@@ -92,10 +92,11 @@ make_eml(path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Formatted_D
          dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2017",
          data.files = c("chemistry"),
          data.files.description = c("Reservoir water chemistry dataset."),
-         #data.files.quote.character = c("\"", "\""),
          temporal.coverage = c("2013-04-04", "2017-12-11"),
          geographic.description = "Southwestern Virginia, USA, North America",
-         #geographic.coordinates = c("69.0", "28.53", "28.38", "-119.95"),
+         geographic.coordinates = c("69.0", "28.53", "28.38", "-119.95"),
          maintenance.description = "ongoing", 
-         user.id = "carylab6",
-         package.id = "edi.199.3")
+         user.id = c("carylab6", "ccarey"),
+         affiliation = c("EDI", "EDI"),
+         package.id = "edi.199.4")
+

@@ -31,6 +31,10 @@ make_eml(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/Falling Cree
          temporal.coverage = c("2014-04-04", "2016-10-25"),
          geographic.description = "Southwestern Virginia, USA, North America",
          maintenance.description = "completed", 
-         user.id = "carylab0", #your personal ID, will be Carey Lab ID eventually!
-         package.id = "edi.198.1") #from EDI portal, login, and then reserve a package ID via the
+         user.id = c("carylab0", "ccarey"), #your personal ID, will be Carey Lab ID eventually!
+         affiliation = c("EDI", "EDI"),
+         package.id = "edi.197.2") #from EDI portal, login, and then reserve a package ID via the
           #Data Package Identifier Reservations
+
+
+

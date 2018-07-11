@@ -24,5 +24,7 @@ make_eml(path = "./Formatted_Data/MakeEMLYSI_PAR_secchi",
          temporal.coverage = c("2013-08-30", "2017-12-11"),
          geographic.description = "Southwestern Virginia, USA, North America",
          maintenance.description = "ongoing", 
-         user.id = "carylab5",
-         package.id = "edi.196.2")
+         user.id = c("carylab5", "ccarey"),
+         affiliation = c("EDI", "EDI"),
+         package.id = "edi.198.3")
+

@@ -92,7 +92,7 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
   data <- data[!is.na(data$DO_mgL),]
   
   ### REMOVE the top negative values and only include the downcast from the water
-  data_wtr_both <- data %>% filter(Depth_m > 0) %>% 
+  data_wtr_both <- data  %>% 
     filter(Depth_m <= MAX_DEPTH) #%>% 
     #filter(`Descent Rate (m/s)` >= 0) #NOTE: I got rid of this 21 Jun 20
   data_wtr <- data %>% filter(Depth_m > 0) %>% 

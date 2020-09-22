@@ -1,5 +1,5 @@
 SAMPLING TIMES
-Most sampling occurred between the hours of 9:00 and 15:00, and are denoted in the DateTime as 12:00 unless the exact time was recorded. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et. al. 2018.
+Most sampling occurred between the hours of 9:00 and 15:00 on day in the DateTime column. The time of day is denoted in the DateTime column as 12:00 unless the exact time of the day was recorded (Flag_DateTime = 0). Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time (Flag_DateTime = 0). For more information about nighttime sampling, see Doubek et. al. 2018.
 
 SAMPLE COLLECTION AND EQUIPMENT
 Total nitrogen (TN) and total phosphorus (TP)

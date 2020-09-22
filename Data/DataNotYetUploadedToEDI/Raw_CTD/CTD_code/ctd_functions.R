@@ -1,3 +1,5 @@
+#Test
+
 trim_ctd <- function(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE){
   ### Format date and names for the rest of the automated script
   DATE<- dmy(DATE_TEXT)

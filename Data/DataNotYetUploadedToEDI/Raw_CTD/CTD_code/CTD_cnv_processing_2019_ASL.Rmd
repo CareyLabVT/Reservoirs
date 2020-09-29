@@ -16,7 +16,11 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
+<<<<<<< HEAD
 DATE_TEXT <- "21-Sep-2020" #format should be "01-Aug-2019"
+=======
+DATE_TEXT <- "30-Apr-2018" #format should be "01-Aug-2019"
+>>>>>>> f5982948aea4520282b389ee0f402dc81db349fa
 SITE <- "fcr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
@@ -28,7 +32,7 @@ MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 REP <- "" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
 AUTO_NAME <- TRUE #If using a nonstandard name format. Must also fill in NAME_OVERRIDE below
 NAME_OVERRIDE <- "MSN2_CTD_CASTS_072419/072519_bvr50_d" #For example, "080119_fcr50"
-AUTO_FOLDER <- TRUE #Default is "CTD_CASTS_CSV" if site == "fcr50" and the working directory for all other sites. Enter FALSE here if you would like to save to a different folder (e.g. for MSNs)
+AUTO_FOLDER <- TRUE 
 CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
 ```
 
@@ -37,7 +41,11 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
+<<<<<<< HEAD
 SCAN_NUMBER <- 15
+=======
+SCAN_NUMBER <- 350
+>>>>>>> f5982948aea4520282b389ee0f402dc81db349fa
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 
@@ -45,15 +53,21 @@ Everything else should be automated, just run this chunk of code!
 ```{r}
 epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, REP, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, CSV_FOLDER_OVERRIDE, MAX_DEPTH)
 
-on = as_datetime(c("")) #July time is estimated based on the time for other sampling. TZ is UTC to match catwalk and current CTD processing
-off = as_datetime(c("")) #July date is wrong bc system broke. TZ is UTC to match catwalk and current CTD processing
+on = as_datetime(c("2020-06-29")) #July time is estimated based on the time for other sampling. TZ is UTC to match catwalk and current CTD processing
+off = as_datetime(c("2020-09-11")) #July date is wrong bc system broke. TZ is UTC to match catwalk and current CTD processing
+
+catwalk_compare = F
 
 #Create dataframes and catwalk comparison for the whole season at fcr50
 if(SITE == "fcr50"){
   pacman::p_load(tidyverse, zoo, lubridate, rLakeAnalyzer,reshape2,akima,dplyr,gridExtra,grid,colorRamps,RCurl)
-  forCatwalkComparison <- fcr_data_wrangling()
+  if(year(as.Date(DATE_TEXT, format = "%d-%b-%Y")) == 2020){
+    forCatwalkComparison <- fcr_data_wrangling()
+  }
   #Compare to catwalk
-  ctd_vs_catwalk(on,off) #This step takes a couple minutes
+  if(catwalk_compare == T){
+      ctd_vs_catwalk(on,off) #This step takes a couple minutes
+  }
 }
 ```
 

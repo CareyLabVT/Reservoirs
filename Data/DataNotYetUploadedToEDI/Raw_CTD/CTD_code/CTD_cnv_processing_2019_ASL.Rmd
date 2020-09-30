@@ -16,11 +16,8 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
-<<<<<<< HEAD
 DATE_TEXT <- "21-Sep-2020" #format should be "01-Aug-2019"
-=======
 DATE_TEXT <- "30-Apr-2018" #format should be "01-Aug-2019"
->>>>>>> f5982948aea4520282b389ee0f402dc81db349fa
 SITE <- "fcr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR

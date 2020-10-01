@@ -17,8 +17,8 @@ source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the g
 
 #Specify global variables
 DATE_TEXT <- "21-Sep-2020" #format should be "01-Aug-2019"
-DATE_TEXT <- "30-Apr-2018" #format should be "01-Aug-2019"
-SITE <- "fcr50"
+DATE_TEXT <- "11-Sep-2019" #format should be "01-Aug-2019"
+SITE <- "fcr10"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
@@ -38,11 +38,8 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
-<<<<<<< HEAD
 SCAN_NUMBER <- 15
-=======
-SCAN_NUMBER <- 350
->>>>>>> f5982948aea4520282b389ee0f402dc81db349fa
+SCAN_NUMBER <- 26
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 

@@ -17,8 +17,8 @@ source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the g
 
 #Specify global variables
 DATE_TEXT <- "21-Sep-2020" #format should be "01-Aug-2019"
-DATE_TEXT <- "03-Sep-2020" #format should be "01-Aug-2019"
-SITE <- "fcr50"
+DATE_TEXT <- "01-Aug-2019" #format should be "01-Aug-2019"
+SITE <- "bvr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
@@ -39,7 +39,7 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
 SCAN_NUMBER <- 15
-SCAN_NUMBER <- 20
+SCAN_NUMBER <- 0
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 

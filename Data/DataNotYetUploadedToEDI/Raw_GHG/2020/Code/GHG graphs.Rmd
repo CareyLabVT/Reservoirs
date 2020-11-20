@@ -21,5 +21,10 @@ ghgs%>%
   filter(Res == "FCR")%>%
   ggplot(aes(x = Date, y = co2_umolL, color = Depth_m))+
   geom_point()
+
+ghgs%>%
+  filter(Res == "FCR")%>%
+  ggplot(aes(x = Date, y = ch4_umolL, color = Depth_m))+
+  geom_point()
 ```
 

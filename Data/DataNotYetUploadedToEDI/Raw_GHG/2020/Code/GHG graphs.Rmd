@@ -1,0 +1,30 @@
+---
+title: "GHG graphs"
+author: "Abby Lewis"
+date: "11/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+ghgs <- read_excel("../GHG_MEGA_GC_SHEET_EXCEL_2020 (1) (3).xlsx", sheet = 2, skip = 6)
+
+colnames(ghgs)[1:4] <- c("Date","Depth_m","Res","Rep")
+colnames(ghgs)[13:14] <- c("ch4_umolL","co2_umolL")
+
+ghgs%>%
+  filter(Res == "FCR")%>%
+  ggplot(aes(x = Date, y = co2_umolL, color = Depth_m))+
+  geom_point()
+
+ghgs%>%
+  filter(Res == "FCR")%>%
+  ggplot(aes(x = Date, y = ch4_umolL, color = Depth_m))+
+  geom_point()
+```
+

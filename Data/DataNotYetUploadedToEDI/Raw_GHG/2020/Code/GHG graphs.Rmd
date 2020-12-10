@@ -16,7 +16,7 @@ ghgs <- read_excel("../GHG_MEGA_GC_SHEET_EXCEL_2020.xlsx", sheet = 2, skip = 6)
 
 colnames(ghgs)[1:4] <- c("DateTime","Depth_m","Reservoir","Rep")
 colnames(ghgs)[13:14] <- c("ch4_umolL","co2_umolL")
-ghgs%>%
+ghgs=ghgs%>%
   select(DateTime,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)
 
 ghgs%>%

@@ -10,6 +10,8 @@ Substantially edited by ASL 10 Dec 2020
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
 ```
 
 
@@ -181,9 +183,6 @@ detach(dt1)
 ```
 
 ```{r}
-library(tidyverse)
-library(lubridate)
-
 # This reads all the files into the R environment
 files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
 files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
@@ -213,7 +212,6 @@ for (i in 2:length(files)){
   ctd = ctd %>%
     full_join(new)
 }
-ctd
 write_csv(ctd, "CTD_Meta_2018-2020.csv")
 ```
 

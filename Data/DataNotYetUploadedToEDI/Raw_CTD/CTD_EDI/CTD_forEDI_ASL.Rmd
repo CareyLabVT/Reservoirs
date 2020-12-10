@@ -5,6 +5,9 @@ date: "12/11/2019"
 output: html_document
 ---
 
+Created by ASL FA 2019
+Substantially edited by ASL 10 Dec 2020
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -192,7 +195,7 @@ ctd = read_csv(paste0("../csv_outputs/",files[1]))
 location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
 ctd = ctd%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("^[a-z]*","",sub("_[a-z]","",location))))%>%
+           Site = as.numeric(sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location))))%>%
     rename(PAR_umolm2s = PAR,
            Desc_rate = 'Descent Rate (m/s)')%>%
     select(-Salinity)

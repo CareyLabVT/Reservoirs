@@ -182,13 +182,13 @@ library(tidyverse)
 library(lubridate)
 
 # This reads all the files into the R environment
-files = list.files(pattern = ".*\\d+.*.csv") #Get all csv files
+files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
 files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-omit <- c("100719_bvr_sedtrap.csv","090419_bvr50.csv","090419_fcr50.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv")
+omit <- c("100719_bvr_sedtrap.csv","090419_bvr50.csv","090419_fcr50.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv")#fill in with any files you need to omit
 files <- files[!files %in% omit]
 
 #This reads the first file in
-ctd = read_csv(files[1]) 
+ctd = read_csv(paste0("../csv_outputs/",files[1])) 
 location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
 ctd = ctd%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
@@ -199,7 +199,7 @@ ctd = ctd%>%
 
 # Loop through and pull all the files in
 for (i in 2:length(files)){
-  new = read_csv(files[i]) 
+  new = read_csv(paste0("../csv_outputs/",files[i]))
   location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
   new = new%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
@@ -211,14 +211,15 @@ for (i in 2:length(files)){
     full_join(new)
 }
 ctd
-write_csv(ctd, "CTD_Meta_2019.csv")
+write_csv(ctd, "CTD_Meta_2018-2020.csv")
 ```
 
 ```{r}
-ctd1 <- read.csv("CTD_Meta_2019.csv")
+ctd1 <- read.csv("CTD_Meta_2018-2020.csv")
 ctd = ctd1 %>%
-  select(-Pressure..PSI.,-Density_mg_m3)%>%
-  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))
+  select(-Density_mg_m3)%>%
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
+         Reservoir = as.factor(Reservoir))
 
 ctd_flagged = ctd %>%
   select(-Flag)%>%
@@ -237,34 +238,34 @@ ctd_flagged = ctd %>%
     Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp),
   
     #DO
-    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO),
     DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL),
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
+    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO),
   
     #COND
-    Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond),
     Cond_uScm = ifelse(Cond_uScm < 0, 0, Cond_uScm),
     Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
+    Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond),
     
     #SPECCOND
-    Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond),
     Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, 0, Spec_Cond_uScm),
     Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
+    Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond),
     
     #CHLA
-    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla),
     Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL),
     Flag_Chla = ifelse(Chla_ugL < 0,4,Flag_Chla),
+    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla),
     
     #TURB
-    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb),
     Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU),
     Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
+    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb),
     
     #pH
-    Flag_pH = ifelse(is.na(pH),2,Flag_pH),
     pH = ifelse(pH < 0, 0, pH),
     Flag_pH = ifelse(pH < 0,4,Flag_pH),
+    Flag_pH = ifelse(is.na(pH),2,Flag_pH),
     
     #ORP
     Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP),

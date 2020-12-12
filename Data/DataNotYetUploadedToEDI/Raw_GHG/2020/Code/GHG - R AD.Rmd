@@ -1,0 +1,18 @@
+---
+title: "GHG FIles"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+```{r}
+GHG=read_csv("GHG - Second Document .csv")
+GHG$Date=as.Date(GHG$Date,format = "%d-%b-%Y")
+GHG$Date
+GHG$Depth=as.numeric(GHG$Depth)
+GHG%>%
+  ggplot(aes(x=Depth,y=CH4))+
+  geom_point()
+```

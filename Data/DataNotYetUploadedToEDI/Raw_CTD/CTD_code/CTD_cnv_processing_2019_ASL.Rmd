@@ -16,7 +16,12 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
+<<<<<<< HEAD
+DATE_TEXT <- "21-Sep-2020" #format should be "01-Aug-2019"
+DATE_TEXT <- "10-Nov-2020" #format should be "01-Aug-2019"
+=======
 DATE_TEXT <- "02-Dec-2020" #format should be "01-Aug-2019"
+>>>>>>> ebe5989024ee194f4740614ca096f65a848b9e7b
 SITE <- "bvr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
@@ -37,7 +42,12 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
+<<<<<<< HEAD
+SCAN_NUMBER <- 15
+SCAN_NUMBER <- 100
+=======
 SCAN_NUMBER <- 17
+>>>>>>> ebe5989024ee194f4740614ca096f65a848b9e7b
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 

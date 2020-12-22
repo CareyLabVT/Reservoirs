@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
 ```
 
 ```{r}
@@ -111,6 +113,18 @@ ghgs=ghgs%>%
          Depth_m = as.numeric(Depth_m),
          Reservoir = as.factor(Reservoir))%>%
   filter(!is.na(Depth_m))
+
+ghgs%>%
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>%
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
 
 ghgs$flag_ch4 <- 1
 ghgs$flag_ch4[is.na(ghgs$ch4_umolL)]<-4

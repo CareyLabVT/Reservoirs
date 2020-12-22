@@ -11,6 +11,7 @@ library(readxl)
 library(tidyverse)
 ```
 
+This first section reads in previous data published on EDI
 ```{r}
 # Package ID: edi.551.2 Cataloging System:https://pasta.edirepository.org.
 # Data set title: Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019.
@@ -102,27 +103,43 @@ detach(dt1)
         
 ```
 
+This section loads data from 2020, graphs CO2 and CH4, and creates a combined file to publish to EDI
 ```{r}
+#Load this year's data
 ghgs <- read_excel("../2020/GHG_MEGA_GC_SHEET_EXCEL_2020.xlsx", sheet = 2, skip = 6)
 
+#Change column names to match EDI standard
 colnames(ghgs)[1:4] <- c("DateTime","Depth_m","Reservoir","Rep")
 colnames(ghgs)[13:14] <- c("ch4_umolL","co2_umolL")
+
 ghgs=ghgs%>%
-  select(DateTime,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)%>%
-  mutate(DateTime = as.Date(DateTime),
+  select(DateTime,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)%>% #Select only the columns we are using
+  mutate(DateTime = as.Date(DateTime), #Make sure columns are the correct type
          Depth_m = as.numeric(Depth_m),
          Reservoir = as.factor(Reservoir))%>%
-  filter(!is.na(Depth_m))
+  filter(!is.na(Depth_m)) #Depth cannot be missing
 
-ghgs%>%
+ghgs%>% #Plot CH4 at Site 50 in FCR
   filter(Depth_m<100,
          Reservoir == "FCR")%>%
   ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
-ghgs%>%
+ghgs%>% #Plot CO2 at Site 50 in FCR
   filter(Depth_m<100,
          Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CH4 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CO2 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
   ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
   geom_point()
 

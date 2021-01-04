@@ -1,9 +1,60 @@
 library(tidyverse)
 library(lubridate)
 
+
+if (!"lubridate" %in% installed.packages()) install.packages("lubridate")
+library(lubridate)
+library(plyr)
+library(readr)
+library(dplyr)
+
+
+
+
+#time to now play with BVR data!
+#Gateway has missing data sections so combine manual data for EDI
+#upload the current BVR data from GitHub
+download.file('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv', "BVRplatform.csv") 
+download.file('https://github.com/CareyLabVT/ManualDownloadsSCCData/blob/master/BVRplatform_manual_2020.csv', "BVRmanualplatform.csv")
+
+bvrheader1<-read.csv("BVRplatform.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
+bvrdata1<-read.csv("BVRplatform.csv", skip=4, header=F) #get data minus wonky Campbell rows
+names(bvrdata1)<-names(bvrheader1) #combine the names to deal with Campbell logger formatting
+
+
+#combine manual and most recent files
+bvrdata=rbind(bvrdata3, bvrdata1)
+
+#taking out the duplicate values  
+obs1=bvrdata[!duplicated(bvrdata$TIMESTAMP), ]
+
+
+#change the date from character to unknown making it easier to graph
+obs1$TIMESTAMP <- as.POSIXct(obs1$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+4") 
+
+
+#check record for gaps
+#order data by timestamp
+obs1=obs1[order(obs1$TIMESTAMP),]
+obs1$DOY=yday(obs1$TIMESTAMP)
+
+#daily record gaps by day of year
+for(i in 2:nrow(obs1)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(Met$DOY[i]-Met$DOY[i-1]>1){
+    print(c(Met$TIMESTAMP[i-1],Met$TIMESTAMP[i]))
+  }
+}
+#sub-daily record gaps by record number
+for(i in 2:length(Met$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(Met$RECORD[i]-Met$RECORD[i-1])>1){
+    print(c(Met$TIMESTAMP[i-1],Met$TIMESTAMP[i]))
+  }
+}
+
+
 qaqc <- function(data_file, maintenance_file, output_file)
 {
-  CATDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
+  BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
                         "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
                         "ThermistorTemp_C_9", "RDO_mgL_5", "RDOsat_percent_5", "RDOTemp_C_5", "RDO_mgL_9",
@@ -43,7 +94,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   ))
   
   # remove NaN data at beginning
-  catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 14:50:00"))
+  #catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 14:50:00"))
   
   # add flag columns
   catdata$Flag_All <- 0

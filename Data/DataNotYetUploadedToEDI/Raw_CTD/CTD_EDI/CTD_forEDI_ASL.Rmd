@@ -287,5 +287,66 @@ final = dt1 %>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
   select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Spec_Cond_uScm,Chla_ugL,Turb_NTU,pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp,Flag_DO,Flag_Cond,Flag_SpecCond,Flag_Chla,Flag_Turb,Flag_pH,Flag_ORP,Flag_PAR, Flag_DescRate)
 
-write.csv(final,"../MakeEMLCTD/CTD_final_2013_2019.csv", row.names = FALSE)
+second_batch = final%>%
+  filter(year(Date)>2019)
+
+first_batch = final%>%
+  filter(year(Date)<=2019)
+
+write.csv(final,"CTD_final_2013_2020.csv", row.names = FALSE)
 ```
+
+```{r}
+library(akima)
+library(colorRamps)
+
+qaqc <- read_csv("CTD_final_2013_2020.csv")
+qaqc%>%
+  filter(Reservoir == "FCR", Site == 50)%>%
+  ggplot(aes(x = Date, y = DO_mgL))
+
+do <- qaqc%>%filter(!is.na(DO_mgL))
+do_interp <- interp2xyz(interp(do$Date,do$Depth_m,do$DO_mgL,xo = seq(min(do$Date), max(do$Date), by = 1),yo = seq(min(do$Depth_m), max(do$Depth_m), by = .1)),data.frame = T)
+
+#jpeg("../figures/TP_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
+tp_interp%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
+  scale_y_reverse(expand = c(0,0))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  labs(x = "", y = "Depth (m)", title = "Total Phosphorus",fill=expression('(mg/L)'))+
+  geom_point(data = tp, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))
+dev.off()
+
+jpeg("../figures/TN_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
+tn_interp%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y, fill = z))+
+  geom_raster()+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "Total Nitrogen",fill=expression('(mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = tn, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))
+dev.off()
+
+jpeg("../figures/DOC_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
+doc_interp%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y, fill = z))+
+  geom_raster()+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "Dissolved Organic Carbon",fill=expression('(mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = doc, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))
+dev.off()
+  
+  
+```
+

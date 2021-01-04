@@ -45,6 +45,27 @@ inflow_pressure <- inflow_pressure %>%
   mutate(Pressure_psi = as.double(Pressure_psi),
          Temp_C = as.double(Temp_C))
 
+## Check for equally spaced time intervals
+## AGH added for January 2021 EDI day
+inflow_difftime <- inflow_pressure %>% select(DateTime) %>% rename(DateTime_1 = DateTime)
+n <- dim(inflow_difftime)[1]
+inflow_difftime <- inflow_difftime[1:(n-1),]
+inflow_difftime$DateTime_2 <- inflow_pressure$DateTime[2:n]
+inflow_difftime$mins <- difftime(as.POSIXct(inflow_difftime$DateTime_1),as.POSIXct(inflow_difftime$DateTime_2),units="mins")
+# Plot
+plot(inflow_difftime$mins)
+# Sort by time difference
+attach(inflow_difftime)
+inflow_difftime <- inflow_difftime[order(mins),]
+detach(inflow_difftime)
+# Notes:
+# Missing data from 2020-05-14 to 2020-08-24
+
+#######################
+# Q's:
+# How to deal with potential time changes? Have we always synched time to laptop?
+# How to deal with data gaps b/c of time or other issues? Data is not perfectly 15 mins apart for all time points.
+
 ##Preliminary visualization of raw pressure data from inflow transducer
 plot_inflow <- inflow_pressure %>%
   mutate(Date = date(DateTime))

@@ -13,7 +13,7 @@
 
 # Updated: 06Mar20 by A. Hounshell - updated V-notch weir calculations with rating curve calculated from correlations
 # between gage height and pressure for the WVWA and VT pressure sensor from 7 Jun 2019 to present. Updates to this
-# relationship will be needed for 2020 EDI push. Relationships is documnted in EDI metadata and with associated data
+# relationship will be needed for 2020 EDI push. Relationships is documented in EDI metadata and with associated data
 # file with data for the gage height vs. pressure relationships. The gage relationship updates when the weir is 
 # too low/over-topped for the period AFTER 6 Jun 2019. Nothing was changed for data prior to 6 Jun 2019.
 
@@ -44,27 +44,6 @@ inflow_pressure <- inflow_pressure %>%
          Temp_C = `Temperature(degC)`) %>%
   mutate(Pressure_psi = as.double(Pressure_psi),
          Temp_C = as.double(Temp_C))
-
-## Check for equally spaced time intervals
-## AGH added for January 2021 EDI day
-inflow_difftime <- inflow_pressure %>% select(DateTime) %>% rename(DateTime_1 = DateTime)
-n <- dim(inflow_difftime)[1]
-inflow_difftime <- inflow_difftime[1:(n-1),]
-inflow_difftime$DateTime_2 <- inflow_pressure$DateTime[2:n]
-inflow_difftime$mins <- difftime(as.POSIXct(inflow_difftime$DateTime_1),as.POSIXct(inflow_difftime$DateTime_2),units="mins")
-# Plot
-plot(inflow_difftime$mins)
-# Sort by time difference
-attach(inflow_difftime)
-inflow_difftime <- inflow_difftime[order(mins),]
-detach(inflow_difftime)
-# Notes:
-# Missing data from 2020-05-14 to 2020-08-24
-
-#######################
-# Q's:
-# How to deal with potential time changes? Have we always synched time to laptop?
-# How to deal with data gaps b/c of time or other issues? Data is not perfectly 15 mins apart for all time points.
 
 ##Preliminary visualization of raw pressure data from inflow transducer
 plot_inflow <- inflow_pressure %>%
@@ -163,7 +142,7 @@ inflow_pressure1 <- inflow_pressure %>%
   select(-Temp_C)
 
 downcorrect <- bind_cols(inflow_pressure, inflow_pressure1) %>%
-  select(-DateTime1)
+  select(-DateTime...3) %>% rename(DateTime = DateTime...5)
 
 ##ARGH!! DATETIMES ARE NOT PLAYING NICELY!! cannot figure it out so just wrote to .csv and read in again
 inflow_pressure$DateTime <- as.POSIXct(inflow_pressure$DateTime, format = "%Y-%m-%d %I:%M:%S %p")
@@ -228,6 +207,111 @@ both_pressures
 
 ggsave(filename = "./Data/DataNotYetUploadedToEDI/Raw_inflow/all_pressure_types.png", both_pressures, device = "png")
 
+# Plot by year to look at potential time issues
+# 2013
+both_pressures +
+  xlim(c(as.Date("2013-01-01"),as.Date("2013-03-31"))) # Barometric pressure only
+
+both_pressures +
+  xlim(c(as.Date("2013-04-01"),as.Date("2013-06-30"))) # Gap in inflow data
+
+both_pressures +
+  xlim(c(as.Date("2013-07-01"),as.Date("2013-09-30"))) # NO GAPS
+
+both_pressures +
+  xlim(c(as.Date("2013-10-01"),as.Date("2013-12-31"))) # NO GAPS
+
+# 2014
+both_pressures +
+  xlim(c(as.Date("2014-01-01"),as.Date("2014-03-31"))) # No barometric pressure at end
+
+both_pressures +
+  xlim(c(as.Date("2014-04-01"),as.Date("2014-06-30"))) # Missing barometric pressure at start; gap in Inflow data - June
+
+both_pressures +
+  xlim(c(as.Date("2014-07-01"),as.Date("2014-09-30"))) # Gap in inflow in Aug
+
+both_pressures +
+  xlim(c(as.Date("2014-10-01"),as.Date("2014-12-31"))) # Gap in inflow in Oct
+
+# 2015
+both_pressures +
+  xlim(c(as.Date("2015-01-01"),as.Date("2015-03-31"))) # No gap
+
+both_pressures +
+  xlim(c(as.Date("2015-04-01"),as.Date("2015-06-30"))) # No gap
+
+both_pressures +
+  xlim(c(as.Date("2015-07-01"),as.Date("2015-09-30"))) # Gap in inflow in Aug
+
+both_pressures +
+  xlim(c(as.Date("2015-10-01"),as.Date("2015-12-31"))) # Gap in inflow in late Oct
+
+# 2016
+both_pressures +
+  xlim(c(as.Date("2016-01-01"),as.Date("2016-03-31"))) # Gap in inflow in late Mar
+
+both_pressures +
+  xlim(c(as.Date("2016-04-01"),as.Date("2016-06-30"))) # Gap in inflow in Apr and Jun
+
+both_pressures +
+  xlim(c(as.Date("2016-07-01"),as.Date("2016-09-30"))) # Gap in inflow in Jul
+
+both_pressures +
+  xlim(c(as.Date("2016-10-01"),as.Date("2016-12-31"))) # Several gaps in both inflow and barometric pressure
+
+# 2017
+both_pressures +
+  xlim(c(as.Date("2017-01-01"),as.Date("2017-03-31"))) # Several gaps in inflow and baro
+
+both_pressures +
+  xlim(c(as.Date("2017-04-01"),as.Date("2017-06-30"))) # No gaps
+
+both_pressures +
+  xlim(c(as.Date("2017-07-01"),as.Date("2017-09-30"))) # No gaps
+
+both_pressures +
+  xlim(c(as.Date("2017-10-01"),as.Date("2017-12-31"))) # Missing inflow data in Oct - Nov
+
+# 2018
+both_pressures +
+  xlim(c(as.Date("2018-01-01"),as.Date("2018-03-31"))) # Gap in inflow in Jan and Mar
+
+both_pressures +
+  xlim(c(as.Date("2018-04-01"),as.Date("2018-06-30"))) # Gap in inflow in Apr
+
+both_pressures +
+  xlim(c(as.Date("2018-07-01"),as.Date("2018-09-30"))) # Gaps in inflow: Jul x2, Aug, Sep
+
+both_pressures +
+  xlim(c(as.Date("2018-10-01"),as.Date("2018-12-31"))) # Gaps in inflow Oct x2
+
+# 2019
+both_pressures +
+  xlim(c(as.Date("2019-01-01"),as.Date("2019-03-31"))) # Gap in inflow Mar
+
+both_pressures +
+  xlim(c(as.Date("2019-04-01"),as.Date("2019-06-30"))) # Gaps in inflow May x2, Jun x2
+
+both_pressures +
+  xlim(c(as.Date("2019-07-01"),as.Date("2019-09-30"))) # Gap in inflow Sep
+
+both_pressures +
+  xlim(c(as.Date("2019-10-01"),as.Date("2019-12-31"))) # No gaps
+
+# 2020
+both_pressures +
+  xlim(c(as.Date("2020-01-01"),as.Date("2020-03-31"))) # No gaps
+
+both_pressures +
+  xlim(c(as.Date("2020-04-01"),as.Date("2020-06-30"))) # Lost inflow data after May
+
+both_pressures +
+  xlim(c(as.Date("2020-07-01"),as.Date("2020-09-30"))) # Lost most of inflow data
+
+both_pressures +
+  xlim(c(as.Date("2020-10-01"),as.Date("2020-12-31")))
+
 #create vector of corrected pressure to match nomenclature from RPM's script
 diff <- diff %>%
   filter(!is.na(Pressure_psia)) %>%
@@ -248,12 +332,17 @@ diff <- diff %>%
 
 
 # separate the dataframe into pre and post v-notch weir to apply different equations
-diff_pre <- diff[diff$DateTime< as.POSIXct('2019-06-06 09:30:00'),]
-diff_post <- diff[diff$DateTime > as.POSIXct('2019-06-07 00:00:00'),]
+diff_pre <- diff[diff$DateTime< as.POSIXct('2019-06-06 09:30:00'),] # Square weir
+diff_post <- diff %>% 
+  filter(DateTime > as.POSIXct('2019-06-07 00:00:00') & DateTime < as.POSIXct('2020-08-24 00:00:00')) # V-notch weir
+diff_aug20 <- diff %>% 
+  filter(DateTime > as.POSIXct('2020-08-24 00:00:00') & DateTime < as.POSIXct('2020-09-02 10:15:00')) # V-notch weir post blow-out
+diff_sep20 <- diff %>% 
+  filter(DateTime > as.POSIXct('2020-09-02 10:00:00')) # V-notch weir post blow-out; final location
 
 ######################
 
-# the old weir equations are taken directly from MEL's Inlow Aggregation script
+# the old weir equations are taken directly from MEL's Inflow Aggregation script
 # Use for pressure data prior to 2019-06-06: see notes above for description of equations
 # NOTE: Pressure_psia < 0.185 calculates -flows (and are automatically set to NA's)
 diff_pre <- diff_pre %>% mutate(flow1 = (Pressure_psia )*0.70324961490205 - 0.1603375 + 0.03048) %>% 

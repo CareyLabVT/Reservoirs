@@ -15,6 +15,7 @@ library(lubridate)
 #upload the current BVR data from GitHub
 download.file('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv', "BVRplatform.csv") 
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRplatform_manual_2020.csv', "BVRmanualplatform.csv")
+#download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt', "maintenance_file.csv")
 
 #Read in csv of data from pushed to github
 bvrheader1<-read.csv("BVRplatform.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
@@ -24,7 +25,10 @@ names(bvrdata1)<-names(bvrheader1) #combine the names to deal with Campbell logg
 #Read in csv of manual uploaded data
 bvrdata3<-read.csv("BVRmanualplatform.csv")
 
-#delete column that was added when uploaded 
+#delete pesky blank row. Make sure that it actually doesn't change
+bvrdata3<-bvrdata3[!(bvrdata3$X==30772),]
+
+#delete column that was added when uploaded
 bvrdata3=select(bvrdata3, -X)
 
 #combine manual and most recent files
@@ -33,12 +37,11 @@ bvrdata4=rbind(bvrdata3, bvrdata1)
 #taking out the duplicate values  
 obs1=bvrdata4[!duplicated(bvrdata4$TIMESTAMP), ]
 
+#take out the rows with blank timestamps
+obs1=obs1[!(obs1$TIMESTAMP == ""), ]
 
 #change the date from character to unknown making it easier to graph
-obs1$TIMESTAMP <- as.POSIXct(obs1$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+4") 
-
-
-
+#obs1$TIMESTAMP <- as.POSIXct(obs1$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
 
 #check record for gaps
 #order data by timestamp
@@ -58,16 +61,23 @@ for(i in 2:length(obs1$RECORD)){ #this identifies if there are any data gaps in 
   }
 }
 
+#remove the DOY column and change to bvrdata
+obs1=select(obs1, -DOY)
+
+write_csv(obs1, 'obs1.csv')
 
 qaqc <- function(data_file, maintenance_file, output_file)
 {
+#read in data from obs1 above
+#bvrdata=data_file
+#change column names
   BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_12.5",
                         "ThermistorTemp_C_11.5", "ThermistorTemp_C_10.5", "ThermistorTemp_C_9.5", "ThermistorTemp_C_8.5",
                         "ThermistorTemp_C_7.5", "ThermistorTemp_C__6.5", "ThermistorTemp_C_5.5", "ThermistorTemp_C_4.5",
                         "ThermistorTemp_C_3.5","ThermistorTemp_C_2.5","ThermistorTemp_C_1.5","ThermistorTemp_C_0.5",
                         "RDO_mgL_7.5", "RDOsat_percent_7.5", "RDOTemp_C_7.5", "RDO_mgL_0.5",
                         "RDOsat_percent_0.5", "RDOTemp_C_0.5", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
-                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1",
+                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
                         "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
                         "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_0.5", "LvlTemp_C_0.5")
   
@@ -78,7 +88,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   # columns where certain values are stored
   DO_MGL_COLS <- c(18, 21, 31)
   DO_SAT_COLS <- c(19, 22, 30)
-  DO_FLAG_COLS <- c(45, 46, 47)
+  DO_FLAG_COLS <- c(46, 47, 48)
   
   # depths at which DO is measured
   #what do I say for DO depths
@@ -92,16 +102,18 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
   # read catwalk data and maintenance log
   # NOTE: date-times throughout this script are processed as UTC
-  #bvrdata <- read_csv(data_file, skip = 4, col_names = CATDATA_COL_NAMES,
-                      #col_types = cols(.default = col_double(), DateTime = col_datetime()))
-  bvrdata=data_file
-
-  log <- read_csv(maintenance_file, col_types = cols(
+  bvrdata <- read_csv(data_file, skip = 1, col_names = BVRDATA_COL_NAMES,
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+#read in maintenance log
+  log <- read_csv(maintenance_file
+  , col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
+  
   
   # remove NaN data at beginning
   #catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 14:50:00"))
@@ -118,25 +130,25 @@ qaqc <- function(data_file, maintenance_file, output_file)
   # replace negative DO values with 0
   bvrdata <- bvrdata %>%
     mutate(Flag_DO_1.5 = ifelse((! is.na(EXODO_mgL_1.5) & EXODO_mgL_1.5 < 0)
-                            | (! is.na(EXODOsat_percent_1) & EXODOsat_percent_1.5 < 0), 3, Flag_DO_1.5)) %>%
+                            | (! is.na(EXODOsat_percent_1.5) & EXODOsat_percent_1.5 < 0), 3, Flag_DO_1.5)) %>%
     mutate(EXODO_mgL_1.5 = ifelse(EXODO_mgL_1.5 < 0, 0, EXODO_mgL_1.5)) %>%
     mutate(EXODOsat_percent_1.5 = ifelse(EXODOsat_percent_1.5 <0, 0, EXODOsat_percent_1.5))
   
   bvrdata <- bvrdata %>%
-    mutate(Flag_DO_7.5 = ifelse((! is.na(RDO_mgL_7.5) & RDO_mgL_5 < 0)
+    mutate(Flag_DO_7.5 = ifelse((! is.na(RDO_mgL_7.5) & RDO_mgL_7.5 < 0)
                             | (! is.na(RDOsat_percent_7.5) & RDOsat_percent_7.5 < 0), 3, Flag_DO_7.5)) %>%
     mutate(RDO_mgL_7.5 = ifelse(RDO_mgL_7.5 < 0, 0, RDO_mgL_7.5)) %>%
     mutate(RDOsat_percent_7.5 = ifelse(RDOsat_percent_7.5 < 0, 0, RDOsat_percent_7.5))
 
   bvrdata <- bvrdata %>%
     mutate(Flag_DO_0.5 = ifelse((! is.na(RDO_mgL_0.5) & RDO_mgL_0.5 < 0)
-                            | (! is.na(RDOsat_percent_0.5) & RDOsat_percent_0.5 < 0), 3, Flag_DO_9)) %>%
+                            | (! is.na(RDOsat_percent_0.5) & RDOsat_percent_0.5 < 0), 3, Flag_DO_0.5)) %>%
     mutate(RDO_mgL_0.5 = ifelse(RDO_mgL_0.5 < 0, 0, RDO_mgL_0.5)) %>%
     mutate(RDOsat_percent_0.5 = ifelse(RDOsat_percent_0.5 < 0, 0, RDOsat_percent_0.5))
   
   # modify bvrdata based on the information in the log
   for(i in 1:nrow(log))
-  {
+    {
     # get start and end time of one maintenance event
     start <- log$TIMESTAMP_start[i]
     end <- log$TIMESTAMP_end[i]
@@ -224,7 +236,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
         {
           bvrdata[bvrdata$DateTime > end & bvrdata$DateTime < DO_recovery_time,
                   intersect(maintenance_cols, c(DO_MGL_COLS[j], DO_SAT_COLS[j]))] <- NA
-          bvrdata[catdata$DateTime > end & bvrdata$DateTime < DO_recovery_time, DO_FLAG_COLS[j]] <- 1
+          bvrdata[bvrdata$DateTime > end & bvrdata$DateTime < DO_recovery_time, DO_FLAG_COLS[j]] <- 1
         }
       }
     }
@@ -280,13 +292,17 @@ qaqc <- function(data_file, maintenance_file, output_file)
   bvrdata[is.na(bvrdata)] <- NA
   
   # convert datetimes to characters so that they are properly formatted in the output file
-  bvrdata$DateTime <- as.character(catdata$DateTime)
+  bvrdata$DateTime <- as.character(bvrdata$DateTime)
   
   # write to output file
   write_csv(bvrdata, output_file)
 }
 
 # example usage
-qaqc(obs1,
-      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log",
-     "BVRplatform.csv")
+#qaqc(obs1,
+#      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log",
+#     "BVRplatform.csv")
+
+qaqc("obs1.csv",
+         "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
+       "BVRplatform3.csv")

@@ -1,0 +1,13 @@
+﻿SAMPLING TIMES
+Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately November to March in 2014-2018. Sampling times are reported in local time at the collection site for those years In 2019, daylight savings time was not observed for data collection, so all data are reported in the Eastern Standard Time Zone, even when this conflicted with the local time.
+SAMPLING INSTRUMENT
+Sampling was conducted using a bbe Moldaenke FluoroProbe, which was sent to bbe Moldaenke for calibration and maintenance yearly according to the standards and practices of bbe Moldaenke between December-April in 2016-2018. The probe was not sent for calibration during the winter of 2019. The FluoroProbe uses fluorescence from six LED wavelengths (525 nm, 570 nm, 610 nm, 370 nm, 590 nm, 470 nm) to calculate biomass of four phytoplankton spectral groups (green algae, brown algae, bluegreen algae, and mixed assemblages) by comparing the sample spectrum to the fluorescence spectra of individual algal divisions measured during calibration.
+CAVEATS OF FLUORESCENCE-BASED DATA
+Measurements taken near the water's surface may be less accurate due to quenching of photosynthetic pigments at high light intensities, such as might be experienced at shallow depths.
+Due to differences in water color among different water bodies, a universal yellow substances offset may not be appropriate for all sampled water bodies. Dissolved organic carbon (DOC) in the reservoirs reported here tends to be low (2-5 mgL), but direct comparisons of phytoplankton biomass values among reservoirs should be treated with caution.
+Measurements taken near the bottom of the water column or during high-turbidity events may be less accurate due to inference of high amounts of particulate matter with the fluorescence signal.
+TEMPERATURE DATA
+The temperature sensor was malfunctioning in 2017-2018 and so the 2017-2018 temperature data are not reported at this time. In addition, three days of data in 2019 have compromised temperature data: 02Sept19, 04Sept19, and 11Sept19.
+Note that temperatures at shallow depths may be less accurate as the sensor adjusts to the water temperature. It is recommended that temperature values in the first ~1 m of the water column be treated with caution.
+TRANSMISSION DATA
+On 28Aug19, the transmission sensor malfunctioned and so values from this point on in 2019 are not reported.

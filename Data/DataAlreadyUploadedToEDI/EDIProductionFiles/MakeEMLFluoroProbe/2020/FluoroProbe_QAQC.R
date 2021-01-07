@@ -48,9 +48,6 @@ fp3 <- fp2 %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
   filter(Depth_m >= 0.2) 
 
-#need to get rid of 20200604_BVR_50 cast because is actually just a duplicate
-#of FCR cast from day before
-
 # #eliminate upcasts if they exist; this can also be done manually as .txt files
 # #are uploaded each field day
 # fp_downcasts <- fp3[0,]
@@ -96,7 +93,7 @@ for (i in 1:length(unique(fp3$cast))){
 for (i in 1:length(unique(fp3$cast))){
   profile = subset(fp3, cast == unique(fp3$cast)[i])
   castname = profile$x[1]
-  profile_plot <- ggplot(data = profile, aes(x = Temp_C, y = Depth_m))+
+  profile_plot <- ggplot(data = profile, aes(x = Temp_degC, y = Depth_m))+
     geom_path(size = 1)+
     scale_y_reverse()+
     ggtitle(castname)+
@@ -105,6 +102,7 @@ for (i in 1:length(unique(fp3$cast))){
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
+
 
 #create png plots for every cast for QAQC purposes (transmission)
 for (i in 1:length(unique(fp3$cast))){
@@ -115,14 +113,13 @@ for (i in 1:length(unique(fp3$cast))){
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_trans_plots_2019/",castname,".png")
+  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_trans_plots_2020/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
 
-#need to get rid of temp data between 02SEP and 11SEP because calibration went 
-#wonky and didn't catch it for a week
-bad_temp_casts <- c("20190902_FCR_50.txt","20190904_BVR_50.txt","20190911_FCR_50.txt")
+#20200824_FCR_50 temp cast problematic (max of 18-20 degrees?)
+bad_temp_casts <- c("20200824_FCR_50.txt")
 
 fp4 <- fp3 %>%
   mutate(Temp_degC = ifelse(x %in% bad_temp_casts,NA,Temp_degC))
@@ -130,20 +127,30 @@ fp4 <- fp3 %>%
 check <- fp4 %>%
   filter(x %in% bad_temp_casts)
 
-#need to get rid of transmission data after 28AUG19 because sensor started 
-#malfunctioning and only reading 100%; still working on fixing this with bbe moldaenke
-#but algal fingerprints not affected
-fp5 <- fp4 %>%
-  mutate(Transmission = ifelse(date(DateTime)>= "2019-08-28",NA,Transmission))
+#if need to alter any of the transmission data, do so here
+#not necessary for 2020
+# fp5 <- fp4 %>%
+#   mutate(Transmission = ifelse(date(DateTime)>= "2019-08-28",NA,Transmission))
+fp5 <- fp4
 
 #merge two datasets - previously published data package + this year's data
 
 #read in old data and check column names of old and new and DateTime format
-fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/FluoroProbe.csv")
+fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019/FluoroProbe.csv")
+
+#convert time zone of old data; usually defaults to UTC when read in
+attr(fp_og$DateTime, "tzone") <- "America/New_York"
+
+#check that time zones are correct (EDT and EST for both old and new)
+head(fp5$DateTime)
+tail(fp5$DateTime)
+head(fp_og$DateTime)
+check <- subset(fp_og, Reservoir == "FCR")
+tail(check$DateTime)
+
+#check column names
 colnames(fp_og)
 colnames(fp5)
-head(fp4$DateTime)
-#attr(fp_final$DateTime, "tzone") <- "America/New_York"
 
 #get rid of columns we don't need for final publication
 fp6 <- fp5 %>%
@@ -157,9 +164,13 @@ fp7 <- fp6[,c(1,2,3,11,4,5,6,7,8,9,10,12,13,14,15,16,17,18)]
 
 colnames(fp7)
 
-#2019: need to flag emp profiles that are missing due to wonky temp sensor calibration
-#2019: need to flag transmission data after 28Aug19 because just reads 100% all the time
-bad_temp_days <- c("2019-09-02","2019-09-04","2019-09-11")
+#ADD FLAGS
+
+#2020: no need to flag algal profiles at this time
+#2020: need to flag temp profile from 08-24 that is missing due to too-cold temp readings
+#(best guess is probe was not given time to equilibrate before cast was taken)
+#2020: no need to flag transmission at this time
+bad_temp_days <- c("2020-08-24")
 
 fp8 <- fp7 %>%
   mutate(Flag_GreenAlgae = 0,
@@ -168,7 +179,7 @@ fp8 <- fp7 %>%
          Flag_MixedAlgae = 0,
          Flag_TotalConc = 0,
          Flag_Temp = ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission = ifelse(date(DateTime)>= "2019-08-28",2,0),
+         Flag_Transmission = 0,
          Flag_525nm = 0,
          Flag_570nm = 0,
          Flag_610nm = 0,
@@ -183,8 +194,8 @@ fp_final <- bind_rows(fp_og, fp8) %>%
   arrange(Reservoir, Site, DateTime)
 
 #write the csv for publication!
-write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019/FluoroProbe.csv", row.names = FALSE)
-fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019/FluoroProbe.csv")
+write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020/FluoroProbe.csv", row.names = FALSE)
+fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020/FluoroProbe.csv")
 
 #Congrats you are done! Go have a cookie :-)
 

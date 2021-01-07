@@ -312,10 +312,20 @@ both_pressures +
 both_pressures +
   xlim(c(as.Date("2020-10-01"),as.Date("2020-12-31")))
 
-#create vector of corrected pressure to match nomenclature from RPM's script
+# Select time period when inflow pressure was collected
+# LEAVE IN VALUES LESS THAN OR EQUAL TO 0!
 diff <- diff %>%
-  filter(!is.na(Pressure_psia)) %>%
-  filter(Pressure_psia >= 0)
+  filter(!is.na(Pressure_psi))
+
+# Plot Diff for 2020 (or most recent year)
+diff_plot <- ggplot(diff,aes(x=DateTime,y=Pressure_psia))+
+  geom_line()+
+  geom_point()+
+  theme_bw()
+diff_plot
+
+diff_plot+
+  xlim(as.POSIXct("2020-01-01"),as.POSIXct("2020-12-31"))
 
 # WW 13-sep-2019 hashtag'ed out some of the script originally written by MEL to incorporate new script that includes the equation for the
 # v-notch weir which was installed 06-Jun-2019

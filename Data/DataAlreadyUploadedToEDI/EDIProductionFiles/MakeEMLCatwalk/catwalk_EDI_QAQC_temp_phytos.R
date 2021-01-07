@@ -222,6 +222,24 @@ catdata_flag$Flag_Temp_9[catdata_flag$DateTime=='2020-09-30 10:30:00'] <- 1
 
 ###########################################################################################################################################################################
 # chl and phyco qaqc
+# check Chla ugL data
+sd_4 <- 4*sd(catdata_flag$EXOChla_ugL_1, na.rm = TRUE)
+
+chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
+  geom_point() +
+  geom_hline(yintercept = sd_4)
+ggplotly(chl_ugl)
+chl_mean <- catdata_flag %>% 
+  select(DateTime, EXOChla_ugL_1) %>% 
+  mutate(day = date(DateTime)) %>% 
+  group_by(day) %>% 
+  mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
+  distinct(day, .keep_all = TRUE)
+chl_mean <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
+  geom_point() +
+  ggtitle('figure 2')
+ggplotly(chl_mean)
+
 
 
 ###########################################################################################################################################################################

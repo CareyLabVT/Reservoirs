@@ -9,7 +9,7 @@ rm(list=ls())
 pacman::p_load(tidyverse, lubridate)
 
 # Load in column names for .txt files to get template
-col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20190208_FCR_50.txt", n_max = 0))
+col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20200525_FCR_50_1.txt", n_max = 0))
 
 # Load in all txt files
 fp_casts <- dir(path = "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe", pattern = paste0("*.txt")) %>%
@@ -24,9 +24,7 @@ fp2 <- left_join(raw_fp, fp_casts, by = c("cast")) %>%
   rowwise() %>% 
   mutate(Reservoir = unlist(strsplit(x, split='_', fixed=TRUE))[2],
          Site = unlist(strsplit(x, split='_', fixed=TRUE))[3],
-         Site = unlist(strsplit(Site, split='.', fixed=TRUE))[1],
-         Reservoir = ifelse(x == "20190710__BVR_50_MSN_1138.txt","BVR",Reservoir),
-         Site = ifelse(x == "20190710__BVR_50_MSN_1138.txt","50",Site)) %>%
+         Site = unlist(strsplit(Site, split='.', fixed=TRUE))[1]) %>%
   ungroup()
 fp2$Site <- as.numeric(fp2$Site)
 
@@ -50,6 +48,9 @@ fp3 <- fp2 %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
   filter(Depth_m >= 0.2) 
 
+#need to get rid of 20200604_BVR_50 cast because is actually just a duplicate
+#of FCR cast from day before
+
 # #eliminate upcasts if they exist; this can also be done manually as .txt files
 # #are uploaded each field day
 # fp_downcasts <- fp3[0,]
@@ -71,6 +72,8 @@ fp3 <- fp2 %>%
 # }
 
 #create png plots for every cast for QAQC purposes (algal biomass)
+#these are just written to a file I temporarily create on my desktop
+#for EDI day
 for (i in 1:length(unique(fp3$cast))){
   profile = subset(fp3, cast == unique(fp3$cast)[i])
   castname = profile$x[1]
@@ -82,12 +85,14 @@ for (i in 1:length(unique(fp3$cast))){
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_plots_2019/",castname,".png")
+  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_plots_2020/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
 
 }
 
 #create png plots for every cast for QAQC purposes (temperature)
+#these are just written to a file I temporarily create on my desktop
+#for EDI day
 for (i in 1:length(unique(fp3$cast))){
   profile = subset(fp3, cast == unique(fp3$cast)[i])
   castname = profile$x[1]
@@ -96,7 +101,7 @@ for (i in 1:length(unique(fp3$cast))){
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_temp_plots_2019/",castname,".png")
+  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_temp_plots_2020/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }

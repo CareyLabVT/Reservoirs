@@ -294,32 +294,37 @@ first_batch = final%>%
   filter(year(Date)<=2019)
 
 write.csv(final,"CTD_final_2013_2020.csv", row.names = FALSE)
+summary(ctd_flagged$Site)
 ```
 
 ```{r}
 library(akima)
 library(colorRamps)
-
-qaqc <- read_csv("CTD_final_2013_2020.csv")
+qaqc = read.csv("CTD_final_2013_2020.csv")%>%
+  mutate(Date = as_datetime(Date))
 qaqc%>%
   filter(Reservoir == "FCR", Site == 50)%>%
   ggplot(aes(x = Date, y = DO_mgL))
 
-do <- qaqc%>%filter(!is.na(DO_mgL))
-do_interp <- interp2xyz(interp(do$Date,do$Depth_m,do$DO_mgL,xo = seq(min(do$Date), max(do$Date), by = 1),yo = seq(min(do$Depth_m), max(do$Depth_m), by = .1)),data.frame = T)
-
+do <- qaqc%>%
+  filter(!is.na(DO_mgL))%>%
+  mutate(Depth_m = round(Depth_m,1))%>%
+  group_by(round(Depth_m,1))%>%
+  slice(which.min(Depth_m))
+do_interp <- interp2xyz(interp(do$Date,do$Depth_m,do$DO_mgL,xo = seq(min(do$Date), max(do$Date), by = 1),yo = seq(min(do$Depth_m), max(do$Depth_m), by = .1), duplicate = "strip"),data.frame = T)
+summary(do)
 #jpeg("../figures/TP_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
-tp_interp%>%
+do_interp%>%
   mutate(x = as.Date(x, origin = "1970-01-01"))%>%
   ggplot(aes(x=x, y=y))+
   geom_raster(aes(fill = z))+
   scale_y_reverse(expand = c(0,0))+
   scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
-  labs(x = "", y = "Depth (m)", title = "Total Phosphorus",fill=expression('(mg/L)'))+
+  labs(x = "", y = "Depth (m)", title = "Dissolved oxygen",fill=expression('(mg/L)'))+
   geom_point(data = tp, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
   scale_x_date(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA))
-dev.off()
+#dev.off()
 
 jpeg("../figures/TN_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
 tn_interp%>%

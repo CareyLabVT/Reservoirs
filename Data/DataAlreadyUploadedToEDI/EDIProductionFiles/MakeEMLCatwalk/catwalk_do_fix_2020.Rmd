@@ -13,18 +13,18 @@ source("temp_oxy_chla_qaqc.R")
 ```
 
 ```{r}
-download.file("https://github.com/FLARE-forecast/FCRE-data/blob/fcre-catwalk-data/CAT_MaintenanceLog.txt","CAT_MaintenanceLog_2020.txt")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt","CAT_MaintenanceLog_2020.txt")
 
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 
-temp_oxy_chla_qaqc('Catwalk_2020.csv',"CAT_MaintenanceLog_2020.txt","Catwalk_final_2020.csv") #NOTE this isn't working right now
+temp_oxy_chla_qaqc('Catwalk_2020.csv',"CAT_MaintenanceLog_2020.txt","Catwalk_final_2020.csv") 
 
-catdata <- read.csv("Catwalk_final.csv") #Has not been updated
+catdata <- read.csv("Catwalk_final_2020.csv")
 catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
-catdata_published <- catdata[catdata$DateTime<="2018-12-16",]
+catdata_published <- catdata[catdata$DateTime<="2018-12-16",] #Need to fix this
 catdata_published <- catdata_published[!is.na(catdata_published$Flag_All),]
-catdata_flag <- catdata[catdata$DateTime>"2018-12-16",]
+catdata_flag <- catdata[catdata$DateTime>"2020-01-01",] #Need to fix this
 
 catdata_flag$Flag_All <- 0
 catdata_flag$Flag_DO_1 <- 0
@@ -60,9 +60,12 @@ catdata_flag <- catdata_flag %>%  #RDO at 5m
          EXODOsat_percent_1 = ifelse(EXODOsat_percent_1 <0, 0, EXODOsat_percent_1),
          Flag_DO_1 = ifelse(is.na(EXODO_mgL_1),7,Flag_DO_1))
 
-#
-clean_start <- as_datetime(c("2018-12-17 11:30:00","2019-02-08 12:50:00","2019-06-17 11:10:00","2019-07-17 11:40:00", "2019-08-12 12:40:00","2019-09-27 12:30:00", "2019-10-07 10:30:00","2019-10-11 12:00:00"))
-clean_end <- as_datetime(c("2018-12-17 11:40:00","2019-02-08 13:10:00","2019-06-17 11:20:00","2019-07-17 12:40:00","2019-08-12 12:40:00","2019-09-27 13:00:00","2019-10-07 11:00:00","2019-10-11 13:00:00"))
+#Deal with when the sesnors were up ###(SHOULD I BE DOING ANYTHING FOR 1m here?)
+maint = read.csv("CAT_MaintenanceLog_2020.txt")
+maint = maint[!grepl("EXO",maint$parameter),]
+clean_start<-as.POSIXct(maint$TIMESTAMP_start)
+clean_end <- as.POSIXct(maint$TIMESTAMP_end)
+
 ADJ_PERIOD = 2*60*60 #amount of time to stabilization after cleaning in seconds
 
 for (i in range(1,length(clean_start))){ #Set all data during cleaning and for ADJ_PERIOD after to NA
@@ -73,7 +76,6 @@ for (i in range(1,length(clean_start))){ #Set all data during cleaning and for A
   catdata_flag$Flag_DO_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
   catdata_flag$Flag_DO_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
 }
-
 
 ################
 #Creating a new flag "6" which means the values seemed so suspect that we adjusted them (started in 2019): "very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5"
@@ -124,7 +126,7 @@ catdata_final <- catdata_published%>%
   select(Reservoir, Site, DateTime, ThermistorTemp_C_surface, ThermistorTemp_C_1, ThermistorTemp_C_2, ThermistorTemp_C_3, ThermistorTemp_C_4, ThermistorTemp_C_5, ThermistorTemp_C_6, ThermistorTemp_C_7, ThermistorTemp_C_8, ThermistorTemp_C_9, RDO_mgL_5, RDOsat_percent_5, RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDOTemp_C_9, EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, EXO_wiper, RECORD, CR6_Batt_V, CR6Panel_Temp_C, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, Flag_All, Flag_DO_1, Flag_DO_5, Flag_DO_9, Flag_Chla, Flag_Phyco, Flag_TDS)
 
 catdata_final <- catdata_final[!is.na(catdata_final$Reservoir),]
-catdata_final <- catdata_final[year(catdata_final$DateTime)<2020,]
+catdata_final <- catdata_final[year(catdata_final$DateTime)<2021,]
 
 write_csv(catdata_final,"catdata_edited_withDO.csv")
 ```

@@ -14,6 +14,8 @@ library(tidyverse)
 library(lubridate)
 ```
 
+Flag when pump wasn't working in July??
+Need to remove pH after August 2020
 
 ```{r}
 # Package ID: edi.200.10 Cataloging System:https://pasta.edirepository.org.
@@ -224,6 +226,15 @@ ctd = ctd1 %>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Reservoir = as.factor(Reservoir))
 
+#Flag codes
+#0=Not suspect, 
+#1=Sample not taken, 
+#2=Instrument malfunction, 
+#3=Sample below detection,
+#4=Negative value set to 0,
+#5=No sensor on CTD
+
+
 ctd_flagged = ctd %>% #Add flags
   select(-Flag)%>%
   mutate(Flag_Temp = 0,
@@ -275,6 +286,8 @@ ctd_flagged = ctd %>% #Add flags
     #pH
     pH = ifelse(pH < 0, 0, pH), #Flag pH < 0 
     Flag_pH = ifelse(pH < 0,4,Flag_pH),
+    pH = ifelse(Date > as.Date("2020-08-04"),NA,pH), #pH sensor broke in summer 2020
+    Flag_pH = ifelse(Date > as.Date("2020-08-04"),2,Flag_pH),
     Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
     
     #ORP
@@ -288,7 +301,7 @@ ctd_flagged = ctd %>% #Add flags
 
 
 #Not all variables are meaningful out of the water
-Above_surface_flag = 3
+Above_surface_flag = 6
 ctd_flagged[ctd_flagged$Depth_m<0,c("Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV")]<-NA
 ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla","Flag_Turb","Flag_Cond","Flag_SpecCond","Flag_DO","Flag_DO_pSat","Flag_pH","Flag_ORP")]<-Above_surface_flag
 colnames(ctd_flagged)
@@ -309,7 +322,7 @@ ctd_flagged$Date[year(ctd_flagged$Date) == 2020] = ctd_flagged$Date[year(ctd_fla
 ```
 
 ```{r}
-missing_time_flag = 8
+missing_time_flag = 7
 final = dt1 %>% #Join new data with published dataset
   mutate(Flag_Datetime = missing_time_flag)%>% #All previous data did not have meaningful times
   full_join(ctd_flagged)%>%
@@ -328,7 +341,7 @@ qaqc = read.csv("CTD_final_2013_2020.csv")%>%
 qaqc_plotly = qaqc%>%
   filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = Chla_ugL))+
+  ggplot(aes(x = Date, y = Depth_m, color = pH))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

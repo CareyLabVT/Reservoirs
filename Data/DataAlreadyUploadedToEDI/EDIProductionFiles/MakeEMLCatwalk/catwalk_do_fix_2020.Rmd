@@ -12,6 +12,11 @@ pacman::p_load("RCurl","tidyverse","lubridate")
 source("temp_oxy_chla_qaqc.R")
 ```
 
+TO DO 
+
+- compare with CTD and add in flags as needed
+
+
 ```{r}
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt","CAT_MaintenanceLog_2020.txt")
 

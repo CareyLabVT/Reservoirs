@@ -6,7 +6,7 @@ output: html_document
 ---
 
 Created by ASL FA 2019
-Substantially edited by ASL 10 Dec 2020
+Substantially edited by ASL 10 Dec 2020, 8 Jan 2021
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -182,6 +182,8 @@ detach(dt1)
 
 ```
 
+
+!!!!! Warning this takes a long time to run! Only run if you have changed CTD csv files
 ```{r}
 # This reads all the files into the R environment
 files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
@@ -194,7 +196,7 @@ ctd = read_csv(paste0("../csv_outputs/",files[1]))
 location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
 ctd = ctd%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location))))%>%
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
     rename(PAR_umolm2s = PAR,
            Desc_rate = 'Descent Rate (m/s)')%>%
     select(-Salinity)
@@ -205,7 +207,7 @@ for (i in 2:length(files)){
   location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
   new = new%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("^[a-z]*","",sub("_[a-z]","",location))))%>%
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
     rename(PAR_umolm2s = PAR,
            Desc_rate = 'Descent Rate (m/s)')%>%
     select(-Salinity)
@@ -216,16 +218,17 @@ write_csv(ctd, "CTD_Meta_2018-2020.csv")
 ```
 
 ```{r}
-ctd1 <- read.csv("CTD_Meta_2018-2020.csv")
+ctd1 <- read.csv("CTD_Meta_2018-2020.csv") #Load saved data
 ctd = ctd1 %>%
   select(-Density_mg_m3)%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Reservoir = as.factor(Reservoir))
 
-ctd_flagged = ctd %>%
+ctd_flagged = ctd %>% #Add flags
   select(-Flag)%>%
   mutate(Flag_Temp = 0,
          Flag_DO= 0,
+         Flag_DO_pSat = 0,
          Flag_Cond = 0,
          Flag_SpecCond = 0,
          Flag_Chla = 0,
@@ -233,125 +236,104 @@ ctd_flagged = ctd %>%
          Flag_pH = 0,
          Flag_ORP = 0,
          Flag_PAR = 0,
-         Flag_DescRate = 0) %>%
+         Flag_DescRate = 0,
+         Flag_datetime = 0) %>%
   mutate(
     #TEMP
-    Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp),
+    Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp), #Flag NA temperatures
   
     #DO
-    DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL),
+    DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
-    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO),
+    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
+    
+    #DO pSat
+    DO_pSat = ifelse(DO_pSat < 0, 0, DO_pSat), #Flag pSat<0
+    Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
+    Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
   
     #COND
-    Cond_uScm = ifelse(Cond_uScm < 0, 0, Cond_uScm),
+    Cond_uScm = ifelse(Cond_uScm < 0, 0, Cond_uScm), #FLag Cond < 0
     Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
-    Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond),
+    Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond), #Flag NA
     
     #SPECCOND
-    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, 0, Spec_Cond_uScm),
+    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, 0, Spec_Cond_uScm), #FLag Cond < 0
     Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
-    Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond),
+    Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond), #Flag NA
     
     #CHLA
-    Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL),
+    Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), #Flag Chla <0
     Flag_Chla = ifelse(Chla_ugL < 0,4,Flag_Chla),
-    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla),
+    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
     
     #TURB
-    Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU),
+    Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
     Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
-    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb),
+    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb), #Flag NA
     
     #pH
-    pH = ifelse(pH < 0, 0, pH),
+    pH = ifelse(pH < 0, 0, pH), #Flag pH < 0 
     Flag_pH = ifelse(pH < 0,4,Flag_pH),
-    Flag_pH = ifelse(is.na(pH),2,Flag_pH),
+    Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
     
     #ORP
-    Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP),
+    Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP), #Flag NA
   
     #PAR
-    Flag_PAR = ifelse(is.na(PAR_umolm2s),2,Flag_PAR),
+    Flag_PAR = ifelse(is.na(PAR_umolm2s),2,Flag_PAR), #Flag NA
     
     #DESC RATE
-    Flag_DescRate = ifelse(is.na(Desc_rate),2,Flag_DescRate))
+    Flag_DescRate = ifelse(is.na(Desc_rate),2,Flag_DescRate)) #Flag NA
+
+
+#Not all variables are meaningful out of the water
+Above_surface_flag = 3
+ctd_flagged[ctd_flagged$Depth_m<0,c("Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV")]<-NA
+ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla","Flag_Turb","Flag_Cond","Flag_SpecCond","Flag_DO","Flag_DO_pSat","Flag_pH","Flag_ORP")]<-Above_surface_flag
+colnames(ctd_flagged)
 
 summary(ctd_flagged)
+
+## CTD times in 2020 are incorrect
+#hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
+#CTD date - date from field notes
+as_datetime("2020-06-21 19:34:20 UTC")-as_datetime("2020-06-22 08:40:00")
+as_datetime("2020-07-05 21:24:12 UTC")-as_datetime("2020-07-06 10:26:00")
+as_datetime("2020-10-13 21:10:11 UTC")-as_datetime("2020-10-14 10:10:00")
+#~13 hours
+
+ctd_flagged$Date[year(ctd_flagged$Date) == 2020] = ctd_flagged$Date[year(ctd_flagged$Date) == 2020]+hours(13)
+#hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
+#Looks much better!
 ```
 
-
 ```{r}
-final = dt1 %>%
+missing_time_flag = 8
+final = dt1 %>% #Join new data with published dataset
+  mutate(Flag_Datetime = missing_time_flag)%>% #All previous data did not have meaningful times
   full_join(ctd_flagged)%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
-  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Spec_Cond_uScm,Chla_ugL,Turb_NTU,pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp,Flag_DO,Flag_Cond,Flag_SpecCond,Flag_Chla,Flag_Turb,Flag_pH,Flag_ORP,Flag_PAR, Flag_DescRate)
-
-second_batch = final%>%
-  filter(year(Date)>2019)
-
-first_batch = final%>%
-  filter(year(Date)<=2019)
+  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Spec_Cond_uScm,Chla_ugL,Turb_NTU,pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp,Flag_DO,Flag_Cond,Flag_SpecCond,Flag_Chla,Flag_Turb,Flag_pH,Flag_ORP,Flag_PAR, Flag_DescRate, Flag_Datetime)
 
 write.csv(final,"CTD_final_2013_2020.csv", row.names = FALSE)
-summary(ctd_flagged$Site)
 ```
 
 ```{r}
 library(akima)
 library(colorRamps)
+library(plotly)
 qaqc = read.csv("CTD_final_2013_2020.csv")%>%
   mutate(Date = as_datetime(Date))
-qaqc%>%
-  filter(Reservoir == "FCR", Site == 50)%>%
-  ggplot(aes(x = Date, y = DO_mgL))
+qaqc_plotly = qaqc%>%
+  filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
+  sample_frac(.1)%>%
+  ggplot(aes(x = Date, y = Depth_m, color = Chla_ugL))+
+  scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
+  scale_y_reverse()+
+  geom_point()
+ggplotly(qaqc_plotly)
 
-do <- qaqc%>%
-  filter(!is.na(DO_mgL))%>%
-  mutate(Depth_m = round(Depth_m,1))%>%
-  group_by(round(Depth_m,1))%>%
-  slice(which.min(Depth_m))
-do_interp <- interp2xyz(interp(do$Date,do$Depth_m,do$DO_mgL,xo = seq(min(do$Date), max(do$Date), by = 1),yo = seq(min(do$Depth_m), max(do$Depth_m), by = .1), duplicate = "strip"),data.frame = T)
-summary(do)
-#jpeg("../figures/TP_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
-do_interp%>%
-  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y))+
-  geom_raster(aes(fill = z))+
-  scale_y_reverse(expand = c(0,0))+
-  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
-  labs(x = "", y = "Depth (m)", title = "Dissolved oxygen",fill=expression('(mg/L)'))+
-  geom_point(data = tp, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
-  scale_x_date(expand = c(0,0))+
-  theme(panel.border = element_rect(fill = NA))
-#dev.off()
-
-jpeg("../figures/TN_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
-tn_interp%>%
-  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y, fill = z))+
-  geom_raster()+
-  scale_y_reverse(expand = c(0,0))+
-  labs(x = "", y = "Depth (m)", title = "Total Nitrogen",fill=expression('(mg/L)'))+
-  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
-  geom_point(data = tn, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
-  scale_x_date(expand = c(0,0))+
-  theme(panel.border = element_rect(fill = NA))
-dev.off()
-
-jpeg("../figures/DOC_heatmap.jpeg",width = 8, height = 6, units = "in", res = 300)
-doc_interp%>%
-  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y, fill = z))+
-  geom_raster()+
-  scale_y_reverse(expand = c(0,0))+
-  labs(x = "", y = "Depth (m)", title = "Dissolved Organic Carbon",fill=expression('(mg/L)'))+
-  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
-  geom_point(data = doc, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
-  scale_x_date(expand = c(0,0))+
-  theme(panel.border = element_rect(fill = NA))
-dev.off()
-  
   
 ```
 

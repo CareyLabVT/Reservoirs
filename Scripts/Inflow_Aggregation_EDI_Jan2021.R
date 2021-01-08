@@ -755,5 +755,8 @@ col_order <- c("Reservoir","Site","DateTime","WVWA_Pressure_psi","WVWA_Baro_pres
 Inflow_Final_8 <- Inflow_Final_7[,col_order]
 Inflow_Final_8$VT_Temp_C <- as.numeric(Inflow_Final_8$VT_Temp_C)
 
+Inflow_Final_8 <- Inflow_Final_8 %>% 
+  rename(VT_Flag_Temp_C = VT_Flag_Temp, WVWA_Flag_Temp_C = WVWA_Flag_Temp)
+
 # Write to CSV
 write.csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_08Jan2021.csv', row.names=F) 

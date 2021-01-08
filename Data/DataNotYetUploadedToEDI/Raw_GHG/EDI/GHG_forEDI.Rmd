@@ -126,6 +126,39 @@ ghgs=ghgs%>%
   filter(!is.na(Depth_m)) #Depth cannot be missing
 ```
 
+This section graphs CO2 and CH4 and adds flags for missing data
+```{r}
+ghgs%>% #Plot CH4 at Site 50 in FCR
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CO2 at Site 50 in FCR
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CH4 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CO2 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs$flag_ch4 <- 1
+ghgs$flag_ch4[is.na(ghgs$ch4_umolL)]<-4
+ghgs$flag_co2 <- 1
+ghgs$flag_co2[is.na(ghgs$co2_umolL)]<-4
+```
+
+
 This section calculates % difference between replicates
 Flag 1 = the % difference between replicates is <30% and both are retained
 Flag 2 = the % difference between replicates is >30% and <50% - both replicates were retained but are flagged
@@ -179,41 +212,16 @@ ghgs_comb <- ghgs_comb %>%
 
 ```
 
-This section graphs CO2 and CH4, and creates a combined file to publish to EDI
+Create a combined file to publish on EDI
 ```{r}
-ghgs%>% #Plot CH4 at Site 50 in FCR
-  filter(Depth_m<100,
-         Reservoir == "FCR")%>%
-  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
-  geom_point()
-
-ghgs%>% #Plot CO2 at Site 50 in FCR
-  filter(Depth_m<100,
-         Reservoir == "FCR")%>%
-  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
-  geom_point()
-
-ghgs%>% #Plot CH4 at Site 50 in BVR
-  filter(Depth_m<100,
-         Reservoir == "BVR")%>%
-  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
-  geom_point()
-
-ghgs%>% #Plot CO2 at Site 50 in BVR
-  filter(Depth_m<100,
-         Reservoir == "BVR")%>%
-  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
-  geom_point()
-
-ghgs$flag_ch4 <- 1
-ghgs$flag_ch4[is.na(ghgs$ch4_umolL)]<-4
-ghgs$flag_co2 <- 1
-ghgs$flag_co2[is.na(ghgs$co2_umolL)]<-4
-
 final = dt1%>%
   full_join(ghgs)
 
-summary(final)
+#Moving sites out of the depth column
+final$Site = 50
+final$Site[final$Depth_m > 98]<- final$Depth_m[final$Depth_m > 98]
+final$Depth_m[final$Depth_m > 98] <- 0.1
+
 write.csv(final,"final_GHG_2015-2020.csv")
 ```
 

@@ -11,6 +11,12 @@ library(readxl)
 library(tidyverse)
 ```
 
+Lingering to do's:
+1. Some CO2 samples below detection - how to handle?
+2. Add in column for site? To mimic other datasets?
+3. Add in early 2020 data
+4. How best to automate/remove bad reps?
+
 This first section reads in previous data published on EDI
 ```{r}
 # Package ID: edi.551.2 Cataloging System:https://pasta.edirepository.org.
@@ -103,7 +109,7 @@ detach(dt1)
         
 ```
 
-This section loads data from 2020, graphs CO2 and CH4, and creates a combined file to publish to EDI
+This section loads data from 2020
 ```{r}
 #Load this year's data
 ghgs <- read_excel("../2020/GHG_MEGA_GC_SHEET_EXCEL_2020.xlsx", sheet = 2, skip = 6)
@@ -118,7 +124,63 @@ ghgs=ghgs%>%
          Depth_m = as.numeric(Depth_m),
          Reservoir = as.factor(Reservoir))%>%
   filter(!is.na(Depth_m)) #Depth cannot be missing
+```
 
+This section calculates % difference between replicates
+Flag 1 = the % difference between replicates is <30% and both are retained
+Flag 2 = the % difference between replicates is >30% and <50% - both replicates were retained but are flagged
+Flag 3 = the % difference between replicates is >50%. The replicate with the largest difference was removed
+```{r}
+# Separate into rep 1 and rep2
+ghgs_rep1 <- ghgs %>% 
+  filter(Rep == "1") %>% 
+  select(-Rep,-flag_ch4,-flag_co2) %>% 
+  rename(ch4_umolL_rep1 = ch4_umolL, co2_umolL_rep1 = co2_umolL)
+
+ghgs_rep2 <- ghgs %>% 
+  filter(Rep == "2") %>% 
+  select(-Rep,-flag_ch4,-flag_co2) %>% 
+  rename(ch4_umolL_rep2 = ch4_umolL, co2_umolL_rep2 = co2_umolL)
+
+ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(ch4_diff = round((abs(ch4_umolL_rep1-ch4_umolL_rep2)/((ch4_umolL_rep1+ch4_umolL_rep2)/2))*100))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(co2_diff = round((abs(co2_umolL_rep1-co2_umolL_rep2)/((co2_umolL_rep1+co2_umolL_rep2)/2))*100))
+
+# Flag replicates: Flag 1; Flag 2; Flag 3
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_ch4 = ifelse(ch4_diff>=50,3,
+                           ifelse(ch4_diff<=50 & ch4_diff>=30,2,
+                           1)))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_co2 = ifelse(co2_diff>=50,3,
+                           ifelse(co2_diff<=50 & co2_diff>=30,2,
+                           1)))
+
+# Recombine with reps
+ghgs_rep1 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep2,-co2_umolL_rep2) %>% 
+  mutate(Rep = "1") %>% 
+  rename(ch4_umolL = ch4_umolL_rep1, co2_umolL = co2_umolL_rep1)
+
+ghgs_rep2 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep1,-co2_umolL_rep1) %>% 
+  mutate(Rep = "2") %>% 
+  rename(ch4_umolL = ch4_umolL_rep2, co2_umolL = co2_umolL_rep2)
+
+ghgs_comb <- rbind(ghgs_rep1,ghgs_rep2)
+
+ghgs_comb <- ghgs_comb %>% 
+  arrange(DateTime,Reservoir,Depth_m,Rep)
+
+```
+
+This section graphs CO2 and CH4, and creates a combined file to publish to EDI
+```{r}
 ghgs%>% #Plot CH4 at Site 50 in FCR
   filter(Depth_m<100,
          Reservoir == "FCR")%>%

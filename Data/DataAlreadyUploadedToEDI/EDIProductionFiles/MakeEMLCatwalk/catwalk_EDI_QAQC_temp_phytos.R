@@ -1,10 +1,10 @@
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly")
-source("C:Users/wwoel/Desktop/Reservoirs_2/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/temp_oxy_chla_qaqc.R")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
+source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020_test.txt"))
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020_test.txt"))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 
 # run standard qaqc
 data_file <- paste0(folder, '/Catwalk_2020.csv')
@@ -65,6 +65,9 @@ catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-11-09 11:30:0
 catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
 catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
 catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
+surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
+  geom_point()
+ggplotly(surf)
 
 # check 1m temp data
 m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
@@ -77,6 +80,11 @@ catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <-
 catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
 catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
 catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
+catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
+catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
+m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
+  geom_point()
+ggplotly(m_1)
 
 # check 2m temp data
 m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
@@ -89,6 +97,13 @@ catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-02 11:30:00'] <-
 catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
 catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
 catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
+catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
+catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
+catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA
+catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
+m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
+  geom_point()
+ggplotly(m_2)
 
 # check 3m temp data
 m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
@@ -101,9 +116,14 @@ catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-02 11:30:00'] <-
 catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
 catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
 catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-# no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
+catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
+catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
+# no maintenance recorded on this day but this was a field day, so forcing this datapoint to NA
 catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
 catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
+m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
+  geom_point()
+ggplotly(m_3)
 
 # check 4m temp data
 m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
@@ -116,6 +136,8 @@ catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-02 11:30:00'] <-
 catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
 catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
 catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
+catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
+catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
 # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
 catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
 catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
@@ -123,6 +145,9 @@ catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-09-15 12:50:00'] <-
 catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
 catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
 catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
+m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
+  geom_point()
+ggplotly(m_4)
 
 # check 5m temp data
 m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
@@ -144,6 +169,9 @@ catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-09-15 12:50:00'] <-
 catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
 catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
 catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
+m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
+  geom_point()
+ggplotly(m_5)
 
 # check 6m temp data
 m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
@@ -179,6 +207,9 @@ days <- c('2020-07-13 10:50:00', '2020-07-13 11:00:00', '2020-07-13 11:10:00', '
 days <- as.POSIXct(days,format = "%Y-%m-%d %H:%M:%S")
 catdata_flag$Flag_Temp_6[catdata_flag$DateTime %in% days] <- 1
 catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime %in% days] <- NA
+m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
+  geom_point()
+ggplotly(m_6)
 
 # check 7m temp data
 m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
@@ -191,6 +222,9 @@ catdata_flag$ThermistorTemp_C_7[catdata_flag$DateTime %in% days] <- NA
 # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
 catdata_flag$ThermistorTemp_C_7[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- NA 
 catdata_flag$Flag_Temp_7[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- 1
+m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
+  geom_point()
+ggplotly(m_7)
 
 # check 8m temp data
 m_8 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_8)) +
@@ -203,6 +237,10 @@ catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime %in% days] <- NA
 # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
 catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- NA 
 catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- 1
+catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-10-14 12:10:00'] <- NA 
+catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-10-14 12:10:00'] <- 1
+catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-10-14 12:20:00'] <- NA 
+catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-10-14 12:20:00'] <- 1
 
 # check 9m temp data
 m_9 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +

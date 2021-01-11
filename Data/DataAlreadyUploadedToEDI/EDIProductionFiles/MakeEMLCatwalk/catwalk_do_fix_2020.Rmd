@@ -108,9 +108,12 @@ Dexter this is the section I would love help with!!
 #Creating a new flag "5" which means that the values are very questionable due to fouling but not adjusted (starting in 2019)
 ################
 
-catdata_adj = catdata_flag%>%
+#removing NA rows at top of catdata_flag
+catdata_flag_test <- catdata_flag[-c(1:6),]
+
+catdata_adj = catdata_flag_test%>%
   mutate(
-     # 5 meters
+     # 5 meters #### READ NOTE: These changes were for 2019, I didn't delete so the RDO 5 adjusted column still appeared for plots below 
     #Add a flag that this period was suspect
      Flag_DO_5 = ifelse(DateTime<as_datetime("2019-08-12 12:40:00") & DateTime> as_datetime("2019-08-11 00:00:00"), 6, Flag_DO_5), 
      #Adjust DO (mg/L) creating a new variable
@@ -123,25 +126,46 @@ catdata_adj = catdata_flag%>%
                                 RDOsat_percent_5),
      Flag_DO_5 = ifelse(DateTime<as_datetime("2019-07-17 11:40:00") & DateTime> as_datetime("2019-07-13 00:00:00"), 5, Flag_DO_5),
      
-     #9 meters 
-     Flag_DO_9 = ifelse(DateTime<"2019-08-12 12:40:00" & DateTime> "2019-08-05 12:45:00",6, Flag_DO_9),
-     RDO_mgL_9_adjusted = ifelse(DateTime<"2019-08-12 12:40:00" & DateTime> "2019-08-05 12:45:00", 
-                                RDO_mgL_9 + sqrt(as.numeric(difftime(DateTime,"2019-08-05 12:45:00", units = "mins")))/70, #A different square root adjustment here
-                                RDO_mgL_9),
-     RDOsat_percent_9_adjusted = ifelse(DateTime<"2019-08-12 12:40:00" & DateTime> "2019-08-05 12:45:00", 
-                                RDOsat_percent_9 + sqrt(as.numeric(difftime(DateTime,"2019-08-05 12:45:00", units = "mins")))/70/11.3*100,
-                                RDOsat_percent_9),
-     Flag_DO_9 = ifelse(DateTime<as_datetime("2019-07-17 11:40:00") & DateTime> as_datetime("2019-07-13 00:00:00"), 5, Flag_DO_9),
-     Flag_DO_9 = ifelse(DateTime<as_datetime("2019-08-19 13:00:00") & DateTime> as_datetime("2019-08-12 12:40:00"), 5, Flag_DO_9),
      
-     # 9 meters september
-     Flag_DO_9 = ifelse(DateTime<"2019-09-27 12:30:00" & DateTime> "2019-09-02 13:00:00",6, Flag_DO_9),
-     RDO_mgL_9_adjusted = ifelse(DateTime<"2019-09-27 12:30:00" & DateTime> "2019-09-02 13:00:00", 
-                                RDO_mgL_9 + as.numeric(difftime(DateTime,"2019-09-02 13:00:00", units = "mins"))/30000, #A linear adjustment here
+     
+     #9 meters #### READ NOTE: These are the sections I noticed apparent following in TS and have tried to correct with linear adjustments
+     #first section fixed 11aug to 17aug
+     Flag_DO_9 = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00",6, Flag_DO_9),
+     RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime("2020-08-17 12:50:00","2020-08-12 15:00:00", units = "mins")))/6500, #A different square root adjustment here. was a sqrt before, I removed that part
+                                RDO_mgL_9),
+     RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00", 
+                                RDOsat_percent_9 + (as.numeric(difftime("2020-08-17 12:50:00","2020-08-12 15:00:00", units = "mins")))/6500/11.3*100,
+                                RDOsat_percent_9),
+     
+     # 9 meters 19aug to 24aug
+     Flag_DO_9 = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00",6, Flag_DO_9),
+     RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime("2020-08-24 10:40:00","2020-08-19 20:00:00", units = "mins")))/6500, #A linear adjustment here
                                 RDO_mgL_9_adjusted),
-     RDOsat_percent_9_adjusted = ifelse(DateTime<"2019-09-27 12:30:00" & DateTime> "2019-09-02 13:00:00", 
-                                RDOsat_percent_9 + as.numeric(difftime(DateTime,"2019-09-02 13:00:00", units = "mins"))/30000/11.3*100,
+     RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
+                                RDOsat_percent_9 + as.numeric(difftime("2020-08-24 10:40:00","2020-08-19 20:00:00", units = "mins"))/6500/11.3*100,
+                                RDOsat_percent_9_adjusted),
+     
+      # 9 meters 26aug to 02sep
+     Flag_DO_9 = ifelse(DateTime<"2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00" ,6, Flag_DO_9),
+     RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime("2020-09-02 10:50:00", "2020-08-26 12:00:00", units = "mins")))/10000, #A linear adjustment here
+                                RDO_mgL_9_adjusted),
+     RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
+                                RDOsat_percent_9 + as.numeric(difftime("2020-09-02 10:50:00", "2020-08-26 12:00:00", units = "mins"))/10000/11.3*100,
+                                RDOsat_percent_9_adjusted),
+     
+     # 9 meters 02sep to 11sep
+     Flag_DO_9 = ifelse(DateTime<"2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00" ,6, Flag_DO_9),
+     RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime("2020-09-09 17:50:00", "2020-09-05 06:00:00", units = "mins")))/4000, #A linear adjustment here
+                                RDO_mgL_9_adjusted),
+     RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
+                                RDOsat_percent_9 + as.numeric(difftime("2020-09-09 17:50:00", "2020-09-05 06:00:00", units = "mins"))/4000/11.3*100,
                                 RDOsat_percent_9_adjusted))
+
+
 ```
 
 Section 5 plot catwalk and ctd
@@ -169,8 +193,8 @@ ctd_new$Date <- ymd_hms(ctd_new$Date)
 
 plot = catdata_adj%>%
   ggplot(aes(x = DateTime))+
-  geom_line(aes(y = RDO_mgL_5), color = "blue")+
-  geom_line(aes(y = RDO_mgL_9), color = "red")+
+  geom_line(aes(y = RDO_mgL_5_adjusted), color = "blue")+
+  geom_line(aes(y = RDO_mgL_9_adjusted), color = "red")+
   geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 5), color = "blue")+
   geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 9), color = "red")
 ggplotly(plot)

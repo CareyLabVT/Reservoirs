@@ -190,21 +190,23 @@ ghgs_rep2 <- ghgs %>%
 ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
 
 ghgs_reps <- ghgs_reps %>% 
-  mutate(ch4_diff = round((abs(ch4_umolL_rep1-ch4_umolL_rep2)/((ch4_umolL_rep1+ch4_umolL_rep2)/2))*100))
+  mutate(ch4_pdiff = round((abs(ch4_umolL_rep1-ch4_umolL_rep2)/((ch4_umolL_rep1+ch4_umolL_rep2)/2))*100)) %>% 
+  mutate(ch4_diff = abs(ch4_umolL_rep1-ch4_umolL_rep2))
 
 ghgs_reps <- ghgs_reps %>% 
-  mutate(co2_diff = round((abs(co2_umolL_rep1-co2_umolL_rep2)/((co2_umolL_rep1+co2_umolL_rep2)/2))*100))
+  mutate(co2_pdiff = round((abs(co2_umolL_rep1-co2_umolL_rep2)/((co2_umolL_rep1+co2_umolL_rep2)/2))*100)) %>% 
+  mutate(co2_diff = abs(co2_umolL_rep1 - co2_umolL_rep2))
 
 # Flag replicates: Flag 1; Flag 2; Flag 3
 ghgs_reps <- ghgs_reps %>% 
-  mutate(flag_ch4 = ifelse(ch4_diff>=50,3,
-                           ifelse(ch4_diff<=50 & ch4_diff>=30,2,
-                           1)))
+  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.002,3,
+                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.002,2,
+                                  1)))
 
 ghgs_reps <- ghgs_reps %>% 
-  mutate(flag_co2 = ifelse(co2_diff>=50,3,
-                           ifelse(co2_diff<=50 & co2_diff>=30,2,
-                           1)))
+  mutate(flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=3.8,3,
+                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=3.8,2,
+                                  1)))
 
 # Recombine with reps
 ghgs_rep1 <- ghgs_reps %>% 

@@ -151,7 +151,9 @@ make_eml(
   maintenance.description = 'ongoing',
   data.table = "FluoroProbe.csv",
   data.table.description = "Reservoir FluoroProbe dataset",
-  user.id = 'carylab6',
+  other.entity = "FluoroProbe_QAQC.R",
+  other.entity.description = "data aggregation and quality control script",
+  user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.123.1')
 

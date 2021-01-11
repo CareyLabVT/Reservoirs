@@ -110,6 +110,21 @@ detach(dt1)
         
 ```
 
+JUST FOR 2021 EDI PUSH: Check to make sure all previous data follows MDL (CH4 = 0.002 umolL; CO2 = 3.8 umolL)
+```{r}
+# For purpose of data - if data is reported from instrument but below MDL - keep data value but flag = 5
+dt2 <- dt1 %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.002 & flag_ch4 == 1, 15, 
+                           ifelse(ch4_umolL <= 0.002 & flag_ch4 == 2, 25,
+                                  ifelse(ch4_umolL <= 0.002 & flag_ch4 == 3, 35,
+                                         dt1$flag_ch4)))) %>% 
+  mutate(flag_co2 = ifelse(co2_umolL <= 3.8 & flag_co2 == 1, 15, 
+                           ifelse(co2_umolL <= 3.8 & flag_co2 == 2, 25,
+                                  ifelse(co2_umolL <= 3.8 & flag_co2 == 3, 35,
+                                         dt1$flag_co2))))
+
+```
+
 This section loads data from 2020
 ```{r}
 #Load this year's data
@@ -127,7 +142,7 @@ ghgs=ghgs%>%
   filter(!is.na(Depth_m)) #Depth cannot be missing
 ```
 
-This section graphs CO2 and CH4 and adds flags for missing data
+This section graphs CO2 and CH4
 ```{r}
 ghgs%>% #Plot CH4 at Site 50 in FCR
   filter(Depth_m<100,
@@ -160,6 +175,8 @@ This section calculates % difference between replicates
 Flag 1 = the % difference between replicates is <30% and both are retained
 Flag 2 = the % difference between replicates is >30% and <50% - both replicates were retained but are flagged
 Flag 3 = the % difference between replicates is >50%. The replicate with the largest difference was removed
+Flag 4 = Sample not collected or problem with instrument
+Flag 5 = Sample below detection; CH4 = 0.002 umolL; CO2 = 3.8 umolL
 ```{r}
 # Separate into rep 1 and rep2
 ghgs_rep1 <- ghgs %>% 
@@ -213,19 +230,23 @@ ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
 ghgs_comb_2$flag_ch4[is.na(ghgs_comb_2$ch4_umolL)]<-4
 ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
 
-# If sample is BD (=0) then flag as 5 (below detection)
+# If sample is BD then flag as 5 (below detection)
 ghgs_comb_2 <- ghgs_comb_2 %>% 
-  mutate(flag_co2 = ifelse(co2_umolL == 0 & is.na(ghgs_comb_2$flag_co2),5,
-                           ifelse(co2_umolL == 0 & flag_co2 == 3, 35,
-                           ghgs_comb_2$flag_co2))) %>% 
-  mutate(flag_ch4 = ifelse(ch4_umolL == 0 & is.na(ghgs_comb_2$flag_ch4),5,
-                           ifelse(ch4_umolL == 0 & flag_ch4 == 3, 35,
-                           ghgs_comb_2$flag_ch4)))
+  mutate(flag_co2 = ifelse(co2_umolL <= 3.8 & is.na(ghgs_comb_2$flag_co2),5,
+                          ifelse(co2_umolL <= 3.8 & flag_co2 == 1, 15,
+                                 ifelse(co2_umolL <= 3.8 & flag_co2 == 2, 25, 
+                                        ifelse(co2_umolL <= 3.8 & flag_co2 == 3, 35,
+                                               ghgs_comb_2$flag_co2))))) %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.002 & is.na(ghgs_comb_2$flag_ch4),5,
+                           ifelse(ch4_umolL <= 0.002 & flag_ch4 == 1, 15,
+                                  ifelse(ch4_umolL <= 0.002 & flag_ch4 == 2, 25,
+                                         ifelse(ch4_umolL <= 0.002 & flag_ch4 == 3, 35,
+                                                ghgs_comb_2$flag_ch4)))))
 ```
 
 Create a combined file to publish on EDI
 ```{r}
-final = dt1%>%
+final = dt2%>%
   full_join(ghgs_comb_2)
 
 #Moving sites out of the depth column

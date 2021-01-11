@@ -1,4 +1,4 @@
-Depth profiles of multiple water-quality variables were collected from 2013 through 2019 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night.
+Depth profiles of multiple water-quality variables were collected from 2013 through 2020 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night.
 
 The CTD was calibrated by the manufacturer yearly (usually in December-February) according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. 
 

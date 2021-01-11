@@ -45,12 +45,12 @@ library(EMLassemblyline)
 
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 make_eml(path = getwd(),
-         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019",
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2020",
          data.table = "CTD_final_2013_2020.csv",
          data.table.description = c("Reservoir CTD dataset"),
          other.entity = c('CTD_forEDI_ASL.Rmd'),
          other.entity.description = c('QAQC script'),
-         temporal.coverage = c("2013-03-07", "2020-01-01"),
+         temporal.coverage = c("2013-03-07", "2020-12-31"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",

@@ -11,6 +11,11 @@ library(readxl)
 library(tidyverse)
 ```
 
+Lingering to do's:
+1. Some CO2 samples below detection - how to handle?
+2. Add in early 2020 data
+3. How best to automate/remove bad reps?
+
 This first section reads in previous data published on EDI
 ```{r}
 # Package ID: edi.551.2 Cataloging System:https://pasta.edirepository.org.
@@ -103,7 +108,7 @@ detach(dt1)
         
 ```
 
-This section loads data from 2020, graphs CO2 and CH4, and creates a combined file to publish to EDI
+This section loads data from 2020
 ```{r}
 #Load this year's data
 ghgs <- read_excel("../2020/GHG_MEGA_GC_SHEET_EXCEL_2020.xlsx", sheet = 2, skip = 6)
@@ -118,7 +123,10 @@ ghgs=ghgs%>%
          Depth_m = as.numeric(Depth_m),
          Reservoir = as.factor(Reservoir))%>%
   filter(!is.na(Depth_m)) #Depth cannot be missing
+```
 
+This section graphs CO2 and CH4 and adds flags for missing data
+```{r}
 ghgs%>% #Plot CH4 at Site 50 in FCR
   filter(Depth_m<100,
          Reservoir == "FCR")%>%
@@ -143,15 +151,85 @@ ghgs%>% #Plot CO2 at Site 50 in BVR
   ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
-ghgs$flag_ch4 <- 1
-ghgs$flag_ch4[is.na(ghgs$ch4_umolL)]<-4
-ghgs$flag_co2 <- 1
-ghgs$flag_co2[is.na(ghgs$co2_umolL)]<-4
+```
 
+
+This section calculates % difference between replicates
+Flag 1 = the % difference between replicates is <30% and both are retained
+Flag 2 = the % difference between replicates is >30% and <50% - both replicates were retained but are flagged
+Flag 3 = the % difference between replicates is >50%. The replicate with the largest difference was removed
+```{r}
+# Separate into rep 1 and rep2
+ghgs_rep1 <- ghgs %>% 
+  filter(Rep == "1") %>% 
+  select(-Rep,-flag_ch4,-flag_co2) %>% 
+  rename(ch4_umolL_rep1 = ch4_umolL, co2_umolL_rep1 = co2_umolL)
+
+ghgs_rep2 <- ghgs %>% 
+  filter(Rep == "2") %>% 
+  select(-Rep,-flag_ch4,-flag_co2) %>% 
+  rename(ch4_umolL_rep2 = ch4_umolL, co2_umolL_rep2 = co2_umolL)
+
+ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(ch4_diff = round((abs(ch4_umolL_rep1-ch4_umolL_rep2)/((ch4_umolL_rep1+ch4_umolL_rep2)/2))*100))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(co2_diff = round((abs(co2_umolL_rep1-co2_umolL_rep2)/((co2_umolL_rep1+co2_umolL_rep2)/2))*100))
+
+# Flag replicates: Flag 1; Flag 2; Flag 3
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_ch4 = ifelse(ch4_diff>=50,3,
+                           ifelse(ch4_diff<=50 & ch4_diff>=30,2,
+                           1)))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_co2 = ifelse(co2_diff>=50,3,
+                           ifelse(co2_diff<=50 & co2_diff>=30,2,
+                           1)))
+
+# Recombine with reps
+ghgs_rep1 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep2,-co2_umolL_rep2) %>% 
+  mutate(Rep = "1") %>% 
+  rename(ch4_umolL = ch4_umolL_rep1, co2_umolL = co2_umolL_rep1)
+
+ghgs_rep2 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep1,-co2_umolL_rep1) %>% 
+  mutate(Rep = "2") %>% 
+  rename(ch4_umolL = ch4_umolL_rep2, co2_umolL = co2_umolL_rep2)
+
+ghgs_comb <- rbind(ghgs_rep1,ghgs_rep2)
+
+ghgs_comb <- ghgs_comb %>% 
+  arrange(DateTime,Reservoir,Depth_m,Rep)
+
+ghgs_comb_2 <- ghgs_comb %>% 
+  select(-c("ch4_diff","co2_diff"))
+
+ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
+
+ghgs_comb_2$flag_ch4[is.na(ghgs_comb_2$ch4_umolL)]<-4
+ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
+
+```
+
+Create a combined file to publish on EDI
+```{r}
 final = dt1%>%
-  full_join(ghgs)
+  full_join(ghgs_comb_2)
 
-summary(final)
+#Moving sites out of the depth column
+final$Site = 50
+final$Site[final$Depth_m > 98]<- final$Depth_m[final$Depth_m > 98]
+final$Depth_m[final$Depth_m > 98] <- 0.1
+
+#Re-order columns
+col_order <- c("Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_ch4","flag_co2")
+
+final <- final[,(col_order)]
+
 write.csv(final,"final_GHG_2015-2020.csv")
 ```
 

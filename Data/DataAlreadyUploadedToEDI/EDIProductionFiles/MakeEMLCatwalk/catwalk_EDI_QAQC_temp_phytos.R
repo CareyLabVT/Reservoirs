@@ -3,8 +3,8 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
 source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020_test.txt"))
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 
 # run standard qaqc
 data_file <- paste0(folder, '/Catwalk_2020.csv')
@@ -44,6 +44,7 @@ catdata_flag$Flag_Temp_9 <- 0
 # 0: no flag
 # 1: value removed due to maintenance and set to NA
 # 3: negative values set to 0
+# 4: value removed due to fouling and set to NA
 # 5: questionable value due to potential fouling
 # 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 # 7: missing data
@@ -262,6 +263,7 @@ catdata_flag$Flag_Temp_9[catdata_flag$DateTime=='2020-09-30 10:30:00'] <- 1
 # chl and phyco qaqc
 # check Chla ugL data
 sd_4 <- 4*sd(catdata_flag$EXOChla_ugL_1, na.rm = TRUE)
+sd_4_phyco <- 4*sd(catdata_flag$EXOBGAPC_ugL_1, na.rm = TRUE)
 
 chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
   geom_point() +
@@ -292,9 +294,8 @@ chl_mean <- catdata_flag %>%
   group_by(day) %>% 
   mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
   distinct(day, .keep_all = TRUE)
-chl_mean <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
-  geom_point() +
-  ggtitle('figure 2')
+chl_mean_plot <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
+  geom_point() 
 ggplotly(chl_mean)
 
 chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
@@ -330,6 +331,13 @@ catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA
 catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
 catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
 catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
+
+
+##### test DWH's QAQC method
+catdata_flag_test <- 
+  catdata_flag %>% 
+  select(DateTime, EXOChla_RFU_1:EXOBGAPC_ugL_1, Flag_All, Flag_Phyco, Flag_Chla) 
+  
 
 ###########################################################################################################################################################################
 # DO qaqc

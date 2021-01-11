@@ -29,4 +29,4 @@ Flag_570nm	Data flag for fluorescence at 570 nm	numeric	dimensionless		NA	value 
 Flag_610nm	Data flag for fluorescence at 610 nm	numeric	dimensionless		NA	value is missing
 Flag_370nm	Data flag for fluorescence at 370 nm	numeric	dimensionless		NA	value is missing
 Flag_590nm	Data flag for fluorescence at 590 nm	numeric	dimensionless		NA	value is missing
-Flag_470nm	Data flag for fluorescence at 370 nm	numeric	dimensionless		NA	value is missing
+Flag_470nm	Data flag for fluorescence at 470 nm	numeric	dimensionless		NA	value is missing

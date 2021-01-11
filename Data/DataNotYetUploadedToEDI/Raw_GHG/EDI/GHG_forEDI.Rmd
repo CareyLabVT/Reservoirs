@@ -13,9 +13,8 @@ library(tidyverse)
 
 Lingering to do's:
 1. Some CO2 samples below detection - how to handle?
-2. Add in column for site? To mimic other datasets?
-3. Add in early 2020 data
-4. How best to automate/remove bad reps?
+2. Add in early 2020 data
+3. How best to automate/remove bad reps?
 
 This first section reads in previous data published on EDI
 ```{r}
@@ -152,10 +151,6 @@ ghgs%>% #Plot CO2 at Site 50 in BVR
   ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
-ghgs$flag_ch4 <- 1
-ghgs$flag_ch4[is.na(ghgs$ch4_umolL)]<-4
-ghgs$flag_co2 <- 1
-ghgs$flag_co2[is.na(ghgs$co2_umolL)]<-4
 ```
 
 
@@ -210,17 +205,30 @@ ghgs_comb <- rbind(ghgs_rep1,ghgs_rep2)
 ghgs_comb <- ghgs_comb %>% 
   arrange(DateTime,Reservoir,Depth_m,Rep)
 
+ghgs_comb_2 <- ghgs_comb %>% 
+  select(-c("ch4_diff","co2_diff"))
+
+ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
+
+ghgs_comb_2$flag_ch4[is.na(ghgs_comb_2$ch4_umolL)]<-4
+ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
+
 ```
 
 Create a combined file to publish on EDI
 ```{r}
 final = dt1%>%
-  full_join(ghgs)
+  full_join(ghgs_comb_2)
 
 #Moving sites out of the depth column
 final$Site = 50
 final$Site[final$Depth_m > 98]<- final$Depth_m[final$Depth_m > 98]
 final$Depth_m[final$Depth_m > 98] <- 0.1
+
+#Re-order columns
+col_order <- c("Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_ch4","flag_co2")
+
+final <- final[,(col_order)]
 
 write.csv(final,"final_GHG_2015-2020.csv")
 ```

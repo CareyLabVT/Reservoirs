@@ -3,8 +3,8 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
 source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020_test.txt"))
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020_test.txt"))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 
 # run standard qaqc
 data_file <- paste0(folder, '/Catwalk_2020.csv')
@@ -267,6 +267,25 @@ chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
   geom_point() +
   geom_hline(yintercept = sd_4)
 ggplotly(chl_ugl)
+
+# no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
+catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- 1
+
 chl_mean <- catdata_flag %>% 
   select(DateTime, EXOChla_ugL_1) %>% 
   mutate(day = date(DateTime)) %>% 
@@ -278,7 +297,39 @@ chl_mean <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
   ggtitle('figure 2')
 ggplotly(chl_mean)
 
+chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
+  geom_point() +
+  geom_hline(yintercept = sd_4)
+ggplotly(chl_rfu)
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA 
+catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
 
+
+phyco_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
+  geom_point() 
+ggplotly(phyco_ugl)
+catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1 
+catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- 1 
+catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1 
+catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1 
+
+phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
+  geom_point() 
+ggplotly(phyco_rfu)
+catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
 
 ###########################################################################################################################################################################
 # DO qaqc

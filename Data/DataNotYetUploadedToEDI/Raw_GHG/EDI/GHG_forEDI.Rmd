@@ -13,8 +13,10 @@ library(tidyverse)
 
 Lingering to do's:
 1. Some CO2 samples below detection - how to handle?
+- Add in BD samples as 0 and flag!
 2. Add in early 2020 data
 3. How best to automate/remove bad reps?
+- Can't really automate; more of an art than a science
 
 This first section reads in previous data published on EDI
 ```{r}
@@ -162,12 +164,10 @@ Flag 3 = the % difference between replicates is >50%. The replicate with the lar
 # Separate into rep 1 and rep2
 ghgs_rep1 <- ghgs %>% 
   filter(Rep == "1") %>% 
-  select(-Rep,-flag_ch4,-flag_co2) %>% 
   rename(ch4_umolL_rep1 = ch4_umolL, co2_umolL_rep1 = co2_umolL)
 
 ghgs_rep2 <- ghgs %>% 
   filter(Rep == "2") %>% 
-  select(-Rep,-flag_ch4,-flag_co2) %>% 
   rename(ch4_umolL_rep2 = ch4_umolL, co2_umolL_rep2 = co2_umolL)
 
 ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
@@ -206,13 +206,17 @@ ghgs_comb <- ghgs_comb %>%
   arrange(DateTime,Reservoir,Depth_m,Rep)
 
 ghgs_comb_2 <- ghgs_comb %>% 
-  select(-c("ch4_diff","co2_diff"))
+  select(-c("ch4_diff","co2_diff","Rep.x","Rep.y"))
 
 ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
 
 ghgs_comb_2$flag_ch4[is.na(ghgs_comb_2$ch4_umolL)]<-4
 ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
 
+# If sample is BD (=0) then flag as 5 (below detection)
+ghgs_comb_2 <- ghgs_comb_2 %>% 
+  mutate(flag_co2 = ifelse(co2_umolL == 0 & is.na(ghgs_comb_2$flag_co2),5,ghgs_comb_2$flag_co2)) %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL == 0 & is.na(ghgs_comb_2$flag_ch4),5,ghgs_comb_2$flag_ch4))
 ```
 
 Create a combined file to publish on EDI

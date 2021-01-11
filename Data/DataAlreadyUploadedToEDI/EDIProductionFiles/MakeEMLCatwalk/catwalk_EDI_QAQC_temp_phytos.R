@@ -1,4 +1,6 @@
-pacman::p_load("RCurl","tidyverse","lubridate", "plotly")
+# QAQC in prep for publishing catwalk sensor string data to EDI
+
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
 source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
@@ -13,22 +15,15 @@ output_file <- paste0(folder, "/Catwalk_final_2020.csv")
 temp_oxy_chla_qaqc(data_file, maintenance_file, output_file)
 
 # read in qaqc function output
-catdata <- read.csv(output_file) #Has not been updated
-catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
+catdata_flag <- read.csv(output_file) #Has not been updated
+catdata_flag$DateTime<-as.POSIXct(catdata_flag$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
-catdata_published <- catdata[catdata$DateTime<="2019-12-31",] # coverage of the last published dataset
-catdata_published <- catdata_published[!is.na(catdata_published$Flag_All),]
-catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
-catdata_flag <- catdata_flag[!is.na(catdata_flag$Reservoir),]
+#catdata_published <- catdata[catdata$DateTime<="2019-12-31",] # coverage of the last published dataset
+#catdata_published <- catdata_published[!is.na(catdata_published$Flag_All),]
+#catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
+#catdata_flag <- catdata_flag[!is.na(catdata_flag$Reservoir),]
 
-# assign all flags 0
-catdata_flag$Flag_All <- 0
-catdata_flag$Flag_DO_1 <- 0
-catdata_flag$Flag_DO_5 <- 0
-catdata_flag$Flag_DO_9 <- 0
-catdata_flag$Flag_Chla <- 0
-catdata_flag$Flag_Phyco <- 0
-catdata_flag$Flag_TDS <- 0
+# assign new flags for temp string, set to 0
 catdata_flag$Flag_Temp_Surf <- 0
 catdata_flag$Flag_Temp_1 <- 0
 catdata_flag$Flag_Temp_2 <- 0
@@ -40,14 +35,26 @@ catdata_flag$Flag_Temp_7 <- 0
 catdata_flag$Flag_Temp_8 <- 0
 catdata_flag$Flag_Temp_9 <- 0
 
+for (i in 1:nrow(catdata_flag)) {
+  if(is.na(catdata_flag$Flag_Chla[i])){
+    catdata_flag$Flag_Chla[i] <- 0
+  }
+  if(is.na(catdata_flag$Flag_Phyco[i])){
+    catdata_flag$Flag_Phyco[i] <- 0
+  }
+}
+
 # Flag values
 # 0: no flag
 # 1: value removed due to maintenance and set to NA
+# 2: value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint
 # 3: negative values set to 0
 # 4: value removed due to fouling and set to NA
 # 5: questionable value due to potential fouling
 # 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 # 7: missing data
+# 22: value set to NA, major outlier which is more than 4 standard deviations different from previous or following datapoint
+# ADD IN ABP FLAGS HERE
 
 ###########################################################################################################################################################################
 # temp qaqc
@@ -340,7 +347,7 @@ catdata_flag <- catdata_flag %>%
   mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
                                  NA, EXOBGAPC_RFU_1)) %>% 
   mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
-                             2, Flag_Phyco)) %>%
+                             22, Flag_Phyco)) %>%
   select(-phyco, -phyco_lag1, -phyco_lead1)
 
 # some spot checking of days with isolated weird data which occured either on maintenance days or field days
@@ -374,4 +381,16 @@ catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
 
 ###########################################################################################################################################################################
 # write final csv
-write.csv(catdata_flag, paste0(folder, 'Catwalk_EDI_2020.csv'))
+catdata_flag <- catdata_flag[catdata_flag$DateTime<'2021-01-01',]
+catdata_flag <- catdata_flag %>% select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:RDOTemp_C_9, 
+                                        EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, 
+                                        EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
+                                        EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
+                                        EXO_wiper, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
+                                        #RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, 
+                                        Flag_All:Flag_Temp_9)
+cols <- c("Flag_All", "Flag_DO_1",  "Flag_DO_5",  "Flag_DO_9", "Flag_Chla", "Flag_Phyco", "Flag_TDS", "Flag_Temp_Surf", "Flag_Temp_1",
+          "Flag_Temp_2", "Flag_Temp_3", "Flag_Temp_4", "Flag_Temp_5", "Flag_Temp_6", "Flag_Temp_7", "Flag_Temp_8","Flag_Temp_9")
+catdata_flag <- catdata_flag %<>% mutate_at(cols, funs(factor(.)))
+str(catdata_flag)
+write.csv(catdata_flag, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

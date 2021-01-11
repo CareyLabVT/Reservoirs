@@ -1,6 +1,6 @@
 ##MakeEMLFluoroProbe
 ##Author: Mary Lofton
-##Date: 16DEC19
+##Date: 11JAN20
 
 #good sites for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -18,7 +18,7 @@ install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020
 
 #Step 2: Move your dataset to the directory - duh.
 
@@ -26,9 +26,19 @@ library(EMLassemblyline)
 #ours is CCBY
 
 #Step 4: Identify the types of data in your dataset
-#right now the only supported option is "table" (this may not longer be true? 16DEC19)
+#need to update which options are supported...not sure what else is
+#possible besides "table"
 
 #Step 5: Import the core metadata templates
+
+#THIS IS ONLY NECESSARY FOR A BRAND NEW DATASET!!!!
+#if you are just updating a previous dataset, PLEASE save yourself time
+#by copy-pasting the metadata files from the previous year's folder 
+#(in this case, 2019) into the current year's folder and editing them
+#as needed. DON'T CAUSE YOURSELF MORE WORK BY BUILDING FROM SCRATCH!!
+
+#IF you are just appending a new year of data, skip steps 5-12 and instead
+#DOUBLE-CHECK all the imported metadata files and edit them as needed
 
 #for our application, we will need to generate all types of metadata
 #files except for taxonomic coverage, as we have both continuous and
@@ -104,10 +114,10 @@ view_unit_dictionary()
 
 #Step 14: Categorical variables
 # Run this function for your dataset
-#THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
+#THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2018",
-                               data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2018",
+template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+                               data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -133,17 +143,17 @@ template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Res
 
 # Run this function
 make_eml(
-  path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  eml.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2019",
-  temporal.coverage = c("2014-05-04", "2019-12-06"),
+  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2020",
+  temporal.coverage = c("2014-05-04", "2020-12-02"),
   maintenance.description = 'ongoing',
   data.table = "FluoroProbe.csv",
   data.table.description = "Reservoir FluoroProbe dataset",
   user.id = 'carylab6',
   user.domain = 'EDI',
-  package.id = 'edi.325.1')
+  package.id = 'edi.123.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -183,8 +193,8 @@ make_eml(
   path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
   data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
   eml.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2019",
-  temporal.coverage = c("2014-05-04", "2019-12-06"),
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2020",
+  temporal.coverage = c("2014-05-04", "2020-12-02"),
   maintenance.description = 'ongoing',
   data.table = "FluoroProbe.csv",
   data.table.description = "Reservoir FluoroProbe dataset",

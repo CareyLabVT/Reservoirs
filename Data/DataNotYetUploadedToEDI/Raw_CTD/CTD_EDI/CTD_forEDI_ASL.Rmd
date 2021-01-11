@@ -223,6 +223,7 @@ write_csv(ctd, "CTD_Meta_2018-2020.csv")
 ctd1 <- read.csv("CTD_Meta_2018-2020.csv") #Load saved data
 ctd = ctd1 %>%
   select(-Density_mg_m3)%>%
+  filter(Date != "2020-07-19T21:02:02Z")%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Reservoir = as.factor(Reservoir))
 
@@ -232,7 +233,9 @@ ctd = ctd1 %>%
 #2=Instrument malfunction, 
 #3=Sample below detection,
 #4=Negative value set to 0,
-#5=No sensor on CTD
+#5=No sensor on CTD,
+#6=Measurement removed (above water)
+#7=Datetime missing time (date is meaningful but not time)
 
 
 ctd_flagged = ctd %>% #Add flags
@@ -319,6 +322,7 @@ as_datetime("2020-10-13 21:10:11 UTC")-as_datetime("2020-10-14 10:10:00")
 ctd_flagged$Date[year(ctd_flagged$Date) == 2020] = ctd_flagged$Date[year(ctd_flagged$Date) == 2020]+hours(13)
 #hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
 #Looks much better!
+write.csv(ctd_flagged, "ctd_2018-2020_flagged.csv")
 ```
 
 ```{r}
@@ -341,7 +345,7 @@ qaqc = read.csv("CTD_final_2013_2020.csv")%>%
 qaqc_plotly = qaqc%>%
   filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = pH))+
+  ggplot(aes(x = Date, y = Depth_m, color = Temp_C))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

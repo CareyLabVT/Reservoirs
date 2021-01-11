@@ -118,6 +118,10 @@ for (i in 1:length(unique(fp3$cast))){
   
 }
 
+#QAQC note that most of the 20200604_BVR_50 cast is missing so am
+#including upcast to give a cursory sense of what is happening in rest
+#of water column
+
 #20200824_FCR_50 temp cast problematic (max of 18-20 degrees?)
 bad_temp_casts <- c("20200824_FCR_50.txt")
 

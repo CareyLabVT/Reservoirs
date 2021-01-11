@@ -215,8 +215,12 @@ ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
 
 # If sample is BD (=0) then flag as 5 (below detection)
 ghgs_comb_2 <- ghgs_comb_2 %>% 
-  mutate(flag_co2 = ifelse(co2_umolL == 0 & is.na(ghgs_comb_2$flag_co2),5,ghgs_comb_2$flag_co2)) %>% 
-  mutate(flag_ch4 = ifelse(ch4_umolL == 0 & is.na(ghgs_comb_2$flag_ch4),5,ghgs_comb_2$flag_ch4))
+  mutate(flag_co2 = ifelse(co2_umolL == 0 & is.na(ghgs_comb_2$flag_co2),5,
+                           ifelse(co2_umolL == 0 & flag_co2 == 3, 35,
+                           ghgs_comb_2$flag_co2))) %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL == 0 & is.na(ghgs_comb_2$flag_ch4),5,
+                           ifelse(ch4_umolL == 0 & flag_ch4 == 3, 35,
+                           ghgs_comb_2$flag_ch4)))
 ```
 
 Create a combined file to publish on EDI

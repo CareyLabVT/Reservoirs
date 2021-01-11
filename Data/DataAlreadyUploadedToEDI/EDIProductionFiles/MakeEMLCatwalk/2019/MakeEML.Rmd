@@ -1,0 +1,56 @@
+---
+title: "Make EML"
+author: "Abby Lewis"
+date: "12/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Install devtools
+#install.packages("devtools")
+
+# Load devtools
+library(pacman)
+pacman::p_load(devtools,tidyverse,lubridate)
+
+# Install and load EMLassemblyline
+install_github("EDIorg/EMLassemblyline")
+library(EMLassemblyline)
+cat <- read.csv("./catdata_edited_withDO.csv")
+cat$DateTime <- as.POSIXct(cat$DateTime, format = '%Y-%m-%d %H:%M:%S')
+
+# Import templates for an example dataset licensed under CC0, with 2 tables located in at "path"
+template_core_metadata(path = ".",
+                license = "CCBY",
+                write.file = TRUE)
+
+template_table_attributes(path = ".",
+                          data.path = ".",
+                          data.table = "catdata_edited_withDO.csv",
+                          write.file = TRUE)
+
+
+template_categorical_variables(getwd())
+
+## NOTE: recieved following warning - worked but may need to update in the future
+#Argument "data.files" is deprecated; please use "data.table" instead.Argument "data.files.description" is #deprecated; please use "data.table.description" instead.cols = 1 != length(data) = 2Creating nodes ...
+
+make_eml(path = '.',
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductivity, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Falling Creek Reservoir, Virginia, USA in 2018-2019",
+         data.files = "catdata_edited_withDO.csv",
+         other.entity = c('temp_oxy_chla_qaqc.R', 'catwalk_do_fix.Rmd','CAT_MaintenanceLog.txt' ),
+         other.entity.description = c('QAQC script', 'Final script to run QAQC and fix DO fouling issues', 'Maintenance log for catwalk sensors'),
+         data.files.description = "Catwalk Sensor String",
+         temporal.coverage = c("2018-07-05", "2019-12-31"),
+         geographic.description = "Southwestern Virginia, USA, North America",
+         geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
+         maintenance.description = "ongoing",
+         user.id =  "ccarey",
+         package.id = "edi.271.4", #### this is the one that I need to change!!!
+         user.domain = 'EDI')
+```
+

@@ -51,10 +51,6 @@ catdata_flag$Flag_Temp_9 <- 0
 
 ###########################################################################################################################################################################
 # temp qaqc
-vars <- c( "ThermistorTemp_C_surface", "ThermistorTemp_C_1",       "ThermistorTemp_C_2",     "ThermistorTemp_C_3"  ,    
-"ThermistorTemp_C_4" ,      "ThermistorTemp_C_5" ,      "ThermistorTemp_C_6"  ,     "ThermistorTemp_C_7"  ,     "ThermistorTemp_C_8"  ,    
- "ThermistorTemp_C_9" )
-
 # check surface temp data
 surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
   geom_point()
@@ -263,14 +259,32 @@ catdata_flag$Flag_Temp_9[catdata_flag$DateTime=='2020-09-30 10:30:00'] <- 1
 # chl and phyco qaqc
 # check Chla ugL data
 sd_4 <- 4*sd(catdata_flag$EXOChla_ugL_1, na.rm = TRUE)
+threshold <- sd_4
 sd_4_phyco <- 4*sd(catdata_flag$EXOBGAPC_ugL_1, na.rm = TRUE)
+threshold_phyco <- sd_4_phyco
 
 chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
   geom_point() +
   geom_hline(yintercept = sd_4)
 ggplotly(chl_ugl)
 
-# no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
+
+# QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+catdata_flag <- catdata_flag %>% 
+  mutate(Chla = lag(EXOChla_ugL_1, 0),
+         Chla_lag1 = lag(EXOChla_ugL_1, 1),
+         Chla_lead1 = lead(EXOChla_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+  mutate(EXOChla_ugL_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)), 
+                                NA, EXOChla_ugL_1)) %>%   
+  mutate(EXOChla_RFU_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)), 
+                                   NA, EXOChla_RFU_1)) %>% 
+  mutate(Flag_Chla = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)), 
+                            2, Flag_Chla)) %>% 
+  select(-Chla, -Chla_lag1, -Chla_lead1)
+
+  
+
+# some spot checking of days with isolated weird data which occured either on maintenance days or field days
 catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
 catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
 catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
@@ -315,6 +329,21 @@ catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA
 phyco_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
   geom_point() 
 ggplotly(phyco_ugl)
+
+# QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+catdata_flag <- catdata_flag %>% 
+  mutate(phyco = lag(EXOBGAPC_ugL_1, 0),
+         phyco_lag1 = lag(EXOBGAPC_ugL_1, 1),
+         phyco_lead1 = lead(EXOBGAPC_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+  mutate(EXOBGAPC_ugL_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+                                 NA, EXOBGAPC_ugL_1)) %>%   
+  mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+                                 NA, EXOBGAPC_RFU_1)) %>% 
+  mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+                             2, Flag_Phyco)) %>%
+  select(-phyco, -phyco_lag1, -phyco_lead1)
+
+# some spot checking of days with isolated weird data which occured either on maintenance days or field days
 catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
 catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1 
 catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
@@ -333,11 +362,7 @@ catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
 catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
 
 
-##### test DWH's QAQC method
-catdata_flag_test <- 
-  catdata_flag %>% 
-  select(DateTime, EXOChla_RFU_1:EXOBGAPC_ugL_1, Flag_All, Flag_Phyco, Flag_Chla) 
-  
+
 
 ###########################################################################################################################################################################
 # DO qaqc
@@ -345,3 +370,8 @@ catdata_flag_test <-
 
 ###########################################################################################################################################################################
 # fdom qaqc
+
+
+###########################################################################################################################################################################
+# write final csv
+write.csv(catdata_flag, paste0(folder, 'Catwalk_EDI_2020.csv'))

@@ -1,9 +1,6 @@
-### MakeEMLGHG_Jun2020
-### Updated script to publish LO-L GHG data to EDI
-### Following: MakeEMLInflow.R and MakeEMLChemistry.R
-### 24Jun2020, A. Hounshell
-### Updated for 01Sep2020, A. Hounshell
-### Publishing GHG data from RPM: 2015-2019
+### MakeEMLChaoborus
+### Updated script to publish ES&T Chaoborus data 
+### 11 January 2021, Ryan McClure & Mary Lofton
 
 # (install and) Load EMLassemblyline #####
 install.packages('devtools')

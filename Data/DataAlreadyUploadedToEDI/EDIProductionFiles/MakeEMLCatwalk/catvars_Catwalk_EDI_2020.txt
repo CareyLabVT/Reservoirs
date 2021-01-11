@@ -1,0 +1,40 @@
+attributeName	code	definition
+Flag_All	0	No flag
+Flag_All	1	Value removed due to maintenance and set to NA
+Flag_Chla	0	No flag
+Flag_Chla	1	Value removed due to maintenance and set to NA
+Flag_Chla	22	"Value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint"
+Flag_Chla	5	Questionable value due to fouling
+Flag_DO_1	0	No flag
+Flag_DO_1	1	Value removed due to maintenance and set to NA
+Flag_DO_5	0	No flag
+Flag_DO_5	1	Value removed due to maintenance and set to NA
+Flag_DO_5	3	Negatives values set to 0
+Flag_DO_9	0	No flag
+Flag_DO_9	1	Value removed due to maintenance and set to NA
+Flag_DO_9	3	Negatives values set to 0
+Flag_Phyco	0	No flag
+Flag_Phyco	1	Value removed due to maintenance and set to NA
+Flag_Phyco	22	"Value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint"
+Flag_Phyco	5	Questionable value due to fouling
+Flag_TDS	0	No flag
+Flag_Temp_1	0	No flag
+Flag_Temp_1	1	Value removed due to maintenance and set to NA
+Flag_Temp_2	0	No flag
+Flag_Temp_2	1	Value removed due to maintenance and set to NA
+Flag_Temp_3	0	No flag
+Flag_Temp_3	1	Value removed due to maintenance and set to NA
+Flag_Temp_4	0	No flag
+Flag_Temp_4	1	Value removed due to maintenance and set to NA
+Flag_Temp_5	0	No flag
+Flag_Temp_5	1	Value removed due to maintenance and set to NA
+Flag_Temp_6	0	No flag
+Flag_Temp_6	1	Value removed due to maintenance and set to NA
+Flag_Temp_7	0	No flag
+Flag_Temp_7	1	Value removed due to maintenance and set to NA
+Flag_Temp_8	0	No flag
+Flag_Temp_8	1	Value removed due to maintenance and set to NA
+Flag_Temp_9	0	No flag
+Flag_Temp_9	1	Value removed due to maintenance and set to NA
+Flag_Temp_Surf	0	No flag
+Flag_Temp_Surf	1	Value removed due to maintenance and set to NA

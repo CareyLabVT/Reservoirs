@@ -1,0 +1,277 @@
+---
+title: "GHG for EDI"
+author: "Abby Lewis"
+date: "12/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
+```
+
+Lingering to do's:
+1. Some CO2 samples below detection - how to handle?
+- Add in BD samples as 0 and flag!
+2. Add in early 2020 data
+3. How best to automate/remove bad reps?
+- Can't really automate; more of an art than a science
+
+This first section reads in previous data published on EDI
+```{r}
+# Package ID: edi.551.2 Cataloging System:https://pasta.edirepository.org.
+# Data set title: Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019.
+# Data set creator:  Cayelan Carey - Virginia Tech 
+# Data set creator:  Ryan McClure - Virginia Tech 
+# Data set creator:  Barbara Niederlehner - Virginia Tech 
+# Data set creator:  Mary Lofton - Virginia Tech 
+# Data set creator:  Alexandria Hounshell - Virginia Tech 
+# Contact:  Cayelan Carey -  Virginia Tech  - Cayelan@vt.edu
+# Stylesheet v2.11 for metadata conversion into program: John H. Porter, Univ. Virginia, jporter@virginia.edu 
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/551/2/38d72673295864956cccd6bbba99a1a3" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "DateTime",     
+                    "Depth_m",     
+                    "Reservoir",     
+                    "Rep",     
+                    "ch4_umolL",     
+                    "co2_umolL",     
+                    "flag_ch4",     
+                    "flag_co2"    ), check.names=TRUE)
+               
+unlink(infile1)
+		    
+# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+                                                   
+# attempting to convert dt1$DateTime dateTime string to R date structure (date or POSIXct)                                
+tmpDateFormat<-"%m/%d/%Y"
+tmp1DateTime<-as.Date(dt1$DateTime,format=tmpDateFormat)
+# Keep the new dates only if they all converted correctly
+if(length(tmp1DateTime) == length(tmp1DateTime[!is.na(tmp1DateTime)])){dt1$DateTime <- tmp1DateTime } else {print("Date conversion failed for dt1$DateTime. Please inspect the data and do the date conversion yourself.")}                                                                    
+rm(tmpDateFormat,tmp1DateTime) 
+if (class(dt1$Depth_m)=="factor") dt1$Depth_m <-as.numeric(levels(dt1$Depth_m))[as.integer(dt1$Depth_m) ]               
+if (class(dt1$Depth_m)=="character") dt1$Depth_m <-as.numeric(dt1$Depth_m)
+if (class(dt1$Reservoir)!="factor") dt1$Reservoir<- as.factor(dt1$Reservoir)
+if (class(dt1$Rep)=="factor") dt1$Rep <-as.numeric(levels(dt1$Rep))[as.integer(dt1$Rep) ]               
+if (class(dt1$Rep)=="character") dt1$Rep <-as.numeric(dt1$Rep)
+if (class(dt1$ch4_umolL)=="factor") dt1$ch4_umolL <-as.numeric(levels(dt1$ch4_umolL))[as.integer(dt1$ch4_umolL) ]               
+if (class(dt1$ch4_umolL)=="character") dt1$ch4_umolL <-as.numeric(dt1$ch4_umolL)
+if (class(dt1$co2_umolL)=="factor") dt1$co2_umolL <-as.numeric(levels(dt1$co2_umolL))[as.integer(dt1$co2_umolL) ]               
+if (class(dt1$co2_umolL)=="character") dt1$co2_umolL <-as.numeric(dt1$co2_umolL)
+if (class(dt1$flag_ch4)=="factor") dt1$flag_ch4 <-as.numeric(levels(dt1$flag_ch4))[as.integer(dt1$flag_ch4) ]               
+if (class(dt1$flag_ch4)=="character") dt1$flag_ch4 <-as.numeric(dt1$flag_ch4)
+if (class(dt1$flag_co2)=="factor") dt1$flag_co2 <-as.numeric(levels(dt1$flag_co2))[as.integer(dt1$flag_co2) ]               
+if (class(dt1$flag_co2)=="character") dt1$flag_co2 <-as.numeric(dt1$flag_co2)
+                
+# Convert Missing Values to NA for non-dates
+                
+dt1$Depth_m <- ifelse((trimws(as.character(dt1$Depth_m))==trimws("NA")),NA,dt1$Depth_m)               
+suppressWarnings(dt1$Depth_m <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$Depth_m))==as.character(as.numeric("NA"))),NA,dt1$Depth_m))
+dt1$Reservoir <- as.factor(ifelse((trimws(as.character(dt1$Reservoir))==trimws("NA")),NA,as.character(dt1$Reservoir)))
+dt1$Rep <- ifelse((trimws(as.character(dt1$Rep))==trimws("NA")),NA,dt1$Rep)               
+suppressWarnings(dt1$Rep <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$Rep))==as.character(as.numeric("NA"))),NA,dt1$Rep))
+dt1$ch4_umolL <- ifelse((trimws(as.character(dt1$ch4_umolL))==trimws("NA")),NA,dt1$ch4_umolL)               
+suppressWarnings(dt1$ch4_umolL <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$ch4_umolL))==as.character(as.numeric("NA"))),NA,dt1$ch4_umolL))
+dt1$co2_umolL <- ifelse((trimws(as.character(dt1$co2_umolL))==trimws("NA")),NA,dt1$co2_umolL)               
+suppressWarnings(dt1$co2_umolL <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$co2_umolL))==as.character(as.numeric("NA"))),NA,dt1$co2_umolL))
+dt1$flag_ch4 <- ifelse((trimws(as.character(dt1$flag_ch4))==trimws("NA")),NA,dt1$flag_ch4)               
+suppressWarnings(dt1$flag_ch4 <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$flag_ch4))==as.character(as.numeric("NA"))),NA,dt1$flag_ch4))
+dt1$flag_co2 <- ifelse((trimws(as.character(dt1$flag_co2))==trimws("NA")),NA,dt1$flag_co2)               
+suppressWarnings(dt1$flag_co2 <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$flag_co2))==as.character(as.numeric("NA"))),NA,dt1$flag_co2))
+
+
+# Here is the structure of the input data frame:
+str(dt1)                            
+attach(dt1)                            
+# The analyses below are basic descriptions of the variables. After testing, they should be replaced.                 
+
+summary(DateTime)
+summary(Depth_m)
+summary(Reservoir)
+summary(Rep)
+summary(ch4_umolL)
+summary(co2_umolL)
+summary(flag_ch4)
+summary(flag_co2) 
+                # Get more details on character variables
+                 
+summary(as.factor(dt1$Reservoir))
+detach(dt1)               
+        
+```
+
+JUST FOR 2021 EDI PUSH: Check to make sure all previous data follows MDL (CH4 = 0.002 umolL; CO2 = 3.8 umolL)
+```{r}
+# For purpose of data - if data is reported from instrument but below MDL - keep data value but flag = 5
+dt2 <- dt1 %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.002 & flag_ch4 == 1, 15, 
+                           ifelse(ch4_umolL <= 0.002 & flag_ch4 == 2, 25,
+                                  ifelse(ch4_umolL <= 0.002 & flag_ch4 == 3, 35,
+                                         dt1$flag_ch4)))) %>% 
+  mutate(flag_co2 = ifelse(co2_umolL <= 3.8 & flag_co2 == 1, 15, 
+                           ifelse(co2_umolL <= 3.8 & flag_co2 == 2, 25,
+                                  ifelse(co2_umolL <= 3.8 & flag_co2 == 3, 35,
+                                         dt1$flag_co2))))
+```
+
+This section loads data from 2020
+```{r}
+#Load this year's data
+ghgs <- read_excel("../2020/GHG_MEGA_GC_SHEET_EXCEL_2020.xlsx", sheet = 2, skip = 6)
+
+#Change column names to match EDI standard
+colnames(ghgs)[1:4] <- c("DateTime","Depth_m","Reservoir","Rep")
+colnames(ghgs)[13:14] <- c("ch4_umolL","co2_umolL")
+
+ghgs=ghgs%>%
+  select(DateTime,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)%>% #Select only the columns we are using
+  mutate(DateTime = as.Date(DateTime), #Make sure columns are the correct type
+         Depth_m = as.numeric(Depth_m),
+         Reservoir = as.factor(Reservoir))%>%
+  filter(!is.na(Depth_m)) #Depth cannot be missing
+```
+
+This section graphs CO2 and CH4
+```{r}
+ghgs%>% #Plot CH4 at Site 50 in FCR
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CO2 at Site 50 in FCR
+  filter(Depth_m<100,
+         Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CH4 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+ghgs%>% #Plot CO2 at Site 50 in BVR
+  filter(Depth_m<100,
+         Reservoir == "BVR")%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
+  geom_point()
+
+plot = ghgs_comb_2%>%
+  filter(Reservoir == "FCR")%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Depth_m), shape = ISSUE_ch4))+
+  scale_alpha_manual(values = c(.2,1))+
+  geom_point()
+library(plotly)
+ggplotly(plot)
+```
+
+
+This section calculates % difference between replicates
+Flag 1 = the % difference between replicates is <30% and both are retained
+Flag 2 = the % difference between replicates is >30% and <50% - both replicates were retained but are flagged
+Flag 3 = the % difference between replicates is >50%. The replicate with the largest difference was removed
+Flag 4 = Sample not collected or problem with instrument
+Flag 5 = Sample below detection; CH4 = 0.002 umolL; CO2 = 3.8 umolL
+```{r}
+# Separate into rep 1 and rep2
+ghgs_rep1 <- ghgs %>% 
+  filter(Rep == "1") %>% 
+  rename(ch4_umolL_rep1 = ch4_umolL, co2_umolL_rep1 = co2_umolL)
+
+ghgs_rep2 <- ghgs %>% 
+  filter(Rep == "2") %>% 
+  rename(ch4_umolL_rep2 = ch4_umolL, co2_umolL_rep2 = co2_umolL)
+
+ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(ch4_diff = round((abs(ch4_umolL_rep1-ch4_umolL_rep2)/((ch4_umolL_rep1+ch4_umolL_rep2)/2))*100),
+         co2_diff = round((abs(co2_umolL_rep1-co2_umolL_rep2)/((co2_umolL_rep1+co2_umolL_rep2)/2))*100),
+         ch4_abs = abs(ch4_umolL_rep1-ch4_umolL_rep2),
+         co2_abs = abs(co2_umolL_rep1-co2_umolL_rep2)) #,
+         #ISSUE_co2 = co2_abs > 11.4 & co2_diff>=50,
+         #ISSUE_ch4 = ch4_abs > 0.6 & ch4_diff>=50)
+sd(ghgs_reps$co2_abs) #76.5
+sd(ghgs_reps$ch4_abs) #76.5
+
+sum(ghgs_reps$ISSUE_co2)
+sum(ghgs_reps$ISSUE_ch4)
+
+# Flag replicates: Flag 1; Flag 2; Flag 3
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_ch4 = ifelse(ch4_diff>=50,3,
+                           ifelse(ch4_diff<=50 & ch4_diff>=30,2,
+                           1)))
+
+ghgs_reps <- ghgs_reps %>% 
+  mutate(flag_co2 = ifelse(co2_diff>=50,3,
+                           ifelse(co2_diff<=50 & co2_diff>=30,2,
+                           1)))
+
+# Recombine with reps
+ghgs_rep1 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep2,-co2_umolL_rep2) %>% 
+  mutate(Rep = "1") %>% 
+  rename(ch4_umolL = ch4_umolL_rep1, co2_umolL = co2_umolL_rep1)
+
+ghgs_rep2 <- ghgs_reps %>% 
+  select(-ch4_umolL_rep1,-co2_umolL_rep1) %>% 
+  mutate(Rep = "2") %>% 
+  rename(ch4_umolL = ch4_umolL_rep2, co2_umolL = co2_umolL_rep2)
+
+ghgs_comb <- rbind(ghgs_rep1,ghgs_rep2)
+
+ghgs_comb <- ghgs_comb %>% 
+  arrange(DateTime,Reservoir,Depth_m,Rep)
+
+ghgs_comb_2 <- ghgs_comb %>% 
+  select(-c("ch4_diff","co2_diff","Rep.x","Rep.y"))
+
+ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
+
+ghgs_comb_2$flag_ch4[is.na(ghgs_comb_2$ch4_umolL)]<-4
+ghgs_comb_2$flag_co2[is.na(ghgs_comb_2$co2_umolL)]<-4
+
+# If sample is BD then flag as 5 (below detection)
+ghgs_comb_2 <- ghgs_comb_2 %>% 
+  mutate(flag_co2 = ifelse(co2_umolL <= 3.8 & is.na(ghgs_comb_2$flag_co2),5,
+                          ifelse(co2_umolL <= 3.8 & flag_co2 == 1, 15,
+                                 ifelse(co2_umolL <= 3.8 & flag_co2 == 2, 25, 
+                                        ifelse(co2_umolL <= 3.8 & flag_co2 == 3, 35,
+                                               ghgs_comb_2$flag_co2))))) %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.002 & is.na(ghgs_comb_2$flag_ch4),5,
+                           ifelse(ch4_umolL <= 0.002 & flag_ch4 == 1, 15,
+                                  ifelse(ch4_umolL <= 0.002 & flag_ch4 == 2, 25,
+                                         ifelse(ch4_umolL <= 0.002 & flag_ch4 == 3, 35,
+                                                ghgs_comb_2$flag_ch4)))))
+```
+
+Create a combined file to publish on EDI
+```{r}
+final = dt2%>%
+  full_join(ghgs_comb_2)
+
+#Moving sites out of the depth column
+final$Site = 50
+final$Site[final$Depth_m > 98]<- final$Depth_m[final$Depth_m > 98]
+final$Depth_m[final$Depth_m > 98] <- 0.1
+
+#Re-order columns
+col_order <- c("Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_ch4","flag_co2")
+
+final <- final[,(col_order)]
+
+write.csv(final,"final_GHG_2015-2020.csv")
+```
+

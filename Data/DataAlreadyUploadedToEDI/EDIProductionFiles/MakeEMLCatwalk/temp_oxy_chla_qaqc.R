@@ -199,7 +199,10 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
   catdata <- catdata %>%
     mutate(Flag_Phyco = ifelse(! is.na(EXOBGAPC_RFU_1) & abs(EXOBGAPC_RFU_1 - BGAPC_RFU_1_mean) > BGAPC_RFU_1_threshold |
                                  ! is.na(EXOBGAPC_ugL_1) & abs(EXOBGAPC_ugL_1 - BGAPC_ugL_1_mean) > BGAPC_ugL_1_threshold,
-                               5, Flag_Phyco))
+                               5, Flag_Phyco)) %>% 
+  mutate(Flag_Chla = ifelse(! is.na(EXOChla_ugL_1) & abs(EXOChla_ugL_1 - Chla_ugL_1_mean) > Chla_ugL_1_threshold |
+                               ! is.na(EXOChla_RFU_1) & abs(EXOChla_RFU_1 - Chla_RFU_1_mean) > Chla_RFU_1_threshold,
+                             5, Flag_Chla))
   
   # delete EXO_Date and EXO_Time columns
   catdata <- catdata %>% select(-EXO_Date, -EXO_Time)

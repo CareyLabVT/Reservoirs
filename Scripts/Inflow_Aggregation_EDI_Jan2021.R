@@ -529,22 +529,6 @@ VT_post$VT_Flow_cms = ifelse(VT_post$VT_Pressure_psia <= 0.080, NA, VT_post$VT_F
 # VT_post$VT_Flow_cms = ifelse(VT_post$VT_Pressure_psia > 0.469, NA, VT_post$VT_Flow_cms)
 # Decided to keep data from above the weir, but flag!
 
-
-
-
-
-diff_pre <- diff[diff$DateTime< as.POSIXct('2019-06-07 01:00:00'),] # Square weir
-diff_post <- diff %>% 
-  filter(DateTime >= as.POSIXct('2019-06-07 01:00:00') & DateTime <= as.POSIXct('2020-08-24 00:00:00')) # V-notch weir
-diff_aug20 <- diff %>% 
-  filter(DateTime > as.POSIXct('2020-08-24 00:00:00') & DateTime <= as.POSIXct('2020-09-02 15:00:00')) # V-notch weir post blow-out
-diff_sep20 <- diff %>% 
-  filter(DateTime > as.POSIXct('2020-09-02 15:00:00')) # V-notch weir post blow-out; final location
-
-
-
-
-
 # Also need to correct data for August 24, 2020 to Sep 2, 2020 period after the weir was fixed (but before
 # instruments were moved to their final location)
 VT_aug20 <- VTdat %>% filter(DateTime >= as.POSIXct('2020-08-24 15:30:00') & DateTime <= as.POSIXct('2020-09-02 14:15:00'))
@@ -680,18 +664,18 @@ Inflow_Final_6 <- Inflow_Final_5 %>%
                                                       ifelse(DateTime >= "2020-05-14 17:00:00" & DateTime <= "2020-08-24 18:30:00",2, # Flag for missing data due to user error (not collecting data)
                                                              ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                                                     Inflow_Final_5$WVWA_Flag_Flow))))))) %>% 
-  mutate(VT_Flag_Flow = ifelse(DateTime >= "2019-06-03 00:00:00" & DateTime <= "2019-06-07 00:00:00",4, # weir un-plugged
+  mutate(VT_Flag_Flow = ifelse(DateTime >= "2019-04-22 00:00:00" & DateTime <= "2019-06-07 00:00:00",4, # weir un-plugged/rating curve not correct
                                ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                       ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
-                               Inflow_Final_5$VT_Flag_Flow)))) %>% 
+                                             Inflow_Final_5$VT_Flag_Flow)))) %>% 
   mutate(VT_Flag_Pressure_psia = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
                                         ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                                ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
-                                        0)))) %>% 
+                                                      0)))) %>% 
   mutate(VT_Flag_Temp = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
-                                 ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
-                                        ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
-                                               0))))
+                               ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
+                                      ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
+                                             0))))
 
 ### Make sure there are NA's for all weir data when there is a '4' flag
 Inflow_Final_7 <- Inflow_Final_6 %>% 
@@ -700,7 +684,6 @@ Inflow_Final_7 <- Inflow_Final_6 %>%
   mutate(WVWA_Pressure_psia = ifelse(WVWA_Flag_Pressure_psia>1,NA,Inflow_Final_6$WVWA_Pressure_psia)) %>% 
   mutate(WVWA_Flow_cms = ifelse(WVWA_Flag_Flow %in% c(2,3,4,13,14,24),NA,Inflow_Final_6$WVWA_Flow_cms)) %>% # But not 6 or 16
   mutate(WVWA_Temp_C = ifelse(WVWA_Flag_Temp>1,NA,Inflow_Final_6$WVWA_Temp_C)) %>% 
-  
   mutate(VT_Pressure_psia = ifelse(VT_Flag_Pressure_psia>1,NA,Inflow_Final_6$VT_Pressure_psia)) %>% 
   mutate(VT_Flow_cms = ifelse(VT_Flag_Flow==4,NA,Inflow_Final_6$VT_Flow_cms)) %>% 
   mutate(VT_Temp_C = ifelse(VT_Flag_Temp>1,NA,Inflow_Final_6$VT_Temp_C))
@@ -759,4 +742,4 @@ Inflow_Final_8 <- Inflow_Final_8 %>%
   rename(VT_Flag_Temp_C = VT_Flag_Temp, WVWA_Flag_Temp_C = WVWA_Flag_Temp)
 
 # Write to CSV
-write.csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_08Jan2021.csv', row.names=F) 
+write.csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv', row.names=F) 

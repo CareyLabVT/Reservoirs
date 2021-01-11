@@ -2,7 +2,7 @@
 <eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.123.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
-      <principal>uid=carylab6,o=EDI,dc=edirepository,dc=org</principal>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
       <permission>all</permission>
     </allow>
     <allow>
@@ -1081,6 +1081,21 @@ On 28Aug19, the transmission sensor malfunctioned and so values from this point 
       </attributeList>
       <numberOfRecords>89897</numberOfRecords>
     </dataTable>
+    <otherEntity>
+      <entityName>FluoroProbe_QAQC.R</entityName>
+      <entityDescription>data aggregation and quality control script</entityDescription>
+      <physical>
+        <objectName>FluoroProbe_QAQC.R</objectName>
+        <size unit="bytes">8056</size>
+        <authentication method="MD5">609a1096546d575b28aac7e3ccf44fe5</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
   </dataset>
   <additionalMetadata>
     <metadata>

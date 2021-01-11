@@ -232,7 +232,9 @@ ctd = ctd1 %>%
 #2=Instrument malfunction, 
 #3=Sample below detection,
 #4=Negative value set to 0,
-#5=No sensor on CTD
+#5=No sensor on CTD,
+#6=Measurement removed (above water)
+#7=Datetime missing time (date is meaningful but not time)
 
 
 ctd_flagged = ctd %>% #Add flags
@@ -341,7 +343,7 @@ qaqc = read.csv("CTD_final_2013_2020.csv")%>%
 qaqc_plotly = qaqc%>%
   filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = pH))+
+  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

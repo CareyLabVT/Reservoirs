@@ -1,5 +1,5 @@
 # Script to pull in YSI and PAR data from multiple reservoirs and years ####
-# Updated 11Jan2021 HLW - deleting all -0.1m values 
+# Updated 11Jan2021 HLW 
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate) ## Use pacman package to install/load other packages
@@ -45,8 +45,8 @@ profiles <- raw_profiles %>%
          Flag_Cond, Flag_PAR, Flag_ORP, Flag_pH, Notes) %>%
   arrange(Reservoir, DateTime, Depth_m) 
 
-### delete -0.1 m data from dataframe
-profiles <- profiles[profiles$Depth_m!=-0.1,]
+### delete -0.1 m data from dataframe if PAR = na
+profiles <- profiles[!(profiles$Depth_m==-0.1 & is.na(profiles$PAR_umolm2s)),]
 
 # Write to CSV (using write.csv for now; want ISO format embedded?)
 write.csv(profiles, 'YSI_PAR_profiles_2013-2019.csv', row.names=F)

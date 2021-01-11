@@ -1,0 +1,2 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir

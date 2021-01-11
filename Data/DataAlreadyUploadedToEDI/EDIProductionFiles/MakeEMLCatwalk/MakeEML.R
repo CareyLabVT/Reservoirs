@@ -1,6 +1,5 @@
-# Install devtools
-#install.packages("devtools")
-
+# 11-Jan-2021 
+# Script written by WW
 # instructions for updating catwalk dataset and publishing to EDI
 # 1. make a new folder for this year, e.g. '2020', within Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020
 # 2. copy all .txt files from the previous year's folder into this folder. You will edit these files to reflect changes for the newest year
@@ -12,38 +11,11 @@
 #    download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 # 4. perform QAQC. The QAQC script will be uploaded with the datapackage into EDI
 
-
-# Load devtools
 library(devtools)
-library(tidyverse)
-library(lubridate)
-
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
-
-# Install and load EMLassemblyline
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-
-
-view_unit_dictionary()
-template_table_attributes(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                          data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                          data.table = "FluoroProbe.csv",
-                          write.file = TRUE)
-define_catvars("C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk")
-
-make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk",
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductivity, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Falling Creek Reservoir, Virginia, USA in 2018",
-         data.files = "Catwalk_EDI_2020.csv",
-         data.files.description = "Catwalk Sensor String",
-         temporal.coverage = c("2018-07-05", "2018-12-18"),
-         geographic.description = "Southwestern Virginia, USA, North America",
-         maintenance.description = "ongoing",
-         user.id = c("carylab1", "ccarey"),
-         package.id = "edi.271.2", #### this is the one that I need to change!!!
-         affiliation = c("EDI", "EDI"))
-
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
 
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -74,21 +46,16 @@ make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI
 #categorical variables and want to report our geographic location
 
 # View documentation for these functions
-?template_core_metadata
-?template_table_attributes
-?template_categorical_variables #don't run this till later
-?template_geographic_coverage
+#?template_core_metadata
+#?template_table_attributes
+#?template_categorical_variables #don't run this till later
+#?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
 #template_core_metadata(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
 #                       license = "CCBY",
 #                       file.type = ".txt",
 #                       write.file = TRUE)
-
-#template_table_attributes(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-#                          data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-#                          data.table = "FluoroProbe.csv",
-#                          write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
@@ -98,6 +65,8 @@ make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI
 #                             data.table = "FluoroProbe.csv",
 #                             empty = TRUE,
 #                             write.file = TRUE)
+
+
 
 #Step 6: Script your workflow
 #that's what this is, silly!
@@ -133,7 +102,15 @@ make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI
 # View and search the standard units dictionary
 view_unit_dictionary()
 #put flag codes and site codes in the definitions cell
-#force reservoir to categorical
+# If you've added in any new columns, rerun the template_table_attributes() function
+#    To edit the file, open up in excel.
+# If you want any of your variables to be categorical, change their class to 'categorical'. Then run the template_categorical_variables()
+# function below to create a template
+template_table_attributes(path = folder,
+                          data.path = folder,
+                          data.table = "Catwalk_EDI_2020.csv",
+                          write.file = TRUE)
+
 
 #if you need to make custom units that aren't in the unit dictionary,
 #use the customunits.txt file and the directions on the EMLassemblyline Github to do so
@@ -145,11 +122,11 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-                               data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
+# edit this file in excel
 
-#open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
@@ -251,3 +228,18 @@ make_eml(
 # should run without errors, and your data product is now published! 
 
 # Click the package.id hyperlink to view your final product! HOORAY!
+
+
+
+make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk",
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductivity, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Falling Creek Reservoir, Virginia, USA in 2018",
+         data.files = "Catwalk_EDI_2020.csv",
+         data.files.description = "Catwalk Sensor String",
+         temporal.coverage = c("2018-07-05", "2018-12-18"),
+         geographic.description = "Southwestern Virginia, USA, North America",
+         maintenance.description = "ongoing",
+         user.id = c("carylab1", "ccarey"),
+         package.id = "edi.271.2", #### this is the one that I need to change!!!
+         affiliation = c("EDI", "EDI"))
+
+

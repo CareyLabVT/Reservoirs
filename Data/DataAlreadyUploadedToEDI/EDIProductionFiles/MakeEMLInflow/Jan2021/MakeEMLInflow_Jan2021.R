@@ -22,7 +22,7 @@ library(EMLassemblyline)
 
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021
 
 #Step 2: Move your dataset to the directory
 
@@ -46,22 +46,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
+template_core_metadata(path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-                          data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-                          data.table = c("inflow_for_EDI_2013_06Mar2020.csv","20200306_RatingCurve.csv"),
+template_table_attributes(path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+                          data.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+                          data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-                             data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-                             data.table = c("inflow_for_EDI_2013_06Mar2020.csv","20200306_RatingCurve.csv"),
+template_geographic_coverage(path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+                             data.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+                             data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -105,12 +105,13 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-                               data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
+template_categorical_variables(path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+                               data.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
                                write.file = TRUE)
+# For 2021 - Ended up adding cavars manually for the two rating curves!
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
-# NO CATEGORICAL VARIABLES FOUND FOR INFLOW
+# Categorical variables for RatingCurves ONLY
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file (or geographic_coverage.txt file) that is Carey Lab specific into your working directory
@@ -135,19 +136,19 @@ template_categorical_variables(path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  eml.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2020",
-  temporal.coverage = c("2013-05-15", "2020-03-09"),
+  path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  data.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  eml.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
+  temporal.coverage = c("2013-05-15", "2021-01-10"),
   maintenance.description = 'ongoing',
-  data.table = c("inflow_for_EDI_2013_06Mar2020.csv","20200306_RatingCurve.csv"),
-  data.table.description = c("FCR inflow dataset","Rating curve"),
-  other.entity= 'Inflow_Aggregation_EDI_Mar2020.R',
+  data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
+  data.table.description = c("FCR inflow dataset","Rating curve WVWA","Rating curve VT"),
+  other.entity= 'Inflow_Aggregation_EDI_Jan2021.R',
   other.entity.description = "QA/QC Code for Discharge aggregation",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.336.1')
+  package.id = 'edi.126.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir	categorical			NA	No data
+Transect	Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4	categorical			NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.	Date		YYYY-MM-DD	NA	No data
+Sed_turb	Sediment turbulence	numeric	joulesPerKilogram		NA	No data
+Surf_turb	Surface turbulence	numeric	joulesPerKilogram		NA	No data
+Flag_sed_turb	Data flag for sediment turbulence; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			
+Flag_surf_turb	Data flag for surface turbulence; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			

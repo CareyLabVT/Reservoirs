@@ -28,8 +28,8 @@ EXOChla_RFU_1	Total Chlorophyll a at 1 meter depth as measured by the EXO Sonde	
 EXOChla_ugL_1	Total Chlorophyll a at 1 meter depth as measured by the EXO Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOBGAPC_RFU_1	Blue-Green Algae Phyocycanin at 1 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOBGAPC_ugL_1	Blue-Green Algae Phycoycanin at 1 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXOfDOM_RFU_1	Fine Dissolved Organic Matter at 1 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOfDOM_QSU_1	Fine Dissolved Organic Matter at 1 meter depth as measured by the EXO Sonde	numeric	QuinineSulfateUnits		NA	value is missing
+EXOfDOM_RFU_1	Fluorecent Dissolved Organic Matter at 1 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1 meter depth as measured by the EXO Sonde	numeric	QuinineSulfateUnits		NA	value is missing
 EXO_pressure	"Gauge pressure of EXO sonde at 1 m, measured relative to ambient atmospheric pressure."	numeric	psig		NA	value is missing
 EXO_depth	Depth of the EXO sonde as measured by the EXO sonde.	numeric	meter		NA	value is missing
 EXO_battery	Voltage of the EXO sonde internal batteries.	numeric	volt		NA	value is missing

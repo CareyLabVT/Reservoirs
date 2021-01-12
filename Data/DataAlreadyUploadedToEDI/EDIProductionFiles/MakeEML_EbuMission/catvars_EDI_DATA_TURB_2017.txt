@@ -1,0 +1,6 @@
+attributeName	code	definition
+Reservoir	FCR	 Reservoir name
+Transect	T1	Transect name
+Transect	T2	Transect name
+Transect	T3	Transect name
+Transect	T4	Transect name

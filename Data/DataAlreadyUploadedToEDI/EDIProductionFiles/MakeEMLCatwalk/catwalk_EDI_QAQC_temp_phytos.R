@@ -53,11 +53,27 @@ for (i in 1:nrow(catdata_flag)) {
 # 5: questionable value due to potential fouling
 # 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 # 7: missing data
+# 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
 # 22: value set to NA, major outlier which is more than 4 standard deviations different from previous or following datapoint
 # ADD IN ABP FLAGS HERE
 
 ###########################################################################################################################################################################
 # temp qaqc
+
+#Two of the thermistors started to read higher than the one above them in fall 2020. Fixed this using a constant offset. 
+#methods described in metadat
+
+#start time for 1m is 30 Oct 2020 13:00EST
+#start time for 4m is 31 Oct 2020 5:00EST
+catdata_flag <- catdata_flag %>%
+  mutate(Flag_Temp_1 = ifelse(DateTime >= "2020-10-30 13:00" & DateTime < "2020-12-31 23:50" & (! is.na(ThermistorTemp_C_1)) ,8, Flag_Temp_1))%>%
+  mutate(Flag_Temp_4 = ifelse(DateTime >= "2020-10-31 5:00" & DateTime < "2020-12-31 23:50" &
+                                (! is.na(ThermistorTemp_C_4)),8, Flag_Temp_1))%>%
+  mutate(ThermistorTemp_C_11 = ifelse(DateTime >= "2020-10-30 13:00" & DateTime < "2020-12-31 23:50" &
+                                        (! is.na(ThermistorTemp_C_1)), (ThermistorTemp_C_1-0.22617), ThermistorTemp_C_1 )) %>%
+  mutate(ThermistorTemp_C_41 = ifelse(DateTime >= "2020-10-30 13:00" & DateTime < "2020-12-31 23:50" &
+                                        (! is.na(ThermistorTemp_C_4)), (ThermistorTemp_C_4-0.18122), ThermistorTemp_C_4 )) 
+
 # check surface temp data
 surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
   geom_point()

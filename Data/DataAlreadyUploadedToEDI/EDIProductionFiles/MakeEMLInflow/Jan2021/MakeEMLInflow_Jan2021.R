@@ -148,7 +148,7 @@ make_eml(
   other.entity.description = "QA/QC Code for Discharge aggregation",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.126.1')
+  package.id = 'edi.126.2')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

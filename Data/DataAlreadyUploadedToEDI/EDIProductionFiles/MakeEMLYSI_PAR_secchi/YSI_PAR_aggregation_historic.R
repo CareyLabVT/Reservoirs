@@ -1,5 +1,5 @@
 # Script to pull in YSI and PAR data from multiple reservoirs and years ####
-# Updated 11Jan2021 HLW 
+# Updated 11Jan2021 HLW and JHW
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate) ## Use pacman package to install/load other packages
@@ -9,6 +9,7 @@ pacman::p_load(tidyverse, lubridate) ## Use pacman package to install/load other
 # Load all data files ending in "_Profiles.csv" and merge into a dataframe
 raw_profiles <- dir(path = "/Users/heatherwander/Documents/VirginiaTech/research/Field data", pattern = "*_profiles.csv") %>% 
   map_df(~ read_csv(file.path(path = "/Users/heatherwander/Documents/VirginiaTech/research/Field data", .), col_types = cols(.default = "c")))
+
 
 #date format
 raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%m/%d/%y %H:%M"))
@@ -33,7 +34,8 @@ profiles <- raw_profiles %>%
          Flag_PAR = ifelse(is.na(PAR_umolm2s), 1, 0),
          Flag_Temp = ifelse(is.na(Temp_C), 1, 
                             ifelse(Temp_C > 35, 2, 0)), # Flag 2 = inst. malfunction
-         Flag_DO = ifelse(is.na(DO_mgL), 1, 0),
+         Flag_DO = ifelse(is.na(DO_mgL), 1,
+                          ifelse(DO_mgL > 70, 2, 0)),  # Flag 2 = inst. malfunction
          Flag_DOSat = ifelse(is.na(DOSat), 1,
                            ifelse(DOSat > 200, 2, 0)), # Flag 2 = inst. malfunction
          Flag_Cond = ifelse(is.na(Cond_uScm), 1,

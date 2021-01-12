@@ -13,7 +13,6 @@ source("temp_oxy_chla_qaqc.R")
 ```
 
 TO DO 
-- compare with CTD and add in flags/remove data as needed
 - Get the correct date for the end of published data
 - Add 1m QAQC?
 
@@ -30,7 +29,7 @@ temp_oxy_chla_qaqc('Catwalk_2020.csv',"CAT_MaintenanceLog_2020.txt","Catwalk_fin
 
 #Load QAQCed catwalk data
 catdata <- read.csv("Catwalk_final_2020.csv")
-catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S") #Format dates as dates
+catdata$DateTime<-as.POSIXct(catdata$DateTime, tz = "EST") #Format dates as dates
 
 catdata_published <- catdata[catdata$DateTime<="2019-12-16",] #Separate data that has already been published
 catdata_published <- catdata_published[!is.na(catdata_published$Flag_All),]
@@ -80,12 +79,14 @@ Section 3: remove maintenance data
 #Deal with when the sensors were up
 maint = read.csv("CAT_MaintenanceLog_2020.txt")
 maint = maint[!grepl("EXO",maint$parameter),] #creating file "maint" with all sensor string maintenance
-clean_start<-as.POSIXct(maint$TIMESTAMP_start)
-clean_end <- as.POSIXct(maint$TIMESTAMP_end)
+maint = maint%>%
+  filter(!colnumber %in% c(" c(24:26)"," 40"," 41"))
+clean_start<-as.POSIXct(maint$TIMESTAMP_start, tz = "EST")
+clean_end <- as.POSIXct(maint$TIMESTAMP_end, tz = "EST")
 
 ADJ_PERIOD = 2*60*60 #amount of time to stabilization after cleaning in seconds
 
-for (i in range(1,length(clean_start))){ #Set all data during cleaning and for ADJ_PERIOD after to NA
+for (i in 1:length(clean_start)){ #Set all data during cleaning and for ADJ_PERIOD after to NA
   catdata_flag$RDO_mgL_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
   catdata_flag$RDO_mgL_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
   catdata_flag$RDOsat_percent_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
@@ -98,8 +99,6 @@ for (i in range(1,length(clean_start))){ #Set all data during cleaning and for A
 
 
 Section 4: Deal with fouling
-Dexter this is the section I would love help with!!
-
 
 
 ```{r}
@@ -113,26 +112,11 @@ catdata_flag_test <- catdata_flag[-c(1:6),]
 
 catdata_adj = catdata_flag_test%>%
   mutate(
-     # 5 meters #### READ NOTE: These changes were for 2019, I didn't delete so the RDO 5 adjusted column still appeared for plots below 
-    #Add a flag that this period was suspect
-     Flag_DO_5 = ifelse(DateTime<as_datetime("2019-08-12 12:40:00") & DateTime> as_datetime("2019-08-11 00:00:00"), 6, Flag_DO_5), 
-     #Adjust DO (mg/L) creating a new variable
-     RDO_mgL_5_adjusted = ifelse(DateTime<"2019-08-12 12:40:00" & DateTime> "2019-08-11 00:00:00", 
-                                RDO_mgL_5 + sqrt(as.numeric(difftime(DateTime,"2019-08-11 00:00:00", units = "mins")))/30,
-                                RDO_mgL_5), #If the date is within this interval, the adjusted values is the measured value plus the squareroot of the number of minutes since the start of the interval divided by 30 -- determined through trial and error
-     #Adjust %sat
-     RDOsat_percent_5_adjusted = ifelse(DateTime<"2019-08-12 12:40:00" & DateTime> "2019-08-11 00:00:00", 
-                                RDOsat_percent_5 + sqrt(as.numeric(difftime(DateTime,"2019-08-11 00:00:00", units = "mins")))/30/11.3*100, #Same as DO_mgL except converted to pSat by multiplying by 100/11.3
-                                RDOsat_percent_5),
-     Flag_DO_5 = ifelse(DateTime<as_datetime("2019-07-17 11:40:00") & DateTime> as_datetime("2019-07-13 00:00:00"), 5, Flag_DO_5),
-     
-     
-     
      #9 meters #### READ NOTE: These are the sections I noticed apparent following in TS and have tried to correct with linear adjustments
      #first section fixed 11aug to 17aug
-     Flag_DO_9 = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00",6, Flag_DO_9),
-     RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00", 
-                                RDO_mgL_9 + (as.numeric(difftime("2020-08-17 12:50:00","2020-08-12 15:00:00", units = "mins")))/6500, #A different square root adjustment here. was a sqrt before, I removed that part
+     Flag_DO_9 = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 7:00:00",6, Flag_DO_9),
+     RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 7:00:00", 
+                                RDO_mgL_9 + as.numeric(difftime(DateTime,"2020-08-11 7:00:00", units = "mins"))/6500, #A linear adjustment here
                                 RDO_mgL_9),
      RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00", 
                                 RDOsat_percent_9 + (as.numeric(difftime("2020-08-17 12:50:00","2020-08-12 15:00:00", units = "mins")))/6500/11.3*100,
@@ -141,28 +125,28 @@ catdata_adj = catdata_flag_test%>%
      # 9 meters 19aug to 24aug
      Flag_DO_9 = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00",6, Flag_DO_9),
      RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
-                                RDO_mgL_9 + (as.numeric(difftime("2020-08-24 10:40:00","2020-08-19 20:00:00", units = "mins")))/6500, #A linear adjustment here
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime,"2020-08-19 20:00:00", units = "mins")))/6500, #A linear adjustment here
                                 RDO_mgL_9_adjusted),
      RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
-                                RDOsat_percent_9 + as.numeric(difftime("2020-08-24 10:40:00","2020-08-19 20:00:00", units = "mins"))/6500/11.3*100,
+                                RDOsat_percent_9 + as.numeric(difftime(DateTime,"2020-08-19 20:00:00", units = "mins"))/6500/11.3*100,
                                 RDOsat_percent_9_adjusted),
      
       # 9 meters 26aug to 02sep
      Flag_DO_9 = ifelse(DateTime<"2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00" ,6, Flag_DO_9),
      RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
-                                RDO_mgL_9 + (as.numeric(difftime("2020-09-02 10:50:00", "2020-08-26 12:00:00", units = "mins")))/10000, #A linear adjustment here
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime, "2020-08-26 12:00:00", units = "mins")))/10000, #A linear adjustment here
                                 RDO_mgL_9_adjusted),
      RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
-                                RDOsat_percent_9 + as.numeric(difftime("2020-09-02 10:50:00", "2020-08-26 12:00:00", units = "mins"))/10000/11.3*100,
+                                RDOsat_percent_9 + as.numeric(difftime(DateTime, "2020-08-26 12:00:00", units = "mins"))/10000/11.3*100,
                                 RDOsat_percent_9_adjusted),
      
      # 9 meters 02sep to 11sep
      Flag_DO_9 = ifelse(DateTime<"2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00" ,6, Flag_DO_9),
      RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
-                                RDO_mgL_9 + (as.numeric(difftime("2020-09-09 17:50:00", "2020-09-05 06:00:00", units = "mins")))/4000, #A linear adjustment here
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime, "2020-09-05 06:00:00", units = "mins")))/3000, #A linear adjustment here
                                 RDO_mgL_9_adjusted),
-     RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
-                                RDOsat_percent_9 + as.numeric(difftime("2020-09-09 17:50:00", "2020-09-05 06:00:00", units = "mins"))/4000/11.3*100,
+     RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-09 17:00:00" & DateTime> "2020-09-05 06:00:00", 
+                                RDOsat_percent_9 + as.numeric(difftime(DateTime, "2020-09-05 06:00:00", units = "mins"))/3000/11.3*100,
                                 RDOsat_percent_9_adjusted))
 
 
@@ -193,10 +177,10 @@ ctd_new$Date <- ymd_hms(ctd_new$Date)
 
 plot = catdata_adj%>%
   ggplot(aes(x = DateTime))+
-  geom_line(aes(y = RDO_mgL_5_adjusted), color = "blue")+
+  geom_line(aes(y = RDO_mgL_9), color = "blue")+
   geom_line(aes(y = RDO_mgL_9_adjusted), color = "red")+
-  geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 5), color = "blue")+
-  geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 9), color = "red")
+  #geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 5), color = "blue")+
+  geom_point(aes(x = Date, y = DO_mgL), data = ctd_new%>% filter(Depth_m == 9))
 ggplotly(plot)
 ```
 

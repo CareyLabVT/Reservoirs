@@ -465,6 +465,7 @@ colnames(VTdat) <- c('DateTime', 'VT_Pressure_psia', 'VT_Temp_C')
 VTdat <- VTdat[c(-1,-2),]
 VTdat$DateTime <- as.POSIXct(strptime(VTdat$DateTime, "%Y-%m-%d %H:%M:%S", tz="EST"))
 VTdat$VT_Pressure_psia <- as.numeric(VTdat$VT_Pressure_psia)
+VTdat$VT_Temp_C <- as.numeric(VTdat$VT_Temp_C)
 
 ## Find dates for rating curve
 ## After v-notch weir was installed on 07 Jun 2019
@@ -736,10 +737,15 @@ col_order <- c("Reservoir","Site","DateTime","WVWA_Pressure_psi","WVWA_Baro_pres
                "VT_Flag_Pressure_psia","VT_Flag_Flow","VT_Flag_Temp")
 
 Inflow_Final_8 <- Inflow_Final_7[,col_order]
-Inflow_Final_8$VT_Temp_C <- as.numeric(Inflow_Final_8$VT_Temp_C)
 
 Inflow_Final_8 <- Inflow_Final_8 %>% 
   rename(VT_Flag_Temp_C = VT_Flag_Temp, WVWA_Flag_Temp_C = WVWA_Flag_Temp)
 
+summary(Inflow_Final_8)
+
 # Write to CSV
-write.csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv', row.names=F) 
+write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv') 
+
+# Check to see how it reads back in
+test <- read_csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv')
+

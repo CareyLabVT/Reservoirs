@@ -459,13 +459,10 @@ colnames(Inflow_Final) <- c('Reservoir', 'Site', 'DateTime', 'WVWA_Pressure_psi'
 
 #add VT sensor data to the WVWA transducer data ('Inflow_Final')
 # Updated 06 Jan 2021 as data has migrated to FLARE-forecast repo on GitHub
-VTsens <- read_csv(file.path('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/FCRweir.csv'),skip=1)
+VTsens <- read_csv(file.path('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/FCRweir.csv'),skip=4,col_names=c("TimeStamp","Record","BattV","PTemp_C","AirTemp_C","Lvl_psi","wtr_weir"))
 VTdat <- VTsens[,c(1,6,7)]
 colnames(VTdat) <- c('DateTime', 'VT_Pressure_psia', 'VT_Temp_C')
-VTdat <- VTdat[c(-1,-2),]
 VTdat$DateTime <- as.POSIXct(strptime(VTdat$DateTime, "%Y-%m-%d %H:%M:%S", tz="EST"))
-VTdat$VT_Pressure_psia <- as.numeric(VTdat$VT_Pressure_psia)
-VTdat$VT_Temp_C <- as.numeric(VTdat$VT_Temp_C)
 
 ## Find dates for rating curve
 ## After v-notch weir was installed on 07 Jun 2019
@@ -748,4 +745,3 @@ write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Ma
 
 # Check to see how it reads back in
 test <- read_csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv')
-

@@ -1,15 +1,17 @@
 # 11-Jan-2021 
 # Script written by WW
-# instructions for updating catwalk dataset and publishing to EDI
+
+
+# helpful hints for yearly updating of catwalk dataset and publishing to EDI
 # 1. make a new folder for this year, e.g. '2020', within Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020
 # 2. copy all .txt files from the previous year's folder into this folder. You will edit these files to reflect changes for the newest year
-#    If you were making a brand new data product you would need to create the metadata file templates following the directions at the end of the
+#    If you were making a brand new data product you would need to create the metadata file templates following the directions within this
 #    script, thanks very much to MEL for writing those up. HOWEVER, if you are appending, as you should be for the catwalk dataset, just copy last year's
 #    files and edit them as needed
 # 3. download most up to date catwalk data and maintenance log
 #    download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
 #    download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
-# 4. perform QAQC. The QAQC script will be uploaded with the datapackage into EDI
+# 4. perform QAQC. The QAQC script will be uploaded as one file with the datapackage into EDI
 
 library(devtools)
 install_github("EDIorg/EMLassemblyline")

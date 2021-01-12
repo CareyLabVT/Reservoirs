@@ -1,0 +1,1273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.400.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ryanmclake,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Methane ebullition and diffusion rates, turbulence, water temperature, and water depth data from Falling Creek Reservoir in the ice-free period during 2016-2019</title>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Mary</givenName>
+        <givenName>E.</givenName>
+        <surName>Lofton</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Shengyang</givenName>
+        <surName>Chen</surName>
+      </individualName>
+      <organizationName>UNSW Water Research Laboratory</organizationName>
+      <electronicMailAddress>s.chen@wrl.unsw.edu.au</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Kathryn</givenName>
+        <givenName>M.</givenName>
+        <surName>Krueger</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>katiek5@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-3509-0611</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>John</givenName>
+        <givenName>C.</givenName>
+        <surName>Little</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>jcl@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <pubDate>2020-09-02</pubDate>
+    <abstract>
+      <para>Weekly and subweekly data of methane ebullition and diffusion rates collected from March through November in 2016, 2017, 2018, and 2019 in Falling Creek Reservoir (FCR), a drinking water reservoir owned and managed by the Western Virginia Water Authority and located in Vinton, Virginia, USA. In 2016, ebullition rates were measured at four near-shore locations along a longitudinal gradient in FCR that included four sites each, for a total of 16 sites. In 2017, methane emission rates and five different driver variables were measured at five longitudinal transects that included four sites each, for a total of 20 sites. In 2018, ebullition was measured at five longitudinal transects that included two sites each, for a total of 10 sites. In 2019, ebullition was meausred from the upmost transect in the reservoir that included four sites. The dataset consists of 1) weekly methane ebullition and diffusion rates and the water depths at each of the 24 sites; 2) 10-minute resolution sediment water interface and surface water temperatures from 16 sites in 2017; 3) weekly sediment water interface and surface turbulence from the four transects in 2017; and 4) geographical coordinates of each of the 24 sites in the reservoir. In 2017, We used time series modeling to quantify how the drivers of ebullition and diffusion rates varied among transects along a longitudinal gradient.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab,</keyword>
+      <keyword>greenhouse gas emissions</keyword>
+      <keyword>reservoir,</keyword>
+      <keyword>depth,</keyword>
+      <keyword>water temperature,</keyword>
+      <keyword>turbulence,</keyword>
+      <keyword>ebullition,</keyword>
+      <keyword>methane,</keyword>
+      <keyword>diffusion,</keyword>
+      <keyword>diffusive flux,</keyword>
+      <keyword>Si3D model,</keyword>
+      <keyword>Virginia Tech,</keyword>
+      <keyword>Stream Team,</keyword>
+      <keyword>lake,</keyword>
+      <keyword>Western Virginia Water Authority,</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+    </keywordSet>
+    <additionalInfo>
+      <para>In 2016, 2017, 2018, and 2019, whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems at the dam. The methane emission sampling sites monitored evaluated were specifically chosen because they were located upstream of any system operation that could affect the data. However, all data represented by "sC" and "t5" represent methane emissions near the hypolimnetic oxygenation and epilimnetic engineered systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). </para>
+      <para>Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279 </para>
+      <para>Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002&#13;
+</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Southwestern Virginia, USA, North America</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.302660</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2016-03-28</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2019-11-07</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Field sample collection</para>
+          <para>We sampled methane ebullition rates using passive ebullition traps (Keller &amp; Stallard, 1994). Each 0.26-meters squared ebullition trap was placed 0.5 m below the water surface to capture methane bubbles that were released from the sediments underneath the trap. A sealed tube extended from the bottom of the funnel to 0.1 m above the water surface through a foam float that kept the trap in place. The top of the inverted funnel’s tubing was fitted with a 25-mm plastic threaded ball valve that was sealed with a rubber septum stopper (Suba-Seal Septa, MilliporeSigma, St. Louis, MO, USA). The valve and the septum prevented ebullition gas from escaping out of the top of the funnel. When rising methane bubbles were caught in the funnel trap, the siphoned water at the top of the tube was displaced with gas, which stayed in the top of the tube until the gas was sampled weekly. We collected ebullition gas from every trap each week during the monitoring period. Up to 10 mL of gas was injected into a 12-mL crimp top glass vial that was pre-filled with salt brine solution. A secondary exit syringe extracted the salt brine solution as the sample was injected to generate 10 mL of gas headspace in the vial. If enough gas sample was available, two replicates were collected from each trap. The vials were stored upside down until analysis, so the remaining 2 mL of salt brine solution acted as a barrier to prevent any gas from escaping. We extracted any remaining gas in the trap using a 30 mL syringe and summed the total volume of gas collected each week. The gas samples were analyzed using a gas chromatograph coupled with a flame ionization detector (GC-FID) within 24 hours of collection (following McClure et al., 2018). We calculated the daily ebullition rate separately for each trap every week and then averaged the rates from the four traps within each transect to determine a mean daily transect ebullition rate for each week. </para>
+          <para>Methane diffusion rates were collected using the floating chamber method (Galfalk et al., 2013). The chamber was constructed using an inverted opaque bucket with a volume of 0.02 meters cubed and an area of 0.15 meters squared. The trap was fitted with foam so that the lip of the chamber sat approximately 3 cm below the water surface to seal the inside of the chamber from the surrounding air. We prevented internal heating within the chamber while it was deployed by wrapping the outside of the chamber with reflective aluminum tape. Two air-tight gas ports were fitted at the top of the chamber and connected to two separate three-meter sections of 0.635-cm Tygon PVC tubing, which were in turn connected to the inlet and waste valves of a Los Gatos ultraportable GHG analyzer (UGGA; Los Gatos Research Inc., San Jose, CA, USA). The UGGA circulated air through the chamber at approximately 405 mL per minute and recorded moisture-corrected methane (ppm) on 10-second intervals. We allowed the chamber to float freely on the water surface and collect data for five minutes at each site before it was vented to the atmosphere. We used a short incubation time because we were interested in instantaneous diffusion rates and did not intend to parse out ebullition from diffusion. If ebullition bubbles were observed when the chamber was deployed, we removed the chamber from the water surface, held it open to the atmosphere, and waited one minute to allow any methane from the ebullition bubble to circulate out of the chamber before placing it back onto the surface.</para>
+          <para>In 2017, 2018, and 2019 the depth of each site was determined using a Portable Water Depth Sounder Gauge (Cole – Parmer, Vernon Hills, IL, USA). We first determined the depth of all the sites along the longitudinal gradient (n = 20). We then determined the mean depth of each transect by adding up the total depth (m) of the traps in each transect and then divided by the number of traps (n = 4 traps) across the transect. In 2016, each ebulliiton trap was deployed 1 meter above the sediments. </para>
+          <para>Sediment and surface water temperature data was collected each ebullition trap during the monitoring period. Two temperature loggers (HOBO Pendant Temperature/Light Data Logger, Bourne, MA, USA) were deployed at each ebullition trap during the monitoring period and recorded data on 10-minute intervals. One logger was sunk using a stainless-steel weight and a nylon string to sit approximately 10 cm above the sediment-water interface to determine the near-sediment temperature. The surface water temperatures logger was attached to the underside of each trap, just below the water’s surface.</para>
+          <para>Sediment and surface water turbulence was estimated as turbulent kinetic energy (TKE) at the transects using a calibrated three-dimensional (3-D) hydrodynamic model (Si3D). Si3D is a semi-implicit 3-D computational fluid dynamics code that adopts a finite-difference method for numerically solving the Reynolds-averaged Navier-Stokes equations for momentum, transport equations for temperature, and equations that relate water temperature to density (Rueda &amp; Schladow, 2003; Rueda &amp; Schladow, 2009). Si3D provides output velocities that are highly resolved over space and time and allows a user to analyze physical processes of lake circulation (Rueda &amp; Schladow, 2003). A detailed description of the Si3D model is provided by Rueda &amp; Schladow (2003). Driver data for Si3D includes shortwave radiation (Watts per meter squared), air temperature (degrees celsius), atmospheric pressure (Pa), relative humidity (percent), cloud cover (percent), and the zonal and meridional wind speeds (meters per second), which were all measured by the meteorological station located on the dam (Carey et al., 2019), and the discharge from the primary inflow into the reservoir (Carey et al., 2018). We developed a three-dimensional numerical grid using 5 m by 5 m by 0.3 m (L by W by H) cells was generated for the entire reservoir based on the bathymetry. The Si3D calibration for was validated by Chen et al. (2017, 2018), who reported good consistency between the field and numerical results for reservoir mixing. The sediment and surface turbulence at each of the sites was determined by running Si3D for one-week intervals at five second timesteps, which generated model output of instantaneous velocity in the x, y, and z-axes for each grid cell. First, we determined the perturbation velocity (in centimeters per second), which is the difference between the instantaneous velocity at each timestep and the mean velocity in all three axes in each grid cell over the week-long time interval (Garratt, 1994). Next, we used the mean perturbation velocities to calculate near-sediment turbulence for each ebullition trap. Finally, we calculated the mean transect-level sediment and surface turbulence by averaging the turbulence for all sites in each transect between weekly samplings.</para>
+          <para>References</para>
+          <para>Carey C. C., B. J. Bookout, M. E. Lofton, R. P. McClure. 2019. Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2018. Environmental Data Initiative. https://doi.org/10.6073/pasta/037384d2d5ae16cdc7450bf7a72792e3. Dataset accessed 10/07/2019.</para>
+          <para>Carey C. C., A. B. Gerling, R. P. McClure, M. E. Lofton, B. J. Bookout. (2018). Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2018. Environmental Data Initiative. https://doi.org/10.6073/pasta/64ff214b987da2997f5c823b156b3334. Dataset accessed 10/07/2019.</para>
+          <para>Chen, S., Lei, C., Carey, C. C., Gantzer, P. A., &amp; Little, J. C. (2017). A coupled three‐dimensional hydrodynamic model for predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir. Water Resour. Res., 53(1), 470-484. doi:10.1002/2016WR019279</para>
+          <para>Chen, S., Carey, C. C., Little, J. C., Lofton, M. E., McClure, R. P., &amp; Lei, C. (2018). Effectiveness of a bubble-plume mixing system for managing phytoplankton in lakes and reservoirs. Ecol. Eng., 113, 43-51. https://doi.org/10.1016/j.ecoleng.2018.01.002</para>
+          <para>Galfalk, M., Bastviken, D., Fredriksson, S., &amp; Arneborg, L. (2013). Determination of the piston velocity for water‐air interfaces using flux chambers, acoustic Doppler velocimetry, and IR imaging of the water surface. J. Geophys. Res. Biogeosci., 118(2), 770-782. https://doi.org/10.1002/jgrg.20064</para>
+          <para>Garratt, J. R. (1994). The atmospheric boundary layer. Earth-Sci. Rev., 37(1-2), 89-134. https://doi.org/10.1016/0012-8252(94)90026-4</para>
+          <para>Keller, M., &amp; Stallard, R. F. (1994). Methane emission by bubbling from Gatun Lake, Panama. J. Geophys. Res., 99(D4), 8307-8319. https://doi.org/10.1029/92JD02170</para>
+          <para>McClure, R. P., Hamre, K. D., Niederlehner, B. R., Munger, Z. W., Chen, S., Lofton, M. E., et al. (2018). Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Sci. Total Environ., 636, 610-620. https://doi.org/10.1016/j.scitotenv.2018.04.255</para>
+          <para>Rueda, F. J., &amp; Schladow, S. G. (2003). Dynamics of Large Polymictic Lake. II: Numerical Simulations. J. Hydraul. Eng-Asce., 129(2), 92-101. https://doi.org/10.1061/(ASCE)0733-9429(2003)129:2(92)</para>
+          <para>Rueda, F., &amp; Schladow, G. (2009). Mixing and stratification in lakes of varying horizontal length scales: Scaling arguments and energy partitioning. Limnol. Oceanogr., 54(6), 2003-2017. https://doi.org/10.4319/lo.2009.54.6.2003&#13;
+</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>Dynamic responses of greenhouse gases to whole ecosystem manipulations under future climate conditions in reservoirs</title>
+      <personnel>
+        <individualName>
+          <givenName>Ryan</givenName>
+          <givenName>P.</givenName>
+          <surName>McClure</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Virginia Tech Graduate Research Development Program 117105</funding>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Western Virginia Water Authority</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Global Change Center</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Fralin Life Sciences Institute</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>MSB-ECA: A macrosystems science training program: developing undergraduates' simulation modeling, distributed computing, and collaborative skills</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1702506</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>Methane Emissions</entityName>
+      <entityDescription>Ebullition, diffusion, and depth data from 24 sites in Falling Creek Reservoir</entityDescription>
+      <physical>
+        <objectName>EDI_DATA_EBU_DIFF_DEPTH.csv</objectName>
+        <size unit="bytes">78578</size>
+        <authentication method="MD5">c8649cc062e26f3894fb8e2ec068f416</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Reservoir name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; T1e1=Transect 1 ebullition trap 1, T1e2=Transect 1 ebullition trap 2, T1e3=Transect 1 ebullition trap 3, T1e4=Transect 1 ebullition trap 4,T2e1=Transect 2 ebullition trap 1, T2e2=Transect 2 ebullition trap 2,T2e3=Transect 2 ebullition trap 3, T2e4=Transect 2 ebullition trap 4, T3e1=Transect 3 ebullition trap 1, T3e2=Transect 3 ebullition trap 2, T3e3=Transect 3 ebullition trap 3, T3e4=Transect 3 ebullition trap 4, T4e1=Transect 4 ebullition trap 1,T4e2=Transect 4 ebullition trap 2, T4e3=Transect 4 ebullition trap 3, T4e4=Transect 4 ebullition trap 4, T5e1=Transect 5 ebullition trap 1, T5e2=Transect 5 ebullition trap 2, T5e3=Transect 5 ebullition trap 3, T5e4=Transect 5 ebullition trap 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>s3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>s4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>s6</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>sC</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Transect</attributeName>
+          <attributeDefinition>Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4, T5=Transect 5</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>T1</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Site depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">9.723238235</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Ebu_rate</attributeName>
+          <attributeDefinition>Ebullition rate</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>milligramPerMeterSquaredPerDay</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">11319.26783</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Diff_rate</attributeName>
+          <attributeDefinition>Diffusion rate</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>milligramPerMeterSquaredPerDay</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.3319</minimum>
+                  <maximum exclusive="false">70.953</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_depth</attributeName>
+          <attributeDefinition>Data flag for site depths; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ebu</attributeName>
+          <attributeDefinition>Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_diff</attributeName>
+          <attributeDefinition>Data flag for diffusion rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>1330</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>2017 Temperature</entityName>
+      <entityDescription>Sediment and surface water temperature data from 16 sites in Falling Creek Reservoir in 2017</entityDescription>
+      <physical>
+        <objectName>EDI_DATA_HOBO_TEMPS_2017.csv</objectName>
+        <size unit="bytes">21363786</size>
+        <authentication method="MD5">9b3723b606eed55cb9bd096595dda73e</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Reservoir name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; T1e1=Transect 1 ebullition trap 1, T1e2=Transect 1 ebullition trap 2, T1e3=Transect 1 ebullition trap 3, T1e4=Transect 1 ebullition trap 4,T2e1=Transect 2 ebullition trap 1, 2e2=Transect 2 ebullition trap 2,T2e3=Transect 2 ebullition trap 3, T2e4=Transect 2 ebullition trap 4, T3e1=Transect 3 ebullition trap 1, T3e2=Transect 3 ebullition trap 2, T3e3=Transect 3 ebullition trap 3, T3e4=Transect 3 ebullition trap 4, T4e1=Transect 4 ebullition trap 1,T4e2=Transect 4 ebullition trap 2, T4e3=Transect 4 ebullition trap 3, T4e4=Transect 4 ebullition trap 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>T1e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Transect</attributeName>
+          <attributeDefinition>Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>T1</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD HH:MM:SS</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Sed_temp</attributeName>
+          <attributeDefinition>Sediment temperature</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">9.077</minimum>
+                  <maximum exclusive="false">31.064</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Surf_temp</attributeName>
+          <attributeDefinition>Surface temperature</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">3.261</minimum>
+                  <maximum exclusive="false">43.844</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_sed_temp</attributeName>
+          <attributeDefinition>Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_surf_temp</attributeName>
+          <attributeDefinition>Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>433103</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>2017 Turbulence</entityName>
+      <entityDescription>Sediment and surface water turbulence from four transects in Falling Creek Reservoir in 2017</entityDescription>
+      <physical>
+        <objectName>EDI_DATA_TURB_2017.csv</objectName>
+        <size unit="bytes">3849</size>
+        <authentication method="MD5">b305b17643df02ceb461defed173178e</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Reservoir name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Transect</attributeName>
+          <attributeDefinition>Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>T1</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Sed_turb</attributeName>
+          <attributeDefinition>Sediment turbulence</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>joulesPerKilogram</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.86e-13</minimum>
+                  <maximum exclusive="false">1.67e-05</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Surf_turb</attributeName>
+          <attributeDefinition>Surface turbulence</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>joulesPerKilogram</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.27e-10</minimum>
+                  <maximum exclusive="false">3.52e-05</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_sed_turb</attributeName>
+          <attributeDefinition>Data flag for sediment turbulence; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_surf_turb</attributeName>
+          <attributeDefinition>Data flag for surface turbulence; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>92</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>Site Locations</entityName>
+      <entityDescription>Location of the 24 sites in Falling Creek Reservoir</entityDescription>
+      <physical>
+        <objectName>SITE_LOCATIONS_EBU.csv</objectName>
+        <size unit="bytes">872</size>
+        <authentication method="MD5">892892a2635869b5f5e524761a6a5b75</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Reservoir name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; s3=Site 3, s4=Site 4, s6=Site 6, sC=Site catwalk, T1e1=Transect 1 ebullition trap 1, T1e2=Transect 1 ebullition trap 2, T1e3=Transect 1 ebullition trap 3, T1e4=Transect 1 ebullition trap 4,T2e1=Transect 2 ebullition trap 1, 2e2=Transect 2 ebullition trap 2,T2e3=Transect 2 ebullition trap 3, T2e4=Transect 2 ebullition trap 4, T3e1=Transect 3 ebullition trap 1, T3e2=Transect 3 ebullition trap 2, T3e3=Transect 3 ebullition trap 3, T3e4=Transect 3 ebullition trap 4, T4e1=Transect 4 ebullition trap 1,T4e2=Transect 4 ebullition trap 2, T4e3=Transect 4 ebullition trap 3, T4e4=Transect 4 ebullition trap 4,T5e1=Transect 5 ebullition trap 1, T5e2=Transect 5 ebullition trap 2, T5e3=Transect 5 ebullition trap 3, T5e4=Transect 5 ebullition trap 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>s3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>s4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>s6</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>sC</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T1e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e1</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e2</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e3</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T5e4</code>
+                    <definition>Site name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Transect</attributeName>
+          <attributeDefinition>Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>T1</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T2</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T3</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T4</code>
+                    <definition>Transect name</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Latitude coordinates of each site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">37.302925</minimum>
+                  <maximum exclusive="false">37.308734</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Longitude coordinates of each site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-79.8387243</minimum>
+                  <maximum exclusive="false">-79.836514</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>24</numberOfRecords>
+    </dataTable>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <unitList>
+        <unit id="milligramPerMeterSquaredPerDay" multiplierToSI="1" name="milligramPerMeterSquaredPerDay" parentSI="milligramPerMeter" unitType="arealMassDensityRate">
+          <description>milligrams per square meter per day</description>
+        </unit>
+        <unit id="joulesPerKilogram" multiplierToSI="1" name="joulesPerKilogram" parentSI="meterSquarePerSecondSquare" unitType="energyPerMass">
+          <description>joules per kilogram</description>
+        </unit>
+        <unit id="Latitude" multiplierToSI="1" name="Latitude" parentSI="decimalDegrees" unitType="Angle">
+          <description>degree latitude</description>
+        </unit>
+        <unit id="Longitude" multiplierToSI="1" name="Longitude" parentSI="decimalDegrees" unitType="Angle">
+          <description>degree longitude</description>
+        </unit>
+      </unitList>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

@@ -1,0 +1,9 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir	categorical				
+Site	Sampling site within each reservoir; T1e1=Transect 1 ebullition trap 1, T1e2=Transect 1 ebullition trap 2, T1e3=Transect 1 ebullition trap 3, T1e4=Transect 1 ebullition trap 4,T2e1=Transect 2 ebullition trap 1, 2e2=Transect 2 ebullition trap 2,T2e3=Transect 2 ebullition trap 3, T2e4=Transect 2 ebullition trap 4, T3e1=Transect 3 ebullition trap 1, T3e2=Transect 3 ebullition trap 2, T3e3=Transect 3 ebullition trap 3, T3e4=Transect 3 ebullition trap 4, T4e1=Transect 4 ebullition trap 1,T4e2=Transect 4 ebullition trap 2, T4e3=Transect 4 ebullition trap 3, T4e4=Transect 4 ebullition trap 4	categorical	NA	No data
+Transect	Sampling transect within each reservoir; T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4	categorical			NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.	Date		YYYY-MM-DD HH:MM:SS	NA	No data
+Sed_temp	Sediment temperature	numeric	celsius		NA	No data
+Surf_temp	Surface temperature	numeric	celsius		NA	No data
+Flag_sed_temp	Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless
+Flag_surf_temp	Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			

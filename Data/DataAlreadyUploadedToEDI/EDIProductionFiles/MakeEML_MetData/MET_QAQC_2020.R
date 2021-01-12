@@ -8,12 +8,12 @@
 #install.packages("tidyverse")
 library(lubridate)
 library(tidyverse)
-rm(list=ls()) #let's start with a blank slate
+#rm(list=ls()) #let's start with a blank slate
 
 ###2) Download the "raw" meteorological FCR datasets from GitHub and aggregate into 1 file: 
 #a. Past Met data, manual downloads
 #download current met data from GitHub
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", "FCRmet.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2020.csv", "FCRmet.csv")
 
 
 #the old files aren't there anymore
@@ -84,7 +84,7 @@ names(Met) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C",
                "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
                "ShortwaveRadiationDown_Average_W_m2", "InfaredRadiationUp_Average_W_m2",
                "InfaredRadiationDown_Average_W_m2", "Albedo_Average_W_m2", "DOY") #finalized column names
-Met$Reservoir= "FCR"#add reservoir name for EDI archiving
+Met$Reservoir="FCR" #add reservoir name for EDI archiving
 Met$Site=50 #add site column for EDI archiving
 Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
 
@@ -126,7 +126,7 @@ lm_Panel2015=lm(MetAir_2015$AirTemp_Average_C ~ MetAir_2015$CR3000Panel_temp_C)
 summary(lm_Panel2015)#gives data on linear model parameters
 
 #make the panelTemp from character into numeric 
-Met$CR3000Panel_temp_C=as.numeric(Met$CR3000Panel_temp_C)
+#Met$CR3000Panel_temp_C=as.numeric(Met$CR3000Panel_temp_C)
 
 #if Air - Panel > 3 sd(lm_Panel2015) then replace with PanelTemp predicted by lm equation rather than raw value
 Met$Flag_AirTemp_Average_C=ifelse((Met$AirTemp_Average_C - (1.6278+(0.9008*Met$CR3000Panel_temp_C)))>(3*sd(lm_Panel2015$residuals)), 4, Met$Flag_AirTemp_Average_C)
@@ -188,6 +188,20 @@ Met$Flag_PAR_Total_mmol_m2=ifelse(Met$PAR_Total_mmol_m2>200, 4, Met$Flag_PAR_Tot
 Met$Note_PAR_Total_mmol_m2=ifelse(Met$PAR_Total_mmol_m2>200, "Outlier_set_to_NA", Met$Note_PAR_Total_mmol_m2)
 Met$PAR_Total_mmol_m2=ifelse(Met$PAR_Total_mmol_m2>200, NA, Met$PAR_Total_mmol_m2)
 
+#See where the low PAR values are in July 2020
+July_par=subset(Met_raw, DateTime >= as.POSIXct('2020-07-01 00:00', tz="Etc/GMT+5") & 
+                  DateTime <= as.POSIXct('2020-07-31 23:59', tz='Etc/GMT+5'))
+Aug_par=subset(Met_raw, DateTime >= as.POSIXct('2020-08-01 00:00', tz="Etc/GMT+5") & 
+                  DateTime <= as.POSIXct('2020-08-31 23:59', tz='Etc/GMT+5'))
+Nov_par=subset(Met_raw, DateTime >= as.POSIXct('2020-11-01 00:00', tz="Etc/GMT+5") & 
+                 DateTime <= as.POSIXct('2020-11-30 23:59', tz='Etc/GMT+5'))
+Dec_par=subset(Met_raw, DateTime >= as.POSIXct('2020-12-01 00:00', tz="Etc/GMT+5") & 
+                 DateTime <= as.POSIXct('2020-12-31 23:59', tz='Etc/GMT+5')) 
+
+plot(July_par$DateTime, July_par$PAR_Average_umol_s_m2, type= 'l')
+plot(Aug_par$DateTime, Aug_par$PAR_Average_umol_s_m2, type = 'l')
+  
+
 #PAR TOT and AVG 2019 QAQC
 #Take out bad data due to sensor failure. Aug 4-5; Aug 17 - Dec 13
 #PAR_failure=c("2019-08-04":"2019-08-05", "2019-08-15":"2019-12-13")
@@ -207,6 +221,33 @@ Met$PAR_Total_mmol_m2=ifelse(Met$PAR_Total_mmol_m2>200, NA, Met$PAR_Total_mmol_m
 #Met$Note_PAR_Average_umol_s_m2=ifelse(Met$DateTime>"2019-08-15 00:00:00", "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Average_umol_s_m2)
 #Met$PAR_Average_umol_s_m2=ifelse(Met$DateTime>"2019-08-15 00:00:00", NA, Met$PAR_Average_umol_s_m2)
 
+#PAR TOT and AVG 2020 QAQC
+#Take out bad data due to sensor failure. Jul 3-21; Nov 1-24; Dec 1-31
+#PAR_failure=c("2020-07-03 11:56":"2020-07-21 13:38", "2020-11-01 12:37":"2020-11-24 12:32", "2020-12-01 09:54":"2020-12-31 23:59")
+Met$Flag_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), 4, Met$Flag_PAR_Total_mmol_m2)
+Met$Note_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Total_mmol_m2)
+Met$PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), NA, Met$PAR_Total_mmol_m2)
+
+Met$Flag_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), 4, Met$Flag_PAR_Average_umol_s_m2)
+Met$Note_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Average_umol_s_m2)
+Met$PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-07-03 11:56:00"&Met$DateTime<"2020-07-21 13:38:00"), NA, Met$PAR_Average_umol_s_m2)
+
+Met$Flag_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), 4, Met$Flag_PAR_Total_mmol_m2)
+Met$Note_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Total_mmol_m2)
+Met$PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), NA, Met$PAR_Total_mmol_m2)
+
+Met$Flag_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), 4, Met$Flag_PAR_Average_umol_s_m2)
+Met$Note_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Average_umol_s_m2)
+Met$PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-11-01 12:37:00"&Met$DateTime<"2020-11-24 12:32:00"), NA, Met$PAR_Average_umol_s_m2)
+
+Met$Flag_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), 4, Met$Flag_PAR_Total_mmol_m2)
+Met$Note_PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Total_mmol_m2)
+Met$PAR_Total_mmol_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), NA, Met$PAR_Total_mmol_m2)
+
+Met$Flag_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), 4, Met$Flag_PAR_Average_umol_s_m2)
+Met$Note_PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), "Outlier_set_to_NA_due_to_probable_sensor_failure", Met$Note_PAR_Average_umol_s_m2)
+Met$PAR_Average_umol_s_m2=ifelse((Met$DateTime>"2020-12-01 09:54:00"), NA, Met$PAR_Average_umol_s_m2)
+
 #Remove shortwave radiation outliers
 #first shortwave upwelling
 Met$Flag_ShortwaveRadiationUp_Average_W_m2=ifelse(Met$ShortwaveRadiationUp_Average_W_m2>1600, 4, Met$Flag_ShortwaveRadiationUp_Average_W_m2)
@@ -223,10 +264,6 @@ Met$Flag_Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2>1000, 4, Met$Flag_Al
 Met$Note_Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2>1000, "Outlier_set_to_NA", Met$Note_Albedo_Average_W_m2)
 Met$Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2>1000, NA, Met$Albedo_Average_W_m2)
 
-#over -100 because have -INF
-Met$Flag_Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2<(-100), 4, Met$Flag_Albedo_Average_W_m2)
-Met$Note_Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2<(-100), "Outlier_set_to_NA", Met$Note_Albedo_Average_W_m2)
-Met$Albedo_Average_W_m2=ifelse(Met$Albedo_Average_W_m2<(-100), NA, Met$Albedo_Average_W_m2)
 
 Met$Flag_Albedo_Average_W_m2=ifelse(is.na(Met$ShortwaveRadiationUp_Average_W_m2)|is.na(Met$ShortwaveRadiationDown_Average_W_m2), 4, Met$Flag_Albedo_Average_W_m2)
 Met$Note_Albedo_Average_W_m2=ifelse(is.na(Met$ShortwaveRadiationUp_Average_W_m2)|is.na(Met$ShortwaveRadiationDown_Average_W_m2), "Set_to_NA_because_Shortwave_equals_NA", Met$Note_Albedo_Average_W_m2)
@@ -283,37 +320,78 @@ Met_agg<-rbind(Met_past,Met) #binds past and current data from Met station
 Met_agg_2 = Met_agg[!duplicated(Met_agg$DateTime),] #takes out duplicated values by timestamp
 
 #check to make sure everything 
-Met_agg=Met_agg[order(Met$TIMESTAMP),]
-Met_agg$DOY=yday(Met_agg$TIMESTAMP)
+Met_agg=Met_agg[order(Met_agg$DateTime),]
+Met_agg$DOY=yday(Met_agg$DateTime)
 
 #check record for gaps
 #daily record gaps by day of year
 for(i in 2:nrow(Met_agg)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
   if(Met_agg$DOY[i]-Met_agg$DOY[i-1]>1){
-    print(c(Met_agg$TIMESTAMP[i-1],Met$TIMESTAMP[i]))
+    print(c(Met_agg$DateTime[i-1],Met$DateTime[i]))
   }
 }
 #sub-daily record gaps by record number
-for(i in 2:length(Met$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(abs(Met$RECORD[i]-Met$RECORD[i-1])>1){
-    print(c(Met$TIMESTAMP[i-1],Met$TIMESTAMP[i]))
+for(i in 2:length(Met_agg$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(Met_agg$RECORD[i]-Met_agg$RECORD[i-1])>1){
+    print(c(Met_agg$DateTime[i-1],Met_agg$DateTime[i]))
   }
 }
+#Reorder so the flags are all next to each other
+Met2=Met%>%
+  select(c("Reservoir","Site","DateTime","Record","CR3000_Batt_V","CR3000Panel_temp_C","PAR_Average_umol_s_m2","PAR_Total_mmol_m2","BP_Average_kPa",                          
+           "AirTemp_Average_C","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
+           "ShortwaveRadiationDown_Average_W_m2","InfaredRadiationUp_Average_W_m2","InfaredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
+           "Flag_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_Average_C","Flag_Rain_Total_mm","Flag_RH_percent",
+           "Flag_WindSpeed_Average_m_s","Flag_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Flag_ShortwaveRadiationDown_Average_W_m2",
+           "Flag_InfaredRadiationUp_Average_W_m2","Flag_InfaredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_PAR_Average_umol_s_m2",              
+           "Note_PAR_Total_mmol_m2","Note_BP_Average_kPa","Note_AirTemp_Average_C","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
+           "Note_WindDir_degrees","Note_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2","Note_InfaredRadiationUp_Average_W_m2",       
+           "Note_InfaredRadiationDown_Average_W_m2","Note_Albedo_Average_W_m2"))
+
+Met_agg3=Met_agg%>%
+  select(c("Reservoir","Site","DateTime","Record","CR3000_Batt_V","CR3000Panel_temp_C","PAR_Average_umol_s_m2","PAR_Total_mmol_m2","BP_Average_kPa",                          
+ "AirTemp_Average_C","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
+ "ShortwaveRadiationDown_Average_W_m2","InfaredRadiationUp_Average_W_m2","InfaredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
+"Flag_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_Average_C","Flag_Rain_Total_mm","Flag_RH_percent",
+ "Flag_WindSpeed_Average_m_s","Flag_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Flag_ShortwaveRadiationDown_Average_W_m2",
+ "Flag_InfaredRadiationUp_Average_W_m2","Flag_InfaredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_PAR_Average_umol_s_m2",              
+ "Note_PAR_Total_mmol_m2","Note_BP_Average_kPa","Note_AirTemp_Average_C","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
+ "Note_WindDir_degrees","Note_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2","Note_InfaredRadiationUp_Average_W_m2",       
+ "Note_InfaredRadiationDown_Average_W_m2","Note_Albedo_Average_W_m2","DOY"))                                     
+
 #prints table of flag frequency
-for(i in 5:17) {
-  print(colnames(Met_agg[i]))
-  print(table(Met_agg[,paste0("Flag_",colnames(Met_agg[i]))])) }
+#can't get it to work
+Met_agg4=Met_agg%>%
+  select(c("Flag_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_Average_C","Flag_Rain_Total_mm","Flag_RH_percent",
+"Flag_WindSpeed_Average_m_s","Flag_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Flag_ShortwaveRadiationDown_Average_W_m2",
+"Flag_InfaredRadiationUp_Average_W_m2","Flag_InfaredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2"))
+
+a=table(Met_agg3$Flag_PAR_Average_umol_s_m2,Met_agg3$Flag_PAR_Total_mmol_m2)
+a
+#why doesn't it work. Come back to it 
+for(b in 22:22) {
+  print(colnames(Met_agg[b]))
+  print(table(Met_agg[,paste0("Flag",colnames(Met_agg[b]))]))}
+
+data.frame(number=Met2$values, n=Met2$lengths)
 
 ####6) Make plots to view data #####
 #plots to check for any wonkiness
+#these are for 2020 to compare to raw 2020 data
 x11(); par(mfrow=c(2,2))
 plot(Met$DateTime, Met$CR3000_Batt_V, type = 'l')
 plot(Met$DateTime, Met$CR3000Panel_temp_C, type = 'l')
 #PAR
 plot(Met_raw$DateTime, Met_raw$PAR_Average_umol_s_m2, col="red", type='l')
-plot(Met_$DateTime, Met$PAR_Average_umol_s_m2, type = 'l')
+plot(Met$DateTime, Met$PAR_Average_umol_s_m2, type = 'l')
 plot(Met_raw$DateTime, Met_raw$PAR_Total_mmol_m2, col="red", type='l')
 plot(Met$DateTime, Met$PAR_Total_mmol_m2, type = 'l')
+#PAR 2020 summerand winter
+plot(July_par$DateTime, July_par$PAR_Average_umol_s_m2, type= 'l')
+plot(Aug_par$DateTime, Aug_par$PAR_Average_umol_s_m2, type = 'l')
+plot(Nov_par$DateTime, Nov_par$PAR_Average_umol_s_m2, type = 'l')
+plot(Dec_par$DateTime, Dec_par$PAR_Average_umol_s_m2, type = 'l')
+
 #BP
 plot(Met_raw$DateTime, Met_raw$BP_Average_kPa, col="red", type='l')
 plot(Met$DateTime, Met$BP_Average_kPa, type = 'l')
@@ -343,10 +421,48 @@ plot(Met$DateTime, Met$InfaredRadiationUp_Average_W_m2, type = 'l')
 plot(Met_raw$DateTime, Met_raw$InfaredRadiationDown_Average_W_m2, col="red", type='l')
 plot(Met$DateTime, Met$InfaredRadiationDown_Average_W_m2, type = 'l')
 
+#Aggregated data from 2015-2020. There is no raw data to compare it to
+x11(); par(mfrow=c(2,2))
+plot(Met_agg$DateTime, Met_agg$CR3000_Batt_V, type = 'l')
+plot(Met_agg$DateTime, Met_agg$CR3000Panel_temp_C, type = 'l')
+#PAR
+#plot(Met_raw$DateTime, Met_raw$PAR_Average_umol_s_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$PAR_Average_umol_s_m2, type = 'l')
+#plot(Met_raw$DateTime, Met_raw$PAR_Total_mmol_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$PAR_Total_mmol_m2, type = 'l')
+#BP
+plot(Met_agg$DateTime, Met_agg$BP_Average_kPa, col="red", type='l')
+#plot(Met$DateTime, Met$BP_Average_kPa, type = 'l')
+#Air Temp
+plot(Met_agg$DateTime, Met_agg$AirTemp_Average_C, col="red", type='l')
+#points(Met$DateTime, Met$AirTemp_Average_C, type = 'l')
+#RH
+plot(Met_agg$DateTime, Met_agg$RH_percent, col="red", type='l')
+#points(Met$DateTime, Met$RH_percent, type = 'l')
+#Rain
+plot(Met_agg$DateTime, Met_agg$Rain_Total_mm, col="red", type='h')
+#points(Met$DateTime, Met$Rain_Total_mm, type = 'h')
+#Wind
+plot(Met_agg$DateTime, Met_agg$WindSpeed_Average_m_s, type = 'l')
+hist(Met_agg$WindDir_degrees)
+#SW Radiation
+#plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationUp_Average_W_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$ShortwaveRadiationUp_Average_W_m2, type = 'l')
+#plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationDown_Average_W_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$ShortwaveRadiationDown_Average_W_m2, type = 'l')
+#Albedo
+#plot(Met_raw$DateTime, Met_raw$Albedo_Average_W_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$Albedo_Average_W_m2, type = 'l')
+#InfRad
+#plot(Met_raw$DateTime, Met_raw$InfaredRadiationUp_Average_W_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$InfaredRadiationUp_Average_W_m2, type = 'l')
+#plot(Met_raw$DateTime, Met_raw$InfaredRadiationDown_Average_W_m2, col="red", type='l')
+plot(Met_agg$DateTime, Met_agg$InfaredRadiationDown_Average_W_m2, type = 'l')
+
 #Met unique values for notes
-for (u in 20:45) {
-  print(colnames(Met[u]))
-  print(unique(Met[,u]))
+for (u in 33:45) {
+  print(colnames(Met_agg3[u]))
+  print(unique(Met_agg3[,u]))
 }
 
 ###Prep RemoveMet for final file version
@@ -358,7 +474,8 @@ RemoveMet=RemoveMet[,c(8:9,1:7)]
 
 ###7) Write file with final cleaned dataset! ###
 Met_final=Met[,c(18:19,1:17, 20:45)] #final column order
+Met_final=Met_agg[,c(1:45)]
 setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData')
-write.csv(Met_final, "Met_final_2015_2019.csv", row.names=F, quote=F)
+write.csv(Met_final, "Met_final_2015_2020.csv", row.names=F, quote=F)
 write.csv(RemoveMet, "Met_Maintenance_2015_2019.csv", row.names=F, quote = F)
 write.csv(Met_agg, "Met_agg_2015_2020.csv")

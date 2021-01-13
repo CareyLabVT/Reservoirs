@@ -394,28 +394,32 @@ catdata_all <- rbind(catdata_pub, catdata_flag)
 # chl and phyco qaqc ----
 # perform qaqc on the entire dataset for chl and phyco
 
+
 # assign standard deviation thresholds
 sd_4 <- 4*sd(catdata_all$EXOChla_ugL_1, na.rm = TRUE)
 threshold <- sd_4
 sd_4_phyco <- 4*sd(catdata_all$EXOBGAPC_ugL_1, na.rm = TRUE)
 threshold_phyco <- sd_4_phyco
 
-chl_ugl <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOChla_ugL_1)) +
-  geom_point() +
-  geom_hline(yintercept = sd_4)
-ggplotly(chl_ugl)
-
+#chl_ugl <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOChla_ugL_1)) +
+#  geom_point() +
+#  geom_hline(yintercept = sd_4)
+#ggplotly(chl_ugl)
 
 # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
 catdata_all <- catdata_all %>% 
   mutate(Chla = lag(EXOChla_ugL_1, 0),
          Chla_lag1 = lag(EXOChla_ugL_1, 1),
          Chla_lead1 = lead(EXOChla_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
-  mutate(EXOChla_ugL_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)), 
+  mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+  mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+  mutate(EXOChla_ugL_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1)) %>% 
+  mutate(EXOChla_RFU_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1)) %>% 
+  mutate(EXOChla_ugL_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
                                 NA, EXOChla_ugL_1)) %>%   
-  mutate(EXOChla_RFU_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)), 
+  mutate(EXOChla_RFU_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
                                    NA, EXOChla_RFU_1)) %>% 
-  mutate(Flag_Chla = ifelse(((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold))), 
+  mutate(Flag_Chla = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)) & !is.na(Chla), 
                             2, Flag_Chla)) %>% 
   select(-Chla, -Chla_lag1, -Chla_lead1)
 
@@ -439,12 +443,12 @@ catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-24 11:40:00'] <- 1
 catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
 catdata_all$Flag_Chla[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1
 
-chl_mean <- catdata_flag %>% 
-  select(DateTime, EXOChla_ugL_1) %>% 
-  mutate(day = date(DateTime)) %>% 
-  group_by(day) %>% 
-  mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
-  distinct(day, .keep_all = TRUE)
+#chl_mean <- catdata_flag %>% 
+#  select(DateTime, EXOChla_ugL_1) %>% 
+#  mutate(day = date(DateTime)) %>% 
+#  group_by(day) %>% 
+#  mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
+#  distinct(day, .keep_all = TRUE)
 #chl_mean_plot <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
 #  geom_point() 
 #ggplotly(chl_mean)
@@ -472,11 +476,15 @@ catdata_all <- catdata_all %>%
   mutate(phyco = lag(EXOBGAPC_ugL_1, 0),
          phyco_lag1 = lag(EXOBGAPC_ugL_1, 1),
          phyco_lead1 = lead(EXOBGAPC_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
-  mutate(EXOBGAPC_ugL_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+  mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+  mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+  mutate(EXOBGAPC_RFU_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1)) %>% 
+  mutate(EXOBGAPC_ugL_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1)) %>% 
+  mutate(EXOBGAPC_ugL_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
                                  NA, EXOBGAPC_ugL_1)) %>%   
-  mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+  mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
                                  NA, EXOBGAPC_RFU_1)) %>% 
-  mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco)), 
+  mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
                              2, Flag_Phyco)) %>%
   select(-phyco, -phyco_lag1, -phyco_lead1)
 
@@ -505,27 +513,28 @@ catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA
 # QAQC done on 2018-2020 dataset
 sd_fDOM <- sd(catdata_all$EXOfDOM_QSU_1, na.rm = TRUE) #deteriming the standard deviation of fDOM data 
 
-fDOM_pre_QAQC <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
-  geom_point()+
-  ggtitle("fDOM (QSU) pre QAQC")
-ggplotly(fDOM_pre_QAQC)
+#fDOM_pre_QAQC <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
+#  geom_point()+
+#  ggtitle("fDOM (QSU) pre QAQC")
+#ggplotly(fDOM_pre_QAQC)
 
 catdata_all <- catdata_all %>% 
   mutate(Flag_fDOM = ifelse(is.na(EXOfDOM_QSU_1), 1, 0)) %>%  #This creates Flag column for fDOM data, setting all NA's going into QAQC as 1 for missing data, and to 0 for the rest
   mutate(fDOM = lag(EXOfDOM_QSU_1, 0),
          fDOM_lag1 = lag(EXOfDOM_QSU_1, 1),
          fDOM_lead1 = lead(EXOfDOM_QSU_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
-  mutate(EXOfDOM_QSU_1 = ifelse(fDOM < 0, NA, EXOfDOM_QSU_1),
-         EXOfDOM_RFU_1 = ifelse(fDOM < 0, NA, EXOfDOM_RFU_1),
+  mutate(Flag_fDOM = ifelse(fDOM < 0 & !is.na(fDOM), 3, Flag_fDOM),
+         EXOfDOM_QSU_1 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_QSU_1),
+         EXOfDOM_RFU_1 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_RFU_1),
          Flag_fDOM = ifelse(fDOM < 0, 2, Flag_fDOM)   ) %>% #These mutates are QAQCing for negative fDOM QSU values and setting these to NA and making a flag for these. This was done outside of the 2 sd deviation rule because there were two negative points in a row and one was not removed with the follwoing if else statements. 
   mutate(EXOfDOM_QSU_1 = ifelse(
-    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)   ), NA, EXOfDOM_QSU_1
+    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1
   )) %>%  #QAQC to remove outliers for QSU fDOM data 
   mutate(EXOfDOM_RFU_1 = ifelse(
-    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)   ), NA, EXOfDOM_RFU_1
+    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), NA, EXOfDOM_RFU_1
   )) %>% #QAQC to remove outliers for RFU fDOM data
   mutate(Flag_fDOM = ifelse(
-    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)   ), 2, Flag_fDOM
+    ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), 2, Flag_fDOM
   ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
   select(-fDOM, -fDOM_lag1, -fDOM_lead1)  #This removes the columns used to run ifelse statements since they are no longer needed. 
 
@@ -534,17 +543,12 @@ catdata_all <- catdata_all %>%
 ###########################################################################################################################################################################
 # write final csv ----
 # some final checking of flags
-for (i in 1:nrow(catdata_flag)) {
-  if(is.na(catdata_flag$Flag_Chla[i])){
-    catdata_flag$Flag_Chla[i] <- 0
-  }
-  if(is.na(catdata_flag$Flag_Phyco[i])){
-    catdata_flag$Flag_Phyco[i] <- 0
+for (i in 1:nrow(catdata_all)) {
+  if(is.na(catdata_all$Flag_fDOM[i])){
+    catdata_all$Flag_fDOM[i] <- 0
   }
 }
 
-
-catdata_all <- rbind()
 
 
 str(catdata_all)

@@ -742,10 +742,3 @@ str(Inflow_Final_8)
 
 # Write to CSV
 write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv') 
-
-# Check to see how it reads back in
-test <- read_csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv')
-str(test)
-
-test2 <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_10Jan2021.csv')
-str(test2)

@@ -3,42 +3,29 @@ Flag_All	0	No flag
 Flag_All	1	Value removed due to maintenance and set to NA
 Flag_Chla	0	No flag
 Flag_Chla	1	Value removed due to maintenance and set to NA
-Flag_Chla	2	"Outlier value removed and set to NA, see Methods section for more detail on QAQC process"
-Flag_Chla	3	Negative value set to 0 
-Flag_Chla	4	Value removed due to fouling and set to NA
+Flag_Chla	22	"Value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint"
+Flag_Chla	5	Questionable value due to fouling
 Flag_DO_1	0	No flag
 Flag_DO_1	1	Value removed due to maintenance and set to NA
-Flag_DO_1	7	Missing data
 Flag_DO_5	0	No flag
 Flag_DO_5	1	Value removed due to maintenance and set to NA
-Flag_DO_5	3	Negative value set to 0 
-Flag_DO_5	5	Questionable value due to potential fouling
-Flag_DO_5	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles 
-Flag_DO_5	7	Missing data
+Flag_DO_5	3	Negatives values set to 0
 Flag_DO_9	0	No flag
 Flag_DO_9	1	Value removed due to maintenance and set to NA
-Flag_DO_9	3	Negative value set to 0 
-Flag_DO_9	5	Questionable value due to potential fouling
-Flag_DO_9	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles 
-Flag_DO_9	7	Missing data
-Flag_fDOM	0	No flag
-Flag_fDOM	2	"Outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_DO_9	3	Negatives values set to 0
 Flag_Phyco	0	No flag
 Flag_Phyco	1	Value removed due to maintenance and set to NA
-Flag_Phyco	3	Negative value set to 0 
-Flag_Phyco	4	Value removed due to fouling and set to NA
-Flag_Phyco	5	Questionable value due to potential fouling
+Flag_Phyco	22	"Value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint"
+Flag_Phyco	5	Questionable value due to fouling
 Flag_TDS	0	No flag
 Flag_Temp_1	0	No flag
 Flag_Temp_1	1	Value removed due to maintenance and set to NA
-Flag_Temp_1	8	Value corrected using a constant offset due to thermistor malfunction
 Flag_Temp_2	0	No flag
 Flag_Temp_2	1	Value removed due to maintenance and set to NA
 Flag_Temp_3	0	No flag
 Flag_Temp_3	1	Value removed due to maintenance and set to NA
 Flag_Temp_4	0	No flag
 Flag_Temp_4	1	Value removed due to maintenance and set to NA
-Flag_Temp_4	8	Value corrected using a constant offset due to thermistor malfunctions
 Flag_Temp_5	0	No flag
 Flag_Temp_5	1	Value removed due to maintenance and set to NA
 Flag_Temp_6	0	No flag

@@ -40,7 +40,7 @@ catdata_flag$Flag_Temp_9 <- 0
 # Flag values
 # 0: no flag
 # 1: value removed due to maintenance and set to NA
-# 2: value set to NA, major outlier which is more than 2 standard deviations different from previous or following datapoint
+# 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 # 3: negative values set to 0
 # 4: value removed due to fouling and set to NA
 # 5: questionable value due to potential fouling
@@ -548,8 +548,12 @@ for (i in 1:nrow(catdata_all)) {
     catdata_all$Flag_fDOM[i] <- 0
   }
 }
-
-
-
 str(catdata_all)
+
+# rearrange the cols
+catdata_all <- catdata_all %>% 
+  select(Reservoir:RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted, RDOTemp_C_5, RDO_mgL_9,
+         RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9, EXOTemp_C_1: EXO_wiper,
+         RECORD:CR6Panel_Temp_C, Flag_All:Flag_fDOM)
+
 write.csv(catdata_all, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

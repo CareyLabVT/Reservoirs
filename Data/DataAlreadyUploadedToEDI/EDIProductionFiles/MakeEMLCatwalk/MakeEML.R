@@ -12,9 +12,11 @@
 #    download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
 #    download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 # 4. perform QAQC. The QAQC script will be uploaded as one file with the datapackage into EDI
+#    QAQC for 2020 is in the script: catwalk_EDI_QAQC_all_variables.R
+#    and output file for EDI is Catwalk_EDI_2020.csv
 
 library(devtools)
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
@@ -112,7 +114,7 @@ template_table_attributes(path = folder,
                           data.path = folder,
                           data.table = "Catwalk_EDI_2020.csv",
                           write.file = TRUE)
-
+# edit this file in excel
 
 #if you need to make custom units that aren't in the unit dictionary,
 #use the customunits.txt file and the directions on the EMLassemblyline Github to do so

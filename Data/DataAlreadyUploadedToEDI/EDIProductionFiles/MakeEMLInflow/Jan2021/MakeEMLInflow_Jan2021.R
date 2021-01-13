@@ -7,13 +7,12 @@
 ### Updated: 11 Jan 2020, A. Hounshell
 
 # (install and) Load EMLassemblyline #####
-install.packages('devtools')
+# install.packages('devtools')
 
-remotes::install_github("EDIorg/EDIutils")
-remotes::install_github("EDIorg/taxonomyCleanr")
-remotes::install_github("EDIorg/EMLassemblyline")
+# devtools::install_github("EDIorg/EDIutils")
+# devtools::install_github("EDIorg/taxonomyCleanr")
+# devtools::install_github("EDIorg/EMLassemblyline")
 
-devtools::install_github("EDIorg/EMLassemblyline")
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
@@ -136,9 +135,9 @@ template_categorical_variables(path = "C:/Users/Adam/Documents/Alex/Reservoirs/D
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  data.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  eml.path = "C:/Users/Adam/Documents/Alex/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  data.path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  eml.path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
   dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
   temporal.coverage = c("2013-05-15", "2021-01-10"),
   maintenance.description = 'ongoing',
@@ -148,7 +147,7 @@ make_eml(
   other.entity.description = "QA/QC Code for Discharge aggregation",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.126.2')
+  package.id = 'edi.126.4')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -171,19 +170,19 @@ make_eml(
 # INFLOW IS A REVISION: already have an identifier: 202.X (x = revision number)
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  eml.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Mar2020",
-  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2020",
-  temporal.coverage = c("2013-05-15", "2020-03-09"),
+  path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  data.path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  eml.path = "C:/Users/ahoun/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
+  temporal.coverage = c("2013-05-15", "2021-01-10"),
   maintenance.description = 'ongoing',
-  data.table = c("inflow_for_EDI_2013_06Mar2020.csv","20200306_RatingCurve.csv"),
-  data.table.description = c("FCR inflow dataset","Rating curve"),
-  other.entity= 'Inflow_Aggregation_EDI_Mar2020.R',
+  data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
+  data.table.description = c("FCR inflow dataset","Rating curve WVWA","Rating curve VT"),
+  other.entity= 'Inflow_Aggregation_EDI_Jan2021.R',
   other.entity.description = "QA/QC Code for Discharge aggregation",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.202.6')
+  package.id = 'edi.202.7')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

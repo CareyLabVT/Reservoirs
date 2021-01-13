@@ -15,13 +15,13 @@ output_file <- paste0(folder, "/Catwalk_first_QAQC_2020.csv")
 temp_oxy_chla_qaqc(data_file, maintenance_file, output_file)
 
 # read in qaqc function output
-catdata_flag <- read.csv(output_file) 
-catdata_flag$DateTime<-as.POSIXct(catdata_flag$DateTime,format = "%Y-%m-%d %H:%M:%S")
+catdata <- read.csv(output_file) 
+catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
-#catdata_published <- catdata[catdata$DateTime<="2019-12-31",] # coverage of the last published dataset
-#catdata_published <- catdata_published[!is.na(catdata_published$Flag_All),]
-#catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
-#catdata_flag <- catdata_flag[!is.na(catdata_flag$Reservoir),]
+# subset file to only unpublished data
+catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
+catdata_flag <- catdata_flag[!is.na(catdata_flag$Reservoir),]
+
 
 # assign new flags for temp string, set to 0
 catdata_flag$Flag_Temp_Surf <- 0
@@ -271,21 +271,143 @@ catdata_flag$ThermistorTemp_C_9[catdata_flag$DateTime=='2020-09-30 10:30:00'] <-
 catdata_flag$Flag_Temp_9[catdata_flag$DateTime=='2020-09-30 10:30:00'] <- 1
 
 ###########################################################################################################################################################################
+# DO qaqc ----
+
+# now fix the negative DO values
+catdata_flag <- catdata_flag %>%  #RDO at 5m
+  mutate(Flag_DO_5 = ifelse(RDO_mgL_5 < 0 | RDOsat_percent_5 < 0, 3, Flag_DO_5), #Add a flag for DO<0
+         RDO_mgL_5 = ifelse(RDO_mgL_5 < 0, 0, RDO_mgL_5), #Change negative to 0
+         RDOsat_percent_5 = ifelse(RDOsat_percent_5 < 0, 0, RDOsat_percent_5), #Change negative %sat to 0
+         Flag_DO_5 = ifelse(is.na(RDO_mgL_5),7,Flag_DO_5), #Flag NA values
+         
+         Flag_DO_9 = ifelse(RDO_mgL_9 < 0 | RDOsat_percent_9 < 0, 3, Flag_DO_9), #repeat for 9m
+         RDO_mgL_9 = ifelse(RDO_mgL_9 < 0, 0, RDO_mgL_9),
+         RDOsat_percent_9 = ifelse(RDOsat_percent_9 < 0, 0, RDOsat_percent_9),
+         Flag_DO_9 = ifelse(is.na(RDO_mgL_9),7,Flag_DO_9),
+         
+         Flag_DO_1 = ifelse(EXODO_mgL_1 < 0 | EXODOsat_percent_1 <0, 3, Flag_DO_1), #and for 1m
+         EXODO_mgL_1 = ifelse(EXODO_mgL_1 < 0, 0, EXODO_mgL_1),
+         EXODOsat_percent_1 = ifelse(EXODOsat_percent_1 <0, 0, EXODOsat_percent_1),
+         Flag_DO_1 = ifelse(is.na(EXODO_mgL_1),7,Flag_DO_1))
+
+#Deal with when the sensors were up
+maint = read.csv(paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
+maint = maint[!grepl("EXO",maint$parameter),] #creating file "maint" with all sensor string maintenance
+maint = maint%>%
+  filter(!colnumber %in% c(" c(24:26)"," 40"," 41"))
+clean_start<-as.POSIXct(maint$TIMESTAMP_start, tz = "EST")
+clean_end <- as.POSIXct(maint$TIMESTAMP_end, tz = "EST")
+
+ADJ_PERIOD = 2*60*60 #amount of time to stabilization after cleaning in seconds
+
+for (i in 1:length(clean_start)){ #Set all data during cleaning and for ADJ_PERIOD after to NA
+  catdata_flag$RDO_mgL_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+  catdata_flag$RDO_mgL_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+  catdata_flag$RDOsat_percent_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+  catdata_flag$RDOsat_percent_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+  catdata_flag$Flag_DO_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  catdata_flag$Flag_DO_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+}
+
+################
+#Creating a new flag "6" started in 2019: "very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5"
+#Creating a new flag "5" which means that the values are very questionable due to fouling but not adjusted (starting in 2019)
+################
+
+
+
+catdata_flag <- catdata_flag%>%
+  mutate(
+    #9 meters #### READ NOTE: These are the sections I noticed apparent following in TS and have tried to correct with linear adjustments
+    #first section fixed 11aug to 17aug
+    Flag_DO_9 = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 7:00:00",6, Flag_DO_9),
+    RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 7:00:00", 
+                                RDO_mgL_9 + as.numeric(difftime(DateTime,"2020-08-11 7:00:00", units = "mins"))/6500, #A linear adjustment here
+                                RDO_mgL_9),
+    RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-17 12:50:00" & DateTime> "2020-08-11 15:00:00", 
+                                       RDOsat_percent_9 + (as.numeric(difftime("2020-08-17 12:50:00","2020-08-12 15:00:00", units = "mins")))/6500/11.3*100,
+                                       RDOsat_percent_9),
+    
+    # 9 meters 19aug to 24aug
+    Flag_DO_9 = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00",6, Flag_DO_9),
+    RDO_mgL_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime,"2020-08-19 20:00:00", units = "mins")))/6500, #A linear adjustment here
+                                RDO_mgL_9_adjusted),
+    RDOsat_percent_9_adjusted = ifelse(DateTime<"2020-08-24 10:40:00" & DateTime> "2020-08-19 20:00:00", 
+                                       RDOsat_percent_9 + as.numeric(difftime(DateTime,"2020-08-19 20:00:00", units = "mins"))/6500/11.3*100,
+                                       RDOsat_percent_9_adjusted),
+    
+    # 9 meters 26aug to 02sep
+    Flag_DO_9 = ifelse(DateTime<"2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00" ,6, Flag_DO_9),
+    RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime, "2020-08-26 12:00:00", units = "mins")))/10000, #A linear adjustment here
+                                RDO_mgL_9_adjusted),
+    RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-02 10:50:00" & DateTime> "2020-08-26 12:00:00", 
+                                       RDOsat_percent_9 + as.numeric(difftime(DateTime, "2020-08-26 12:00:00", units = "mins"))/10000/11.3*100,
+                                       RDOsat_percent_9_adjusted),
+    
+    # 9 meters 02sep to 11sep
+    Flag_DO_9 = ifelse(DateTime<"2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00" ,6, Flag_DO_9),
+    RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
+                                RDO_mgL_9 + (as.numeric(difftime(DateTime, "2020-09-05 06:00:00", units = "mins")))/3000, #A linear adjustment here
+                                RDO_mgL_9_adjusted),
+    RDOsat_percent_9_adjusted = ifelse(DateTime< "2020-09-09 17:00:00" & DateTime> "2020-09-05 06:00:00", 
+                                       RDOsat_percent_9 + as.numeric(difftime(DateTime, "2020-09-05 06:00:00", units = "mins"))/3000/11.3*100,
+                                       RDOsat_percent_9_adjusted))
+
+###########################################################################################################################################################
+# merge 2018-2019 EDI data with 2020 data ----
+catdata_flag <- catdata_flag[catdata_flag$DateTime<'2021-01-01',]
+catdata_flag$RDO_mgL_5_adjusted <- catdata_flag$RDO_mgL_5
+catdata_flag$RDOsat_percent_5_adjusted <- catdata_flag$RDOsat_percent_5
+catdata_flag <- catdata_flag %>% select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:RDOTemp_C_9, 
+                                        EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, 
+                                        EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
+                                        EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
+                                        EXO_wiper, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
+                                        RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, 
+                                        Flag_All:Flag_Temp_9)
+
+# read in catwalk data already published on EDI
+catdata_pub <- read_csv(paste0(folder, '/catdata_EDI_2019_downloaded12Jan21.csv'), col_types = cols(.default = "d", 
+                                                                                                    Reservoir = "c",
+                                                                                                    DateTime = "T"))
+catdata_pub$DateTime<-as.POSIXct(catdata_pub$DateTime,format = "%Y-%m-%d %H:%M:%S")
+catdata_pub <- catdata_pub[catdata_pub$DateTime<'2020-01-01',]
+# check for duplicated hour???
+
+# assign new flags for temp string, set to 0
+catdata_pub$Flag_Temp_Surf <- 0
+catdata_pub$Flag_Temp_1 <- 0
+catdata_pub$Flag_Temp_2 <- 0
+catdata_pub$Flag_Temp_3 <- 0
+catdata_pub$Flag_Temp_4 <- 0
+catdata_pub$Flag_Temp_5 <- 0
+catdata_pub$Flag_Temp_6 <- 0
+catdata_pub$Flag_Temp_7 <- 0
+catdata_pub$Flag_Temp_8 <- 0
+catdata_pub$Flag_Temp_9 <- 0
+
+catdata_all <- rbind(catdata_pub, catdata_flag)
+
+###########################################################################################################################################################################
 # chl and phyco qaqc ----
-# check Chla ugL data
-sd_4 <- 4*sd(catdata_flag$EXOChla_ugL_1, na.rm = TRUE)
+# perform qaqc on the entire dataset for chl and phyco
+
+# assign standard deviation thresholds
+sd_4 <- 4*sd(catdata_all$EXOChla_ugL_1, na.rm = TRUE)
 threshold <- sd_4
-sd_4_phyco <- 4*sd(catdata_flag$EXOBGAPC_ugL_1, na.rm = TRUE)
+sd_4_phyco <- 4*sd(catdata_all$EXOBGAPC_ugL_1, na.rm = TRUE)
 threshold_phyco <- sd_4_phyco
 
-chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
+chl_ugl <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOChla_ugL_1)) +
   geom_point() +
   geom_hline(yintercept = sd_4)
 ggplotly(chl_ugl)
 
 
 # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
-catdata_flag <- catdata_flag %>% 
+catdata_all <- catdata_all %>% 
   mutate(Chla = lag(EXOChla_ugL_1, 0),
          Chla_lag1 = lag(EXOChla_ugL_1, 1),
          Chla_lead1 = lead(EXOChla_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
@@ -300,22 +422,22 @@ catdata_flag <- catdata_flag %>%
   
 
 # some spot checking of days with isolated weird data which occured either on maintenance days or field days
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
-catdata_flag$EXOChla_ugL_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_flag$Flag_Chla[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-08-10 12:20:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 12:40:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 12:40:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 12:50:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 12:50:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 13:00:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 13:00:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-02 11:30:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-09 11:30:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-24 11:40:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-24 11:40:00'] <- 1
+catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_all$Flag_Chla[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1
 
 chl_mean <- catdata_flag %>% 
   select(DateTime, EXOChla_ugL_1) %>% 
@@ -323,30 +445,30 @@ chl_mean <- catdata_flag %>%
   group_by(day) %>% 
   mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
   distinct(day, .keep_all = TRUE)
-chl_mean_plot <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
-  geom_point() 
-ggplotly(chl_mean)
+#chl_mean_plot <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
+#  geom_point() 
+#ggplotly(chl_mean)
 
-chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
-  geom_point() +
-  geom_hline(yintercept = sd_4)
-ggplotly(chl_rfu)
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-09-15 13:00:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA 
-catdata_flag$EXOChla_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
+#chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
+#  geom_point() +
+#  geom_hline(yintercept = sd_4)
+#ggplotly(chl_rfu)
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 12:40:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 12:50:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 13:00:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-24 11:40:00'] <- NA 
+catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
 
 
-phyco_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
-  geom_point() 
-ggplotly(phyco_ugl)
+#phyco_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
+#  geom_point() 
+#ggplotly(phyco_ugl)
 
 # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
-catdata_flag <- catdata_flag %>% 
+catdata_all <- catdata_all %>% 
   mutate(phyco = lag(EXOBGAPC_ugL_1, 0),
          phyco_lag1 = lag(EXOBGAPC_ugL_1, 1),
          phyco_lead1 = lead(EXOBGAPC_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
@@ -359,40 +481,36 @@ catdata_flag <- catdata_flag %>%
   select(-phyco, -phyco_lag1, -phyco_lead1)
 
 # some spot checking of days with isolated weird data which occured either on maintenance days or field days
-catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1 
-catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- 1 
-catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1 
-catdata_flag$EXOBGAPC_ugL_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_flag$Flag_Phyco[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1 
+catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-08-10 12:20:00'] <- 1 
+catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1 
+catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-11-02 11:30:00'] <- 1 
+catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
+catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-11-09 11:30:00'] <- 1 
 
-phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
-  geom_point() 
-ggplotly(phyco_rfu)
-catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_flag$EXOBGAPC_RFU_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA 
-
-
-###########################################################################################################################################################################
-# DO qaqc ----
+#phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
+#  geom_point() 
+#ggplotly(phyco_rfu)
+catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
+catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
+catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
+catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
 
 
 ###########################################################################################################################################################################
 # fdom qaqc----
 # QAQC from DWH to remove major outliers from fDOM data that are 2 sd's greater than the previous and following datapoint
+# QAQC done on 2018-2020 dataset
+sd_fDOM <- sd(catdata_all$EXOfDOM_QSU_1, na.rm = TRUE) #deteriming the standard deviation of fDOM data 
 
-sd_fDOM <- sd(catdata_flag$EXOfDOM_QSU_1, na.rm = TRUE) #deteriming the standard deviation of fDOM data 
-
-fDOM_pre_QAQC <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
+fDOM_pre_QAQC <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
   geom_point()+
   ggtitle("fDOM (QSU) pre QAQC")
 ggplotly(fDOM_pre_QAQC)
 
-catdata_checkfirst <- catdata_flag %>% 
+catdata_all <- catdata_all %>% 
   mutate(Flag_fDOM = ifelse(is.na(EXOfDOM_QSU_1), 1, 0)) %>%  #This creates Flag column for fDOM data, setting all NA's going into QAQC as 1 for missing data, and to 0 for the rest
   mutate(fDOM = lag(EXOfDOM_QSU_1, 0),
          fDOM_lag1 = lag(EXOfDOM_QSU_1, 1),
@@ -415,14 +533,7 @@ catdata_checkfirst <- catdata_flag %>%
 
 ###########################################################################################################################################################################
 # write final csv ----
-catdata_flag <- catdata_flag[catdata_flag$DateTime<'2021-01-01',]
-catdata_flag <- catdata_flag %>% select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:RDOTemp_C_9, 
-                                        EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, 
-                                        EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
-                                        EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
-                                        EXO_wiper, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
-                                        #RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, 
-                                        Flag_All:Flag_Temp_9)
+# some final checking of flags
 for (i in 1:nrow(catdata_flag)) {
   if(is.na(catdata_flag$Flag_Chla[i])){
     catdata_flag$Flag_Chla[i] <- 0
@@ -431,8 +542,10 @@ for (i in 1:nrow(catdata_flag)) {
     catdata_flag$Flag_Phyco[i] <- 0
   }
 }
-cols <- c("Flag_All", "Flag_DO_1",  "Flag_DO_5",  "Flag_DO_9", "Flag_Chla", "Flag_Phyco", "Flag_TDS", "Flag_Temp_Surf", "Flag_Temp_1",
-          "Flag_Temp_2", "Flag_Temp_3", "Flag_Temp_4", "Flag_Temp_5", "Flag_Temp_6", "Flag_Temp_7", "Flag_Temp_8","Flag_Temp_9")
-catdata_flag <- catdata_flag %<>% mutate_at(cols, funs(factor(.)))
-str(catdata_flag)
-write.csv(catdata_flag, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)
+
+
+catdata_all <- rbind()
+
+
+str(catdata_all)
+write.csv(catdata_all, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

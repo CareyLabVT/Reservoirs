@@ -6,16 +6,20 @@ source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
 #download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",'CAT_MaintenanceLog_2020.txt')
+#download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', "pressure.csv")
 #download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
 
 # run standard qaqc
 data_file <- paste0(folder, '/Catwalk_2020.csv')
+data2_file <- paste0(folder, '/pressure.csv')
 maintenance_file <- paste0(folder, "/CAT_MaintenanceLog_2020.txt")
 output_file <- paste0(folder, "/Catwalk_first_QAQC_2020.csv")
-temp_oxy_chla_qaqc(data_file, maintenance_file, output_file)
+temp_oxy_chla_qaqc(data_file,data2_file, maintenance_file, output_file)
 
 # read in qaqc function output
 catdata <- read.csv(output_file) 
+pres <- read.csv(data2_file)
 catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
 # subset file to only unpublished data

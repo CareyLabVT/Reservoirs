@@ -1,4 +1,4 @@
-temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
+temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_file)
 {
   CATDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -9,6 +9,8 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
                         "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper")
   
+  PRESSURE_COL_NAMES = c("X","DateTime", "RECORD", "Lvl_psi", "LvlTemp_c_9")
+  
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
   DO_RECOVERY_THRESHOLD <- 1
@@ -16,7 +18,7 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
   # columns where certain values are stored
   DO_MGL_COLS <- c(28, 15, 18)
   DO_SAT_COLS <- c(27, 16, 19)
-  DO_FLAG_COLS <- c(41, 42, 43)
+  DO_FLAG_COLS <- c(43, 44, 45)
   
   # depths at which DO is measured
   DO_DEPTHS <- c(1, 5, 9)
@@ -31,6 +33,13 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
   # NOTE: date-times throughout this script are processed as UTC
   catdata <- read_csv(data_file, skip = 4, col_names = CATDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  pressure <- read_csv(data2_file, skip = 4, col_names = PRESSURE_COL_NAMES,
+                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  pressure=pressure%>%
+    select(-c(RECORD, X))
+  
+  catdata=merge(catdata,pressure, all.x=T)
   
   log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
@@ -80,17 +89,17 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
     # get indices of columns affected by maintenance
     if(grepl("^\\d+$", log$colnumber[i])) # single num
     {
-      maintenance_cols <- intersect(c(2:39), as.integer(log$colnumber[i]))
+      maintenance_cols <- intersect(c(2:41), as.integer(log$colnumber[i]))
     }
     else if(grepl("^c\\(\\s*\\d+\\s*(;\\s*\\d+\\s*)*\\)$", log$colnumber[i])) # c(x;y;...)
     {
-      maintenance_cols <- intersect(c(2:39), as.integer(unlist(regmatches(log$colnumber[i],
+      maintenance_cols <- intersect(c(2:41), as.integer(unlist(regmatches(log$colnumber[i],
                                                                           gregexpr("\\d+", log$colnumber[i])))))
     }
     else if(grepl("^c\\(\\s*\\d+\\s*:\\s*\\d+\\s*\\)$", log$colnumber[i])) # c(x:y)
     {
       bounds <- as.integer(unlist(regmatches(log$colnumber[i], gregexpr("\\d+", log$colnumber[i]))))
-      maintenance_cols <- intersect(c(2:39), c(bounds[1]:bounds[2]))
+      maintenance_cols <- intersect(c(2:41), c(bounds[1]:bounds[2]))
     }
     else
     {
@@ -226,6 +235,9 @@ temp_oxy_chla_qaqc <- function(data_file, maintenance_file, output_file)
 }
 
 # example usage
-# qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
-#      "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
-#      "Catwalk.csv")
+temp_oxy_chla_qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
+      'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv',
+      "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
+     "Catwalk5.csv")
+
+cat=read.csv("Catwalk5.csv")

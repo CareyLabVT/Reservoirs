@@ -2,21 +2,21 @@
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"
-source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
+source(paste0(folder, "misc_QAQC_scripts/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
-#download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', paste0(folder, '/pressure.csv'))
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv","Catwalk_2020.csv")
-#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_Catwalk_20201109.dat', paste0(folder, "/CAT_2.csv"))
-#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_FCRWaterLevel_20201202.dat', paste0(folder, '/pressure2.csv'))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog_2020.txt"))
+#download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', paste0(folder, 'misc_data_files/pressure.csv'))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk_2020.csv"))
+#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_Catwalk_20201109.dat', paste0(folder, "misc_data_files/CAT_2.csv"))
+#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_FCRWaterLevel_20201202.dat', paste0(folder, 'misc_data_files/pressure2.csv'))
 # run standard qaqc
-data_file <- paste0(folder, '/Catwalk_2020.csv')
-data2_file <- paste0(folder, '/Cat_2.csv')
-data3_file <- paste0(folder, '/pressure.csv')
-data4_file <- paste0(folder, '/pressure2.csv')
-maintenance_file <- paste0(folder, "/CAT_MaintenanceLog_2020.txt")
-output_file <- paste0(folder, "/Catwalk_first_QAQC_2020.csv")
+data_file <- paste0(folder, 'misc_data_files/Catwalk_2020.csv')
+data2_file <- paste0(folder, 'misc_data_files/Cat_2.csv')
+data3_file <- paste0(folder, 'misc_data_files/pressure.csv')
+data4_file <- paste0(folder, 'misc_data_files/pressure2.csv')
+maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2020.txt")
+output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2020.csv")
 temp_oxy_chla_qaqc(data_file,data2_file,data3_file,data4_file, maintenance_file, output_file)
 
 # read in qaqc function output

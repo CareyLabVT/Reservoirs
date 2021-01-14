@@ -1,7 +1,7 @@
 # QAQC in prep for publishing catwalk sensor string data to EDI
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"
 source(paste0(folder, "/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log

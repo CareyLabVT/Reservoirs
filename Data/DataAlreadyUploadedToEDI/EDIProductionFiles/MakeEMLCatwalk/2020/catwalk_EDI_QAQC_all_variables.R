@@ -1,4 +1,7 @@
-# QAQC in prep for publishing catwalk sensor string data to EDI
+# Master QAQC script in prep for publishing catwalk sensor string data to EDI
+# this script combines code from other QAQC scripts found in misc_QAQC_scipts folder
+# as well as other data files from misc_data_files
+# final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"

@@ -5,7 +5,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/202
 source(paste0(folder, "misc_QAQC_scripts/temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog_2020.txt"))
+#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
 #download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', paste0(folder, 'misc_data_files/pressure.csv'))
 #download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk_2020.csv"))
 #download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_Catwalk_20201109.dat', paste0(folder, "misc_data_files/CAT_2.csv"))

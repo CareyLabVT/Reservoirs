@@ -23,6 +23,8 @@ temp_oxy_chla_qaqc(data_file,data2_file,data3_file,data4_file, maintenance_file,
 catdata <- read.csv(output_file) 
 catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
 catdata <- catdata[!duplicated(catdata$DateTime), ]
+colnames(catdata)[colnames(catdata)=="Lvl_psi"] <- "Lvl_psi_9"
+colnames(catdata)[colnames(catdata)=="LvlTemp_c_9"] <- "LvlTemp_C_9"
 
 # subset file to only unpublished data
 catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
@@ -366,11 +368,13 @@ catdata_flag <- catdata_flag%>%
 catdata_flag <- catdata_flag[catdata_flag$DateTime<'2021-01-01',]
 catdata_flag$RDO_mgL_5_adjusted <- catdata_flag$RDO_mgL_5
 catdata_flag$RDOsat_percent_5_adjusted <- catdata_flag$RDOsat_percent_5
-catdata_flag <- catdata_flag %>% select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:RDOTemp_C_9, 
+catdata_flag <- catdata_flag %>% select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:ThermistorTemp_C_9,
+                                        RDO_mgL_5, RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,
+                                        RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9, 
                                         EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, 
                                         EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
                                         EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
-                                        EXO_wiper, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
+                                        EXO_wiper, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
                                         RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, 
                                         Flag_All:Flag_Temp_9)
 
@@ -380,7 +384,9 @@ catdata_pub <- read_csv(paste0(folder, '/catdata_EDI_2019_downloaded12Jan21.csv'
                                                                                                     DateTime = "T"))
 catdata_pub$DateTime<-as.POSIXct(catdata_pub$DateTime,format = "%Y-%m-%d %H:%M:%S")
 catdata_pub <- catdata_pub[catdata_pub$DateTime<'2020-01-01',]
-# check for duplicated hour???
+# add the two pressure columns
+catdata_pub$Lvl_psi_9 <- NA
+catdata_pub$LvlTemp_C_9 <- NA
 
 # assign new flags for temp string, set to 0
 catdata_pub$Flag_Temp_Surf <- 0
@@ -558,8 +564,14 @@ str(catdata_all)
 
 # rearrange the cols
 catdata_all <- catdata_all %>% 
-  select(Reservoir:RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted, RDOTemp_C_5, RDO_mgL_9,
-         RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9, EXOTemp_C_1: EXO_wiper,
-         RECORD:CR6Panel_Temp_C, Flag_All:Flag_fDOM)
-
+  select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:ThermistorTemp_C_9,
+         RDO_mgL_5, RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,
+         RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9, 
+         EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, 
+         EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
+         EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
+         EXO_wiper, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
+         Flag_All:Flag_fDOM)
+  
+  
 write.csv(catdata_all, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

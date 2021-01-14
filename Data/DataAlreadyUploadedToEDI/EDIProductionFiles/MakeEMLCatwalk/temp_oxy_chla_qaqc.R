@@ -1,4 +1,4 @@
-temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_file)
+temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, data4_file, maintenance_file, output_file)
 {
   CATDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -9,7 +9,7 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
                         "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper")
   
-  PRESSURE_COL_NAMES = c("X","DateTime", "RECORD", "Lvl_psi", "LvlTemp_c_9")
+  PRESSURE_COL_NAMES = c("DateTime", "RECORD", "Lvl_psi", "LvlTemp_c_9")
   
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
@@ -33,13 +33,24 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
   # NOTE: date-times throughout this script are processed as UTC
   catdata <- read_csv(data_file, skip = 4, col_names = CATDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  catdata2 <- read_csv(data2_file, skip = 4, col_names = CATDATA_COL_NAMES,
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
-  pressure <- read_csv(data2_file, skip = 4, col_names = PRESSURE_COL_NAMES,
+  catdata <-rbind(catdata,catdata2)
+  
+  pressure <- read_csv(data3_file, skip = 4, col_names = PRESSURE_COL_NAMES,
                        col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  pressure2 <- read_csv(data4_file, skip = 4, col_names = PRESSURE_COL_NAMES,
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  pressure <-rbind(pressure,pressure2)
+  
   pressure=pressure%>%
-    select(-c(RECORD, X))
+    select(-RECORD)
   
   catdata=merge(catdata,pressure, all.x=T)
+  
+  catdata=catdata[!duplicated(catdata), ]
   
   log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
@@ -235,9 +246,9 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
 }
 
 # example usage
-temp_oxy_chla_qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
-      'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv',
-      "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
-     "Catwalk5.csv")
+#temp_oxy_chla_qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
+#     'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv',
+#     "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
+#    "Catwalk.csv")
 
-cat=read.csv("Catwalk5.csv")
+

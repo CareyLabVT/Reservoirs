@@ -1,7 +1,10 @@
 keyword
 Carey Lab
 Virginia Tech
+lake
+reservoir
 lakes
+reservoirs
 high-frequency sensors
 water quality
 temperature 
@@ -9,7 +12,13 @@ dissolved oxygen
 conductivity
 specific conductance
 chlorophyll a
+phycocyanin
+fDOM
+fluorescent dissolved organic matter
+total dissolved solids
+pressure
 physical properties
 lake chemistry
 Western Virginia Water Authority
 Falling Creek Reservoir
+fluorescence 

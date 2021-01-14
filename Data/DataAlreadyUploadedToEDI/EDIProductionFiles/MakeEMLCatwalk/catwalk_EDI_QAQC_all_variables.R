@@ -55,7 +55,7 @@ catdata_flag$Flag_Temp_9 <- 0
 # 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 # 7: missing data
 # 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
-# ADD IN ABP FLAGS HERE
+
 
 ###########################################################################################################################################################################
 # temp qaqc ----
@@ -571,7 +571,7 @@ catdata_all <- catdata_all %>%
          EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, 
          EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
          EXO_wiper, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
-         Flag_All:Flag_fDOM)
+         Flag_All:Flag_TDS, Flag_fDOM, Flag_Temp_Surf:Flag_Temp_9)
   
   
 write.csv(catdata_all, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

@@ -1,7 +1,9 @@
 library(tidyverse)
 library(lubridate)
 
-qaqc <- function(data_file, maintenance_file, output_file)
+
+
+qaqc <- function(data_file, data2_file,  maintenance_file, output_file)
 {
   CATDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -12,6 +14,8 @@ qaqc <- function(data_file, maintenance_file, output_file)
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
                         "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper")
   
+  PRESSURE_COL_NAMES = c("DateTime", "RECORD", "Lvl_psi", "LvlTemp_c_9")
+  
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
   DO_RECOVERY_THRESHOLD <- 1
@@ -19,7 +23,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   # columns where certain values are stored
   DO_MGL_COLS <- c(28, 15, 18)
   DO_SAT_COLS <- c(27, 16, 19)
-  DO_FLAG_COLS <- c(41, 42, 43)
+  DO_FLAG_COLS <- c(43, 44, 45)
   
   # depths at which DO is measured
   DO_DEPTHS <- c(1, 5, 9)
@@ -34,6 +38,13 @@ qaqc <- function(data_file, maintenance_file, output_file)
   # NOTE: date-times throughout this script are processed as UTC
   catdata <- read_csv(data_file, skip = 4, col_names = CATDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  pressure <- read_csv(data2_file, skip = 4, col_names = PRESSURE_COL_NAMES,
+                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  pressure=pressure%>%
+    select(-RECORD)
+  
+  catdata=merge(catdata,pressure, all.x=T)
 
   log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
@@ -83,17 +94,17 @@ qaqc <- function(data_file, maintenance_file, output_file)
     # get indices of columns affected by maintenance
     if(grepl("^\\d+$", log$colnumber[i])) # single num
     {
-      maintenance_cols <- intersect(c(2:39), as.integer(log$colnumber[i]))
+      maintenance_cols <- intersect(c(2:41), as.integer(log$colnumber[i]))
     }
     else if(grepl("^c\\(\\s*\\d+\\s*(;\\s*\\d+\\s*)*\\)$", log$colnumber[i])) # c(x;y;...)
     {
-      maintenance_cols <- intersect(c(2:39), as.integer(unlist(regmatches(log$colnumber[i],
+      maintenance_cols <- intersect(c(2:41), as.integer(unlist(regmatches(log$colnumber[i],
                                                                           gregexpr("\\d+", log$colnumber[i])))))
     }
     else if(grepl("^c\\(\\s*\\d+\\s*:\\s*\\d+\\s*\\)$", log$colnumber[i])) # c(x:y)
     {
       bounds <- as.integer(unlist(regmatches(log$colnumber[i], gregexpr("\\d+", log$colnumber[i]))))
-      maintenance_cols <- intersect(c(2:39), c(bounds[1]:bounds[2]))
+      maintenance_cols <- intersect(c(2:41), c(bounds[1]:bounds[2]))
     }
     else
     {
@@ -117,7 +128,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
     # replace relevant data with NAs and set "all" flag while maintenance was in effect
     catdata[catdata$DateTime >= start & catdata$DateTime <= end, maintenance_cols] <- NA
     catdata[catdata$DateTime >= start & catdata$DateTime <= end, "Flag_All"] <- 1
-    
+  
     # if DO data was affected by maintenance, set the appropriate DO flags, and replace DO data with NAs after maintenance
     # was in effect until value returns to within a threshold of the value when maintenance began, because the sensors take
     # time to re-adjust to ambient conditions
@@ -227,5 +238,8 @@ qaqc <- function(data_file, maintenance_file, output_file)
 
 # example usage
 # qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
+#      'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv'
 #      "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
 #      "Catwalk.csv")
+      
+      

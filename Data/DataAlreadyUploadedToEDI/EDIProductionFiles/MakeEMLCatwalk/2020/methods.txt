@@ -1,0 +1,52 @@
+Depth profiles of multiple water quality variables were collected at the deep hole of Falling Creek Reservoir in 2018 and 2019 using water temperature thermistors, dissolved oxygen sensors, and a YSI EXO sonde. Profiles were collected every ten minutes from July 2018 to December 2019. We deployed the thermistors and 5 and 9 m dissolved oxygen sondes in July 2018 and the EXO sonde at 1 m depth was deployed in August 2018. The EXO sonde was moved from 1.0m to 1.6 m depth on 2019-05-20 at 12:40:00.
+
+The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The in situ dissolved oxygen sensors were calibrated using a one point calibration according to the standards and practices outlined in the user manual. The YSI EXO Sonde sensors, except for temperature, were user calibrated with one point calibration as outlined in the user manual. 
+
+There were two periods in the summer of 2019 where hypolimnetic DO sondes had inexplicably low readings that did not align with simultaneous measurements from a high-resolution CTD profiler. We adjusted these values using linear or square root functions to best match the CTD and present those data in a separate column. The equations for each adjustment are given below, as well as in the R code provided with this data product.
+
+9 meter oxygen sonde
+2019-08-05 12:45:00 to 2019-08-12 12:40:00
+- DO (mg/L) = DO observed plus the square root of the difference between the current time and 2019-08-05 12:45:00 in minutes, divided by 70
+- DO (percent saturation) = DO observed plus the square root of the difference between the current time and 2019-08-05 12:45:00 in minutes, divided by 70/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+2019-09-02 13:00:00 to 2019-09-27 12:30:00
+- DO (mg/L) = DO observed plus the difference between the current time and 2019-09-02 13:00:00 in minutes, divided by 30000
+- DO (percent saturation) = DO observed plus the difference between the current time and 2019-09-02 13:00:00 in minutes, divided by 30000/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+5 meter oxygen sonde 
+2019-08-11 00:00:00 to 2019-08-12 12:40:00
+- DO (mg/L) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30
+- DO (percent saturation) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+Instruments, manual, and serial numbers used in 2018 and 2019:
+Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+
+NexSens T-Node FR Thermistors (July 2018 - December 2019)
+https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf
+Serial No. 3718; Depth 0.1m
+Serial No. 3724; Depth 1m
+Serial No. 3741; Depth 2m
+Serial No. 3746; Depth 3m
+Serial No. 3747; Depth 4m
+Serial No. 3751; Depth 5m
+Serial No. 3786; Depth 6m
+Serial No. 3823; Depth 7m
+Serial No. 3851; Depth 8m
+Serial No. 3857; Depth 9m
+
+InSitu RDO Pro-X Dissolved Oxygen Sensor with Anti-Fouling Guard (July 2018 - December 2019)
+https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf
+Serial No. 584491; Depth 5m
+Calibration from July 5, 2018 to December 19, 2018; slope = 1.0361, offset = 0.00
+Serial No. 584488; Depth 9m
+Calibration from July 5, 2018 to August 20, 2018; slope = 1.0743, offset = 0.00
+Calibration from August 20, 2018 to December 19, 2018; slope = 1.0000, offset = 0.00
+
+YSI EXO2 Sonde Serial No. 18D103367 (August 2018 - December 2019)
+Wiped Conductivity/Temperature Sensor Serial No. 18C102992
+Central Wiper for Conductivity/Temperature Sensor Serial No. 18D101236
+Dissolved Oxygen Sensor Serial No. 18D101168
+Total Algae Sensor Serial No. 18D102222
+fDOM Sensor Serial No. 18C100625
+Pressure Transducer Serial No. 17K100864
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	

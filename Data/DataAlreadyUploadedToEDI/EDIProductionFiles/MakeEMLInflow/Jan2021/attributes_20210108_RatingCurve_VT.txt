@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Pic_File_Name	Name of picture file used to determine gage height	character			NA	value is missing
-DateTime	"Date and time of picture. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+DateTime	Date and time of picture. All data were collected in the eastern time zone of the U.S.A.	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 GageHeight_cm	Gage height as determined using pictures taken at the primary inflow	numeric	centimeter		NA	value is missing
 Notes	Any notes assoicated with the picture of gage height	character			NA	value is missing
 VT_Pressure_psia	Corrected pressure (with atmospheric pressure subtracted) by VT sensor	numeric	poundsPerSquareInch		NA	value is missing

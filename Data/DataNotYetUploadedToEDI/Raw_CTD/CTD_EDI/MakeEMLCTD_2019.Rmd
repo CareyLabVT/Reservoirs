@@ -1,0 +1,59 @@
+---
+title: "MakeEMLCTD"
+author: "Abby Lewis"
+date: "12/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Install and load devtools
+install.packages("devtools")
+library(devtools)
+
+# Install and load EMLassemblyline
+install_github("EDIorg/EMLassemblyline")
+library(EMLassemblyline)
+
+# Import Templates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#template_core_metadata(
+ #     path = getwd(),
+  #    license = "CCBY",
+   #   file.type = '.txt',
+    #  write.file = TRUE)
+
+#template_table_attributes(
+ #     path = getwd(),
+  #    data.path = getwd(),
+   #   data.table = "CTD_final_2013_2019.csv",
+    #  write.file = TRUE)
+
+
+#Geographic coverage
+#template_geographic_coverage(path = getwd(),
+ #                            data.path = getwd(),
+  #                           data.table = "CTD_final_2013_2019.csv",
+   #                          empty = TRUE,
+    #                         write.file = TRUE)
+
+
+# Define Categorical Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#template_categorical_variables(path = "C:/Users/Owner/Dropbox/MakeEMLCTD")
+
+# Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make_eml(path = getwd(),
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019",
+         data.table = "CTD_final_2013_2019.csv",
+         data.table.description = c("Reservoir CTD dataset"),
+         other.entity = c('CTD_forEDI_ASL.Rmd'),
+         other.entity.description = c('QAQC script'),
+         temporal.coverage = c("2013-03-07", "2019-12-16"),
+         maintenance.description = "ongoing",
+         user.domain = "EDI",
+         user.id = "ccarey",
+         package.id = "edi.200.10")
+```
+

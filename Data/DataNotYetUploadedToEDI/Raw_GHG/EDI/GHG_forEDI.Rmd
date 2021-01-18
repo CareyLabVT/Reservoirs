@@ -199,13 +199,13 @@ ghgs_reps <- ghgs_reps %>%
 
 # Flag replicates: Flag 1; Flag 2; Flag 3
 ghgs_reps <- ghgs_reps %>% 
-  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.002,3,
-                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.002,2,
+  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.006,3,
+                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.006,2,
                                   1)))
 
 ghgs_reps <- ghgs_reps %>% 
-  mutate(flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=3.8,3,
-                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=3.8,2,
+  mutate(flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=11.4,3,
+                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=11.4,2,
                                   1)))
 
 # Recombine with reps
@@ -225,7 +225,7 @@ ghgs_comb <- ghgs_comb %>%
   arrange(DateTime,Reservoir,Depth_m,Rep)
 
 ghgs_comb_2 <- ghgs_comb %>% 
-  select(-c("ch4_diff","co2_diff","Rep.x","Rep.y"))
+  select(-c("Rep.x","Rep.y"))
 
 ghgs_comb_2$Rep <- as.integer(ghgs_comb_2$Rep)
 

@@ -320,18 +320,18 @@ as_datetime("2020-10-13 21:10:11 UTC")-as_datetime("2020-10-14 10:10:00")
 #~13 hours
 
 ctd_flagged$Date[year(ctd_flagged$Date) == 2020] = ctd_flagged$Date[year(ctd_flagged$Date) == 2020]+hours(13)
+ctd_flagged$Date[year(ctd_flagged$Date) == 2018] = ctd_flagged$Date[year(ctd_flagged$Date) == 2018]-hours(4) #to align with published data
 #hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
 #Looks much better!
 write.csv(ctd_flagged, "ctd_2018-2020_flagged.csv")
 ```
 
 ```{r}
-missing_time_flag = 7
 final = dt1 %>% #Join new data with published dataset
-  mutate(Flag_Datetime = missing_time_flag)%>% #All previous data did not have meaningful times
+  filter(!year(Date)%in% c(2018,2019))%>% #Filtering out 2018 and 2019 because all casts were reprocessed
   full_join(ctd_flagged)%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
-  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Spec_Cond_uScm,Chla_ugL,Turb_NTU,pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp,Flag_DO,Flag_Cond,Flag_SpecCond,Flag_Chla,Flag_Turb,Flag_pH,Flag_ORP,Flag_PAR, Flag_DescRate, Flag_Datetime)
+  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Cond_uScm, Spec_Cond_uScm, Chla_ugL, Turb_NTU, pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp, Flag_DO, Flag_Cond, Flag_SpecCond, Flag_Chla, Flag_Turb, Flag_pH, Flag_ORP, Flag_PAR, Flag_DescRate)
 
 write.csv(final,"CTD_final_2013_2020.csv", row.names = FALSE)
 ```
@@ -340,17 +340,16 @@ write.csv(final,"CTD_final_2013_2020.csv", row.names = FALSE)
 library(akima)
 library(colorRamps)
 library(plotly)
+qaqc = final
 qaqc = read.csv("CTD_final_2013_2020.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
+  filter(Reservoir == "FCR", Site == 50, year(Date)==2018)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = Temp_C))+
+  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()
 ggplotly(qaqc_plotly)
-
-  
 ```
 

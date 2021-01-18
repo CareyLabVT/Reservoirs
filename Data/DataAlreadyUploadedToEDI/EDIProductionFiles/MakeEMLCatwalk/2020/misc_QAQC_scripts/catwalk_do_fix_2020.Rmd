@@ -140,7 +140,7 @@ catdata_adj = catdata_flag_test%>%
                                 RDOsat_percent_9 + as.numeric(difftime(DateTime, "2020-08-26 12:00:00", units = "mins"))/10000/11.3*100,
                                 RDOsat_percent_9_adjusted),
      
-     # 9 meters 02sep to 11sep
+     # 9 meters 05sep to 09sep
      Flag_DO_9 = ifelse(DateTime<"2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00" ,6, Flag_DO_9),
      RDO_mgL_9_adjusted = ifelse(DateTime< "2020-09-09 17:50:00" & DateTime> "2020-09-05 06:00:00", 
                                 RDO_mgL_9 + (as.numeric(difftime(DateTime, "2020-09-05 06:00:00", units = "mins")))/3000, #A linear adjustment here

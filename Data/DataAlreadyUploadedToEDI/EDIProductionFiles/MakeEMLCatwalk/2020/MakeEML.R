@@ -19,7 +19,7 @@
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"
 
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -152,19 +152,23 @@ template_categorical_variables(path = folder,
 ?make_eml
 
 # Run this function
-make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk",
+make_eml(path = folder,
+         data.path = folder,
+         eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
          in Falling Creek Reservoir, Virginia, USA in 2018-2020",
-         data.files = "Catwalk_EDI_2020.csv",
-         data.files.description = "FCR Catwalk Sensor String",
-         temporal.coverage = c("2018-07-05", "2020-12-131"),
-         geographic.description = "Southwestern Virginia, USA, North America",
+         data.table = "Catwalk_EDI_2020.csv",
+         other.entity = c('temp_oxy_chla_qaqc.R', 'catwalk_EDI_QAQC_all_variables.R','CAT_MaintenanceLog_2020.txt' ),
+         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
+         data.table.description = "FCR Catwalk Sensor String",
+         temporal.coverage = c("2018-07-05", "2020-12-31"),
+         #geographic.description = "Southwestern Virginia, USA, North America",
+         #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
-         user.id = c("carylab1", "ccarey"), #carylab6
-         package.id = "edi.85.1", #### use a package identifier reserved in the staging environment
-         affiliation = c("EDI", "EDI"))
-
+         user.id =  "ccarey",
+         package.id = "edi.85.7", #### this is the one that I need to change!!!
+         user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
 # then login using one of the Carey Lab usernames and passwords. 
@@ -183,15 +187,8 @@ make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI
 # evaluation check again, until you receive a message with no errors.
 
 ## Step 9: PUBLISH YOUR DATA! ####
-# Reserve a package.id for your error-free data package. 
-# NEVER ASSIGN this identifier to a staging environment package.
-# Go to the EDI Production environment (https://portal.edirepository.org/nis/home.jsp)
-# and login using the ccarey (permanent) credentials. 
-
-# Select Tools --> Data Package Identifier Reservations and click "Reserve Next 
-# Available Identifier". A new value will appear in the "Current data package 
-# identifier reservations" table (e.g., edi.518)
-# This will be your PUBLISHED package.id
+# using the package ID associated with the catwalk dataset, increase the end digit by 1
+# e.g. edi.271.4 -> edi.271.5
 
 # In the make_eml command below, change the package.id to match your 
 # PUBLISHED package id. This id should end in .1 (e.g., edi.518.1)
@@ -199,20 +196,23 @@ make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI
 # ALL OTHER entries in the make_eml() command should match what you ran above,
 # in step 7
 
-make_eml(
-  path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  eml.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2020",
-  temporal.coverage = c("2014-05-04", "2020-12-02"),
-  maintenance.description = 'ongoing',
-  data.table = "FluoroProbe.csv",
-  data.table.description = "Reservoir FluoroProbe dataset",
-  other.entity = "FluoroProbe_QAQC.R",
-  other.entity.description = "data aggregation and quality control script",
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.272.4')
+make_eml(path = folder,
+         data.path = folder,
+         eml.path = folder,
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
+         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
+         in Falling Creek Reservoir, Virginia, USA in 2018-2020",
+         data.table = "Catwalk_EDI_2020.csv",
+         other.entity = c('temp_oxy_chla_qaqc.R', 'catwalk_EDI_QAQC_all_variables.R','CAT_MaintenanceLog_2020.txt' ),
+         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
+         data.table.description = "FCR Catwalk Sensor String",
+         temporal.coverage = c("2018-07-05", "2020-12-31"),
+         #geographic.description = "Southwestern Virginia, USA, North America",
+         #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
+         maintenance.description = "ongoing",
+         user.id =  "ccarey",
+         package.id = "edi.271.5", #### make sure this matches the original catwalk file, which you are just updating, DO NOT RESERVE NEW PACKAGE ID
+         user.domain = 'EDI')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

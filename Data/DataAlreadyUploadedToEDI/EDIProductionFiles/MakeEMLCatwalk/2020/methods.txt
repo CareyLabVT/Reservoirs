@@ -1,31 +1,107 @@
-Depth profiles of multiple water quality variables were collected at the deep hole of Falling Creek Reservoir in 2018 and 2019 using water temperature thermistors, dissolved oxygen sensors, and a YSI EXO sonde. Profiles were collected every ten minutes from July 2018 to December 2019. We deployed the thermistors and 5 and 9 m dissolved oxygen sondes in July 2018 and the EXO sonde at 1 m depth was deployed in August 2018. The EXO sonde was moved from 1.0m to 1.6 m depth on 2019-05-20 at 12:40:00.
+Methods
+Depth profiles of multiple water quality variables were collected at the deep hole of Falling Creek Reservoir in 2018-2020 using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO sonde. Profiles were collected every ten minutes from July 2018 to December 2020. We deployed the thermistors and 5 and 9 m dissolved oxygen sensors in July 2018 and the EXO sonde at 1 m depth was deployed in August 2018. The EXO sonde was moved from 1.0 m to 1.6 m depth on 2019-05-20 at 12:40:00 (1.6 m is the depth of one of the outtake valves for drinking water treatment). As the EXO sonde has been moored near the outtake valve at 1.6 m (assuming full pond), the exact depth of the EXO sonde varied slightly over time due to small water level changes in the reservoir. We deployed a pressure transducer at 9 m in May 2020 to help track water level changes. 
 
-The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The in situ dissolved oxygen sensors were calibrated using a one point calibration according to the standards and practices outlined in the user manual. The YSI EXO Sonde sensors, except for temperature, were user calibrated with one point calibration as outlined in the user manual. 
+At the time of deployment in summer 2018, the thermistor string was factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The in situ dissolved oxygen sensors were calibrated using a one point calibration according to the standards and practices outlined in the user manual. The YSI EXO Sonde sensors, except for temperature, were user-calibrated as outlined in the user manual and KOR EXO software. 
 
-There were two periods in the summer of 2019 where hypolimnetic DO sondes had inexplicably low readings that did not align with simultaneous measurements from a high-resolution CTD profiler. We adjusted these values using linear or square root functions to best match the CTD and present those data in a separate column. The equations for each adjustment are given below, as well as in the R code provided with this data product.
+Maintenance/Issues
 
+Maintenance data gaps:
+
+The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the CAT_MaintenanceLog_2020.txt file. To account for this, we used an automated QAQC script (temp_oxy_qaqc.R) which indexed the dates and times recorded in the maintenance log and set the data to NA and the Flag_All column set to 1. Any data points outside of the immediate timeframe that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA and Flag_All to 1 manually.   
+
+Dissolved Oxygen sondes at 5 and 9 m
+
+On August 7, 2020, the RDO-PRO-X Sensor caps at 5 m and 9 m were replaced. Both dissolved oxygen sensors were calibrated on August 17, 2020 using a one point 100 percent air saturation calibration. 
+
+There were two periods in the summer of 2019 and four periods in the summer of 2020 when hypolimnetic DO sondes gave low readings that did not align with simultaneous measurements from a high-resolution CTD profiler (likely due to fouling). We adjusted these values using linear or square root functions to best match the CTD and present those data in a separate column (original values are retained and data are flagged for this column with Flag = 6). The equations for each adjustment are given below, as well as in the R code provided with this data product.
+5 meter oxygen sonde 
+2019-08-11 00:00:00 to 2019-08-12 12:40:00
+
+- DO (mg/L) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30
+- DO (percent saturation) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
 9 meter oxygen sonde
 2019-08-05 12:45:00 to 2019-08-12 12:40:00
+
 - DO (mg/L) = DO observed plus the square root of the difference between the current time and 2019-08-05 12:45:00 in minutes, divided by 70
 - DO (percent saturation) = DO observed plus the square root of the difference between the current time and 2019-08-05 12:45:00 in minutes, divided by 70/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
 
 2019-09-02 13:00:00 to 2019-09-27 12:30:00
+
 - DO (mg/L) = DO observed plus the difference between the current time and 2019-09-02 13:00:00 in minutes, divided by 30000
 - DO (percent saturation) = DO observed plus the difference between the current time and 2019-09-02 13:00:00 in minutes, divided by 30000/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
 
-5 meter oxygen sonde 
-2019-08-11 00:00:00 to 2019-08-12 12:40:00
-- DO (mg/L) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30
-- DO (percent saturation) = DO observed plus the square root of the difference between the current time and 2019-08-11 00:00:00 in minutes, divided by 30/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+2020-08-11 07:00:00 to 2020-08-17 12:50:00
 
-Instruments, manual, and serial numbers used in 2018 and 2019:
+- DO (mg/L) = DO observed plus the difference between the current time and 2020-08-11 07:00:00 in minutes, divided by 6500
+- DO (percent saturation) = DO observed plus the difference between the current time and 2020-08-11 07:00:00 in minutes, divided by 6500/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+2020-08-19 20:00:00 to 2020-08-24 10:40:00
+
+- DO (mg/L) = DO observed plus the difference between the current time and 2020-08-19 20:00:00 in minutes, divided by 6500
+- DO (percent saturation) = DO observed plus the difference between the current time and 2020-08-19 20:00:00 in minutes, divided by 6500/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+2020-08-26 12:00:00 to 2020-09-02 10:50:00
+
+- DO (mg/L) = DO observed plus the difference between the current time and 2020-08-26 12:00:00 in minutes, divided by 10000
+- DO (percent saturation) = DO observed plus the difference between the current time and 2020-08-26 12:00:00 in minutes, divided by 10000/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+2020-09-05 06:00:00 to 2020-09-09 17:50:00
+
+- DO (mg/L) = DO observed plus the difference between the current time and 2020-09-05 06:00:00 in minutes, divided by 3000
+- DO (percent saturation) = DO observed plus the difference between the current time and 2020-09-05 06:00:00 in minutes, divided by 3000/11.3*100, with 11.3/100 being the potential saturation of oxygen in water at 10 degrees C
+
+
+ 
+Water temperature (thermistors):
+
+The temperature string was tangled after some maintenance on October 9th, 2020 and was fixed on October 11, 2020. Consequently, there was a data gap for the temperature sensors at 5, 6, 7, 8 and 9 m from October 9-11, 2020, with a data flag of 1 in the Flag_All column. 
+
+On October 19, 2020, the NexSens T-Node FR Thermistor (Serial No. 3718) deployed at 0.1 m stopped working and read NA until October 20, when we took the thermistor from 2 m and put it at 0.1 m. There was a data gap at 2m from October 20-22, 2020. We put the NexSens T-Node Thermistor (Serial No. 3903) from Beaverdam Reservoir, another one of our sites, at 0.1 m in FCR and returned the 2 m thermistor back to its original depth at  2 m on October 22, 2020. Consequently, there was a data gap for 0.1 m temperature from October 19-20, 2020 and a data gap for 2 m temperature from October 20-22, 2020, all flagged with data code 1 .
+
+In late October-December 2020, two of the Nexus T-Node FR Thermistors (at 1 m and 4 m) appeared to be reading water temperatures higher than the sensors deployed above them. On 7 Jan 2021, we put the 2 suspect thermistors and 4 other thermistors adjacently located (0.1, 2, 3, and 9 m) in a water bath in the field for an hour. The water bath showed that thermistors at 1 m and 4m were exhibiting higher readings than the others in the bath. The 1 m thermistor was reading about 0.2496_ higher, and the 4 m thermistor was reading about 0.3862_. To correct for this discrepancy, we created an offset for both the 1 m and 4 m thermistors from November 1, 2020 to December 31, 2020 (the time period in which the thermistors were consistently exhibiting higher temperature readings). First, we took the average temperature of the thermistors directly above and below the suspect ones for each 10-min interval observation during November 1 to December 31, 2020. Second, we calculated the difference between the suspect thermistor's reading and its neighbor average, which we averaged over the entire time period to calculate a mean offset. Third, this mean offset was subtracted from the observed thermistor reading on each observation. For example, for the 1 m thermistor we took the average of the 0.1 m thermistor and the 2m thermistor for the neighbor average at each time interval, then we found the difference between the 1 m thermistor and the neighbor average to calculate the offset value for the entire November 1-December 31 period. The offset value for the 1 m thermistor was 0.22617oC and for the 4m thermistor was 0.18122oC. The offset was subtracted from the 1 m thermistor values from October 29, 2020 13:00EST to the end of 2020 and the offset for the 4m thermistor was subtracted from the raw values on October 31, 2020 05:00EST to the end of 2020.  These times were chosen because the broken thermistors were reading consistently higher than than the one above them. The observations that received an offset were flagged with data code 8.
+
+
+EXO sonde:
+
+On August 7, 2020, the YSI EXO (1.6 m) Optical Dissolved Oxygen Sensor Cap (Serial No. 20E101629) was replaced, and the dissolved oxygen sensor was calibrated on August 17, 2020 using a one point 100 percent air saturation calibration. The EXO 1.6 m dissolved oxygen sensor was recalibrated on 15 September 2020, 19 October 2020, and 27 December 2020 using a one point 100 percent air saturation calibration.
+
+The YSI EXO sonde was removed from the reservoir on December 2, 2020 for manufacturer cleaning, maintenance, and calibration. It was re-deployed in the reservoir on December 27, 2020. Below is the status of each sensor: pass or fail, and the calibration, or maintenance  information. All sensors were calibrated by the manufacturer on December 21, 2020 unless otherwise stated. 
+
+YSI EXO2 Sonde Serial No. 18D103367, Pass
+Replaced power-communication circuit board due to issues at final testing, depth sensor passed
+Wiped Conductivity/Temperature Sensor Serial No. 18C102992, Pass
+Temperature reads 20.78 _C in a 20.70 _C bath with a cell constant of 0.47 
+Conductivity reads zero sp cond. in air.
+Central Wiper for Conductivity/Temperature Sensor Serial No. 18D101236, Pass
+Replaced head & motor O-rings
+Dissolved Oxygen Sensor Serial No. 18D101168, Pass
+Probe ODO Gain: 1.24
+Total Algae Sensor Serial No. 18D102222, Pass
+Chlorophyll-a: Probe reads 14.73 RFU in 16.4 standard-calibrated to standard. Probe reads 58.65 _g/L in 66 standard-calibrated to standard.  
+Phycocyanin: Probe reads 13.36 RFU in 16 standard-calibrated. Probe reads 13.37 _g/L in 16 standard-calibrated to standard
+fDOM Sensor Serial No. 18C100625, Pass
+Probe reads 275.69 uncalibrated QSU in 300 QSU standard- calibrated to 300QSU. Probe reads 92.18 uncalibrated RFU in 100 RFU standard- calibrated to 100 RFU
+
+
+EXO Chlorophyll-a and Phycocyanin 
+The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see 'chla and phyco qaqc' section of catwalk_EDI_QAQC_all_variables.R script). Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. 
+
+EXO fDOM 
+fDOM sensor data underwent a QAQC process to remove extreme outliers (see 'fdom qaqc' section of catwalk_EDI_QAQC_all_variables.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. 
+
+
+
+
+Instruments, manual, and serial numbers used in 2018,  2019, and 2020:
 Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
 
-NexSens T-Node FR Thermistors (July 2018 - December 2019)
+NexSens T-Node FR Thermistors (July 2018 - December 2020)
 https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf
-Serial No. 3718; Depth 0.1m
+Serial No. 3718; Depth 0.1m (July 2018- October 19, 2020)
+Serial No. 3741; Depth 0.1m (October 20-22, 2020)
+Serial No. 3903: Depth 0.1m (October 22, 2020- current)
 Serial No. 3724; Depth 1m
-Serial No. 3741; Depth 2m
+Serial No. 3741; Depth 2m (July 2018-October 20, 2020; October 22, 2020-current)
 Serial No. 3746; Depth 3m
 Serial No. 3747; Depth 4m
 Serial No. 3751; Depth 5m
@@ -34,19 +110,34 @@ Serial No. 3823; Depth 7m
 Serial No. 3851; Depth 8m
 Serial No. 3857; Depth 9m
 
-InSitu RDO Pro-X Dissolved Oxygen Sensor with Anti-Fouling Guard (July 2018 - December 2019)
+InSitu RDO Pro-X Dissolved Oxygen Sensor with Anti-Fouling Guard (July 2018 - December 2020)
 https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf
 Serial No. 584491; Depth 5m
 Calibration from July 5, 2018 to December 19, 2018; slope = 1.0361, offset = 0.00
+Calibration from August 17, 2020 to September 15, 2020; slope = 1.1074, offset = 0.00
+Calibration from October 19, 2020 to current; slope = 1.1447, offset = 0.00
 Serial No. 584488; Depth 9m
 Calibration from July 5, 2018 to August 20, 2018; slope = 1.0743, offset = 0.00
 Calibration from August 20, 2018 to December 19, 2018; slope = 1.0000, offset = 0.00
+Calibration from August 17, 2020 to September 15, 2020; slope = 1.1656, offset = 0.00
+Calibration from September 15, 2020 to October 19, 2020; slope = 1.0916, offset= 0.00
+Calibration from October 19, 2020 to current; slope=1.1221; offset=0.00
 
-YSI EXO2 Sonde Serial No. 18D103367 (August 2018 - December 2019)
+Campbell Scientific Stainless-Steel Pressure Transducer CS451 (May 2020-current)
+Serial No. 29010799
+https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf
+
+YSI EXO2 Sonde Serial No. 18D103367 (August 2018 - December 2020)
 Wiped Conductivity/Temperature Sensor Serial No. 18C102992
 Central Wiper for Conductivity/Temperature Sensor Serial No. 18D101236
 Dissolved Oxygen Sensor Serial No. 18D101168
 Total Algae Sensor Serial No. 18D102222
 fDOM Sensor Serial No. 18C100625
 Pressure Transducer Serial No. 17K100864
-https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 18C105373 (August 2018- August 7, 2020)
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20E101629 (August 7, 2020-December 2020)	
+Calibration from August 17, 2020 to September 15, 2020; DO Gain=1.13
+Calibration from September 15, 2020 to October 19, 2020; DO Gain=1.11
+Calibration from October 19, 2020 to December 2, 2020; DO Gain=1.12
+Calibration fromDecember 27, 2020 to December 31, 2020; DO Gain=1.10

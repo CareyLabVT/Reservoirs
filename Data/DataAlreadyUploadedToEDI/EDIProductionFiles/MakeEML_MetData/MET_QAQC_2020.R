@@ -16,19 +16,17 @@ library(tidyverse)
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2020.csv", "FCRmet.csv")
 
 
-#the old files aren't there anymore
-#RawMet_1516=read.csv('https://raw.githubusercontent.com/CareyLabVT/FCR-GLM/master/RawMetData_2015_2016.csv',header = T) #2015-2016 data
-#RawMet_17=read.csv('https://raw.githubusercontent.com/CareyLabVT/FCR-GLM/master/RawMetData_2017.csv',header = T) #2017 data
-#RawMet_18=read.csv('https://raw.githubusercontent.com/CareyLabVT/FCR-GLM/master/RawMetData_2018.csv',header = T) #2018 data
-#RawMet_19=read.csv('https://raw.githubusercontent.com/CareyLabVT/FCR-GLM/master/RawMetData_2018.csv',header = T) #2019 data
-#mytempdata = rbind(RawMet_1516, RawMet_17) #merges first 3 years of met data
-#Met_past = rbind(mytempdata, RawMet_18) #merges 2018 with data
+#original raw files from 2015-2019
+RawMet_1516=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',header = T) #2015-2016 data
+RawMet_17=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',header = T) #2017 data
+RawMet_18=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv',header = T) #2018 data
+RawMet_19=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv',header = T) #2019 data
+#combine all the years to create a past data frame
+Met_past = rbind(RawMet_1516,RawMet_17,RawMet_18,RawMet_19) #merges 2018 with data
 
-#past MET data from the manual downloads
-Met_past=read.csv("MET_raw_2015_2019.csv")
+#pesky X column
 Met_past$X<-NULL
-Met_past$DOY<-NULL
-#Met_past$DateTime=with_tz(ymd_hms(Met_past$DateTime, tz="Etc/GMT+4"),"Etc/GMT+5") #formats to be same
+
 names(Met_past) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
                "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
                "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
@@ -36,52 +34,6 @@ names(Met_past) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C",
                "InfaredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
 #put datetime in a useable form
 Met_past$DateTime<-as.POSIXct(strptime(Met_past$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
-
-#Divide into years and then add to the MAKEEML_MetData
-all_15_16=subset(Met_past, DateTime >= as.POSIXct('2015-01-01 00:00', tz="Etc/GMT+5") & 
-                   DateTime <= as.POSIXct('2016-12-31 23:59', tz='Etc/GMT+5'))
-all_17=subset(Met_past, DateTime >= as.POSIXct('2017-01-01 00:00', tz="Etc/GMT+5") & 
-                   DateTime <= as.POSIXct('2017-12-31 23:59', tz='Etc/GMT+5'))
-all_18=subset(Met_past, DateTime >= as.POSIXct('2018-01-01 00:00', tz="Etc/GMT+5") & 
-                   DateTime <= as.POSIXct('2018-12-31 23:59', tz='Etc/GMT+5')) 
-all_19=subset(Met_past, DateTime >= as.POSIXct('2019-01-01 00:00', tz="Etc/GMT+5") & 
-                   DateTime <= as.POSIXct('2019-12-31 23:59', tz='Etc/GMT+5'))
-
-write.csv(all_15_16,"RawMetData_2015_2016.csv" )
-write.csv(all_17,"RawMetData_2017.csv" )
-write.csv(all_18,"RawMetData_2018.csv" )
-write.csv(all_19,"RawMetData_2019.csv" )
-
-#taking some missing data from the final.csv from 2019
-Met_sup=read.csv("Met_final_2015_2019.csv")
-Met_sup$DateTime<-as.POSIXct(strptime(Met_sup$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
-
-Dec_missing=Met_sup%>%
-  subset( DateTime >= as.POSIXct('2019-12-12 12:48', tz="Etc/GMT+5") & 
-            DateTime <= as.POSIXct('2019-12-31 23:59', tz='Etc/GMT+5'))%>%
-  select(c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-           "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-           "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-           "ShortwaveRadiationDown_Average_W_m2", "InfaredRadiationUp_Average_W_m2",
-           "InfaredRadiationDown_Average_W_m2", "Albedo_Average_W_m2"))
-
-June_missing=Met_sup%>%
-  subset( DateTime >= as.POSIXct('2019-06-17 8:52', tz="Etc/GMT+5") & 
-            DateTime <= as.POSIXct('2019-07-12 02:00', tz='Etc/GMT+5'))%>%
-  select(c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-           "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-           "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-           "ShortwaveRadiationDown_Average_W_m2", "InfaredRadiationUp_Average_W_m2",
-           "InfaredRadiationDown_Average_W_m2", "Albedo_Average_W_m2"))
-#combine the missing files from the past raw data
-Missing_2019=rbind(June_missing,Dec_missing)
-
-#add them together
-Met_past=rbind(Met_past,Missing_2019)
-
-#get rid of duplicates
-Met_past <- Met_past[!duplicated(Met_past$DateTime), ]
-
 
 
 #Note for publishing the 2015-2018 dataset, I skipped this step, but for future archiving,
@@ -141,6 +93,7 @@ for(i in 2:length(Met$Record)){ #this identifies if there are any data gaps in t
   }
 }
 
+
 #EDI Column names
 names(Met) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
                "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
@@ -174,7 +127,7 @@ for(i in 5:17) { #for loop to create new columns in data frame
 }
 
 #change the rain totals to per a minute for the time that was recorded in 5 minute intervals
-Met$Flag_Rain_Total_mm=ifelse((Met$DateTime>"2015-07-01 00:00:00"&Met$DateTime<"2015-07-13 12:20:00"&Met$Rain_Total_mm>0),6,Met$Flag_Rain_Total_mm)
+Met$Flag_Rain_Total_mm=ifelse((Met$DateTime>"2015-07-01 00:00:00"&Met$DateTime<"2015-07-13 12:20:00"&Met$Rain_Total_mm>0),4,Met$Flag_Rain_Total_mm)
 Met$Note_Rain_Total_mm=ifelse((Met$DateTime>"2015-07-01 00:00:00"&Met$DateTime<"2015-07-13 12:20:00"&Met$Rain_Total_mm>0),"Change_to_mm_per_min",Met$Note_Rain_Total_mm)
 Met$Rain_Total_mm=ifelse((Met$DateTime>"2015-07-01 00:00:00"&Met$DateTime<"2015-07-13 12:20:00"&Met$Rain_Total_mm>0), (Met$Rain_Total_mm/5) , Met$Rain_Total_mm)
 #Air temperature data cleaning

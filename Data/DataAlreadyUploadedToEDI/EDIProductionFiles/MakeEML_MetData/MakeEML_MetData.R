@@ -27,9 +27,9 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
 template_table_attributes(
- path = "C:/Users/ahoun/OneDrive/Desktop/MakeEML_MetData",
- data.path = "C:/Users/ahoun/OneDrive/Desktop/MakeEML_MetData",
- data.table = 'Met_final_2015_2019.csv')
+ path = "C:\R\Reservoirs\Data\DataAlreadyUploadedToEDI\EDIProductionFiles\MakeEML_MetData",
+ data.path = "C:\R\Reservoirs\Data\DataAlreadyUploadedToEDI\EDIProductionFiles\MakeEML_MetData",
+ data.table = 'Met_final_2015_2020.csv')
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 

@@ -1,4 +1,4 @@
-Reservoir,Site,DateTime,Depth_m,CH4_umol_L,ChaoborusDensity_NumPerLiter,Flag_depth,Flag_CH4_umol_L,Flag_ChaoborusDensity_NumPerLiter
+Reservoir,Site,DateTime,Depth_m,CH4_umolL,ChaoborusDensity_NumPerLiter,Flag_Depth_m,Flag_CH4_umolL,Flag_ChaoborusDensity_NumPerLiter
 BVR,50,2016-08-03 12:01:00,0,1.801815052,0,0,7,0
 BVR,50,2016-08-03 12:01:00,1,2.411645851,0,0,7,0
 BVR,50,2016-08-03 12:01:00,2,2.28601872,0,0,7,0

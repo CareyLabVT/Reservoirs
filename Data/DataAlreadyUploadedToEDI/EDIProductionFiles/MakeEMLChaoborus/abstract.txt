@@ -4,7 +4,7 @@ Carey, C.C., J.P. Doubek, and K.L. Campbell. 2018. Crustacean zooplankton densit
 
 Carey, C.C., A.S. Lewis, R.P. McClure, A.B. Gerling, J.P. Doubek, S. Chen, M.E. Lofton, and K.D. Hamre. 2019. Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019 ver 10. Environmental Data Initiative. https://doi.org/10.6073/pasta/1fc7d2a5c69c6a651793dba06d375ae2
 
-<LIST GHG EDI PACKAGE WHEN READY>
+Carey, C.C., R.P. McClure, B.R. Niederlehner, M.E. Lofton, and A.G. Hounshell. 2020. Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/e048414b480a2a1359192f5c8d30dcd1
 
 REFERENCES:
 Carey, C.C., R.P. McClure, J.P. Doubek, M.E. Lofton, N.K. Ward, and D. Scott. 2018. Chaoborus spp. transport CH4 from the sediments to the surface waters of a eutrophic reservoir, but their contribution to water column CH4 concentrations and diffusive efflux is minor. Environmental Science & Technology. 52:1165-1173. DOI 10.1021/acs.est.7b04384

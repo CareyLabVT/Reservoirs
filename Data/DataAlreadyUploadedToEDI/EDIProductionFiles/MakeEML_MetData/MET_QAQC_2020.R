@@ -436,7 +436,17 @@ RemoveMet$Site=50 #add site column for EDI archiving
 RemoveMet=RemoveMet[,c(8:9,1:7)]
 
 ###7) Write file with final cleaned dataset! ###
-Met_final=Met[,c(18:19,1:17, 20:45)] #final column order
+Met_final=Met%>%
+  select(c("Site","Reservoir","DateTime","Record","CR3000_Batt_V","CR3000Panel_temp_C","PAR_Average_umol_s_m2","PAR_Total_mmol_m2","BP_Average_kPa",                          
+           "AirTemp_Average_C","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
+           "ShortwaveRadiationDown_Average_W_m2","InfaredRadiationUp_Average_W_m2","InfaredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
+           "Flag_PAR_Average_umol_s_m2","Note_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Note_PAR_Total_mmol_m2","Flag_BP_Average_kPa",
+           "Note_BP_Average_kPa","Flag_AirTemp_Average_C","Note_AirTemp_Average_C","Flag_RH_percent","Note_RH_percent","Flag_Rain_Total_mm",
+           "Note_Rain_Total_mm","Flag_WindSpeed_Average_m_s","Note_WindSpeed_Average_m_s",
+           "Flag_WindDir_degrees","Note_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationUp_Average_W_m2",
+           "Flag_ShortwaveRadiationDown_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2",
+           "Flag_InfaredRadiationUp_Average_W_m2","Note_InfaredRadiationUp_Average_W_m2",
+           "Flag_InfaredRadiationDown_Average_W_m2","Note_InfaredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_Albedo_Average_W_m2"))
 setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData')
 write.csv(Met_final, "Met_final_2015_2020.csv", row.names=F, quote=F)
 write.csv(RemoveMet, "Met_Maintenance_2015_2020.csv", row.names=F, quote = F)

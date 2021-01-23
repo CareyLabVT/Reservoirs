@@ -18,57 +18,59 @@ download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCDa
 #download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt', "maintenance_file.csv")
 
 #Read in csv of data from pushed to github
-bvrheader1<-read.csv("BVRplatform.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
+#bvrheader1<-read.csv("BVRplatform.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
 bvrdata1<-read.csv("BVRplatform.csv", skip=4, header=F) #get data minus wonky Campbell rows
-names(bvrdata1)<-names(bvrheader1) #combine the names to deal with Campbell logger formatting
+colnames(bvrdata1)=c('TIMESTAMP','RECORD','BattV','PTemp_C', 'wtr_1','wtr_2','wtr_3','wtr_4',	
+                     'wtr_5','wtr_6','wtr_7','wtr_8','wtr_9','wtr_10','wtr_11','wtr_12',
+                     'wtr_13','doobs_6','dosat_6','dotemp_6','doobs_13','dosat_13','dotemp_13',
+                     'EXO_Date','EXO_Time','EXO_wtr_1','Cond_1','SpCond_1','TDS_1','dosat_1',
+                     'doobs_1',	'Chla_RFU_1',	'Chla_1','BGAPC_RFU_1',	'BGAPC_1','fDOM_RFU_1',
+                     'fDOM_QSU_1',	'EXO_pressure','EXO_depth','EXO_battery','EXO_cablepower',
+                     'EXO_wiper','Lvl_psi','wtr_pt_13') #combine the names to deal with Campbell logger formatting
+					
 
 #Read in csv of manual uploaded data
 bvrdata3<-read.csv("BVRmanualplatform.csv")
 
-#delete pesky blank row. Make sure that it actually doesn't change
-bvrdata3<-bvrdata3[!(bvrdata3$X==30772),]
+bvrdata= bvrdata3%>%
+  filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
+  select(!X)%>% #delete column that was added when uploaded
+  rbind(.,bvrdata1)%>% #combine manual and most recent files
+  distinct(TIMESTAMP, .keep_all= TRUE)%>% #taking out the duplicate values 
+  filter(!TIMESTAMP=="")%>% #take out the rows with blank timestamps
+  filter(TIMESTAMP< ymd_hms("2021-01-01 00:00:00", tz = "Etc/GMT+5")) #filter for 2020
 
-#delete column that was added when uploaded
-bvrdata3=select(bvrdata3, -X)
-
-#combine manual and most recent files
-bvrdata4=rbind(bvrdata3, bvrdata1)
-
-#taking out the duplicate values  
-obs1=bvrdata4[!duplicated(bvrdata4$TIMESTAMP), ]
-
-#take out the rows with blank timestamps
-obs1=obs1[!(obs1$TIMESTAMP == ""), ]
+  
 
 #change the date from character to unknown making it easier to graph
-#obs1$TIMESTAMP <- as.POSIXct(obs1$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
+bvrdata$TIMESTAMP <- as.POSIXct(bvrdata$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
 
 #check record for gaps
 #order data by timestamp
-obs1=obs1[order(obs1$TIMESTAMP),]
-obs1$DOY=yday(obs1$TIMESTAMP)
+bvrdata=bvrdata[order(bvrdata$TIMESTAMP),]
+bvrdata$DOY=yday(bvrdata$TIMESTAMP)
 
 #daily record gaps by day of year
-for(i in 2:nrow(obs1)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(obs1$DOY[i]-obs1$DOY[i-1]>1){
-    print(c(obs1$TIMESTAMP[i-1],obs1$TIMESTAMP[i]))
+for(i in 2:nrow(bvrdata)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(bvrdata$DOY[i]-bvrdata$DOY[i-1]>1){
+    print(c(bvrdata$TIMESTAMP[i-1],bvrdata$TIMESTAMP[i]))
   }
 }
 #sub-daily record gaps by record number
-for(i in 2:length(obs1$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(abs(obs1$RECORD[i]-obs1$RECORD[i-1])>1){
-    print(c(obs1$TIMESTAMP[i-1],obs1$TIMESTAMP[i]))
+for(i in 2:length(bvrdata$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(bvrdata$RECORD[i]-bvrdata$RECORD[i-1])>1){
+    print(c(bvrdata$TIMESTAMP[i-1],bvrdata$TIMESTAMP[i]))
   }
 }
 
 #remove the DOY column and change to bvrdata
-obs1=select(obs1, -DOY)
+bvrdata=select(bvrdata, -DOY)
 
-write_csv(obs1, 'obs1.csv')
+write_csv(bvrdata, 'bvrdata2020_comb.csv')
 
-qaqc <- function(data_file, maintenance_file, output_file)
+qaqc <- function(data_file,maintenance_file,  output_file)
 {
-#read in data from obs1 above
+
 #bvrdata=data_file
 #change column names
   BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_12.5",
@@ -81,6 +83,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
                         "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
                         "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_0.5", "LvlTemp_C_0.5")
   
+ 
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
   DO_RECOVERY_THRESHOLD <- 1
@@ -98,25 +101,22 @@ qaqc <- function(data_file, maintenance_file, output_file)
   # either be replaced with NA and flagged (if between 2018-10-01 and 2019-03-01) or just flagged (otherwise)
   EXO_FOULING_FACTOR <- 4
   
-  
+  #read in data from obs1 above
   
   # read catwalk data and maintenance log
   # NOTE: date-times throughout this script are processed as UTC
-  bvrdata <- read_csv(data_file, skip = 1, col_names = BVRDATA_COL_NAMES,
+  bvrdata <- read_csv(data_file, skip=1, col_names = BVRDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
 #read in maintenance log
-  log <- read_csv(maintenance_file
-  , col_types = cols(
+  log <- read_csv(maintenance_file,
+    col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
   
-  
-  # remove NaN data at beginning
-  #catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 14:50:00"))
   
   # add flag columns
   bvrdata$Flag_All <- 0
@@ -126,6 +126,8 @@ qaqc <- function(data_file, maintenance_file, output_file)
   bvrdata$Flag_Chla <- 0
   bvrdata$Flag_Phyco <- 0
   bvrdata$Flag_TDS <- 0
+  
+  
   
   # replace negative DO values with 0
   bvrdata <- bvrdata %>%
@@ -253,23 +255,23 @@ qaqc <- function(data_file, maintenance_file, output_file)
   BGAPC_RFU_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOBGAPC_RFU_1.5, na.rm = TRUE)
   BGAPC_ugL_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOBGAPC_ugL_1.5, na.rm = TRUE)
 
-  bvrdata <- bvrdata %>%
-    mutate(Flag_Chla = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                (! is.na(EXOChla_RFU_1.5) & abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold |
-                                 ! is.na(EXOChla_ugL_1.5) & abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold),
-                              4, Flag_Chla)) %>%
-    mutate(Flag_Phyco = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                 (! is.na(EXOBGAPC_RFU_1.5) & abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold |
-                                  ! is.na(EXOBGAPC_ugL_1.5) & abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold),
-                               4, Flag_Phyco)) %>%
-    mutate(EXOChla_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                  abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold, NA, EXOChla_RFU_1.5)) %>%
-    mutate(EXOChla_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                  abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold, NA, EXOChla_ugL_1.5)) %>%
-    mutate(EXOBGAPC_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                   abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold, NA, EXOBGAPC_RFU_1.5)) %>%
-    mutate(EXOBGAPC_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                   abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold, NA, EXOBGAPC_ugL_1.5))
+  #bvrdata <- bvrdata %>%
+    #mutate(Flag_Chla = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                #(! is.na(EXOChla_RFU_1.5) & abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold |
+                                 #! is.na(EXOChla_ugL_1.5) & abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold),
+                              #4, Flag_Chla)) %>%
+    #mutate(Flag_Phyco = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                 #(! is.na(EXOBGAPC_RFU_1.5) & abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold |
+                                  #! is.na(EXOBGAPC_ugL_1.5) & abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold),
+                               #4, Flag_Phyco)) %>%
+    #mutate(EXOChla_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                  #abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold, NA, EXOChla_RFU_1.5)) %>%
+    #mutate(EXOChla_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                  #abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold, NA, EXOChla_ugL_1.5)) %>%
+    #mutate(EXOBGAPC_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                   #abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold, NA, EXOBGAPC_RFU_1.5)) %>%
+    #mutate(EXOBGAPC_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
+                                   #abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold, NA, EXOBGAPC_ugL_1.5))
   
   # flag EXO sonde sensor data of value above 4 * standard deviation at other times
   bvrdata <- bvrdata %>%
@@ -303,6 +305,6 @@ qaqc <- function(data_file, maintenance_file, output_file)
 #      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log",
 #     "BVRplatform.csv")
 
-qaqc("obs1.csv",
-         "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
-       "BVRplatform3.csv")
+qaqc('bvrdata2020_comb.csv',
+      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
+       "BVRplatform.csv")

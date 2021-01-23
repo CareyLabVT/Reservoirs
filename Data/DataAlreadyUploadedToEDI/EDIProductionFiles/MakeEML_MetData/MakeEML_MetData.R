@@ -138,19 +138,21 @@ template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToE
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
 make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2019",
+         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2020",
          data.table = c('Met_final_2015_2020.csv', 'Met_Maintenance_2015_2020.csv'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2019',
+         data.table.name = c('Met_final_2015_2020', 'Met_Maintenance_2015_2020'),
+         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2020',
                                     'The log of all maintenance applied to the meteorological station'),
          other.entity = 'MET_QAQC_2020.R',
+         other.entity.name = 'MET_QAQC_2020',
          other.entity.description = 'Data aggregation and QA/QC R script',
          temporal.coverage = c("2015-07-07", "2020-12-31"),
-         geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
-         geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
+         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
+         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.336.1") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.143.4") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
@@ -166,8 +168,8 @@ make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
          other.entity = 'Met_QAQC.R',
          other.entity.description = 'Data aggregation and QA/QC R script',
          temporal.coverage = c("2015-07-07", "2018-12-31"),
-         geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
-         geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
+         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
+         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',

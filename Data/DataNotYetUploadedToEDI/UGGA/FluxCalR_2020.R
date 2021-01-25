@@ -5,15 +5,14 @@
 # Script following: https://github.com/junbinzhao/FluxCalR
 
 # Load in 'remotes' package
-pacman::p_load(remotes,tidyverse)
+pacman::p_load(remotes,tidyverse,FluxCalR)
 
 # Install FluxCalR
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 library(FluxCalR)
 
 # Load in data: will need to load in individual files - this can serve as a log for what files have been corrected
-wd <- getwd()
-setwd(wd)
+wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 
 # Load in flux data
 # NOTE: Did not sure data from 2002-05-11 (aka: 2020-06-29 - datetime messed up!)
@@ -151,28 +150,30 @@ flux_output <- rbind(Flux_output2,Flux_output3,Flux_output4,Flux_output5,Flux_ou
 # Get together for publication to EDI
 flux_co2 <- flux_output %>% 
   filter(Gas == "CO2") %>% 
-  rename(co2_slope = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
+  rename(co2_slope_ppmS = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
 flux_ch4 <- flux_output %>% 
   filter(Gas == "CH4") %>% 
-  rename(ch4_slope = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
+  rename(ch4_slope_ppmS = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
 flux_all <- left_join(flux_co2,flux_ch4,by=c("Num","Date","Start","End","Ta"))
 
 flux_all <- flux_all %>% 
   rename(Rep = Num, Start_time = Start, End_time = End, Temp_C = Ta) %>% 
-  mutate (Reservoir = "FCR", Site = 50, co2_flux_umolCm2s_flag = NA, ch4_flux_umolCm2s_flag = NA)
+  mutate (Reservoir = "FCR", Site = 50, co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0)
 
-col_order <- c("Reservoir","Site","Date","Rep","Start_time","End_time","Temp_C","co2_slope","co2_R2",
-               "co2_flux_umolCm2s","ch4_slope","ch4_R2","ch4_flux_umolCm2s","co2_flux_umolCm2s_flag",
+col_order <- c("Reservoir","Site","Date","Rep","Start_time","End_time","Temp_C","co2_slope_ppmS","co2_R2",
+               "co2_flux_umolCm2s","ch4_slope_ppmS","ch4_R2","ch4_flux_umolCm2s","co2_flux_umolCm2s_flag",
                "ch4_flux_umolCm2s_flag")
 
 flux_all_2 <- flux_all[,col_order]
 
+# NOTE: WILL NEED TO ADD EXTRA REPS WHEN ONLY ONE PEAK IDENTIFIED IN THE DATA - DO THIS MANUALLY FOR NOW!
+
 # Plots to double check data!
-flux_all_2$Date <- as.POSIXct(strptime(flux_all_2$Date,"%Y-%m-%d"))
+flux_all_2$Date <- as.POSIXct(strptime(flux_all_2$Date,"%Y-%m-%d", tz="EST"))
 
 ggplot()+
   geom_point(flux_all_2,mapping=aes(x=Date,y=co2_flux_umolCm2s,color="CO2"))+

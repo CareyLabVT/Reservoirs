@@ -1,0 +1,164 @@
+%% Picarro Import for GHG
+%
+% version: 2.0
+% 1 September 2016
+% D. Scott
+
+% Updated by A. Hounshell for Stream Team UGGA
+% 20 July 2020
+
+% This program is intended to calculate water-air fluxes using
+% recirculating chambers and the Picarro GHG. The user must first import 
+% the raw Picarro data file, and save as "matlab.mat" in the same folder as
+% this m-script.
+
+% Source for converting from ppmv to moles/L: http://www.lenntech.com/calculators/ppm/converter-parts-per-million.htm
+% Conversion for ppmv data to mg/m3 ==> conc in ppmv * MWgas / Vm where Vm
+% = standard molar volume of ideal gas at 1 bar, 273K = 22.71108 L/mol
+
+
+% Data inputs:
+% matlab.mat: raw data file
+% volCh = volume of chamber/hat for experiment
+% volTub = volume of tubing between chamber/Picarro
+% volTrap = volume of water trap
+% volPic = internal volume of Picarro
+% areaB = surface area of chamber, m2
+
+clear all;
+
+
+%% Parameter inputs
+volCh = 0.020876028;                            % 2 gallon container * m3/gallon conversion
+volTub = pi()*((0.125/2)/12).^2*13.12.*0.00378541;  % 1/4" tubing, 50' long
+volTrap = .018;                                 % 1 liter volume for water trap, converted to m3
+volPic = 7560/1e6;                              % internal volume of Picarro, m3
+volT2 = volCh+volTub+volTrap;                   % total volume of picarro+tubing+watertrap+chamber
+volT = volPic+volTrap;                          % per Tyler, volPic includes everything minus trap
+areaB = 0.1451465;                              % total surface area of chamber, m2 (based on 9" diameter)
+
+%% read initial data and convert ppmv to mg/m3 gas concentration
+% For now: will need to un-zip and navigate to the folder which contains
+% the text file (in the 'current folder')
+% You will need to open the .txt file in excel - use 'comma;
+% delimited. Delete the first row; use 'trim' to remove the leading
+% whitespace for the 'Time' column
+% Then rename the file name below
+[ugga.data, ugga.parms, ugga.raw] = xlsread ('gga_2020-07-06_f0000.xlsx');
+ugga.time(:,1) = datenum(ugga.raw(2:end,1),'mm/dd/YYYY HH:MM:SS.FFF');
+
+
+
+% parameter vectors of used for calculations:
+% Frac_DAYS_SINCE_JAN1 = decimal days since 1st January of given year
+% CH4_dry = water corrected methane in ppmv (umoles CH4 / moles of air)
+% CO2_dry = water corrected carbon dioxide in ppmv (umoles CO2 / moles of air)
+
+% convert concentrations into mass/liter (see resource on line 12)
+
+% NEW
+CH4_drymg = ugga.data(:,11)*12.011/22.71108/1000; % converts to mg/L assuming STP
+CO2_drymg = ugga.data(:,13)*12.011/22.71108/1000; % converts to mg/L assuming STP
+
+%% Plot data for CH4, find peak locations using methane signal here * modify GHG choice for different systems
+xx = ugga.time;
+xxbegin=xx(1,1);                    % first sampling time in record
+xx = xx-xxbegin;           % substract initial day(integer) from day vector
+avgdt = (xx(end)-xx(1))/length(xx)*60*60*24;
+
+
+yy = CH4_drymg; yy2 = CO2_drymg;
+
+[pks,locs,w,p] = findpeaks(CH4_drymg,'MinPeakProminence',0.001);
+
+figure
+plot(xx,yy,'-b',xx(locs),yy(locs),'.r')
+xlabel('Time [days]'); ylabel('CH4_dry_PeakHeight')
+
+%delPks = input('Select number of first peaks to delete from analysis')
+delPks = 0;
+pks(1:delPks,:)=[]; locs(1:delPks,:)=[]; w(1:delPks,:)=[]; p(1:delPks,:)=[]; 
+plot(xx,yy,'-b',xx(locs),yy(locs),'.r')
+xlabel('Time [days]'); ylabel('CH4_dry_PeakHeight')
+clear delPks
+
+%% Step through each peak and identify slope. Setup to calculate slope from -4.5 to -0.5 minutes before peak.
+
+numPeaks = length(pks);             % total number of identified peaks
+%numPeaks = 1;                       % remove after testing
+tsBeforePeak = 5*60/avgdt;          % number of rows 5 minutes before peak
+tsAfterPeak = 2*60/avgdt;           % number of rows 2 minutes after peak
+
+for i = 1:numPeaks
+    xT = (xx(locs(i)-tsBeforePeak:locs(i)+tsAfterPeak,:)-xx(locs(i)))*24*60;  % vector of time [min] around peak
+    yyT = yy(locs(i)-tsBeforePeak:locs(i)+tsAfterPeak,:);       % vector of CH4 [mg/m3] around peak
+    yy2T = yy2(locs(i)-tsBeforePeak:locs(i)+tsAfterPeak,:);     % vector of CO2 [mg/m3] around peak
+
+    hold on
+    figure
+    h = subplot(1,2,1)
+        plot(xT,yyT)
+        xlabel('Time [min]'); ylabel('CH4 [mg/m3]')
+    h = subplot(1,2,2)
+        plot(xT,yy2T)
+        xlabel('Time [min]'); ylabel('CO2 [mg/m3]')
+    
+    
+    %Fit slopes for methane
+    tsBeforePeakfit = (4.5*60/avgdt);                               % number of rows 4.5 minutes before peak till 1 minute before peak
+    tseBeforePeakfit = (0.5*60/avgdt);                               % number of rows 0.5 minutes before peak till 1 minute before peak
+    xTf = (xx(locs(i)-tsBeforePeakfit:locs(i)-tseBeforePeakfit,:)-xx(locs(i)))*24*60;
+    yyTf = yy(locs(i)-tsBeforePeakfit:locs(i)-tseBeforePeakfit,:);
+    p1 = polyfit(xTf,yyTf,1);
+    yfit = polyval(p1,xTf);
+    yresid=yyTf-yfit;
+    SSresid = sum(yresid.^2);
+    SStotal=(length(yyTf)-1)*var(yyTf);
+    rsq = 1-SSresid/SStotal;
+   
+    subplot(1,2,1)
+    
+    hold on
+    plot(xTf,yfit,'-r')
+    title(['RSQ = ' num2str(round(rsq,3))])
+    
+    %Fit slopes for carbon dioxide
+    xTf = (xx(locs(i)-tsBeforePeakfit:locs(i)-tseBeforePeakfit,:)-xx(locs(i)))*24*60;
+    yy2Tf = yy2(locs(i)-tsBeforePeakfit:locs(i)-tseBeforePeakfit,:);
+    p2 = polyfit(xTf,yy2Tf,1);
+    yfit = polyval(p2,xTf);
+    yresid=yy2Tf-yfit;
+    SSresid = sum(yresid.^2);
+    SStotal=(length(yy2Tf)-1)*var(yy2Tf);
+    rsq2 = 1-SSresid/SStotal;
+   
+    subplot(1,2,2)
+    hold on
+    plot(xTf,yfit,'-r')
+    title(['RSQ = ' num2str(round(rsq2,3))])
+    
+    hold off
+    strovt = ['peak # = ' num2str(i)]
+
+    kTable(i,1) = locs(i);              % location of peak
+    kTable(i,2) = ugga.time(locs(i),1)  % time of peak 
+    kTable(i,3) = p1(1);                % slope CH4 [mg/L/min]
+    kTable(i,4) = rsq;                  % R2 for CH4 slope
+    kTable(i,5) = p2(1);                % slope CO2 [mg/L/min]
+    kTable(i,6) = rsq2;                 % R2 for CO2 slope
+    %pause
+end
+
+%%
+
+% calculate fluxes
+for i = 1:length(kTable)
+    kTable(i,7) = volT/areaB *kTable(i,3)*1000*60*24; % CH4 flux [mgCH4-C/m2/d]
+    kTable(i,8) = volT/areaB *kTable(i,5)*1000*60*24; % CO2 flux [mgCO2-C/m2/d]
+    kTable(i,9) = volT/areaB *kTable(i,3)*1000*1000/60/12.011; % CH4 flux [umolCH4-C/m2/s]
+    kTable(i,10)= volT/areaB *kTable(i,5)*1000*1000/60/12.011; % CO2 flux [umolCO2-C/m2/s]
+end
+
+dates = datetime(kTable(:,2),'ConvertFrom','datenum');
+
+csvwrite('C:\Users\ahoun\OneDrive\Desktop\Reservoir\Reservoirs\Data\DataNotYetUploadedToEDI\UGGA\Flux_Calcs\06Jul20_Fluxes_2020.csv',kTable);

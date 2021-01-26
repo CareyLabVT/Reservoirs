@@ -32,7 +32,7 @@ colnames(bvrdata1)=c('TIMESTAMP','RECORD','BattV','PTemp_C', 'wtr_1','wtr_2','wt
 #Read in csv of manual uploaded data
 bvrdata3<-read.csv("BVRmanualplatform.csv")
 
-bvrdata= bvrdata3%>%
+bvrdata2= bvrdata3%>%
   filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
   select(!X)%>% #delete column that was added when uploaded
   rbind(.,bvrdata1)%>% #combine manual and most recent files
@@ -40,42 +40,45 @@ bvrdata= bvrdata3%>%
   filter(!TIMESTAMP=="")%>% #take out the rows with blank timestamps
   filter(TIMESTAMP< ymd_hms("2021-01-01 00:00:00", tz = "Etc/GMT+5")) #filter for 2020
 
-  
+bvrdata2$RECORD=as.numeric(bvrdata2$RECORD)  
 
 #change the date from character to unknown making it easier to graph
-bvrdata$TIMESTAMP <- as.POSIXct(bvrdata$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
+bvrdata2$TIMESTAMP <- as.POSIXct(bvrdata2$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
 
 #check record for gaps
 #order data by timestamp
-bvrdata=bvrdata[order(bvrdata$TIMESTAMP),]
-bvrdata$DOY=yday(bvrdata$TIMESTAMP)
+bvrdata2=bvrdata2[order(bvrdata2$TIMESTAMP),]
+bvrdata2$DOY=yday(bvrdata2$TIMESTAMP)
 
 #daily record gaps by day of year
-for(i in 2:nrow(bvrdata)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(bvrdata$DOY[i]-bvrdata$DOY[i-1]>1){
-    print(c(bvrdata$TIMESTAMP[i-1],bvrdata$TIMESTAMP[i]))
+for(i in 2:nrow(bvrdata2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(bvrdata2$DOY[i]-bvrdata2$DOY[i-1]>1){
+    print(c(bvrdata2$TIMESTAMP[i-1],bvrdata2$TIMESTAMP[i]))
   }
 }
 #sub-daily record gaps by record number
-for(i in 2:length(bvrdata$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(abs(bvrdata$RECORD[i]-bvrdata$RECORD[i-1])>1){
-    print(c(bvrdata$TIMESTAMP[i-1],bvrdata$TIMESTAMP[i]))
+for(i in 2:length(bvrdata2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(bvrdata2$RECORD[i]-bvrdata2$RECORD[i-1])>1){
+    print(c(bvrdata2$TIMESTAMP[i-1],bvrdata2$TIMESTAMP[i]))
   }
 }
 
+# convert datetimes to characters so that they are properly formatted in the output file
+#bvrdata$DateTime <- as.character(bvrdata$DateTime)
 #remove the DOY column and change to bvrdata
-bvrdata=select(bvrdata, -DOY)
+bvrdata2=select(bvrdata2, -DOY)
 
-write_csv(bvrdata, 'bvrdata2020_comb.csv')
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform")
+write.csv(bvrdata2, 'bvrdata2020_comb.csv')
 
 qaqc <- function(data_file,maintenance_file,  output_file)
 {
 
 #bvrdata=data_file
 #change column names
-  BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_12.5",
+  BVRDATA_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_12.5",
                         "ThermistorTemp_C_11.5", "ThermistorTemp_C_10.5", "ThermistorTemp_C_9.5", "ThermistorTemp_C_8.5",
-                        "ThermistorTemp_C_7.5", "ThermistorTemp_C__6.5", "ThermistorTemp_C_5.5", "ThermistorTemp_C_4.5",
+                        "ThermistorTemp_C_7.5", "ThermistorTemp_C_6.5", "ThermistorTemp_C_5.5", "ThermistorTemp_C_4.5",
                         "ThermistorTemp_C_3.5","ThermistorTemp_C_2.5","ThermistorTemp_C_1.5","ThermistorTemp_C_0.5",
                         "RDO_mgL_7.5", "RDOsat_percent_7.5", "RDOTemp_C_7.5", "RDO_mgL_0.5",
                         "RDOsat_percent_0.5", "RDOTemp_C_0.5", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
@@ -107,7 +110,7 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   # NOTE: date-times throughout this script are processed as UTC
   bvrdata <- read_csv(data_file, skip=1, col_names = BVRDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
-  
+ bvrdata$X<-NULL
 #read in maintenance log
   log <- read_csv(maintenance_file,
     col_types = cols(
@@ -116,8 +119,7 @@ qaqc <- function(data_file,maintenance_file,  output_file)
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
-  
-  
+ 
   # add flag columns
   bvrdata$Flag_All <- 0
   bvrdata$Flag_DO_1.5 <- 0
@@ -126,6 +128,8 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   bvrdata$Flag_Chla <- 0
   bvrdata$Flag_Phyco <- 0
   bvrdata$Flag_TDS <- 0
+  bvrdata$Flag_fDOM <- 0
+  bvrdata$Flag_Cond <-0
   
   
   
@@ -245,39 +249,71 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   }
   
   # find EXO sonde sensor data that differs from the mean by more than the standard deviation times a given factor, and
-  # replace with NAs between October and March, due to sensor fouling
-  Chla_RFU_1.5_mean <- mean(bvrdata$EXOChla_RFU_1.5, na.rm = TRUE)
-  Chla_ugL_1.5_mean <- mean(bvrdata$EXOChla_ugL_1.5, na.rm = TRUE)
-  BGAPC_RFU_1.5_mean <- mean(bvrdata$EXOBGAPC_RFU_1.5, na.rm = TRUE)
-  BGAPC_ugL_1.5_mean <- mean(bvrdata$EXOBGAPC_ugL_1.5, na.rm = TRUE)
-  Chla_RFU_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOChla_RFU_1.5, na.rm = TRUE)
-  Chla_ugL_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOChla_ugL_1.5, na.rm = TRUE)
-  BGAPC_RFU_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOBGAPC_RFU_1.5, na.rm = TRUE)
-  BGAPC_ugL_1.5_threshold <- EXO_FOULING_FACTOR * sd(bvrdata$EXOBGAPC_ugL_1.5, na.rm = TRUE)
-
-  #bvrdata <- bvrdata %>%
-    #mutate(Flag_Chla = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                #(! is.na(EXOChla_RFU_1.5) & abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold |
-                                 #! is.na(EXOChla_ugL_1.5) & abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold),
-                              #4, Flag_Chla)) %>%
-    #mutate(Flag_Phyco = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                 #(! is.na(EXOBGAPC_RFU_1.5) & abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold |
-                                  #! is.na(EXOBGAPC_ugL_1.5) & abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold),
-                               #4, Flag_Phyco)) %>%
-    #mutate(EXOChla_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                  #abs(EXOChla_RFU_1.5 - Chla_RFU_1.5_mean) > Chla_RFU_1.5_threshold, NA, EXOChla_RFU_1.5)) %>%
-    #mutate(EXOChla_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                  #abs(EXOChla_ugL_1.5 - Chla_ugL_1.5_mean) > Chla_ugL_1.5_threshold, NA, EXOChla_ugL_1.5)) %>%
-    #mutate(EXOBGAPC_RFU_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                   #abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold, NA, EXOBGAPC_RFU_1.5)) %>%
-    #mutate(EXOBGAPC_ugL_1.5 = ifelse(DateTime >= ymd("2020-10-01") & DateTime < ymd("2021-03-01") &
-                                   #abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold, NA, EXOBGAPC_ugL_1.5))
   
-  # flag EXO sonde sensor data of value above 4 * standard deviation at other times
-  bvrdata <- bvrdata %>%
-    mutate(Flag_Phyco = ifelse(! is.na(EXOBGAPC_RFU_1.5) & abs(EXOBGAPC_RFU_1.5 - BGAPC_RFU_1.5_mean) > BGAPC_RFU_1.5_threshold |
-                               ! is.na(EXOBGAPC_ugL_1.5) & abs(EXOBGAPC_ugL_1.5 - BGAPC_ugL_1.5_mean) > BGAPC_ugL_1.5_threshold,
-                               5, Flag_Phyco))
+  # chl and phyco qaqc ----
+  # perform qaqc on the entire dataset for chl and phyco
+  
+  # assign standard deviation thresholds
+  sd_4 <- 4*sd(bvrdata$EXOChla_ugL_1.5, na.rm = TRUE)
+  threshold <- sd_4
+  sd_4_phyco <- 4*sd(bvrdata$EXOBGAPC_ugL_1.5, na.rm = TRUE)
+  threshold_phyco <- sd_4_phyco 
+  
+  # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+  bvrdata <- bvrdata %>% 
+    mutate(Chla = lag(EXOChla_ugL_1.5, 0),
+           Chla_lag1.5 = lag(EXOChla_ugL_1.5, 1),
+           Chla_lead1.5 = lead(EXOChla_ugL_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+    mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+    mutate(EXOChla_ugL_1.5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1.5)) %>% 
+    mutate(EXOChla_RFU_1.5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1.5)) %>% 
+    mutate(EXOChla_ugL_1.5 = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOChla_ugL_1.5)) %>%   
+    mutate(EXOChla_RFU_1.5 = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOChla_RFU_1.5)) %>% 
+    mutate(Flag_Chla = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold)) & !is.na(Chla), 
+                              2, Flag_Chla)) %>% 
+    select(-Chla, -Chla_lag1.5, -Chla_lead1.5)
+  
+  # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+  bvrdata <- bvrdata %>% 
+    mutate(phyco = lag(EXOBGAPC_ugL_1.5, 0),
+           phyco_lag1.5 = lag(EXOBGAPC_ugL_1.5, 1),
+           phyco_lead1.5 = lead(EXOBGAPC_ugL_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+    mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+    mutate(EXOBGAPC_RFU_1.5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1.5)) %>% 
+    mutate(EXOBGAPC_ugL_1.5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1.5)) %>% 
+    mutate(EXOBGAPC_ugL_1.5 = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+                                     NA, EXOBGAPC_ugL_1.5)) %>%   
+    mutate(EXOBGAPC_RFU_1.5 = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+                                     NA, EXOBGAPC_RFU_1.5)) %>% 
+    mutate(Flag_Phyco = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+                               2, Flag_Phyco)) %>%
+    select(-phyco, -phyco_lag1.5, -phyco_lead1.5)
+  
+  #deteriming the standard deviation of fDOM data 
+  sd_fDOM <- sd(bvrdata$EXOfDOM_QSU_1.5, na.rm = TRUE) 
+  bvrdata <- bvrdata %>% 
+    mutate(fDOM = lag(EXOfDOM_QSU_1.5, 0),
+           fDOM_lag1.5 = lag(EXOfDOM_QSU_1.5, 1),
+           fDOM_lead1.5 = lead(EXOfDOM_QSU_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(Flag_fDOM = ifelse(fDOM < 0 & !is.na(fDOM), 3, Flag_fDOM),
+           EXOfDOM_QSU_1.5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_QSU_1.5),
+           EXOfDOM_RFU_1.5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_RFU_1.5),
+           Flag_fDOM = ifelse(fDOM < 0, 2, Flag_fDOM)   ) %>% #These mutates are QAQCing for negative fDOM QSU values and setting these to NA and making a flag for these. This was done outside of the 2 sd deviation rule because there were two negative points in a row and one was not removed with the follwoing if else statements. 
+    mutate(EXOfDOM_QSU_1.5 = ifelse(
+      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1.5
+    )) %>%  #QAQC to remove outliers for QSU fDOM data 
+    mutate(EXOfDOM_RFU_1.5 = ifelse(
+      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), NA, EXOfDOM_RFU_1.5
+    )) %>% #QAQC to remove outliers for RFU fDOM data
+    mutate(Flag_fDOM = ifelse(
+      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), 2, Flag_fDOM
+    ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
+    select(-fDOM, -fDOM_lag1.5, -fDOM_lead1.5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
+  
   
   # delete EXO_Date and EXO_Time columns
   bvrdata <- bvrdata %>% select(-EXO_Date, -EXO_Time)
@@ -295,7 +331,8 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   
   # convert datetimes to characters so that they are properly formatted in the output file
   bvrdata$DateTime <- as.character(bvrdata$DateTime)
-  
+ 
+ 
   # write to output file
   write_csv(bvrdata, output_file)
 }
@@ -307,4 +344,4 @@ qaqc <- function(data_file,maintenance_file,  output_file)
 
 qaqc('bvrdata2020_comb.csv',
       "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
-       "BVRplatform.csv")
+       "BVRplatform_clean.csv")

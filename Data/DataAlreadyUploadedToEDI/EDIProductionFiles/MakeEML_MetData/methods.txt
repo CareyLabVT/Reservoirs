@@ -61,3 +61,5 @@ The outlier thresholds were developed by comparison with the NOAA Roanoke Airpor
 The PAR data from 2019-08-04 to 2019-08-05 and from 2019-08-15 to 2019-12-13 were set to NA due to probable sensor failure or fouling as sensor recorded values near 0 for this period. This was done in 2020  from 2020-07-03 11:56 to 2020-07-21 13:38 from 2020-11-01 12:37 to 2020-11-24 12:32, and from 2020-12-01 09:54 to 2020-12-31 23:59. 
 
 All QA/QC code used for the dataset is archived with this dataset.
+
+Please note: When pulling the file via EDI's API, we recommend using the function "read.csv" instead of "read_csv". The function 'read_csv' identifies some of the Note columns as "logical" instead of "character" due to >100 NA's at the beginning of the dataset. This is avoided when using the function "read.csv".

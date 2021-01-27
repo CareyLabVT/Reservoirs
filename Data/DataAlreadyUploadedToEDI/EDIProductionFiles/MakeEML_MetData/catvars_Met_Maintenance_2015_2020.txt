@@ -11,8 +11,8 @@ Parameter	SR01Dn_Avg	Any maintenance done to the shortwave down sensor
 Parameter	IR01DnCo_Avg	Any maintenance done to the infared down sensor
 Parameter	IR01UpCo_Avg	Any maintenance done to the infared up sensor
 Parameter	Albedo_Avg	Any maintenance down to the up or down light sensors to affect albedo calculations
-Parameter	WindDir	Any maintenance done to the infared up sensor
-Parameter	WS_ms_Avg	Any maintenance done to the infared up sensor
+Parameter	WindDir	Any maintenance done to the anemometer
+Parameter	WS_ms_Avg	Any maintenance done to theanemometer
 Notes	calibrated_rain_gauge	Rain gauge was re-calibrated
 Notes	calibrated_rain_gauge_and_releveled	Rain gauge was re-calibrated and re-leveled
 Notes	cleaned_air_temp_shield	Air temperature shield was cleaned

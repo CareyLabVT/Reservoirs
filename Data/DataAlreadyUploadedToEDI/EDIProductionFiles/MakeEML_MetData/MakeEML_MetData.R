@@ -1,7 +1,7 @@
 ##MakeEML_MetData
 ##Author: Cayelan Carey
 ##Date: 21 July 2019
-## Updated: 07 Feb 2020, A. Hounshell
+## Updated: 27 Jan 2021, A. Breef-Pilz
 
 setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData")
 # # Install devtools
@@ -152,7 +152,7 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.4") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.389.5") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

@@ -1,10 +1,10 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	categorical			NA	No data
 Site	Sampling site within each reservoir; 50 = site closest to the dam	numeric	dimensionless		NA	No data
-DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.	Date		YYYY-MM-DD HH:MM:SS	NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A. with daylight savings time observed	Date		YYYY-MM-DD HH:MM:SS	NA	No data
 Depth_m	Depth chaoborus were sampled from for gas extraction	numeric	meter		NA	No data
 Rep	Vial rep number	numeric	dimensionless		NA	No data
-CH4_umolL	Methane concentration	numeric	micromolePerLiter		NA	No data
+CH4_umolL	Methane concentration in vial	numeric	micromolePerLiter		NA	No data
 NumberChaoborus_NumPerVial	Number of Chaoborus per vial	numeric	dimensionless		NA	No data
 Chaoborus_Length_mm	Average length of Chaoborus in vial	numeric	millimeters		NA	No data
 Chaoborus_DryWeight_ug	Total mass of Chaoborus in vial	numeric	micrograms		NA	No data

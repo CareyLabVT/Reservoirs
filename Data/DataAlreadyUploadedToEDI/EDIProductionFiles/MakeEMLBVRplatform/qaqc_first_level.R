@@ -76,15 +76,15 @@ qaqc <- function(data_file,maintenance_file,  output_file)
 
 #bvrdata=data_file
 #change column names
-  BVRDATA_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_12.5",
-                        "ThermistorTemp_C_11.5", "ThermistorTemp_C_10.5", "ThermistorTemp_C_9.5", "ThermistorTemp_C_8.5",
-                        "ThermistorTemp_C_7.5", "ThermistorTemp_C_6.5", "ThermistorTemp_C_5.5", "ThermistorTemp_C_4.5",
-                        "ThermistorTemp_C_3.5","ThermistorTemp_C_2.5","ThermistorTemp_C_1.5","ThermistorTemp_C_0.5",
-                        "RDO_mgL_7.5", "RDOsat_percent_7.5", "RDOTemp_C_7.5", "RDO_mgL_0.5",
-                        "RDOsat_percent_0.5", "RDOTemp_C_0.5", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
+  BVRDATA_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
+                        "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
+                        "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
+                        "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
+                        "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
+                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
                         "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
                         "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
-                        "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_0.5", "LvlTemp_C_0.5")
+                        "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
   
  
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
@@ -123,14 +123,27 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   # add flag columns
   bvrdata$Flag_All <- 0
   bvrdata$Flag_DO_1.5 <- 0
-  bvrdata$Flag_DO_7.5 <- 0
-  bvrdata$Flag_DO_0.5 <- 0
+  bvrdata$Flag_DO_6 <- 0
+  bvrdata$Flag_DO_13 <- 0
   bvrdata$Flag_Chla <- 0
   bvrdata$Flag_Phyco <- 0
   bvrdata$Flag_TDS <- 0
   bvrdata$Flag_fDOM <- 0
   bvrdata$Flag_Cond <-0
-  
+  bvrdata$Flag_Lvl <-0
+  bvrdata$Flag_Temp_1 <-0
+  bvrdata$Flag_Temp_2 <-0
+  bvrdata$Flag_Temp_3 <-0
+  bvrdata$Flag_Temp_4 <-0
+  bvrdata$Flag_Temp_5 <-0
+  bvrdata$Flag_Temp_6 <-0
+  bvrdata$Flag_Temp_7 <-0
+  bvrdata$Flag_Temp_8 <-0
+  bvrdata$Flag_Temp_9 <-0
+  bvrdata$Flag_Temp_10 <-0
+  bvrdata$Flag_Temp_11 <-0
+  bvrdata$Flag_Temp_12 <-0
+  bvrdata$Flag_Temp_13 <-0
   
   
   # replace negative DO values with 0
@@ -141,18 +154,19 @@ qaqc <- function(data_file,maintenance_file,  output_file)
     mutate(EXODOsat_percent_1.5 = ifelse(EXODOsat_percent_1.5 <0, 0, EXODOsat_percent_1.5))
   
   bvrdata <- bvrdata %>%
-    mutate(Flag_DO_7.5 = ifelse((! is.na(RDO_mgL_7.5) & RDO_mgL_7.5 < 0)
-                            | (! is.na(RDOsat_percent_7.5) & RDOsat_percent_7.5 < 0), 3, Flag_DO_7.5)) %>%
-    mutate(RDO_mgL_7.5 = ifelse(RDO_mgL_7.5 < 0, 0, RDO_mgL_7.5)) %>%
-    mutate(RDOsat_percent_7.5 = ifelse(RDOsat_percent_7.5 < 0, 0, RDOsat_percent_7.5))
+    mutate(Flag_DO_6 = ifelse((! is.na(RDO_mgL_6) & RDO_mgL_6 < 0)
+                            | (! is.na(RDOsat_percent_6) & RDOsat_percent_6 < 0), 3, Flag_DO_6)) %>%
+    mutate(RDO_mgL_6 = ifelse(RDO_mgL_6 < 0, 0, RDO_mgL_6)) %>%
+    mutate(RDOsat_percent_6 = ifelse(RDOsat_percent_6 < 0, 0, RDOsat_percent_6))
 
   bvrdata <- bvrdata %>%
-    mutate(Flag_DO_0.5 = ifelse((! is.na(RDO_mgL_0.5) & RDO_mgL_0.5 < 0)
-                            | (! is.na(RDOsat_percent_0.5) & RDOsat_percent_0.5 < 0), 3, Flag_DO_0.5)) %>%
-    mutate(RDO_mgL_0.5 = ifelse(RDO_mgL_0.5 < 0, 0, RDO_mgL_0.5)) %>%
-    mutate(RDOsat_percent_0.5 = ifelse(RDOsat_percent_0.5 < 0, 0, RDOsat_percent_0.5))
+    mutate(Flag_DO_13 = ifelse((! is.na(RDO_mgL_13) & RDO_mgL_13 < 0)
+                            | (! is.na(RDOsat_percent_13) & RDOsat_percent_13 < 0), 3, Flag_DO_13)) %>%
+    mutate(RDO_mgL_13 = ifelse(RDO_mgL_13 < 0, 0, RDO_mgL_13)) %>%
+    mutate(RDOsat_percent_13 = ifelse(RDOsat_percent_13 < 0, 0, RDOsat_percent_13))
   
-  # modify bvrdata based on the information in the log
+  
+   # modify bvrdata based on the information in the log
   for(i in 1:nrow(log))
     {
     # get start and end time of one maintenance event
@@ -314,6 +328,9 @@ qaqc <- function(data_file,maintenance_file,  output_file)
     ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
     select(-fDOM, -fDOM_lag1.5, -fDOM_lead1.5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
   
+  #create depth column
+  bvrdata=bvrdata%>%
+    mutate(Depth_m_13=Lvl_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
   
   # delete EXO_Date and EXO_Time columns
   bvrdata <- bvrdata %>% select(-EXO_Date, -EXO_Time)
@@ -323,8 +340,8 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   bvrdata$Site <- "50"
   
   # reorder columns
-  bvrdata <- bvrdata %>% select(Reservoir, Site, -RECORD, -CR6_Batt_V, -CR6Panel_Temp_C, -Flag_All, -Flag_DO_1.5, -Flag_DO_7.5,
-                                -Flag_DO_0.5, -Flag_Chla, -Flag_Phyco, -Flag_TDS, everything())
+  bvrdata <- bvrdata %>% select(Reservoir, Site, -RECORD, -CR6_Batt_V, -CR6Panel_Temp_C, -Flag_All, -Flag_DO_1.5, -Flag_DO_6,
+                                -Flag_DO_13, -Flag_Chla, -Flag_Phyco, -Flag_TDS, everything())
   
   # replace NaNs with NAs
   bvrdata[is.na(bvrdata)] <- NA

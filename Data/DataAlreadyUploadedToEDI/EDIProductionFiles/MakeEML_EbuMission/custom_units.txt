@@ -1,0 +1,5 @@
+id	unitType	parentSI	multiplierToSI	description
+milligramPerMeterSquaredPerDay	arealMassDensityRate	milligramPerMeter	1	milligrams per square meter per day
+joulesPerKilogram	energyPerMass	meterSquarePerSecondSquare	1	joules per kilogram
+Latitude	Angle	decimalDegrees	1	degree latitude
+Longitude	Angle	decimalDegrees	1	degree longitude

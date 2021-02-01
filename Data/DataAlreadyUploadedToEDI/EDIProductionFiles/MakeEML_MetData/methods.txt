@@ -1,6 +1,6 @@
-Meteorological data were collected from 2015 through 2019 using a research-grade meteorological station from Campbell Scientific (Logan, UT, USA). Data were collected at 1 minute intervals, except for a brief period at the beginning of the dataset from 2015-07-07 16:45:00 to 2015-07-13 12:20:00 (YYYY-MM-DD hh:mm:ss), when data were recorded at 5-minute intervals. All observations are recorded in the GMT -5 time zone (Eastern Standard time) without any time zone changes in the data record.
+Meteorological data were collected from 2015 through 2020 using a research-grade meteorological station from Campbell Scientific (Logan, UT, USA). Data were collected at 1 minute intervals, except for a brief period at the beginning of the dataset from 2015-07-07 16:45:00 to 2015-07-13 12:20:00 (YYYY-MM-DD hh:mm:ss), when data were recorded at 5-minute intervals. To correct for the difference in time interval of data collection, we divided the Rain_Total_mm variable by 5 minutes to get a rate of precipitation in millimeters per minute so that the precipitation data is comparable throughout the dataset; values that were changed in July 2015 were given a "flag 4" in the dataset. All observations are recorded in the GMT -5 time zone (Eastern Standard time) without any time zone changes in the data record.
 
-Instruments, manual, and serial numbers used between 2015 - 2018:
+Instruments, manual, and serial numbers used between 2015 - 2020:
 Campbell Scientific CR3000 Micrologger  SERIAL NO. 10344
 https://s.campbellsci.com/documents/us/manuals/cr3000.pdf
 
@@ -28,34 +28,38 @@ Description of the battery and power flow
 The meteorological station is powered with a solar panel and lead acid battery. Using a regulator, the solar panel charges the battery, and the battery powers the CR3000 datalogger. 
 Data Quality Assurance/Quality Control (QA/QC) procedures
 Missing data: Major gaps lasting longer than 1 day in the record occurred during these intervals:
-"2016-10-14 16:08:00" to "2016-12-19 15:21:00”, "2017-02-06 10:05:00" to "2017-04-24 14:48:00”, and "2018-03-19 11:05:00" to "2018-04-05 12:25:00”.  Sub-daily gaps occurred on “2015-07-13”, “2016-07-25”, “2016-10-14”, “2017-10-09”, “2018-05-21”, “2018-09-24”, "2019-02-08”, "2019-04-15”,  "2019-04-22”, "2019-05-20", ”2019-08-28", and "2019-11-08".
+"2016-10-14 16:08:00" to "2016-12-19 15:21:00", "2017-02-06 10:05:00" to "2017-04-24 14:48:00", and "2018-03-19 11:05:00" to "2018-04-05 12:25:00".  Sub-daily gaps occurred on "2015-07-13", "2016-07-25", "2016-10-14", "2017-10-09", "2018-05-21", "2018-09-24", "2019-02-08", and  "2019-04-22" .
 
-We automated QA/QC with an R script (archived with this dataset) that set flags and removed outliers. Smaller gaps in data for a few hours or less due to maintenance occurred throughout the dataset. We set erroneous values due to maintenance as NA (flag 1) in the dataset. For all flag descriptions, see the data table metadata below. There is only one flag per variable in the dataset with all unique flag values; flag 1 for maintenance in some cases overwrote other existing flags. All previously existing NAs due to missing observations other than maintenance were flagged as 2 for convenience in analysis. Negative values were set to 0 for all meteorological variable columns except AirTemp_Average_C and data logger variables. Values over 100% were set to 100 for Relative Humidity. Infinite values were set to NA for all variables and flagged as 3.
-The AirTemp_Average_C variable received more intensive QA/QC than other meteorological variables due to fouling of the sensor filter. After the first year of deployment and before replacement of the sensor filter in February 2019, the air temperature sensor exhibited more outliers than should be typical. We used the data from the initial year of deployment prior to fouling (2015) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor, which did not exhibit any outliers or evidence of fouling.
+We automated QA/QC with an R script (archived with this dataset) that set flags and removed outliers. Smaller gaps in data for a few hours or less due to maintenance occurred throughout the dataset. We set erroneous values due to maintenance as NA (flag 1) in the dataset. For all flag descriptions, see the data table metadata below. There is only one flag per variable in the dataset with all unique flag values; flag 1 for maintenance in some cases overwrote other existing flags. All previously existing NAs due to missing observations other than maintenance were flagged as 2. Negative values were set to 0 for all meteorological variable columns except AirTemp_Average_C and data logger variables and flagged as 4. Values over 100% were set to 100 for Relative Humidity. Infinite values were set to NA for all variables and flagged as 3.
+The AirTemp_Average_C variable received intensive QA/QC  due to fouling of the sensor filter. After the first year of deployment and before replacement of the sensor filter in February 2019, the air temperature sensor exhibited more outliers than expected. We used the data from the initial year of deployment prior to fouling (2015) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor, which did not exhibit any outliers or evidence of fouling.
 
 The 2015  relationship can be described by the following equation:
-AirTemp_Average_C = 1.627758(±0.004510, 1 SE) + 0.900781(±0.000252)×CR3000Panel_temp_C
-This relationship’s adjusted R-squared value was 0.98. The residuals from this equation were minimum: -7.3922, 1st quartile: -0.6315, median: 0.0244, 3rd quartile: 0.5602, and maximum: 11.0234. If any air temperature values after 2015 and before February 21st, 2019 were above the upper 3 standard deviations of the residuals from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. This occurred for 175158 observations. 
+AirTemp_Average_C = 1.627758(_0.004510, 1 SE) + 0.900781(_0.000252)_CR3000Panel_temp_C
+This relationship's adjusted R-squared value was 0.98. The residuals from this equation were minimum: -7.3922, 1st quartile: -0.6315, median: 0.0244, 3rd quartile: 0.5602, and maximum: 11.0234. If any air temperature values were above the upper 3 standard deviations of the residuals from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. This occurred for 207397 observations during 2015-2020. 
 
 Given that temperature and relative humidity are measured with the same sensor, we flagged the time period after 2015 for potentially higher humidity values but left the observed values in the dataset.
 
-Infrared Radiation Up and Down variables were recorded in volts from 2015-07-07 16:45:00 to 2016-07-25 10:55:00. These values were corrected using equations from the manufacturer's manual:
+Infrared Radiation Up and Down variables were recorded in volts from 2015-07-07 16:45:00 to 2016-07-25 10:12:00. These values were corrected using equations from the manufacturer's manual:
 InfaredRadiationUp_Average_W_m2 = InfaredRadiationUp_Average_W_m2+5.67 times 10 to the (-8) times (AirTemp_Average_C+273.15) to the 4th power
 InfaredRadiationDown_Average_W_m2 = 5.67 times 10 to the (-8)times(AirTemp_Average_C+273.15)to the 4th power
 
-The InfaredRadiationDown_Average_W_m2 variable also received more intensive QA/QC than other meteorological variables due to potential fouling of the sensor in 2018 and 2019. From 2018-08-02 to 2018-09-10 and 2019-07-06 to 2019-07-16, the sensor exhibited atypical low values which were alleviated after the sensor was cleaned on 2018-09-10 12:32:00. We used the data from the years before the fouling incident in 2018 (2015-2017) to calculate the mean and standard deviation of the variable by day of the year (1-366). If values were not within 3 standard deviations of the mean on a given day of the year, they were corrected to the mean for that day and flagged.
+The InfaredRadiationDown_Average_W_m2 variable also received intensive QA/QC due to potential fouling of the sensor in 2018,  2019, and 2020. From 2018-08-02 to 2018-09-10 and 2019-07-06 to 2019-07-16, the sensor exhibited atypical low values which were alleviated after the sensor was cleaned on 2018-09-10 12:32:00. We used the data from the years before the fouling incident in 2018 (2015-2017) to calculate the mean and standard deviation of the variable by day of the year (1-366). If values were not within 3 standard deviations of the mean on a given day of the year, they were corrected to the mean for that day and flagged with "flag 4". From 2020-06-10 to 2020-07-15, the values seemed lower than previous years so for this time period we added a "flag 5" to values less than 400 W/m2 but left the values in the dataset.  
 
-After previously described adjustments, outliers were set to NA and received ‘flag 4’ in the dataset, following these outlier thresholds:
+The ShortwaveRadiationUp_Average_W_m2 variable had higher than observed readings in 2018-09-05 12:00 to 2018-09-07 and 2020-05-31 00:00 to 2020-07-10 23:59. The values in 2018 were due to sensor error and fouling as it was right before a cleaning on 2018-09-10. All values during that time were flagged and changed to NA. For the summer values in 2020, outliers were removed according to the outlier value below and values between 1499-1300 m2 were flagged for questionable high values with flag 5. 
+
+After previously described adjustments, outliers were set to NA and received 'flag 4' in the dataset, following these outlier thresholds:
 AirTemp_Average_C > 40.6
 InfaredRadiationUp_Average_W_m2 < 150
-BP_Average_kPa < 95
+BP_Average_kPa < 98.5
 PAR_Total_mmol_m2 > 200
-ShortwaveRadiationUp_Average_W_m2 > 2000
+ShortwaveRadiationUp_Average_W_m2 > 1500
 ShortwaveRadiationDown_Average_W_m2 > 300
 Albedo_Average_W_m2 > 1000
 
 The outlier thresholds were developed by comparison with the NOAA Roanoke Airport dataset. The Roanoke Airport is located ~10 km away from Falling Creek Reservoir.
 
-The PAR data from 2019-08-04 to 2019-08-05 and from 2019-08-15 to 2019-12-13 were set to NA due to probable sensor failure or fouling as sensor recorded values near 0 for this period.
+The PAR data from 2019-08-04 to 2019-08-05 and from 2019-08-15 to 2019-12-13 were set to NA due to probable sensor failure or fouling as sensor recorded values near 0 for this period. This was done in 2020  from 2020-07-03 11:56 to 2020-07-21 13:38 from 2020-11-01 12:37 to 2020-11-24 12:32, and from 2020-12-01 09:54 to 2020-12-31 23:59. 
 
 All QA/QC code used for the dataset is archived with this dataset.
+
+Please note: When pulling the file via EDI's API, we recommend using the function "read.csv" instead of "read_csv". The function 'read_csv' identifies some of the Note columns as "logical" instead of "character" due to >100 NA's at the beginning of the dataset. This is avoided when using the function "read.csv".

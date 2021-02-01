@@ -1,4 +1,4 @@
-Reservoir,Site,DateTime,Depth_m,Rep,CH4_umol_L,NumberChaoborus_vial,Chaoborus_length_mm,Chaoborus_DryWeight_ug,Biomass ,Flag_depth,Flag_rep,Flag_CH4_umol_L,Flag_NumberChaoborus_vial,Flag_Chaoborus_length_mm,Flag_Chaoborus_DryWeight_ug,Flag_Chaoborus_Biomass_ug_L
+Reservoir,Site,DateTime,Depth_m,Rep,CH4_umolL,NumberChaoborus_NumPerVial,Chaoborus_Length_mm,Chaoborus_DryWeight_ug,Biomass_ugL,Flag_Depth_m,Flag_Rep,Flag_CH4_umolL,Flag_NumberChaoborus_NumPerVial,Flag_Chaoborus_Length_mm,Flag_Chaoborus_DryWeight_ug,Flag_Chaoborus_Biomass_ugL
 BVR,50,2016-08-03 12:01:00,5,1,0.123914801,25,NA,NA,NA,0,0,7,0,1,1,1
 BVR,50,2016-08-03 12:01:00,10,1,6.008739515,25,NA,NA,NA,0,0,7,0,1,1,1
 BVR,50,2016-08-03 12:01:00,10,2,1.95248243,25,NA,NA,NA,0,0,7,0,1,1,1

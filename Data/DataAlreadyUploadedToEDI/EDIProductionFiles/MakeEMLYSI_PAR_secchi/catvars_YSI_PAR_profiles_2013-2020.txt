@@ -1,0 +1,7 @@
+attributeName	code	definition
+Reservoir	BVR	
+Reservoir	CCR	
+Reservoir	FCR	
+Reservoir	GWR	
+Reservoir	SHR	
+Notes		

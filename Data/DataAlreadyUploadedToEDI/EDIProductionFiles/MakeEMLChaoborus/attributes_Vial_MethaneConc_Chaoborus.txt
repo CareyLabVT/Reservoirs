@@ -6,8 +6,8 @@ Depth_m	Depth chaoborus were sampled from for gas extraction	numeric	meter		NA	N
 Rep	Vial rep number	numeric	dimensionless		NA	No data
 CH4_umolL	Methane concentration	numeric	micromolePerLiter		NA	No data
 NumberChaoborus_NumPerVial	Number of Chaoborus per vial	numeric	dimensionless		NA	No data
-Chaoborus_Length_mm	Average length of Chaoborus in vial	numeric	millimeters		NA	No data
-Chaoborus_DryWeight_ug	Total mass of Chaoborus in vial	numeric	micrograms		NA	No data
+Chaoborus_Length_mm	Average length of Chaoborus in vial	numeric	millimeter		NA	No data
+Chaoborus_DryWeight_ug	Total mass of Chaoborus in vial	numeric	microgram		NA	No data
 Biomass_ugL	Biomass of Chaoborus per vial	numeric	microgramsPerLiter		NA	No data
 Flag_Depth_m	Data flag for site depths; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
 Flag_Rep	Data flag for vial reps; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data

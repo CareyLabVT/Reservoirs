@@ -38,22 +38,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
+template_core_metadata(path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-                          data.path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-                          data.table = c("Solutes_EDI_TEAPS.csv"),
+template_table_attributes(path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+                          data.path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+                          data.table = c("Vial_MethaneConc_Chaoborus.csv", "WaterColumn_MethaneConc_ChaoborusDensity.csv"),
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-                             data.path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-                             data.table = c("Solutes_EDI_TEAPS.csv"),
+template_geographic_coverage(path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+                             data.path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+                             data.table = c("Vial_MethaneConc_Chaoborus.csv", "WaterColumn_MethaneConc_ChaoborusDensity.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -97,8 +97,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-                               data.path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
+template_categorical_variables(path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+                               data.path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -126,18 +126,20 @@ template_categorical_variables(path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSIN
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-  data.path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-  eml.path = "C:/Users/Owner/Dropbox/EDI_DATA_PROCESSING/MakeEML_TEAPs",
-  dataset.title = "Time series of iron (II) and sulfate concentrations for Beaverdam and Falling Creek Reservoirs in southwestern Virginia, USA during 2016",
-  temporal.coverage = c("2016-05-12", "2016-10-14"),
+  path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+  data.path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+  eml.path = "C:/Users/Owner/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChaoborus",
+  dataset.title = "Depth profiles of water column dissolved methane, density and biomass of zooplankton (specifically, Chaoborus spp.), and measurements of methane extracted from the tracheal gas sacs of Chaoborus spp. during two sampling efforts in 2016",
+  temporal.coverage = c("2016-08-03", "2016-09-17"),
   maintenance.description = 'completed',
-  data.table = 'Solutes_EDI_TEAPS.csv',
-  data.table.description = "Iron (II) and sulfate concentrations in Beaverdam and Falling Creek Reservoirs",
-  data.table.name = "Iron (II) and sulfate data",
+  data.table = c("Vial_MethaneConc_Chaoborus.csv", "WaterColumn_MethaneConc_ChaoborusDensity.csv"),
+  data.table.description = c("Measurements of methane extracted from the tracheal gas sacs of Chaoborus spp.",
+                             "Depth profiles of water column dissolved methane, density and biomass of Chaoborus spp."),
+  data.table.name = c("Methane Extracted from Chaooborus spp.",
+                      "Ambient Water Column Methane Concentrations"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.607.0')
+  package.id = 'edi.151.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

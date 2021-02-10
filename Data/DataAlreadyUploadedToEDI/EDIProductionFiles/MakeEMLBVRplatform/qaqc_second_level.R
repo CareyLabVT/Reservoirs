@@ -4,22 +4,28 @@
 # final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles"
-source(paste0(folder, "MakeEMLBVRplatform/qaqc_first_level.R"))
+folder <- "~/VT_Carey_Lab/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/"
+source(paste0(folder, "qaqc_first_level.R"))
 
+# download most up to date catwalk data and maintenance log
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log.txt"))
+download.file('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv',paste0(folder, "/BVRplatform.csv")) 
+download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRplatform_manual_2020.csv',paste0(folder, "/BVRmanualplatform.csv") )
 
 # run standard qaqc
-#data_file <- paste0(folder, 'misc_data_files/Catwalk_2020.csv')
-#maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2020.txt")
-#output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2020.csv")
-#qaqc(data_file, maintenance_file, output_file)
+data_file <- paste0(folder, '/BVRplatform.csv')
+data2_file <- paste0(folder, '/BVRmanualplatform.csv')
+maintenance_file <- paste0(folder, "/BVR_maintenance_log.txt")
+output_file <- paste0(folder, "/BVRplatform_clean.csv")
+output2_file <- paste0(folder, "/BVR_Maintenance_2020.csv")
+qaqc(data_file, data2_file, maintenance_file, output_file, output2_file)
+
+
 
 # read in qaqc function output
-bvrdata_clean <- read.csv("BVRplatform_clean.csv") 
+bvrdata_clean <- read.csv(output_file) 
 bvrdata_clean$DateTime<-as.POSIXct(bvrdata_clean$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
-#setting the raw data for comparison
-bvrdata_raw=bvrdata2
 
 
 # Flag values
@@ -42,7 +48,7 @@ bvrdata_raw=bvrdata2
 
 #add a depth column which we set NAs for when the thermistor is out of the water. Flag 2
 bvrdata_clean=bvrdata_clean%>%
-  mutate(depth_1=Depth_m_13-11.81)%>%
+  mutate(depth_1=Depth_m_13-11.82)%>%
   mutate(depth_2=Depth_m_13-11.478)
 
 
@@ -324,12 +330,12 @@ bvrdata_clean=bvrdata_clean%>%
 #Take out and flagging some points
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Chla= ifelse(DateTime=="2020-08-01 12:50:00 tz=Etc/GMT+5", 5, Flag_Chla))%>%
-  mutate(Flag_Chla= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", 2, Flag_Chla))%>%
-  mutate(Flag_Chla= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", 2, Flag_Chla))
-  mutate(EXOChla_RFU_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_RFU_1.5))%>%
-  mutate(EXOChla_mgL_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_mgL_1.5))%>%
+  mutate(Flag_Chla= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", 2, Flag_Chla))%>%
+  mutate(Flag_Chla= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", 2, Flag_Chla))%>%
+  mutate(EXOChla_RFU_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_RFU_1.5))%>%
+  mutate(EXOChla_ugL_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1.5))%>%
   mutate(EXOChla_RFU_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOChla_RFU_1.5))%>%
-  mutate(EXOChla_mgL_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOChla_mgL_1.5))
+  mutate(EXOChla_ugL_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1.5))
   
 #bvrdata_clean%>%
 #    select(DateTime, Flag_Chla)%>%
@@ -428,8 +434,8 @@ bvrdata_clean=bvrdata_clean%>%
 
 #Add flags when the wire was not connected
 bvrdata_clean=bvrdata_clean%>%
-  mutate(Flag_Lvl=ifelse(is.na(Lvl_psi_13)& DateTime>="2020-10-26 12:00:00" & DateTime<="2020-10-30 09:40:00",
-                         7, Flag_Lvl))
+  mutate(Flag_Lvl_13=ifelse(is.na(Lvl_psi_13)& DateTime>="2020-10-26 12:00:00" & DateTime<="2020-10-30 09:40:00",
+                         7, Flag_Lvl_13))
 
 
 #temp_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = LvlTemp_C_13)) +
@@ -494,8 +500,8 @@ bvrdata_clean <- bvrdata_clean %>%
          EXODO_mgL_1.5, EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5, 
          EXOfDOM_RFU_1.5, EXOfDOM_QSU_1.5, EXO_pressure_1.5, EXO_depth, EXO_battery, EXO_cablepower, 
          EXO_wiper,  RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
-         Flag_All,Flag_Temp_1:Flag_Temp_13,Flag_DO_1.5, Flag_DO_6, Flag_DO_13,Flag_Lvl, 
+         Flag_All,Flag_Temp_1:Flag_Temp_13,Flag_DO_1.5, Flag_DO_6, Flag_DO_13,Flag_Lvl_13, 
          Flag_Chla,Flag_Phyco,Flag_TDS,Flag_fDOM,Flag_Cond )
 
 
-write.csv(bvrdata_clean, 'BVR_EDI_2020.csv', row.names = FALSE)
+write.csv(bvrdata_clean, 'BVR_EDI_2020.csv', row.names = FALSE, quote=FALSE)

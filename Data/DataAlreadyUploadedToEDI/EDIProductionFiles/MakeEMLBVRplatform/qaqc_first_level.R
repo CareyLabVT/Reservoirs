@@ -1,82 +1,21 @@
 
-#qaqc of BVRdata for EDI
-if (!"lubridate" %in% installed.packages()) install.packages("lubridate")
-library(lubridate)
-library(plyr)
-library(readr)
-library(dplyr)
-library(tidyverse)
-library(lubridate)
 
 
-
-#time to now play with BVR data!
-#Gateway has missing data sections so combine manual data for EDI
-#upload the current BVR data from GitHub
-download.file('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv', "BVRplatform.csv") 
-download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRplatform_manual_2020.csv', "BVRmanualplatform.csv")
-#download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt', "maintenance_file.csv")
-
-#Read in csv of data from pushed to github
-#bvrheader1<-read.csv("BVRplatform.csv", skip=1, as.is=T) #get header minus wonky Campbell rows
-bvrdata1<-read.csv("BVRplatform.csv", skip=4, header=F) #get data minus wonky Campbell rows
-colnames(bvrdata1)=c('TIMESTAMP','RECORD','BattV','PTemp_C', 'wtr_1','wtr_2','wtr_3','wtr_4',	
-                     'wtr_5','wtr_6','wtr_7','wtr_8','wtr_9','wtr_10','wtr_11','wtr_12',
-                     'wtr_13','doobs_6','dosat_6','dotemp_6','doobs_13','dosat_13','dotemp_13',
-                     'EXO_Date','EXO_Time','EXO_wtr_1','Cond_1','SpCond_1','TDS_1','dosat_1',
-                     'doobs_1',	'Chla_RFU_1',	'Chla_1','BGAPC_RFU_1',	'BGAPC_1','fDOM_RFU_1',
-                     'fDOM_QSU_1',	'EXO_pressure','EXO_depth','EXO_battery','EXO_cablepower',
-                     'EXO_wiper','Lvl_psi','wtr_pt_13') #combine the names to deal with Campbell logger formatting
-					
-
-#Read in csv of manual uploaded data
-bvrdata3<-read.csv("BVRmanualplatform.csv")
-
-bvrdata2= bvrdata3%>%
-  filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
-  select(!X)%>% #delete column that was added when uploaded
-  rbind(.,bvrdata1)%>% #combine manual and most recent files
-  distinct(TIMESTAMP, .keep_all= TRUE)%>% #taking out the duplicate values 
-  filter(!TIMESTAMP=="")%>% #take out the rows with blank timestamps
-  filter(TIMESTAMP< ymd_hms("2021-01-01 00:00:00", tz = "Etc/GMT+5")) #filter for 2020
-
-bvrdata2$RECORD=as.numeric(bvrdata2$RECORD)  
-
-#change the date from character to unknown making it easier to graph
-bvrdata2$TIMESTAMP <- as.POSIXct(bvrdata2$TIMESTAMP, format = "%Y-%m-%d %H:%M:%S", tz = "Etc/GMT+5") 
-
-#check record for gaps
-#order data by timestamp
-bvrdata2=bvrdata2[order(bvrdata2$TIMESTAMP),]
-bvrdata2$DOY=yday(bvrdata2$TIMESTAMP)
-
-#daily record gaps by day of year
-for(i in 2:nrow(bvrdata2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(bvrdata2$DOY[i]-bvrdata2$DOY[i-1]>1){
-    print(c(bvrdata2$TIMESTAMP[i-1],bvrdata2$TIMESTAMP[i]))
-  }
-}
-#sub-daily record gaps by record number
-for(i in 2:length(bvrdata2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-  if(abs(bvrdata2$RECORD[i]-bvrdata2$RECORD[i-1])>1){
-    print(c(bvrdata2$TIMESTAMP[i-1],bvrdata2$TIMESTAMP[i]))
-  }
-}
-
-# convert datetimes to characters so that they are properly formatted in the output file
-#bvrdata$DateTime <- as.character(bvrdata$DateTime)
-#remove the DOY column and change to bvrdata
-bvrdata2=select(bvrdata2, -DOY)
-
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform")
-write.csv(bvrdata2, 'bvrdata2020_comb.csv')
-
-qaqc <- function(data_file,maintenance_file,  output_file)
+qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_file)
 {
 
 #bvrdata=data_file
 #change column names
-  BVRDATA_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
+  BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
+                        "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
+                        "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
+                        "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
+                        "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
+                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
+                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
+                        "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
+                        "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
+  BVRDATA2_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
                         "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
                         "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
                         "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
@@ -108,9 +47,27 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   
   # read catwalk data and maintenance log
   # NOTE: date-times throughout this script are processed as UTC
-  bvrdata <- read_csv(data_file, skip=1, col_names = BVRDATA_COL_NAMES,
+  bvrdata1 <- read_csv(data_file, skip=4, col_names = BVRDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
- bvrdata$X<-NULL
+ 
+#bvrdata1$DateTime=as.character.Date(bvrdata1$DateTime)#adjust time so can easily filter but takes too long
+  #bvrdata1$DateTime<-as.POSIXct(bvrdata1$DateTime,format = "%Y-%m-%d %H:%M:%S")
+
+ bvrdata3<-read_csv(data2_file, skip=1, col_names = BVRDATA2_COL_NAMES,
+                    col_types = cols(.default = col_double(), DateTime = col_datetime()))
+ 
+ #bvrdata3$DateTime=as.character.Date(bvrdata3$DateTime)#adjust time so can easily filter
+ #bvrdata3$DateTime<-as.POSIXct(bvrdata3$DateTime,format = "%Y-%m-%d %H:%M:%S")
+ 
+ bvrdata= bvrdata3%>%
+   filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
+   select(!X)%>% #delete column that was added when uploaded
+   rbind(.,bvrdata1)%>% #combine manual and most recent files
+   drop_na(DateTime)%>% #take out the rows with blank timestamps
+   distinct(DateTime, .keep_all= TRUE)%>% #taking out the duplicate values 
+   filter(DateTime< "2020-12-31 19:00:00") #filter for 2020
+ 
+ 
 #read in maintenance log
   log <- read_csv(maintenance_file,
     col_types = cols(
@@ -130,7 +87,7 @@ qaqc <- function(data_file,maintenance_file,  output_file)
   bvrdata$Flag_TDS <- 0
   bvrdata$Flag_fDOM <- 0
   bvrdata$Flag_Cond <-0
-  bvrdata$Flag_Lvl <-0
+  bvrdata$Flag_Lvl_13 <-0
   bvrdata$Flag_Temp_1 <-0
   bvrdata$Flag_Temp_2 <-0
   bvrdata$Flag_Temp_3 <-0
@@ -329,16 +286,16 @@ qaqc <- function(data_file,maintenance_file,  output_file)
     select(-fDOM, -fDOM_lag1.5, -fDOM_lead1.5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
   
   #create depth column
-  bvrdata=bvrdata%>%
-    mutate(Depth_m_13=Lvl_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
+  bvrdata=bvrdata%>%mutate(Depth_m_13=Lvl_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
   
   # delete EXO_Date and EXO_Time columns
   bvrdata <- bvrdata %>% select(-EXO_Date, -EXO_Time)
   
   # add Reservoir and Site columns
-  bvrdata$Reservoir <- "BVR"
-  bvrdata$Site <- "50"
-  
+  bvrdata$Reservoir="BVR"
+  bvrdata$Site=50
+    
+ 
   # reorder columns
   bvrdata <- bvrdata %>% select(Reservoir, Site, -RECORD, -CR6_Batt_V, -CR6Panel_Temp_C, -Flag_All, -Flag_DO_1.5, -Flag_DO_6,
                                 -Flag_DO_13, -Flag_Chla, -Flag_Phyco, -Flag_TDS, everything())
@@ -351,14 +308,30 @@ qaqc <- function(data_file,maintenance_file,  output_file)
  
  
   # write to output file
-  write_csv(bvrdata, output_file)
+  write_csv(bvrdata, output_file, quote=FALSE)
+  
+ 
+  
+  ###Prep RemoveMet for final file version
+  
+    names(log)=c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber", "Flag", "Notes")
+    
+    log=log%>%
+    mutate(Reservoir="BVR")%>%
+    mutate(Site=50)%>%
+    mutate(Station="BVR_sensor_string")%>%
+    select(Reservoir, Site, Station, DateTime_start, DateTime_end, Parameter, ColumnNumber, Flag, Notes)
+  
+  
+  write.csv(log, output2_file, quote=FALSE)
 }
 
 # example usage
-#qaqc(obs1,
-#      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log",
-#     "BVRplatform.csv")
 
-qaqc('bvrdata2020_comb.csv',
-      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
-       "BVRplatform_clean.csv")
+
+#qaqc('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv',
+#      'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRplatform_manual_2020.csv',
+#      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
+#       "BVRplatform_clean.csv", 
+#     "BVR_Maintenance_2020.csv")
+

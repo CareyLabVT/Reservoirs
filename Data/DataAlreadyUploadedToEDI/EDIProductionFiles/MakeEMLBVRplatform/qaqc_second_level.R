@@ -519,5 +519,7 @@ bvrdata_clean <- bvrdata_clean %>%
          Flag_All,Flag_Temp_1:Flag_Temp_13,Flag_DO_1.5, Flag_DO_6, Flag_DO_13,Flag_Lvl_13, 
          Flag_Chla,Flag_Phyco,Flag_TDS,Flag_fDOM,Flag_Cond )
 
+#order from oldest to newest
+bvrdata_clean=bvrdata_clean[order(bvrdata_clean$DateTime),]
 
 write.csv(bvrdata_clean, 'BVR_EDI_2020.csv', row.names = FALSE, quote=FALSE)

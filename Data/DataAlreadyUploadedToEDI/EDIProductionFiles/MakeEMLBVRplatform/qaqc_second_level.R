@@ -1,16 +1,18 @@
-# Master QAQC script in prep for publishing catwalk sensor string data to EDI
-# this script combines code from other QAQC scripts found in misc_QAQC_scipts folder
-# as well as other data files from misc_data_files
-# final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
+# Master QAQC script in prep for publishing BVR platform sensor string data to EDI
+# this script combines code from the first level qaqc script which takes out maintenance times
+# negative and infainite values and automated qaqc as described in the metadata
+# final EDI-ready file outputs directly to MakeEMLBVR
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "~/VT_Carey_Lab/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/"
 source(paste0(folder, "qaqc_first_level.R"))
 
-# download most up to date catwalk data and maintenance log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log.txt"))
+# download most up to date bvr data streaming from the sensors
+#manually downloaded from the datalogger that fills in missing data from the streamed data 
+#maintenance log so we can flag when the sensors were being worked on or other problems
 download.file('https://github.com/FLARE-forecast/BVRE-data/raw/bvre-platform-data/BVRplatform.csv',paste0(folder, "/BVRplatform.csv")) 
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRplatform_manual_2020.csv',paste0(folder, "/BVRmanualplatform.csv") )
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log.txt"))
 
 # run standard qaqc
 data_file <- paste0(folder, '/BVRplatform.csv')
@@ -21,12 +23,11 @@ output2_file <- paste0(folder, "/BVR_Maintenance_2020.csv")
 qaqc(data_file, data2_file, maintenance_file, output_file, output2_file)
 
 
-
 # read in qaqc function output
 bvrdata_clean <- read.csv(output_file) 
+
+#change the datetime into a useable and easy to graph format
 bvrdata_clean$DateTime<-as.POSIXct(bvrdata_clean$DateTime,format = "%Y-%m-%d %H:%M:%S")
-
-
 
 # Flag values
 # 0: no flag
@@ -34,7 +35,7 @@ bvrdata_clean$DateTime<-as.POSIXct(bvrdata_clean$DateTime,format = "%Y-%m-%d %H:
 # 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 # 3: negative values set to 0
 # 4: value removed due to fouling and set to NA
-# 5: questionable value due to potential fouling
+# 5: questionable value but left in the dataset
 # 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 # 7: missing data
 # 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
@@ -43,21 +44,18 @@ bvrdata_clean$DateTime<-as.POSIXct(bvrdata_clean$DateTime,format = "%Y-%m-%d %H:
 ###########################################################################################################################################################################
 # temp qaqc ----
 
-#Two of the thermistors started to read higher than the one above them in fall 2020. Fixed this using a constant offset. 
-#methods described in metadat
-
+#Setting the temperature to NA when the thermistors are out of the water
 #add a depth column which we set NAs for when the thermistor is out of the water. Flag 2
 bvrdata_clean=bvrdata_clean%>%
   mutate(depth_1=Depth_m_13-11.82)%>%
   mutate(depth_2=Depth_m_13-11.478)
 
 
-# check Temp_1 data
-#Temp_1 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_1)) +
- # geom_point()
-#ggplotly(Temp_1)
-
 #change the temp to NA when the thermistor is clearly out of the water which we used to determine the depth of the temp string
+#negative depths are changed to NA
+#the date ifelse statement is when the pressure transducer was unplugged
+
+#for thermistor at position 1 when it was out of the water 
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Temp_1= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",2,Flag_Temp_1))%>%
   mutate(ThermistorTemp_C_1= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",NA,ThermistorTemp_C_1))%>%
@@ -65,47 +63,57 @@ bvrdata_clean=bvrdata_clean%>%
   mutate(ThermistorTemp_C_1=ifelse(!is.na(depth_1) & depth_1<0,NA,ThermistorTemp_C_1))
 
 
-#surf <- ggplot(data = bvrdata_clean_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
-#  geom_point()
-#ggplotly(surf)
-
-# check thermistor 2 data
-#Temp_2 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_2)) +
- # geom_point()
-#ggplotly(Temp_2)
-
-#change the temp to NA when the thermistor is clearly out of the water which we used to determine the depth of the temp string
+#for thermistor at position 2 when it was out of the water 
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Temp_2= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",2,Flag_Temp_2))%>%#this is when the pressure sensor was unplugged
   mutate(ThermistorTemp_C_2= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",NA,ThermistorTemp_C_2))%>%
   mutate(Flag_Temp_2= ifelse(!is.na(depth_2) & depth_2<0 ,2,Flag_Temp_2))%>%
   mutate(ThermistorTemp_C_2=ifelse(!is.na(depth_2) & depth_2<0,NA,ThermistorTemp_C_2))
-  
-#take this out after you set the values to NA
+
+
+#take out the depth columns for thermisotrs 1 and 2 after you set the values to NA
 bvrdata_clean=bvrdata_clean%>%
   select(-depth_1,-depth_2)
-  
 
+# check the graph of Thermistor at postion 1 
+#Temp_1 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_1)) +
+ # geom_point()
+#ggplotly(Temp_1)
+
+
+
+# check the graph of Thermistor at postion 2
+#Temp_2 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_2)) +
+ # geom_point()
+#ggplotly(Temp_2)
+
+# check the graph of Thermistor at postion 3
 # check Thermistor 3 temp data
 #Temp_3 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_3)) +
  # geom_point()
 #Temp_3
 #ggplotly(Temp_3)
 
+#check the EXO temp which is deployed at 1.5m
+#Exo_temp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTemp_C_1.5)) +
+#  geom_point()
+#Exo_temp
+#ggplotly(Exo_temp)
 
 
-# check Thermistor 4 temp data
+# check the graph of Thermistor at postion 4
 #Temp_4 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_4)) +
 #  geom_point()
 #Temp_4
 #ggplotly(Temp_4)
 
 
-# check Thermistor 5 temp data
+# check the graph of Thermistor at postion 5
 #Temp_5 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_5)) +
 #  geom_point()
 #Temp_5
 #ggplotly(Temp_5)
+
 # a few isolated points that we flagged but didn't change
 bvrdata_clean <- bvrdata_clean %>%
   mutate(Flag_Temp_5 = ifelse(DateTime>="2020-07-11 9:00:00 tz=Etc/GMT+5" &DateTime<="2020-07-11 9:20:00 tz=Etc/GMT+5"
@@ -114,68 +122,90 @@ bvrdata_clean <- bvrdata_clean %>%
                                ,5, Flag_Temp_5))
   
 
-# check Thermistor 6 temp data
+# check the graph of Thermistor at postion 6
 #Temp_6 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_6)) +
 #  geom_point()
 #Temp_6
 #ggplotly(Temp_6)
+
+#Check the temperature from the RDO at position 6
+#DO_temp_6<- ggplot(data = bvrdata_clean, aes(x = DateTime, y = RDOTemp_C_6)) +
+#  geom_point()
+#DO_temp_6
+#ggplotly(DO_temp_6)
 
 #check that the temp from the RDO and the thermistor line up
 #plot(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_6, type='l')
 #points(bvrdata_clean$DateTime, bvrdata_clean$RDOTemp_C_6, type='l', col="red")
 
 
-# check Thermistor 7 temp data
+# check the graph of Thermistor at postion 7
 #Temp_7 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_7)) +
 #  geom_point()
 #Temp_7
 #ggplotly(Temp_7)
 
 
-# check Thermistor 8 temp data
+# check the graph of Thermistor at postion 8
 #Temp_8 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_8)) +
 #  geom_point()
 #Temp_8
 #ggplotly(Temp_8)
 
 
-# check Thermistor 9 temp data
+# check the graph of Thermistor at postion 9
 #Temp_9 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_9)) +
 #  geom_point()
 #Temp_9
 #ggplotly(Temp_9)
 
 
-# check Thermistor 10 temp data
+# check the graph of Thermistor at postion 10
 #Temp_10 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_10)) +
 #  geom_point()
 #Temp_10
 #ggplotly(Temp_10)
 
 
-#flag the NAs when the thermistors weren't programed. 
+#flag the NAs when the thermistors 11, 12 and 13 weren't programmed. Flagged as 7 for missing data
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Temp_11=ifelse(DateTime<"2020-10-05 12:05:00 tz=Etc/GMT+5", 7, Flag_Temp_11))%>%
   mutate(Flag_Temp_12=ifelse(DateTime<"2020-10-05 12:05:00 tz=Etc/GMT+5", 7, Flag_Temp_12))%>%
   mutate(Flag_Temp_13=ifelse(DateTime<"2020-10-05 12:05:00 tz=Etc/GMT+5", 7, Flag_Temp_13))
 
-# check Thermistor 11 temp data
+# check the graph of Thermistor at postion 11
 #Temp_11 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_11)) +
 #  geom_point()
 #Temp_11
 #ggplotly(Temp_11)
 
-# check Thermistor 12 temp data
+# check the graph of Thermistor at postion 12
 #Temp_12 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_12)) +
 #  geom_point()
 #Temp_12
 #ggplotly(Temp_12)
 
-# check Thermistor 13 temp data
+# check the graph of Thermistor at postion 13
 #Temp_13 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = ThermistorTemp_C_13)) +
 #  geom_point()
 #Temp_13
 #ggplotly(Temp_13)
+
+#Check the other temp sensors at position 13 for the RDO and the pressure transducer
+#temp_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = LvlTemp_C_13)) +
+#  geom_point()
+#temp_pressure
+#ggplotly(temp_pressure)
+
+#temp_do <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = RDOTemp_C_13)) +
+#  geom_point()
+#temp_do
+#ggplotly(temp_do)
+
+#plot all on the same graph to make sure they line up 
+#plot(bvrdata_clean$DateTime, bvrdata_clean$LvlTemp_C_0.5, type="l")
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_0.5, type= "l", col="red")
+#points(bvrdata_clean$DateTime, bvrdata_clean$RDOTemp_C_0.5, type= "l", col="darkorange")
 
 
 
@@ -236,11 +266,13 @@ bvrdata_clean=bvrdata_clean%>%
 
 
 ##read in ctd values to see how they compare to sensor values
-#ctd=read.csv("ctd_2018-2020_flagged.csv")
+#download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020/misc_data_files/ctd_2018-2020_flagged.csv", "ctd.csv")
+#ctd=read.csv("ctd.csv")
 #ctd$Date<-as.POSIXct(ctd$Date,format = "%Y-%m-%d %H:%M:%S")
 
 #read in YSI to check the DO 
-#ysi=read.csv("YSI_PAR_profiles_2013-2020.csv")
+#download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/YSI_PAR_profiles_2013-2020.csv", "ysi.csv")
+#ysi=read.csv("ysi.csv")
 #ysi$DateTime<-as.POSIXct(ysi$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
 #get the bottom DO values to compare with DO_13
@@ -318,12 +350,13 @@ bvrdata_clean=bvrdata_clean%>%
 ###########################################################################################################################################################################
 # chl and phyco qaqc ----
 
-
+#plot the chal from the EXO
 #chl_rfu <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOChla_RFU_1.5)) +
 #  geom_point() 
 #chl_rfu
 #ggplotly(chl_rfu)
 
+#plot the raw chla and the cleaned data to see what was set to NA
 #plot(bvrdata_raw$TIMESTAMP, bvrdata_raw$Chla_RFU_1, type ="l")
 #points(bvrdata_clean$DateTime, bvrdata_clean$EXOChla_RFU_1.5, type= "l", col="red")
 
@@ -337,6 +370,7 @@ bvrdata_clean=bvrdata_clean%>%
   mutate(EXOChla_RFU_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOChla_RFU_1.5))%>%
   mutate(EXOChla_ugL_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1.5))
   
+#check that the flags were added to the right row
 #bvrdata_clean%>%
 #    select(DateTime, Flag_Chla)%>%
 #    filter(Flag_Chla>1)%>%
@@ -345,13 +379,13 @@ bvrdata_clean=bvrdata_clean%>%
 
 #Checking out the phycos and flagging points, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5  
   
+#plot the phyco
 #phyco_ugl <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOBGAPC_ugL_1.5)) +
 #  geom_point() 
 #phyco_ugl
 #ggplotly(phyco_ugl)
 
 #add flaggs and set to NA 
-
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Phyco= ifelse(DateTime=="2020-08-01 12:50:00 tz=Etc/GMT+5", 5, Flag_Phyco))%>%
   mutate(Flag_Phyco= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", 2, Flag_Phyco))%>%
@@ -366,30 +400,27 @@ bvrdata_clean=bvrdata_clean%>%
 # QAQC from DWH to remove major outliers from fDOM data that are 2 sd's greater than the previous and following datapoint
 # QAQC done on 2018-2020 dataset
 
+#plot the raw fdom values with the cleaned fdom values
 #plot(bvrdata_raw$TIMESTAMP, bvrdata_raw$fDOM_QSU_1, type ="l")
 #points(bvrdata_clean$DateTime, bvrdata_clean$EXOfDOM_QSU_1.5, type= "l", col="red")
 
+#plot the clean fdom values and look for outliers
 #fDOM_QSU <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOfDOM_QSU_1.5)) +
 #    geom_point()
   #  ggtitle("fDOM (QSU) pre QAQC")
 #fDOM_QSU
   #ggplotly(fDOM_pre_QAQC)
 
-#plot(bvrdata_raw$TIMESTAMP, bvrdata_raw$fDOM_RFU_1, type ="l")
-#points(bvrdata_clean$DateTime, bvrdata_clean$EXOfDOM_RFU_1.5, type= "l", col="red")
-
-#fDOM_RFU <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOfDOM_RFU_1.5)) +
-#  geom_point()
-#  ggtitle("fDOM (QSU) pre QAQC")
-#fDOM_RFU
-#ggplotly(fDOM_pre_QAQC)
-
+#check that the flags went to the right rows
 #bvrdata_clean%>%
 #  select(DateTime, Flag_fDOM)%>%
 #  filter(Flag_fDOM>1)%>%
 #  print()
 #conductivity check
 
+###check the conductivity values and the specific conductivity
+
+#plot the conductivity
 #cond <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOCond_uScm_1.5)) +
 #  geom_point()
 #cond
@@ -400,33 +431,38 @@ bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Cond= ifelse(DateTime=="2020-08-01 12:40:00", 5, Flag_Cond))%>%
   mutate(Flag_Cond= ifelse(DateTime>="2020-11-12 20:30:00" &DateTime<="2020-11-12 20:40:00", 5, Flag_Cond))
 
+#plot the specific conductivity 
 #cond_sp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOSpCond_uScm_1.5)) +
 #  geom_point()
 #cond_sp
 #ggplotly(cond_sp)
 
-
+#plot the total dissolved solids
 #tds <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTDS_mgL_1.5)) +
 #  geom_point()
 #tds
 #ggplotly(tds)
 
+#flag a few high values
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_TDS= ifelse(DateTime=="2020-08-01 12:40:00", 5, Flag_TDS))%>%
   mutate(Flag_TDS= ifelse(DateTime>="2020-11-12 20:30:00" &DateTime<="2020-11-12 20:40:00", 5, Flag_TDS))
     
 #Pressure graphs
+#graph the EXO pressure
 #Exo_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXO_pressure_1.5)) +
 #  geom_point()
 #Exo_pressure
 #ggplotly(Exo_pressure)
 
+#graph the EXO depth which is based on pressure so should be the same as above
 #Exo_depth <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXO_depth)) +
 #  geom_point()
 #Exo_depth
 #ggplotly(Exo_depth)
 
-#Check the depth and flag when the wire wasn't connected
+#Check the pressure of the pressure gauge at position 13 and flag when the wire wasn't connected
+#plot the pressure at position 13
 #Lvl_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = Lvl_psi_13)) +
 #  geom_point()
 #Lvl_pressure
@@ -438,29 +474,10 @@ bvrdata_clean=bvrdata_clean%>%
                          7, Flag_Lvl_13))
 
 
-#temp_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = LvlTemp_C_13)) +
-#  geom_point()
-#temp_pressure
-#ggplotly(temp_pressure)
 
-#temp_do <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = RDOTemp_C_13)) +
-#  geom_point()
-#temp_do
-#ggplotly(temp_do)
 
-#plot(bvrdata_clean$DateTime, bvrdata_clean$LvlTemp_C_0.5, type="l")
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_0.5, type= "l", col="red")
-#points(bvrdata_clean$DateTime, bvrdata_clean$RDOTemp_C_0.5, type= "l", col="darkorange")
 
-#Exo_temp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTemp_C_1.5)) +
-#  geom_point()
-#Exo_temp
-#ggplotly(Exo_temp)
-
-#DO_temp_7.5<- ggplot(data = bvrdata_clean, aes(x = DateTime, y = RDOTemp_C_7.5)) +
-#  geom_point()
-#DO_temp_7.5
-#ggplotly(DO_temp_7.5)
+####Records power and other variables to just check for anything funny
 
 #plot(bvrdata_clean$DateTime, bvrdata_clean$CR6_Batt_V, type="l", ylim=c(10,16))
 #points(bvrdata_clean$DateTime, bvrdata_clean$EXO_cablepower, type="l", col="darkorange")
@@ -479,7 +496,6 @@ bvrdata_clean=bvrdata_clean%>%
 #ggplotly(record)
 
 
-####Records power and other variables to just check for anything funny
 
 ###########################################################################################################################################################################
 # write final csv ----

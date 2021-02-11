@@ -1,0 +1,22 @@
+,Reservoir,Site,Station,DateTime_start,DateTime_end,Parameter,ColumnNumber,Flag,Notes
+1,BVR,50,BVR_sensor_string,2020-06-18 17:50:00,2020-10-05 12:00:00,wtr_11,15,1,the bottom three sensors were not programed to be read into the datafile
+2,BVR,50,BVR_sensor_string,2020-06-18 17:50:00,2020-10-05 12:00:00,wtr_12,16,1,the bottom three sensors were not programed to be read into the datafile
+3,BVR,50,BVR_sensor_string,2020-06-18 17:50:00,2020-10-05 12:00:00,wtr_13,17,1,the bottom three sensors were not programed to be read into the datafile
+4,BVR,50,BVR_sensor_string,2020-06-25 12:50:00,2020-06-25 14:00:00,All_BVR,c(1:44),1,sensor string up for cleaning
+5,BVR,50,BVR_sensor_string,2020-07-02 12:50:00,2020-07-02 13:20:00,All_BVR,c(1:44),1,sensor string up for cleaning
+6,BVR,50,BVR_sensor_string,2020-07-23 12:12:00,2020-07-23 12:21:00,All_BVR,c(1:44),1,sensor string up for cleaning
+7,BVR,50,BVR_sensor_string,2020-08-06 11:29:00,2020-08-06 11:41:00,All_BVR,c(1:44),1,sensor string up for cleaning
+8,BVR,50,BVR_sensor_string,2020-08-13 10:40:00,2020-08-13 11:20:00,All_BVR,c(1:44),1,sensor string up for cleaning
+9,BVR,50,BVR_sensor_string,2020-08-17 10:20:00,2020-08-17 11:20:00,All_BVR,c(1:44),1,sensor string up for cleaning
+10,BVR,50,BVR_sensor_string,2020-08-20 09:40:00,2020-08-20 10:00:00,All_BVR,c(1:44),1,sensor string up for cleaning
+11,BVR,50,BVR_sensor_string,2020-08-26 11:25:00,2020-08-26 11:40:00,All_BVR,c(1:44),1,sensor string up for cleaning
+12,BVR,50,BVR_sensor_string,2020-09-09 09:30:00,2020-09-09 10:20:00,All_BVR,c(1:44),1,sensor string up for cleaning
+13,BVR,50,BVR_sensor_string,2020-09-16 11:15:00,2020-09-16 13:10:00,All_BVR,c(1:44),1,sensor string up for cleaning and calibrated DO sensors
+14,BVR,50,BVR_sensor_string,2020-10-01 15:20:00,2020-10-01 17:00:00,All_BVR,c(1:44),1,sensor string up for cleaning
+15,BVR,50,BVR_sensor_string,2020-10-05 09:20:00,2020-10-05 11:50:00,All_BVR,c(1:44),1,reprogramed the data logger to read the bottom three sensors so no data recorded
+16,BVR,50,BVR_sensor_string,2020-10-14 10:55:00,2020-10-14 11:10:00,All_BVR,c(1:44),1,sensor string up for cleaning
+17,BVR,50,BVR_sensor_string,2020-10-26 12:10:00,2020-10-26 13:50:00,All_BVR,c(1:44),1,sensor string up for cleaning and calibrated DO sensor
+18,BVR,50,BVR_sensor_string,2020-10-26 12:10:00,2020-10-30 09:40:00,Lvl_psi,43,1,wire into the data logger came loose and did not record data
+19,BVR,50,BVR_sensor_string,2020-10-26 12:10:00,2020-10-30 09:40:00,wtr_pt_13,44,1,wire into the data logger came loose and did not record data
+20,BVR,50,BVR_sensor_string,2020-11-10 11:28:00,2020-11-10 12:00:00,All_BVR,c(1:44),1,sensor string up for cleaning
+21,BVR,50,BVR_sensor_string,2020-10-22 09:00:00,2020-12-02 11:30:00,wtr_1,5,1,no thermoster connected took thermoster from BVR to replace a broken one at FCR

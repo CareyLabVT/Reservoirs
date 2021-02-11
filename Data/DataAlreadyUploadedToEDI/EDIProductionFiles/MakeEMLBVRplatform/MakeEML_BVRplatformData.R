@@ -5,10 +5,10 @@
 
 setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData")
 # # Install devtools
-# install.packages("devtools")
+install.packages("devtools")
 # 
 # # Load devtools
-# library(devtools)
+library(devtools)
 # 
 devtools::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
@@ -27,9 +27,9 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
 template_table_attributes(
- path = "C:/Users/ahoun/OneDrive/Desktop/MakeEML_MetData",
- data.path = "C:/Users/ahoun/OneDrive/Desktop/MakeEML_MetData",
- data.table = 'Met_final_2015_2019.csv')
+ path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+ data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+ data.table = 'Met_final_2015_2020.csv')
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -94,15 +94,24 @@ template_table_attributes(
 
 #Step 14: Categorical variables
 # View documentation for this function
-#?define_catvars
+
+?template_categorical_variables
 
 # Run this function for your dataset
-#define_catvars(path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Formatted_Data/MakeEMLChemistry")
+
+template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+                               write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
+template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+                             data.table = 'Met_final_2015_2020.csv',
+                             empty = TRUE,
+                             write.file = TRUE)
 
 #Step 16: Make EML
 # View documentation for this function
@@ -128,20 +137,22 @@ template_table_attributes(
 # zip.dir: Change the name of the module files zip folder
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
-make_eml(path = "C:/Users/ahoun/OneDrive/Desktop/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2019",
-         data.table = c('Met_final_2015_2019.csv', 'Met_Maintenance_2015_2019.csv'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2019',
+make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2020",
+         data.table = c('Met_final_2015_2020.csv', 'Met_Maintenance_2015_2020.csv'),
+         data.table.name = c('Met_final_2015_2020', 'Met_Maintenance_2015_2020'),
+         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2020',
                                     'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'MET_QAQC_2019.R',
+         other.entity = 'MET_QAQC_2020.R',
+         other.entity.name = 'MET_QAQC_2020',
          other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2019-12-31"),
-         geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
-         geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
+         temporal.coverage = c("2015-07-07", "2020-12-31"),
+         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
+         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.336.1") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.143.4") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
@@ -157,8 +168,8 @@ make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
          other.entity = 'Met_QAQC.R',
          other.entity.description = 'Data aggregation and QA/QC R script',
          temporal.coverage = c("2015-07-07", "2018-12-31"),
-         geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
-         geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
+         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
+         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',

@@ -11,19 +11,19 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
                         "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
                         "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
                         "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
-                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
-                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
-                        "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
-                        "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
+                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1_5", "EXOCond_uScm_1_5",
+                        "EXOSpCond_uScm_1_5", "EXOTDS_mgL_1_5", "EXODOsat_percent_1_5", "EXODO_mgL_1_5", "EXOChla_RFU_1_5",
+                        "EXOChla_ugL_1_5", "EXOBGAPC_RFU_1_5", "EXOBGAPC_ugL_1_5", "EXOfDOM_RFU_1_5", "EXOfDOM_QSU_1_5",
+                        "EXO_pressure_1_5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
   BVRDATA2_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
                         "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
                         "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
                         "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
                         "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
-                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
-                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
-                        "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
-                        "EXO_pressure_1.5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
+                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1_5", "EXOCond_uScm_1_5",
+                        "EXOSpCond_uScm_1_5", "EXOTDS_mgL_1_5", "EXODOsat_percent_1_5", "EXODO_mgL_1_5", "EXOChla_RFU_1_5",
+                        "EXOChla_ugL_1_5", "EXOBGAPC_RFU_1_5", "EXOBGAPC_ugL_1_5", "EXOfDOM_RFU_1_5", "EXOfDOM_QSU_1_5",
+                        "EXO_pressure_1_5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
   
  
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
@@ -37,7 +37,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
   
   # depths at which DO is measured
   #what do I say for DO depths
-  DO_DEPTHS <- c(1.5, 7.5, 0.5)
+  DO_DEPTHS <- c(1_5, 7.5, 0.5)
   
   # EXO sonde sensor data that differs from the mean by more than the standard deviation multiplied by this factor will
   # either be replaced with NA and flagged (if between 2018-10-01 and 2019-03-01) or just flagged (otherwise)
@@ -79,7 +79,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
  
   # add flag columns
   bvrdata$Flag_All <- 0
-  bvrdata$Flag_DO_1.5 <- 0
+  bvrdata$Flag_DO_1_5 <- 0
   bvrdata$Flag_DO_6 <- 0
   bvrdata$Flag_DO_13 <- 0
   bvrdata$Flag_Chla <- 0
@@ -105,10 +105,10 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
   
   # replace negative DO values with 0
   bvrdata <- bvrdata %>%
-    mutate(Flag_DO_1.5 = ifelse((! is.na(EXODO_mgL_1.5) & EXODO_mgL_1.5 < 0)
-                            | (! is.na(EXODOsat_percent_1.5) & EXODOsat_percent_1.5 < 0), 3, Flag_DO_1.5)) %>%
-    mutate(EXODO_mgL_1.5 = ifelse(EXODO_mgL_1.5 < 0, 0, EXODO_mgL_1.5)) %>%
-    mutate(EXODOsat_percent_1.5 = ifelse(EXODOsat_percent_1.5 <0, 0, EXODOsat_percent_1.5))
+    mutate(Flag_DO_1_5 = ifelse((! is.na(EXODO_mgL_1_5) & EXODO_mgL_1_5 < 0)
+                            | (! is.na(EXODOsat_percent_1_5) & EXODOsat_percent_1_5 < 0), 3, Flag_DO_1_5)) %>%
+    mutate(EXODO_mgL_1_5 = ifelse(EXODO_mgL_1_5 < 0, 0, EXODO_mgL_1_5)) %>%
+    mutate(EXODOsat_percent_1_5 = ifelse(EXODOsat_percent_1_5 <0, 0, EXODOsat_percent_1_5))
   
   bvrdata <- bvrdata %>%
     mutate(Flag_DO_6 = ifelse((! is.na(RDO_mgL_6) & RDO_mgL_6 < 0)
@@ -225,65 +225,65 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
   # perform qaqc on the entire dataset for chl and phyco
   
   # assign standard deviation thresholds
-  sd_4 <- 4*sd(bvrdata$EXOChla_ugL_1.5, na.rm = TRUE)
+  sd_4 <- 4*sd(bvrdata$EXOChla_ugL_1_5, na.rm = TRUE)
   threshold <- sd_4
-  sd_4_phyco <- 4*sd(bvrdata$EXOBGAPC_ugL_1.5, na.rm = TRUE)
+  sd_4_phyco <- 4*sd(bvrdata$EXOBGAPC_ugL_1_5, na.rm = TRUE)
   threshold_phyco <- sd_4_phyco 
   
   # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
   bvrdata <- bvrdata %>% 
-    mutate(Chla = lag(EXOChla_ugL_1.5, 0),
-           Chla_lag1.5 = lag(EXOChla_ugL_1.5, 1),
-           Chla_lead1.5 = lead(EXOChla_ugL_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(Chla = lag(EXOChla_ugL_1_5, 0),
+           Chla_lag1_5 = lag(EXOChla_ugL_1_5, 1),
+           Chla_lead1_5 = lead(EXOChla_ugL_1_5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
     mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
     mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
-    mutate(EXOChla_ugL_1.5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1.5)) %>% 
-    mutate(EXOChla_RFU_1.5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1.5)) %>% 
-    mutate(EXOChla_ugL_1.5 = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold) & !is.na(Chla)), 
-                                    NA, EXOChla_ugL_1.5)) %>%   
-    mutate(EXOChla_RFU_1.5 = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold) & !is.na(Chla)), 
-                                    NA, EXOChla_RFU_1.5)) %>% 
-    mutate(Flag_Chla = ifelse((abs(Chla_lag1.5 - Chla) > (threshold))  & (abs(Chla_lead1.5 - Chla) > (threshold)) & !is.na(Chla), 
+    mutate(EXOChla_ugL_1_5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1_5)) %>% 
+    mutate(EXOChla_RFU_1_5 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1_5)) %>% 
+    mutate(EXOChla_ugL_1_5 = ifelse((abs(Chla_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOChla_ugL_1_5)) %>%   
+    mutate(EXOChla_RFU_1_5 = ifelse((abs(Chla_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOChla_RFU_1_5)) %>% 
+    mutate(Flag_Chla = ifelse((abs(Chla_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold)) & !is.na(Chla), 
                               2, Flag_Chla)) %>% 
-    select(-Chla, -Chla_lag1.5, -Chla_lead1.5)
+    select(-Chla, -Chla_lag1_5, -Chla_lead1_5)
   
   # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
   bvrdata <- bvrdata %>% 
-    mutate(phyco = lag(EXOBGAPC_ugL_1.5, 0),
-           phyco_lag1.5 = lag(EXOBGAPC_ugL_1.5, 1),
-           phyco_lead1.5 = lead(EXOBGAPC_ugL_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(phyco = lag(EXOBGAPC_ugL_1_5, 0),
+           phyco_lag1_5 = lag(EXOBGAPC_ugL_1_5, 1),
+           phyco_lead1_5 = lead(EXOBGAPC_ugL_1_5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
     mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
     mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
-    mutate(EXOBGAPC_RFU_1.5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1.5)) %>% 
-    mutate(EXOBGAPC_ugL_1.5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1.5)) %>% 
-    mutate(EXOBGAPC_ugL_1.5 = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
-                                     NA, EXOBGAPC_ugL_1.5)) %>%   
-    mutate(EXOBGAPC_RFU_1.5 = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
-                                     NA, EXOBGAPC_RFU_1.5)) %>% 
-    mutate(Flag_Phyco = ifelse((abs(phyco_lag1.5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1.5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+    mutate(EXOBGAPC_RFU_1_5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1_5)) %>% 
+    mutate(EXOBGAPC_ugL_1_5 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1_5)) %>% 
+    mutate(EXOBGAPC_ugL_1_5 = ifelse((abs(phyco_lag1_5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1_5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+                                     NA, EXOBGAPC_ugL_1_5)) %>%   
+    mutate(EXOBGAPC_RFU_1_5 = ifelse((abs(phyco_lag1_5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1_5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+                                     NA, EXOBGAPC_RFU_1_5)) %>% 
+    mutate(Flag_Phyco = ifelse((abs(phyco_lag1_5 - phyco) > (threshold_phyco))  & (abs(phyco_lead1_5 - phyco) > (threshold_phyco) & !is.na(phyco)), 
                                2, Flag_Phyco)) %>%
-    select(-phyco, -phyco_lag1.5, -phyco_lead1.5)
+    select(-phyco, -phyco_lag1_5, -phyco_lead1_5)
   
   #deteriming the standard deviation of fDOM data 
-  sd_fDOM <- sd(bvrdata$EXOfDOM_QSU_1.5, na.rm = TRUE) 
+  sd_fDOM <- sd(bvrdata$EXOfDOM_QSU_1_5, na.rm = TRUE) 
   bvrdata <- bvrdata %>% 
-    mutate(fDOM = lag(EXOfDOM_QSU_1.5, 0),
-           fDOM_lag1.5 = lag(EXOfDOM_QSU_1.5, 1),
-           fDOM_lead1.5 = lead(EXOfDOM_QSU_1.5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(fDOM = lag(EXOfDOM_QSU_1_5, 0),
+           fDOM_lag1_5 = lag(EXOfDOM_QSU_1_5, 1),
+           fDOM_lead1_5 = lead(EXOfDOM_QSU_1_5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
     mutate(Flag_fDOM = ifelse(fDOM < 0 & !is.na(fDOM), 3, Flag_fDOM),
-           EXOfDOM_QSU_1.5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_QSU_1.5),
-           EXOfDOM_RFU_1.5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_RFU_1.5),
+           EXOfDOM_QSU_1_5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_QSU_1_5),
+           EXOfDOM_RFU_1_5 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_RFU_1_5),
            Flag_fDOM = ifelse(fDOM < 0, 2, Flag_fDOM)   ) %>% #These mutates are QAQCing for negative fDOM QSU values and setting these to NA and making a flag for these. This was done outside of the 2 sd deviation rule because there were two negative points in a row and one was not removed with the follwoing if else statements. 
-    mutate(EXOfDOM_QSU_1.5 = ifelse(
-      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1.5
+    mutate(EXOfDOM_QSU_1_5 = ifelse(
+      ( abs(fDOM_lag1_5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1_5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1_5
     )) %>%  #QAQC to remove outliers for QSU fDOM data 
-    mutate(EXOfDOM_RFU_1.5 = ifelse(
-      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), NA, EXOfDOM_RFU_1.5
+    mutate(EXOfDOM_RFU_1_5 = ifelse(
+      ( abs(fDOM_lag1_5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1_5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), NA, EXOfDOM_RFU_1_5
     )) %>% #QAQC to remove outliers for RFU fDOM data
     mutate(Flag_fDOM = ifelse(
-      ( abs(fDOM_lag1.5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1.5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), 2, Flag_fDOM
+      ( abs(fDOM_lag1_5 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1_5 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), 2, Flag_fDOM
     ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
-    select(-fDOM, -fDOM_lag1.5, -fDOM_lead1.5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
+    select(-fDOM, -fDOM_lag1_5, -fDOM_lead1_5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
   
   #create depth column
   bvrdata=bvrdata%>%mutate(Depth_m_13=Lvl_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
@@ -297,7 +297,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
     
  
   # reorder columns
-  bvrdata <- bvrdata %>% select(Reservoir, Site, -RECORD, -CR6_Batt_V, -CR6Panel_Temp_C, -Flag_All, -Flag_DO_1.5, -Flag_DO_6,
+  bvrdata <- bvrdata %>% select(Reservoir, Site, -RECORD, -CR6_Batt_V, -CR6Panel_Temp_C, -Flag_All, -Flag_DO_1_5, -Flag_DO_6,
                                 -Flag_DO_13, -Flag_Chla, -Flag_Phyco, -Flag_TDS, everything())
   
   # replace NaNs with NAs

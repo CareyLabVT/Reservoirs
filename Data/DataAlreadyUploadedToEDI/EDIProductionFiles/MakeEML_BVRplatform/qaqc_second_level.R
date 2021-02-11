@@ -94,8 +94,8 @@ bvrdata_clean=bvrdata_clean%>%
 #Temp_3
 #ggplotly(Temp_3)
 
-#check the EXO temp which is deployed at 1.5m
-#Exo_temp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTemp_C_1.5)) +
+#check the EXO temp which is deployed at 1_5m
+#Exo_temp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTemp_C_1_5)) +
 #  geom_point()
 #Exo_temp
 #ggplotly(Exo_temp)
@@ -210,20 +210,20 @@ bvrdata_clean=bvrdata_clean%>%
 
 
 ###Put all the points on the same plot using base R
-#plot(bvrdata_clean$DateTime,bvrdata_clean$ThermistorTemp_C_1, main="Water Temp", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1.5, ylim=c(0,40))
-#points(bvrdata_clean$DateTime,bvrdata_clean$ThermistorTemp_C_1, col="firebrick4", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_2, col="firebrick1", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_3, col="DarkOrange1", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_4, col="gold", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_5, col="greenyellow", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_6, col="medium sea green", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_7, col="sea green", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_8, col="DeepSkyBlue4", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_9, col="blue2", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_10, col="blue4", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_11, col="darkslateblue", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_12, col="magenta2", type='l', lwd=1.5)
-#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_13, col="darkmagenta", type='l', lwd=1.5)
+#plot(bvrdata_clean$DateTime,bvrdata_clean$ThermistorTemp_C_1, main="Water Temp", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1_5, ylim=c(0,40))
+#points(bvrdata_clean$DateTime,bvrdata_clean$ThermistorTemp_C_1, col="firebrick4", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_2, col="firebrick1", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_3, col="DarkOrange1", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_4, col="gold", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_5, col="greenyellow", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_6, col="medium sea green", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_7, col="sea green", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_8, col="DeepSkyBlue4", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_9, col="blue2", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_10, col="blue4", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_11, col="darkslateblue", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_12, col="magenta2", type='l', lwd=1_5)
+#points(bvrdata_clean$DateTime, bvrdata_clean$ThermistorTemp_C_13, col="darkmagenta", type='l', lwd=1_5)
 
 ###########################################################################################################################################################################
 # DO qaqc ----
@@ -255,14 +255,14 @@ bvrdata_clean=bvrdata_clean%>%
 #ggplotly(DOsat_13)
 
 #Do from the EXO
-#EXODO_1.5 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXODO_mgL_1.5)) +
+#EXODO_1_5 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXODO_mgL_1_5)) +
 #  geom_point()
-#EXODO_1.5
-#ggplotly(EXODO_1.5)
-#EXODOsat_1.5 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXODOsat_percent_1.5)) +
+#EXODO_1_5
+#ggplotly(EXODO_1_5)
+#EXODOsat_1_5 <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXODOsat_percent_1_5)) +
 #  geom_point()
-#EXODOsat_1.5
-#ggplotly(EXODOsat_1.5)
+#EXODOsat_1_5
+#ggplotly(EXODOsat_1_5)
 
 
 ##read in ctd values to see how they compare to sensor values
@@ -297,15 +297,15 @@ bvrdata_clean=bvrdata_clean%>%
 #points(ysi_bottom$DateTime, ysi_bottom$mean_DO, type = "p", col = "purple")
   
 #Check the EXO against the CTD and YSI
-#ctd_1.5=ctd%>%
+#ctd_1_5=ctd%>%
 #  filter(Reservoir=="BVR")%>%
 #  filter(Date>"2020-01-01 00:00:00")%>%
 #  select(Date, Depth_m, Temp_C,DO_mgL,DO_pSat)%>%
-#  filter(Depth_m>1.48 & Depth_m<1.52)%>%
+#  filter(Depth_m>1.48 & Depth_m<1_52)%>%
 #  group_by(Date)%>%
 #  summarise(mean_DO=mean(DO_mgL))
 
-#ysi_1.5=ysi%>%
+#ysi_1_5=ysi%>%
 #  filter(Reservoir=="BVR")%>%
 #  filter(DateTime>"2020-06-22 00:00:00")%>%
 #  select(DateTime, Depth_m, DO_mgL)%>%
@@ -314,9 +314,9 @@ bvrdata_clean=bvrdata_clean%>%
 #  group_by(day) %>%
 #  summarize(avg = mean(DO_mgL))
 
-#plot(bvrdata_clean$DateTime, bvrdata_clean$EXODO_mgL_1.5, type='l', ylim= c(3,13))
-#points(ctd_1.5$Date, ctd_1.5$mean_DO, type='p', col= "red",pch=16, cex= 1.0)
-#points(ysi_1.5$day, ysi_1.5$avg, type ='p', col="darkorange", pch=16,cex=1.0 )
+#plot(bvrdata_clean$DateTime, bvrdata_clean$EXODO_mgL_1_5, type='l', ylim= c(3,13))
+#points(ctd_1_5$Date, ctd_1_5$mean_DO, type='p', col= "red",pch=16, cex= 1.0)
+#points(ysi_1_5$day, ysi_1_5$avg, type ='p', col="darkorange", pch=16,cex=1.0 )
 
 #check DO_6 against ctd and ysi
 #ctd_middle=ctd%>%
@@ -351,24 +351,24 @@ bvrdata_clean=bvrdata_clean%>%
 # chl and phyco qaqc ----
 
 #plot the chal from the EXO
-#chl_rfu <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOChla_RFU_1.5)) +
+#chl_rfu <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOChla_RFU_1_5)) +
 #  geom_point() 
 #chl_rfu
 #ggplotly(chl_rfu)
 
 #plot the raw chla and the cleaned data to see what was set to NA
 #plot(bvrdata_raw$TIMESTAMP, bvrdata_raw$Chla_RFU_1, type ="l")
-#points(bvrdata_clean$DateTime, bvrdata_clean$EXOChla_RFU_1.5, type= "l", col="red")
+#points(bvrdata_clean$DateTime, bvrdata_clean$EXOChla_RFU_1_5, type= "l", col="red")
 
 #Take out and flagging some points
 bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Chla= ifelse(DateTime=="2020-08-01 12:50:00 tz=Etc/GMT+5", 5, Flag_Chla))%>%
   mutate(Flag_Chla= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", 2, Flag_Chla))%>%
   mutate(Flag_Chla= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", 2, Flag_Chla))%>%
-  mutate(EXOChla_RFU_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_RFU_1.5))%>%
-  mutate(EXOChla_ugL_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1.5))%>%
-  mutate(EXOChla_RFU_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOChla_RFU_1.5))%>%
-  mutate(EXOChla_ugL_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1.5))
+  mutate(EXOChla_RFU_1_5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_RFU_1_5))%>%
+  mutate(EXOChla_ugL_1_5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" & DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1_5))%>%
+  mutate(EXOChla_RFU_1_5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOChla_RFU_1_5))%>%
+  mutate(EXOChla_ugL_1_5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOChla_ugL_1_5))
   
 #check that the flags were added to the right row
 #bvrdata_clean%>%
@@ -377,10 +377,10 @@ bvrdata_clean=bvrdata_clean%>%
 #    print()
 
 
-#Checking out the phycos and flagging points, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5  
+#Checking out the phycos and flagging points, EXOBGAPC_RFU_1_5, EXOBGAPC_ugL_1_5  
   
 #plot the phyco
-#phyco_ugl <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOBGAPC_ugL_1.5)) +
+#phyco_ugl <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOBGAPC_ugL_1_5)) +
 #  geom_point() 
 #phyco_ugl
 #ggplotly(phyco_ugl)
@@ -390,10 +390,10 @@ bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Phyco= ifelse(DateTime=="2020-08-01 12:50:00 tz=Etc/GMT+5", 5, Flag_Phyco))%>%
   mutate(Flag_Phyco= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", 2, Flag_Phyco))%>%
   mutate(Flag_Phyco= ifelse(DateTime=="2020-12-25 06:20:00 tz=Etc/GMT+5", 2, Flag_Phyco))%>%
-  mutate(EXOBGAPC_RFU_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOBGAPC_RFU_1.5))%>%
-  mutate(EXOBGAPC_ugL_1.5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOBGAPC_ugL_1.5))%>%
-  mutate(EXOBGAPC_RFU_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOBGAPC_RFU_1.5))%>%
-  mutate(EXOBGAPC_ugL_1.5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOBGAPC_ugL_1.5))
+  mutate(EXOBGAPC_RFU_1_5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOBGAPC_RFU_1_5))%>%
+  mutate(EXOBGAPC_ugL_1_5= ifelse(DateTime>="2020-10-29 10:10:00 tz=Etc/GMT+5" &DateTime<="2020-10-29 12:00:00 tz=Etc/GMT+5", NA, EXOBGAPC_ugL_1_5))%>%
+  mutate(EXOBGAPC_RFU_1_5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5",NA, EXOBGAPC_RFU_1_5))%>%
+  mutate(EXOBGAPC_ugL_1_5= ifelse(DateTime=="2020-12-28 03:20:00 tz=Etc/GMT+5", NA, EXOBGAPC_ugL_1_5))
 
 ###########################################################################################################################################################################
 # fdom qaqc----
@@ -402,10 +402,10 @@ bvrdata_clean=bvrdata_clean%>%
 
 #plot the raw fdom values with the cleaned fdom values
 #plot(bvrdata_raw$TIMESTAMP, bvrdata_raw$fDOM_QSU_1, type ="l")
-#points(bvrdata_clean$DateTime, bvrdata_clean$EXOfDOM_QSU_1.5, type= "l", col="red")
+#points(bvrdata_clean$DateTime, bvrdata_clean$EXOfDOM_QSU_1_5, type= "l", col="red")
 
 #plot the clean fdom values and look for outliers
-#fDOM_QSU <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOfDOM_QSU_1.5)) +
+#fDOM_QSU <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOfDOM_QSU_1_5)) +
 #    geom_point()
   #  ggtitle("fDOM (QSU) pre QAQC")
 #fDOM_QSU
@@ -421,7 +421,7 @@ bvrdata_clean=bvrdata_clean%>%
 ###check the conductivity values and the specific conductivity
 
 #plot the conductivity
-#cond <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOCond_uScm_1.5)) +
+#cond <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOCond_uScm_1_5)) +
 #  geom_point()
 #cond
 #ggplotly(cond)
@@ -432,13 +432,13 @@ bvrdata_clean=bvrdata_clean%>%
   mutate(Flag_Cond= ifelse(DateTime>="2020-11-12 20:30:00" &DateTime<="2020-11-12 20:40:00", 5, Flag_Cond))
 
 #plot the specific conductivity 
-#cond_sp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOSpCond_uScm_1.5)) +
+#cond_sp <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOSpCond_uScm_1_5)) +
 #  geom_point()
 #cond_sp
 #ggplotly(cond_sp)
 
 #plot the total dissolved solids
-#tds <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTDS_mgL_1.5)) +
+#tds <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXOTDS_mgL_1_5)) +
 #  geom_point()
 #tds
 #ggplotly(tds)
@@ -450,7 +450,7 @@ bvrdata_clean=bvrdata_clean%>%
     
 #Pressure graphs
 #graph the EXO pressure
-#Exo_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXO_pressure_1.5)) +
+#Exo_pressure <- ggplot(data = bvrdata_clean, aes(x = DateTime, y = EXO_pressure_1_5)) +
 #  geom_point()
 #Exo_pressure
 #ggplotly(Exo_pressure)
@@ -512,11 +512,11 @@ bvrdata_clean <- bvrdata_clean %>%
   select(Reservoir, Site, DateTime, ThermistorTemp_C_1:ThermistorTemp_C_13,
          RDO_mgL_6, RDOsat_percent_6,
          RDOTemp_C_6, RDO_mgL_13, RDOsat_percent_13, RDOTemp_C_13, Lvl_psi_13, Depth_m_13,LvlTemp_C_13,
-         EXOTemp_C_1.5, EXOCond_uScm_1.5, EXOSpCond_uScm_1.5, EXOTDS_mgL_1.5, EXODOsat_percent_1.5, 
-         EXODO_mgL_1.5, EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5, 
-         EXOfDOM_RFU_1.5, EXOfDOM_QSU_1.5, EXO_pressure_1.5, EXO_depth, EXO_battery, EXO_cablepower, 
+         EXOTemp_C_1_5, EXOCond_uScm_1_5, EXOSpCond_uScm_1_5, EXOTDS_mgL_1_5, EXODOsat_percent_1_5, 
+         EXODO_mgL_1_5, EXOChla_RFU_1_5, EXOChla_ugL_1_5, EXOBGAPC_RFU_1_5, EXOBGAPC_ugL_1_5, 
+         EXOfDOM_RFU_1_5, EXOfDOM_QSU_1_5, EXO_pressure_1_5, EXO_depth, EXO_battery, EXO_cablepower, 
          EXO_wiper,  RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
-         Flag_All,Flag_Temp_1:Flag_Temp_13,Flag_DO_1.5, Flag_DO_6, Flag_DO_13,Flag_Lvl_13, 
+         Flag_All,Flag_Temp_1:Flag_Temp_13,Flag_DO_1_5, Flag_DO_6, Flag_DO_13,Flag_Lvl_13, 
          Flag_Chla,Flag_Phyco,Flag_TDS,Flag_fDOM,Flag_Cond )
 
 #order from oldest to newest

@@ -37,7 +37,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
   
   # depths at which DO is measured
   #what do I say for DO depths
-  DO_DEPTHS <- c(1_5, 7.5, 0.5)
+  DO_DEPTHS <- c(1.5, 7.5, 0.5)
   
   # EXO sonde sensor data that differs from the mean by more than the standard deviation multiplied by this factor will
   # either be replaced with NA and flagged (if between 2018-10-01 and 2019-03-01) or just flagged (otherwise)

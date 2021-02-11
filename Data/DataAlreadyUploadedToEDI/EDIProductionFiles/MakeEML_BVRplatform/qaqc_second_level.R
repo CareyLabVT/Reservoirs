@@ -4,7 +4,7 @@
 # final EDI-ready file outputs directly to MakeEMLBVR
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/"
 source(paste0(folder, "qaqc_first_level.R"))
 
 # download most up to date bvr data streaming from the sensors
@@ -521,5 +521,7 @@ bvrdata_clean <- bvrdata_clean %>%
 
 #order from oldest to newest
 bvrdata_clean=bvrdata_clean[order(bvrdata_clean$DateTime),]
+
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
 
 write.csv(bvrdata_clean, 'BVR_EDI_2020.csv', row.names = FALSE, quote=FALSE)

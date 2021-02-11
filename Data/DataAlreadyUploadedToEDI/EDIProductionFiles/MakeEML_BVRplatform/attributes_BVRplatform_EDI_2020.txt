@@ -24,19 +24,19 @@ RDOTemp_C_13	Water temperature as measured by the DO sonde at position 13 as mea
 Lvl_psi_13 	Gauge pressure of EXO sonde at  position 13, measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
 Depth_m_13	Depth of the pressure sensor at position 13 in meters calculated by Lvl_psi_0m_13 * 0.70455	numeric	meter		NA	value is missing
 LvlTemp_C_13	water temperature at position 13 as measured by the water level logger	numeric	celsius		NA	value is missing
-EXOTemp_C_1.5	water temperature at 1.5 meter depth as measured by the EXO Sonde	numeric	celsius		NA	value is missing
-EXOCond_uScm_1.5	Conductivity at 1.5 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOSpCond _uScm_1.5	Specific conductivity at 1.5 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOTDS_mgL_1.5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO Sonde as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXODOsat_percent_1.5	Dissolved Oxygen percent saturation at 1.5 meter depth as measured by the EXO Sonde	numeric	percent		NA	value is missing
-EXODO_mgL_1.5	Dissolved Oxygen at 1.5 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXOChla_RFU_1.5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOChla_ugL_1.5	Total Chlorophyll a in ug/L at 1.5 meter depth as measured by the EXO Sonde	numeric	microgramsPerLiter		NA	value is missing
-EXOBGAPC_RFU_1.5	Blue-Green Algae phycocyanin in RFU  at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOBGAPC _ugL_1 .5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXOfDOM_RFU_1.5	Fluorescent  Dissolved Organic Matter in RFU at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOfDOM_QSU_1.5	Fluorescent Dissolved Organic Matter in QSU at 1.5 meter depth as measured by the EXO Sonde	numeric	QuinineSulfateUnits		NA	value is missing
-EXO_pressure_1.5	Gauge pressure of EXO sonde at 1.5 m 	numeric	psig		NA	value is missing
+EXOTemp_C_1_5	water temperature at 1.5 meter depth as measured by the EXO Sonde	numeric	celsius		NA	value is missing
+EXOCond_uScm_1_5	Conductivity at 1.5 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond _uScm_1_5	Specific conductivity at 1.5 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOTDS_mgL_1_5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO Sonde as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXODOsat_percent_1_5	Dissolved Oxygen percent saturation at 1.5 meter depth as measured by the EXO Sonde	numeric	percent		NA	value is missing
+EXODO_mgL_1_5	Dissolved Oxygen at 1.5 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOChla_RFU_1_5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOChla_ugL_1_5	Total Chlorophyll a in ug/L at 1.5 meter depth as measured by the EXO Sonde	numeric	microgramsPerLiter		NA	value is missing
+EXOBGAPC_RFU_1_5	Blue-Green Algae phycocyanin in RFU  at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOBGAPC _ugL_1_5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOfDOM_RFU_1_5	Fluorescent  Dissolved Organic Matter in RFU at 1.5 meter depth as measured by the EXO Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_1_5	Fluorescent Dissolved Organic Matter in QSU at 1.5 meter depth as measured by the EXO Sonde	numeric	QuinineSulfateUnits		NA	value is missing
+EXO_pressure_1_5	Gauge pressure of EXO sonde at 1.5 m 	numeric	psig		NA	value is missing
 EXO_depth	Depth of the EXO sonde as measured by the EXO sonde.	numeric	meter		NA	value is missing
 EXO_battery	Voltage of the EXO sonde internal batteries.	numeric	volt		NA	value is missing
 EXO_cablepower	Measure of power being used by the cable connected to the CR6 datalogger as measured by the EXO sonde.	numeric	volt		NA	value is missing
@@ -58,7 +58,7 @@ Flag_Temp_10	Data flag for temperature data at position 10 (ThermistorTemp_C_10)
 Flag_Temp_11	Data flag for temperature data at position 11 (ThermistorTemp_C_11). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset,  7 = missing data 	categorical 			0	value is missing
 Flag_Temp_12	Data flag for temperature data at position 12 (ThermistorTemp_C_12). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset,  7 = missing data 	categorical 			0	value is missing
 Flag_Temp_13	Data flag for temperature data at position 13 (ThermistorTemp_C_13) 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset,  7 = missing data 	categorical 			0	value is missing
-Flag_DO_1.5	Data flag for EXO DO data at 1.5 meter depth (EXODOsat_percent_1.5, EXODO_mgL_1.5). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 3 = negative values set to 0, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset, 7 = missing data	categorical 			0	value is missing
+Flag_DO_1_5	Data flag for EXO DO data at 1.5 meter depth (EXODOsat_percent_1.5, EXODO_mgL_1.5). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 3 = negative values set to 0, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset, 7 = missing data	categorical 			0	value is missing
 Flag_DO_6	Data flag for DO data at position 6 (RDO_mgL_6, RDOsat_percent_6). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 3 = negative values set to 0, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset, 7 = missing data	categorical 			0	value is missing
 Flag_DO_13	Data flag for DO data at position 13(RDO_mgL_13, RDOsat_percent_13). 0 = no flag, 2=negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process, 3 = negative values set to 0, 4 = value removed due to fouling and set to NA, 5 = questionable value but left in dataset, 7 = missing data	categorical 			0	value is missing
 Flag _Lvl	Data flag for pressure sensors at position 13 (Lvl_psi_13 , Depth_m_13). 0 = no flag, 7 = missing data"	categorical 			0	value is missing

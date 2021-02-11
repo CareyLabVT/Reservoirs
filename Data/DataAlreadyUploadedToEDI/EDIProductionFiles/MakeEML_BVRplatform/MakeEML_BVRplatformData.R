@@ -1,9 +1,9 @@
-##MakeEML_MetData
+##MakeEML_BVRplatformData
 ##Author: Cayelan Carey
 ##Date: 21 July 2019
-## Updated: 07 Feb 2020, A. Hounshell
+## Updated: 10 Feb 2021, A. Breef-Pilz
 
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData")
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
 # # Install devtools
 install.packages("devtools")
 # 
@@ -14,7 +14,7 @@ devtools::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform
 
 #Step 2: Move your dataset to the directory
 
@@ -27,9 +27,9 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
 template_table_attributes(
- path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
- data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
- data.table = 'Met_final_2015_2020.csv')
+ path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.table = 'BVR_EDI_2020.csv')
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -85,7 +85,7 @@ template_table_attributes(
 #grab attribute names and definitions from your metadata word document
 #for units....
 # View and search the standard units dictionary
-#view_unit_dictionary()
+view_unit_dictionary()
 #put flag codes and site codes in the definitions cell
 #force reservoir to categorical
 
@@ -99,17 +99,17 @@ template_table_attributes(
 
 # Run this function for your dataset
 
-template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
-template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                             data.table = 'Met_final_2015_2020.csv',
+template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+                             data.table = 'BVR_EDI_2020.csv',
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -137,17 +137,20 @@ template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToE
 # zip.dir: Change the name of the module files zip folder
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
-make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2020",
-         data.table = c('Met_final_2015_2020.csv', 'Met_Maintenance_2015_2020.csv'),
-         data.table.name = c('Met_final_2015_2020', 'Met_Maintenance_2015_2020'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2020',
-                                    'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'MET_QAQC_2020.R',
-         other.entity.name = 'MET_QAQC_2020',
-         other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2020-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
+make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
+         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
+         in Beaverdam Reservoir, Virginia, USA in 2020",
+         data.table = c('BVR_EDI_2020.csv', 'BVR_Maintenance_2020.csv', 'BVR_Depth_offsets_2020.csv'),
+         data.table.name = c('BVR_EDI_2020', 'BVR_Maintenance_2020', 'BVR_Depth_offsets_2020'),
+         data.table.description = c('All water quality parameters measured at Beaverdam during 2020',
+                                    'The log of all maintenance applied to the sensors',
+                                    'The position, offset, and distance above the sediment for the sensors'),
+         other.entity = c('MET_QAQC_2020.R', 'BVR_sort_by_depth_2020.R'),
+         other.entity.name = c('MET_QAQC_2020', 'BVR_sort_by_depth'),
+         other.entity.description = c('Data aggregation and QA/QC R script','Applying the depth offset and sorting by sensor depth'),
+         temporal.coverage = c("2020-06-18", "2020-12-31"),
+         #geographic.description = c("Beaverdam Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",

@@ -3,7 +3,7 @@
 ##Date: 21 July 2019
 ## Updated: 10 Feb 2021, A. Breef-Pilz
 
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
+setwd("C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
 # # Install devtools
 install.packages("devtools")
 # 
@@ -28,9 +28,9 @@ library(EMLassemblyline)
 #Prepare metadata file templates using the 
 ?template_table_attributes
 template_table_attributes(
- path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
- data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
- data.table = 'BVR_EDI_2020.csv',
+ path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.table = 'BVR_Depth_offsets_2020.csv',
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -101,19 +101,19 @@ view_unit_dictionary()
 
 # Run this function for your dataset
 
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
-template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
-                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
-                             data.table = 'BVR_EDI_2020.csv',
-                             empty = TRUE,
-                             write.file = TRUE)
+#template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+#                            data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+#                             data.table = 'BVR_EDI_2020.csv',
+#                             empty = TRUE,
+#                             write.file = TRUE)
 
 #Step 16: Make EML
 # View documentation for this function
@@ -148,16 +148,18 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
          data.table.description = c('All water quality parameters measured at Beaverdam during 2020',
                                     'The log of all maintenance applied to the sensors',
                                     'The position, offset, and distance above the sediment for the sensors'),
-         other.entity = c('MET_QAQC_2020.R', 'BVR_sort_by_depth_2020.R'),
-         other.entity.name = c('MET_QAQC_2020', 'BVR_sort_by_depth'),
-         other.entity.description = c('Data aggregation and QA/QC R script','Applying the depth offset and sorting by sensor depth'),
+         other.entity = c("qaqc_first_level.R",'BVR_QAQC.R','BVR_sort_by_depth_2020.R'),
+         other.entity.name = c("qaqc_first_level",'BVR_QAQC', 'BVR_sort_by_depth'),
+         other.entity.description = c("Function used in the second script to take out maintenance times and other qaqc steps",
+                                      'Data aggregation and QA/QC R script',
+                                      'Applying the depth offset and sorting by sensor depth'),
          temporal.coverage = c("2020-06-18", "2020-12-31"),
          #geographic.description = c("Beaverdam Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.4") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.157.3") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
@@ -172,13 +174,13 @@ make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
                                     'The log of all maintenance applied to the meteorological station'),
          other.entity = 'Met_QAQC.R',
          other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2018-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
+         temporal.coverage = c("2020-06-18", "2018-12-31"),
+         #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.389.2") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.157.1") # Put your package.id here, followed by .1 (for 1st version)
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

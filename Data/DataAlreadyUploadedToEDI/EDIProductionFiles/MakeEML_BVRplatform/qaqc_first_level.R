@@ -308,7 +308,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
  
  
   # write to output file
-  write_csv(bvrdata, output_file, quote=FALSE)
+  write.csv(bvrdata, output_file, row.names = FALSE, quote=FALSE)
   
  
   
@@ -323,7 +323,7 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
     select(Reservoir, Site, Station, DateTime_start, DateTime_end, Parameter, ColumnNumber, Flag, Notes)
   
   
-  write.csv(log, output2_file, quote=FALSE)
+  write.csv(log, output2_file, row.names = FALSE, quote=FALSE)
 }
 
 # example usage

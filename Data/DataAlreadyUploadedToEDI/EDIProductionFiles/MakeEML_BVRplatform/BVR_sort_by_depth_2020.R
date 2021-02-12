@@ -8,6 +8,7 @@
 pacman::p_load("tidyverse","lubridate", "plotly")
 
 #download the data from the EDI folder on GitHub
+
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/BVR_EDI_2020.csv", "BVR_EDI_2020.csv")
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/BVR_Depth_offsets_2020.csv", "BVR_Depth_offset_2020.csv")
 
@@ -69,6 +70,7 @@ bvr_new=bvr_new%>%
 #add the EXO back in 
   bvr_new=bvr_new%>%
     merge(.,EXO)
-
-#write the csv
+  
+#write the csv  
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
   write.csv(bvr_new, 'BVR_EDI_bydepth_2020.csv', row.names = FALSE, quote=FALSE)

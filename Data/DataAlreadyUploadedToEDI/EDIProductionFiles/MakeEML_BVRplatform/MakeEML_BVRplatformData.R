@@ -26,10 +26,12 @@ library(EMLassemblyline)
 
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
+?template_table_attributes
 template_table_attributes(
- path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
- data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
- data.table = 'BVR_EDI_2020.csv')
+ path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+ data.table = 'BVR_EDI_2020.csv',
+ write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -99,8 +101,8 @@ view_unit_dictionary()
 
 # Run this function for your dataset
 
-template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
-                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category

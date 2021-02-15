@@ -148,10 +148,10 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
          data.table.description = c('All water quality parameters measured at Beaverdam during 2020',
                                     'The log of all maintenance applied to the sensors',
                                     'The position, offset, and distance above the sediment for the sensors'),
-         other.entity = c("qaqc_first_level.R",'BVR_QAQC.R','BVR_sort_by_depth_2020.R'),
-         other.entity.name = c("qaqc_first_level",'BVR_QAQC', 'BVR_sort_by_depth'),
-         other.entity.description = c("Function used in the second script to take out maintenance times and other qaqc steps",
-                                      'Data aggregation and QA/QC R script',
+         other.entity = c("qaqc_function_first_level.R",'BVR_QAQC_second_level.R','BVR_sort_by_depth_2020.R'),
+         other.entity.name = c("qaqc_function_first_level",'BVR_QAQC_second_level', 'BVR_sort_by_depth'),
+         other.entity.description = c("First Level function used in the BVR_QAQC_second_level script to take out maintenance times and other qaqc steps",
+                                      'Second level data aggregation and QA/QC R script',
                                       'Applying the depth offset and sorting by sensor depth'),
          temporal.coverage = c("2020-06-18", "2020-12-31"),
          #geographic.description = c("Beaverdam Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
@@ -159,7 +159,7 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.3") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.157.4") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

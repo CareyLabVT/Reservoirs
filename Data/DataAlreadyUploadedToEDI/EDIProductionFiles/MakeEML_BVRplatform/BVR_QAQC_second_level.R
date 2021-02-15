@@ -3,7 +3,7 @@
 # negative and infainite values and automated qaqc as described in the metadata
 # final EDI-ready file outputs directly to MakeEMLBVR
 # Set up ----
-pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
+pacman::p_load(RCurl,tidyverse,lubridate, plotly, magrittr)
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/"
 source(paste0(folder, "qaqc_first_level.R"))
 

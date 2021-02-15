@@ -5,12 +5,12 @@
 #then it will sort into depth about 1m bins. Ex. 3m is from 2.5m-3.49m
 #All flags are removed
 
-pacman::p_load("tidyverse","lubridate", "plotly")
+pacman::p_load(tidyverse,lubridate, plotly)
 
 #download the data from the EDI folder on GitHub
 
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/BVR_EDI_2020.csv", "BVR_EDI_2020.csv")
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBVRplatform/BVR_Depth_offsets_2020.csv", "BVR_Depth_offset_2020.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/BVR_EDI_2020.csv", "BVR_EDI_2020.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/BVR_Depth_offsets_2020.csv", "BVR_Depth_offset_2020.csv")
 
 #read in data
 bvr=read.csv("BVR_EDI_2020.csv")
@@ -36,21 +36,21 @@ bvr_new=bvr_new%>%
   select(Reservoir, Site, DateTime, Sensor, Reading, Units, Sensor_depth)%>%
     mutate(Depth = 0)%>%
     mutate(Depth = ifelse(is.na(Sensor_depth), NA, Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth < 0, NA, Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth <= 0, NA, Depth))%>%
     mutate(Depth = ifelse(Sensor_depth > 0 & Sensor_depth < 0.2, "0.1m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 0.2 & Sensor_depth < 0.5, "0.3m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 0.5 & Sensor_depth < 1.5, "1m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 1.5 & Sensor_depth < 2.5, "2m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 2.5 & Sensor_depth < 3.5, "3m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 3.5 & Sensor_depth < 4.5, "4m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 4.5 & Sensor_depth < 5.5, "5m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 5.5 & Sensor_depth < 6.5, "6m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 6.5 & Sensor_depth < 7.5, "7m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 7.5 & Sensor_depth < 8.5, "8m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 8.5 & Sensor_depth < 9.5, "9m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 9.5 & Sensor_depth < 10.5, "10m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 10.5 & Sensor_depth < 11.5, "11m", Depth))%>%
-    mutate(Depth = ifelse(Sensor_depth > 11.5 & Sensor_depth < 12.5, "12m", Depth))
+    mutate(Depth = ifelse(Sensor_depth >= 0.2 & Sensor_depth < 0.5, "0.3m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 0.5 & Sensor_depth < 1.5, "1m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 1.5 & Sensor_depth < 2.5, "2m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 2.5 & Sensor_depth < 3.5, "3m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 3.5 & Sensor_depth < 4.5, "4m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 4.5 & Sensor_depth < 5.5, "5m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 5.5 & Sensor_depth < 6.5, "6m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 6.5 & Sensor_depth < 7.5, "7m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 7.5 & Sensor_depth < 8.5, "8m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 8.5 & Sensor_depth < 9.5, "9m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 9.5 & Sensor_depth < 10.5, "10m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 10.5 & Sensor_depth < 11.5, "11m", Depth))%>%
+    mutate(Depth = ifelse(Sensor_depth >= 11.5 & Sensor_depth < 12.5, "12m", Depth))
 
 #change back to a wide data form 
 bvr_new=bvr_new%>%

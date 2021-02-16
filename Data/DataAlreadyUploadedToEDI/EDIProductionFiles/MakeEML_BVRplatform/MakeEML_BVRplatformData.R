@@ -159,7 +159,7 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.5") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.725.1") # Put your package.id here, followed by .1 (for 1st version)
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

@@ -62,7 +62,7 @@ Serial No. 04080: Postion_9;
 Serial No. 04091: Position_10;
 Serial No. 04092: Position_11;
 Serial No. 04102: Position_12;
-Serial No. 04169: Position_13;
+Serial No. 04169: Position_13
 
 InSitu RDO Pro-X Dissolved Oxygen Sensor with Anti-Fouling Guard (June 2020 - December 2020)
 https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf
@@ -71,7 +71,7 @@ Calibration from September 16, 2020 to October 26, 2020; slope = 1.1209, offset 
 Calibration from October 26, 2020 to December 31, 2020; slope = 1.0897, offset = 0.00;
 Serial No. 733787:Position_13,
 Calibration from September 16, 2020 to October 26, 2020; slope = 1.1664, offset = 0.00,
-Calibration from October 26, 2020 to December 31, 2020; slope = 1.1370, offset = 0.00;
+Calibration from October 26, 2020 to December 31, 2020; slope = 1.1370, offset = 0.00
 
 YSI EXO2 Sonde Serial No. 19H101129 (June 2020 - December 2020)
 https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	

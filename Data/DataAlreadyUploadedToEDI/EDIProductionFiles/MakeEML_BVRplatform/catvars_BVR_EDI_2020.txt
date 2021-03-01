@@ -1,0 +1,45 @@
+attributeName	code	definition
+Flag_All	0	No flag
+Flag_All	1	Value removed due to maintenance and set to NA
+Flag_Chla	0	No flag
+Flag_Chla	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Chla	5	Questionable value but left in the dataset
+Flag_Cond	0	No flag
+Flag_Cond	5	Questionable value but left in the dataset
+Flag_DO_1_5	0	No flag
+Flag_DO_1_5	1	Value removed due to maintenance and set to NA
+Flag_DO_13	0	No flag
+Flag_DO_13	1	Value removed due to maintenance and set to NA
+Flag_DO_13	3	Negative value set to 0
+Flag_DO_6	0	No flag
+Flag_DO_6	1	Value removed due to maintenance and set to NA
+Flag_DO_6	5	Questionable value but left in the dataset
+Flag_fDOM	0	No flag
+Flag_Lvl_13	0	No flag
+Flag_Lvl_13	7	Missing data
+Flag_Phyco	0	No flag
+Flag_Phyco	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Phyco	3	Negative value set to 0
+Flag_Phyco	5	Questionable value but left in the dataset
+Flag_TDS	0	No flag
+Flag_TDS	5	Questionable value but left in the dataset
+Flag_Temp_1	0	No flag
+Flag_Temp_1	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Temp_10	0	No flag
+Flag_Temp_11	0	No flag
+Flag_Temp_11	7	Missing data
+Flag_Temp_12	0	No flag
+Flag_Temp_12	7	Missing data
+Flag_Temp_13	0	No flag
+Flag_Temp_13	7	Missing data
+Flag_Temp_2	0	No flag
+Flag_Temp_2	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Temp_3	0	No flag
+Flag_Temp_4	0	No flag
+Flag_Temp_5	0	No flag
+Flag_Temp_5	5	Questionable value but left in the dataset
+Flag_Temp_6	0	No flag
+Flag_Temp_7	0	No flag
+Flag_Temp_8	0	No flag
+Flag_Temp_9	0	No flag
+Site	50	Sampling site closest to the dam

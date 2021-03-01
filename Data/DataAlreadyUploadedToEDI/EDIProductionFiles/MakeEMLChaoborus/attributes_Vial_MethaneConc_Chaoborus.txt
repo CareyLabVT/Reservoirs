@@ -1,0 +1,18 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	categorical			NA	No data
+Site	Sampling site within each reservoir; 50 = site closest to the dam	numeric	dimensionless		NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A. with daylight savings time observed	Date		YYYY-MM-DD HH:MM:SS	NA	No data
+Depth_m	Depth chaoborus were sampled from for gas extraction	numeric	meter		NA	No data
+Rep	Vial rep number	numeric	dimensionless		NA	No data
+CH4_umolL	Methane concentration in vial	numeric	micromolePerLiter		NA	No data
+NumberChaoborus_NumPerVial	Number of Chaoborus per vial	numeric	dimensionless		NA	No data
+Chaoborus_Length_mm	Average length of Chaoborus in vial	numeric	millimeter		NA	No data
+Chaoborus_DryWeight_ug	Total mass of Chaoborus in vial	numeric	microgram		NA	No data
+Biomass_ugL	Biomass of Chaoborus per vial	numeric	microgramsPerLiter		NA	No data
+Flag_Depth_m	Data flag for site depths; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_Rep	Data flag for vial reps; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_CH4_umolL	Data flag for chaoborus methane concentraions; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_NumberChaoborus_NumPerVial	Data flag for the number of chaoborus used in each vial; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_Chaoborus_Length_mm	Data flag for the chaoborus length; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_Chaoborus_DryWeight_ug	Data flag for the chaoborus mass per vial; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_Chaoborus_Biomass_ugL	Data flag for the chaoborus biomass; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data

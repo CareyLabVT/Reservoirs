@@ -41,10 +41,10 @@ library(EMLassemblyline)
 #categorical variables and want to report our geographic location
 
 # View documentation for these functions
-?template_core_metadata
-?template_table_attributes
-?template_categorical_variables #don't run this till later
-?template_geographic_coverage
+??template_core_metadata
+??template_table_attributes
+??template_categorical_variables #don't run this till later
+??template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
 template_core_metadata(path = "C:/FCR_BVR Metals Data/EDI",
@@ -54,7 +54,7 @@ template_core_metadata(path = "C:/FCR_BVR Metals Data/EDI",
 
 template_table_attributes(path = "C:/FCR_BVR Metals Data/EDI",
                           data.path = "C:/FCR_BVR Metals Data/EDI",
-                          data.table = "Metals_EDI.csv",
+                          data.table = "Metals_EDI_current.csv",
                           write.file = TRUE)
 
 
@@ -62,7 +62,7 @@ template_table_attributes(path = "C:/FCR_BVR Metals Data/EDI",
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "C:/FCR_BVR Metals Data/EDI",
                              data.path = "C:/FCR_BVR Metals Data/EDI",
-                             data.table = "Metals_EDI.csv",
+                             data.table = "Metals_EDI_current.csv",
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -137,14 +137,16 @@ make_eml(
   path = "C:/FCR_BVR Metals Data/EDI",
   data.path = "C:/FCR_BVR Metals Data/EDI",
   eml.path = "C:/FCR_BVR Metals Data/EDI",
-  dataset.title = "Metals data from Falling Creek Reservoir and Beaverdam Reservoir from 2014 to 2018",
-  temporal.coverage = c("2014-04-01", "2018-12-17"),
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2020",
+  temporal.coverage = c("2014-04-01", "2020-12-02"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_EDI.csv",
+  data.table = "Metals_EDI_current.csv",
   data.table.description = "Reservoir iron and manganese chemistry dataset",
+  other.entity = "Metals_QAQC.R",
+  other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.326.1')
+  package.id = 'edi.127.5')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -184,14 +186,16 @@ make_eml(
   path = "C:/FCR_BVR Metals Data/EDI",
   data.path = "C:/FCR_BVR Metals Data/EDI",
   eml.path = "C:/FCR_BVR Metals Data/EDI",
-  dataset.title = "Metals data from Falling Creek Reservoir and Beaverdam Reservoir from 2014 to 2018",
-  temporal.coverage = c("2014-04-01", "2018-12-17"),
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2020",
+  temporal.coverage = c("2014-04-01", "2019-12-02"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_EDI.csv",
+  data.table = "Metals_EDI_current.csv",
   data.table.description = "Reservoir iron and manganese chemistry dataset",
+  other.entity = "Metals_QAQC.R",
+  other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.455.2')
+  package.id = 'edi.455.5')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

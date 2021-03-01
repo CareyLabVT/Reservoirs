@@ -1,23 +1,23 @@
-Depth profiles of multiple water-quality variables were collected from 2013 through 2019 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night.
+Depth profiles of multiple water-quality variables were collected from 2013 through 2020 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2020, and are denoted with a negative depth measurement that indicate the distance above the surface of the reservoir. 
 
 The CTD was calibrated by the manufacturer yearly (usually in December-February) according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. 
 
-INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2019
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2020
 
 Multiple sensors and instruments were added over time; below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals.
 
 Seacat 19Plus V 1.6 SERIAL NO. 4397 2013 - 2016 http://www.seabird.com/sites/default/files/documents/19plus_018_0.pdf 
 
-Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2019 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
+Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2020 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
 
 For CTD processing, refer to the SeaBird Data processing manual. http://www.seabird.com/sites/default/files/documents/SBEDataProcessing_7.26.7.pdf
 
-SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2019 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
+SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2020 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
 
-FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2019 
+FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2020 
 
-Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2019 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
+Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2020 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
 
-OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2019 http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
+OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2020 http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
 
-Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2019 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
+Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2020 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891

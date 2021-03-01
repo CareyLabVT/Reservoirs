@@ -1,0 +1,15 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	categorical			NA	No data
+Site	Sampling site within each reservoir; 50 = site closest to the dam	numeric	dimensionless		NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A. with daylight savings time observed	Date		YYYY-MM-DD HH:MM:SS	NA	No data
+Depth_m	Depth chaoborus were sampled from for gas extraction	numeric	meter		NA	No data
+<<<<<<< HEAD
+CH4_umolL	Methane concentration	numeric	micromolePerLiter		NA	No data
+ChaoborusDensity_NumPerLiter	Number of Chaoborus per liter of sample water	numeric	numberPerLiter		NA	No data
+=======
+CH4_umolL	Methane concentration in vial	numeric	micromolePerLiter		NA	No data
+ChaoborusDensity_NumPerLiter	Number of Chaoborus per liter of sample water	numeric	NumPerLiter		NA	No data
+>>>>>>> 6c565c4271db8b7649e688d361a4f5607ed74855
+Flag_Depth_m	Data flag for site depths; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_CH4_umolL	Data flag for chaoborus methane concentraions; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data
+Flag_ChaoborusDensity_NumPerLiter	Data flag for the chaoborus density; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged	numeric	dimensionless		NA	No data

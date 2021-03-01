@@ -2,8 +2,10 @@ givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	ro
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	creator
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	contact
 Kathryn	M.	Krueger	Virginia Tech	katiek5@vt.edu	0000-0002-3509-0611	creator
+Kathryn	M.	Krueger	Virginia Tech	katiek5@vt.edu	0000-0002-3509-0611	PI		Virginia Water Resources Research Center	
 Zackary	W.	Munger	Virginia Tech	mungalor@gmail.com	0000-0002-3604-2697	creator
 Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	creator
+Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	PI		Geological Society of America	
 Mary	E.	Lofton	Virginia Tech	melofton@vt.edu	0000-0003-3270-1330	creator
 Ryan	P.	McClure	Virginia Tech	Ryan333@vt.edu	0000-0001-6370-3852	creator
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator
@@ -13,5 +15,7 @@ Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Virginia T
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Fralin Life Sciences Institute	
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust	National Science Foundation	1737424
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933016
+Renato	J.	Figueiredo	University of Florida	renato@acis.ufl.edu	0000-0001-9841-6060	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933102
 Athena	 	Tilley	Virginia Tech	atilley@vt.edu	0000-0001-7865-5136	analytical chemist
 Jeffrey	 	Parks	Virginia Tech	jparks@vt.edu	0000-0002-1269-6987	analytical chemist

@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.151.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Depth profiles of water column dissolved methane, density and biomass of zooplankton (specifically, Chaoborus spp.), and measurements of methane extracted from the tracheal gas sacs of Chaoborus spp. during two sampling efforts in 2016</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Jonathan</givenName>
+        <givenName>P.</givenName>
+        <surName>Doubek</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>jdoubek@lssu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-1858-7730</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Mary</givenName>
+        <givenName>E.</givenName>
+        <surName>Lofton</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Nicole</givenName>
+        <givenName>K.</givenName>
+        <surName>Ward</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>nkward@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-7549-0153</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Durelle</givenName>
+        <givenName>T.</givenName>
+        <surName>Scott</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dscott@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-5792-789X</userId>
+    </creator>
+    <pubDate>2021-02-02</pubDate>
+    <abstract>
+      <para>Depth profiles of water column dissolved methane (CH4), density and biomass of zooplankton (specifically, Chaoborus spp.), and measurements of methane extracted from the tracheal gas sacs of Chaoborus spp. were collected from Beaverdam Reservoir, Vinton, VA, USA during two, 24-hr intensive sampling efforts in fall 2016 (3-4 August and 16-17 September). The sampling campaign was designed to test the hypothesis that Chaoborus spp. can transport CH4 from the hypolimnion to the epilimnion of lakes and reservoirs as they migrate to the surface waters from the benthos at night in search of zooplankton prey, and results of the project are published in Carey et al. 2018. During both sampling events, depth profiles of water column methane and Chaoborus spp. density were collected at noon, dusk, midnight, 2 a.m., dawn, and noon the following day at a 1 m resolution. In addition, during the September sampling event depth profiles were collected 1 hour prior to and after dusk. Methane gas was extracted from live Chaoborus individuals at every depth and time point immediately after collection via gentle centrifugation in distilled water following McGinnis et al. 2017. Additional datasets associated with the Carey et al. 2018 publication can be found in the following data packages:</para>
+      <para>Carey, C.C., J.P. Doubek, and K.L. Campbell. 2018. Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2016 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/e2776f99d78433a3458212a7ffb30163</para>
+      <para>Carey, C.C., A.S. Lewis, R.P. McClure, A.B. Gerling, J.P. Doubek, S. Chen, M.E. Lofton, and K.D. Hamre. 2019. Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019 ver 10. Environmental Data Initiative. https://doi.org/10.6073/pasta/1fc7d2a5c69c6a651793dba06d375ae2</para>
+      <para>Carey, C.C., R.P. McClure, B.R. Niederlehner, M.E. Lofton, and A.G. Hounshell. 2020. Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/e048414b480a2a1359192f5c8d30dcd1</para>
+      <para>REFERENCES:&#13;
+Carey, C.C., R.P. McClure, J.P. Doubek, M.E. Lofton, N.K. Ward, and D. Scott. 2018. Chaoborus spp. transport CH4 from the sediments to the surface waters of a eutrophic reservoir, but their contribution to water column CH4 concentrations and diffusive efflux is minor. Environmental Science &amp; Technology. 52:1165-1173. DOI 10.1021/acs.est.7b04384</para>
+      <para>McGinnis, D. F., Flury, S., Tang, K. W., Grossart, H.-P. 2017. Porewater methane transport within the gas vesicles of diurnally migrating Chaoborus spp.: an energetic advantage. Scientific Reports. 7(44478) DOI 10.1038/srep44478</para>
+      <para>&#13;
+</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Stream Team</keyword>
+      <keyword>Carey Lab</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keyword>Chaoborus</keyword>
+      <keyword>greenhouse gases</keyword>
+      <keyword>reservoir</keyword>
+    </keywordSet>
+    <keywordSet>
+      <keyword>methane</keyword>
+      <keyword>zooplankton</keyword>
+      <keyword>lake</keyword>
+      <keyword>lakes</keyword>
+      <keywordThesaurus>LTER Controlled Vocabulary</keywordThesaurus>
+    </keywordSet>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2016-08-03</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2016-09-17</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>completed</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>SUMMARY: &#13;
+Chaoborus spp., water column dissolved methane concentrations, and methane contained in the gas sacs of Chaoborus were sampled in Beaverdam Reservoir (BVR) throughout the diel periods of 3-4 August and 16-17 September 2016. This data product includes collected meter-resolution depth profiles of Chaoborus and methane (CH4), at noon, dusk, midnight, 2 a.m., dawn, and then noon the next day as well as measurements of methane extracted from Chaoborus at every depth and time point.  Sunset and sunrise times for 3-4 August were approximately 20:30 and 6:00, respectively, and 20:00 and 6:30 for 16-17 September. On the second sampling event (16-17 September), we collected additional profiles at 1 h before and after dusk for more finely resolved Chaoborus and CH4 profiles. </para>
+          <para>WATER COLUMN DISSOLVED METHANE:&#13;
+CH4 samples were collected with a Van Dorn sampler every meter in the water column from subsurface (0.1 m) to just above the sediments at 11 m. Water samples were transferred from the Van Dorn into two replicate 20 mL serum vials, capped without headspace, and kept on ice until analysis within 24 h using a GC-FID following standard methods (McClure et al 2018; Carey et al 2020). </para>
+          <para>CHAOBORUS SAMPLING:&#13;
+Profiles of Chaoborus were collected every meter from the surface to 10 m using a 30 L Schindler trap (Doubek et al 2019; Carey et al 2018); 11 m was not sampled to prevent submerging the Schindler trap in the sediments. All Schindler trap samples were collected in &lt;30 s, the duration from when the trap was closed with a messenger at depth to when the trap was raised to the water surface and poured into an opaque sample bottle. All Chaoborus collected at night were kept in near-complete darkness from the time of collection to the beginning of the incubations to limit any light effects. After incubation for methane extraction (see below), Chaoborus were preserved in 70% ethanol. Chaoborus spp. were identified using a Meiji RZ dissecting microscope (Meiji Techno, San Jose, California, USA) at 50x magnification. All Chaoborus spp. were counted in each sample and then scaled to the volume of the vertical tow net or the volume of the Schindler trap. Chaoborus densities were calculated following Downing and Rigler 1984. The first ten individuals in each sample were measured and biomass was calculated using published length-weight regressions (Dumont and Balvay, 1979; Downing and Rigler, 1984).</para>
+          <para>METHANE EXTRACTED FROM CHAOBORUS:&#13;
+At every sampling time, we measured the CH4 released from Chaoborus with methods adapted from McGinnis et al 2017. Immediately after collection (see above), the Chaoborus were transported to a mobile lab set up onshore. We immediately separated Chaoborus into counting trays, discarded any individuals not in their third or fourth instar stage, and then rinsed, counted, and gently added Chaoborus to 125 mL Erlenmeyer flasks. The Chaoborus were thoroughly rinsed with distilled water pre-equilibrated to atmospheric CH4 concentrations to prevent high-CH4 water from contaminating the flasks.  The flasks had a magnetic stir bar and were filled with 100 mL of equilibrated distilled water. Each flask was tightly capped with a rubber septum stopper and placed on a stir plate, where Chaoborus were mixed at 60 rpm for 60 min to release any gas in their tracheal sacs and equilibrate CH4 concentrations in the water with the headspace. The total duration of time from Chaoborus collection in the reservoir to the beginning of the incubations was approximately 10-30 min, and much care was taken to limit any unnecessary Chaoborus handling. After 60 min, 30 mL of gas were removed from the flask headspace using a syringe and injected into a serum vial that was kept on ice until analysis within 24 h. All flasks were thoroughly cleaned with atmosphere-equilibrated distilled water between incubations. </para>
+          <para>ANCILLARY DATASETS:&#13;
+Additionally, From 6 April to 11 November 2016, Beaverdam Reservoir was sampled fortnightly during the daytime to compare the seasonal pattern of Chaoborus and CH4 throughout the summer stratified period with the diel sampling. On each sampling date, we collected approximately 0.1 m resolution depth profiles of temperature and DO concentrations using a 4-Hz SBE 19plus CTD profiler with an SBE 43 DO sensor (SeaBird Electronics, Bellevue, WA; Carey et al. 2020). We also quantified the daytime density of Chaoborus in the water column with 74-m mesh vertical net tows from 0.5 m above the sediments to the surface, which were preserved and analyzed as described above for Chaoborus samples (Carey et al. 2018). Finally, on every sample day, we measured depth profiles of dissolved CH4 concentrations in the water column at five depths (0.1, 3, 6, 9, and 11 m), following the methods described above (Carey et al. 2020).  </para>
+          <para>Literature and data cited: &#13;
+Carey, C.C., R.P. McClure, B.R. Niederlehner, M.E. Lofton, and A.G. Hounshell. 2020. Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/e048414b480a2a1359192f5c8d30dcd1&#13;
+Carey, C.C., A.S. Lewis, R.P. McClure, A.B. Gerling, J.P. Doubek, S. Chen, M.E. Lofton, and K.D. Hamre. 2019. Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019 ver 10. Environmental Data Initiative. https://doi.org/10.6073/pasta/1fc7d2a5c69c6a651793dba06d375ae2&#13;
+Carey, C. C., McClure, R. P., Doubek, J. P., Lofton, M. E., Ward, N. K., &amp; Scott, D. T. (2018). Chaoborus spp. transport CH4 from the sediments to the surface waters of a eutrophic reservoir, but their contribution to water column CH4 concentrations and diffusive efflux is minor. Environmental science &amp; technology, 52(3), 1165-1173. https://doi.org/10.1021/acs.est.7b04384&#13;
+Carey, C.C., J.P. Doubek, and K.L. Campbell. 2018. Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2016 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/e2776f99d78433a3458212a7ffb30163&#13;
+Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McClure, R. P., ... &amp; Carey, C. C. (2018). The effects of hypolimnetic anoxia on the diel vertical migration of freshwater crustacean zooplankton. Ecosphere, 9(7), e02332. https://doi.org/10.1002/ecs2.2332&#13;
+Downing and Rigler (1984). A Manual on Methods for the Assessment of Secondary Productivity in Fresh Waters, 2nd ed.; Blackwell Scientific: London.&#13;
+Dumont, H. J., and G. Balvay. (1979) The dry weight estimate of Chaoborus flavicans (Meigen) as a function of length and instars. Hydrobiologia 64:139-145.&#13;
+McClure, R. P., Hamre, K. D., Niederlehner, B. R., Munger, Z. W., Chen, S., Lofton, M. E., ... &amp; Carey, C. C. (2018). Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment, 636, 610-620. https://doi.org/10.1016/j.scitotenv.2018.04.255&#13;
+McGinnis, D. F., Flury, S., Tang, K. W., &amp; Grossart, H. P. (2017). Porewater methane transport within the gas vesicles of diurnally migrating Chaoborus spp.: an energetic advantage. Scientific Reports, 7, 44478. https://doi.org/10.1038/srep44478&#13;
+</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Global Change Center</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Institute of Critical Technology and Applied Science</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Hypoxia-induced trade-offs on zooplankton vertical distribution and community structure in freshwaters</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1601061</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Linking Land-Use Decision Making, Water Quality, and Lake Associations to Understand Human-Natural Feedbacks in Lake Catchments</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1517823</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>Methane Extracted from Chaooborus spp.</entityName>
+      <entityDescription>Measurements of methane extracted from the tracheal gas sacs of Chaoborus spp.</entityDescription>
+      <physical>
+        <objectName>Vial_MethaneConc_Chaoborus.csv</objectName>
+        <size unit="bytes">6583</size>
+        <authentication method="MD5">4200e608be4d52019232368e04f1973c</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; 50 = site closest to the dam</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD HH:MM:SS</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Depth chaoborus were sampled from for gas extraction</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Vial rep number</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CH4_umolL</attributeName>
+          <attributeDefinition>Methane concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>micromolePerLiter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.039951675</minimum>
+                  <maximum exclusive="false">13.0771367</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>NumberChaoborus_NumPerVial</attributeName>
+          <attributeDefinition>Number of Chaoborus per vial</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">25</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Chaoborus_Length_mm</attributeName>
+          <attributeDefinition>Average length of Chaoborus in vial</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>millimeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">4.875</minimum>
+                  <maximum exclusive="false">7.974512744</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Chaoborus_DryWeight_ug</attributeName>
+          <attributeDefinition>Total mass of Chaoborus in vial</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">20.64744904</minimum>
+                  <maximum exclusive="false">100.2259035</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Biomass_ugL</attributeName>
+          <attributeDefinition>Biomass of Chaoborus per vial</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">412.9489808</minimum>
+                  <maximum exclusive="false">2505.647587</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Depth_m</attributeName>
+          <attributeDefinition>Data flag for site depths; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Rep</attributeName>
+          <attributeDefinition>Data flag for vial reps; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_CH4_umolL</attributeName>
+          <attributeDefinition>Data flag for chaoborus methane concentraions; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">7</minimum>
+                  <maximum exclusive="false">7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_NumberChaoborus_NumPerVial</attributeName>
+          <attributeDefinition>Data flag for the number of chaoborus used in each vial; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Chaoborus_Length_mm</attributeName>
+          <attributeDefinition>Data flag for the chaoborus length; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Chaoborus_DryWeight_ug</attributeName>
+          <attributeDefinition>Data flag for the chaoborus mass per vial; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Chaoborus_Biomass_ugL</attributeName>
+          <attributeDefinition>Data flag for the chaoborus biomass; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>75</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>Ambient Water Column Methane Concentrations</entityName>
+      <entityDescription>Depth profiles of water column dissolved methane, density and biomass of Chaoborus spp.</entityDescription>
+      <physical>
+        <objectName>WaterColumn_MethaneConc_ChaoborusDensity.csv</objectName>
+        <size unit="bytes">8864</size>
+        <authentication method="MD5">0dff85053da2eee4441e18597753affa</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; 50 = site closest to the dam</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD HH:MM:SS</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Depth chaoborus were sampled from for gas extraction</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">11</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CH4_umolL</attributeName>
+          <attributeDefinition>Methane concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>micromolePerLiter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.368800631</minimum>
+                  <maximum exclusive="false">1149.130704</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ChaoborusDensity_NumPerLiter</attributeName>
+          <attributeDefinition>Number of Chaoborus per liter of sample water</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>numberPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1.366666667</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Depth_m</attributeName>
+          <attributeDefinition>Data flag for site depths; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_CH4_umolL</attributeName>
+          <attributeDefinition>Data flag for chaoborus methane concentraions; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">7</minimum>
+                  <maximum exclusive="false">7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ChaoborusDensity_NumPerLiter</attributeName>
+          <attributeDefinition>Data flag for the chaoborus density; 0 = not suspect, 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>156</numberOfRecords>
+    </dataTable>
+  </dataset>
+</eml:eml>

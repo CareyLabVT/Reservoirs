@@ -1,0 +1,11 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir	categorical			NA	No data
+Site	Sampling site within each reservoir; s3=Near primary inflow, s4=In between point and inflow, s6=Point out from catwalk, sC=Off of sampling catwalk, T1e1=Transect 1 ebullition trap 1, T1e2=Transect 1 ebullition trap 2, T1e3=Transect 1 ebullition trap 3, T1e4=Transect 1 ebullition trap 4,T2e1=Transect 2 ebullition trap 1, T2e2=Transect 2 ebullition trap 2,T2e3=Transect 2 ebullition trap 3, T2e4=Transect 2 ebullition trap 4, T3e1=Transect 3 ebullition trap 1, T3e2=Transect 3 ebullition trap 2, T3e3=Transect 3 ebullition trap 3, T3e4=Transect 3 ebullition trap 4, T4e1=Transect 4 ebullition trap 1,T4e2=Transect 4 ebullition trap 2, T4e3=Transect 4 ebullition trap 3, T4e4=Transect 4 ebullition trap 4, T5e1=Transect 5 ebullition trap 1, T5e2=Transect 5 ebullition trap 2, T5e3=Transect 5 ebullition trap 3, T5e4=Transect 5 ebullition trap 4	categorical			NA	No data
+Transect	Sampling transect within each reservoir;NT=No Transect, T1=Transect 1, T2=Transect 2, T3=Transect 3, T4=Transect 4, T5=Transect 5	categorical			NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A.	Date		YYYY-MM-DD	NA	No data
+Depth_m	Site depth	numeric	meter		NA	No data
+Ebu_rate	Ebullition rate	numeric	milligramPerMeterSquaredPerDay		NA	No data
+Diff_rate	Diffusion rate	numeric	milligramPerMeterSquaredPerDay		NA	No data
+Flag_depth	Data flag for site depths; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			
+Flag_ebu	Data flag for ebullition rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			
+Flag_diff	Data flag for diffusion rates; 0=not suspect, 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=demonic intrusion due to otter attack of equipment	numeric	dimensionless			

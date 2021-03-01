@@ -4,8 +4,8 @@ Virginia Tech
 Lake	
 Reservoir	
 High-frequency Sensors	
-"Temperature, sensor"	
-"Oxygen, Dissolved"	
+Temperature sensor
+Dissolved Oxygen
 Conductivity	
 Specific conductivity	
 Photosynthetic active radiation
@@ -13,5 +13,10 @@ Chlorophyll a
 Turbidity	
 pH	
 Reduction Potential	
+Descent rate
 Western Virginia Water Authority	
 Falling Creek Reservoir	
+Beaverdam Reservoir
+Carvins Cove Reservoir
+Spring Hollow Reservoir
+Gatewood Reservoir

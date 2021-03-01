@@ -13,7 +13,11 @@ library(FluxCalR)
 
 # Load in data: will need to load in individual files - I recommend doing this by year
 # SET TO YOUR OWN WD!
-wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
+
+#Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
+#wd <- 
+#wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
+#wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
 
@@ -176,4 +180,4 @@ ggplot()+
   ylab("flux_umolCm2s")
 
 # Export out fluxes
-write_csv(flux_all_2,"./20210219_Flux_Output.csv")
+write_csv(flux_all_2,"./20210219_Flux_Output.csv") #change this!

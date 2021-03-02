@@ -1,6 +1,6 @@
 ##MakeEML_Ice
 ##Author: Cayelan Carey
-##Date: 16 Dec 2019
+##Date: 1 March 2021
 # useful ref: https://github.com/EDIorg/EMLassemblyline/blob/master/documentation/instructions.md
 
 setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Ice")
@@ -10,7 +10,7 @@ setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Ice")
 # # Load devtools
 # library(devtools)
 # 
-devtools::install_github("EDIorg/EMLassemblyline")
+#devtools::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
@@ -115,16 +115,16 @@ define_catvars(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/Fallin
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
 make_eml(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
-         dataset.title = "Ice cover data for Falling Creek Reservoir, Vinton, Virginia, USA for 2013-2019",
-         data.table = c('Ice_Data.csv'),
-         data.table.description = c('All ice-on and ice-off data recorded for Falling Creek Reservoir during 2013-2019'),
-         temporal.coverage = c("2014-01-06", "2019-02-02"),
+         dataset.title = "Ice cover data for Falling Creek Reservoir, Vinton, Virginia, USA for 2013-2021",
+         data.files = c('Ice_Data.csv'),
+         data.files.description = c('All ice-on and ice-off data recorded for Falling Creek Reservoir during 2013-2021'),
+         temporal.coverage = c("2014-01-06", "2021-02-23"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
-         user.domain = 'EDI',
-         package.id = "edi.456.1") # Put your package.id here, followed by .1 (for 1st version)
+         affiliation = 'EDI',
+         package.id = "edi.456.2") # Put your package.id here, followed by .1 (for 1st version)
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK

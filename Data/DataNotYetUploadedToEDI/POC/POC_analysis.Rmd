@@ -1,0 +1,82 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+library(tidyverse)
+
+log = read_excel("FilterLog.xlsx") #Import filter log
+
+log = log %>% mutate( #Create date, depth, and rep variables from ID
+  Date_collected = str_extract(ID, "[0-9]+ [A-Z|a-z]{3} [0-9]+"),
+  Date_collected = as.Date(Date_collected, format = "%d %b %y"),
+  Depth = as.numeric(str_extract(str_extract(ID, "[0-9|.]+m "),"[0-9|.]+")),
+  Rep = str_extract(str_extract(ID, " [r|R][0-9]"),"[0-9]"),
+  full_ID = paste(Date_collected,Depth,Rep))
+
+cn = read_excel("POC_datafile.xlsx") #Import CN data
+
+cn = cn %>% mutate( #Create date, depth, and rep variables from ID
+  Date_collected = str_extract(Name, "([0-9][^ ]+) "),
+  Date_collected = as.Date(Date_collected, format = "%d%b%y"),
+  Depth = as.numeric(str_extract(str_extract(Name, "[0-9|.]+m "),"[0-9|.]+")),
+  Rep = str_extract(str_extract(Name, " [r|R][0-9]"),"[0-9]"),
+  full_ID = paste(Date_collected,Depth,Rep))
+
+#cn$full_ID[!cn$full_ID %in% log$full_ID]
+
+#####
+#IDs that are in one file but not the other:
+
+#log
+#"2019-08-12 9 1" <-mislabeled  
+#"2019-07-29 9 1" <- mislabeled
+#"2019-05-27 5 2"<- missing
+#"2019-06-10 5 2"  <- missing
+#
+#cn
+#[1] "2019-03-27 5 1" <- missing
+
+#####
+
+full = log%>%
+  full_join(cn, by = c("Date_collected", "Depth", 'Rep'))%>% #combine filter log and cn data
+  mutate(N_g = N_mg/1000, #Change units to grams
+         C_g = C_mg/1000)%>%
+  select(Date_collected, Depth,Rep,Volume_filtered_mL,Mass_pre_filtering_g,Mass_post_filtering_g,N_g,C_g,Notes,Reactor_exhausted_yn,Below_LOQ_N,Below_LOQ_C)%>% #Reorder variables
+  rename(Depth_m = Depth)%>%
+  mutate(Mass_post_filtering_g = 0.3) #Post filtering mass was not recorded. Bobbie approximated all as 0.3 g
+
+#Set Flags
+bd_flag = 1 #Flag for below detection values, can be changed
+reactor_flag = 2 #reactor exhausted. N set to NA, C retained (flag number can be changed as necessary)
+
+full$N_g[full$Reactor_exhausted_yn==1]<-NA #When the reactor is exhausted, N values need to be removed
+full$Flag_C <- ifelse(full$Reactor_exhausted_yn == 0, 0, reactor_flag)
+full$Flag_N <- ifelse(full$Reactor_exhausted_yn == 0, 0, reactor_flag)
+full$Flag_C <- ifelse(full$Below_LOQ_C == 0, full$Flag_C, bd_flag) #Flag values below detection
+full$Flag_N <- ifelse(full$Below_LOQ_N == 0, full$Flag_N, bd_flag)
+
+full = full%>% #Remove the variables used to create these flags
+  select(-Reactor_exhausted_yn,-Below_LOQ_N,-Below_LOQ_C)
+
+full= full%>% #Calculate summary varaibles: percent C and N in sample, and C and N conc in filtered water
+  mutate(percent_N = N_g/(Mass_post_filtering_g-Mass_pre_filtering_g)*100,
+         percent_C = C_g/(Mass_post_filtering_g-Mass_pre_filtering_g)*100,
+         N_conc_mgL = N_g/Volume_filtered_mL*1000000,
+         C_conc_mgL = C_g/Volume_filtered_mL*1000000)
+
+full%>% #Plot C conc over time
+  ggplot(aes(x = Date_collected, y = C_conc_mgL,color = as.factor(Depth_m)))+
+  geom_point()
+
+full%>% #Plot N conc over time
+  ggplot(aes(x = Date_collected, y = N_conc_mgL,color = as.factor(Depth_m)))+
+  geom_point()
+
+#full[full$Depth_m == 6,]
+#There are two samples from october 16, 2019 that are recorded as being from 6m depth (both on the filter log and the foil)
+```
+

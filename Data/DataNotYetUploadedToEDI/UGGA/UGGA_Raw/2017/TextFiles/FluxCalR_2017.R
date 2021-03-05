@@ -23,7 +23,7 @@ wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/201
 
 # Load in flux data - load in all text files from the 'TextFiles' folder here.
 # This can be used as a record of what files you have already corrected.
-flux_lgr_2 <- LoadLGR(file ="./gga_2020-07-06_f0000.txt",
+flux_lgr_2 <- LoadLGR(file ="./gga_2017-12-01_f0000.txt",
                       time_format = "mdy_HMS")
 
 # Select times when the UGGA was on/off the water
@@ -54,11 +54,6 @@ flux_output <- rbind(Flux_output2,Flux_output3,Flux_output4,Flux_output5,Flux_ou
 flux_co2 <- flux_output %>% 
   filter(Gas == "CO2") %>% 
   rename(co2_slope_ppmS = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
-  select(-Gas)
-
-flux_ch4 <- flux_output %>% 
-  filter(Gas == "CH4") %>% 
-  rename(ch4_slope_ppmS = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
 flux_all <- left_join(flux_co2,flux_ch4,by=c("Num","Date","Start","End","Ta"))

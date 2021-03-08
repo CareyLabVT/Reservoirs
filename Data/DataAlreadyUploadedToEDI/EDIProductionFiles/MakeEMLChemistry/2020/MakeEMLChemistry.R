@@ -2,7 +2,7 @@
 ##Author: Mary Lofton
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
-##Date: 20Aug20
+##Date: 7Mar21
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -12,12 +12,12 @@
 library(tidyverse)
 
 
-old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2018/chemistry_EDI.csv")
-new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/2019_chemistry_collation_final_nocommas.csv")
+old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
+new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
-#add rep col to 2013-2018 data
-old$Rep <- 1
+#make 2019 samples ran in 2020 rep=1 so they fill in properly with rbind
+new$Rep[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00"] <- 1
 
 chem <- rbind(old, new) 
 write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)

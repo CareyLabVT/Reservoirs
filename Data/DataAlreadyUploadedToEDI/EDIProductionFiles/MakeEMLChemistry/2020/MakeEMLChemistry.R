@@ -17,7 +17,11 @@ new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 new <- new %>% select(-X)
 
 #make 2019 samples ran in 2020 rep=1 so they fill in properly with rbind
-new$Rep[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00"] <- 1
+new$Rep[(new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00")& new$Site!=30] <- 1
+
+#fill in missing 2019 data with 2019 samples run in 2020
+test <- inner_join(new[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00",], 
+                             old[c(3030,3242,3356,3355,3358),], by=c("Reservoir","Site","DateTime","Depth_m","Rep"))
 
 chem <- rbind(old, new) 
 write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)

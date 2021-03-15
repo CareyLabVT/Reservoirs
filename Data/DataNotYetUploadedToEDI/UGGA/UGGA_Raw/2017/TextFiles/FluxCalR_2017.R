@@ -2,6 +2,9 @@
 ## For 2020 data! Will need to updated for 2021 data : )
 ## A Hounshell, 25 Jan 2021
 
+##It wasn't possible to pick an endpoint due to the pattern
+
+
 # Script following: https://github.com/junbinzhao/FluxCalR
 
 # Load in 'remotes' package
@@ -34,7 +37,7 @@ flux_lgr_2 <- LoadLGR(file ="./gga_2017-12-01_f0000.txt",
 time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
 
 # Repeat this for all timepoints
-time_cue_3 <- SelCue(flux_lgr_3,flux="CO2",cue="End",save=F)
+
 
 # Then calculate fluxes
 Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in

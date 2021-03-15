@@ -15,7 +15,7 @@ library(FluxCalR)
 # SET TO YOUR OWN WD!
 
 #Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
-#wd <- 
+wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2018/TextFiles")
 #wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 # You'll want to save this script in the same working directory to keep a record of what files
@@ -23,7 +23,7 @@ library(FluxCalR)
 
 # Load in flux data - load in all text files from the 'TextFiles' folder here.
 # This can be used as a record of what files you have already corrected.
-flux_lgr_2 <- LoadLGR(file ="./gga_2020-07-06_f0000.txt",
+flux_lgr_2 <- LoadLGR(file ="./gga_2018-05-31_f0000.txt",
                       time_format = "mdy_HMS")
 flux_lgr_3 <- LoadLGR(file ="./gga_2020-07-13_f0000.txt",
                       time_format = "mdy_HMS")

@@ -2,7 +2,7 @@
 ##Author: Mary Lofton
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
-##Date: 7Mar21
+##Date: 10Mar21
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -11,23 +11,27 @@
 #append this year's chemistry to last year's published data
 library(tidyverse)
 
-
 old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
-#make 2019 samples ran in 2020 rep=1 so they fill in properly with rbind
-new$Rep[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00"] <- 1
+#get cols in same order
+new <- new[names(old)]
+
+#pull out 2019 samples run in 2020
+dups <- new[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00",]
+
+#manually merge the 2020 sample data with the 2019 sample rows (n=4 samples)
+old[old$DateTime=="2019-05-30 12:00:00" & old$Site==30 & old$Reservoir=="FCR",c(10:13,19:22)] <- dups[1, c(10:13,19:22)]
+old[old$DateTime=="2019-07-18 12:00:00" & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(5,6,14,15)] <- dups[2, c(5,6,14,15)]
+old[old$DateTime=="2019-07-18 12:00:00" & old$Site==102 & old$Reservoir=="FCR",c(7:13,16:22)] <- dups[3, c(7:13,16:22)]
+old[old$DateTime=="2019-07-18 12:00:00" & old$Site==200 & old$Reservoir=="FCR",c(5,6,14,15)] <- dups[4, c(5,6,14,15)]
+
+#drop 2019 from new sample list 
+new <- new[!(new$DateTime %in% dups$DateTime),]
 
 chem <- rbind(old, new) 
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)
-
-#Jacob read in (exact times df)
-chem <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
-chem <- select(chem, -X)
-chem$DateTime <- as.POSIXct(chem$DateTime)
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)
-
+write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry.csv",row.names = FALSE)
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
@@ -65,21 +69,21 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                        data.table = "chemistry.csv",
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                           data.table = "chemistry.csv",
                           empty = TRUE,
                           write.file = TRUE)
@@ -129,8 +133,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -154,17 +158,17 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2019",
-  temporal.coverage = c("2013-04-04", "2019-11-20"),
+  temporal.coverage = c("2013-04-04", "2020-12-02"),
   maintenance.description = 'ongoing',
   data.table = "chemistry.csv",
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.12.13')
+  package.id = 'edi.182.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -203,17 +207,17 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2019",
-  temporal.coverage = c("2013-04-04", "2019-11-20"),
+  temporal.coverage = c("2013-04-04", "2020-12-02"),
   maintenance.description = 'ongoing',
   data.table = "chemistry.csv",
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.7') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.8') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

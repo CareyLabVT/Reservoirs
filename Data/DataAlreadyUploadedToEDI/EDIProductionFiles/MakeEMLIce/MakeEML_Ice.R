@@ -124,7 +124,7 @@ make_eml(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          affiliation = 'EDI',
-         package.id = "edi.456.2") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.456.3") # Put your package.id here, followed by .1 (for 1st version)
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK

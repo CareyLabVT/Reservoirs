@@ -25,21 +25,61 @@ wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/201
 # This can be used as a record of what files you have already corrected.
 flux_lgr_2 <- LoadLGR(file ="./gga_2018-05-31_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_3 <- LoadLGR(file ="./gga_2020-07-13_f0000.txt",
+flux_lgr_3 <- LoadLGR(file ="./gga_2018-05-30_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_4 <- LoadLGR(file ="./gga_2020-07-20_f0000.txt",
+flux_lgr_4 <- LoadLGR(file ="./gga_2018-05-29_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_5 <- LoadLGR(file ="./gga_2020-07-27_f0000.txt",
+flux_lgr_5 <- LoadLGR(file ="./gga_2018-05-28_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_6 <- LoadLGR(file ="./gga_2020-08-10_f0000.txt",
+flux_lgr_6 <- LoadLGR(file ="./gga_2018-05-24_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_7 <- LoadLGR(file ="./gga_2020-08-24_f0000.txt",
+flux_lgr_7 <- LoadLGR(file ="./gga_2018-05-21_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_8 <- LoadLGR(file ="./gga_2020-09-02_f0000.txt",
+flux_lgr_8 <- LoadLGR(file ="./gga_2018-05-14_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_9 <- LoadLGR(file ="./gga_2020-09-11_f0000.txt",
+flux_lgr_9 <- LoadLGR(file ="./gga_2018-05-07_f0000.txt",
                       time_format = "mdy_HMS")
-flux_lgr_10 <- LoadLGR(file ="./gga_2020-10-30_f0000.txt",
+flux_lgr_10 <- LoadLGR(file ="./gga_2018-03-23_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_11 <- LoadLGR(file ="./gga_2018-03-05_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_12 <- LoadLGR(file ="./gga_2018-02-23_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_13 <- LoadLGR(file ="./gga_2018-02-12_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_14 <- LoadLGR(file ="./gga_2018-01-26_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_15 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_16 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_17 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_18 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_19 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_20 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_21 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_22 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_23 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_24 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_25 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_26 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_27 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_28 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_29 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_30 <- LoadLGR(file ="./gga_2018-01-25_f0000.txt",
                        time_format = "mdy_HMS")
 
 # Select times when the UGGA was on/off the water
@@ -47,9 +87,10 @@ flux_lgr_10 <- LoadLGR(file ="./gga_2020-10-30_f0000.txt",
 # Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
 # the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
 # This generates a list of 'end' times for each peak saved as time_cue_x
-time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
 
 # Repeat this for all timepoints
+
+time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
 time_cue_3 <- SelCue(flux_lgr_3,flux="CO2",cue="End",save=F)
 time_cue_4 <- SelCue(flux_lgr_4,flux="CO2",cue="End",save=F)
 time_cue_5 <- SelCue(flux_lgr_5,flux="CO2",cue="End",save=F)
@@ -58,6 +99,11 @@ time_cue_7 <- SelCue(flux_lgr_7,flux="CO2",cue="End",save=F)
 time_cue_8 <- SelCue(flux_lgr_8,flux="CO2",cue="End",save=F)
 time_cue_9 <- SelCue(flux_lgr_9,flux="CO2",cue="End",save=F)
 time_cue_10 <- SelCue(flux_lgr_10,flux="CO2",cue="End",save=F)
+time_cue_11 <- SelCue(flux_lgr_11,flux="CO2",cue="End",save=F)
+time_cue_12 <- SelCue(flux_lgr_12,flux="CO2",cue="End",save=F)
+time_cue_13 <- SelCue(flux_lgr_13,flux="CO2",cue="End",save=F)
+time_cue_14 <- SelCue(flux_lgr_14,flux="CO2",cue="End",save=F)
+time_cue_15 <- SelCue(flux_lgr_15,flux="CO2",cue="End",save=F)
 
 # Then calculate fluxes
 Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in
@@ -137,6 +183,51 @@ Flux_output10 <- FluxCal(data = flux_lgr_10, # Dataframe loaded in
                          vol = 0.020876028*1000, # Volume of trap in liters
                          area = 0.1451465, # Area of trap in m^2
                          df_cue = time_cue_10, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         output = FALSE)
+
+Flux_output11 <- FluxCal(data = flux_lgr_11, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_11, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         output = FALSE)
+
+Flux_output12 <- FluxCal(data = flux_lgr_12, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_12, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         output = FALSE)
+
+Flux_output13 <- FluxCal(data = flux_lgr_13, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_13, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         output = FALSE)
+
+Flux_output14 <- FluxCal(data = flux_lgr_14, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_14, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         output = FALSE)
+
+Flux_output15 <- FluxCal(data = flux_lgr_15, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_15, # End times selected using SelCue
                          cue_type = "End", # Designate that these times are for the end
                          ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
                          output = FALSE)

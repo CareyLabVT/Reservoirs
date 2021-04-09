@@ -15,7 +15,7 @@ library(FluxCalR)
 # SET TO YOUR OWN WD!
 
 #Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
-#wd <- 
+wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 # You'll want to save this script in the same working directory to keep a record of what files

@@ -2,7 +2,7 @@
 ##Author: Mary Lofton
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
-##Date: 10Mar21
+##Date: 10Apr21
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -15,17 +15,20 @@ old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
+#rearrange cols to match 2020 EDI pub order
+new <- new %>% select(colnames(new[,c(1:5,7,6,10,12,11,16:19,24,9,8,13,15,14,22,21,20,23)]))
+
 #get cols in same order
-new <- new[names(old)]
+old <- old[names(new)]
 
 #pull out 2019 samples run in 2020
-dups <- new[new$DateTime=="2019-05-30 12:00:00" | new$DateTime=="2019-07-18 12:00:00",]
+dups <- new[new$DateTime==as.Date("2019-05-30") | new$DateTime==as.Date("2019-07-18"),]
 
 #manually merge the 2020 sample data with the 2019 sample rows (n=4 samples)
-old[old$DateTime=="2019-05-30 12:00:00" & old$Site==30 & old$Reservoir=="FCR",c(10:13,19:22)] <- dups[1, c(10:13,19:22)]
-old[old$DateTime=="2019-07-18 12:00:00" & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(5,6,14,15)] <- dups[2, c(5,6,14,15)]
-old[old$DateTime=="2019-07-18 12:00:00" & old$Site==102 & old$Reservoir=="FCR",c(7:13,16:22)] <- dups[3, c(7:13,16:22)]
-old[old$DateTime=="2019-07-18 12:00:00" & old$Site==200 & old$Reservoir=="FCR",c(5,6,14,15)] <- dups[4, c(5,6,14,15)]
+old[old$DateTime==as.Date("2019-05-30") & old$Site==30 & old$Reservoir=="FCR",c(10:13,19:22)] <- dups[1, c(10:13,19:22)]
+old[old$DateTime==as.Date("2019-07-18") & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(5,6,14,15)] <- dups[2, c(5,6,14,15)]
+old[old$DateTime==as.Date("2019-07-18") & old$Site==102 & old$Reservoir=="FCR",c(7:13,16:22)] <- dups[3, c(7:13,16:22)]
+old[old$DateTime==as.Date("2019-07-18") & old$Site==200 & old$Reservoir=="FCR",c(5,6,14,15)] <- dups[4, c(5,6,14,15)]
 
 #drop 2019 from new sample list 
 new <- new[!(new$DateTime %in% dups$DateTime),]
@@ -36,7 +39,7 @@ write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
 
-devtools::install_github("EDIorg/EMLassemblyline")
+#devtools::install_github("EDIorg/EMLassemblyline")
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
@@ -122,7 +125,7 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 #grab attribute names and definitions from your metadata word document
 #for units....
 # View and search the standard units dictionary
-view_unit_dictionary()
+#view_unit_dictionary()
 #put flag codes and site codes in the definitions cell
 #force reservoir to categorical
 
@@ -168,7 +171,7 @@ make_eml(
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.182.1')
+  package.id = 'edi.197.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

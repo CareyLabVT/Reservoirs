@@ -16,17 +16,18 @@ old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/2019_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
-#add rep col to 2013-2018 data
+#add rep and Flag_DateTime col to 2013-2018 data
 old$Rep <- 1
+old$Flag_DateTime <- 1
 
 chem <- rbind(old, new) 
 write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)
 
 #Jacob read in (exact times df)
-chem <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
-chem <- select(chem, -X)
-chem$DateTime <- as.POSIXct(chem$DateTime)
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)
+#chem <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
+#chem <- select(chem, -X)
+#chem$DateTime <- as.POSIXct(chem$DateTime)
+#write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv",row.names = FALSE)
 
 
 # (install and) Load EMLassemblyline #####

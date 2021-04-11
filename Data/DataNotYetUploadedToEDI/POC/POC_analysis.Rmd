@@ -68,13 +68,18 @@ full= full%>% #Calculate summary varaibles: percent C and N in sample, and C and
          N_conc_mgL = N_g/Volume_filtered_mL*1000000,
          C_conc_mgL = C_g/Volume_filtered_mL*1000000)
 
-full%>% #Plot C conc over time
+library(plotly)
+p = full%>% #Plot C conc over time
   ggplot(aes(x = Date_collected, y = C_conc_mgL,color = as.factor(Depth_m)))+
-  geom_point()
+  geom_point()+
+  facet_wrap(~Depth_m)
+ggplotly(p)
 
-full%>% #Plot N conc over time
+q = full%>% #Plot N conc over time
   ggplot(aes(x = Date_collected, y = N_conc_mgL,color = as.factor(Depth_m)))+
-  geom_point()
+  geom_point()+
+  facet_wrap(~Depth_m)
+ggplotly(q)
 
 #full[full$Depth_m == 6,]
 #There are two samples from october 16, 2019 that are recorded as being from 6m depth (both on the filter log and the foil)

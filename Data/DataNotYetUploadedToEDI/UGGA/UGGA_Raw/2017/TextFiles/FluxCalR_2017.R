@@ -34,7 +34,7 @@ flux_lgr_2 <- LoadLGR(file ="./gga_2017-12-01_f0000.txt",
 # Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
 # the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
 # This generates a list of 'end' times for each peak saved as time_cue_x
-time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
+time_cue_2 <- SelCue(flux_lgr_2,flux="CH4",cue="End",save=F)
 
 # Repeat this for all timepoints
 
@@ -50,8 +50,7 @@ Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in
                         output = FALSE)
 
 # Combine all flux outputs
-flux_output <- rbind(Flux_output2,Flux_output3,Flux_output4,Flux_output5,Flux_output6,Flux_output7,
-                     Flux_output8,Flux_output9,Flux_output10)
+flux_output <- rbind(Flux_output2)
 
 # Get together for publication to EDI
 flux_co2 <- flux_output %>% 

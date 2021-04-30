@@ -50,14 +50,14 @@ flux_lgr_10 <- LoadLGR(file ="./gga_2020-10-30_f0000.txt",
 time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
 
 # Repeat this for all timepoints
-time_cue_3 <- SelCue(flux_lgr_3,flux="CO2",cue="End",save=F)
-time_cue_4 <- SelCue(flux_lgr_4,flux="CO2",cue="End",save=F)
-time_cue_5 <- SelCue(flux_lgr_5,flux="CO2",cue="End",save=F)
-time_cue_6 <- SelCue(flux_lgr_6,flux="CO2",cue="End",save=F)
-time_cue_7 <- SelCue(flux_lgr_7,flux="CO2",cue="End",save=F)
-time_cue_8 <- SelCue(flux_lgr_8,flux="CO2",cue="End",save=F)
-time_cue_9 <- SelCue(flux_lgr_9,flux="CO2",cue="End",save=F)
-time_cue_10 <- SelCue(flux_lgr_10,flux="CO2",cue="End",save=F)
+time_cue_3 <- SelCue(flux_lgr_3,flux="CH4",cue="End",save=F)
+time_cue_4 <- SelCue(flux_lgr_4,flux="CH4",cue="End",save=F)
+time_cue_5 <- SelCue(flux_lgr_5,flux="CH4",cue="End",save=F)
+time_cue_6 <- SelCue(flux_lgr_6,flux="CH4",cue="End",save=F)
+time_cue_7 <- SelCue(flux_lgr_7,flux="CH4",cue="End",save=F)
+time_cue_8 <- SelCue(flux_lgr_8,flux="CH4",cue="End",save=F)
+time_cue_9 <- SelCue(flux_lgr_9,flux="CH4",cue="End",save=F)
+time_cue_10 <- SelCue(flux_lgr_10,flux="CH4",cue="End",save=F)
 
 # Then calculate fluxes
 Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in

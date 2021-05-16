@@ -47,7 +47,7 @@ flux_lgr_10 <- LoadLGR(file ="./gga_2020-10-30_f0000.txt",
 # Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
 # the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
 # This generates a list of 'end' times for each peak saved as time_cue_x
-time_cue_2 <- SelCue(flux_lgr_2,flux="CO2",cue="End",save=F)
+time_cue_2 <- SelCue(flux_lgr_2,flux="CH4",cue="End",save=F)
 
 # Repeat this for all timepoints
 time_cue_3 <- SelCue(flux_lgr_3,flux="CH4",cue="End",save=F)

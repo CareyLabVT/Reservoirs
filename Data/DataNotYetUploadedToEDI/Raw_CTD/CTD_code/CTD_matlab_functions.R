@@ -132,9 +132,9 @@ ctd_vs_catwalk <- function(on,off,startDate = "2021-01-01 12:00:00"){
     filter(abs(Depth_m-(EXO_depth +9 -1.6))==min(abs(Depth_m-(EXO_depth +9 -1.6))))
   
   jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_DO_2021.jpg", width=14, height=8, units = "in",res = 300)
-  plot(as.POSIXct(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_1, type = "l", ylim = c(0,14), xlab = "", ylab = "DO (mg/L)")
-  lines(as.POSIXct(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_5, type = "l", ylim = c(0,14), col = "blue")
-  lines(as.POSIXct(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_9, type = "l", ylim = c(0,14), col = "magenta")
+  plot(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_1, type = "l", ylim = c(0,14), xlab = "", ylab = "DO (mg/L)")
+  lines(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_5, type = "l", ylim = c(0,14), col = "blue")
+  lines(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_9, type = "l", ylim = c(0,14), col = "magenta")
   points(ctd_1.0$Date, ctd_1.0$DO_mgL, type = "p", pch = 21, col = "black", bg = "black", cex = 2, lwd = 2)
   points(ctd_5.0$Date, ctd_5.0$DO_mgL, type = "p", pch = 21, col = "black", bg = "blue", cex = 2, lwd = 2)
   points(ctd_9.0$Date, ctd_9.0$DO_mgL, type = "p", pch = 21, col = "black", bg = "magenta", cex = 2, lwd = 2)

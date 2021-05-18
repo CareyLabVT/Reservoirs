@@ -344,12 +344,45 @@ qaqc = final
 qaqc = read.csv("CTD_final_2013_2020.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)==2018)%>%
+  filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL))+
+  ggplot(aes(x = Date, y = Depth_m, color = Temp_C))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()
 ggplotly(qaqc_plotly)
+
+
+depths <- seq(0.5,9, by = .5) #These are the depths we are using as of 02 Aug 19. 
+newDepths <- depths
+# I am reassigning a depth based on the numbers we are currently using for flare, etc
+# (Depths Can be changed as necessary)
+df.final<- qaqc %>% group_by(Date) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  ctd_atThisDepth <- qaqc %>% group_by(Date) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  ctd_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,ctd_atThisDepth)
+}
+
+library(rLakeAnalyzer)
+qaqc
+thermo = df.final%>%
+  filter(Reservoir=="FCR",
+         Site == 50,
+         Depth_m >0.1,
+         Depth_m <9.3)%>%
+  group_by(Date)%>%
+  filter(!duplicated(Depth_m))%>%
+  summarize(depth = thermo.depth(Temp_C,Depth_m))
+
+thermo%>%
+  filter(month(Date)>5,
+         month(Date)<11)%>%
+  mutate(Year = year(Date))%>%
+  ggplot(aes(x = Date, y = depth))+
+  geom_point()+
+  facet_wrap(~Year, scales = "free_x")+
+  ylab("Thermocline depth")
 ```
 

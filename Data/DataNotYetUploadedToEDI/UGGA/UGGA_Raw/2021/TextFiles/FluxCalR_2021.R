@@ -18,7 +18,7 @@ library(FluxCalR)
 # SET TO YOUR OWN WD!
 
 #Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
-wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2017/TextFiles")
+wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2021/TextFiles")
 #wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 # You'll want to save this script in the same working directory to keep a record of what files
@@ -26,7 +26,7 @@ wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/201
 
 # Load in flux data - load in all text files from the 'TextFiles' folder here.
 # This can be used as a record of what files you have already corrected.
-flux_lgr_2 <- LoadLGR(file ="./gga_2017-12-01_f0000.txt",
+flux_lgr_2 <- LoadLGR(file ="./gga_2021-04-26_f0000.txt",
                       time_format = "mdy_HMS")
 
 # Select times when the UGGA was on/off the water

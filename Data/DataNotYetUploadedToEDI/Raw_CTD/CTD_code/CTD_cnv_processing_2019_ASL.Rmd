@@ -63,6 +63,9 @@ if(SITE %in% c("fcr50", "bvr50")){
 }
 ```
 
+
+
+Do not run during normal processing:
 ```{r}
 library(lubridate)
 startDate = as.Date("2020-06-15")

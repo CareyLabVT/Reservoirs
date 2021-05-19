@@ -166,7 +166,7 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
     
     #### BVR #####
     
-    cat <- read_csv(file = getURLContent("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVRplatform.csv"),skip = 1)
+    cat <- read_csv(file = getURLContent("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"),skip = 1)
     ctd_new = read_csv("../CTD_season_csvs/CTD_notmatlab_ready_2021_bvr50.csv")
     
     cat_sum_19 <- cat %>% filter(TIMESTAMP >= startDate) %>%
@@ -177,6 +177,12 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
       filter(TIMESTAMP != "NAN") %>%
       filter(TIMESTAMP != "YYYY_MM_DD_HH_MM_SS")
     
+    dates = unique(ctd_new$Date)
+    ctd_new$EXO_depth=NA
+    for(date in dates){
+      ctd_new$EXO_depth[ctd_new$Date==date] = cat_sum_19$EXO_depth[which.min(abs(as.numeric(as.POSIXct(cat_sum_19$TIMESTAMP))-date))]
+    }
+    class(ctd_new$EXO_depth)="numeric"
     
     ctd_1.0 <- ctd_new %>% 
       group_by(Date)%>%
@@ -190,7 +196,7 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
       group_by(Date)%>%
       filter(abs(Depth_m-11)==min(abs(Depth_m-11)))
     
-    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_DO_2021.jpg", width=14, height=8, units = "in",res = 300)
+    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_DO_2021_BVR.jpg", width=14, height=8, units = "in",res = 300)
     plot(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_1, type = "l", ylim = c(0,14), xlab = "", ylab = "DO (mg/L)")
     lines(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_6, type = "l", ylim = c(0,14), col = "blue")
     lines(as_datetime(cat_sum_19$TIMESTAMP), cat_sum_19$doobs_13, type = "l", ylim = c(0,14), col = "magenta")
@@ -204,16 +210,16 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
     
     ### THERE IS NO dotemp_1 ???
     cat_sum_19_temp <- cat %>% filter(TIMESTAMP >= startDate) %>%
-      select(TIMESTAMP, wtr_1, dotemp_6, dotemp_13) %>%
-      filter(wtr_1 != "NAN") %>%
-      filter(dotemp_5 != "NAN") %>%
-      filter(dotemp_9 != "NAN") %>%
+      select(TIMESTAMP, EXO_wtr_1, dotemp_6, dotemp_13) %>%
+      filter(EXO_wtr_1 != "NAN") %>%
+      filter(dotemp_6 != "NAN") %>%
+      filter(dotemp_13 != "NAN") %>%
       filter(TIMESTAMP != "NAN") %>%
       filter(TIMESTAMP != "YYYY_MM_DD_HH_MM_SS")
     
     
-    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_TEMP_2021.jpg", width=14, height=8, units = "in",res = 300)
-    plot(as_datetime(cat_sum_19_temp$TIMESTAMP), cat_sum_19_temp$wtr_1, type = "l", ylim = c(4,33), xlab = "", ylab = "Temp (C)")
+    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_TEMP_2021_BVR.jpg", width=14, height=8, units = "in",res = 300)
+    plot(as_datetime(cat_sum_19_temp$TIMESTAMP), cat_sum_19_temp$EXO_wtr_1, type = "l", ylim = c(4,33), xlab = "", ylab = "Temp (C)")
     lines(as_datetime(cat_sum_19_temp$TIMESTAMP), cat_sum_19_temp$dotemp_6, type = "l", ylim = c(4,33), col = "blue")
     lines(as_datetime(cat_sum_19_temp$TIMESTAMP), cat_sum_19_temp$dotemp_13, type = "l", ylim = c(4,33), col = "magenta")
     points(ctd_1.0$Date, ctd_1.0$Temp_C, type = "p", pch = 21, col = "black", bg = "black", cex = 2, lwd = 2)
@@ -230,8 +236,8 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
       filter(TIMESTAMP != "NAN") %>%
       filter(TIMESTAMP != "YYYY_MM_DD_HH_MM_SS")
     
-    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_CHLA_2021.jpg", width=14, height=8, units = "in",res = 300)
-    plot(as_datetime(cat_sum_19_chla$TIMESTAMP), cat_sum_19_chla$Chla_1, type = "l", ylim = c(0,50), xlab = "", ylab = "chla (ug/L)")
+    jpeg("../CTD_catwalk_figures/SEASONAL_CATWALK_CTD_COMPARE_CHLA_2021_BVR.jpg", width=14, height=8, units = "in",res = 300)
+    plot(as_datetime(cat_sum_19_chla$TIMESTAMP), cat_sum_19_chla$Chla_1, type = "l", ylim = c(0,25), xlab = "", ylab = "chla (ug/L)")
     points(ctd_1.0$Date, ctd_1.0$Chla_ugL, type = "p", pch = 21, col = "black", bg = "green", cex = 2, lwd = 2)
     abline(v=on, lwd = 1.5)
     abline(v=off,lty=2, lwd = 1.5)

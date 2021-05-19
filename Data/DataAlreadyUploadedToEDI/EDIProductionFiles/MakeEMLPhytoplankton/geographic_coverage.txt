@@ -1,0 +1,3 @@
+geographicDescription	westBoundingCoordinate	eastBoundingCoordinate	northBoundingCoordinate	southBoundingCoordinate
+"Falling Creek Reservoir is located in Vinton, Virginia, USA"	-79.839249	-79.836009	37.309589	37.30266
+"Site 50 is the deepest point in the reservoir (9.3 m)"	-79.83726	-79.83726	37.30325	 37.30325

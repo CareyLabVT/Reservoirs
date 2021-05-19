@@ -1,0 +1,66 @@
+name	name_type	name_resolved	authority_system	authority_id
+Ankistrodesmus	scientific	Ankistrodesmus	GBIF Backbone Taxonomy	9516573
+Aphanocapsa	scientific	Aphanocapsa	World Register of Marine Species	146562
+Asterionella	scientific	Asterionella	World Register of Marine Species	148953
+Chlorophyte sp. 1	scientific	NA	NA	NA
+Cryptomonas	scientific	Cryptomonas	World Register of Marine Species	106282
+Dinobryon	scientific	Dinobryon	World Register of Marine Species	157240
+Dolichospermum	scientific	Dolichospermum	World Register of Marine Species	578476
+Elakatothrix	scientific	Elakatothrix	GBIF Backbone Taxonomy	9314907
+Parvodinium	scientific	Parvodinium	GBIF Backbone Taxonomy	7557330
+Pseudanabaena	scientific	Pseudanabaena	World Register of Marine Species	177588
+Rhodomonas	scientific	Rhodomonas	World Register of Marine Species	106289
+Synedra	scientific	Synedra	World Register of Marine Species	149186
+Cyclotella	scientific	Cyclotella	World Register of Marine Species	148905
+Dictyosphaerium	scientific	Dictyosphaerium	World Register of Marine Species	178623
+Synura	scientific	Synura	World Register of Marine Species	178594
+Selenastrum	scientific	Selenastrum	GBIF Backbone Taxonomy	8224926
+Fragilaria	scientific	Fragilaria	World Register of Marine Species	149028
+Oocystis	scientific	Oocystis	World Register of Marine Species	178611
+Nitzchia	scientific	Nitzchia	GBIF Backbone Taxonomy	NA
+Woronichinia	scientific	Woronichinia	World Register of Marine Species	146617
+Euglena	scientific	Euglena	World Register of Marine Species	8012
+Merismopedia	scientific	Merismopedia	World Register of Marine Species	146545
+Trachelomonas	scientific	Trachelomonas	World Register of Marine Species	163247
+Gloeodinium	scientific	Gloeodinium	World Register of Marine Species	366605
+Prorocentrum	scientific	Prorocentrum	World Register of Marine Species	109566
+Microcystis	scientific	Microcystis	World Register of Marine Species	146557
+Pandorina	scientific	Pandorina	GBIF Backbone Taxonomy	2639351
+Staurastrum	scientific	Staurastrum	World Register of Marine Species	162728
+Polytomella	scientific	Polytomella	GBIF Backbone Taxonomy	7578716
+Platydorina	scientific	Platydorina	GBIF Backbone Taxonomy	2639364
+Peridinium	scientific	Peridinium	World Register of Marine Species	109549
+Navicula	scientific	Navicula	World Register of Marine Species	149142
+Chlorophyte sp. 4	scientific	NA	NA	NA
+Spondylosium	scientific	Spondylosium	GBIF Backbone Taxonomy	8148257
+Oochromonas	scientific	NA	NA	NA
+Snowella	scientific	Snowella	GBIF Backbone Taxonomy	3217087
+Bambusina	scientific	Bambusina	GBIF Backbone Taxonomy	2649859
+Micractinium	scientific	Micractinium	GBIF Backbone Taxonomy	2641076
+Dactylococcopsis	scientific	Dactylococcopsis	World Register of Marine Species	146579
+Staurodesmus	scientific	Staurodesmus	GBIF Backbone Taxonomy	2647177
+Desmid sp. 1	scientific	NA	NA	NA
+Gonyostomum	scientific	Gonyostomum	World Register of Marine Species	369698
+unicell Cyanobacterium	scientific	NA	NA	NA
+unicell Eukaryote	scientific	NA	NA	NA
+Gloeocystis	scientific	Gloeocystis	World Register of Marine Species	178924
+Pediastrum	scientific	Pediastrum	GBIF Backbone Taxonomy	2641883
+Ceratoneis	scientific	Ceratoneis	World Register of Marine Species	163931
+Chlamydomonas	scientific	Chlamydomonas	World Register of Marine Species	178583
+Tetraselmis	scientific	Tetraselmis	World Register of Marine Species	134526
+Nephroselmis	scientific	Nephroselmis	World Register of Marine Species	134524
+Chlorophyte sp. 3	scientific	NA	NA	NA
+Actinotaenium	scientific	Actinotaenium	GBIF Backbone Taxonomy	2649739
+Closterium	scientific	Closterium	GBIF Backbone Taxonomy	2646356
+Cosmarium	scientific	Cosmarium	World Register of Marine Species	478557
+Lepocinclis	scientific	Lepocinclis	GBIF Backbone Taxonomy	3208529
+Monomastix	scientific	Monomastix	World Register of Marine Species	578239
+Kirchneriella	scientific	Kirchneriella	GBIF Backbone Taxonomy	3245126
+Schroederia	scientific	Schroederia	GBIF Backbone Taxonomy	9455895
+Coccomyxa	scientific	Coccomyxa	World Register of Marine Species	143947
+Dunaliella	scientific	Dunaliella	World Register of Marine Species	178589
+Nephrocytium	scientific	Nephrocytium	GBIF Backbone Taxonomy	2641565
+Tetraspora	scientific	Tetraspora	World Register of Marine Species	246832
+Volvulina	scientific	Volvulina	World Register of Marine Species	184974
+Synechococcus	scientific	Synechococcus	World Register of Marine Species	160572
+Eudorina	scientific	Eudorina	GBIF Backbone Taxonomy	2639366

@@ -1,0 +1,67 @@
+attributeName	code	definition
+Genus	Actinotaenium	phytoplankton genus scientific name
+Genus	Ankistrodesmus	phytoplankton genus scientific name
+Genus	Aphanocapsa	phytoplankton genus scientific name
+Genus	Asterionella	phytoplankton genus scientific name
+Genus	Bambusina	phytoplankton genus scientific name
+Genus	Ceratoneis	phytoplankton genus scientific name
+Genus	Chlamydomonas	phytoplankton genus scientific name
+Genus	Chlorophyte sp. 1	cell less than five micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	Chlorophyte sp. 3	cell less than five micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	Chlorophyte sp. 4	cell less than five micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	Closterium	phytoplankton genus scientific name
+Genus	Coccomyxa	phytoplankton genus scientific name
+Genus	Cosmarium	phytoplankton genus scientific name
+Genus	Cryptomonas	phytoplankton genus scientific name
+Genus	Cyclotella	phytoplankton genus scientific name
+Genus	Dactylococcopsis	phytoplankton genus scientific name
+Genus	Desmid sp. 1	cell less than ten micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	Dictyosphaerium	phytoplankton genus scientific name
+Genus	Dinobryon	phytoplankton genus scientific name
+Genus	Dolichospermum	phytoplankton genus scientific name
+Genus	Dunaliella	phytoplankton genus scientific name
+Genus	Elakatothrix	phytoplankton genus scientific name
+Genus	Eudorina	phytoplankton genus scientific name
+Genus	Euglena	phytoplankton genus scientific name
+Genus	Fragilaria	phytoplankton genus scientific name
+Genus	Gloeocystis	phytoplankton genus scientific name
+Genus	Gloeodinium	phytoplankton genus scientific name
+Genus	Gonyostomum	phytoplankton genus scientific name
+Genus	Kirchneriella	phytoplankton genus scientific name
+Genus	Lepocinclis	phytoplankton genus scientific name
+Genus	Merismopedia	phytoplankton genus scientific name
+Genus	Micractinium	phytoplankton genus scientific name
+Genus	Microcystis	phytoplankton genus scientific name
+Genus	Monomastix	phytoplankton genus scientific name
+Genus	Navicula	phytoplankton genus scientific name
+Genus	Nephrocytium	phytoplankton genus scientific name
+Genus	Nephroselmis	phytoplankton genus scientific name
+Genus	Nitzchia	phytoplankton genus scientific name
+Genus	Oochromonas	phytoplankton genus scientific name
+Genus	Oocystis	phytoplankton genus scientific name
+Genus	Pandorina	phytoplankton genus scientific name
+Genus	Parvodinium	phytoplankton genus scientific name
+Genus	Pediastrum	phytoplankton genus scientific name
+Genus	Peridinium	phytoplankton genus scientific name
+Genus	Platydorina	phytoplankton genus scientific name
+Genus	Polytomella	phytoplankton genus scientific name
+Genus	Prorocentrum	phytoplankton genus scientific name
+Genus	Pseudanabaena	phytoplankton genus scientific name
+Genus	Rhodomonas	phytoplankton genus scientific name
+Genus	Schroederia	phytoplankton genus scientific name
+Genus	Selenastrum	phytoplankton genus scientific name
+Genus	Snowella	phytoplankton genus scientific name
+Genus	Spondylosium	phytoplankton genus scientific name
+Genus	Staurastrum	phytoplankton genus scientific name
+Genus	Staurodesmus	phytoplankton genus scientific name
+Genus	Synechococcus	phytoplankton genus scientific name
+Genus	Synedra	phytoplankton genus scientific name
+Genus	Synura	phytoplankton genus scientific name
+Genus	Tetraselmis	phytoplankton genus scientific name
+Genus	Tetraspora	phytoplankton genus scientific name
+Genus	Trachelomonas	phytoplankton genus scientific name
+Genus	unicell Cyanobacterium	cell less than five micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	unicell Eukaryote	cell less than five micrometers greatest axial linear dimension identified to lowest possible taxonomic level
+Genus	Volvulina	phytoplankton genus scientific name
+Genus	Woronichinia	phytoplankton genus scientific name
+Reservoir	FCR	Falling Creek Reservoir

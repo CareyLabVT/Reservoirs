@@ -82,4 +82,4 @@ ggplot()+
   ylab("flux_umolCm2s")
 
 # Export out fluxes
-write_csv(flux_all_2,"./20210219_Flux_Output.csv") #change this!
+write_csv(flux_all_2,"./2017_Seasonal_Output.csv") #change this!

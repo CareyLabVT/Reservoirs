@@ -302,8 +302,8 @@ Flux_output23 <- FluxCal(data = flux_lgr_23, # Dataframe loaded in
                         output = FALSE)
 
 # Combine all flux outputs
-flux_output <- rbind(Flux_output2,Flux_output3,Flux_output4,Flux_output5,Flux_output6,Flux_output7,
-                     Flux_output8,Flux_output9,Flux_output10)
+flux_output <- rbind(Flux_output2,Flux_output4,Flux_output5,Flux_output6,Flux_output7,
+                     Flux_output9,Flux_output10,Flux_output11,Flux_output12,Flux_output14,Flux_output15,Flux_output16,Flux_output17,Flux_output23)
 
 # Get together for publication to EDI
 flux_co2 <- flux_output %>% 

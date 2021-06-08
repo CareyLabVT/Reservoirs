@@ -548,18 +548,18 @@
 #     </TurbidityMeter>
 #   </sensor>
 # </Sensors>
-# datcnv_date = Jun 07 2021 12:34:02, 7.26.7.129 [datcnv_vars = 15]
+# datcnv_date = Jun 08 2021 11:38:40, 7.26.7.129 [datcnv_vars = 15]
 # datcnv_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060721_fcr50_0001.hex C:\DATA\SBE19plusV2_7809.xmlcon
 # datcnv_skipover = 0
 # datcnv_ox_hysteresis_correction = yes
 # datcnv_ox_tau_correction = yes
-# filter_date = Jun 07 2021 12:34:22, 7.26.7.129
+# filter_date = Jun 08 2021 11:39:14, 7.26.7.129
 # filter_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060721_fcr50_0001.cnv
 # filter_low_pass_tc_A = 0.030
 # filter_low_pass_tc_B = 0.150
 # filter_low_pass_A_vars = sbeox0Mg/L tv290C density00 prdE prdM
 # filter_low_pass_B_vars = depFM dz/dtM orp sbeox0PS par/sat/log ph specc c0uS/cm flECO-AFL turbWETntu0
-# alignctd_date = Jun 07 2021 12:34:44, 7.26.7.129
+# alignctd_date = Jun 08 2021 11:39:46, 7.26.7.129
 # alignctd_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060721_fcr50_0001.cnv
 # alignctd_adv = dz/dtM 1.000, orp 1.000, sbeox0PS 1.000, ph 1.000, specc 1.000, c0uS/cm 1.000, flECO-AFL 1.000, turbWETntu0 1.000                                                                                                   
 # file_type = ascii

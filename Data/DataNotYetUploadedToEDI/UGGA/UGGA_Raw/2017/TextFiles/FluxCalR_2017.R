@@ -58,6 +58,11 @@ flux_co2 <- flux_output %>%
   rename(co2_slope_ppmS = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
+flux_ch4 <- flux_output %>% 
+  filter(Gas == "CH4") %>% 
+  rename(ch4_slope_ppmS = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
+  select(-Gas)
+
 flux_all <- left_join(flux_co2,flux_ch4,by=c("Num","Date","Start","End","Ta"))
 
 # NOTE: For 2020 - all data came from FCR at site 50
@@ -82,4 +87,4 @@ ggplot()+
   ylab("flux_umolCm2s")
 
 # Export out fluxes
-write_csv(flux_all_2,"./2017_Seasonal_Output.csv") #change this!
+write_csv(flux_all_2,"./2017_season_Flux_Output.csv") #change this!

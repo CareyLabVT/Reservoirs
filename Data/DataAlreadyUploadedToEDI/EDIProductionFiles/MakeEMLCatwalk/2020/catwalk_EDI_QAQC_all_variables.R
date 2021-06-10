@@ -4,33 +4,30 @@
 # final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"
-source(paste0(folder, "misc_QAQC_scripts/temp_oxy_chla_qaqc.R"))
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020/"
+source(paste0(folder, "temp_oxy_chla_qaqc.R"))
 
 # download most up to date catwalk data and maintenance log
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "/CAT_MaintenanceLog_2020.txt"))
-#download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', paste0(folder, 'misc_data_files/pressure.csv'))
-#download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk_2020.csv"))
-#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_Catwalk_20201109.dat', paste0(folder, "misc_data_files/CAT_2.csv"))
-#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/CR6_FCRcatwalk_FCRWaterLevel_20201202.dat', paste0(folder, 'misc_data_files/pressure2.csv'))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt"))
+download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv', paste0(folder, 'misc_data_files/pressure.csv'))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk.csv"))
+download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2021.csv', paste0(folder, "misc_data_files/CAT_2.csv"))
+
 # run standard qaqc
-data_file <- paste0(folder, 'misc_data_files/Catwalk_2020.csv')
+data_file <- paste0(folder, 'misc_data_files/Catwalk.csv')
 data2_file <- paste0(folder, 'misc_data_files/Cat_2.csv')
 data3_file <- paste0(folder, 'misc_data_files/pressure.csv')
-data4_file <- paste0(folder, 'misc_data_files/pressure2.csv')
-maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2020.txt")
-output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2020.csv")
-temp_oxy_chla_qaqc(data_file,data2_file,data3_file,data4_file, maintenance_file, output_file)
+maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt")
+output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2021.csv")
+temp_oxy_chla_qaqc(data_file,data2_file,data3_file, maintenance_file, output_file)
 
 # read in qaqc function output
 catdata <- read.csv(output_file) 
 catdata$DateTime<-as.POSIXct(catdata$DateTime,format = "%Y-%m-%d %H:%M:%S")
-catdata <- catdata[!duplicated(catdata$DateTime), ]
-colnames(catdata)[colnames(catdata)=="Lvl_psi"] <- "Lvl_psi_9"
-colnames(catdata)[colnames(catdata)=="LvlTemp_c_9"] <- "LvlTemp_C_9"
+
 
 # subset file to only unpublished data
-catdata_flag <- catdata[catdata$DateTime>"2019-12-31",]
+catdata_flag <- catdata[catdata$DateTime>"2019-05-31 23:59",]
 catdata_flag <- catdata_flag[!is.na(catdata_flag$Reservoir),]
 
 
@@ -575,6 +572,9 @@ catdata_all <- catdata_all %>%
          EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower, 
          EXO_wiper, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C, 
          Flag_All:Flag_TDS, Flag_fDOM, Flag_Temp_Surf:Flag_Temp_9)
+
+# convert datetimes to characters so that they are properly formatted in the output file
+catdata_all$DateTime <- as.character(catdata_all$DateTime)
   
   
 write.csv(catdata_all, paste0(folder, '/Catwalk_EDI_2020.csv'), row.names = FALSE)

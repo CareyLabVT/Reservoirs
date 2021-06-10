@@ -1,4 +1,4 @@
-temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, data4_file, maintenance_file, output_file)
+temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_file, output_file)
 {
   CATDATA_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -9,7 +9,16 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, data4_file, mai
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
                         "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper")
   
-  PRESSURE_COL_NAMES = c("DateTime", "RECORD", "Lvl_psi", "LvlTemp_c_9")
+  PRESSURE_COL_NAMES = c("DateTime", "RECORD", "Lvl_psi_9", "LvlTemp_C_9")
+  
+  CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
+                        "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
+                        "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
+                        "ThermistorTemp_C_9", "RDO_mgL_5", "RDOsat_percent_5", "RDOTemp_C_5", "RDO_mgL_9",
+                        "RDOsat_percent_9", "RDOTemp_C_9", "EXO_Date", "EXO_Time", "EXOTemp_C_1", "EXOCond_uScm_1",
+                        "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
+                        "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
+                        "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper","Lvl_psi_9", "LvlTemp_C_9")
   
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
@@ -31,27 +40,88 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, data4_file, mai
   
   # read catwalk data and maintenance log
   # NOTE: date-times throughout this script are processed as UTC
-  catdata <- read_csv(data_file, skip = 4, col_names = CATDATA_COL_NAMES,
-                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
-  catdata2 <- read_csv(data2_file, skip = 4, col_names = CATDATA_COL_NAMES,
+  catdata <- read_csv(data_file, skip = 7, col_names = CATDATA_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
-  catdata <-rbind(catdata,catdata2)
-  
-  pressure <- read_csv(data3_file, skip = 4, col_names = PRESSURE_COL_NAMES,
+  pressure <- read_csv(data3_file, skip = 7, col_names = PRESSURE_COL_NAMES,
                        col_types = cols(.default = col_double(), DateTime = col_datetime()))
-  pressure2 <- read_csv(data4_file, skip = 4, col_names = PRESSURE_COL_NAMES,
-                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
-  pressure <-rbind(pressure,pressure2)
   
   pressure=pressure%>%
     select(-RECORD)
   
   catdata=merge(catdata,pressure, all.x=T)
   
-  catdata=catdata[!duplicated(catdata), ]
+  catdata2 <- read_csv(data2_file, skip = 1, col_names = CATPRES_COL_NAMES,
+                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
+  catdata <-rbind(catdata,catdata2)
+  
+  
+  
+  #catdata5=catdata4[order(catdata5$DateTime),]
+  #catdata5$DOY=yday(catdata5$DateTime)
+  
+  
+  #check record for gaps
+  #daily record gaps by day of year
+  
+ # v=c(2:153882)
+ # for(i in 2:nrow(catdata4)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+ #   if(catdata4$DOY[i]-catdata4$DOY[i-1]>1){
+  #    print(c(catdata4$DateTime[i-1],catdata4$DateTime[i]))
+  #  }
+ # }
+  #sub-daily RECORD gaps by RECORD number
+ # for(j in v){ #this identifies if there are any data gaps in the long-term RECORD, and where they are by RECORD number
+  #  if(abs(catdata5$RECORD[j-1]-catdata5$RECORD[j])>1){
+    #  print(c(catdata5$DateTime[j-1],catdata5$DateTime[j]))
+   # }
+  #}
+  
+  
+  #catdata5$DateTime <- force_tz(as.POSIXct(catdata5$DateTime, tz="America/New_York", format = "%Y-%m-%d %H:%M:%S"))
+  
+  #time was changed from GMT-4 to GMT-5 on 15 APR 19 at 10:00
+  #have to seperate data frame by year and record because when the time was changed 10:00-10:40 were recorded twice
+  #once before the time change and once after so have to seperate and assign the right time. 
+  before=catdata%>%
+    filter(DateTime<"2019-04-15 6:50")%>%
+    filter(DateTime<"2019-04-15 6:50" & RECORD < 32879)#Don't know how to change timezones so just subtract 4 from the time we want
+    
+  
+  #now put into GMT-5 from GMT-4
+  #because you already sorted don't need this line
+  #cat_timechange=max(which(before$TIMESTAMP=="2019-04-15 10:40:00"))
+  before$DateTime<-as.POSIXct(strptime(before$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
+  before$DateTime<-with_tz(force_tz(before$DateTime,"Etc/GMT+4"), "Etc/GMT+5") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+  
+  #before$DateTime=as.character(before$DateTime)
+  
+  #filter after the time change 
+  after=catdata%>%
+    filter(DateTime>"2019-04-15 05:50")%>%
+    slice(-c(1,3,5,7,9))
+    
+  
+  after$DateTime<-as.POSIXct(strptime(after$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")#change or else after is off by an hour
+  
+  #after$DateTime=as.character(after$DateTime)#must change time to character before rbind or time is off by an hour for the after dataframe
+  
+  #merge before and after so they are one dataframe in GMT-5
+  
+  catdata=rbind(before, after)
+  
+  catdata=catdata[!duplicated(catdata$DateTime), ]
+  
+  catdata$DateTime<-as.POSIXct(strptime(catdata$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "UTC")
+  #catdata6$DateTime <- force_tz(as.POSIXct(catdata6$DateTime, tz="UTC", format = "%Y-%m-%d %H:%M:%S"))
+  #force to GMT so when add pressure everything lines up
+  #catdata4$DateTime <- force_tz(as.POSIXct(catdata4$DateTime, tz="America/New_York", format = "%Y-%m-%d %H:%M:%S"))
+  
+  #catdata3$DateTime<-as.POSIXct(strptime(after$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
+  
+ 
   log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
@@ -60,7 +130,7 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, data4_file, mai
   ))
   
   # remove NaN data at beginning
-  catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 14:50:00"))
+  catdata <- catdata %>% filter(DateTime >= ymd_hms("2018-07-05 13:50:00"))
   
   # add flag columns
   catdata$Flag_All <- 0

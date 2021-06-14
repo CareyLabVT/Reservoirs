@@ -1,0 +1,3 @@
+In 2019, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation. For a detailed description of the hypolimnetic oxygenation engineered system (HOx), see Gerling et al. (2014). In 2019, the HOx was activated during the following time periods: 3 June to 17 June; 8 July to 19 July; 5 August to 19 August; and 2 September to 1 December.
+
+Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002

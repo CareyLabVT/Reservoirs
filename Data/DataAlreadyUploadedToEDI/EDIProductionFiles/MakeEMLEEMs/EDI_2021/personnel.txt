@@ -1,0 +1,9 @@
+givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
+Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
+Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	contact			
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
+Rose	H.	Thai	Virginia Tech	rosethai@vt.edu		creator			
+Kelly	A.	Peeler	Virginia Tech	kpeeler@vt.edu		creator			
+Durelle	T.	Scott	Virginia Tech	dscott@vt.edu	0000-0002-5792-789X	creator			
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator			

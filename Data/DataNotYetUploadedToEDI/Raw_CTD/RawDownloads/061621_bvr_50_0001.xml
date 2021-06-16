@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<!-- SCPlusV2_RS232 -->
+<SBEDataUploadFile>
+<ApplicationData>
+<Seaterm232>
+<SoftwareVersion>2.8.0.119</SoftwareVersion>
+<BuildDate>07-Nov-2018</BuildDate>
+</Seaterm232>
+</ApplicationData>
+<InstrumentState>
+<HardwareData DeviceType='SBE19plus' SerialNumber='01907809'>
+
+   <Manufacturer>Sea-Bird Electronics, Inc.</Manufacturer>
+
+   <FirmwareVersion>3.1.8</FirmwareVersion>
+
+   <FirmwareDate>Mar  9 2016 16:22:29</FirmwareDate>
+
+   <CommandSetVersion>1.4</CommandSetVersion>
+
+   <PCBAssembly PCBSerialNum='120721' AssemblyNum='41054J'/>
+
+   <PCBAssembly PCBSerialNum='120715' AssemblyNum='41967A'/>
+
+   <PCBAssembly PCBSerialNum='116699' AssemblyNum='41606'/>
+
+   <PCBAssembly PCBSerialNum='120719' AssemblyNum='41059D'/>
+
+   <MfgDate>28-Apr-2017</MfgDate>
+
+   <InternalSensors>
+
+      <Sensor id='Main Temperature'>
+
+         <type>temperature0</type>
+
+         <SerialNumber>01907809</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='Main Conductivity'>
+
+         <type>conductivity-0</type>
+
+         <SerialNumber>01907809</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='Main Pressure'>
+
+         <type>strain-0</type>
+
+         <SerialNumber>10586018</SerialNumber>
+
+      </Sensor>
+
+   </InternalSensors>
+
+   <ExternalSensors>
+
+      <Sensor id='volt 0'>
+
+         <type>pH</type>
+
+         <SerialNumber>27-0363</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='volt 1'>
+
+         <type>ORP</type>
+
+         <SerialNumber>27-0363</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='volt 2'>
+
+         <type>OXY</type>
+
+         <SerialNumber>43-0434</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='volt 3'>
+
+         <type>PAR</type>
+
+         <SerialNumber>1122</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='volt 4'>
+
+         <type>ECO AFL/FL</type>
+
+         <SerialNumber>FLNTURT-2496</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='volt 5'>
+
+         <type>ECO-NTU</type>
+
+         <SerialNumber>FLNTURT-2496</SerialNumber>
+
+      </Sensor>
+
+      <Sensor id='serial'>
+
+         <type>not assigned</type>
+
+         <SerialNumber>not assigned</SerialNumber>
+
+      </Sensor>
+
+   </ExternalSensors>
+
+</HardwareData>
+<StatusData DeviceType='SBE19plus' SerialNumber='01907809'>
+
+   <DateTime>2021-06-16T02:08:19</DateTime>
+
+   <LoggingState>not logging</LoggingState>
+
+   <EventSummary numEvents='0'/>
+
+   <Power>
+
+      <vMain>12.4</vMain>
+
+      <vLith>8.5</vLith>
+
+      <iMain>63.0</iMain>
+
+      <iPump>57.2</iPump>
+
+      <iExt01>21.3</iExt01>
+
+      <iExt2345>38.4</iExt2345>
+
+   </Power>
+
+   <MemorySummary>
+
+      <Bytes>98348</Bytes>
+
+      <Samples>4276</Samples>
+
+      <SamplesFree>2856512</SamplesFree>
+
+      <SampleLength>23</SampleLength>
+
+      <Profiles>3</Profiles>
+
+   </MemorySummary>
+
+</StatusData>
+<ConfigurationData DeviceType='SBE19plus' SerialNumber='01907809'>
+
+   <ProfileMode>
+
+      <ScansToAverage>1</ScansToAverage>
+
+      <MinimumCondFreq>5</MinimumCondFreq>
+
+      <PumpDelay>30</PumpDelay>
+
+      <AutoRun>no</AutoRun>
+
+      <IgnoreSwitch>no</IgnoreSwitch>
+
+   </ProfileMode>
+
+   <Battery>
+
+      <Type>alkaline</Type>
+
+      <CutOff>7.5</CutOff>
+
+   </Battery>
+
+   <DataChannels>
+
+      <ExtVolt0>yes</ExtVolt0>
+
+      <ExtVolt1>yes</ExtVolt1>
+
+      <ExtVolt2>yes</ExtVolt2>
+
+      <ExtVolt3>yes</ExtVolt3>
+
+      <ExtVolt4>yes</ExtVolt4>
+
+      <ExtVolt5>yes</ExtVolt5>
+
+      <SBE38>no</SBE38>
+
+      <WETLABS>no</WETLABS>
+
+      <OPTODE>no</OPTODE>
+
+      <SBE63>no</SBE63>
+
+      <SeaFET>no</SeaFET>
+
+      <GTD>no</GTD>
+
+   </DataChannels>
+
+   <EchoCharacters>yes</EchoCharacters>
+
+   <OutputExecutedTag>yes</OutputExecutedTag>
+
+   <OutputFormat>raw HEX</OutputFormat>
+
+</ConfigurationData>
+<CalibrationCoefficients DeviceType='SBE19plus' SerialNumber='01907809'>
+
+   <Calibration format='TEMP1' id='Main Temperature'>
+
+      <SerialNum>01907809</SerialNum>
+
+      <CalDate>17-Feb-20</CalDate>
+
+      <TA0>1.231828e-03</TA0>
+
+      <TA1>2.765479e-04</TA1>
+
+      <TA2>-9.738161e-07</TA2>
+
+      <TA3>1.725813e-07</TA3>
+
+      <TOFFSET>0.000000e+00</TOFFSET>
+
+   </Calibration>
+
+   <Calibration format='WBCOND0' id='Main Conductivity'>
+
+      <SerialNum>01907809</SerialNum>
+
+      <CalDate>17-Feb-20</CalDate>
+
+      <G>-1.004905e+00</G>
+
+      <H>1.264249e-01</H>
+
+      <I>-3.338479e-05</I>
+
+      <J>1.822406e-05</J>
+
+      <CPCOR>-9.570000e-08</CPCOR>
+
+      <CTCOR>3.250000e-06</CTCOR>
+
+      <CSLOPE>1.000000e+00</CSLOPE>
+
+   </Calibration>
+
+   <Calibration format='STRAIN0' id='Main Pressure'>
+
+      <SerialNum>10586018</SerialNum>
+
+      <CalDate>30-Jan-20</CalDate>
+
+      <PA0>-8.839367e-03</PA0>
+
+      <PA1>4.852353e-04</PA1>
+
+      <PA2>-3.463847e-12</PA2>
+
+      <PTCA0>5.254672e+05</PTCA0>
+
+      <PTCA1>5.138564e+00</PTCA1>
+
+      <PTCA2>-2.726934e-01</PTCA2>
+
+      <PTCB0>2.516687e+01</PTCB0>
+
+      <PTCB1>3.750000e-04</PTCB1>
+
+      <PTCB2>0.000000e+00</PTCB2>
+
+      <PTEMPA0>-5.396332e+01</PTEMPA0>
+
+      <PTEMPA1>5.390761e+01</PTEMPA1>
+
+      <PTEMPA2>-2.231787e-02</PTEMPA2>
+
+      <POFFSET>6.460000e-01</POFFSET>
+
+      <PRANGE>1.600000e+02</PRANGE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 0'>
+
+      <OFFSET>-4.920000e-02</OFFSET>
+
+      <SLOPE>1.248122e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 1'>
+
+      <OFFSET>-4.784000e-02</OFFSET>
+
+      <SLOPE>1.248871e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 2'>
+
+      <OFFSET>-4.864632e-02</OFFSET>
+
+      <SLOPE>1.248714e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 3'>
+
+      <OFFSET>-4.743790e-02</OFFSET>
+
+      <SLOPE>1.248571e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 4'>
+
+      <OFFSET>-4.671263e-02</OFFSET>
+
+      <SLOPE>1.248951e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='VOLT0' id='Volt 5'>
+
+      <OFFSET>-4.871053e-02</OFFSET>
+
+      <SLOPE>1.249136e+00</SLOPE>
+
+   </Calibration>
+
+   <Calibration format='FREQ0' id='external frequency channel'>
+
+      <EXTFREQSF>1.000014e+00</EXTFREQSF>
+
+   </Calibration>
+
+</CalibrationCoefficients>
+<EventCounters DeviceType='SBE19plus' SerialNumber='01907809'>
+
+   <EventSummary numEvents='0'/>
+
+</EventCounters></InstrumentState>
+<Headers>
+
+cast   1 14 Jun 2021 21:00:06 samples 1 to 33, avg = 1, stop = mag switch
+
+</Headers><InstrumentRawData>
+<SBEDataUpload startAddr='0'>
+
+   <Type>1</Type>
+
+   <DataFormat>SEACATPLUS0</DataFormat>
+
+   <Bytes>759</Bytes>
+
+   <Data>
+C94B04E1020B157308EA444D9FA897E1
+F7472CB4029203BB4B04DF020B157308
+EA445A9F6F8815F8492DB6028F03B14B
+04E1020B157308EA444F9FD98754F880
+2BB9029603A94B04E1020B147308EA44
+479FDA9D89F87529C002A903A24B04E1
+020B177308EB44529F66947AF88829C4
+02A1039A4B04DF020B177308EB444F9F
+C98B47F8692BCE02A403924B04DF020B
+177308EB44529F4A9523F8EA2CD002AC
+038D4B04DF020B177308EB444C9FC48A
+0BF80E2EC402A103884B04DD020B1673
+08EC44549F51AE1AF8392DB202190385
+4B04DF020B167308ED44519FC1B245F8
+8F2CBD021B03824B04DF020B167308ED
+44509F258C70F8732BBC0213037E4B04
+DF020B167308ED44549F33B3C4F81C28
+BF021A03764B04DD020B157308EE4451
+9FACAAFAF8412519038503724B04DF02
+0B147308EE44509F348C67F9A61D1C03
+8A03684B04DF020B157308EE444F9F80
+998AF9AD1717038A035D4B04DF020B12
+7308EF444F9F3E9043F918151A038503
+564B04DF020B137308F044579FA48CED
+F8391494026F034C4B04DD020B137308
+F1444B9F9CB3FDF82D119B027803434B
+04DF020B127308F144549F89AFF7F808
+0E9F026B035B4B04DF020B137308F244
+529F64B38BF87C129E027403914B04DF
+020B137308F244549F70892FF9900CB9
+026703C74B04DD020B127308F244529F
+5B8858F9F909BD026B03E34B04DF020B
+107308F244509F758859F8B30FB50263
+03024C04DF020B117308F344539F10B3
+F6F70313BC0263036D4C04DF020B1273
+08F3444C9FF1B21DF85515DF028703FB
+4C04DD020B127308F3445C9FC8B2F2F9
+5D00D4027E03644D04E1020B147308F3
+444C9F9788B7F92604D8027A03AE4D04
+E3020B127308F3444D9F3687A3F90000
+D3027E03F54D04E5020B127308F44445
+9F3E8B74FA0000D60282032A4E04E702
+0B137308F4445D9F08B3E1F0BEB79B02
+AB03564E04E9020B137308F544489FFA
+B23EFA000093029E03754E04E9020B12
+7308F544549FFAB2E8F951079902A603
+8A4E04E9020B137308F544499FF1B2A0
+FA00009B02A903</Data>
+
+   <DataCRC>7fa2ec2c</DataCRC>
+
+   <BytesSent>759</BytesSent>
+
+</SBEDataUpload>
+</InstrumentRawData>
+</SBEDataUploadFile>

@@ -58,7 +58,7 @@ if(SITE %in% c("fcr50", "bvr50")){
   }
   #Compare to catwalk
   if(catwalk_compare == T){
-      ctd_vs_catwalk(on,off, SITE, startDate = "2021-06-10 12:00:00") #This step takes a couple minutes
+      ctd_vs_catwalk(on,off, SITE) #This step takes a couple minutes
   }
 }
 ```

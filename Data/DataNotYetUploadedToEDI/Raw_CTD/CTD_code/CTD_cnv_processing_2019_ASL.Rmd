@@ -3,7 +3,7 @@ title: "CNV Processing"
 output: html_notebook
 ---
 2019 CTD Processing for cnv files
-First writted by ASL 02 Aug 2019
+First written by ASL 02 Aug 2019
 
 # Load packages and assign global variables
 ```{r}
@@ -16,8 +16,13 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
+<<<<<<< HEAD
 DATE_TEXT <- "16-Jun-2021" #format should be "01-Aug-2019"
 SITE <- "bvr50"
+=======
+DATE_TEXT <- "11-Jun-2021" #format should be "01-Aug-2019"
+SITE <- "fcr50"
+>>>>>>> 33e063a7b0d1acbabb1929a3dfe2b578fb1c0236
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
@@ -25,7 +30,11 @@ MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
 
 #Advanced customization
+<<<<<<< HEAD
 REP <- "_0003" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
+=======
+REP <- "_0008" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
+>>>>>>> 33e063a7b0d1acbabb1929a3dfe2b578fb1c0236
 AUTO_NAME <- TRUE #If using a nonstandard name format. Must also fill in NAME_OVERRIDE below
 NAME_OVERRIDE <- "MSN2_CTD_CASTS_072419/072519_bvr50_d" #For example, "080119_fcr50"
 AUTO_FOLDER <- TRUE 
@@ -37,7 +46,11 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
+<<<<<<< HEAD
 SCAN_NUMBER <- 55
+=======
+SCAN_NUMBER <- 450
+>>>>>>> 33e063a7b0d1acbabb1929a3dfe2b578fb1c0236
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 
@@ -45,8 +58,8 @@ Everything else should be automated, just run this chunk of code!
 ```{r}
 epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, REP, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, CSV_FOLDER_OVERRIDE, MAX_DEPTH)
 
-on = as_datetime(c("2020-06-29")) #July time is estimated based on the time for other sampling. TZ is UTC to match catwalk and current CTD processing
-off = as_datetime(c("2020-09-11")) #July date is wrong bc system broke. TZ is UTC to match catwalk and current CTD processing
+on = as_datetime(c("2021-06-11 10:40:00"))
+off = as_datetime(c("2021-01-01"))
 
 catwalk_compare = T
 
@@ -58,7 +71,7 @@ if(SITE %in% c("fcr50", "bvr50")){
   }
   #Compare to catwalk
   if(catwalk_compare == T){
-      ctd_vs_catwalk(on,off, SITE) #This step takes a couple minutes
+      ctd_vs_catwalk(on,off, SITE, startDate = "2021-06-10 12:00:00") #This step takes a couple minutes
   }
 }
 ```

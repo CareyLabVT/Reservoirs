@@ -94,6 +94,8 @@ ctd_vs_catwalk <- function(on,off,site,startDate = "2021-01-01 12:00:00"){
       filter(TIMESTAMP != "NAN") %>%
       filter(TIMESTAMP != "YYYY_MM_DD_HH_MM_SS")
     
+    ctd_new$Date = ctd_new$Date+hours(13)
+    
     dates = unique(ctd_new$Date)
     ctd_new$EXO_depth=NA
     for(date in dates){

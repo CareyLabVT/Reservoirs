@@ -2,8 +2,8 @@ DataStream, TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, notes
 CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Date, 21, 4, internally logged data; different format than when logging with CR6
 CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Time, 22, 4, internally logged data; different format than when logging with CR6
 CAT, 2018-07-05 00:00:00 EST, 2018-08-20 14:40:00 EST, doobs_9, 18, 3, incorrectly calibrated; needs correcting to match factory value
-CAT, 2018-11-19 12:10:00 EST, 2018-11-19 12:30:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
-CAT, 2018-12-17 10:30:00 EST, 2018-12-17 10:40:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
+CAT, 2018-11-19 12:00:00 EST, 2018-11-19 13:50:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
+CAT, 2018-12-17 10:20:00 EST, 2018-12-17 13:15:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2019-01-15 12:50:00 EST, 2019-01-15 13:10:00 EST, All_Cat, c(1:41), 1, sensor_string_up_for_cleaning_EXO_only
 CAT, 2019-02-08 12:50:00 EST, 2019-02-08 13:10:00 EST, All_Cat, c(1:41), 1, sensor_string_up
 CAT, 2019-04-15 09:50:00 EST, 2019-04-15 09:50:00 EST, All_Cat, c(1:41), 4, switched_time_GMT-4_to_GMT-5
@@ -65,7 +65,7 @@ CAT, 2020-10-19 12:18:00 EST, 2020-10-19 15:00:00 EST, All_Cat, c(1:41), 1, sens
 CAT, 2020-10-19 15:00:00 EST, 2020-10-20 11:22:00 EST, wtr_surface, 5, 1, surface temp sensor broke and is reading NA
 CAT, 2020-10-20 11:23:00 EST, 2020-10-20 13:38:00 EST, All_Cat, c(1:41), 1, sensor string up troubleshooting
 CAT, 2020-10-20 13:38:00 EST, 2020-10-22 09:26:00 EST, wtr_2, 7, 1, the 2m sensor was moved to the surface spot and moved back when fixed with BVR sensor
-CAT, 2020-10-26 10:04:00 EST, 2020-10-26 10:09:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
+CAT, 2020-10-26 09:05:00 EST, 2020-10-26 09:15:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2020-11-02 11:21:00 EST, 2020-11-02 11:30:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2020-11-09 10:25:00 EST, 2020-11-09 10:50:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2020-11-09 11:30:00 EST, 2020-11-09 11:50:00 EST, All_Cat, c(1:41), 1, sensor string up for maintenance
@@ -73,7 +73,7 @@ CAT, 2020-11-24 11:30:00 EST, 2020-11-24 11:55:00 EST, All_Cat, c(1:41), 1, sens
 CAT, 2020-12-02 12:25:00 EST, 2020-12-02 12:57:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2020-12-02 12:50:00 EST, 2020-12-27 12:40:00 EST, EXO_*, c(21:39), 1, EXO sent for cleaning and calibration
 CAT, 2021-01-07 09:40:00 EST, 2021-01-07 09:55:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
-CAT, 2021-01-07 10:00:00 EST, 2021-01-07 11:30:00 EST, All_Cat, c(1:41), 1, troubleshooting broken thermistors
+CAT, 2021-01-07 10:00:00 EST, 2021-01-07 11:40:00 EST, All_Cat, c(1:41), 1, troubleshooting broken thermistors
 CAT, 2021-02-08 14:25:00 EST, 2021-02-08 14:35:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2021-02-08 14:30:00 EST, 2021-02-26 12:00:00 EST, wtr_1, 6, 1, thermistor broken removed and replaced
 CAT, 2021-02-08 14:30:00 EST, 2021-02-26 12:00:00 EST, wtr_4, 9, 1, thermistor broken removed and replaced
@@ -84,6 +84,6 @@ CAT, 2021-04-16 11:50:00 EST, 2021-04-26 13:10:00 EST, fdom, c(33:34), 4, bad fd
 CAT, 2021-04-26 10:55:00 EST, 2021-04-26 11:10:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2021-05-06 13:25:00 EST, 2021-05-06 13:50:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2021-05-14 13:45:00 EST, 2021-05-14 14:00:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
-CAT, 2021-05-24 10:15:00 EST, 2021-05-24 10:30:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
+CAT, 2021-05-24 10:15:00 EST, 2021-05-24 10:40:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2021-05-31 10:55:00 EST, 2021-05-31 11:20:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning
 CAT, 2021-06-07 10:25:00 EST, 2021-06-07 10:35:00 EST, All_Cat, c(1:41), 1, sensor string up for cleaning

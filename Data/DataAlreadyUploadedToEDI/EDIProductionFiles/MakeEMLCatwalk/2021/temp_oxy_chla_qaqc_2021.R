@@ -22,7 +22,8 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
   
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
   # of the pre-maintenance value
-  DO_RECOVERY_THRESHOLD <- 1 #changed from 1
+  #changed to a two hour window 
+  #DO_RECOVERY_THRESHOLD <- 1 
   
   # columns where certain values are stored
   DO_MGL_COLS <- c(28, 15, 18)
@@ -111,7 +112,7 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
   catdata$Flag_Chla <- 0
   catdata$Flag_Phyco <- 0
   catdata$Flag_TDS <- 0
-  catdata$Flag_fDOM <- 0
+  catdata$Flag_fDOM <-0
  
   # modify catdata based on the information in the log
   for(i in 1:nrow(log))
@@ -165,15 +166,17 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
   
 
     maint = read.csv(maintenance_file)
-    maint = maint[!grepl("EXO",maint$parameter),] #creating file "maint" with all sensor string maintenance
-    maint = maint%>%
-      filter(!colnumber %in% c(" c(24:26)"," 40"," 41"))
+    maint_all = maint[grepl("EXO|All_Cat|do*",maint$parameter),] #creating file "maint" with all sensor string maintenance
+    maint_all = maint_all%>%
+    filter(flag==1)%>%
+    filter(parameter!="fdom")
     clean_start<-as.POSIXct(maint$TIMESTAMP_start, tz = "UTC")#changed the time tz to make sure there is no conflict
     clean_end <- as.POSIXct(maint$TIMESTAMP_end, tz = "UTC")
 
     ADJ_PERIOD = 2*60*60 #amount of time to stabilization after cleaning in seconds
 
     for (i in 1:length(clean_start)){ #Set all data during cleaning and for ADJ_PERIOD after to NA
+      if (maint$colnumber[i]=="c(1:41)"){
       catdata$EXODO_mgL_1[catdata$DateTime>clean_start[i]&catdata$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
       catdata$RDO_mgL_5[catdata$DateTime>clean_start[i]&catdata$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
       catdata$RDO_mgL_9[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
@@ -183,12 +186,30 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
       catdata$Flag_DO_1[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
       catdata$Flag_DO_5[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
       catdata$Flag_DO_9[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
-    }
+      }
+      else if(maint$colnumber[i] %in% c("15","16")){
+        catdata$RDO_mgL_5[catdata$DateTime>clean_start[i]&catdata$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+        catdata$RDOsat_percent_5[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+        catdata$Flag_DO_5[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+      }
+      else if(maint$colnumber[i] %in% c("18","19")){
+        catdata$RDO_mgL_9[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+        catdata$RDOsat_percent_9[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+        catdata$Flag_DO_9[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+      }
+      else if (maint$colnumber[i] %in% c("c(21:39","27","28")){
+        catdata$EXODO_mgL_1[catdata$DateTime>clean_start[i]&catdata$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+        catdata$EXODOsat_percent_1[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+        catdata$Flag_DO_1[catdata$DateTime>clean_start[i]&catdata$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+        next
+        }
+      }
+    
 
 
 ##################################################################################################################  
   #Set negative DO values to 0 and Flag_DO for NA values
-  catdata_flag <- catdata_flag %>%  #RDO at 5m
+  catdata <- catdata %>%  #RDO at 5m
     mutate(Flag_DO_5 = ifelse(RDO_mgL_5 < 0 | RDOsat_percent_5 < 0, 3, Flag_DO_5), #Add a flag for DO<0
            RDO_mgL_5 = ifelse(RDO_mgL_5 < 0, 0, RDO_mgL_5), #Change negative to 0
            RDOsat_percent_5 = ifelse(RDOsat_percent_5 < 0, 0, RDOsat_percent_5), #Change negative %sat to 0
@@ -210,12 +231,12 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
   Chla_ugL_1_mean <- mean(catdata$EXOChla_ugL_1, na.rm = TRUE)
   BGAPC_RFU_1_mean <- mean(catdata$EXOBGAPC_RFU_1, na.rm = TRUE)
   BGAPC_ugL_1_mean <- mean(catdata$EXOBGAPC_ugL_1, na.rm = TRUE)
-  EXOfDOM_QSU_1_mean <- mean(catdata$EXOfDOM_QSU_1, na.rm = TRUE)
+  #EXOfDOM_QSU_1_mean <- mean(catdata$EXOfDOM_QSU_1, na.rm = TRUE)
   Chla_RFU_1_threshold <- EXO_FOULING_FACTOR * sd(catdata$EXOChla_RFU_1, na.rm = TRUE)
   Chla_ugL_1_threshold <- EXO_FOULING_FACTOR * sd(catdata$EXOChla_ugL_1, na.rm = TRUE)
   BGAPC_RFU_1_threshold <- EXO_FOULING_FACTOR * sd(catdata$EXOBGAPC_RFU_1, na.rm = TRUE)
   BGAPC_ugL_1_threshold <- EXO_FOULING_FACTOR * sd(catdata$EXOBGAPC_ugL_1, na.rm = TRUE)
-  EXOfDOM_QSU_1_threshold <- EXO_FOULING_FACTORfor2 * sd(catdata$EXOfDOM_QSU_1_1, na.rm = TRUE)
+  #EXOfDOM_QSU_1_threshold <- EXO_FOULING_FACTORfor2 * sd(catdata$EXOfDOM_QSU_1_1, na.rm = TRUE)
   
   catdata <- catdata %>%
     mutate(Flag_Chla = ifelse(DateTime >= ymd("2018-10-01") & DateTime < ymd("2019-03-01") &
@@ -285,12 +306,11 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
 ####################################################################################################################################  
   # fdom qaqc----
   # QAQC from DWH to remove major outliers from fDOM data that are 2 sd's greater than the previous and following datapoint
+  sd_fDOM <- sd(catdata$EXOfDOM_QSU_1, na.rm = TRUE) #deteriming the standard deviation of fDOM data 
   
   catdata <- catdata%>% 
-    mutate(Flag_fDOM = ifelse(is.na(EXOfDOM_QSU_1), 1, 0)) %>% 
-    mutate(Flag_fDOM = ifelse(DateTime >= "2021-04-16 11:50" & DateTime < "2021-04-26 13:10",2, Flag_fDOM))
-  
-  catdata <- catdata%>%
+    mutate(Flag_fDOM = ifelse(is.na(EXOfDOM_QSU_1), 1, 0)) %>% #This creates Flag column for fDOM data, setting all NA's going into QAQC as 1 for missing data, and to 0 for the rest
+    mutate(Flag_fDOM = ifelse(DateTime >= "2021-04-16 11:50" & DateTime < "2021-04-26 13:10",2, Flag_fDOM))%>%
   mutate(fDOM = lag(EXOfDOM_QSU_1, 0),
          fDOM_lag1 = lag(EXOfDOM_QSU_1, 1),
          fDOM_lead1 = lead(EXOfDOM_QSU_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
@@ -299,13 +319,13 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file,data3_file, maintenance_fil
            EXOfDOM_RFU_1 = ifelse(fDOM < 0 & !is.na(fDOM), NA, EXOfDOM_RFU_1),
            Flag_fDOM = ifelse(fDOM < 0, 2, Flag_fDOM)   ) %>% #These mutates are QAQCing for negative fDOM QSU values and setting these to NA and making a flag for these. This was done outside of the 2 sd deviation rule because there were two negative points in a row and one was not removed with the follwoing if else statements. 
     mutate(EXOfDOM_QSU_1 = ifelse(
-      ( abs(fDOM_lag1 - fDOM) > (EXOfDOM_QSU_1_threshold))  & ( abs(fDOM_lead1 - fDOM) > (EXOfDOM_QSU_1_threshold)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1
+      ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM) ), NA, EXOfDOM_QSU_1
     )) %>%  #QAQC to remove outliers for QSU fDOM data 
     mutate(EXOfDOM_RFU_1 = ifelse(
-      ( abs(fDOM_lag1 - fDOM) > (EXOfDOM_QSU_1_threshold))  & ( abs(fDOM_lead1 - fDOM) > (EXOfDOM_QSU_1_threshold)  & !is.na(fDOM)), NA, EXOfDOM_RFU_1
+      ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), NA, EXOfDOM_RFU_1
     )) %>% #QAQC to remove outliers for RFU fDOM data
     mutate(Flag_fDOM = ifelse(
-      ( abs(fDOM_lag1 - fDOM) > (EXOfDOM_QSU_1_threshold))  & ( abs(fDOM_lead1 - fDOM) > (EXOfDOM_QSU_1_threshold)  & !is.na(fDOM)  ), 2, Flag_fDOM
+      ( abs(fDOM_lag1 - fDOM) > (2*sd_fDOM)   )  & ( abs(fDOM_lead1 - fDOM) > (2*sd_fDOM)  & !is.na(fDOM)  ), 2, Flag_fDOM
     ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
     select(-fDOM, -fDOM_lag1, -fDOM_lead1)  #This removes the columns used to run ifelse statements since they are no longer needed. 
 #####################################################################################################################################  

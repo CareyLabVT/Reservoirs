@@ -5,7 +5,7 @@
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2021/"
-source(paste0(folder, "temp_oxy_chla_qaqc.R"))
+source(paste0(folder, "temp_oxy_chla_qaqc_2021.R"))
 
 # download most up to date catwalk data and maintenance log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt"))
@@ -22,11 +22,12 @@ output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2021.csv")
 temp_oxy_chla_qaqc(data_file,data2_file,data3_file, maintenance_file, output_file)
 
 # read in qaqc function output
-catdata <- read.csv(output_file) 
+catdata <- read.csv(output_file)
+
 
 catdata2=catdata
 #Convert the time and put it in current time zone so the times line up when changing NAs. 
-#Have to do strpttime or you get some NAs
+#Have to do strpttime or you get some NAs in the DateTime column
 catdata2$DateTime<-as.POSIXct(strptime(catdata2$DateTime, "%Y-%m-%d %H:%M"), tz = "America/New_York")
 
 
@@ -113,15 +114,6 @@ Checktime=catdata_flag%>%
   select(c(DateTime, ThermistorTemp_C_1, ThermistorTemp_C_2, ThermistorTemp_C_4, Flag_Temp_1, Flag_Temp_4))
 # check surface temp data
 
-# # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
-# catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA
-# catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
-# catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_surface[catdata_flag$DateTime=='2020-05-15 15:00:00'] <- NA
-# catdata_flag$Flag_Temp_Surf[catdata_flag$DateTime=='2020-05-15 15:00:00'] <- 1
 surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
   geom_point()
 surf
@@ -135,18 +127,7 @@ surf21
 ggplotly(surf21)
 
 # check 1m temp data
-#m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
-#  geom_point()
-#ggplotly(m_1)
-# # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
-# catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_1[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
+
 m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
  geom_point()
 m_1
@@ -160,20 +141,7 @@ m_1_21
 ggplotly(m_1_21)
 
 # check 2m temp data
-#m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
-#  geom_point()
-#ggplotly(m_2)
-# a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
-catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
-catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
-catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
-catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
-catdata_flag$ThermistorTemp_C_2[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA
-catdata_flag$Flag_Temp_2[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
+
 m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
  geom_point()
 m_2
@@ -193,15 +161,7 @@ ggplotly(m_2_21)
 # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
 # catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
 # catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
-# # no maintenance recorded on this day but this was a field day, so forcing this datapoint to NA
-# catdata_flag$ThermistorTemp_C_3[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA
-# catdata_flag$Flag_Temp_3[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
+
 m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
  geom_point()
 m_3
@@ -220,19 +180,7 @@ ggplotly(m_3_21)
 # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
 # catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
 # catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
-# # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
-# catdata_flag$ThermistorTemp_C_4[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA
-# catdata_flag$Flag_Temp_4[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
+
 m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
  geom_point()
 m_4
@@ -251,19 +199,7 @@ ggplotly(m_4_21)
 # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
 # catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
 # catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-11-09 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-11-09 11:40:00'] <- 1
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-11-09 11:50:00'] <- NA
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-11-09 11:50:00'] <- 1
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- NA 
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-09-15 12:50:00'] <- 1
-# catdata_flag$ThermistorTemp_C_5[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- NA 
-# catdata_flag$Flag_Temp_5[catdata_flag$DateTime=='2020-09-15 12:40:00'] <- 1
+
 m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
   geom_point()
 m_5
@@ -282,33 +218,7 @@ ggplotly(m_5_21)
 # a few isolated points with weird data, all on days when the sensors string was pulled up earlier so turning them to NA and setting flag to 1
 # catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- NA
 # catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-09 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-09 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-09 11:40:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-09 11:50:00'] <- NA
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-09 11:50:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-02 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- NA
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-24 11:30:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- NA
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-11-24 11:40:00'] <- 1
-# # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- NA 
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-08-10 12:20:00'] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime=='2020-08-10 12:30:00'] <- NA 
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime=='2020-08-10 12:30:00'] <- 1
 
-#added to maintenance log
-# days <- c('2020-07-13 10:50:00', '2020-07-13 11:00:00', '2020-07-13 11:10:00', '2020-07-20 11:00:00', '2020-07-20 11:10:00', '2020-07-27 11:50:00', 
-#           '2020-07-27 12:00:00', '2020-08-03 12:20:00', '2020-08-03 12:30:00', '2020-08-07 12:30:00', '2020-08-07 12:40:00', '2020-08-07 12:50:00', 
-#           '2020-08-10 12:20:00', '2020-08-10 12:30:00', '2020-08-10 12:40:00', '2020-08-17 15:20:00', '2020-08-17 15:30:00', '2020-08-17 15:40:00', 
-#           '2020-08-24 11:10:00', '2020-08-24 11:20:00', '2020-09-02 11:40:00', '2020-09-02 11:50:00', '2020-09-02 12:00:00', '2020-09-11 10:00:00', 
-#           '2020-09-15 10:10:00', '2020-09-15 13:00:00', '2020-09-15 13:10:00', '2020-09-15 13:20:00', '2020-09-15 12:40:00', '2020-09-15 12:50:00', 
-#           '2020-09-19 13:10:00', '2020-11-02 11:30:00', '2020-11-09 11:30:00', '2020-11-09 11:40:00', '2020-11-09 11:50:00', '2020-11-24 11:30:00', 
-#           '2020-11-24 11:40:00')
-# days <- as.POSIXct(days,format = "%Y-%m-%d %H:%M:%S", tz="America/New_York")
-# catdata_flag$Flag_Temp_6[catdata_flag$DateTime %in% days] <- 1
-# catdata_flag$ThermistorTemp_C_6[catdata_flag$DateTime %in% days] <- NA
 m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
  geom_point()
 m_6
@@ -321,9 +231,7 @@ m_6_21
 ggplotly(m_6_21)
 
 # check 7m temp data
-#m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
-#  geom_point()
-#ggplotly(m_7)
+
 
 # catdata_flag$Flag_Temp_7[catdata_flag$DateTime %in% days] <- 1
 # catdata_flag$ThermistorTemp_C_7[catdata_flag$DateTime %in% days] <- NA
@@ -362,10 +270,7 @@ catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime %in% days] <- NA
 # no maintenance on this day but this datapoint is way above any others and this was a field day, so forcing this datapoint to NA
 catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- NA 
 catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-06-12 10:30:00'] <- 1
-catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-10-14 12:10:00'] <- NA 
-catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-10-14 12:10:00'] <- 1
-catdata_flag$ThermistorTemp_C_8[catdata_flag$DateTime=='2020-10-14 12:20:00'] <- NA 
-catdata_flag$Flag_Temp_8[catdata_flag$DateTime=='2020-10-14 12:20:00'] <- 1
+
 
 # check 9m temp data
 m_9 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +
@@ -435,41 +340,61 @@ points(t2021$DateTime, t2021$ThermistorTemp_C_9, col="blue4", type='l', lwd=1.5)
 # DO qaqc ----
 
 # now fix the negative DO values
-catdata_flag <- catdata_flag %>%  #RDO at 5m
-  mutate(Flag_DO_5 = ifelse(RDO_mgL_5 < 0 | RDOsat_percent_5 < 0, 3, Flag_DO_5), #Add a flag for DO<0
-         RDO_mgL_5 = ifelse(RDO_mgL_5 < 0, 0, RDO_mgL_5), #Change negative to 0
-         RDOsat_percent_5 = ifelse(RDOsat_percent_5 < 0, 0, RDOsat_percent_5), #Change negative %sat to 0
-         Flag_DO_5 = ifelse(is.na(RDO_mgL_5),7,Flag_DO_5), #Flag NA values
-         
-         Flag_DO_9 = ifelse(RDO_mgL_9 < 0 | RDOsat_percent_9 < 0, 3, Flag_DO_9), #repeat for 9m
-         RDO_mgL_9 = ifelse(RDO_mgL_9 < 0, 0, RDO_mgL_9),
-         RDOsat_percent_9 = ifelse(RDOsat_percent_9 < 0, 0, RDOsat_percent_9),
-         Flag_DO_9 = ifelse(is.na(RDO_mgL_9),7,Flag_DO_9),
-         
-         Flag_DO_1 = ifelse(EXODO_mgL_1 < 0 | EXODOsat_percent_1 <0, 3, Flag_DO_1), #and for 1m
-         EXODO_mgL_1 = ifelse(EXODO_mgL_1 < 0, 0, EXODO_mgL_1),
-         EXODOsat_percent_1 = ifelse(EXODOsat_percent_1 <0, 0, EXODOsat_percent_1),
-         Flag_DO_1 = ifelse(is.na(EXODO_mgL_1),7,Flag_DO_1))
+# catdata_flag <- catdata_flag %>%  #RDO at 5m
+#   mutate(Flag_DO_5 = ifelse(RDO_mgL_5 < 0 | RDOsat_percent_5 < 0, 3, Flag_DO_5), #Add a flag for DO<0
+#          RDO_mgL_5 = ifelse(RDO_mgL_5 < 0, 0, RDO_mgL_5), #Change negative to 0
+#          RDOsat_percent_5 = ifelse(RDOsat_percent_5 < 0, 0, RDOsat_percent_5), #Change negative %sat to 0
+#          Flag_DO_5 = ifelse(is.na(RDO_mgL_5),7,Flag_DO_5), #Flag NA values
+#          
+#          Flag_DO_9 = ifelse(RDO_mgL_9 < 0 | RDOsat_percent_9 < 0, 3, Flag_DO_9), #repeat for 9m
+#          RDO_mgL_9 = ifelse(RDO_mgL_9 < 0, 0, RDO_mgL_9),
+#          RDOsat_percent_9 = ifelse(RDOsat_percent_9 < 0, 0, RDOsat_percent_9),
+#          Flag_DO_9 = ifelse(is.na(RDO_mgL_9),7,Flag_DO_9),
+#          
+#          Flag_DO_1 = ifelse(EXODO_mgL_1 < 0 | EXODOsat_percent_1 <0, 3, Flag_DO_1), #and for 1m
+#          EXODO_mgL_1 = ifelse(EXODO_mgL_1 < 0, 0, EXODO_mgL_1),
+#          EXODOsat_percent_1 = ifelse(EXODOsat_percent_1 <0, 0, EXODOsat_percent_1),
+#          Flag_DO_1 = ifelse(is.na(EXODO_mgL_1),7,Flag_DO_1))
 
 #Deal with when the sensors were up
 maint=read.csv(paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt"))
-maint = maint[!grepl("EXO",maint$parameter),] #creating file "maint" with all sensor string maintenance
+maint = maint[grepl("EXO|All_Cat|do*",maint$parameter),] #creating file "maint" with all sensor string maintenance
 maint = maint%>%
-  filter(!colnumber %in% c(" c(24:26)"," 40"," 41"))
-clean_start<-as.POSIXct(maint$TIMESTAMP_start, tz="America/New_York")#changed the time tz to make sure there is no conflict
-clean_end <- as.POSIXct(maint$TIMESTAMP_end, tz="America/New_York")
+  filter(flag==1)%>%
+  filter(parameter!="fdom")
+clean_start<-as.POSIXct(maint$TIMESTAMP_start, tz = "America/New_York")#changed the time tz to make sure there is no conflict
+clean_end <- as.POSIXct(maint$TIMESTAMP_end, tz = "America/New_York")
 
 ADJ_PERIOD = 2*60*60 #amount of time to stabilization after cleaning in seconds
 
 for (i in 1:length(clean_start)){ #Set all data during cleaning and for ADJ_PERIOD after to NA
-  catdata_flag$RDO_mgL_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
-  catdata_flag$RDO_mgL_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
-  catdata_flag$RDOsat_percent_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
-  catdata_flag$RDOsat_percent_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
-  catdata_flag$Flag_DO_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
-  catdata_flag$Flag_DO_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  if (maint$colnumber[i]=="c(1:41)"){
+    catdata_flag$EXODO_mgL_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+    catdata_flag$RDO_mgL_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+    catdata_flag$RDO_mgL_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$EXODOsat_percent_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$RDOsat_percent_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$RDOsat_percent_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$Flag_DO_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+    catdata_flag$Flag_DO_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+    catdata_flag$Flag_DO_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  }
+  else if(maint$colnumber[i] %in% c("15","16")){
+    catdata_flag$RDO_mgL_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+    catdata_flag$RDOsat_percent_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$Flag_DO_5[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  }
+  else if(maint$colnumber[i] %in% c("18","19")){
+    catdata_flag$RDO_mgL_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$RDOsat_percent_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$Flag_DO_9[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  }
+  else if(maint$colnumber[i] %in% c("c(21:39","27","28")){
+    catdata_flag$EXODO_mgL_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<(clean_end[i]+ADJ_PERIOD)] <- NA
+    catdata_flag$EXODOsat_percent_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- NA
+    catdata_flag$Flag_DO_1[catdata_flag$DateTime>clean_start[i]&catdata_flag$DateTime<clean_end[i]+ADJ_PERIOD] <- 1
+  }
 }
-
 #Creating a new flag "6" started in 2019: "very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5"
 #Creating a new flag "5" which means that the values are very questionable due to fouling but not adjusted (starting in 2019)
 ################
@@ -520,7 +445,7 @@ catdata_flag <- catdata_flag%>%
 EXODO <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXODO_mgL_1)) +
   geom_point()
 EXODO
-ggplotly(m_8)
+ggplotly(EXODO)
 
 EXODO_21=catdata_flag%>%
   filter(DateTime>"2020-12-31 23:59")%>%
@@ -597,53 +522,43 @@ catdata_all <- rbind(catdata_pub, catdata_flag)
 # perform qaqc on the entire dataset for chl and phyco
 
 
-# assign standard deviation thresholds
-sd_4 <- 4*sd(catdata_all$EXOChla_ugL_1, na.rm = TRUE)
-threshold <- sd_4
-sd_4_phyco <- 4*sd(catdata_all$EXOBGAPC_ugL_1, na.rm = TRUE)
-threshold_phyco <- sd_4_phyco
+# # assign standard deviation thresholds
+# sd_4 <- 4*sd(catdata_all$EXOChla_ugL_1, na.rm = TRUE)
+# threshold <- sd_4
+# sd_4_phyco <- 4*sd(catdata_all$EXOBGAPC_ugL_1, na.rm = TRUE)
+# threshold_phyco <- sd_4_phyco
+# 
+chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
+  geom_point() 
+chl_ugl
+#   geom_hline(yintercept = sd_4)
+ggplotly(chl_ugl)
 
-#chl_ugl <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOChla_ugL_1)) +
-#  geom_point() +
-#  geom_hline(yintercept = sd_4)
-#ggplotly(chl_ugl)
+chl_ugl_21=catdata_flag%>%
+  filter(DateTime>"2020-12-31 23:59")%>%
+  ggplot(.,aes(x = DateTime, y = EXOChla_ugL_1)) +
+  geom_point()
+chl_ugl_21
+# 
+# # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+# catdata_all <- catdata_all %>% 
+#   mutate(Chla = lag(EXOChla_ugL_1, 0),
+#          Chla_lag1 = lag(EXOChla_ugL_1, 1),
+#          Chla_lead1 = lead(EXOChla_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+#   mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+#   mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
+#   mutate(EXOChla_ugL_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1)) %>% 
+#   mutate(EXOChla_RFU_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1)) %>% 
+#   mutate(EXOChla_ugL_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
+#                                 NA, EXOChla_ugL_1)) %>%   
+#   mutate(EXOChla_RFU_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
+#                                    NA, EXOChla_RFU_1)) %>% 
+#   mutate(Flag_Chla = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)) & !is.na(Chla), 
+#                             2, Flag_Chla)) %>% 
+#   select(-Chla, -Chla_lag1, -Chla_lead1)
 
-# QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
-catdata_all <- catdata_all %>% 
-  mutate(Chla = lag(EXOChla_ugL_1, 0),
-         Chla_lag1 = lag(EXOChla_ugL_1, 1),
-         Chla_lead1 = lead(EXOChla_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
-  mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
-  mutate(Flag_Chla = ifelse(Chla < 0 & !is.na(Chla), 3, Flag_Chla)) %>% 
-  mutate(EXOChla_ugL_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_ugL_1)) %>% 
-  mutate(EXOChla_RFU_1 = ifelse(Chla < 0 & !is.na(Chla), 0, EXOChla_RFU_1)) %>% 
-  mutate(EXOChla_ugL_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
-                                NA, EXOChla_ugL_1)) %>%   
-  mutate(EXOChla_RFU_1 = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold) & !is.na(Chla)), 
-                                   NA, EXOChla_RFU_1)) %>% 
-  mutate(Flag_Chla = ifelse((abs(Chla_lag1 - Chla) > (threshold))  & (abs(Chla_lead1 - Chla) > (threshold)) & !is.na(Chla), 
-                            2, Flag_Chla)) %>% 
-  select(-Chla, -Chla_lag1, -Chla_lead1)
 
-  
 
-# some spot checking of days with isolated weird data which occured either on maintenance days or field days
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-08-10 12:20:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 12:40:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 12:40:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 12:50:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 12:50:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-09-15 13:00:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-09-15 13:00:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-02 11:30:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-09 11:30:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-11-24 11:40:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-11-24 11:40:00'] <- 1
-catdata_all$EXOChla_ugL_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_all$Flag_Chla[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1
 
 #chl_mean <- catdata_flag %>% 
 #  select(DateTime, EXOChla_ugL_1) %>% 
@@ -652,21 +567,20 @@ catdata_all$Flag_Chla[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1
 #  mutate(daily_mean = mean(EXOChla_ugL_1, na.rm = TRUE)) %>% 
 #  distinct(day, .keep_all = TRUE)
 #chl_mean_plot <- ggplot(data = chl_mean, aes(x = day, y = daily_mean)) +
-#  geom_point() 
+#  geom_point()
 #ggplotly(chl_mean)
 
-#chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
-#  geom_point() +
+chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
+  geom_point() 
 #  geom_hline(yintercept = sd_4)
-#ggplotly(chl_rfu)
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 12:40:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 12:50:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-09-15 13:00:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-11-24 11:40:00'] <- NA 
-catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
+ggplotly(chl_rfu)
+
+chl_rfu_21=catdata_flag%>%
+  filter(DateTime>"2020-12-31 23:59")%>%
+  ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1)) +
+  geom_point()
+chl_rfu_21
+
 
 
 #phyco_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
@@ -674,39 +588,36 @@ catdata_all$EXOChla_RFU_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA
 #ggplotly(phyco_ugl)
 
 # QAQC on major chl outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
-catdata_all <- catdata_all %>% 
-  mutate(phyco = lag(EXOBGAPC_ugL_1, 0),
-         phyco_lag1 = lag(EXOBGAPC_ugL_1, 1),
-         phyco_lead1 = lead(EXOBGAPC_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
-  mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
-  mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
-  mutate(EXOBGAPC_RFU_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1)) %>% 
-  mutate(EXOBGAPC_ugL_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1)) %>% 
-  mutate(EXOBGAPC_ugL_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
-                                 NA, EXOBGAPC_ugL_1)) %>%   
-  mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
-                                 NA, EXOBGAPC_RFU_1)) %>% 
-  mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
-                             2, Flag_Phyco)) %>%
-  select(-phyco, -phyco_lag1, -phyco_lead1)
+# catdata_all <- catdata_all %>% 
+#   mutate(phyco = lag(EXOBGAPC_ugL_1, 0),
+#          phyco_lag1 = lag(EXOBGAPC_ugL_1, 1),
+#          phyco_lead1 = lead(EXOBGAPC_ugL_1, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+#   mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+#   mutate(Flag_Phyco = ifelse(phyco < 0 & !is.na(phyco), 3, Flag_Phyco)) %>% 
+#   mutate(EXOBGAPC_RFU_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_RFU_1)) %>% 
+#   mutate(EXOBGAPC_ugL_1 = ifelse(phyco < 0 & !is.na(phyco), 0, EXOBGAPC_ugL_1)) %>% 
+#   mutate(EXOBGAPC_ugL_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+#                                  NA, EXOBGAPC_ugL_1)) %>%   
+#   mutate(EXOBGAPC_RFU_1 = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+#                                  NA, EXOBGAPC_RFU_1)) %>% 
+#   mutate(Flag_Phyco = ifelse((abs(phyco_lag1 - phyco) > (threshold_phyco))  & (abs(phyco_lead1 - phyco) > (threshold_phyco) & !is.na(phyco)), 
+#                              2, Flag_Phyco)) %>%
+#   select(-phyco, -phyco_lag1, -phyco_lead1)
 
 # some spot checking of days with isolated weird data which occured either on maintenance days or field days
-catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-08-10 12:20:00'] <- 1 
-catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-10-26 09:10:00'] <- 1 
-catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-11-02 11:30:00'] <- 1 
-catdata_all$EXOBGAPC_ugL_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
-catdata_all$Flag_Phyco[catdata_all$DateTime=='2020-11-09 11:30:00'] <- 1 
 
-#phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
-#  geom_point() 
-#ggplotly(phyco_rfu)
-catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-08-10 12:20:00'] <- NA 
-catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-10-26 09:10:00'] <- NA 
-catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-02 11:30:00'] <- NA 
-catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA 
+
+phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
+  geom_point() 
+phyco_rfu
+ggplotly(phyco_rfu)
+
+phyco_rfu_21=catdata_flag%>%
+  filter(DateTime>"2020-12-31 23:59")%>%
+  ggplot(.,aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
+  geom_point()
+phyco_rfu_21
+
 
 
 ###########################################################################################################################################################################
@@ -715,10 +626,17 @@ catdata_all$EXOBGAPC_RFU_1[catdata_all$DateTime=='2020-11-09 11:30:00'] <- NA
 # QAQC done on 2018-2020 dataset
 sd_fDOM <- sd(catdata_all$EXOfDOM_QSU_1, na.rm = TRUE) #deteriming the standard deviation of fDOM data 
 
-#fDOM_pre_QAQC <- ggplot(data = catdata_all, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
-#  geom_point()+
+fDOM_pre_QAQC <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
+  geom_point()
+fDOM_pre_QAQC
 #  ggtitle("fDOM (QSU) pre QAQC")
-#ggplotly(fDOM_pre_QAQC)
+ggplotly(fDOM_pre_QAQC)
+
+fDOM_pre_QAQC_21=catdata_flag%>%
+  filter(DateTime>"2020-12-31 23:59")%>%
+  ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_1)) +
+  geom_point()
+fDOM_pre_QAQC_21
 
 catdata_all <- catdata_all %>% 
   mutate(Flag_fDOM = ifelse(is.na(EXOfDOM_QSU_1), 1, 0)) %>% #This creates Flag column for fDOM data, setting all NA's going into QAQC as 1 for missing data, and to 0 for the rest

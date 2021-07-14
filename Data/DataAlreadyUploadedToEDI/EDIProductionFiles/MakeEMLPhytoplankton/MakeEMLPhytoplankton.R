@@ -230,7 +230,7 @@ make_eml(
   other.entity.name = c("data digitization form","functions to calculate biovolume from approximation of cells to geometric shapes","data aggregation and quality control script"),
   user.id = 'melofton',
   user.domain = 'EDI',
-  package.id = 'edi.223.2')
+  package.id = 'edi.875.1')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

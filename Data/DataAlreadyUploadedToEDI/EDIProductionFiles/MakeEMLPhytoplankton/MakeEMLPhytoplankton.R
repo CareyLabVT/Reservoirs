@@ -172,12 +172,14 @@ make_eml(
   temporal.coverage = c("2016-04-25", "2019-11-20"),
   maintenance.description = 'ongoing',
   data.table = "phytoplankton.csv",
+  data.table.name = "FCR phytoplankton dataset",
   data.table.description = "FCR phytoplankton dataset",
   other.entity = c("phyto_sample_entry.R","shape_BV_functions.R","FCR_phyto_data_formatting.R"),
   other.entity.description = c("data digitization form","functions to calculate biovolume from approximation of cells to geometric shapes","data aggregation and quality control script"),
+  other.entity.name = c("data digitization form","functions to calculate biovolume from approximation of cells to geometric shapes","data aggregation and quality control script"),
   user.id = 'melofton',
   user.domain = 'EDI',
-  package.id = 'edi.223.1')
+  package.id = 'edi.223.2')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -214,19 +216,21 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2020",
-  temporal.coverage = c("2014-05-04", "2020-12-02"),
+  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLPhytoplankton",
+  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLPhytoplankton",
+  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLPhytoplankton",
+  dataset.title = "Time series of phytoplankton biovolume at the depth of the vertical chlorophyll maximum in Falling Creek Reservoir, Vinton, VA, USA 2016-2019",
+  temporal.coverage = c("2016-04-25", "2019-11-20"),
   maintenance.description = 'ongoing',
-  data.table = "FluoroProbe.csv",
-  data.table.description = "Reservoir FluoroProbe dataset",
-  other.entity = "FluoroProbe_QAQC.R",
-  other.entity.description = "data aggregation and quality control script",
-  user.id = 'ccarey',
+  data.table = "phytoplankton.csv",
+  data.table.name = "FCR phytoplankton dataset",
+  data.table.description = "FCR phytoplankton dataset",
+  other.entity = c("phyto_sample_entry.R","shape_BV_functions.R","FCR_phyto_data_formatting.R"),
+  other.entity.description = c("data digitization form","functions to calculate biovolume from approximation of cells to geometric shapes","data aggregation and quality control script"),
+  other.entity.name = c("data digitization form","functions to calculate biovolume from approximation of cells to geometric shapes","data aggregation and quality control script"),
+  user.id = 'melofton',
   user.domain = 'EDI',
-  package.id = 'edi.272.5')
+  package.id = 'edi.223.2')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

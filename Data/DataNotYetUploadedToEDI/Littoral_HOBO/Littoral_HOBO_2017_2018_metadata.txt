@@ -1,0 +1,47 @@
+Metadata for HOBO logger temperature data associated with phytoplankton recruitment sampling campaign in Falling Creek Reservoir, Vinton, VA in 2017-2018
+
+Key personnel:
+Cayelan Carey - PI
+Mary Lofton - grad student; point person for data; co-field crew lead
+Dexter Howard - undergrad research technician
+Ryan McClure - grad student; co-field crew lead
+
+Background and Methods: As part of her PhD prospectus, Mary Lofton initially proposed a study of phytoplankton benthic recruitment rates from dormancy in the sediments to a vegetative state in the water column. This project was subsequently altered due to contamination of the recruitment traps by zooplankton and periphyton. However, as part of the project, three HOBO temperature loggers were placed in the littoral zone of Falling Creek Reservoir at sites located near the transects associated with Site 50, Site 45, and Site 20. Each site was selected to have about 1 m depth and the loggers were installed about 10 cm above the sediments. Each logger was in place from late April/early May to September each year in 2017-2018 and recorded temperature data on a 15-min interval.
+
+Site coordinates (for full transparency, these are estimated from Google Maps):
+Site 50 transect: 37.303127, -79.836690 (basically right next to where the SSS pipe comes out of the embankment below the shed)
+Site 45 transect: 37.303502, -79.838745 (note that this site shifted slightly between 2017 and 2018 but was generally in the region of the small cove on the left as you look upstream near the Site 45 transect)
+Site 20 transect: 37.307412, -79.836651 (this site also shifted slightly between 2017 and 2018 due to macrophytes, sediment buildup, and subsequent shallowing over the course of time near the mouth of the primary inflow; in 2018 the site was moved and the trap was suspended from an overhanging tree near the inflow mouth, so in 2017 this was a sunny site and in 2018 it was a shady site; the coordinates here are for the 2018 site)
+
+Data entities:
+HOBO_Site50_2017.csv
+HOBO_Site45_2017.csv
+HOBO_Site20_2017.csv
+HOBO_Site50_2018.csv
+HOBO_Site45_2018.csv
+HOBO_Site20_2018.csv
+
+Table columns for 2017 data:
+#: record number
+Date Time, GMT-04:00: mm/dd/yyyy hh:mm:ss AM/PM	
+Temp, °F: water temperature in degrees Fahrenheit	
+Coupler Detached: will say "Logged" when coupler was detached; believe the coupler is the device used to plug the HOBO into a computer
+Host Connected: will say "Logged" when host connected, but don't know what this means exactly; maybe when connection is made to computer software?
+Coupler Attached: will say "Logged" when coupler attached
+Stopped: will say "Logged" when logging is stopped
+End Of File: will say "Logged" at end of file
+
+Table columns for 2018 data:
+#: record number	
+Date Time, GMT-04:00: mm/dd/yyyy hh:mm:ss AM/PM		
+Temp, °F: water temperature in degrees Fahrenheit		
+Batt, V: battery voltage in volts
+Coupler Attached: will say "Logged" when coupler attached	
+Host Connected: will say "Logged" when host connected, but don't know what this means exactly; maybe when connection is made to computer software?	
+Stopped: will say "Logged" when logging is stopped	
+End Of File: will say "Logged" at end of file
+
+
+
+
+

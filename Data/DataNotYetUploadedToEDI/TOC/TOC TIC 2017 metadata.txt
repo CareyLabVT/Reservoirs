@@ -1,0 +1,30 @@
+Metadata for total inorganic carbon (TIC) and total organic carbon (TOC) data from Falling Creek Reservoir (FCR), Vinton, VA in 2017
+
+Key personnel:
+Cayelan Carey - PI
+Dexter Howard - undergraduate technician; ran the samples
+Bobbie Niederlehner - analytical chemist and lab manager
+Mary Lofton - undergraduate mentor; data point person
+
+Background:
+Falling Creek Reservoir experienced a phytoplankton bloom event in July 2017. Around the same time, the water treatment plant exceeded its limit for disinfection byproducts (DBPs) mandated by the Virginia Department of Environmental Quality. Because certain organic compounds can contribute to DBP formation, several analyses were conducted in an attempt to better understand the various carbon pools in FCR. One of these was TIC/TOC. 
+
+Methods: 
+From July 5 to August 7, water samples were collected weekly at the deepest site in FCR at 0.1, 1.6, 3.8, 5.0, 6.2, 8.0, and 9.0 m, corresponding to the depths of the outtake values to the water treatment plant. Samples were frozen within 24 hours until analysis, which occurred within 3 months of the sample collection date. Samples were analyzed on an Elementar Vario TOC Cube (Elementar Analysensysteme GmbH, Hanau, Germany following APHA 2012 and Lewis and Wallace 1998. As part of this analysis, the instrument runs each sample twice, so two lab replicates are obtained. In addition, the instrument also measures total nitrogen.
+
+APHA. 2012. American Public Health Association. Standard Methods for the Examination of Water and Wastewater, 22th ed. Method 5310C. Total organic carbon (TOC): persulfate-ultraviolet or heated-persulfate oxidation method. Rice, E. W., R. B. Baird, A. D. Eaton, and L. S. Clesceri [eds.]. American Public Health Association, Washington, DC.
+Lewis, E., and D. W. R. Wallace. 1998. Program developed for CO2 system calculations. ORNL/CDIAC-105. Carbon Dioxide Information Analysis Center, Oak Ridge National Laboratory, U.S. Department of Energy, Oak Ridge, Tennessee.
+
+Data entities:
+TOC TIC condensed results 19SEP17.xlsx
+
+Table columns:
+Name: coded sample name, where F is for Falling Creek Reservoir, followed by the date as ddmmm, where day is numeric and month is the first three letters of the month, followed by T for total (unfiltered) sample, followed by the depth of collection in meters
+reservoir: FCR = Falling Creek Reservoir
+date: yyyy-mm-dd hh:mm:ss
+depth: in meters
+TIC Mean of 2 reps: total inorganic carbon in mg/L; mean of two laboratory replicates	
+TC Mean of 2 reps: total carbon in mg/L; mean of two laboratory replicates; calculated as sum of TIC and TOC
+TOC Mean of 2 reps: total organic carbon in mg/L; mean of two laboratory replicates	
+TNb Mean of 2 reps: total nitrogen in mg/L; mean of two laboratory replicates
+

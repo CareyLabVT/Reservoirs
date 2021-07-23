@@ -10,6 +10,7 @@ pacman::p_load(remotes,tidyverse,FluxCalR)
 # Install FluxCalR (if not already installed! If installed, skip to library(FluxCalR))
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
 library(FluxCalR)
+library(tidyverse)
 
 # Load in data: will need to load in individual files - I recommend doing this by year
 # SET TO YOUR OWN WD!
@@ -99,9 +100,15 @@ flux_lgr_41 <- LoadLGR(file ="./gga_2018-11-02_f0000.txt",
 # the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
 # This generates a list of 'end' times for each peak saved as time_cue_x
 
+##Workflow:
+#Look at flux_lgr_x to find date and time
+#Add reservoir and site to the line beginning "mutate"
+#Run the SelCue function
+
+
 # Repeat this for all timepoints
 time_cue_2 <- SelCue(flux_lgr_2,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c()) #Need to fill in reservoir and site!
+  mutate(Reservoir = c("FCR","BVR"), Site = c(50,50)) #Need to fill in reservoir and site!
 time_cue_3 <- SelCue(flux_lgr_3,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_4 <- SelCue(flux_lgr_4,flux="CH4",cue="End",save=F)%>%

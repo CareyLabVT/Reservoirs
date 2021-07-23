@@ -106,7 +106,7 @@ flux_lgr_41 <- LoadLGR(file ="./gga_2018-11-02_f0000.txt",
 time_cue_2 <- SelCue(flux_lgr_2,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c("FCR","BVR"), Site = c(50,50)) #Need to fill in reservoir and site!
 time_cue_3 <- SelCue(flux_lgr_3,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","BVR"), Site = c(50,50))
 time_cue_4 <- SelCue(flux_lgr_4,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_5 <- SelCue(flux_lgr_5,flux="CH4",cue="End",save=F)%>%

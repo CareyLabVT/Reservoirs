@@ -1,0 +1,56 @@
+﻿Advanced Calibration Data
+,Temperature,date,coef1,coef2,coef3,coef4,coef5,coef6,coef7,coef8,coef9
+,,,0,0,0,0,0,0,0,0,0
+,Pressure,date,coef1,coef2,coef3,coef4,coef5,coef6,coef7,coef8,coef9
+,,26-Jul-2012 19:21:15,0,-0.00018900001305155456,0.9953789710998535,-0.000032000003557186574,0.0035760002210736275,0.34736597537994385,0,1,0
+,Power,date,coef1,coef2,coef3,coef4,coef5,coef6,coef7,coef8,coef9
+,,,1,0,0,0,0,0,0,0,0
+,DO,date,coef1,coef2,coef3,coef4,coef5,coef6,coef7,coef8,coef9
+,,,1,0,0,0,0,0,0,0,0
+,DO Temp,date,coef1,coef2,coef3,coef4,coef5,coef6,coef7,coef8,coef9
+,,,1,0,0,0,0,0,0,0,0
+
+Field Calibration Data
+,Temperature,date,coef1,coef2,coef3,coef4,coef5
+,,,1,0,0,0,0
+,Pressure,date,coef1,coef2,coef3,coef4,coef5
+,,,1,0,0,0,0
+,Power,date,coef1,coef2,coef3,coef4,coef5
+,,,1,0,0,0,0
+,DO,date,coef1,coef2,coef3,coef4,coef5
+,,19-Feb-2018 12:38:03,1,0.12999999523162842,0,0,0
+,DO Temp,date,coef1,coef2,coef3,coef4,coef5
+,,,1,0,0,0,0
+
+Sensor/File information
+Sensor SN,0021230019,,Modbus Addr.,1
+Sensor Type,DO2,,Initialized w/fw Rev,v2.130
+Sensor Name,FCR DO (1)
+File Name,FCR_DO_8m_20210416
+
+# Records,16
+Statistical Data,,Temperature (°C),Pressure (psi),Power (V),DO (ppm),DO Temp (°C)
+,Sensor Range,Custom,Custom,Custom,Custom,Custom
+,Minimum,7.500,26.233,12.817,4.670,7.40
+,Maximum,7.938,26.311,13.891,5.340,7.46
+,Mean,7.605,26.265,13.183,5.002,7.43
+,Variance,0.0091,0.0005,0.0739,0.0426,0.000
+,Std Deviation,0.0956,0.0214,0.2719,0.2063,0.018
+
+Rec #,Date / Time,Temperature (°C),Pressure (psi),Power (V),DO (ppm),DO Temp (°C)
+1,16-Apr-2021 12:25:15,7.938,26.311,12.817,5.030,7.44
+2,16-Apr-2021 12:40:15,7.688,26.291,13.175,5.230,7.44
+3,16-Apr-2021 12:55:15,7.563,26.285,13.086,4.910,7.43
+4,16-Apr-2021 13:10:15,7.563,26.286,13.086,4.670,7.41
+5,16-Apr-2021 13:25:15,7.563,26.282,13.086,4.710,7.41
+6,16-Apr-2021 13:40:15,7.563,26.282,13.861,4.780,7.41
+7,16-Apr-2021 13:55:15,7.563,26.268,13.891,4.880,7.42
+8,16-Apr-2021 14:10:15,7.563,26.263,13.086,5.050,7.42
+9,16-Apr-2021 14:25:15,7.625,26.253,13.086,4.940,7.42
+10,16-Apr-2021 14:40:15,7.625,26.256,13.086,5.090,7.44
+11,16-Apr-2021 14:55:15,7.563,26.245,13.086,5.240,7.46
+12,16-Apr-2021 15:10:15,7.563,26.249,13.116,5.260,7.46
+13,16-Apr-2021 15:25:15,7.625,26.246,13.116,5.340,7.45
+14,16-Apr-2021 15:40:15,7.625,26.233,13.116,5.040,7.40
+15,16-Apr-2021 15:55:15,7.500,26.246,13.116,4.710,7.42
+16,16-Apr-2021 16:10:15,7.563,26.245,13.116,5.150,7.43

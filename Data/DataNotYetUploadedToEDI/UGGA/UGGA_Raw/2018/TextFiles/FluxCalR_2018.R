@@ -148,15 +148,15 @@ time_cue_23 <- SelCue(flux_lgr_23,flux="CH4",cue="End",save=F)%>%
 time_cue_24 <- SelCue(flux_lgr_24,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_25 <- SelCue(flux_lgr_25,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))#The points are scattered out all over the graph
 time_cue_26 <- SelCue(flux_lgr_26,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_27 <- SelCue(flux_lgr_27,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))
 time_cue_28 <- SelCue(flux_lgr_28,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))#There were many points, so it might be multiple sites
 time_cue_29 <- SelCue(flux_lgr_29,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))
 time_cue_30 <- SelCue(flux_lgr_30,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_31 <- SelCue(flux_lgr_31,flux="CH4",cue="End",save=F)%>%
@@ -164,17 +164,17 @@ time_cue_31 <- SelCue(flux_lgr_31,flux="CH4",cue="End",save=F)%>%
 time_cue_34 <- SelCue(flux_lgr_34,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_35 <- SelCue(flux_lgr_35,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,0))
 time_cue_37 <- SelCue(flux_lgr_37,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))#Might be multiple sites
 time_cue_38 <- SelCue(flux_lgr_38,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))
 time_cue_39 <- SelCue(flux_lgr_39,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))#There are two different types of patterns along the graph, so it might be different sites
 time_cue_40 <- SelCue(flux_lgr_40,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))
 time_cue_41 <- SelCue(flux_lgr_41,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))
 
 # Then calculate fluxes
 Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in

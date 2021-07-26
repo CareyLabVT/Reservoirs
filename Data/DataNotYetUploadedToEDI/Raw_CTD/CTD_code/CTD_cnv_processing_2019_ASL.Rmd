@@ -16,7 +16,7 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
-DATE_TEXT <- "12-Jul-2021" #format should be "01-Aug-2019"
+DATE_TEXT <- "21-Jul-2021" #format should be "01-Aug-2019"
 SITE <- "fcr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
@@ -25,7 +25,7 @@ MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
 
 #Advanced customization
-REP <- "" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
+REP <- "_sit_1.6m" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
 AUTO_NAME <- TRUE #If using a nonstandard name format. Must also fill in NAME_OVERRIDE below
 NAME_OVERRIDE <- "MSN2_CTD_CASTS_072419/072519_bvr50_d" #For example, "080119_fcr50"
 AUTO_FOLDER <- TRUE 
@@ -37,7 +37,7 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
-SCAN_NUMBER <- 51
+SCAN_NUMBER <- 120
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 
@@ -48,7 +48,7 @@ epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, REP, AUTO_NAME, NAME_OVE
 on = as_datetime(c("2021-06-11 10:40:00"))
 off = as_datetime(c("2021-01-01"))
 
-catwalk_compare = T
+catwalk_compare = F
 
 #Create dataframes and catwalk comparison for the whole season at fcr50
 if(SITE %in% c("fcr50", "bvr50")){
@@ -132,3 +132,38 @@ for(i in 1:length(dates)){
 }
 dates
 ```
+
+```{r}
+sit_1.6 = read.csv("../csv_outputs/072121_fcr50_sit_1.6m.csv")%>%
+  mutate(row = row_number())%>%
+  mutate(Date = as_datetime(Date)+hours(14)+seconds(row/4))
+
+cat <- read_csv(file = getURL("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv"),skip = 1)
+
+cat = cat%>%
+  mutate(TIMESTAMP = as_datetime(TIMESTAMP))%>%
+  filter(TIMESTAMP>as_datetime("2021-07-21 11:42:00"),
+         TIMESTAMP<as_datetime("2021-07-21 14:13:00"))
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = DO_mgL))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(doobs_1)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = DO_pSat))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(dosat_1)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = Depth_m))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(EXO_depth)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = Temp_C))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(EXO_wtr_1)), data = cat)
+
+```
+

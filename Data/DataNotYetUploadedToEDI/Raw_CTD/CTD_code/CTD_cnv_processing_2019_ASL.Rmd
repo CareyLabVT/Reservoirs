@@ -37,7 +37,7 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
-SCAN_NUMBER <- 120
+SCAN_NUMBER <- 100
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 

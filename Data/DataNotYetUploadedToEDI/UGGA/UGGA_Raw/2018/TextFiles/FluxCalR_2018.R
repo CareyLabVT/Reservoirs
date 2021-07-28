@@ -104,21 +104,21 @@ flux_lgr_41 <- LoadLGR(file ="./gga_2018-11-02_f0000.txt",
 
 # Repeat this for all timepoints
 time_cue_2 <- SelCue(flux_lgr_2,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c()) #Need to fill in reservoir and site!
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50)) #Need to fill in reservoir and site!
 time_cue_3 <- SelCue(flux_lgr_3,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_4 <- SelCue(flux_lgr_4,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_5 <- SelCue(flux_lgr_5,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_6 <- SelCue(flux_lgr_6,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#The pots are very linear in one aspect, so it was hard picking two points
 time_cue_7 <- SelCue(flux_lgr_7,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_8 <- SelCue(flux_lgr_8,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_9 <- SelCue(flux_lgr_9,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","bvr"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_10 <- SelCue(flux_lgr_10,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_11 <- SelCue(flux_lgr_11,flux="CH4",cue="End",save=F)%>%
@@ -134,17 +134,17 @@ time_cue_15 <- SelCue(flux_lgr_15,flux="CH4",cue="End",save=F)%>%
 time_cue_16 <- SelCue(flux_lgr_16,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_18 <- SelCue(flux_lgr_18,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("FCR","FCR"), Site = c(50,50))#Multiple sites seem to be present in the graph
 time_cue_19 <- SelCue(flux_lgr_19,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_20 <- SelCue(flux_lgr_20,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_21 <- SelCue(flux_lgr_21,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_22 <- SelCue(flux_lgr_22,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_23 <- SelCue(flux_lgr_23,flux="CH4",cue="End",save=F)%>%
-  mutate(Reservoir = c(), Site = c())
+  mutate(Reservoir = c("BVR","BVR"), Site = c(50,50))#There seem to be as though there are multiple sites present in the graph
 time_cue_24 <- SelCue(flux_lgr_24,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c(), Site = c())
 time_cue_25 <- SelCue(flux_lgr_25,flux="CH4",cue="End",save=F)%>%

@@ -24,6 +24,14 @@
 # 2. Removed the down-correction originally applied for all data after 18 Apr 2016 for data collected using
 # the v-notch weir
 
+# Updated: 03Aug21 by A. Hounshell - correcting VT weir data ONLY
+# A few key notes:
+# 1. Updated weir rating curve after 02 Sep 2020 using additional data from:
+#      2020_WeirWaterLevel: https://docs.google.com/spreadsheets/d/14XlOGqaUZYJO6aOLvMPDrvNAxooOaThK17PU8w7LCIE/edit#gid=0
+#      2021_WeirWaterLevel: https://docs.google.com/spreadsheets/d/1w5i30nNg4T2nuPkcKDmC5Pp2Hly8Ddy6gtS6vR1znGk/edit#gid=0
+# 2. DID NOT UPDATE ANYTHING FOR WVWA!
+# 3. Also note - need to look at weir for summer 2021: values are funky?!
+
 #install.packages('pacman') #installs pacman package, making it easier to load in packages
 pacman::p_load(tidyverse, lubridate, magrittr, ggplot2) #installs and loads in necessary packages for script
 
@@ -256,9 +264,16 @@ diff_plot+
 
 ## Find dates for rating curve
 ## After v-notch weir was installed on 07 Jun 2019
-# Load in dates for rating curve
-rating_curve_dates <- read_csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/20210108_RatingCurveDates.csv")
-rating_curve_dates$DateTime <- as.POSIXct(strptime(rating_curve_dates$DateTime, "%Y-%m-%d %H:%M:%S", tz="EST"))
+# Load in dates for rating curve: Updated on 20210803 using the following data:
+# 2021_WeirWaterLevel: https://docs.google.com/spreadsheets/d/1w5i30nNg4T2nuPkcKDmC5Pp2Hly8Ddy6gtS6vR1znGk/edit#gid=0
+# 2020_WeirWaterLevel: https://docs.google.com/spreadsheets/d/14XlOGqaUZYJO6aOLvMPDrvNAxooOaThK17PU8w7LCIE/edit#gid=0
+rating_curve_dates <- read_csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/20210803_RatingCurveDates.csv")
+rating_curve_dates$DateTime <- as.POSIXct(strptime(rating_curve_dates$DateTime, "%m/%d/%Y %H:%M", tz="EST"))
+
+# Round time to nearest 15 minutes
+rating_curve_dates <- rating_curve_dates %>% 
+  mutate(DateTime = round_date(DateTime,"15 minutes")) %>% 
+  select(DateTime,GageHeight_cm)
 
 rating_curve <- left_join(rating_curve_dates, diff, by="DateTime")
 
@@ -469,9 +484,6 @@ VTdat$DateTime <- as.POSIXct(strptime(VTdat$DateTime, "%Y-%m-%d %H:%M:%S", tz="E
 # Load in dates for rating curve
 rating_curve_VT <- left_join(rating_curve_dates, VTdat, by="DateTime")
 
-# Export out to calculate rating curve
-write.csv(rating_curve_VT, "./Data/DataNotYetUploadedToEDI/Raw_inflow/20210108_RatingCurve_VT.csv")
-
 # VT data for rectangular weir
 # Used same equation as above following original Inflow Preparation script
 VT_pre <- VTdat[VTdat$DateTime < as.POSIXct('2019-06-07 01:00:00'),]  
@@ -514,8 +526,9 @@ vt_2020 +
 
 ## UPDATED 06 MAR 2020: To use rating curve developed for VT pressure sensor (see metadata for additional information)
 ## to convert pressure to head
-## UPDATED 06 JAN 2021: Using full rating curve for this time period
-## SEE: 20210108_RatingCurve_VT
+
+# Following V-notch weir and before blow-out in Summer 2020
+# Calculate linear relationship between pressure and height in excel sheet (20210108_RatingCurve_VT_workbook.xls)
 VT_post <- VT_post %>% mutate(head = ((70.64*VT_Pressure_psia)-5.6633)/100) %>% 
   mutate(VT_Flow_cms = 2.391*(head^2.5)) %>% 
   select(DateTime,VT_Pressure_psia,VT_Flow_cms,VT_Temp_C)
@@ -532,6 +545,7 @@ VT_post$VT_Flow_cms = ifelse(VT_post$VT_Pressure_psia <= 0.080, NA, VT_post$VT_F
 VT_aug20 <- VTdat %>% filter(DateTime >= as.POSIXct('2020-08-24 15:30:00') & DateTime <= as.POSIXct('2020-09-02 14:15:00'))
 
 # Update rating curve for this time period to calculate flow
+# Calculate linear relationship between pressure and height in excel sheet (20210108_RatingCurve_VT_workbook.xls)
 VT_aug20 <- VT_aug20 %>% mutate(head = ((58.14*VT_Pressure_psia)+2.9302)/100) %>% 
   mutate(VT_Flow_cms = 2.391*(head^2.5)) %>% 
   select(DateTime,VT_Pressure_psia,VT_Flow_cms,VT_Temp_C)
@@ -546,19 +560,38 @@ VT_aug20$VT_Flow_cms = ifelse(VT_aug20$VT_Pressure_psia <= 0, NA, VT_aug20$VT_Fl
 VT_sep20 <- VTdat %>% filter(DateTime >= as.POSIXct('2020-09-02 14:30:00'))
 
 # Update rating curve from 2 Sep 2020 to present
-VT_sep20 <- VT_sep20 %>% mutate(head =((80.534*VT_Pressure_psia)+6.1945)/100) %>% 
+# Last updated: 03 August 20201
+# UPDATE HERE USING ADDITIONAL RATING CURVE DATA IF NEEDED!
+vt_post_dates <- rating_curve_VT %>% 
+  filter(DateTime >= "2020-09-09 00:00:00")
+
+# Calculate linear relationship between pressure (x) and gage height (y)
+fit <- lm(GageHeight_cm ~ VT_Pressure_psia, data = vt_post_dates)
+
+ggplot(vt_post_dates,mapping=aes(x=VT_Pressure_psia,y=GageHeight_cm,color=as.factor(DateTime)))+
+  geom_point()
+
+# Update the head = ((slope * VT_Pressure_psia)+Intercept)/100) line!!!!
+VT_sep20 <- VT_sep20 %>% mutate(head =((70.919*VT_Pressure_psia)+6.114)/100) %>% 
   mutate(VT_Flow_cms = 2.391*(head^2.5)) %>% 
   select(DateTime,VT_Pressure_psia,VT_Flow_cms,VT_Temp_C)
 
-# Use rating curve, pressure at gage height = 0; pressure = -0.077
+# Use rating curve, pressure at gage height = 0; pressure = -0.086
 VT_sep20$VT_Flow_cms = ifelse(VT_sep20$VT_Pressure_psia <= 0, NA, VT_sep20$VT_Flow_cms)
 
 # Will need to flag flows when water tops the weir:
-# VT_sep20$VT_Flow_cms = ifelse(VT_sep20$VT_Pressure_psia >= 0.265, NA, VT_sep20$VT_Flow_cms)
+# Note: weir over-tops at gage height = 27.5 cm
+# VT_sep20$VT_Flow_cms = ifelse(VT_sep20$VT_Pressure_psia >= 0.302, NA, VT_sep20$VT_Flow_cms)
 
 VTinflow <- rbind(VT_pre, VT_post, VT_aug20, VT_sep20)
 VTinflow$Reservoir <- 'FCR'
 VTinflow$Site <- 100
+
+# Check VT inflow data
+ggplot(VTinflow,mapping=aes(x=DateTime,y=VT_Flow_cms))+
+  geom_line()
+
+# Merge with WVWA data
 Inflow_Final <- merge(Inflow_Final, VTinflow, by=c('DateTime', 'Reservoir', 'Site'), all=TRUE)
 
 # Plot data
@@ -637,7 +670,7 @@ Inflow_Final_4 <- Inflow_Final_3 %>%
   mutate(VT_Flag_Flow = ifelse(DateTime <= "2019-06-03 00:00:00" & VT_Pressure_psia >= 0.611 & is.na(VT_Flow_cms),6, # Flow too high for rectangular weir
                                ifelse(DateTime >= "2019-06-07 00:00:00" & DateTime <= "2020-08-24 14:15:00" & VT_Pressure_psia >= 0.469, 6, # flow too high for v-notch weir - pre-blow out
                                       ifelse(DateTime >= "2020-08-24 14:30:00" & DateTime <= "2020-09-02 13:45:00" & VT_Pressure_psia >= 0.423, 6, # flow too high for v-notch weir - Aug 2020 (post blow-out, pre instrument move)
-                                             ifelse(DateTime >= "2020-09-02 14:30:00" & VT_Pressure_psia >= 0.265,6, # (UPDATE RATING CURVE IN 2022) flow too high for v-notch weir - 2 Sep 2020 to present)
+                                             ifelse(DateTime >= "2020-09-02 14:30:00" & VT_Pressure_psia >= 0.302,6, # (UPDATE RATING CURVE IN 2022) flow too high for v-notch weir - 2 Sep 2020 to present)
                                       0)))))
 # Add flags for low flows
 Inflow_Final_5 <- Inflow_Final_4 %>% 

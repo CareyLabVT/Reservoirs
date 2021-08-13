@@ -2,7 +2,7 @@
 #install.packages("tidyverse")
 library(tidyverse)
 
-flow <- read.csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/2019_Discharge_Flowmate.csv") # the location of the discharge_digitized.csv, should come from github
+flow <- read.csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/2020_Discharge_Flowmate.csv") # the location of the discharge_digitized.csv, should come from github
 flow$Date <- as.Date(flow$Date)
 
 # first convert the depth to m in a new column (it is always measured in cm in the field)
@@ -29,4 +29,4 @@ discharge <- discharge[!duplicated(discharge[1:3]),]
 wetland <- discharge[discharge$Site=='F200',]
 plot(wetland$Date, wetland$Discharge_m3_s)
 
-write.csv(wetland, './Data/DataNotYetUploadedToEDI/Raw_inflow/Wetland_Discharge_Data.csv', row.names = FALSE)
+write.csv(wetland, './Data/DataNotYetUploadedToEDI/Raw_inflow/Wetland_Discharge_Data_2020.csv', row.names = FALSE)

@@ -17,6 +17,14 @@ library(lubridate)
 Flag when pump wasn't working in July??
 Need to remove pH after August 2020
 
+
+
+BVR cast on 18/19 July 2019 is actually FCR!!!
+
+
+
+
+
 ```{r}
 # Package ID: edi.200.10 Cataloging System:https://pasta.edirepository.org.
 # Data set title: Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2019.
@@ -344,9 +352,9 @@ qaqc = final
 qaqc = read.csv("CTD_final_2013_2020.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)==2020)%>%
+  filter(Reservoir == "BVR", Site == 50, year(Date)==2019)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = Temp_C))+
+  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

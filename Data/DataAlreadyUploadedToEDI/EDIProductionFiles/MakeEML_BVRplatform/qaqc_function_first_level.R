@@ -1,7 +1,8 @@
 
 
 
-qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_file)
+qaqc <- function(data_file, #data2_file, 
+                 maintenance_file,  output_file, output2_file)
 {
 
 #bvrdata=data_file
@@ -14,16 +15,17 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
                         "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1_5", "EXOCond_uScm_1_5",
                         "EXOSpCond_uScm_1_5", "EXOTDS_mgL_1_5", "EXODOsat_percent_1_5", "EXODO_mgL_1_5", "EXOChla_RFU_1_5",
                         "EXOChla_ugL_1_5", "EXOBGAPC_RFU_1_5", "EXOBGAPC_ugL_1_5", "EXOfDOM_RFU_1_5", "EXOfDOM_QSU_1_5",
-                        "EXO_pressure_1_5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
-  BVRDATA2_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
-                        "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
-                        "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
-                        "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
-                        "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
-                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1_5", "EXOCond_uScm_1_5",
-                        "EXOSpCond_uScm_1_5", "EXOTDS_mgL_1_5", "EXODOsat_percent_1_5", "EXODO_mgL_1_5", "EXOChla_RFU_1_5",
-                        "EXOChla_ugL_1_5", "EXOBGAPC_RFU_1_5", "EXOBGAPC_ugL_1_5", "EXOfDOM_RFU_1_5", "EXOfDOM_QSU_1_5",
-                        "EXO_pressure_1_5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
+                        "EXOTurbidity_FNU_1_5", "EXOTSS_mg_1_5","EXO_pressure_1_5", "EXO_depth", "EXO_battery",
+                         "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
+  #BVRDATA2_COL_NAMES = c("X","DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
+  #                      "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
+  #                      "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
+  #                      "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
+  #                      "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
+  #                      "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1_5", "EXOCond_uScm_1_5",
+  #                      "EXOSpCond_uScm_1_5", "EXOTDS_mgL_1_5", "EXODOsat_percent_1_5", "EXODO_mgL_1_5", "EXOChla_RFU_1_5",
+  #                      "EXOChla_ugL_1_5", "EXOBGAPC_RFU_1_5", "EXOBGAPC_ugL_1_5", "EXOfDOM_RFU_1_5", "EXOfDOM_QSU_1_5",
+  #                      "EXO_pressure_1_5", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper", "Lvl_psi_13", "LvlTemp_C_13")
   
  
   # after maintenance, DO values will continue to be replaced by NA until DO_mgL returns within this threshold (in mg/L)
@@ -53,19 +55,19 @@ qaqc <- function(data_file, data2_file, maintenance_file,  output_file, output2_
 #bvrdata1$DateTime=as.character.Date(bvrdata1$DateTime)#adjust time so can easily filter but takes too long
   #bvrdata1$DateTime<-as.POSIXct(bvrdata1$DateTime,format = "%Y-%m-%d %H:%M:%S")
 
- bvrdata3<-read_csv(data2_file, skip=1, col_names = BVRDATA2_COL_NAMES,
-                    col_types = cols(.default = col_double(), DateTime = col_datetime()))
+ #bvrdata3<-read_csv(data2_file, skip=1, col_names = BVRDATA2_COL_NAMES,
+ #                   col_types = cols(.default = col_double(), DateTime = col_datetime()))
  
  #bvrdata3$DateTime=as.character.Date(bvrdata3$DateTime)#adjust time so can easily filter
  #bvrdata3$DateTime<-as.POSIXct(bvrdata3$DateTime,format = "%Y-%m-%d %H:%M:%S")
  
- bvrdata= bvrdata3%>%
-   filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
-   select(!X)%>% #delete column that was added when uploaded
-   rbind(.,bvrdata1)%>% #combine manual and most recent files
-   drop_na(DateTime)%>% #take out the rows with blank timestamps
-   distinct(DateTime, .keep_all= TRUE)%>% #taking out the duplicate values 
-   filter(DateTime< "2020-12-31 19:00:00") #filter for 2020
+ #bvrdata= bvrdata3%>%
+ #  filter(!X==30772)%>% #delete pesky blank row. Make sure that it actually doesn't change
+ #  select(!X)%>% #delete column that was added when uploaded
+ #  rbind(.,bvrdata1)%>% #combine manual and most recent files
+ #  drop_na(DateTime)%>% #take out the rows with blank timestamps
+ #  distinct(DateTime, .keep_all= TRUE)%>% #taking out the duplicate values 
+ #  filter(DateTime< "2020-12-31 19:00:00") #filter for 2020
  
  
 #read in maintenance log

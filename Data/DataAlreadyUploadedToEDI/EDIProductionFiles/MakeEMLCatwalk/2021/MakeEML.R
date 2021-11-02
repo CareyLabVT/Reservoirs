@@ -1,4 +1,5 @@
 # 11-Jan-2021 
+# edit 02 NOV 2021 by ABP
 # Script written by WW
 
 
@@ -19,7 +20,7 @@
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2020"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2021"
 
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -112,7 +113,7 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "Catwalk_EDI_2020.csv",
+                          data.table = "Catwalk_EDI_2018_2021.csv",
                           write.file = TRUE)
 # edit this file in excel
 
@@ -157,12 +158,12 @@ make_eml(path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
-         in Falling Creek Reservoir, Virginia, USA in 2018-2020",
-         data.table = "Catwalk_EDI_2020.csv",
-         other.entity = c('temp_oxy_chla_qaqc.R', 'catwalk_EDI_QAQC_all_variables.R','CAT_MaintenanceLog_2020.txt' ),
+         in Falling Creek Reservoir, Virginia, USA in 2018-2021",
+         data.table = "Catwalk_EDI_2018_2021.csv",
+         other.entity = c('FCR_catwalk_QAQC_function_2018_2021.R', 'FCR_catwalk_QAQC_Plots_2018_2021.R','CAT_MaintenanceLog_2021.txt' ),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
          data.table.description = "FCR Catwalk Sensor String",
-         temporal.coverage = c("2018-07-05", "2020-12-31"),
+         temporal.coverage = c("2018-07-05", "2021-10-15"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
@@ -188,7 +189,7 @@ make_eml(path = folder,
 
 ## Step 9: PUBLISH YOUR DATA! ####
 # using the package ID associated with the catwalk dataset, increase the end digit by 1
-# e.g. edi.271.4 -> edi.271.5
+# e.g. edi.271.4 -> edi.271.5(2020)
 
 # In the make_eml command below, change the package.id to match your 
 # PUBLISHED package id. This id should end in .1 (e.g., edi.518.1)
@@ -201,12 +202,12 @@ make_eml(path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
-         in Falling Creek Reservoir, Virginia, USA in 2018-2020",
-         data.table = "Catwalk_EDI_2020.csv",
-         other.entity = c('temp_oxy_chla_qaqc.R', 'catwalk_EDI_QAQC_all_variables.R','CAT_MaintenanceLog_2020.txt' ),
+         in Falling Creek Reservoir, Virginia, USA in 2018-2021",
+         data.table = "Catwalk_EDI_2018_2021.csv",
+         other.entity = c('FCR_catwalk_QAQC_function_2018_2021.R', 'FCR_catwalk_QAQC_Plots_2018_2021.R','CAT_MaintenanceLog_2021.txt' ),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
          data.table.description = "FCR Catwalk Sensor String",
-         temporal.coverage = c("2018-07-05", "2020-12-31"),
+         temporal.coverage = c("2018-07-05", "2021-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",

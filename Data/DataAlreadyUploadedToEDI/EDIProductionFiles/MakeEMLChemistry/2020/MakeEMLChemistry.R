@@ -10,6 +10,7 @@
 
 #append this year's chemistry to last year's published data
 library(tidyverse)
+library(viridis)
 
 old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
@@ -35,6 +36,22 @@ new <- new[!(new$DateTime %in% dups$DateTime),]
 
 chem <- rbind(old, new) 
 write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry.csv",row.names = FALSE)
+
+#select columns for plotting
+raw_chem <- chem [,(names(chem) %in% c("Reservoir","Site","DateTime",
+                                               "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL"))]
+
+
+#### Chemistry diagnostic plots ####
+chemistry_long <- raw_chem %>% 
+  gather(metric, value, TN_ugL:DOC_mgL) %>% 
+  mutate(month = strftime(DateTime, "%b")) %>%
+  mutate(DateTime = as.Date(DateTime))
+
+# FCR deep hole data time series plot
+ggplot(subset(chemistry_long, metric=="NO3NO2_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
+geom_point(cex=2) + theme_bw()
+
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')

@@ -1,0 +1,10 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	"Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir"	categorical			NA	value is missing
+Site	"Sampling site within each reservoir, 50=Deep hole or site nearest to dam at Falling Creek Reservoir"	numeric	dimensionless		NA	value is missing
+Station	Code corresponding to data set nickname; MET=meteorological station at Falling Creek Reservoir	categorical			NA	value is missing
+DateTime_start	"Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+DateTime_end	"Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Parameter	Name of variable corresponding to meteorological data table names	categorical			NA	value is missing
+ColumnNumber	Column number associated with parameter in raw file before QAQC	numeric	dimensionless		NA	value is missing
+Flag	Data flag applying to associated variable	numeric	dimensionless		NA	value is missing
+Notes	Additional information describing Flag for associated variable	categorical			NA	value is missing

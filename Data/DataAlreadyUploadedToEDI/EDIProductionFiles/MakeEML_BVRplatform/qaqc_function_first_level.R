@@ -287,6 +287,32 @@ qaqc <- function(data_file, #data2_file,
     ))  %>%  #QAQC to set flags for data that was set to NA after applying 2 S.D. QAQC 
     select(-fDOM, -fDOM_lag1_5, -fDOM_lead1_5)  #This removes the columns used to run ifelse statements since they are no longer needed. 
   
+  # assign standard deviation thresholds
+  sd_4 <- 4*sd(bvrdata$EXOCond_uScm_1_5, na.rm = TRUE)
+  threshold <- sd_4
+  sd_4_spcond <- 4*sd(bvrdata$EXOBGAPC_ugL_1_5, na.rm = TRUE)
+  threshold_spcond <- sd_4_spcond 
+  
+  # QAQC on major conductivity outliers using DWH's method: datapoint set to NA if data is greater than 4*sd different from both previous and following datapoint
+  bvrdata <- bvrdata %>% 
+    mutate(Cond = lag(EXOCond_uScm_1_5, 0),
+           Cond_lag1_5 = lag(EXOCond_uScm_1_5, 1),
+           Cond_lead1_5 = lead(EXOCond_uScm_1_5, 1)) %>%  #These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+    mutate(Flag_Cond = ifelse(Cond < 0 & !is.na(Cond), 3, Flag_Cond)) %>% 
+    mutate(Flag_Cond = ifelse(Cond < 0 & !is.na(Cond), 3, Flag_Cond)) %>% 
+    mutate(EXOCond_uScm_1_5 = ifelse(Cond < 0 & !is.na(Cond), 0, EXOCond_uScm_1_5)) %>% 
+    mutate(EXOChla_RFU_1_5 = ifelse(Cond < 0 & !is.na(Cond), 0, EXOChla_RFU_1_5)) %>% 
+    mutate(EXOCond_uScm_1_5 = ifelse((abs(Cond_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOCond_uScm_1_5)) %>%   
+    mutate(EXOChla_RFU_1_5 = ifelse((abs(Chla_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold) & !is.na(Chla)), 
+                                    NA, EXOChla_RFU_1_5)) %>% 
+    mutate(Flag_Cond = ifelse((abs(Chla_lag1_5 - Chla) > (threshold))  & (abs(Chla_lead1_5 - Chla) > (threshold)) & !is.na(Chla), 
+                              2, Flag_Cond)) %>% 
+    select(-Cond, -Cond_lag1_5, -Cond_lead1_5)
+  
+  
+  
+  
   #create depth column
   bvrdata=bvrdata%>%mutate(Depth_m_13=Lvl_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
   

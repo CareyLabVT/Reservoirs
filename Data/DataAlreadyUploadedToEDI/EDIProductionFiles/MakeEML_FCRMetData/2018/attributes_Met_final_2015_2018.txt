@@ -1,0 +1,98 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Site	"Sampling site within each reservoir, 50=Deep hole or site nearest to dam at Falling Creek Reservoir"	numeric	dimensionless		NA	value is missing
+Reservoir	"Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir"	categorical			NA	value is missing
+DateTime	"Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Record	The nth record collected since the instrument was turned on or the program on the CR3000 was altered (see maintenance log file).	numeric	dimensionless		NA	value is missing
+CR3000_Batt_V	The battery voltage of the CR3000 datalogger	numeric	volt		NA	value is missing
+CR3000Panel_temp_C	Panel temperature of the CR3000 data logger.	numeric	celsius		NA	value is missing
+PAR_Average_umol_s_m2	Photosynthetically active radiation averaged over measurement interval.	numeric	micromolesPerSecondPerSquareMeter		NA	value is missing or outlier (see metatdata)
+PAR_Total_mmol_m2	Total photosynthetically active radiation over measurement interval.	numeric	millimolesPerSquareMeter		NA	value is missing or outlier (see metatdata)
+BP_Average_kPa	Barometric Pressure averaged over measurement interval.	numeric	kilopascal		NA	value is missing or outlier (see metatdata)
+AirTemp_Average_C	Air Temperature averaged over measurement interval. See metadata for QA/QC applied to this variable.	numeric	celsius		NA	value is missing or outlier (see metatdata)
+RH_percent	Relative Humidity at time of measurement.	numeric	percent		NA	value is missing or outlier (see metatdata)
+Rain_Total_mm	Total rainfall over measurement interval.	numeric	millimeter		NA	value is missing or outlier (see metatdata)
+WindSpeed_Average_m_s	Wind speed averaged over measurement interval.	numeric	metersPerSecond		NA	value is missing or outlier (see metatdata)
+WindDir_degrees	Direction of wind at time of measurement.	numeric	degree		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationUp_Average_W_m2	Short wave radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationDown_Average_W_m2	Short wave radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfaredRadiationUp_Average_W_m2	Infrared wave radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfaredRadiationDown_Average_W_m2	Infrared wave radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+Albedo_Average_W_m2	Calculated from ShortwaveRadiationDown_Average_W_m2 divided by ShortwaveRadiationUp_Average_W_m2	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+Flag_PAR_Average_umol_s_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_PAR_Average_umol_s_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_PAR_Total_mmol_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_PAR_Total_mmol_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_BP_Average_kPa	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_BP_Average_kPa	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_AirTemp_Average_C	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_AirTemp_Average_C	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_RH_percent	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_RH_percent	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_Rain_Total_mm	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_Rain_Total_mm	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_WindSpeed_Average_m_s	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_WindSpeed_Average_m_s	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_WindDir_degrees	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_WindDir_degrees	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_ShortwaveRadiationUp_Average_W_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_ShortwaveRadiationUp_Average_W_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_ShortwaveRadiationDown_Average_W_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_ShortwaveRadiationDown_Average_W_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_InfaredRadiationUp_Average_W_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_InfaredRadiationUp_Average_W_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_InfaredRadiationDown_Average_W_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_InfaredRadiationDown_Average_W_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value
+Flag_Albedo_Average_W_m2	"Data flag applying to associated variable. 0 = no flag applied
+1 = value removed due to maintenance and set to NA
+2 = sample not collected
+3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+4 = potentially questionable value, see note"	numeric	dimensionless		0	no flag for value
+Note_Albedo_Average_W_m2	Additional information describing Flag for associated variable	categorical			NA	no note for value

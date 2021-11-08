@@ -723,7 +723,7 @@ Inflow_Final_4 <- Inflow_Final_3 %>%
                                  ifelse(DateTime >= "2016-04-18 15:15:00" & DateTime <= "2019-06-03 00:00:00" & WVWA_Pressure_psia >= 0.611,16, # Down correction, flow over rectangular weir
                                         ifelse(DateTime > "2019-06-07 00:00:00" & DateTime <= "2020-08-24 14:15:00" & WVWA_Pressure_psia >= 0.570, 6, # flow over v-notch weir - pre blow out
                                                ifelse(DateTime >= "2020-08-24 14:30:00" & DateTime <= "2020-09-02 13:45:00" & WVWA_Pressure_psia >= 0.528, 6, # flow over v-notch weir - Aug 2020 (post blow-out, pre sensor move)
-                                                      ifelse(DateTime >= "2020-09-02 14:30:00" & WVWA_Pressure_psia >= 0.400, 6, # (UPDATE RATING CURVE IN 2022)  flow over v-notch weir - 2 Sep 2020 to Present
+                                                      ifelse(DateTime >= "2020-09-02 14:30:00" & WVWA_Pressure_psia >= 0.394, 6, # (UPDATE RATING CURVE IN 2022)  flow over v-notch weir - 2 Sep 2020 to Present
                                                              Inflow_Final_3$WVWA_Flag_Flow)))))) %>% 
   mutate(VT_Flag_Flow = ifelse(DateTime <= "2019-06-03 00:00:00" & VT_Pressure_psia >= 0.611 & is.na(VT_Flow_cms),6, # Flow too high for rectangular weir
                                ifelse(DateTime >= "2019-06-07 00:00:00" & DateTime <= "2020-08-24 14:15:00" & VT_Pressure_psia >= 0.469, 6, # flow too high for v-notch weir - pre-blow out

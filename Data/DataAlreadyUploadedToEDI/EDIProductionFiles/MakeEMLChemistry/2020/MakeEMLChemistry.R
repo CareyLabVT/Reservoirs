@@ -3,6 +3,7 @@
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
 ##Date: 10Apr21
+#11Nov21 - fixing the NO3NO2 flagging issue and adding data that was rerun after publishing in april (HLW)
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -188,7 +189,7 @@ make_eml(
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.197.4')
+  package.id = 'edi.525.2')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

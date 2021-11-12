@@ -4,7 +4,7 @@
 # final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2021/"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2021/"
 source(paste0(folder, "FCR_catwalk_QAQC_function_2018_2021.R"))
 
 # download most up to date catwalk data and maintenance log
@@ -58,7 +58,7 @@ current_time="2020-12-31 23:59"
 
 # subset file to only unpublished data
 catdata_flag=catdata
-catdata_flag <- catdata_flag[catdata_flag$DateTime<"2021-10-15 23:59",]
+catdata_flag <- catdata_flag[catdata_flag$DateTime<"2021-11-11 23:59",]
 
 
 # Flag values

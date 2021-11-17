@@ -17,6 +17,12 @@ old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
+#add the 4 to 2019 samples that have negative values (~7 TP samples; already all have a 3 flag so assigning flag as 43)
+old$Flag_TP[old$TP_ugL < 0] <- 43
+
+#add a catch here for the ~7 2019 TP samples that are negative and were not set to 0
+old$TP_ugL[old$TP_ugL < 0] <- 0
+
 #rearrange cols to match 2020 EDI pub order
 new <- new %>% select(colnames(new[,c(1:5,7,6,10,12,11,16:19,24,9,8,13,15,14,22,21,20,23)]))
 
@@ -36,7 +42,7 @@ old[old$DateTime==as.Date("2019-07-18") & old$Site==200 & old$Reservoir=="FCR",c
 new <- new[!(new$DateTime %in% dups$DateTime),]
 
 chem <- rbind(old, new) 
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry.csv",row.names = FALSE)
+write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry_2013_2020.csv",row.names = FALSE)
 
 #select columns for plotting
 raw_chem <- chem [,(names(chem) %in% c("Reservoir","Site","DateTime",
@@ -97,7 +103,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                        data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                       data.table = "chemistry.csv",
+                       data.table = "chemistry_2013_2020.csv",
                        write.file = TRUE)
 
 
@@ -105,7 +111,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                          data.table = "chemistry.csv",
+                          data.table = "chemistry_2013_2020.csv",
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -185,11 +191,11 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2020",
   temporal.coverage = c("2013-04-04", "2020-12-02"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry.csv",
+  data.table = "chemistry_2013_2020.csv",
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.525.2')
+  package.id = 'edi.525.6')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -234,11 +240,11 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2020",
   temporal.coverage = c("2013-04-04", "2020-12-02"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry.csv",
+  data.table = "chemistry_2013_2020.csv",
   data.table.description = "Reservoir water chemistry dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.8') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.9') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

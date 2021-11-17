@@ -14,7 +14,7 @@ Whitney	M.	Woelmer	Virginia Tech	wwoelmer@vt.edu	0000-0001-5147-3877	creator
 Mary	E.	Lofton	Virginia Tech	melofton@vt.edu	0000-0003-3270-1330	creator			
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Jonathan	P.	Doubek	Virginia Tech	jpdoubek@vt.edu	0000-0003-2651-4715	creator			
-Alexandra	B.	Gerling	Virginia Tech	alexg13@vt.edu		creator			
+Alexandra	B.	Gerling	Virginia Tech	alexg13@vt.edu	0000-0001-5280-6709	creator			
 Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
 Ryan	P.	McClure	Virginia Tech	ryan333@vt.edu	0000-0001-6370-3852	creator			
-Barbara	R.	Niederlehner	Virginia Tech	bniederl@vt.edu		creator			
+Barbara	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator			

@@ -10,19 +10,20 @@ library(lubridate)
 library(tidyverse)
 #rm(list=ls()) #let's start with a blank slate
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021/"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021/misc_data_files/"
 
 ###2) Download the "raw" meteorological FCR datasets from GitHub and aggregate into 1 file: 
 #a. Past Met data, manual downloads
 #download current met data from GitHub
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2020.csv", "FCRmet.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", paste0(folder, "FCRmet.csv"))
 
 
 #original raw files from 2015-2019
-RawMet_1516=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',header = T) #2015-2016 data
-RawMet_17=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',header = T) #2017 data
-RawMet_18=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv',header = T) #2018 data
-RawMet_19=read.csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv',header = T) #2019 data
+download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',paste0(folder, "misc_data_files/RawMetData_2015_2016.csv")) #2015-2016 data
+download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',paste0(folder, "misc_data_files/RawMetData_2017.csv")) #2017 data
+download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv',paste0(folder, "misc_data_files/RawMetData_2018.csv")) #2018 data
+download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv',paste0(folder, "misc_data_files/RawMetData_2019.csv")) #2019 data
+download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2020.csv',paste0(folder, "misc_data_files/RawMetData_2020.csv")) #2019 data
 #combine all the years to create a past data frame
 Met_past = rbind(RawMet_1516,RawMet_17,RawMet_18,RawMet_19) #merges 2018 with data
 
@@ -30,21 +31,22 @@ Met_past = rbind(RawMet_1516,RawMet_17,RawMet_18,RawMet_19) #merges 2018 with da
 #Gateway has missing data sections so combine manual data for EDI
 
 #put manual data from BVR platform into a file 
-mydir = "CR6_Files/Catwalk"
+mydir = "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021/mics_data_files"
 myfiles = list.files(path=mydir, pattern="", full.names=TRUE)#list the files from BVR platform
 
 #taking out the the Temp Test files
 #myfilesBVR <- myfiles[ !grepl("CR6_BVR_TempTest*", myfiles) ]#exclude the Temp test data
 
 #create dataframe for the for loop
-fcrdata3<-""
+out.file<-""
 
 #combine all of the files into one data sheet, have to come back and fix this loop
 for(k in 1:length(myfiles)){
-  fcrheader2<-read.csv(myfiles[k], skip=1, as.is=T) #get header minus wonky Campbell rows
-  fcrdata2<-read.csv(myfiles[k], skip=4, header=F) #get data minus wonky Campbell rows
-  names(fcrdata2)<-names(fcrheader2) #combine the names to deal with Campbell logger formatting
-  fcrdata3=rbind(fcrdata2, fcrdata3)
+  files<-read.csv(myfiles[k], header=T) #get header minus wonky Campbell rows
+  if(length(names(files))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
+    Met_now$NR01TK_Avg<-NULL #remove extra column
+  }
+  out.file=rbind(out.file, files)
 }
 
 #get rid of duplicates

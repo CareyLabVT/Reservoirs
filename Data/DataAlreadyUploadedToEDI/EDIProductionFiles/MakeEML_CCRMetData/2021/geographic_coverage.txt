@@ -1,2 +1,2 @@
 geographicDescription	northBoundingCoordinate	southBoundingCoordinate	eastBoundingCoordinate	westBoundingCoordinate
-"Falling Creek Reservoir is located in Vinton, Virginia, USA"	37.309589	37.30266	-79.836009	-79.839249
+"Carvins Cove Reservoir is located in Hollins, Virginia, USA"	37.409127	37.36534	-79.978642	-79.944052

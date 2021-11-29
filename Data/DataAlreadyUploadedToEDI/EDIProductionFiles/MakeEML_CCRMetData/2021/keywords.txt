@@ -2,7 +2,7 @@ keyword	keyword Thesaurus
 Carey Lab	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
 Smart Reservoir	carey lab controlled vocabulary
-Falling Creek Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
 Lake	cuahsi controlled vocabulary
 reservoir	cuahsi controlled vocabulary
 lakes	cuahsi controlled vocabulary

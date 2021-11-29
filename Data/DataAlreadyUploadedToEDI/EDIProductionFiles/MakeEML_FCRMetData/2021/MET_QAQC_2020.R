@@ -100,17 +100,17 @@ Met$DOY=yday(Met$DateTime)
 
 #check record for gaps
 #daily record gaps by day of year
-# for(i in 2:nrow(Met)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-#   if(Met$DOY[i]-Met$DOY[i-1]>1){
-#     print(c(Met$DateTime[i-1],Met$DateTime[i]))
-#   }
-# }
+ for(i in 2:nrow(Met)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+   if(Met$DOY[i]-Met$DOY[i-1]>1){
+     print(c(Met$DateTime[i-1],Met$DateTime[i]))
+   }
+ }
 # #sub-daily record gaps by record number
-# for(i in 2:length(Met$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-#   if(abs(Met$Record[i]-Met$Record[i-1])>1){
-#     print(c(Met$DateTime[i-1],Met$DateTime[i]))
-#   }
-# }
+ for(i in 2:length(Met$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+   if(abs(Met$Record[i]-Met$Record[i-1])>1){
+     print(c(Met$DateTime[i-1],Met$DateTime[i]))
+   }
+ }
 
 
 #EDI Column names
@@ -122,8 +122,12 @@ names(Met) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C",
 Met$Reservoir="FCR" #add reservoir name for EDI archiving
 Met$Site=50 #add site column for EDI archiving
 
-Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
+#change the columns from as.character to as.numeric after the merge
+Met[, c(3:17)] <- sapply(Met[, c(3:17)], as.numeric)
 
+
+Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
+Met_raw[, c(3:17)] <- sapply(Met_raw[, c(3:17)], as.numeric)
 
 #plot(Met$DateTime, Met$BP_Average_kPa, type= "l")
 
@@ -151,9 +155,11 @@ for(i in 5:17) { #for loop to create new columns in data frame
 Met=Met%>%
   mutate(
     Rain_Total_mm=as.numeric(Rain_Total_mm),
-  Flag_Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0),4,Flag_Rain_Total_mm),
-  Note_Rain_Total_mm=ifelse((DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0),"Change_to_mm_per_min",Note_Rain_Total_mm),
-  Rain_Total_mm=ifelse((DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0), (Rain_Total_mm/5) ,Rain_Total_mm))
+  Flag_Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0,4,Flag_Rain_Total_mm),
+  Note_Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0,"Change_to_mm_per_min",Note_Rain_Total_mm),
+  Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"&DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0, (Rain_Total_mm/5) ,Rain_Total_mm))
+
+#make columns
 
 #Air temperature data cleaning
 #separate data by date; before and after air temp filter installed 2019-02-21 11:50:00
@@ -276,9 +282,9 @@ Met=Met%>%
 #flagging IR down values in the summer of 2020 that are lower than 400
 Met=Met%>%
   mutate(
-  Met$Flag_InfaredRadiationDown_Average_W_m2=ifelse((DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400),5,Flag_InfaredRadiationDown_Average_W_m2),
-  Met$Note_InfaredRadiationDown_Average_W_m2=ifelse((DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400),"Questionable_value",Note_InfaredRadiationDown_Average_W_m2),
-  Met$InfaredRadiationDown_Average_W_m2=ifelse((DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400),(InfaredRadiationDown_Average_W_m2),InfaredRadiationDown_Average_W_m2))
+  Flag_InfaredRadiationDown_Average_W_m2=ifelse(DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400,5,Flag_InfaredRadiationDown_Average_W_m2),
+  Note_InfaredRadiationDown_Average_W_m2=ifelse(DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400,"Questionable_value",Note_InfaredRadiationDown_Average_W_m2),
+  InfaredRadiationDown_Average_W_m2=ifelse(DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400,InfaredRadiationDown_Average_W_m2,InfaredRadiationDown_Average_W_m2))
 
 
 #PAR TOT and AVG 2019 QAQC-put in maintenance log 
@@ -382,43 +388,76 @@ Met=Met%>%
 
 ####6) Make plots to view data #####
 #plots to check for any wonkiness
-x11(); par(mfrow=c(2,2))
-plot(Met$DateTime, Met$CR3000_Batt_V, type = 'l')
-plot(Met$DateTime, Met$CR3000Panel_temp_C, type = 'l')
+#Battery
+Bat=ggplot(Met, aes(x=DateTime, y=CR3000_Batt_V))+
+  geom_point()
+Bat
+
+Temp=ggplot(Met, aes(x=DateTime, y=CR3000Panel_temp_C))+
+  geom_line()
+
 #PAR
-plot(Met_raw$DateTime, Met_raw$PAR_Average_umol_s_m2, col="red", type='l')
-plot(Met$DateTime, Met$PAR_Average_umol_s_m2, type = 'l')
-plot(Met_raw$DateTime, Met_raw$PAR_Total_mmol_m2, col="red", type='l')
-plot(Met$DateTime, Met$PAR_Total_mmol_m2, type = 'l')
+PAR_Avg=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=PAR_Average_umol_s_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= PAR_Average_umol_s_m2), col="black")
+  
+PAR_Tot=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=PAR_Total_mmol_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= PAR_Total_mmol_m2), col="black")
 
 #BP
-plot(Met_raw$DateTime, Met_raw$BP_Average_kPa, col="red", type='l')
-points(Met$DateTime, Met$BP_Average_kPa, type = 'l')
+BP_Avg=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=BP_Average_kPa), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= BP_Average_kPa), col="black")
+
+
 #Air Temp
-plot(Met_raw$DateTime, Met_raw$AirTemp_Average_C, col="red", type='l')
-points(Met$DateTime, Met$AirTemp_Average_C, type = 'l')
+Air=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=AirTemp_Average_C), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= AirTemp_Average_C), col="black")
+
 #RH
-plot(Met_raw$DateTime, Met_raw$RH_percent, col="red", type='l')
-points(Met$DateTime, Met$RH_percent, type = 'l')
+RH=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=RH_percent), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= RH_percent), col="black")
+
 #Rain
-plot(Met_raw$DateTime, Met_raw$Rain_Total_mm, col="red", type='h')
-points(Met$DateTime, Met$Rain_Total_mm, type = 'h')
+Rain=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=Rain_Total_mm), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= Rain_Total_mm), col="black")
+
 #Wind
-plot(Met$DateTime, Met$WindSpeed_Average_m_s, type = 'l')
-hist(Met$WindDir_degrees)
+Wind=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=WindSpeed_Average_m_s), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= WindSpeed_Average_m_s), col="black")
+  
+Wind_his=ggplot(Met, aes(x=DateTime, y=WindDir_degrees))+
+  geom_histogram()
+
 #SW Radiation
-plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationUp_Average_W_m2, col="red", type='l')
-points(Met$DateTime, Met$ShortwaveRadiationUp_Average_W_m2, type = 'l')
-plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationDown_Average_W_m2, col="red", type='l')
-points(Met$DateTime, Met$ShortwaveRadiationDown_Average_W_m2, type = 'l')
+SW_Up=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=ShortwaveRadiationUp_Average_W_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= ShortwaveRadiationUp_Average_W_m2), col="black")
+
+SW_Dn=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=ShortwaveRadiationDown_Average_W_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= ShortwaveRadiationDown_Average_W_m2), col="black")
+
+
 #Albedo
-plot(Met_raw$DateTime, Met_raw$Albedo_Average_W_m2, col="red", type='l')
-plot(Met$DateTime, Met$Albedo_Average_W_m2, type = 'l')
+Alb=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=Albedo_Average_W_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= Albedo_Average_W_m2), col="black")
+
 #InfRad
-plot(Met_raw$DateTime, Met_raw$InfaredRadiationUp_Average_W_m2, col="red", type='l')
-points(Met$DateTime, Met$InfaredRadiationUp_Average_W_m2, type = 'l')
-plot(Met_raw$DateTime, Met_raw$InfaredRadiationDown_Average_W_m2, col="red", type='l')
-points(Met$DateTime, Met$InfaredRadiationDown_Average_W_m2, type = 'l')
+InfRad_Up=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=InfaredRadiationUp_Average_W_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= InfaredRadiationUp_Average_W_m2), col="black")
+
+InfRad_Dn=(NULL)+
+  geom_point(data=Met_raw, aes(x=DateTime, y=InfaredRadiationDown_Average_W_m2), col="red")+
+  geom_point(data=Met, aes(X=DateTime, y= InfaredRadiationDown_Average_W_m2), col="black")
+
 
 
 #Met unique values for notes

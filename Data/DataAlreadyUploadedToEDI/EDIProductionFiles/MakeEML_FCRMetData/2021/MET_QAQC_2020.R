@@ -77,7 +77,7 @@ Met=rbind(out.file,Met_now)
 
 Met$Record=as.numeric(Met$Record)
 
-met_na=Met%>%filter(is.na(DateTime))
+#met_na=Met%>%filter(is.na(DateTime))
 
 #Change DateTime when it was changed from EDT to EST
 Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "Etc/GMT+5")

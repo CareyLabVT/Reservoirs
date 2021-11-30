@@ -5,7 +5,7 @@
 
 ###1) Install and load packages needed
 
-pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr", "suncalc")
 
 #rm(list=ls()) #let's start with a blank slate
 
@@ -272,6 +272,31 @@ Met=Met%>%
   Note_BP_Average_kPa=ifelse(BP_Average_kPa<98.5,"Outlier_set_to_NA",Note_BP_Average_kPa),
   BP_Average_kPa=ifelse(BP_Average_kPa<98.5,NA,BP_Average_kPa))
 
+
+#remove high PAR values at night
+#get sunrise and sunset times
+suntimes=getSunlightTimes(date = seq.Date(Sys.Date()-2500, Sys.Date(), by = 1),
+                          keep = c("sunrise",  "sunset"),
+                          lat = 37.30, lon = -79.83, tz = "Etc/GMT+5")
+
+#create date column
+Met_now$date <- as.Date(Met_now$DateTime)
+
+#create subset to join
+
+
+#now merge the datasets to get daylight time
+tagdata1 <- left_join(Met, suntimes, by = "date") %>%
+  mutate(daylight_intvl = interval(sunrise, sunset)) %>%
+  mutate(during_day = DateTime %within% daylight_intvl)
+
+Met=Met%>%
+  mutate(
+    Flag_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, 4, Flag_PAR_Total_mmol_m2),
+    Note_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
+    PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, NA, PAR_Total_mmol_m2))
+
+
 #Remove total PAR (PAR_Tot) outliers
 Met=Met%>%
   mutate(
@@ -279,6 +304,19 @@ Met=Met%>%
   Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200, "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
   PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200, NA, PAR_Total_mmol_m2))
 
+#Remove average PAR (PAR_Avg) outliers based on removing totals
+Met=Met%>%
+  mutate(
+    Flag_PAR_Average_umol_s_m2=ifelse(PAR_Total_mmol_m2>200, 4, Flag_PAR_Average_umol_s_m2),
+    Note_PAR_Average_umol_s_m2=ifelse(PAR_Total_mmol_m2>200, "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
+    PAR_Average_umol_s_m2=ifelse(PAR_Total_mmol_m2>200, NA, PAR_Average_umol_s_m2))
+
+#Remove average PAR (PAR_Avg) outliers at night 
+Met=Met%>%
+  mutate(
+    Flag_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, 4, Flag_PAR_Average_umol_s_m2),
+    Note_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
+    PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, NA, PAR_Average_umol_s_m2))
 #flagging IR down values in the summer of 2020 that are lower than 400
 Met=Met%>%
   mutate(
@@ -386,6 +424,44 @@ Met=Met%>%
 
 
 
+x11(); par(mfrow=c(2,2))
+plot(Met$DateTime, Met$CR3000_Batt_V, type = 'l')
+plot(Met$DateTime, Met$CR3000Panel_temp_C, type = 'l')
+#PAR
+plot(Met_raw$DateTime, Met_raw$PAR_Average_umol_s_m2, col="red", type='l')
+plot(Met$DateTime, Met$PAR_Average_umol_s_m2, type = 'l')
+plot(Met_raw$DateTime, Met_raw$PAR_Total_mmol_m2, col="red", type='l')
+plot(Met$DateTime, Met$PAR_Total_mmol_m2, type = 'l')
+#BP
+plot(Met_raw$DateTime, Met_raw$BP_Average_kPa, col="red", type='l')
+plot(Met$DateTime, Met$BP_Average_kPa, type = 'l')
+#Air Temp
+plot(Met_raw$DateTime, Met_raw$AirTemp_Average_C, col="red", type='l')
+points(Met$DateTime, Met$AirTemp_Average_C, type = 'l')
+#RH
+plot(Met_raw$DateTime, Met_raw$RH_percent, col="red", type='l')
+points(Met$DateTime, Met$RH_percent, type = 'l')
+#Rain
+plot(Met_raw$DateTime, Met_raw$Rain_Total_mm, col="red", type='h')
+points(Met$DateTime, Met$Rain_Total_mm, type = 'h')
+#Wind
+plot(Met$DateTime, Met$WindSpeed_Average_m_s, type = 'l')
+hist(Met$WindDir_degrees)
+#SW Radiation
+plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationUp_Average_W_m2, col="red", type='l')
+plot(Met$DateTime, Met$ShortwaveRadiationUp_Average_W_m2, type = 'l')
+plot(Met_raw$DateTime, Met_raw$ShortwaveRadiationDown_Average_W_m2, col="red", type='l')
+plot(Met$DateTime, Met$ShortwaveRadiationDown_Average_W_m2, type = 'l')
+#Albedo
+plot(Met_raw$DateTime, Met_raw$Albedo_Average_W_m2, col="red", type='l')
+plot(Met$DateTime, Met$Albedo_Average_W_m2, type = 'l')
+#InfRad
+plot(Met_raw$DateTime, Met_raw$InfaredRadiationUp_Average_W_m2, col="red", type='l')
+plot(Met$DateTime, Met$InfaredRadiationUp_Average_W_m2, type = 'l')
+plot(Met_raw$DateTime, Met_raw$InfaredRadiationDown_Average_W_m2, col="red", type='l')
+plot(Met$DateTime, Met$InfaredRadiationDown_Average_W_m2, type = 'l')
+
+
 ####6) Make plots to view data #####
 #plots to check for any wonkiness
 #Battery
@@ -393,14 +469,26 @@ Bat=ggplot(Met, aes(x=DateTime, y=CR3000_Batt_V))+
   geom_point()
 Bat
 
+
+
 Temp=ggplot(Met, aes(x=DateTime, y=CR3000Panel_temp_C))+
   geom_line()
 
 #PAR
-PAR_Avg=(NULL)+
-  geom_point(data=Met_raw, aes(x=DateTime, y=PAR_Average_umol_s_m2), col="red")+
-  geom_point(data=Met, aes(X=DateTime, y= PAR_Average_umol_s_m2), col="black")
+PAR_Avg=Met%>%
+  filter(DateTime>"2021-05-01 00:00:00" & DateTime<"2021-05-07 00:00:00")
+  ggplot(., aes(x=DateTime, y= PAR_Average_umol_s_m2, col=PAR_Average_umol_s_m2))+
+  geom_point()
+
+PAR_Avg
   
+PAR_Tot=Met%>%
+  filter(DateTime>"2020-12-31 23:59:00")%>%
+  ggplot(., aes(x=DateTime, y= PAR_Total_mmol_m2, col=PAR_Total_mmol_m2))+
+  geom_line()
+
+PAR_Tot
+
 PAR_Tot=(NULL)+
   geom_point(data=Met_raw, aes(x=DateTime, y=PAR_Total_mmol_m2), col="red")+
   geom_point(data=Met, aes(X=DateTime, y= PAR_Total_mmol_m2), col="black")

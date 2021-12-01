@@ -75,7 +75,10 @@ names(Met_now) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C",
 #add the past and now together
 Met=rbind(out.file,Met_now)
 
-Met$Record=as.numeric(Met$Record)
+#change the columns from as.character to as.numeric after the merge
+Met[, c(2:17)] <- sapply(Met[, c(2:17)], as.numeric)
+
+
 
 #met_na=Met%>%filter(is.na(DateTime))
 
@@ -90,8 +93,6 @@ Met$DateTime[c(1:met_timechange-1)]<-with_tz(force_tz(Met$DateTime[c(1:met_timec
 
 ######################################################################
 #Check for record gaps and day gpas
-#change to as. numeric from as. character
-Met$Record=as.numeric(Met$Record)
 
 #order data by timestamp
 Met=Met[order(Met$DateTime),]
@@ -122,12 +123,13 @@ names(Met) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C",
 Met$Reservoir="FCR" #add reservoir name for EDI archiving
 Met$Site=50 #add site column for EDI archiving
 
-#change the columns from as.character to as.numeric after the merge
-Met[, c(3:17)] <- sapply(Met[, c(3:17)], as.numeric)
+
 
 
 Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
-Met_raw[, c(3:17)] <- sapply(Met_raw[, c(3:17)], as.numeric)
+
+Met=Met_raw
+
 
 #plot(Met$DateTime, Met$BP_Average_kPa, type= "l")
 
@@ -200,7 +202,7 @@ Met=Met%>%
   mutate(
   Flag_AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6,4,Flag_AirTemp_Average_C),
   Note_AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6,"Outlier_set_to_NA",Note_AirTemp_Average_C),
-  AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6,NA,AirTemp_Average_0))
+  AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6,NA,AirTemp_Average_C))
 
 #check the infared radiation-if there are any low values
 #plot(Met_raw$DateTime, Met_raw$InfaredRadiationDown_Average_W_m2,main = "Raw Infared Radiation 2020", ylab = "Average_W_m2", type = "l")
@@ -215,12 +217,27 @@ Met=Met%>%
   InfaredRadiationUp_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" &InfaredRadiationUp_Average_W_m2<100,InfaredRadiationUp_Average_W_m2+5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfaredRadiationUp_Average_W_m2),
   Flag_InfaredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" &InfaredRadiationDown_Average_W_m2<250,4,Flag_InfaredRadiationDown_Average_W_m2),
   Note_InfaredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" &InfaredRadiationDown_Average_W_m2<250,"Value_corrected_from_Voltage_with_InfRadDn_equation_as_described_in_metadata",Note_InfaredRadiationDown_Average_W_m2),
-  InfaredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" &MInfaredRadiationDown_Average_W_m2<250,5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfaredRadiationDown_Average_W_m2))
+  InfaredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" &InfaredRadiationDown_Average_W_m2<250,5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfaredRadiationDown_Average_W_m2))
   
 
 #Mean correction for InfRadDown (needs to be after voltage correction)
 #Using 2018 data, taking the mean and sd of values on DOY to correct to
 #Met$DOY=yday(Met$DateTime)
+Met_infrad=Met%>%
+  filter(DateTime>"2017-12-31 23:59"& DateTime<"2019-01-01 00:00")%>%
+  select(c(DOY,InfaredRadiationDown_Average_W_m2))%>%
+  group_by(DOY)%>%
+  summarize(infardavg=mean(InfaredRadiationDown_Average_W_m2, na.rm=T),
+            infardsd=sd(InfaredRadiationDown_Average_W_m2, na.rm=T))
+
+  summarise(infradavg=mean(InfaredRadiationDown_Average_W_m2))%>%
+  summarise(infradsd=sd(InfaredRadiationDown_Average_W_m2))
+
+df_stat <- df %>% group_by(var2) %>% summarize(
+  count = n(),
+  mean = mean(var1, na.rm = TRUE), 
+  sd = sd(var1, na.rm = TRUE)) 
+
 Met_infrad=Met[year(Met$DateTime)<2018,]
 Met_infrad$infradavg=ave(Met_infrad$InfaredRadiationDown_Average_W_m2, Met_infrad$DOY) #creating column with mean of infraddown by day of year
 Met_infrad$infradsd=ave(Met_infrad$InfaredRadiationDown_Average_W_m2, Met_infrad$DOY, FUN = sd) #creating column with sd of infraddown by day of year
@@ -280,7 +297,7 @@ suntimes=getSunlightTimes(date = seq.Date(Sys.Date()-2500, Sys.Date(), by = 1),
                           lat = 37.30, lon = -79.83, tz = "Etc/GMT+5")
 
 #create date column
-Met_now$date <- as.Date(Met_now$DateTime)
+Met$date <- as.Date(Met$DateTime)
 
 #create subset to join
 
@@ -290,12 +307,18 @@ tagdata1 <- left_join(Met, suntimes, by = "date") %>%
   mutate(daylight_intvl = interval(sunrise, sunset)) %>%
   mutate(during_day = DateTime %within% daylight_intvl)
 
+#Remove PAR Tot
 Met=Met%>%
   mutate(
     Flag_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, 4, Flag_PAR_Total_mmol_m2),
     Note_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
     PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>25, NA, PAR_Total_mmol_m2))
 
+Met=Met%>%
+  mutate(
+    Flag_PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2>5, 4, Flag_PAR_Average_umol_s_m2),
+    Note_PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2>5, "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
+    PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2>5, NA, PAR_Average_umol_s_m2))
 
 #Remove total PAR (PAR_Tot) outliers
 Met=Met%>%
@@ -311,12 +334,7 @@ Met=Met%>%
     Note_PAR_Average_umol_s_m2=ifelse(PAR_Total_mmol_m2>200, "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
     PAR_Average_umol_s_m2=ifelse(PAR_Total_mmol_m2>200, NA, PAR_Average_umol_s_m2))
 
-#Remove average PAR (PAR_Avg) outliers at night 
-Met=Met%>%
-  mutate(
-    Flag_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, 4, Flag_PAR_Average_umol_s_m2),
-    Note_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
-    PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-04 20:00:00"&DateTime<"2021-05-05 5:00:00"&PAR_Average_umol_s_m2>1, NA, PAR_Average_umol_s_m2))
+
 #flagging IR down values in the summer of 2020 that are lower than 400
 Met=Met%>%
   mutate(

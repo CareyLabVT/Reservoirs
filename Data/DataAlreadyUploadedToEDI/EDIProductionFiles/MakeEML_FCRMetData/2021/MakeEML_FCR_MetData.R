@@ -3,7 +3,7 @@
 ##Date: 21 July 2019
 ## Updated: 07 Feb 2020, A. Hounshell
 
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData")
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021")
 # # Install devtools
 install.packages("devtools")
 # 
@@ -27,9 +27,9 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
 template_table_attributes(
- path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
- data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
- data.table = 'Met_final_2015_2020.csv')
+ path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+ data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+ data.table = 'FCR_Met_final_2015_2021.csv')
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -70,7 +70,7 @@ template_table_attributes(
 #paste text and click remove diacritics
 
 #Step 9: Additional information
-#nothing mandatory for Carey Lab in this section
+#This is where the authorship contribution statement goes
 
 #Step 10: Keywords
 #DO NOT EDIT KEYWORDS FILE USING A TEXT EDITOR!! USE EXCEL!!
@@ -99,17 +99,17 @@ template_table_attributes(
 
 # Run this function for your dataset
 
-template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
+template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
-template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-                             data.table = 'Met_final_2015_2020.csv',
+template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+                             data.table = 'FCR_Met_final_2015_2021.csv',
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -137,22 +137,22 @@ template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToE
 # zip.dir: Change the name of the module files zip folder
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
-make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2020",
-         data.table = c('Met_final_2015_2020.csv', 'Met_Maintenance_2015_2020.csv'),
-         data.table.name = c('Met_final_2015_2020', 'Met_Maintenance_2015_2020'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2020',
+make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2021",
+         data.table = c('FCR_Met_final_2015_2021.csv', 'FCR_Met_Maintenance_2015_2021.csv'),
+         data.table.name = c('FCR_Met_final_2015_2021', 'FCR_Met_Maintenance_2015_2021'),
+         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2021',
                                     'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'MET_QAQC_2020.R',
-         other.entity.name = 'MET_QAQC_2020',
+         other.entity = 'FCR_MET_QAQC_2021.R',
+         other.entity.name = 'FCR_MET_QAQC_2021',
          other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2020-12-31"),
+         temporal.coverage = c("2015-07-07", "2021-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.4") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.143.8") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2020 was "edi.389.5"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

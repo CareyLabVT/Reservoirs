@@ -1,6 +1,7 @@
 #Title: Script for aggregating and QAQCing FP txt files for publication to EDI
 #Author: Mary Lofton
 #Date: 16DEC19
+#Last updated: 05JAN22
 
 rm(list=ls())
 

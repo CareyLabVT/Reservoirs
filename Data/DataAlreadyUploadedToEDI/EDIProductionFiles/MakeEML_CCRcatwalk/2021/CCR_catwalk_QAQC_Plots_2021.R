@@ -1,64 +1,35 @@
 # Master QAQC script in prep for publishing catwalk sensor string data to EDI
 # this script combines code from other QAQC scripts found in misc_QAQC_scipts folder
 # as well as other data files from misc_data_files
-# final EDI-ready file outputs directly to MakeEMLCatwalk/2020 folder
+# final EDI-ready file outputs directly to MakeEML_CCRcatwalk/2020 folder
 # Set up ----
 pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2021/"
-source(paste0(folder, "FCR_catwalk_QAQC_function_2018_2021.R"))
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2021/"
+source(paste0(folder, "CCR_catwalk_QAQC_function_2021.R"))
 
-# download most up to date catwalk data and maintenance log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt"))
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk.csv"))
-download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2021.csv', paste0(folder, "misc_data_files/CAT_2.csv"))
+# download most up to date catwalk data and maintenance log for input into the function
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/CCRW_maintenance_log.txt",paste0(folder, "CCRW_maintenance_log_2021.txt"))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality.csv",paste0(folder, "ccre-waterquality.csv"))
+#download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2021.csv', paste0(folder, "CAT_2.csv"))
 
 # run standard qaqc function from FCR_catwalk_QAQC_function_2021.R
-data_file <- paste0(folder, 'misc_data_files/Catwalk.csv')#current file from the data logger
-data2_file <- paste0(folder, 'misc_data_files/CAT_2.csv')#manual downloads to add missing data 
-maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt")#maintenance file
-output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2018_2021.csv")#name of the output file
-temp_oxy_chla_qaqc(data_file,data2_file, maintenance_file, output_file)#function to do the main qaqc
+data_file <- paste0(folder, "ccre-waterquality.csv")#current file from the data logger
+#data2_file <- paste0(folder, 'CAT_2.csv')#manual downloads to add missing data 
+maintenance_file <- paste0(folder, "CCRW_maintenance_log_2021.txt")#maintenance file
+output_file <- paste0(folder, "CCRwaterquality_first_QAQC_2021.csv")#name of the output file
+qaqc(data_file, maintenance_file, output_file)#function to do the main qaqc
 
 
 # read in qaqc function output
 
-catdata <- read.csv(output_file)
+ccrwater <- read.csv(output_file)
 
 #current time of QAQC for graphing
-current_time="2020-12-31 23:59"
+current_time="2021-12-31 23:59"
 
-
-
-
-#check to see if there is missing data 
-
-#check record for gaps
-#daily record gaps by day of year
-
-# #make a copy of the frame so if you mess it up
-# #for the missing data check
-# catdata2=catdata
-# 
-# catdata2=catdata2[order(catdata2$DateTime),]
-# catdata2$DOY=yday(catdata2$DateTime)
-# 
-# # v=c(2:153882)
-#  for(i in 2:nrow(catdata2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-#    if(catdata2$DOY[i]-catdata2$DOY[i-1]>1){
-#     print(c(catdata2$DateTime[i-1],catdata2$DateTime[i]))
-#   }
-#  }
-# #sub-daily RECORD gaps by RECORD number
-#  for(j in 2:nrow(catdata2)){ #this identifies if there are any data gaps in the long-term RECORD, and where they are by RECORD number
-#   if(abs(catdata2$RECORD[j-1]-catdata2$RECORD[j])>1){
-#   print(c(catdata2$DateTime[j-1],catdata2$DateTime[j]))
-#  }
-# }
-# 
 
 # subset file to only unpublished data
-catdata_flag=catdata
-catdata_flag <- catdata_flag[catdata_flag$DateTime<"2021-10-15 23:59",]
+ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 
 
 # Flag values
@@ -76,35 +47,39 @@ catdata_flag <- catdata_flag[catdata_flag$DateTime<"2021-10-15 23:59",]
 ###########################################################################################################################################################################
 # temp qaqc ----
 
-#Two of the thermistors started to read higher than the one above them in fall 2020. Fixed this using a constant offset. 
-#methods described in metadata
-
-#start time for 1m is 30 Oct 2020 13:00EST
-#start time for 4m is 31 Oct 2020 5:00EST
-catdata_flag <- catdata_flag %>%
-  mutate(Flag_Temp_1 = ifelse(DateTime >= "2020-10-30 13:00" & DateTime < "2020-12-31 23:50" & (! is.na(ThermistorTemp_C_1)) ,8, Flag_Temp_1))%>%
-  mutate(Flag_Temp_4 = ifelse(DateTime >= "2020-10-31 5:00" & DateTime < "2020-12-31 23:50" &
-                                (! is.na(ThermistorTemp_C_4)),8, Flag_Temp_4))%>%
-  mutate(ThermistorTemp_C_1 = ifelse(DateTime >= "2020-10-30 13:00" & DateTime < "2020-12-31 23:50" &
-                                        (! is.na(ThermistorTemp_C_1)), (ThermistorTemp_C_1-0.22617), ThermistorTemp_C_1 )) %>%
-  mutate(ThermistorTemp_C_4 = ifelse(DateTime >= "2020-10-31 5:00" & DateTime < "2020-12-31 23:50" &
-                                        (! is.na(ThermistorTemp_C_4)), (ThermistorTemp_C_4-0.18122), ThermistorTemp_C_4 )) 
-#thermistors were replaced in 2021
-catdata_flag <- catdata_flag %>%
-  mutate(Flag_Temp_1 = ifelse(DateTime >= "2021-02-08 14:30" & DateTime < "2021-02-26 12:00" & (! is.na(ThermistorTemp_C_2)) ,7, Flag_Temp_1))%>%
-  mutate(Flag_Temp_4 = ifelse(DateTime >= "2021-02-08 14:30" & DateTime < "2021-02-26 12:00" &
-                                (! is.na(ThermistorTemp_C_2)),7, Flag_Temp_4))
-
-#Checktime=catdata_flag%>%
-#  select(c(DateTime, ThermistorTemp_C_1, ThermistorTemp_C_2, ThermistorTemp_C_4, Flag_Temp_1, Flag_Temp_4))
-# check surface temp data
 
 
-#Convert the time and put it in current time zone so the times line up when changing NAs.
-#+5 is during EDT and +4 is during EST(make sure to check this in December)
-#Have to do strpttime or you get some NAs in the DateTime column
-#Do this so the graphing is nice
-# catdata_flag$DateTime<-as.POSIXct(strptime(catdata_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
+#graph to figure out off set
+depth=ccrwater%>%
+  select(DateTime,LvlDepth_m_13, Lvl_psi_13, ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3)%>%
+  drop_na(ThermistorTemp_C_1)
+
+depth$DateTime<-as.POSIXct(strptime(depth$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
+
+#
+#Setting the temperature to NA when the thermistors are out of the water
+#add a depth column which we set NAs for when the thermistor is out of the water. Flag 2
+ccrwater=ccrwater%>%
+  mutate(depth_1=LvlDepth_m_13-11.82)%>%
+  mutate(depth_2=LvlDepth_m_13-11.478)%>%
+  mutate(Flag_Temp_1= ifelse(!is.na(depth_1) & depth_1<0 ,2,Flag_Temp_1))%>%
+  mutate(ThermistorTemp_C_1=ifelse(!is.na(depth_1) & depth_1<0,NA,ThermistorTemp_C_1))%>%
+  mutate(Flag_Temp_2= ifelse(!is.na(depth_2) & depth_2<0 ,2,Flag_Temp_2))%>%
+  mutate(ThermistorTemp_C_2=ifelse(!is.na(depth_2) & depth_2<0,NA,ThermistorTemp_C_2))%>%
+  select(-depth_1,-depth_2)
+
+
+#change the temp to NA when the thermistor is clearly out of the water which we used to determine the depth of the temp string
+#negative depths are changed to NA
+#the date ifelse statement is when the pressure transducer was unplugged
+
+#for thermistor at position 1 when it was out of the water 
+bvrdata_clean=bvrdata_clean%>%
+  mutate(Flag_Temp_1= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",2,Flag_Temp_1))%>%
+  mutate(ThermistorTemp_C_1= ifelse(DateTime>="2020-10-26 12:10:00 tz=Etc/GMT+5 "&DateTime<="2020-10-30 09:40:00 tz=Etc/GMT+5",NA,ThermistorTemp_C_1))%>%
+  
+
+
 
 ################################################################################################################
 # #graphing temperature
@@ -112,14 +87,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Surface Temp
 # #From 2018-current
-# surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
+# surf <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
 #   geom_point()
 # surf
 # #Plotly so can pick out questionable values
 # ggplotly(surf)
 # 
 # #Just the current year
-# surf21=catdata_flag%>%
+# surf21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_surface)) +
 #   geom_point()
@@ -129,14 +104,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 1m temp data
 # #From 2018-current
-# m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
+# m_1 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
 #  geom_point()
 # m_1
 # #Plotly so can pick out questionable values
 # ggplotly(m_1)
 # 
 # #Just the current year
-# m_1_21=catdata_flag%>%
+# m_1_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_1)) +
 #   geom_point()
@@ -146,14 +121,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 2m temp data
 # #Plot 2018-current
-# m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
+# m_2 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
 #  geom_point()
 # m_2
 # #Plotly so can pick out questionable values
 # ggplotly(m_2)
 # 
 # #Just the current year
-# m_2_21=catdata_flag%>%
+# m_2_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_2)) +
 #   geom_point()
@@ -163,14 +138,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 3m temp data
 # #Plot From 2018-current
-# m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
+# m_3 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
 #  geom_point()
 # m_3
 # #Plotly so can pick out questionable values
 # ggplotly(m_3)
 # 
 # #Just the current year
-# m_3_21=catdata_flag%>%
+# m_3_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_3)) +
 #   geom_point()
@@ -180,14 +155,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 4m temp data
 # #Plot from 2018-current
-# m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
+# m_4 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
 #  geom_point()
 # m_4
 # #Plotly so can pick out questionable values
 # ggplotly(m_4)
 # 
 # # Just from current year
-# m_4_21=catdata_flag%>%
+# m_4_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_4)) +
 #   geom_point()
@@ -197,14 +172,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 5m temp data
 # # Plot from 2018-current
-# m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
+# m_5 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
 #   geom_point()
 # m_5
 # # Plotly so can pick out questionable values
 # ggplotly(m_5)
 # 
 # # Just current year
-# m_5_21=catdata_flag%>%
+# m_5_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_5)) +
 #   geom_point()
@@ -214,14 +189,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 6m temp data
 # # Plot from 2018-current
-# m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
+# m_6 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
 #  geom_point()
 # m_6
 # # Plotly so can pick out questionable values
 # ggplotly(m_6)
 # 
 # # Just the current year
-# m_6_21=catdata_flag%>%
+# m_6_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_6)) +
 #   geom_point()
@@ -231,14 +206,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 7m temp data
 # # all the temp 2018-current
-# m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
+# m_7 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
 #  geom_point()
 # m_7
 # # Plotly so can pick out questionable values
 # ggplotly(m_7)
 # 
 # #filter for the current year
-# m_7_21=catdata_flag%>%
+# m_7_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_7)) +
 #   geom_point()
@@ -248,14 +223,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 8m temp data
 # # Plot 2018-current
-# m_8 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_8)) +
+# m_8 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_8)) +
 #  geom_point()
 # m_8
 # # Plotly so can pick out questionable values
 # ggplotly(m_8)
 # 
 # # Plot just the current year
-# m_8_21=catdata_flag%>%
+# m_8_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_8)) +
 #   geom_point()
@@ -266,14 +241,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # check 9m temp data
 # # Plot 2018-current
-# m_9 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +
+# m_9 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +
 #  geom_point()
 # m_9
 # # Plotly so can pick out questionable values
 # ggplotly(m_9)
 # 
 # # Just the current year
-# m_9_21=catdata_flag%>%
+# m_9_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_9)) +
 #   geom_point()
@@ -285,7 +260,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #graph all the temps in 2021on the same graph so use base R
 # #create a new data frame for 2021
-# t2021=catdata_flag%>%
+# t2021=ccrwater_flag%>%
 #   filter(DateTime>current_time)
 # 
 # #this part taken from the daily email script
@@ -332,7 +307,7 @@ catdata_flag <- catdata_flag %>%
 ################
 #Correcting some DO values 
 
-catdata_flag <- catdata_flag%>%
+ccrwater_flag <- ccrwater_flag%>%
   mutate(
     DateTime=as.character(DateTime),#change DateTime to as.character so they line up when making changes
     #For 5m READ NOTE: These are the sections I noticed apparent following in TS and have tried to correct with linear adjustments
@@ -388,7 +363,7 @@ catdata_flag <- catdata_flag%>%
                                        RDOsat_percent_9_adjusted))
 
 #take out questionable values for the 5m DO from 2018-2021
-catdata_flag <- catdata_flag %>%
+ccrwater_flag <- ccrwater_flag %>%
   mutate(
     Flag_DO_5_obs = ifelse(DateTime >= "2018-09-25 10:40" & DateTime<"2018-09-25 10:55",2, Flag_DO_5_obs),
     Flag_DO_5_sat = ifelse(DateTime >= "2018-09-25 10:40" & DateTime<"2018-09-25 10:55",2, Flag_DO_5_sat),
@@ -420,7 +395,7 @@ catdata_flag <- catdata_flag %>%
                          (! is.na(RDO_mgL_5)),NA, RDO_mgL_5))
 
 #take out questionable values for the 9m DO from 2018-2021
-catdata_flag <- catdata_flag %>%
+ccrwater_flag <- ccrwater_flag %>%
   mutate(
     Flag_DO_9_obs = ifelse(DateTime >= "2018-11-19 15:00" & DateTime < "2018-11-20 12:20" & 
                          (! is.na(RDO_mgL_9)) ,2, Flag_DO_9_obs),
@@ -454,11 +429,11 @@ catdata_flag <- catdata_flag %>%
   #+5 is during EDT and +4 is during EST(make sure to check this in December)
   #Have to do strpttime or you get some NAs in the DateTime column
   #Do this so the graphing is nice
-#  catdata_flag$DateTime<-as.POSIXct(strptime(catdata_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
+#  ccrwater_flag$DateTime<-as.POSIXct(strptime(ccrwater_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
 
 #Check 1.6m EXO DO data
 #Plot 2018-current
-# EXODO <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXODO_mgL_1)) +
+# EXODO <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXODO_mgL_1)) +
 #   geom_point()
 # EXODO
 # 
@@ -466,7 +441,7 @@ catdata_flag <- catdata_flag %>%
 # ggplotly(EXODO)
 # 
 # #Plot Just the current year
-# EXODO_21=catdata_flag%>%
+# EXODO_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXODO_mgL_1)) +
 #   geom_point()
@@ -476,14 +451,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Check the 5m RDO
 # # plot of 5m DO from 2018 to present
-# RDO5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = RDO_mgL_5)) +
+# RDO5 <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = RDO_mgL_5)) +
 #   geom_point()
 # RDO5
 # # Plotly so can pick out questionable values
 # ggplotly(RDO5)
 # 
 # # Plot the current year
-# RDO5_21=catdata_flag%>%
+# RDO5_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = RDO_mgL_5)) +
 #   geom_point()
@@ -494,14 +469,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Plot the 9m Do
 # # From 2018-current 
-# RDO9=ggplot(catdata_flag, aes(x = DateTime, y = RDO_mgL_9)) +
+# RDO9=ggplot(ccrwater_flag, aes(x = DateTime, y = RDO_mgL_9)) +
 #   geom_point()
 # RDO9
 # # Plotly so can pick out questionable values
 # ggplotly(RDO9)
 # 
 # #Just the current year
-# RDO9_21=catdata_flag%>%
+# RDO9_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = RDO_mgL_9)) +
 #   geom_point()
@@ -516,14 +491,14 @@ catdata_flag <- catdata_flag %>%
 
 # Chla
 # Plot for 2018-current
-# chl_ugl <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
+# chl_ugl <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOChla_ugL_1)) +
 #   geom_point() 
 # chl_ugl
 # # Plotly so can pick out questionable values
 # ggplotly(chl_ugl)
 # 
 # # Plot just the current year
-# chl_ugl_21=catdata_flag%>%
+# chl_ugl_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOChla_ugL_1)) +
 #   geom_point()
@@ -532,7 +507,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # plot the daily mean
 # # calculate the daily mean
-# chl_mean <- catdata_flag %>%
+# chl_mean <- ccrwater_flag %>%
 #  select(DateTime, EXOChla_ugL_1) %>%
 #  mutate(day = date(DateTime)) %>%
 #  group_by(day) %>%
@@ -547,13 +522,13 @@ catdata_flag <- catdata_flag %>%
 # ggplotly(chl_mean)
 # 
 # # Plot the chla and the daily mean on the same graph
-# plot(catdata_flag$DateTime, catdata_flag$EXOChla_ugL_1)
+# plot(ccrwater_flag$DateTime, ccrwater_flag$EXOChla_ugL_1)
 # points(chl_mean$DateTime, chl_mean$daily_mean, type="l", col="green")
 # 
 # 
 # # Chla-RFU
 # # Plot 2018-current
-# chl_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
+# chl_rfu <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOChla_RFU_1)) +
 #   geom_point()
 # chl_rfu
 # # Plotly so can pick out questionable values
@@ -561,7 +536,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # 
 # # Just the current year
-# chl_rfu_21=catdata_flag%>%
+# chl_rfu_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1)) +
 #   geom_point()
@@ -569,14 +544,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Phyco-RFU
 # # Plot 2018-current
-# phyco_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
+# phyco_rfu <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
 #   geom_point() 
 # phyco_rfu
 # # Plotly so can pick out questionable values
 # ggplotly(phyco_rfu)
 # 
 # # Just the current year
-# phyco_rfu_21=catdata_flag%>%
+# phyco_rfu_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
 #   geom_point()
@@ -587,14 +562,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # fDOM-RFU
 # # Plot 2018-current
-# fDOM_rfu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOfDOM_RFU_1)) +
+# fDOM_rfu <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOfDOM_RFU_1)) +
 #   geom_point() 
 # fDOM_rfu
 # # Plotly so can pick out questionable values
 # ggplotly(fDOM_rfu)
 # 
 # # Just the current year
-# fDOM_rfu_21=catdata_flag%>%
+# fDOM_rfu_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOfDOM_RFU_1)) +
 #   geom_point()
@@ -603,14 +578,14 @@ catdata_flag <- catdata_flag %>%
 # 
 # # fDOM-QSU
 # # Plot 2018-current
-# fDOM_qsu <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
+# fDOM_qsu <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOfDOM_QSU_1)) +
 #   geom_point() 
 # fDOM_qsu
 # # Plotly so can pick out questionable values
 # ggplotly(fDOM_qsu)
 # 
 # # Just the current year
-# fDOM_qsu_21=catdata_flag%>%
+# fDOM_qsu_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_1)) +
 #   geom_point()
@@ -624,7 +599,7 @@ catdata_flag <- catdata_flag %>%
 
 #Flag high conductivity values in 2020
 
-catdata_flag <- catdata_flag %>%
+ccrwater_flag <- ccrwater_flag %>%
   mutate(
     DateTime=as.character(DateTime),#change DateTime to as.character so they line up when making changes
     Flag_Cond = ifelse(DateTime >"2020-05-01 00:00" & DateTime < "2020-08-31 23:59" &
@@ -640,21 +615,21 @@ catdata_flag <- catdata_flag %>%
 #+5 is during EDT and +4 is during EST(make sure to check this in December)
 #Have to do strpttime or you get some NAs in the DateTime column
 #Do this so the graphing is nice
-# catdata_flag$DateTime<-as.POSIXct(strptime(catdata_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
+# ccrwater_flag$DateTime<-as.POSIXct(strptime(ccrwater_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
 # 
 # #Plot from 2018-current
-# Cond <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOCond_uScm_1)) +
+# Cond <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOCond_uScm_1)) +
 #   geom_point()
 # Cond
 # # Plotly so can pick out questionable values
 # ggplotly(Cond)
 # 
 # 
-# Con=catdata_flag%>%
+# Con=ccrwater_flag%>%
 #   select(c(DateTime,EXOTemp_C_1,EXOCond_uScm_1,EXOSpCond_uScm_1,EXO_wiper,EXO_pressure))
 # #Just the current year
 # 
-# Cond_21=catdata_flag%>%
+# Cond_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOCond_uScm_1)) +
 #   geom_point()
@@ -665,14 +640,14 @@ catdata_flag <- catdata_flag %>%
 # #Specific Conductivity
 # 
 # #Plot from 2018-current
-# SpCond <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOSpCond_uScm_1)) +
+# SpCond <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOSpCond_uScm_1)) +
 #   geom_point()
 # SpCond
 # # Plotly so can pick out questionable values
 # ggplotly(SpCond)
 # 
 # #Just the current year
-# SpCond_21=catdata_flag%>%
+# SpCond_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOSpCond_uScm_1)) +
 #   geom_point()
@@ -681,14 +656,14 @@ catdata_flag <- catdata_flag %>%
 # ggplotly(SpCond_21)
 # 
 # #Total Dissolved Solids
-# TDS <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXOTDS_mgL_1)) +
+# TDS <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXOTDS_mgL_1)) +
 #   geom_point()
 # TDS
 # # Plotly so can pick out questionable values
 # ggplotly(TDS)
 # 
 # #Just the current year
-# TDS_21=catdata_flag%>%
+# TDS_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOTDS_mgL_1)) +
 #   geom_point()
@@ -697,14 +672,14 @@ catdata_flag <- catdata_flag %>%
 # ggplotly(TDS_21)
 # 
 # #Depth
-# Depth <- ggplot(data = catdata_flag, aes(x = DateTime, y = EXO_depth)) +
+# Depth <- ggplot(data = ccrwater_flag, aes(x = DateTime, y = EXO_depth)) +
 #   geom_point()
 # Depth
 # # Plotly so can pick out questionable values
 # ggplotly(Depth)
 # 
 # #Just the current year
-# Depth_21=catdata_flag%>%
+# Depth_21=ccrwater_flag%>%
 #   filter(DateTime>current_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXO_depth)) +
 #   geom_point()
@@ -715,22 +690,22 @@ catdata_flag <- catdata_flag %>%
 ###########################################################################################################################################################################
 # write final csv ----
 # some final checking of flags
-# for (i in 1:nrow(catdata_all)) {
-#   if(is.na(catdata_all$Flag_fDOM[i])){
-#     catdata_all$Flag_fDOM[i] <- 0
+# for (i in 1:nrow(ccrwater_all)) {
+#   if(is.na(ccrwater_all$Flag_fDOM[i])){
+#     ccrwater_all$Flag_fDOM[i] <- 0
 #   }
 # }
 
 #Order by date and time
 
-catdata_flag <- catdata_flag[order(catdata_flag$DateTime),]
+ccrwater_flag <- ccrwater_flag[order(ccrwater_flag$DateTime),]
 
 
 # for(b in 1:nrow())
-# str(catdata_flag)
+# str(ccrwater_flag)
 
 #rearrange the cols
-catdata_flag <- catdata_flag %>%
+ccrwater_flag <- ccrwater_flag %>%
   select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:ThermistorTemp_C_9,
          RDO_mgL_5, RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,
          RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9,
@@ -743,9 +718,9 @@ catdata_flag <- catdata_flag %>%
          Flag_DO_1_sat, Flag_DO_1_obs, Flag_Chla, Flag_Phyco,Flag_fDOM, Flag_Pres )
 
 # convert datetimes to characters so that they are properly formatted in the output file
-catdata_flag$DateTime <- as.character(catdata_flag$DateTime)
+ccrwater_flag$DateTime <- as.character(ccrwater_flag$DateTime)
   
   
-write.csv(catdata_flag, paste0(folder, '/Catwalk_EDI_2018_2021.csv'), row.names = FALSE)
+write.csv(ccrwater_flag, paste0(folder, '/Catwalk_EDI_2018_2021.csv'), row.names = FALSE)
 
 

@@ -14,15 +14,6 @@ library(tidyverse)
 library(lubridate)
 ```
 
-Flag when pump wasn't working in July??
-BVR cast on 18/19 July 2019 is actually FCR!!! (and generally need to make sure all casts are labeled as the right reservoir)
-Need to fix 2021 times
-Make sure all 2019 MSN data is here
-Oxygen flags for 2022?
-Why are these omitted "090419_bvr50.csv","090419_fcr50.csv"
-filter(Date != "2020-07-19T21:02:02Z") from last year. No! This is just a BVR cast! Need to add it back
-Are we missing FCR data in late june/ early july?
-2020-07-17 FCR has very high orp
 
 ```{r}
 # Package ID: edi.200.11 Cataloging System:https://pasta.edirepository.org.
@@ -202,7 +193,10 @@ detach(dt1)
 Fix issues in existing dataset
 ```{r}
 dt1 = dt1%>%
-  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR")
+  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR") #these profiles are duplicated and listed as both FCR and BVR
+dt1$Reservoir[as.Date(dt1$Date)%in% as.Date(c("2017-07-06","2017-10-08"))]<-"BVR" #incorrectly listed as FCR
+
+#"2017-08-27","2017-09-03" have a few oxygen values but mostly NA
 ```
 
 
@@ -211,10 +205,10 @@ dt1 = dt1%>%
 # This reads all the files into the R environment
 files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
 files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-omit <- c("100719_bvr_sedtrap.csv","090419_bvr50.csv","090419_fcr50.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv", "072121_fcr50_sit_1.6m.csv")#fill in with any files you need to omit
+omit <- c("100719_bvr_sedtrap.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv", "072121_fcr50_sit_1.6m.csv", "072621_fcr_50_sit_anoxic.csv")#fill in with any files you need to omit
 files <- files[!files %in% omit]
 files <- files[file.mtime(paste0("../csv_outputs/",files))>as.Date("2021-02-01")] #Only read files that have been modified this year
-files <- c(files,"071819_fcr50.csv","071819_bvr50.csv") #Reprocessing these files in 2021
+files <- c(files,"071819_fcr50.csv","090419_fcr50.csv","090419_bvr50.csv","090419_bvr50_b.csv") #Reprocessing these files in 2021
 
 #This reads the first file in
 ctd = read_csv(paste0("../csv_outputs/",files[1])) 
@@ -240,6 +234,8 @@ for (i in 2:length(files)){
     full_join(new)
 }
 write_csv(ctd, "CTD_Meta_2021.csv")
+
+summary(ctd$Reservoir)
 ```
 
 ```{r}
@@ -280,11 +276,17 @@ ctd_flagged = ctd %>% #Add flags
     #DO
     DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
+    DO_mgL = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_mgL), #DO pump wasn't working for these casts
+    Flag_DO = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO),
+    Flag_DO = ifelse(Date > as.Date("2021-06-26"),2, Flag_DO), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
     Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
     
     #DO pSat
     DO_pSat = ifelse(DO_pSat < 0, 0, DO_pSat), #Flag pSat<0
     Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
+    DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_pSat), #DO pump wasn't working for these casts
+    Flag_DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO_pSat),
+    Flag_DO_pSat = ifelse(Date > as.Date("2021-06-26"),2, Flag_DO_pSat), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
     Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
   
     #COND
@@ -333,16 +335,16 @@ ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla","Flag_Turb","Flag_Cond","Flag_Sp
 colnames(ctd_flagged)
 
 summary(ctd_flagged)
+unique(ctd_flagged$Date)
 
-## CTD times in 2020 are incorrect
+## CTD times in 2021 are incorrect
 hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2021])))
 #CTD date - date from field notes
-as_datetime("2020-06-21 19:34:20 UTC")-as_datetime("2020-06-22 08:40:00")
-as_datetime("2020-07-05 21:24:12 UTC")-as_datetime("2020-07-06 10:26:00")
-as_datetime("2020-10-13 21:10:11 UTC")-as_datetime("2020-10-14 10:10:00")
+as_datetime("2021-04-25 22:43:12 CDT")-as_datetime("2021-04-26 11:45:00 EDT")
+as_datetime("2021-07-07 01:06:56 CDT")-as_datetime("2021-07-07 14:20:00")
 #~13 hours
 
-ctd_flagged$Date[year(ctd_flagged$Date) == 2020] = ctd_flagged$Date[year(ctd_flagged$Date) == 2020]+hours(13)
+ctd_flagged$Date[year(ctd_flagged$Date) %in% c(2020,2021)] = ctd_flagged$Date[year(ctd_flagged$Date) %in% c(2020,2021)]+hours(13)
 ctd_flagged$Date[year(ctd_flagged$Date) == 2018] = ctd_flagged$Date[year(ctd_flagged$Date) == 2018]-hours(4) #to align with published data
 #hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
 #Looks much better!
@@ -385,13 +387,13 @@ write.csv(CTD_fix,"CTD_final_2013_2021.csv", row.names = FALSE)
 library(akima)
 library(colorRamps)
 library(plotly)
-qaqc = final
+qaqc = CTD_fix
 qaqc = read.csv("CTD_final_2013_2021.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2019))%>%
+  filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2020))%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL))+
+  ggplot(aes(x = Date, y = Depth_m, color = ORP_mV))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()
@@ -429,5 +431,11 @@ thermo%>%
   geom_point()+
   facet_wrap(~Year, scales = "free_x")+
   ylab("Thermocline depth")
+
+p = df.final%>%
+  filter(Depth_m == 9, year(Date)==2021)%>%
+  ggplot(aes(y = DO_mgL, x = Date))+
+  geom_point()
+ggplotly(p)
 ```
 

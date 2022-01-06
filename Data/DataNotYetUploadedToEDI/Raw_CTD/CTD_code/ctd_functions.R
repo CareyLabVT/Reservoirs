@@ -180,7 +180,7 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
                     par.sat.log,
                     salinity, 
                     descentRate,
-                    density,
+                    #density,
                     #pressurePSI,
                     flag)
     
@@ -204,7 +204,7 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
     
     ### REMOVE THE BOTTOM NA values ###
     data_air <- data_air%>%
-      filter(!is.na(DO_mgL))
+      dplyr::filter(!is.na(DO_mgL))
     
     data_air$scan_num <- as.numeric(row.names(data_air))
     

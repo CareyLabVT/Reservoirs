@@ -592,7 +592,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
 #add depth of bottom Thermistor. Subtract 0.15 from the depth because the pressure sensor
 #is 0.15m deeper than the bottom Thermistor
-  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(Lvl_psi_13*0.70455)-0.15)#1psi=2.31ft, 1ft=0.305m
+  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(Lvl_psi_13*0.70455))#-0.15)#1psi=2.31ft, 1ft=0.305m
   
   # add Reservoir and Site columns
   ccrwater$Reservoir <- "CCR"

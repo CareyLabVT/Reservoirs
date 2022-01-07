@@ -1,0 +1,29 @@
+---
+title: "Flux calc collation for EDI"
+author: "Abby Lewis"
+date: "1/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+ugga_2021 = read.csv("../UGGA_Raw/2021/TextFiles/20220106_Flux_Output.csv")
+ugga_2020 = read.csv("../UGGA_Raw/2020/TextFiles/2020_season_Flux_Output.csv")
+ugga_2019 = read.csv("../UGGA_Raw/2019/TextFiles/2019_season_Flux_Output.csv")
+ugga_2018 = read.csv("../UGGA_Raw/2018/TextFiles/2018_season_Flux_Output.csv")
+ugga_2017 = read.csv("../UGGA_Raw/2017/TextFiles/2017_season_Flux_Output.csv")
+
+ugga_comb = ugga_2021%>%
+  full_join(ugga_2020)%>%
+  full_join(ugga_2019)%>%
+  full_join(ugga_2018)%>%
+  full_join(ugga_2017)
+
+ugga_comb%>%
+  
+```
+

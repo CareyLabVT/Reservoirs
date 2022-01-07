@@ -18,8 +18,8 @@ library(FluxCalR)
 # SET TO YOUR OWN WD!
 
 #Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
-wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2021/TextFiles")
-#wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
+#wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2021/TextFiles")
+wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2021/TextFiles")
 #wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
@@ -58,6 +58,11 @@ flux_co2 <- flux_output %>%
   rename(co2_slope_ppmS = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
+flux_ch4 <- flux_output %>% 
+  filter(Gas == "CH4") %>% 
+  rename(ch4_slope_ppmS = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
+  select(-Gas)
+
 flux_all <- left_join(flux_co2,flux_ch4,by=c("Num","Date","Start","End","Ta"))
 
 # NOTE: For 2020 - all data came from FCR at site 50
@@ -71,7 +76,7 @@ col_order <- c("Reservoir","Site","Date","Rep","Start_time","End_time","Temp_C",
                "co2_flux_umolCm2s","ch4_slope_ppmS","ch4_R2","ch4_flux_umolCm2s","co2_flux_umolCm2s_flag",
                "ch4_flux_umolCm2s_flag")
 
-flux_all_2 <- flux_all[,col_order]
+flux_all_2 <- flux_all
 
 # Plots to double check data!
 flux_all_2$Date <- as.POSIXct(strptime(flux_all_2$Date,"%Y-%m-%d", tz="EST"))
@@ -82,4 +87,4 @@ ggplot()+
   ylab("flux_umolCm2s")
 
 # Export out fluxes
-write_csv(flux_all_2,"./20210219_Flux_Output.csv") #change this!
+write_csv(flux_all_2,"./20220106_Flux_Output.csv") #change this!

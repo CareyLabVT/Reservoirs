@@ -278,7 +278,7 @@ ctd_flagged = ctd %>% #Add flags
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
     DO_mgL = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_mgL), #DO pump wasn't working for these casts
     Flag_DO = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO),
-    Flag_DO = ifelse(Date > as.Date("2021-06-26"),2, Flag_DO), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
+    Flag_DO = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
     Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
     
     #DO pSat
@@ -286,7 +286,7 @@ ctd_flagged = ctd %>% #Add flags
     Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
     DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_pSat), #DO pump wasn't working for these casts
     Flag_DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO_pSat),
-    Flag_DO_pSat = ifelse(Date > as.Date("2021-06-26"),2, Flag_DO_pSat), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
+    Flag_DO_pSat = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO_pSat), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
     Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
   
     #COND
@@ -312,13 +312,13 @@ ctd_flagged = ctd %>% #Add flags
     #pH
     pH = ifelse(pH < 0, 0, pH), #Flag pH < 0 
     Flag_pH = ifelse(pH < 0,4,Flag_pH),
-    pH = ifelse(Date > as.Date("2020-08-04"),NA,pH), #pH sensor broke in summer 2020
-    Flag_pH = ifelse(Date > as.Date("2020-08-04"),2,Flag_pH),
+    pH = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),NA,pH), #pH sensor broke in summer 2020
+    Flag_pH = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),2,Flag_pH),
     Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
     
     #ORP
-    ORP_mV = ifelse(Date > as.Date("2021-01-01"),NA,ORP_mV), #ORP sensor was capped in 2021 because pH sensor was broken
-    Flag_ORP = ifelse(Date > as.Date("2021-01-01"),2,Flag_ORP),
+    ORP_mV = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),NA,ORP_mV), #ORP sensor was capped in 2021 because pH sensor was broken
+    Flag_ORP = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),2,Flag_ORP),
     Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP), #Flag NA
   
     #PAR
@@ -346,7 +346,7 @@ as_datetime("2021-07-07 01:06:56 CDT")-as_datetime("2021-07-07 14:20:00")
 
 ctd_flagged$Date[year(ctd_flagged$Date) %in% c(2020,2021)] = ctd_flagged$Date[year(ctd_flagged$Date) %in% c(2020,2021)]+hours(13)
 ctd_flagged$Date[year(ctd_flagged$Date) == 2018] = ctd_flagged$Date[year(ctd_flagged$Date) == 2018]-hours(4) #to align with published data
-#hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2020])))
+hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2021])))
 #Looks much better!
 write.csv(ctd_flagged, "ctd_2021_flagged.csv")
 ```
@@ -387,13 +387,13 @@ write.csv(CTD_fix,"CTD_final_2013_2021.csv", row.names = FALSE)
 library(akima)
 library(colorRamps)
 library(plotly)
-qaqc = CTD_fix
+qaqc = ctd_flagged
 qaqc = read.csv("CTD_final_2013_2021.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
   filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2020))%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = ORP_mV))+
+  ggplot(aes(x = Date, y = Depth_m, color = pH, shape = as.factor(Flag_pH)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

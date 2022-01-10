@@ -74,8 +74,8 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 #negative depths are changed to NA
 
 ccrwater=ccrwater%>%
-  mutate(depth_1=LvlDepth_m_13-18.92)%>%
-  mutate(depth_2=LvlDepth_m_13-18.065)
+  mutate(depth_1=LvlDepth_m_13-18.77)%>%
+  mutate(depth_2=LvlDepth_m_13-18.915)
   mutate(Flag_Temp_1= ifelse(!is.na(depth_1) & depth_1<0 ,2,Flag_Temp_1))%>%
   mutate(ThermistorTemp_C_1=ifelse(!is.na(depth_1) & depth_1<0,NA,ThermistorTemp_C_1))%>%
   mutate(Flag_Temp_2= ifelse(!is.na(depth_2) & depth_2<0 ,2,Flag_Temp_2))%>%
@@ -738,7 +738,7 @@ ccrwater <- ccrwater[order(ccrwater$DateTime),]
                                  EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
                                  EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXO_pressure_psi_9, EXO_depth_m_9, EXO_battery_V_9,
                                  EXO_cablepower_V_9, EXO_wiper_V_9,Lvl_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
-                                 Record, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
+                                 RECORD, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
 
 # convert datetimes to characters so that they are properly formatted in the output file
 ccrwater$DateTime <- as.character(ccrwater$DateTime)

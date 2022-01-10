@@ -3,7 +3,7 @@
 qaqc <- function(data_file, maintenance_file, output_file)
 {
  
-  CATPRES_COL_NAMES = c("DateTime", "Record", "CR3000_Batt_V", "CR3000Panel_Temp_C", 
+  CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000_Batt_V", "CR3000Panel_Temp_C", 
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
                         "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
                         "ThermistorTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11", "ThermistorTemp_C_12",
@@ -30,7 +30,6 @@ qaqc <- function(data_file, maintenance_file, output_file)
   ccrwater <- read_csv(data_file, skip = 1, col_names = CATPRES_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
-  ccr2=ccrwater
   
  #read in manual data from the data logger to fill in missing gaps
   
@@ -42,6 +41,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
 ################################################################################################################
   #check for gaps and missing data
   #order data by timestamp
+  ccr2=ccrwater
   ccr2=ccr2[order(ccr2$DateTime),]
   ccr2$DOY=yday(ccr2$DateTime)
   
@@ -54,8 +54,8 @@ qaqc <- function(data_file, maintenance_file, output_file)
     }
   }
   # #sub-daily record gaps by record number
-  for(i in 2:length(ccr2$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if(abs(ccr2$Record[i]-ccr2$Record[i-1])>1){
+  for(i in 2:length(ccr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(abs(ccr2$RECORD[i]-ccr2$RECORD[i-1])>1){
       print(c(ccr2$DateTime[i-1],ccr2$DateTime[i]))
     }
   }
@@ -592,7 +592,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
 #add depth of bottom Thermistor. Subtract 0.15 from the depth because the pressure sensor
 #is 0.15m deeper than the bottom Thermistor
-  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(Lvl_psi_13*0.70455))#-0.15)#1psi=2.31ft, 1ft=0.305m
+  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=((Lvl_psi_13*0.70455)-0.15))#1psi=2.31ft, 1ft=0.305m
   
   # add Reservoir and Site columns
   ccrwater$Reservoir <- "CCR"
@@ -611,7 +611,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
   EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXO_pressure_psi_9, EXO_depth_m_9, EXO_battery_V_9,
   EXO_cablepower_V_9, EXO_wiper_V_9,Lvl_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
-  Record, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
+  RECORD, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
   
   
   

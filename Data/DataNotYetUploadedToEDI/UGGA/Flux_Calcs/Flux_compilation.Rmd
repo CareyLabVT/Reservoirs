@@ -10,20 +10,26 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+Need to fix reps for 2018
+Are start and end times in real units?
+How to do flags?
+
 ```{r}
-ugga_2021 = read.csv("../UGGA_Raw/2021/TextFiles/20220106_Flux_Output.csv")
-ugga_2020 = read.csv("../UGGA_Raw/2020/TextFiles/2020_season_Flux_Output.csv")
-ugga_2019 = read.csv("../UGGA_Raw/2019/TextFiles/2019_season_Flux_Output.csv")
-ugga_2018 = read.csv("../UGGA_Raw/2018/TextFiles/2018_season_Flux_Output.csv")
-ugga_2017 = read.csv("../UGGA_Raw/2017/TextFiles/2017_season_Flux_Output.csv")
+ugga_2021 = read_csv("../UGGA_Raw/2021/TextFiles/20220106_Flux_Output.csv")
+ugga_2020 = read_csv("../UGGA_Raw/2020/TextFiles/2020_season_Flux_Output.csv")
+ugga_2019 = read_csv("../UGGA_Raw/2019/TextFiles/2019_season_Flux_Output.csv")
+ugga_2018 = read_csv("../UGGA_Raw/2018/TextFiles/2018_season_Flux_Output.csv")
 
 ugga_comb = ugga_2021%>%
   full_join(ugga_2020)%>%
   full_join(ugga_2019)%>%
-  full_join(ugga_2018)%>%
-  full_join(ugga_2017)
+  full_join(ugga_2018)
 
 ugga_comb%>%
-  
+  ggplot(aes(x = Date, y = co2_slope_ppmS, color = co2_R2))+
+  geom_point()
+
+min(ugga_comb$Date)
+max(ugga_comb$Date)
 ```
 

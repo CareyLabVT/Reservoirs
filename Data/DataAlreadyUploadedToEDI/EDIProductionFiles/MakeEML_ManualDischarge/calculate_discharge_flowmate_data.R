@@ -2,8 +2,13 @@
 #install.packages("tidyverse")
 library(tidyverse)
 
-flow <- read.csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/2020_Discharge_Flowmate.csv") # the location of the discharge_digitized.csv, should come from github
-flow$Date <- as.Date(flow$Date)
+flow_20 <- read.csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/2020_Discharge_Flowmate.csv") # the location of the discharge_digitized.csv, should come from github
+flow_20$Date <- as.Date(flow_20$Date)
+
+flow_21 <- read.csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/2021_Discharge_Flowmate.csv") # the location of the discharge_digitized.csv, should come from github
+flow_21$Date <- as.Date(flow_21$Date)
+
+flow <- rbind(flow_20, flow_21)
 
 # first convert the depth to m in a new column (it is always measured in cm in the field)
 flow$Depth_m <- flow$Depth_cm/100
@@ -17,7 +22,7 @@ flow$Velocity_m.s <- ifelse(flow$Velocity_unit=="ft_s", flow$Velocity*0.3048, fl
 flow$Discharge <- flow$Depth_m*flow$Velocity_m.s*flow$WidthInterval_m
 
 # now sum by site and date to get the total discharge for that day/site
-flow <-  flow %>% group_by(Site, Date) %>% mutate(Discharge_m3_s = sum(Discharge))
+flow <-  flow %>% group_by(Site, Date) %>% mutate(Discharge_m3_s = sum(Discharge, na.rm = TRUE))
 
 
 # now subset out only the unique discharge measurements
@@ -29,4 +34,4 @@ discharge <- discharge[!duplicated(discharge[1:3]),]
 wetland <- discharge[discharge$Site=='F200',]
 plot(wetland$Date, wetland$Discharge_m3_s)
 
-write.csv(wetland, './Data/DataNotYetUploadedToEDI/Raw_inflow/Wetland_Discharge_Data_2020.csv', row.names = FALSE)
+write.csv(wetland, './Data/DataNotYetUploadedToEDI/Raw_inflow/Wetland_Discharge_Data_2020_2021.csv', row.names = FALSE)

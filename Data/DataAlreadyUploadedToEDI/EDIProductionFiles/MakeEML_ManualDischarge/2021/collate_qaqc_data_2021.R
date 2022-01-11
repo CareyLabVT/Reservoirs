@@ -25,3 +25,8 @@ colnames(newdata) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_
 ggplot(data = newdata, aes(x = Date, y = Flow_cms)) + 
   geom_line() 
 
+# combine with previous published data
+olddata <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2019/2019_Continuum_Discharge.csv')
+
+edi <- rbind(olddata, newdata)
+write.csv(edi, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021/ManualDischarge_2019_2021.csv', row.names = FALSE)

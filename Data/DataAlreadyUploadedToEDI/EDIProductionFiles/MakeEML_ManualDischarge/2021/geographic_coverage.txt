@@ -1,0 +1,2 @@
+geographicDescription	westBoundingCoordinate	eastBoundingCoordinate	northBoundingCoordinate	southBoundingCoordinate
+"Falling Creek Reservoir and Beaverdam Reservoir are located in Vinton, Virginia, USA"	-79.83692	-79.81721	37.322851	37.30247

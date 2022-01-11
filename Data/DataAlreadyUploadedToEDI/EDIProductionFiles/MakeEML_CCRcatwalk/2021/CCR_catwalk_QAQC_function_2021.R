@@ -581,7 +581,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
                 "Flag_EXObat_9","Flag_EXOcab_9","Flag_EXOwip_9")
   
   
-  #Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
+  #Change the EXO data to NAs when the EXO is above 6m and not due to maintenance
   ccrwater[which(ccrwater$EXO_depth_m_9 < 6), exo_idx9] <- NA
   #Flag the data that was removed with 2 for outliers
   ccrwater[which(ccrwater$EXO_depth_m_9 < 6),exo_flag9]<- 2
@@ -590,13 +590,12 @@ qaqc <- function(data_file, maintenance_file, output_file)
    # delete EXO_Date and EXO_Time columns
   ccrwater <- ccrwater %>% select(-EXO_Date_1,-EXO_Date_9,-EXO_Time_1,-EXO_Time_9)
   
-#add depth of bottom Thermistor. Subtract 0.15 from the depth because the pressure sensor
-#is 0.15m deeper than the bottom Thermistor
-  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=((Lvl_psi_13*0.70455)-0.15))#1psi=2.31ft, 1ft=0.305m
+#Convert the PSI of the pressure sensor to meters. 1psi=2.31ft, 1ft=0.305m
+  ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(Lvl_psi_13*0.70455) )
   
   # add Reservoir and Site columns
   ccrwater$Reservoir <- "CCR"
-  ccrwater$Site <- "50"
+  ccrwater$Site <- "51"
   
   # reorder columns
   ccrwater <- ccrwater %>% select(Reservoir, Site, DateTime,  

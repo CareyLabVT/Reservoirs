@@ -49,23 +49,34 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 # temp qaqc ----
 
 # #graph to figure out off set
-# depth=ccrwater%>%
-#   select(DateTime,LvlDepth_m_13, Lvl_psi_13, ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3)%>%
-#   drop_na(ThermistorTemp_C_1)
-# 
-# depth$DateTime<-as.POSIXct(strptime(depth$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
-# 
-# ccrwater2=depth%>%
-#   mutate(depth_1=LvlDepth_m_13-18.92)%>%
-#   mutate(depth_2=LvlDepth_m_13-18.065)
-# 
-# a=depth%>%
-#   filter(DateTime>"2021-11-29 00:00" & DateTime<"2021-12-02 00:00")%>%
-#   ggplot(., aes(x=DateTime))+
-#   #geom_line(aes(y=ThermistorTemp_C_1, color="red"))+
-#   geom_line(aes(y=ThermistorTemp_C_2, color="blue"))+
-#   geom_line(aes(y=ThermistorTemp_C_3, color="green"))+
-#   geom_line(aes(y=LvlDepth_m_13, color="purple"))
+ # depth=ccrwater%>%
+ #   select(DateTime,LvlDepth_m_13, Lvl_psi_13, ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3, EXO_depth_m_9)%>%
+ #   drop_na(ThermistorTemp_C_1)
+ # 
+ # depth$DateTime<-as.POSIXct(strptime(depth$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
+ # #look at the top 10 depths to make sure they make sense
+ # ccrwater2=depth%>%
+ #   mutate(depth_1=LvlDepth_m_13-18.92)%>%
+ #   mutate(depth_2=LvlDepth_m_13-18.065)%>%
+ #    mutate(depth_3=LvlDepth_m_13-17.07)%>%
+ #    mutate(depth_4=LvlDepth_m_13-16.075)%>%
+ #    mutate(depth_5=LvlDepth_m_13-15.08)%>%
+ #    mutate(depth_6=LvlDepth_m_13-14.085)%>%
+ #    mutate(depth_7=LvlDepth_m_13-13.09)%>%
+ #    mutate(depth_8=LvlDepth_m_13-12.095)%>%
+ #    mutate(depth_9=LvlDepth_m_13-11.1)%>%
+ #    mutate(depth_10=LvlDepth_m_13-9.11)
+ # #reorder to put the EXO depth in between Thermistor 9 and 10 to see if they consistent
+ # ccrwater2=ccrwater2%>%
+ #    select(DateTime,depth_1,depth_2,depth_3, depth_4,depth_5,depth_6, depth_7,depth_8,depth_9, EXO_depth_m_9, depth_10, everything())
+ # #Use to figure out when the thermistor is out of the water-larger variability when out of the water
+ # a=depth%>%
+ #   filter(DateTime>"2021-11-29 00:00" & DateTime<"2021-12-02 00:00")%>%
+ #   ggplot(., aes(x=DateTime))+
+ #   geom_line(aes(y=ThermistorTemp_C_1, color="red"))+
+ #   geom_line(aes(y=ThermistorTemp_C_2, color="blue"))+
+ #   geom_line(aes(y=ThermistorTemp_C_3, color="green"))+
+ #   geom_line(aes(y=LvlDepth_m_13, color="purple"))
 
 #
 #Setting the temperature to NA when the thermistors are out of the water
@@ -74,13 +85,16 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 #negative depths are changed to NA
 
 ccrwater=ccrwater%>%
-  mutate(depth_1=LvlDepth_m_13-18.77)%>%
-  mutate(depth_2=LvlDepth_m_13-18.915)
+  mutate(depth_1=LvlDepth_m_13-18.92)%>%
+  mutate(depth_2=LvlDepth_m_13-18.065)%>%
+   mutate(depth_3=LvlDepth_m_13-17.07)%>%
   mutate(Flag_Temp_1= ifelse(!is.na(depth_1) & depth_1<0 ,2,Flag_Temp_1))%>%
   mutate(ThermistorTemp_C_1=ifelse(!is.na(depth_1) & depth_1<0,NA,ThermistorTemp_C_1))%>%
   mutate(Flag_Temp_2= ifelse(!is.na(depth_2) & depth_2<0 ,2,Flag_Temp_2))%>%
   mutate(ThermistorTemp_C_2=ifelse(!is.na(depth_2) & depth_2<0,NA,ThermistorTemp_C_2))%>%
-  select(-depth_1,-depth_2)
+   mutate(Flag_Temp_3= ifelse(!is.na(depth_3) & depth_3<0 ,2,Flag_Temp_3))%>%
+   mutate(ThermistorTemp_C_3=ifelse(!is.na(depth_3) & depth_3<0,NA,ThermistorTemp_C_3))%>%
+  select(-depth_1,-depth_2, -depth_3)
   
 
 ################################################################################################################
@@ -744,6 +758,6 @@ ccrwater <- ccrwater[order(ccrwater$DateTime),]
 ccrwater$DateTime <- as.character(ccrwater$DateTime)
   
   
-write.csv(ccrwater, paste0(folder, 'Catwalk_EDI_2021.csv'), row.names = FALSE)
+write.csv(ccrwater, paste0(folder, 'CCR_Catwalk_EDI_2021.csv'), row.names = FALSE)
 
 

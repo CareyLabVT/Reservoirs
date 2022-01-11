@@ -1,3 +1,0 @@
-attributeName	code	definition
-Notes	Weir_obstructed_by_leaves_and_branches	Weir obstructed by leaves as identified by picture.
-Notes	No_data_as_of_02_Mar_2020	Data has not been downloaded.

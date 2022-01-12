@@ -53,6 +53,13 @@
 
 ###############################################################################
 
+# Updated: 12Jan22 by W. Woelmer
+# added newest VT and WVWA data, updated file naming convention to Inflow_BEGINYEAR_ENDYEAR.csv, e.g. Inflow_2013_2022.csv
+# added flags to period with missing data
+
+###############################################################################
+
+
 # Install packages
 pacman::p_load(tidyverse, lubridate, magrittr, ggplot2)
 
@@ -204,6 +211,14 @@ inflow$DateTime <- floor_date(inflow$DateTime, "15 minutes")
 baro$DateTime <- as.POSIXct(strptime(baro$DateTime, "%Y-%m-%d %H:%M:%S", tz = 'EST'))
 inflow$DateTime <- as.POSIXct(strptime(inflow$DateTime, "%Y-%m-%d %H:%M:%S", tz = 'EST'))
 
+ggplot(data = baro, aes(x = as.Date(DateTime), y = Baro_pressure_psi)) +
+  geom_point() +
+  xlim(c(as.Date("2021-01-01"),as.Date("2021-12-31")))
+
+ggplot(data = inflow, aes(x = as.Date(DateTime), y = Pressure_psi)) +
+  geom_point() +
+  xlim(c(as.Date("2021-01-01"),as.Date("2021-12-31")))
+
 #merge inflow and barometric pressures to do differencing
 diff = left_join(baro, inflow, by = "DateTime") %>%
   select(-c(1,4))
@@ -218,6 +233,10 @@ diff <- diff %>%
 
 diff <- diff %>%
   mutate(Pressure_psia = Pressure_psi - Baro_pressure_psi)
+
+ggplot(data = diff, aes(x = as.Date(DateTime), y = Pressure_psia)) +
+  geom_point() +
+  xlim(c(as.Date("2021-01-01"),as.Date("2021-12-31")))
 
 plot_both <- diff %>%
   mutate(Date = date(DateTime)) 
@@ -671,6 +690,14 @@ all_flow_2021 <- all_flow +
   xlim(as.POSIXct('2021-01-01'),as.POSIXct('2021-12-31'))
 all_flow_2021
 
+ggplot()+
+  geom_line(data=Inflow_Final, mapping=aes(x=DateTime,y=WVWA_Flow_cms,color="WVWA"))+
+  #geom_line(data=Inflow_Final,mapping = aes(x=DateTime,y=VT_Flow_cms,color="VT"))+
+  xlim(as.POSIXct('2021-01-01'),as.POSIXct('2021-12-31')) +
+  ylab("Flow (cms)")+
+  theme_bw()+
+  mytheme
+
 #ggsave(filename = "./Data/DataNotYetUploadedToEDI/Raw_inflow/VTvWVWA_AllFlow_2020.png", all_flow_2020, device = "png")
 
 # Check relationship between WVWA and VT
@@ -685,28 +712,31 @@ flow_comp
 # Make sure dates are in posix.ct
 Inflow_Final$DateTime <- as.POSIXct(strptime(Inflow_Final$DateTime, "%Y-%m-%d %H:%M:%S"))
 
+
+
+
 #add flags for WVWA Uncorrected Inflow pressure (WVWA_Flag_Pressure_psi); WVWA Barometric pressure (WVWA_Flag_Baro_pressure_psi); WVWA corr inflow pressure
 # (WVWA_Flag_Pressure_psia); and WVWA Temp (WVWA_Flag_Temp)
 Inflow_Final_2 <- Inflow_Final %>%
-  mutate(WVWA_Flag_Pressure_psi = ifelse(DateTime > '2021-01-07 09:15:00', NA, # (ALWAYS UPDATE!) AKA: no data after 2020-11-02 14:30:00
+  mutate(WVWA_Flag_Pressure_psi = ifelse(DateTime > '2021-01-07 09:15:00', 0, # (ALWAYS UPDATE!) AKA: no data after 2020-11-02 14:30:00
                                          ifelse(DateTime <= "2017-11-13 10:45:00" & DateTime >= "2017-10-15 06:00:00",5, # Flag for leaking weir
                                                 ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 24, # Flag for weir blow-out
                                                       ifelse(DateTime >= "2020-05-14 17:00:00" & DateTime <= "2020-08-24 18:30:00",2, # Flag for missing data due to user error (not collecting data)
                                                               ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                                                      ifelse(DateTime >= "2016-04-18 15:15:00 EST" & DateTime < "2019-06-07 00:00:00" ,1, # Flag for down correction after 18Apr16
                                                                             0)))))),  
-         WVWA_Flag_Baro_pressure_psi = ifelse(DateTime > '2021-01-07 09:15:00', NA, # (ALWAYS UPDATE!) No data after 2020-11-02 14:30:00
+         WVWA_Flag_Baro_pressure_psi = ifelse(DateTime > '2021-01-07 09:15:00', 0, # (ALWAYS UPDATE!) No data after 2020-11-02 14:30:00
                                               ifelse(DateTime <= "2014-04-28 05:45:00" & DateTime >= "2014-03-20 09:00:00",2, # Sensor malfunction 
                                                      ifelse(DateTime >= "2020-05-14 17:00:00" & DateTime <= "2020-08-24 16:00:00",2, # Flag for missing data due to user error (not collecting data)
                                                      0))),   
-         WVWA_Flag_Pressure_psia = ifelse(DateTime >= '2021-01-07 09:15:00', NA, # (ALWAYS UPDATE!) AKA: no data after 2020-11-02 14:30:00 for WVWA
+         WVWA_Flag_Pressure_psia = ifelse(DateTime >= '2021-01-07 09:15:00', 0, # (ALWAYS UPDATE!) AKA: no data after 2020-11-02 14:30:00 for WVWA
                                           ifelse(DateTime <= "2017-11-13 10:45:00" & DateTime >= "2017-10-15 06:00:00",5, # Flag for leaking weir
                                                  ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 24, # Flag for weir blow-out
                                                         ifelse(DateTime >= "2020-05-14 17:00:00" & DateTime <= "2020-08-24 18:30:00",2, # Flag for missing data due to user error (not collecting data)
                                                                ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                                                       ifelse(DateTime >= "2016-04-18 15:15:00 EST" & DateTime < "2019-06-07 00:00:00",1, # Flag for down correction after 18Apr16
                                                                              0)))))), 
-         WVWA_Flag_Temp = ifelse(DateTime > '2021-01-07 09:15:00', NA, # (ALWAYS UPDATE!) No WVWA data after 2020-11-02 14:30:00
+         WVWA_Flag_Temp = ifelse(DateTime > '2021-01-07 09:15:00', 0, # (ALWAYS UPDATE!) No WVWA data after 2020-11-02 14:30:00
                                  ifelse(DateTime <= "2017-11-13 10:45:00" & DateTime >= "2017-10-15 06:00:00",5, # Leaking weir (no NA's; just flag)
                                         ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 24, # Flag for weir blow-out
                                                ifelse(DateTime >= "2020-05-14 17:00:00" & DateTime <= "2020-08-24 18:30:00",2, # Flag for missing data due to user error (not collecting data)
@@ -757,11 +787,11 @@ Inflow_Final_6 <- Inflow_Final_5 %>%
                                ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                       ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                              Inflow_Final_5$VT_Flag_Flow)))) %>% 
-  mutate(VT_Flag_Pressure_psia = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
+  mutate(VT_Flag_Pressure_psia = ifelse(DateTime < '2019-04-22 12:00:00', 0, # no data before 4-22-19
                                         ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                                ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                                       0)))) %>% 
-  mutate(VT_Flag_Temp = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
+  mutate(VT_Flag_Temp = ifelse(DateTime < '2019-04-22 12:00:00', 0, # no data before 4-22-19
                                ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                       ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                              0))))
@@ -778,7 +808,7 @@ Inflow_Final_7 <- Inflow_Final_6 %>%
   mutate(VT_Temp_C = ifelse(VT_Flag_Temp>1,NA,Inflow_Final_6$VT_Temp_C))
 
 ### Check inflow and flags
-pdf("./Data/DataNotYetUploadedToEDI/Raw_inflow/QA_Plots.pdf",width=12,height=8)
+#pdf("./Data/DataNotYetUploadedToEDI/Raw_inflow/QA_Plots.pdf",width=12,height=8)
 
 # Uncorrected WVWA inflow pressure
 ggplot()+
@@ -832,4 +862,4 @@ Inflow_Final_8 <- Inflow_Final_8 %>%
 str(Inflow_Final_8)
 
 # Write to CSV
-write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021/inflow_for_EDI_2013_22Oct2021.csv') 
+write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/2022_Jan/Inflow_2013_2022.csv') 

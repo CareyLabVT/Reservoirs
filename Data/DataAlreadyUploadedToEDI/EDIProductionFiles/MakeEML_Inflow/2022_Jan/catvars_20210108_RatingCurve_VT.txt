@@ -1,0 +1,12 @@
+attributeName	code	definition
+Notes	Weir_obstructed_by_leaves_and_branches	Weir obstructed by leaves and branches
+Notes	Noted_erosion_on_side_of_weir_Obstructed_by_branches_No_time_associated_with_picture	Noted erosion on side of weir Obstructed by branches No time associated with picture
+Notes	Erosion_on_side_of_weir_Shored_up_side_of_weir	Erosion on side of weir. Shored up side of weir.
+Notes	No_data_from_WVWA	No data from WVWA
+Notes	Weir_topped	Weir topped
+Notes	Weir_completely_washed_out_No_water	Weir completely washed out. No water.
+Notes	Sensors_removed_from_weir	Sensors removed from weir
+Notes	Sensors_Moved_Post_Construction	Sensors Moved Post Construction
+Notes	Sensors_Moved	Sensors Moved
+Notes	No_time_associated_with_picture	No time associated with picture
+Notes	Weir_obstructed_by_branches_No_time_associated_with_picture	Weir obstructed by branches. No time associated by branches No time associated with picture

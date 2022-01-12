@@ -49,11 +49,11 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 # temp qaqc ----
 
 # #graph to figure out off set
- # depth=ccrwater%>%
- #   select(DateTime,LvlDepth_m_13, Lvl_psi_13, ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3, EXO_depth_m_9)%>%
- #   drop_na(ThermistorTemp_C_1)
+  depth=ccrwater%>%
+    select(DateTime,LvlDepth_m_13, Lvl_psi_13, ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3, EXO_depth_m_9, CR3000Panel_Temp_C)%>%
+    drop_na(ThermistorTemp_C_1)
  # 
- # depth$DateTime<-as.POSIXct(strptime(depth$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
+  depth$DateTime<-as.POSIXct(strptime(depth$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
  # #look at the top 10 depths to make sure they make sense
  # ccrwater2=depth%>%
  #   mutate(depth_1=LvlDepth_m_13-18.92)%>%
@@ -70,11 +70,12 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
  # ccrwater2=ccrwater2%>%
  #    select(DateTime,depth_1,depth_2,depth_3, depth_4,depth_5,depth_6, depth_7,depth_8,depth_9, EXO_depth_m_9, depth_10, everything())
  # #Use to figure out when the thermistor is out of the water-larger variability when out of the water
- # a=depth%>%
- #   filter(DateTime>"2021-11-29 00:00" & DateTime<"2021-12-02 00:00")%>%
- #   ggplot(., aes(x=DateTime))+
- #   geom_line(aes(y=ThermistorTemp_C_1, color="red"))+
- #   geom_line(aes(y=ThermistorTemp_C_2, color="blue"))+
+  a=depth%>%
+    filter(DateTime>"2021-05-17 00:00" & DateTime<"2021-05-20 00:00")%>%
+    ggplot(., aes(x=DateTime))+
+    geom_line(aes(y=CR3000Panel_Temp_C, color="black"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="red"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="blue"))
  #   geom_line(aes(y=ThermistorTemp_C_3, color="green"))+
  #   geom_line(aes(y=LvlDepth_m_13, color="purple"))
 
@@ -85,7 +86,7 @@ ccrwater <- ccrwater[ccrwater$DateTime<"2021-12-31 23:59",]
 #negative depths are changed to NA
 
 ccrwater=ccrwater%>%
-  mutate(depth_1=LvlDepth_m_13-18.92)%>%
+  mutate(depth_1=LvlDepth_m_13-18.94)%>%
   mutate(depth_2=LvlDepth_m_13-18.065)%>%
    mutate(depth_3=LvlDepth_m_13-17.07)%>%
   mutate(Flag_Temp_1= ifelse(!is.na(depth_1) & depth_1<0 ,2,Flag_Temp_1))%>%
@@ -104,7 +105,7 @@ ccrwater=ccrwater%>%
   #+5 is during EDT and +4 is during EST(make sure to check this in December)
   #Have to do strpttime or you get some NAs in the DateTime column
   #Do this so the graphing is nice
-  #  ccrwater$DateTime<-as.POSIXct(strptime(ccrwater$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
+    ccrwater$DateTime<-as.POSIXct(strptime(ccrwater$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
 # 
 # 
 # # check 1 temp data

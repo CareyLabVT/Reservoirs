@@ -73,7 +73,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
   
   # remove NaN data at beginning when data when no sensors were connected to the data logger
-  ccrwater <- ccrwater %>% filter(DateTime >= ymd_hms("2021-04-09 14:00:00"))
+  ccrwater <- ccrwater %>% filter(DateTime >= ymd_hms("2021-04-09 15:20:00"))
   
   # add flag columns
   ccrwater$Flag_Temp_1 <- 0
@@ -568,12 +568,12 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
   
   #Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
-  ccrwater[which(ccrwater$EXO_depth_m_1 < 0.3), exo_idx] <- NA
+  ccrwater[which(ccrwater$EXO_depth_m_1 < 1), exo_idx] <- NA
   #Flag the data that was removed with 2 for outliers
-  ccrwater[which(ccrwater$EXO_depth_m_1<0.3),exo_flag]<- 2
+  ccrwater[which(ccrwater$EXO_depth_m_1< 1),exo_flag]<- 2
   
   #index only the colummns with EXO at the beginning
-  exo_idx9 <-grep("^EXO.*_1$",colnames(ccrwater))
+  exo_idx9 <-grep("^EXO.*_9$",colnames(ccrwater))
   
   #create list of the Flag columns that need to be changed to 2
   exo_flag9 <- c("Flag_EXOTemp_9", "Flag_EXOCond_9","Flag_EXOSpCond_9","Flag_EXOTDS_9",'Flag_EXODO_obs_9',
@@ -582,9 +582,9 @@ qaqc <- function(data_file, maintenance_file, output_file)
   
   
   #Change the EXO data to NAs when the EXO is above 6m and not due to maintenance
-  ccrwater[which(ccrwater$EXO_depth_m_9 < 6), exo_idx9] <- NA
+  ccrwater[which(ccrwater$EXO_depth_m_9 < 7), exo_idx9] <- NA
   #Flag the data that was removed with 2 for outliers
-  ccrwater[which(ccrwater$EXO_depth_m_9 < 6),exo_flag9]<- 2
+  ccrwater[which(ccrwater$EXO_depth_m_9 < 7),exo_flag9]<- 2
   
 #############################################################################################################################  
    # delete EXO_Date and EXO_Time columns

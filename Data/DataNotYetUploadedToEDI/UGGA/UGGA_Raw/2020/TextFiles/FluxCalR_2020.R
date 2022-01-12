@@ -1,5 +1,4 @@
 ## Script to *try* FluxCalR for calculating fluxes from UGGA data
-## For 2020 data! Will need to updated for 2021 data : )
 ## A Hounshell, 25 Jan 2021
 
 # Script following: https://github.com/junbinzhao/FluxCalR
@@ -14,7 +13,6 @@ library(FluxCalR)
 # Load in data: will need to load in individual files - I recommend doing this by year
 # SET TO YOUR OWN WD!
 
-#Arpita: go to Session then Set Working Directory then To Source File Location and paste the output here
 wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")
 #wd <- setwd("C:/Users/ahoun/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2020/TextFiles")

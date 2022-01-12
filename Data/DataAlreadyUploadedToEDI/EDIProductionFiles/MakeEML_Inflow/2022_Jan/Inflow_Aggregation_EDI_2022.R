@@ -787,11 +787,11 @@ Inflow_Final_6 <- Inflow_Final_5 %>%
                                ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                       ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                              Inflow_Final_5$VT_Flag_Flow)))) %>% 
-  mutate(VT_Flag_Pressure_psia = ifelse(DateTime < '2019-04-22 12:00:00', 0, # no data before 4-22-19
+  mutate(VT_Flag_Pressure_psia = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
                                         ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                                ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                                       0)))) %>% 
-  mutate(VT_Flag_Temp = ifelse(DateTime < '2019-04-22 12:00:00', 0, # no data before 4-22-19
+  mutate(VT_Flag_Temp = ifelse(DateTime < '2019-04-22 12:00:00', NA, # no data before 4-22-19
                                ifelse(DateTime >= "2020-07-20 11:00:00" & DateTime <= "2020-08-24 18:30:00", 4, # Flag for weir blow-out
                                       ifelse(DateTime >= "2020-09-02 14:00:00" & DateTime <= "2020-09-02 14:30:00", 4, # Flag for moving sensors on 02 Sep 2020
                                              0))))
@@ -846,7 +846,7 @@ ggplot()+
   geom_point(Inflow_Final_7,mapping=aes(x=DateTime,y=VT_Flag_Temp,color="VT"))+
   theme_bw()
 
-dev.off()
+#dev.off()
 
 ## Re-order data table
 col_order <- c("Reservoir","Site","DateTime","WVWA_Pressure_psi","WVWA_Baro_pressure_psi","WVWA_Pressure_psia",

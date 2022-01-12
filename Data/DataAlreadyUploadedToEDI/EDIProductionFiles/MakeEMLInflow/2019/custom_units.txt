@@ -1,2 +1,0 @@
-id	unitType	parentSI	multiplierToSI	description
-poundsPerSquareInchAbsolute	arealMassDensity	kilogramsPerSquareMeter	17.85	lbs/square meter corrected for atmospheric pressure

@@ -1,0 +1,17 @@
+﻿We calculated the daily discharge rate of water in cubic meters per second entering Falling Creek Reservoir through the gauged weir on its primary inflow. This weir was rectangular from 15 May 2013 to 6 June 2019, when it was replaced by a V-notched weir (7 June 2019 to present). Inflow was calculated from a pressure sensor installed at the weir by the Western Virginia Water Authority (WVWA) from 15 May 2013 to 9 Mar 2020 and a pressure sensor installed by Virginia Tech (VT) researchers (PI Cayelan Carey) from 22 April 2019 to 9 Mar 2020. Collection of both datasets is ongoing.
+
+We measured the amount of water entering into the reservoir through the weir with an INW Aquistar PT2X pressure sensor (INW, Kirkland, Washington, USA) installed by the WVWA, which recorded the weir water level with a pressure sensor and stream temperature every 15 minutes. From 22 April 2019 to present, we also measured pressure and stream temperature every 15 minutes using a Campbell Scientific CS451 (Campbell Scientific, Logan, Utah, USA; SN: 5318) pressure transducer installed by VT. As noted above, from 15 May 2013 - 6 June 2019, a rectangular weir was installed; from 7 June 2019 to 9 Mar 2020, a v-notch weir was installed. The water level data were used to calculate the daily flow rate of water entering into the reservoir, following Gerling et al. (2014) for the rectangular weir (15 May 2013 - 6 June 2019) and the equation below for the v-notch weir (7 June 2019 - 9 Mar 2020):
+
+V-notch weir, discharge equation:
+Q = 2.391 x H^2.5
+
+Where Q is the calculated discharge (m^3 s^-1), 2.391 is the conversion factor for a 120 degree angle -notch weir in m^3 s^-1, and H is the head on the weir (m). 
+
+A rating curve was developed using correlations between gage height and pressure measured for each of the installed pressure sensors (WVWA and VT) from 10 June 2019 to 6 Dec 2019 (included as a supplementary dataset). Briefly, pictures were taken of the gage height periodically throughout 10 June 2019 to 6 Dec 2019. The time stamp from each picture was used to identify the closest pressure reading for both the WVWA and VT pressure sensors. A separate rating curve was developed for WVWA (gage height = 59.623 x pressure + 0.6723) and VT (gage height = 65.822 x pressure - 4.3804) to convert pressure to gage height (cm). Gage height was then converted to (m) and used to calculate discharge as described above. 
+
+For the 15 May 2013 - 6 June 2019 time period, the weir installed at the inflow was rectangular, and thus very low flows were often not well-resolved by our flow equation. At these times, flow is reported as NA. However, the Falling Creek Reservoir inflow stream generally does have perennial flow.
+
+For 6 June 2019 - present, flow over-tops the weir at 27.5 cm (WVWA pressure = 0.437; VT pressure = 0.467). Flow which over-tops the weir were retained but flagged in the data set. Flow is below the weir at 0 cm (WVWA pressure = -0.004; VT pressure = 0.0815). Flows below these pressures for the time period from 6 June 2019 - present were set to NA.
+ 
+References:
+Gerling, A. B., R. G. Browne, P. A. Gantzer, M. H. Mobley, J. C. Little, and C. C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research 67: 129-143. DOI: 10.1016/j.watres.2014.09.002

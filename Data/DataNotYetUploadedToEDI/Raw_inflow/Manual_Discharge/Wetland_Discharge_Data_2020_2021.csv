@@ -1,0 +1,12 @@
+"Date","Site","Discharge_m3_s","FlowmeterSensorID","Notes"
+2020-03-30,"F200",0.01949,"flowmate new",NA
+2020-06-22,"F200",0.0481,"flowmate new",NA
+2020-09-02,"F200",0.00831,"flowmate new",NA
+2020-11-02,"F200",0.013221,"flowmate new",NA
+2020-12-02,"F200",0.02201,"flowmate new",NA
+2020-05-25,"F200",0.074055,"flowmate new",NA
+2020-07-06,"F200",0.0158,"flowmate new",NA
+2021-03-22,"F200",0.032415,"flowmate new",""
+2021-04-26,"F200",0.019635,"flowmate new",""
+2021-05-24,"F200",0.01019,"flowmate new",""
+2021-06-21,"F200",6.99e-05,"flowmate new","negative value"

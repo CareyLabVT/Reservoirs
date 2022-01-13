@@ -6,6 +6,7 @@
 ### Updated: 09 Mar 2020, A. Hounshell
 ### Updated: 11 Jan 2021, A. Hounshell
 ### Updated: 6 Nov 2021, A. Hounshell
+### Updated: 13 Jan 2021, W. Woelmer
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
@@ -45,27 +46,24 @@ library(EMLassemblyline)
 #?template_categorical_variables #don't run this till later
 #?template_geographic_coverage
 
-# Find and set-up working directory
-wd <- getwd()
-setwd(wd)
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-                          data.table = c("inflow_for_EDI_2013_22Oct2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+                          data.table = c("Inflow_2013_2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-                             data.table = c("inflow_for_EDI_2013_22Oct2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+                             data.table = c("Inflow_2013_2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -109,8 +107,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
                                write.file = TRUE)
 # NO CATVARS!
 
@@ -137,19 +135,19 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
   dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
-  temporal.coverage = c("2013-05-15", "2021-10-22"),
+  temporal.coverage = c("2013-05-15", "2021-12-31"),
   maintenance.description = 'ongoing',
-  data.table = c("inflow_for_EDI_2013_22Oct2021.csv","2020_WeirWaterLevel.csv","2021_WeirWaterLevel.csv"),
+  data.table = c("Inflow_2013_2021.csv","2020_WeirWaterLevel.csv","2021_WeirWaterLevel.csv"),
   data.table.description = c("FCR inflow dataset","2020 Weir Water Level","2021 Weir Water Level"),
-  other.entity= 'Inflow_Aggregation_EDI.R',
+  other.entity= 'Inflow_Aggregation_EDI_2021.R',
   other.entity.description = "Weir Water level for rating curve",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.522.1')
+  package.id = 'edi.713.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

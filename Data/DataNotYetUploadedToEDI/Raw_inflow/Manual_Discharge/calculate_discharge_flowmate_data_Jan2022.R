@@ -29,9 +29,4 @@ flow <-  flow %>% group_by(Site, Date) %>% mutate(Discharge_m3_s = sum(Discharge
 discharge <- flow %>% select(Date, Site, Discharge_m3_s, FlowmeterSensorID, Notes)
 discharge <- discharge[!duplicated(discharge[1:3]),]
 
-
-
-wetland <- discharge[discharge$Site=='F200',]
-plot(wetland$Date, wetland$Discharge_m3_s)
-
-write.csv(wetland, './Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/Wetland_Discharge_Data_2020_2021.csv', row.names = FALSE)
+write.csv(discharge, './Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/Wetland_Discharge_Data_2020_2021.csv', row.names = FALSE)

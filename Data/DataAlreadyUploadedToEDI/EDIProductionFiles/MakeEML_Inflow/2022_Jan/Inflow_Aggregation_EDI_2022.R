@@ -862,4 +862,4 @@ Inflow_Final_8 <- Inflow_Final_8 %>%
 str(Inflow_Final_8)
 
 # Write to CSV
-write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2022.csv') 
+write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv') 

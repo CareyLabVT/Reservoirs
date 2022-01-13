@@ -55,7 +55,7 @@
 
 # Updated: 12Jan22 by W. Woelmer
 # added newest VT and WVWA data, updated file naming convention to Inflow_BEGINYEAR_ENDYEAR.csv, e.g. Inflow_2013_2022.csv
-# added flags to period with missing data
+# updated flags so '0' indicates no flag and 'NA' indicates no data, so no corresponding flag
 
 ###############################################################################
 
@@ -862,4 +862,4 @@ Inflow_Final_8 <- Inflow_Final_8 %>%
 str(Inflow_Final_8)
 
 # Write to CSV
-write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/2022_Jan/Inflow_2013_2022.csv') 
+write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2022.csv') 

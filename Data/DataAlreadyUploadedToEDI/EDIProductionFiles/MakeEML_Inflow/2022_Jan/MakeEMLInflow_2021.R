@@ -147,7 +147,7 @@ make_eml(
   other.entity.description = "Weir Water level for rating curve",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.713.1')
+  package.id = 'edi.714.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

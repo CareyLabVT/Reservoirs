@@ -321,10 +321,19 @@ ghg_hist_time <- dt1 %>%
 
 ghg_hist_time <- left_join(ghg_hist_time,chem,by=c("Reservoir","Site","Date","Depth_m"))
 
-# If time = 12:00, then time = NA
+# Create a loop
+for (i in 1:length(ghg_hist_time$Time)){
+  if (is.na(ghg_hist_time$Time[i])){
+    ghg_hist_time$Time[i] =  ghg_hist_time$Time[1]
+  }
+  ghg_hist_time$Time[i] = ghg_hist_time$Time[i]
+}
+
+# Merge Date and Time
 ghg_hist_time <- ghg_hist_time %>% 
-  mutate(Time = ifelse(Time == "12:00", NA, Time)) %>% 
-  relocate(Time,.before=Depth_m)
+  mutate(DateTime = as.POSIXct(paste(Date,Time),format = "%Y-%m-%d %H:%M")) %>% 
+  select(Reservoir,Site,Depth_m,Rep,ch4_umolL,co2_umolL,flag_ch4,flag_co2,DateTime) %>% 
+  relocate(DateTime,.before=Depth_m)
 
 # Change Station 300 to 1.1
 ghg_hist_time <- ghg_hist_time %>% 
@@ -340,21 +349,12 @@ ghgs <- read_excel("./Data/DataNotYetUploadedToEDI/Raw_GHG/2021/GHG_MEGA_GC_SHEE
 colnames(ghgs)[1:4] <- c("DateTime","Depth_m","Reservoir","Rep")
 colnames(ghgs)[13:14] <- c("ch4_umolL","co2_umolL")
 
-ghgs=ghgs%>%
+ghgs <- ghgs%>%
   select(DateTime,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)%>% #Select only the columns we are using
   mutate(DateTime = as.POSIXct(DateTime, "%Y-%m-%d %HH:%MM", tz="EST"), #Make sure columns are the correct type
-         Date = as.Date(DateTime), #Separate date
-         Time = format(DateTime,"%H:%M"), #Separate time
          Depth_m = as.numeric(Depth_m), # CHANGE TO as.numeric AFTER NAMING IS FINALIZED
          Reservoir = as.factor(Reservoir)) %>%
   filter(!is.na(Depth_m)) #Depth cannot be missing
-
-# If time = 00:00, then time = NA
-ghgs <- ghgs %>% 
-  mutate(Time = ifelse(Time == "00:00", NA, Time)) %>% 
-  select(Date,Time,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL) %>% 
-  relocate(Date,.before=Depth_m) %>% 
-  relocate(Time,.before=Depth_m)
 
 #############################################################################
 ### Make some graphs!
@@ -363,28 +363,28 @@ ghgs <- ghgs %>%
 ghgs%>% 
   filter(Depth_m<100,
          Reservoir == "FCR")%>%
-  ggplot(aes(x = Date, y = ch4_umolL, col = as.factor(Depth_m)))+
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
 # Plot CO2 at Site 50 in FCR
 ghgs%>% 
   filter(Depth_m<100,
          Reservoir == "FCR")%>%
-  ggplot(aes(x = Date, y = co2_umolL, col = as.factor(Depth_m)))+
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
 # Plot CH4 at Site 50 in BVR
 ghgs%>% 
   filter(Depth_m<100,
          Reservoir == "BVR")%>%
-  ggplot(aes(x = Date, y = ch4_umolL, col = as.factor(Depth_m)))+
+  ggplot(aes(x = DateTime, y = ch4_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
 # Plot CO2 at Site 50 in BVR
 ghgs%>% 
   filter(Depth_m<100,
          Reservoir == "BVR")%>%
-  ggplot(aes(x = Date, y = co2_umolL, col = as.factor(Depth_m)))+
+  ggplot(aes(x = DateTime, y = co2_umolL, col = as.factor(Depth_m)))+
   geom_point()
 
 ##############################################################################
@@ -405,7 +405,7 @@ ghgs_rep2 <- ghgs %>%
   filter(Rep == "2") %>% 
   rename(ch4_umolL_rep2 = ch4_umolL, co2_umolL_rep2 = co2_umolL)
 
-ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("Date","Time","Depth_m","Reservoir"))
+ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Depth_m","Reservoir"))
 
 # Add '2' when rep 2 is NA
 ghgs_reps <- ghgs_reps %>% 
@@ -422,13 +422,13 @@ ghgs_reps <- ghgs_reps %>%
 
 # Pivot_longer
 ghg_rep1 <- ghgs_reps %>% 
-  select(Date,Time,Depth_m,Reservoir,ch4_umolL_rep1,co2_umolL_rep1,ch4_pdiff,ch4_diff,co2_pdiff,co2_diff) %>% 
+  select(DateTime,Depth_m,Reservoir,ch4_umolL_rep1,co2_umolL_rep1,ch4_pdiff,ch4_diff,co2_pdiff,co2_diff) %>% 
   mutate(Rep = "1") %>% 
   rename(ch4_umolL = ch4_umolL_rep1,
          co2_umolL = co2_umolL_rep1)
 
 ghg_rep2 <- ghgs_reps %>% 
-  select(Date,Time,Depth_m,Reservoir,ch4_umolL_rep2,co2_umolL_rep2,ch4_pdiff,ch4_diff,co2_pdiff,co2_diff) %>% 
+  select(DateTime,Depth_m,Reservoir,ch4_umolL_rep2,co2_umolL_rep2,ch4_pdiff,ch4_diff,co2_pdiff,co2_diff) %>% 
   mutate(Rep = "2") %>% 
   rename(ch4_umolL = ch4_umolL_rep2,
          co2_umolL = co2_umolL_rep2)
@@ -436,13 +436,11 @@ ghg_rep2 <- ghgs_reps %>%
 ghg_all <- rbind(ghg_rep1,ghg_rep2)
 
 ghg_all <-  ghg_all %>% 
-  arrange(Date,Reservoir,Depth_m)
+  arrange(DateTime,Reservoir,Depth_m)
 
 ## Flag replicates: 
 # Flag 1 = Sample not collected
 # Flag 2 = Sample below MDL (for 2021: 0.00252 umol/L CH4; 4.36 umol/L CO2)
-# NOTE: Running MDL information is calculated by Bobbie on Analytical Lab Google Drive
-# StreamTeam Analytical Lab -> SOPs -> GC -> Shimadzu GC2030 2018 Info -> MDLs -> MDL 1998 style CH4 CO2 over time.xlsx
 # Flag 3 = Difference between samples >LOQ and percent difference >30% but <50%
 # Flag 4 = Difference between samples >LOQ and percent difference >50%
 ghg_all <- ghg_all %>% 
@@ -472,9 +470,9 @@ ghg_all <- ghg_all %>%
 
 ### Re-order to join with historical data
 ghg_all <- ghg_all %>% 
-  select(Date,Time,Depth_m,Reservoir,ch4_umolL,co2_umolL,flag_ch4,flag_co2,Site,Rep)
+  select(DateTime,Depth_m,Reservoir,ch4_umolL,co2_umolL,flag_ch4,flag_co2,Site,Rep)
 
-col_order <- c("Reservoir","Site","Date","Time","Depth_m","Rep","ch4_umolL","co2_umolL","flag_ch4","flag_co2")
+col_order <- c("Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_ch4","flag_co2")
 
 ghg_all <- ghg_all[,(col_order)]
 
@@ -482,7 +480,7 @@ ghg_all <- ghg_all[,(col_order)]
 final <- rbind(ghg_hist_time,ghg_all)
 
 final <- final %>% 
-  arrange(Date,Reservoir,Site,Depth_m)
+  arrange(DateTime,Reservoir,Site,Depth_m)
 
 # Some depths are funky
 final <- final %>% 
@@ -497,47 +495,47 @@ write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2021/final_GHG_2015-2021
 # FCR Site 50 - CH4
 final %>% 
   filter(Reservoir == "FCR", Site == 50) %>% 
-  ggplot(mapping=aes(x=Date,y=ch4_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # FCR NOT Site 50 - CH4
 final %>% 
   filter(Reservoir == "FCR", Site != 50) %>% 
-  ggplot(mapping=aes(x=Date,y=ch4_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Site)))+
   geom_point()
 
 # FCR Site 50 - CO2
 final %>% 
   filter(Reservoir == "FCR", Site == 50) %>% 
-  ggplot(mapping=aes(x=Date,y=co2_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # FCR NOT Site 50 - CO2
 final %>% 
   filter(Reservoir == "FCR", Site != 50) %>% 
-  ggplot(mapping=aes(x=Date,y=co2_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Site)))+
   geom_point()
 
 # BVR Site 50 - CH4
 final %>% 
   filter(Reservoir == "BVR", Site == 50) %>% 
-  ggplot(mapping=aes(x=Date,y=ch4_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # BVR NOT Site 50 - CH4
 final %>% 
   filter(Reservoir == "BVR", Site != 50) %>% 
-  ggplot(mapping=aes(x=Date,y=ch4_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Site)))+
   geom_point()
 
 # BVR Site 50 - CO2
 final %>% 
   filter(Reservoir == "BVR", Site == 50) %>% 
-  ggplot(mapping=aes(x=Date,y=co2_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # BVR NOT Site 50 - CO2
 final %>% 
   filter(Reservoir == "BVR", Site != 50) %>% 
-  ggplot(mapping=aes(x=Date,y=co2_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Site)))+
   geom_point()

@@ -1,6 +1,12 @@
 Additional Information:
- 	
-From 2015 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2020, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2021, the HOx was activated during the following time periods: <INSERT OXYGENATION SCHEDULE HERE>
+
+Authorship Contribution Statement:
+	
+CCC developed and led the reservoir monitoring program 2013-present. AGH is the point person for dissolved GHG data collation, QA/QC, and publishing for 2021. RPM was the point person for the dissolved GHG data analysis, collation, QA/QC, and publishing from 2015-2020; ABG co-developed sampling protocol with CCC and was the point person for spring-summer 2015. ASL coordinated GHG data collation, assisted with QA/QC, and data publishing in 2020-2021. BRN conducted all dissolved GHG analysis in 2020-2021 and all QA/QC curves.
+
+Oxygenation Information:
+
+From 2015 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2020, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2021, the HOx was activated during the following time periods: 11 June to 28 June, 26 July to 6 December 2021.
 
 Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279
 

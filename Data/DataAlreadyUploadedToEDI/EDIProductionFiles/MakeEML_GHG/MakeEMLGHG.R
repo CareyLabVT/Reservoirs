@@ -125,9 +125,6 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 # Copy and pased custom units .txt file from prior year
 
 
-##### STOPPED HERE #####
-
-
 ## Step 17: Obtain a package.id FROM STAGING ENVIRONMENT. ####
 # Go to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
 # then login using one of the Carey Lab usernames and passwords. 
@@ -145,18 +142,21 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  eml.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019",
-  temporal.coverage = c("2015-03-31", "2019-11-20"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2021",
+  temporal.coverage = c("2015-03-31", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = 'DATASET_for_EDI_LOL_MS_31Aug20.csv',
+  data.table = 'final_GHG_2015-2021.csv',
   data.table.description = "GHG Dataset",
   data.table.name = "GHG Dataset",
+  other.entity= 'GHGforEDI.R',
+  other.entity.name = "QA/QC Code",
+  other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.51.2')
+  package.id = 'edi.705.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

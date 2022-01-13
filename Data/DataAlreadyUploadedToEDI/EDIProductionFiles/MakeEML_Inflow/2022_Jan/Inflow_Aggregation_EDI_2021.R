@@ -95,6 +95,19 @@ rawplot = ggplot(data = daily_flow, aes(x = Date, y = daily_pressure_avg))+
   geom_vline(xintercept = as.Date('2016-04-18'))+ # Date when downcorrection started
   theme_bw()
 rawplot
+
+ggplot(data = daily_flow, aes(x = Date, y = daily_pressure_avg))+
+  geom_point()+
+  ylab("Daily avg. inflow pressure (psi)")+
+  theme_bw() +
+  xlim(c(as.Date("2021-01-01"),as.Date("2021-12-31")))
+
+ggplot(data = daily_flow, aes(x = Date, y = daily_pressure_avg))+
+  geom_point()+
+  ylab("Daily avg. inflow pressure (psi)")+
+  theme_bw() +
+  xlim(c(as.Date("2020-01-01"),as.Date("2020-12-31")))
+
 #ggsave(filename = "./Data/DataNotYetUploadedToEDI/Raw_inflow/raw_inflow_pressure.png", rawplot, device = "png")
 
 pressure_hist = ggplot(data = daily_flow, aes(x = daily_pressure_avg, group = Year, fill = Year))+
@@ -535,6 +548,9 @@ Inflow_Final <- Inflow_Final %>%
 
 colnames(Inflow_Final) <- c('Reservoir', 'Site', 'DateTime', 'WVWA_Pressure_psi', 'WVWA_Baro_pressure_psi',  'WVWA_Pressure_psia', 'WVWA_Flow_cms', 'WVWA_Temp_C')
 
+ggplot(data = Inflow_Final, aes(x = DateTime, y = WVWA_Flow_cms)) +
+  geom_line() +
+  xlim(c(as.POSIXct('2021-01-01 00:00:00'), as.POSIXct('2021-12-31 00:00:00')))
 ######################
 
 #add VT sensor data to the WVWA transducer data ('Inflow_Final')
@@ -859,7 +875,27 @@ Inflow_Final_8 <- Inflow_Final_7[,col_order]
 Inflow_Final_8 <- Inflow_Final_8 %>% 
   rename(VT_Flag_Temp_C = VT_Flag_Temp, WVWA_Flag_Temp_C = WVWA_Flag_Temp)
 
-str(Inflow_Final_8)
+# add flags for days when WVWA data was overwritten/missing in 2021 due to sensor malfunction
+Inflow_Final_9 <- Inflow_Final_8 %>% 
+  mutate(WVWA_Flag_Pressure_psi = ifelse((DateTime >= as.Date('2021-07-21') & DateTime <= as.Date('2021-10-26')), '2', WVWA_Flag_Pressure_psi)) %>% 
+  mutate(WVWA_Flag_Baro_pressure_psi = ifelse((DateTime >= as.Date('2021-07-21') & DateTime <= as.Date('2021-10-26')), '2', WVWA_Flag_Baro_pressure_psi)) %>% 
+  mutate(WVWA_Flag_Pressure_psia = ifelse((DateTime >= as.Date('2021-07-21') & DateTime <= as.Date('2021-10-26')), '2', WVWA_Flag_Pressure_psia)) %>% 
+  mutate(WVWA_Flag_Flow = ifelse((DateTime >= as.Date('2021-07-21') & DateTime <= as.Date('2021-10-26')), 2, WVWA_Flag_Flow)) %>% 
+  mutate(WVWA_Flag_Flow = ifelse(is.na(WVWA_Flag_Flow), 0, WVWA_Flag_Flow))
+  
+# remove days when there is no DateTime
+Inflow_Final_10 <- Inflow_Final_9 %>% 
+  filter(!is.na(DateTime))
 
+
+str(Inflow_Final_10)
+
+# look at final year of data alone
+ggplot(data = Inflow_Final_10, aes(x = DateTime, y = WVWA_Flow_cms)) +
+  geom_line() +
+  xlim(c(as.POSIXct('2021-01-01 00:00:00'), as.POSIXct('2021-12-31 00:00:00')))
+
+# limit data to Dec 31, 2021
+Inflow_Final_10 <- Inflow_Final_10[Inflow_Final_10$DateTime < as.POSIXct('2022-01-01 00:00:00'),]
 # Write to CSV
-write_csv(Inflow_Final_8, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv') 
+write_csv(Inflow_Final_10, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv') 

@@ -1,15 +1,26 @@
 ﻿ADDITIONAL NOTES
 From 2013 to 2019, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), Table 2 in McClure et al. (2018), and Table SI.1 in Hounshell et al. (2020). Additional hypolimnetic oxygenation and epilimnetic mixing events not currently detailed in peer-reviewed articles are listed below:
+
 2017
 EM was activated on 29 May and from 10-12 July.
+
 2019
 HOx was activated during the following time periods: 03 June to 17 June, 08 July to 22 July, 05 August to 19 August, 02 September to 20 November.
+
 2020
 HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December.
+
+2021
+HOx was activated on 11 June but malfunctioned. It was fixed 14 September and operated from 14 September to 06 December.
+
 Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279 
 Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002
 Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0
 Hounshell, A.G., McClure, R.P., Lofton, M.E., and C.C. Carey. 2020. Whole-ecosystem oxygenation experiments reveal substantially greater hypolimnetic methane concentrations in reservoirs during anoxia. Limnology and Oceanography Letters. DOI: 10.1002/lol2.10173
 McClure, R.P., K.D. Hamre, B.R. Niederlehner, Z.W. Munger, S. Chen, M.E. Lofton, M.E. Schreiber, and C.C. Carey. 2018 Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment 636: 610-620. DOI: 10.1016/j.scitotenv.2018.04.255
 Munger, Z.W., C.C. Carey, A.B. Gerling, K.D. Hamre, J.P. Doubek, S.D. Klepatzki, R.P. McClure, and M.E. Schreiber. 2016. Effectiveness of hypolimnetic oxygenation for preventing accumulation of Fe and Mn in a drinking water reservoir. Water Research. 106: 1-14. DOI: 10.1016/j.watres.2016.09.038.
+
+AUTHORSHIP STATEMENT
+CCC developed and led the reservoir monitoring program 2013-present, and oversaw FluoroProbe purchasing, use, and maintenance throughout this time. MEL was the point person for instrument maintenance, troubleshooting, and data collation from 2016-2021 and led data publication during this time. WMW was the point person from June-October 2020 and led instrument maintenance and troubleshooting for the summer 2020 field season. KDH was the point person for 2014-2015. ABP led the 2021 field season, downloaded FluoroProbe sensor data regularly, and oversaw daily use of the instrument, including maintaining battery charge.
+
 

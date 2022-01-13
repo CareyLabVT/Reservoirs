@@ -1,6 +1,6 @@
 ##MakeEMLFluoroProbe
 ##Author: Mary Lofton
-##Date: 11JAN20
+##Date: 13JAN22
 
 #good sites for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -34,7 +34,7 @@ library(EMLassemblyline)
 #THIS IS ONLY NECESSARY FOR A BRAND NEW DATASET!!!!
 #if you are just updating a previous dataset, PLEASE save yourself time
 #by copy-pasting the metadata files from the previous year's folder 
-#(in this case, 2019) into the current year's folder and editing them
+#(in this case, 2020) into the current year's folder and editing them
 #as needed. DON'T CAUSE YOURSELF MORE WORK BY BUILDING FROM SCRATCH!!
 
 #IF you are just appending a new year of data, skip steps 5-12 and instead

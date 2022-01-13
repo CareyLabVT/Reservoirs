@@ -1,23 +1,40 @@
-Depth profiles of multiple water-quality variables were collected from 2013 through 2020 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2020, and are denoted with a negative depth measurement that indicate the distance above the surface of the reservoir. 
+Depth profiles of multiple water-quality variables were collected from 2013 through 2021 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2021, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir. 
 
-The CTD was calibrated by the manufacturer yearly (usually in December-February) according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. 
+The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except before the 2021 field season when calibration was skipped due to the ongoing covid-19 pandemic. 
 
-INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2020
+Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also include marginal error over the course of the dataset, but this error is unquantified and unflagged. 
+
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2021
 
 Multiple sensors and instruments were added over time; below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals.
 
 Seacat 19Plus V 1.6 SERIAL NO. 4397 2013 - 2016 http://www.seabird.com/sites/default/files/documents/19plus_018_0.pdf 
 
-Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2020 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
+Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2021 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
 
 For CTD processing, refer to the SeaBird Data processing manual. http://www.seabird.com/sites/default/files/documents/SBEDataProcessing_7.26.7.pdf
 
-SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2020 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
+SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2021 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
 
-FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2020 
+FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2021
 
-Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2020 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
+Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2021 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
 
-OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2020 http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
+OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2021 http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
 
-Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2020 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
+Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2021 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
+
+Additional Notes
+From 2013 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018).
+
+Chen, S., C. Lei, C.C. Carey, and J.C. Little. 2016. Modelling the effect of artificial mixing on thermal stability and substance transport in a drinking-water reservoir using a 3D hydrodynamic model. Proceedings of the 20th Australasian Fluid Mechanics Conference. Perth, Australia, 5-8 December 2016.
+
+Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279
+
+Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002
+
+Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0
+
+McClure, R.P., K.D. Hamre, B.R. Niederlehner, Z.W. Munger, S. Chen, M.E. Lofton, M.E. Schreiber, and C.C. Carey. 2018 Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment 636: 610-620. DOI: 10.1016/j.scitotenv.2018.04.255
+
+Munger, Z.W., C.C. Carey, A.B. Gerling, K.D. Hamre, J.P. Doubek, S.D. Klepatzki, R.P. McClure, and M.E. Schreiber. 2016. Effectiveness of hypolimnetic oxygenation for preventing accumulation of Fe and Mn in a drinking water reservoir. Water Research. 106: 1-14. DOI: 10.1016/j.watres.2016.09.038.

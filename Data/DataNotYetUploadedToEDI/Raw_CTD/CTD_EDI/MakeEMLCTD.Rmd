@@ -42,20 +42,21 @@ library(EMLassemblyline)
 
 # Define Categorical Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #template_categorical_variables(path = "C:/Users/Owner/Dropbox/MakeEMLCTD")
+read.csv("CTD_2013_2021.csv")
 
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 make_eml(path = getwd(),
-         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2020",
-         data.table = "CTD_final_2013_2020.csv",
-         data.table.name = "CTD dataset 2013-2020",
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2021",
+         data.table = "CTD_2013_2021.csv",
+         data.table.name = "CTD dataset 2013-2021",
          data.table.description = c("Reservoir CTD dataset"),
-         other.entity = 'CTD_forEDI_ASL.Rmd',
+         other.entity = 'QAQC_CTD_2013_2021.Rmd',
          other.entity.name = 'CTD QAQC script',
          other.entity.description = c('QAQC script for reference'),
-         temporal.coverage = c("2013-03-07", "2020-12-31"),
+         temporal.coverage = c("2013-03-07", "2021-12-31"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.200.11")
+         package.id = "edi.706.2")
 ```
 

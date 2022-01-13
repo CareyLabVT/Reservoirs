@@ -23,11 +23,31 @@ ugga_comb = ugga_2021%>%
   mutate(Date = as.Date(Date))%>%
   group_by(Reservoir, Site, Date)%>%
   mutate(Rep = seq(1:n()))%>%
-  select("Reservoir","Site","Date","Rep","Start_time","End_time","Temp_C","co2_slope_ppmS","co2_R2",
-               "co2_flux_umolCm2s","ch4_slope_ppmS","ch4_R2","ch4_flux_umolCm2s","co2_flux_umolCm2s_flag",
-               "ch4_flux_umolCm2s_flag")
+  rename(Flag_co2_flux_umolCm2s = co2_flux_umolCm2s_flag,
+         Flag_ch4_flux_umolCm2s = ch4_flux_umolCm2s_flag)%>%
+  select("Reservoir",
+         "Site",
+         "Date",
+         "Rep",
+         "Start_time",
+         "End_time",
+         "Temp_C",
+         "co2_slope_ppmS",
+         "co2_R2",
+         "co2_flux_umolCm2s",
+         "ch4_slope_ppmS",
+         "ch4_R2",
+         "ch4_flux_umolCm2s",
+         "Flag_co2_flux_umolCm2s",
+         "Flag_ch4_flux_umolCm2s")
 
-write.csv(ugga_comb, "UGGA_2018_2021.csv", row.names = F)
+ugga_flagged = ugga_comb%>%
+  mutate(Flag_co2_flux_umolCm2s = ifelse(co2_R2<0.9,1,Flag_co2_flux_umolCm2s),
+         Flag_ch4_flux_umolCm2s = ifelse(ch4_R2<0.9,1,Flag_ch4_flux_umolCm2s))
+
+summary(ugga_flagged)
+
+write.csv(ugga_flagged, "UGGA_2018_2021.csv", row.names = F)
 
 jpeg("UGGA_2018_2021_co2.jpeg", res = 300, width = 6, height = 4, units = "in")
 ugga_comb%>%
@@ -62,13 +82,13 @@ make_eml(path = getwd(),
          data.table = "UGGA_2018_2021.csv",
          data.table.name = "UGGA dataset 2018-2021",
          data.table.description = c("UGGA diffusive flux dataset from FCR and BVR"),
-         other.entity = c('RawData.zip', "Flux_compilation.Rmd"),
+         other.entity = c('RawData.zip', "QAQC_UGGA_2018_2021.Rmd"),
          other.entity.name = c('Raw UGGA files and code', "Data compilation and publishing script"),
          other.entity.description = c('Raw data from the Ultraportable Greenhouse Gas Analyzer and code used to translate these data into the diffusive flux rates presented in this data table', "Code used to compile and QAQC all years of UGGA data, then publish to EDI"),
          temporal.coverage = c("2018-05-07", "2021-04-26"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.704.2")
+         package.id = "edi.704.4")
 ```
 

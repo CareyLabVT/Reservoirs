@@ -17,7 +17,7 @@ data_file <- paste0(folder, 'misc_data_files/Catwalk.csv')#current file from the
 data2_file <- paste0(folder, 'misc_data_files/CAT_2.csv')#manual downloads to add missing data 
 maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt")#maintenance file
 output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2018_2021.csv")#name of the output file
-temp_oxy_chla_qaqc(data_file,data2_file, maintenance_file, output_file)#function to do the main qaqc
+qaqc(data_file,data2_file, maintenance_file, output_file)#function to do the main qaqc
 
 
 # read in qaqc function output
@@ -25,40 +25,14 @@ temp_oxy_chla_qaqc(data_file,data2_file, maintenance_file, output_file)#function
 catdata <- read.csv(output_file)
 
 #current time of QAQC for graphing
-current_time="2020-12-31 23:59"
+start_time="2021-01-01 00:00"
+end_time="2021-12-31 23:59"
 
-
-
-
-#check to see if there is missing data 
-
-#check record for gaps
-#daily record gaps by day of year
-
-# #make a copy of the frame so if you mess it up
-# #for the missing data check
-# catdata2=catdata
-# 
-# catdata2=catdata2[order(catdata2$DateTime),]
-# catdata2$DOY=yday(catdata2$DateTime)
-# 
-# # v=c(2:153882)
-#  for(i in 2:nrow(catdata2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-#    if(catdata2$DOY[i]-catdata2$DOY[i-1]>1){
-#     print(c(catdata2$DateTime[i-1],catdata2$DateTime[i]))
-#   }
-#  }
-# #sub-daily RECORD gaps by RECORD number
-#  for(j in 2:nrow(catdata2)){ #this identifies if there are any data gaps in the long-term RECORD, and where they are by RECORD number
-#   if(abs(catdata2$RECORD[j-1]-catdata2$RECORD[j])>1){
-#   print(c(catdata2$DateTime[j-1],catdata2$DateTime[j]))
-#  }
-# }
-# 
 
 # subset file to only unpublished data
-catdata_flag=catdata
-catdata_flag <- catdata_flag[catdata_flag$DateTime<"2021-11-11 23:59",]
+
+catdata_flag =catdata%>%
+  filter(DateTime<"2022-01-01 00:00")
 
 
 # Flag values
@@ -104,7 +78,7 @@ catdata_flag <- catdata_flag %>%
 #+5 is during EDT and +4 is during EST(make sure to check this in December)
 #Have to do strpttime or you get some NAs in the DateTime column
 #Do this so the graphing is nice
-# catdata_flag$DateTime<-as.POSIXct(strptime(catdata_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+4")
+ catdata_flag$DateTime<-as.POSIXct(strptime(catdata_flag$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5")
 
 ################################################################################################################
 # #graphing temperature
@@ -112,172 +86,172 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Surface Temp
 # #From 2018-current
-# surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
-#   geom_point()
-# surf
+ surf <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_surface)) +
+   geom_point()
+ surf
 # #Plotly so can pick out questionable values
 # ggplotly(surf)
 # 
 # #Just the current year
-# surf21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_surface)) +
-#   geom_point()
-# surf21
+ surf21=catdata_flag%>%
+   filter(DateTime>start_time & DateTime<end_time)%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_surface)) +
+   geom_point()
+ surf21
 # #Plotly so can pick out questionable values
 # ggplotly(surf21)
 # 
 # # check 1m temp data
 # #From 2018-current
-# m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
-#  geom_point()
-# m_1
+ m_1 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_1)) +
+  geom_point()
+ m_1
 # #Plotly so can pick out questionable values
-# ggplotly(m_1)
+ ggplotly(m_1)
 # 
 # #Just the current year
-# m_1_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_1)) +
-#   geom_point()
-# m_1_21
+ m_1_21=catdata_flag%>%
+   filter(DateTime>start_time & DateTime<end_time)%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_1)) +
+   geom_point()
+ m_1_21
 # #Plotly so can pick out questionable values
 # ggplotly(m_1_21)
 # 
 # # check 2m temp data
 # #Plot 2018-current
-# m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
-#  geom_point()
-# m_2
+m_2 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_2)) +
+ geom_point()
+m_2
 # #Plotly so can pick out questionable values
 # ggplotly(m_2)
 # 
 # #Just the current year
-# m_2_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_2)) +
-#   geom_point()
-# m_2_21
+m_2_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_2)) +
+  geom_point()
+m_2_21
 # #Plotly so can pick out questionable values
-# ggplotly(m_2_21)
+ ggplotly(m_2_21)
 # 
 # # check 3m temp data
 # #Plot From 2018-current
-# m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
-#  geom_point()
-# m_3
+m_3 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_3)) +
+ geom_point()
+m_3
 # #Plotly so can pick out questionable values
-# ggplotly(m_3)
+ ggplotly(m_3)
 # 
 # #Just the current year
-# m_3_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_3)) +
-#   geom_point()
-# m_3_21
+m_3_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_3)) +
+  geom_point()
+m_3_21
 # #Plotly so can pick out questionable values
 # ggplotly(m_3_21)
 # 
 # # check 4m temp data
 # #Plot from 2018-current
-# m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
-#  geom_point()
-# m_4
+m_4 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_4)) +
+ geom_point()
+m_4
 # #Plotly so can pick out questionable values
 # ggplotly(m_4)
 # 
 # # Just from current year
-# m_4_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_4)) +
-#   geom_point()
-# m_4_21
+m_4_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_4)) +
+  geom_point()
+m_4_21
 # # Plotly so can pick out questionable values
 # ggplotly(m_4_21)
 # 
 # # check 5m temp data
 # # Plot from 2018-current
-# m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
-#   geom_point()
-# m_5
+m_5 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_5)) +
+  geom_point()
+m_5
 # # Plotly so can pick out questionable values
 # ggplotly(m_5)
 # 
 # # Just current year
-# m_5_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_5)) +
-#   geom_point()
-# m_5_21
+m_5_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_5)) +
+  geom_point()
+m_5_21
 # # Plotly so can pick out questionable values
 # ggplotly(m_5_21)
 # 
 # # check 6m temp data
 # # Plot from 2018-current
-# m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
-#  geom_point()
-# m_6
+m_6 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_6)) +
+ geom_point()
+m_6
 # # Plotly so can pick out questionable values
 # ggplotly(m_6)
 # 
 # # Just the current year
-# m_6_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_6)) +
-#   geom_point()
-# m_6_21
+m_6_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_6)) +
+  geom_point()
+m_6_21
 # # Plotly so can pick out questionable values
 # ggplotly(m_6_21)
 # 
 # # check 7m temp data
 # # all the temp 2018-current
-# m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
-#  geom_point()
-# m_7
+m_7 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_7)) +
+ geom_point()
+m_7
 # # Plotly so can pick out questionable values
 # ggplotly(m_7)
 # 
 # #filter for the current year
-# m_7_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_7)) +
-#   geom_point()
-# m_7_21
+m_7_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_7)) +
+  geom_point()
+m_7_21
 # # plotly so you can pick out the questionable values
 # ggplotly(m_7_21)
 # 
 # # check 8m temp data
 # # Plot 2018-current
-# m_8 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_8)) +
-#  geom_point()
-# m_8
+m_8 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_8)) +
+ geom_point()
+m_8
 # # Plotly so can pick out questionable values
 # ggplotly(m_8)
 # 
 # # Plot just the current year
-# m_8_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_8)) +
-#   geom_point()
-# m_8_21
+m_8_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_8)) +
+  geom_point()
+m_8_21
 # # Plotly so can pick out questionable values
 # ggplotly(m_8_21)
 # 
 # 
 # # check 9m temp data
 # # Plot 2018-current
-# m_9 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +
-#  geom_point()
-# m_9
+m_9 <- ggplot(data = catdata_flag, aes(x = DateTime, y = ThermistorTemp_C_9)) +
+ geom_point()
+m_9
 # # Plotly so can pick out questionable values
 # ggplotly(m_9)
 # 
 # # Just the current year
-# m_9_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
-#   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_9)) +
-#   geom_point()
-# m_9_21
+m_9_21=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)%>%
+  ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_9)) +
+  geom_point()
+m_9_21
 # # Plotly so can pick out questionable values
 # ggplotly(m_9_21)
 # 
@@ -285,42 +259,42 @@ catdata_flag <- catdata_flag %>%
 # 
 # #graph all the temps in 2021on the same graph so use base R
 # #create a new data frame for 2021
-# t2021=catdata_flag%>%
-#   filter(DateTime>current_time)
+t2021=catdata_flag%>%
+  filter(DateTime>start_time & DateTime<end_time)
 # 
 # #this part taken from the daily email script
-# par(mfrow=c(1,1))
-# par(oma=c(1,1,1,4))
-# plot(t2021$DateTime,t2021$ThermistorTemp_C_surface, main="Water Temp", xlab="Time", ylab="degrees C", type='l', col="firebrick4", lwd=1.5, ylim=c(0,35))
-# points(t2021$DateTime, t2021$ThermistorTemp_C_1, col="firebrick1", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_2, col="DarkOrange1", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_3, col="gold", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_4, col="greenyellow", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_5, col="medium sea green", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_6, col="sea green", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_7, col="DeepSkyBlue4", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_8, col="blue2", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$ThermistorTemp_C_9, col="blue4", type='l', lwd=1.5)
-# par(fig=c(0,1,0,1), oma=c(0,0,0,0), mar=c(0,0,0,0), new=T)
-# plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-# legend("right",c("0.1m","1m", "2m", "3m", "4m", "5m", "6m", "7m","8m", "9m"),
-#        text.col=c("firebrick4", "firebrick1", "DarkOrange1", "gold", "greenyellow", "medium sea green", "sea green",
-#                   "DeepSkyBlue4", "blue2", "blue4"), cex=1, y.intersp=1, x.intersp=0.001, inset=c(0,0), xpd=T, bty='n')
+par(mfrow=c(1,1))
+par(oma=c(1,1,1,4))
+plot(t2021$DateTime,t2021$ThermistorTemp_C_surface, main="Water Temp", xlab="Time", ylab="degrees C", type='l', col="firebrick4", lwd=1.5, ylim=c(0,35))
+points(t2021$DateTime, t2021$ThermistorTemp_C_1, col="firebrick1", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_2, col="DarkOrange1", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_3, col="gold", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_4, col="greenyellow", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_5, col="medium sea green", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_6, col="sea green", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_7, col="DeepSkyBlue4", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_8, col="blue2", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$ThermistorTemp_C_9, col="blue4", type='l', lwd=1.5)
+par(fig=c(0,1,0,1), oma=c(0,0,0,0), mar=c(0,0,0,0), new=T)
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("right",c("0.1m","1m", "2m", "3m", "4m", "5m", "6m", "7m","8m", "9m"),
+       text.col=c("firebrick4", "firebrick1", "DarkOrange1", "gold", "greenyellow", "medium sea green", "sea green",
+                  "DeepSkyBlue4", "blue2", "blue4"), cex=1, y.intersp=1, x.intersp=0.001, inset=c(0,0), xpd=T, bty='n')
 # 
 # #check the DO temp compared to temp string in 2021
 # 
-# plot(t2021$DateTime,t2021$ThermistorTemp_C_1, main="EXO vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="firebrick4", lwd=1.5, ylim=c(0,35))
-# points(t2021$DateTime, t2021$ThermistorTemp_C_2, col="firebrick1", type='l', lwd=1.5)
-# points(t2021$DateTime, t2021$EXOTemp_C_1, col="black", type='l', lwd=1.5)
-# 
-# plot(t2021$DateTime,t2021$RDOTemp_C_5, main="RDO 5m vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1.5, ylim=c(0,15))
-# points(t2021$DateTime, t2021$ThermistorTemp_C_5, col="medium sea green", type='l', lwd=1.5)
-# 
-# plot(t2021$DateTime,t2021$RDOTemp_C_9, main="RDO 9m vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1.5, ylim=c(0,10))
-# points(t2021$DateTime, t2021$ThermistorTemp_C_9, col="blue4", type='l', lwd=1.5)
-# 
-# 
-# 
+plot(t2021$DateTime,t2021$ThermistorTemp_C_1, main="EXO vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="firebrick4", lwd=1.5, ylim=c(0,35))
+points(t2021$DateTime, t2021$ThermistorTemp_C_2, col="firebrick1", type='l', lwd=1.5)
+points(t2021$DateTime, t2021$EXOTemp_C_1, col="black", type='l', lwd=1.5)
+
+plot(t2021$DateTime,t2021$RDOTemp_C_5, main="RDO 5m vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1.5, ylim=c(0,15))
+points(t2021$DateTime, t2021$ThermistorTemp_C_5, col="medium sea green", type='l', lwd=1.5)
+
+plot(t2021$DateTime,t2021$RDOTemp_C_9, main="RDO 9m vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="black", lwd=1.5, ylim=c(0,10))
+points(t2021$DateTime, t2021$ThermistorTemp_C_9, col="blue4", type='l', lwd=1.5)
+
+
+
 
 
 
@@ -467,7 +441,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Plot Just the current year
 # EXODO_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXODO_mgL_1)) +
 #   geom_point()
 # EXODO_21
@@ -484,7 +458,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Plot the current year
 # RDO5_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = RDO_mgL_5)) +
 #   geom_point()
 # RDO5_21
@@ -502,7 +476,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Just the current year
 # RDO9_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = RDO_mgL_9)) +
 #   geom_point()
 # RDO9_21
@@ -524,7 +498,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Plot just the current year
 # chl_ugl_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOChla_ugL_1)) +
 #   geom_point()
 # chl_ugl_21
@@ -562,7 +536,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Just the current year
 # chl_rfu_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1)) +
 #   geom_point()
 # chl_rfu_21
@@ -577,7 +551,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Just the current year
 # phyco_rfu_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOBGAPC_RFU_1)) +
 #   geom_point()
 # # Plotly so can pick out questionable values
@@ -595,7 +569,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Just the current year
 # fDOM_rfu_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOfDOM_RFU_1)) +
 #   geom_point()
 # # Plotly so can pick out questionable values
@@ -611,7 +585,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # # Just the current year
 # fDOM_qsu_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_1)) +
 #   geom_point()
 # # Plotly so can pick out questionable values
@@ -622,7 +596,8 @@ catdata_flag <- catdata_flag %>%
 ###########################################################################################################################################################################
 # conductivity visual QAQC
 
-#Flag high conductivity values in 2020
+#Flag high conductivity values in 2020 but don't remove them. If want to remove later I will but I am
+# not convinved it is a sensor malfunction
 
 catdata_flag <- catdata_flag %>%
   mutate(
@@ -655,7 +630,7 @@ catdata_flag <- catdata_flag %>%
 # #Just the current year
 # 
 # Cond_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOCond_uScm_1)) +
 #   geom_point()
 # Cond_21
@@ -673,7 +648,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Just the current year
 # SpCond_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOSpCond_uScm_1)) +
 #   geom_point()
 # SpCond_21
@@ -689,7 +664,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Just the current year
 # TDS_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXOTDS_mgL_1)) +
 #   geom_point()
 # TDS_21
@@ -705,7 +680,7 @@ catdata_flag <- catdata_flag %>%
 # 
 # #Just the current year
 # Depth_21=catdata_flag%>%
-#   filter(DateTime>current_time)%>%
+#   filter(DateTime>start_time & DateTime<end_time)%>%
 #   ggplot(.,aes(x = DateTime, y = EXO_depth)) +
 #   geom_point()
 # Depth_21
@@ -736,8 +711,8 @@ catdata_flag <- catdata_flag %>%
          RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9,
          EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1,
          EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1,
-         EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure, EXO_depth, EXO_battery, EXO_cablepower,
-         EXO_wiper, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C,
+         EXOfDOM_RFU_1, EXOfDOM_QSU_1, EXO_pressure_psi, EXO_depth_m, EXO_battery_V, EXO_cablepower_V,
+         EXO_wiper_V, Lvl_psi_9, LvlTemp_C_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C,
          Flag_All, Flag_Temp_Surf:Flag_Temp_9,Flag_DO_5_obs, Flag_DO_5_sat, Flag_DO_5_temp,
          Flag_DO_9_obs, Flag_DO_9_sat, Flag_DO_9_temp,Flag_EXOTemp, Flag_Cond, Flag_SpCond,Flag_TDS,
          Flag_DO_1_sat, Flag_DO_1_obs, Flag_Chla, Flag_Phyco,Flag_fDOM, Flag_Pres )

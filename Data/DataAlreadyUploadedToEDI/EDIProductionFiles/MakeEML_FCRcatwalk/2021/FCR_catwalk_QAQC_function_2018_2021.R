@@ -1,6 +1,6 @@
 
 
-temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_file)
+qaqc <- function(data_file, data2_file, maintenance_file, output_file)
 {
  
   CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
@@ -10,7 +10,7 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
                         "RDOsat_percent_9", "RDOTemp_C_9", "EXO_Date", "EXO_Time", "EXOTemp_C_1", "EXOCond_uScm_1",
                         "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
-                        "EXO_pressure", "EXO_depth", "EXO_battery", "EXO_cablepower", "EXO_wiper","Lvl_psi_9", "LvlTemp_C_9")
+                        "EXO_pressure_psi", "EXO_depth_m", "EXO_battery_V", "EXO_cablepower_V", "EXO_wiper_V","Lvl_psi_9", "LvlTemp_C_9")
   
   
   # EXO sonde sensor data that differs from the mean by more than the standard deviation multiplied by this factor will
@@ -65,6 +65,27 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
   catdata=catdata[!duplicated(catdata$DateTime), ]
   
   catdata$DateTime<-as.POSIXct(strptime(catdata$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "UTC")
+###############################################################################################################################
+  #check for gaps and missing data
+  #order data by timestamp
+  catdata2=catdata
+  catdata2=catdata2[order(catdata2$DateTime),]
+  catdata2$DOY=yday(catdata2$DateTime)
+  
+  
+  #check record for gaps
+  #daily record gaps by day of year
+  for(i in 2:nrow(catdata2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(catdata2$DOY[i]-catdata2$DOY[i-1]>1){
+      print(c(catdata2$DateTime[i-1],catdata2$DateTime[i]))
+    }
+  }
+  cat2=catdata2%>%filter(!is.na(RECORD))
+  for(i in 2:length(cat2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(abs(cat2$RECORD[i]-cat2$RECORD[i-1])>1){
+      print(c(cat2$DateTime[i-1],cat2$DateTime[i]))
+    }
+  }
 ############################################################################################################################### 
 #Read in the maintneance log 
   
@@ -464,9 +485,9 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
   
   
   #Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
-  catdata[which(catdata$EXO_depth < 0.5), exo_idx] <- NA
+  catdata[which(catdata$EXO_depth_m < 0.55), exo_idx] <- NA
   #Flag the data that was removed with 2 for outliers
-  catdata[which(catdata$EXO_depth<0.5),exo_flag]<- 2
+  catdata[which(catdata$EXO_depth_m<0.55),exo_flag]<- 2
   
 #############################################################################################################################  
    # delete EXO_Date and EXO_Time columns
@@ -541,6 +562,8 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
                               Flag_SpCond==0, 1, Flag_SpCond)
     )
   
+  #order by date and time
+  catdata <- catdata[order(catdata$DateTime),]
   
   # convert datetimes to characters so that they are properly formatted in the output file
   catdata$DateTime <- as.character(catdata$DateTime)
@@ -550,7 +573,7 @@ temp_oxy_chla_qaqc <- function(data_file, data2_file, maintenance_file, output_f
 }
 
 # example usage
-#temp_oxy_chla_qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
+#qaqc("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv",
 #     'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/FCRWaterLevel.csv',
 #     "https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/CAT_MaintenanceLog.txt",
 #    "Catwalk.csv")

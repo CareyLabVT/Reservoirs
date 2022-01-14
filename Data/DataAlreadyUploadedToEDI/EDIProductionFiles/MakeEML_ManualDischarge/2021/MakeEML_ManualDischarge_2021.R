@@ -55,7 +55,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
                              data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
-                             data.table = c("Inflow_2013_2021.csv"),
+                             data.table = c("ManualDischarge_2019_2021.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -96,20 +96,79 @@ view_unit_dictionary()
 #force reservoir to categorical
 #view_unit_dictionary()
 
-define_catvars(".")
+template_categorical_variables(path = 'C:/Users/wwoel/Desktop/Reservoirs_2/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021',
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
+                               write.file = TRUE)
 
-make_eml(path = ".",
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton, Virginia, USA from 2019-2021",
-         data.files = "2019_Continuum_Discharge",
-         data.files.description = "Reservoir Continuum Manual Discharge Data",
-         temporal.coverage = c("2019-02-08", "2019-10-30"),
+## Step 17: Obtain a package.id FROM STAGING ENVIRONMENT. ####
+# Go to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
+# then login using one of the Carey Lab usernames and passwords. 
+
+# Select Tools --> Data Package Identifier Reservations and click 
+# "Reserve Next Available Identifier"
+# A new value will appear in the "Current data package identifier reservations" 
+# table (e.g., edi.123)
+# Make note of this value, as it will be your package.id below
+
+make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
+         data.table = "ManualDischarge_2019_2021.csv",
+         data.table.description = "Reservoir Continuum Manual Discharge Data",
+         temporal.coverage = c("2019-02-08", "2021-11-19"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('calculate_discharge_flowmate_data.R', 
-                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation'),
-         other.entity.description = c('Script used to calculate discharge from flowmate measurements', 
-                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, and velocity float methods') ,
-         package.id = "edi.454.4", #### this is the one that I need to change!!!
+         other.entity = c('Collate_QAQC_ManualDischarge_2021.R', 
+                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+                          'CCR_VolumetricFlow_discharge_calc_example.xlsx'),
+         other.entity.description = c('Script used to collate and QAQC data for publication', 
+                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+                                      'Example spreadsheet which demonstrates the bucket volumetric calculation') ,
+         package.id = "edi.716.1", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
+## Step 8: Check your data product! ####
+# Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
+# then login using one of the Carey Lab usernames and passwords. 
+
+# Select Tools --> Evaluate/Upload Data Packages, then under "EML Metadata File", 
+# choose your metadata (.xml) file (e.g., edi.270.1.xml), check "I want to 
+# manually upload the data by selecting files on my local system", then click Upload.
+
+# Now, Choose File for each file within the data package (e.g., each zip folder), 
+# then click Upload. Files will upload and your EML metadata will be checked 
+# for errors. If there are no errors, your data product is now published! 
+# If there were errors, click the link to see what they were, then fix errors 
+# in the xml file. 
+# Note that each revision results in the xml file increasing one value 
+# (e.g., edi.270.1, edi.270.2, etc). Re-upload your fixed files to complete the 
+# evaluation check again, until you receive a message with no errors.
+
+## Step 17: Obtain a package.id. ####
+# INFLOW IS A REVISION: already have an identifier: 202.X (x = revision number)
+## NOTE: Will need to check geographic coordinates!!!
+make_eml(
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
+  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
+  temporal.coverage = c("2013-05-15", "2021-01-10"),
+  maintenance.description = 'ongoing',
+  data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
+  data.table.description = c("FCR inflow dataset","Rating curve WVWA","Rating curve VT"),
+  other.entity= 'Inflow_Aggregation_EDI_Jan2021.R',
+  other.entity.description = "QA/QC Code for Discharge aggregation",
+  user.id = 'ccarey',
+  user.domain = 'EDI',
+  package.id = 'edi.202.7')
+
+## Step 18: Upload revision to EDI
+# Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID
+# Click: Tools then Evaluate/Upload Data Packages
+# Under EML Metadata File, select 'Choose File'
+# Select the .xml file of the last revision (i.e., edi.202.4)
+# Under Data Upload Options, select 'I want to manually upload the data by selecting...'
+# Click 'Upload'
+# Select text files and R file associated with the upload
+# Then click 'Upload': if everything works, there will be no errors and the dataset will be uploaded!
+# Check to make sure everything looks okay on EDI Website
 

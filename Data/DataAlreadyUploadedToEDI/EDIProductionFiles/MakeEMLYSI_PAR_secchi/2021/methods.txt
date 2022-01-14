@@ -1,6 +1,6 @@
-﻿Field sample collection
+Field sample collection
 
-At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the deepest portion of the reservoir using a YSI ProPlus with Quatro cable (pH, ORP, conductivity) or YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature). Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The pH sensor was calibrated approximately weekly using a series of three  standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution.,  
+At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, specific conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the deepest portion of the reservoir using a YSI ProPlus with Quatro cable (pH, ORP, conductivity), YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature), or EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The pH sensor was calibrated approximately weekly using a series of three  standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution.  
 
 Photosynthetically active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192
 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m. 
@@ -11,7 +11,7 @@ YSI and PAR profiles, and Secchi depths, were collected approximately fortnightl
 
 The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), as well as at a gauged weir on the primary inflow tributary (Site 100) at Falling Creek Reservoir and other in-reservoir transects in Falling Creek Reservoir (Site 45, 30, 20, 10). For a map of the transects in Falling Creek Reservoir, see Chen et al. 2016.
 
-From 2013 to 2017, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018).
+From 2013 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018).
 
 References
 

@@ -331,7 +331,7 @@ for (i in 1:length(ghg_hist_time$Time)){
 
 # Merge Date and Time
 ghg_hist_time <- ghg_hist_time %>% 
-  mutate(DateTime = as.POSIXct(paste(Date,Time),format = "%Y-%m-%d %H:%M")) %>% 
+  mutate(DateTime = as.POSIXct(paste(Date,Time),format = "%Y-%m-%d %H:%M", tz = "EST")) %>% 
   select(Reservoir,Site,Depth_m,Rep,ch4_umolL,co2_umolL,flag_ch4,flag_co2,DateTime) %>% 
   relocate(DateTime,.before=Depth_m)
 
@@ -354,6 +354,7 @@ ghgs <- ghgs%>%
   mutate(DateTime = as.POSIXct(DateTime, "%Y-%m-%d %HH:%MM", tz="EST"), #Make sure columns are the correct type
          Depth_m = as.numeric(Depth_m), # CHANGE TO as.numeric AFTER NAMING IS FINALIZED
          Reservoir = as.factor(Reservoir)) %>%
+  mutate(DateTime = force_tz(DateTime,tzone = "EST")) %>% 
   filter(!is.na(Depth_m)) #Depth cannot be missing
 
 #############################################################################
@@ -446,12 +447,15 @@ ghg_all <-  ghg_all %>%
 ghg_all <- ghg_all %>% 
   mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.00252*3,4,
                            ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.00252*3,3,
-                                  ifelse(ch4_umolL <= 0.00252,2,
-                                                NA))),
+                                         NA)),
          flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=4.36*3,4,
                            ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=4.36*3,3,
-                                  ifelse(co2_umolL <= 4.36,2,
-                                                NA))))
+                                         NA)))
+
+ghg_all <- ghg_all %>% 
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.00252,2,flag_ch4),
+         flag_co2 = ifelse(co2_umolL <= 4.36,2,flag_co2))
+
 ghg_all <- ghg_all %>% 
   mutate(flag_ch4 = ifelse(is.na(ch4_umolL), 1, flag_ch4),
          flag_co2 = ifelse(is.na(co2_umolL), 1, flag_co2))
@@ -489,7 +493,7 @@ final <- final %>%
   mutate(Depth_m = ifelse(Depth_m %in% c(100,200), 0.1, Depth_m))
 
 ### Save GHG file!
-write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2021/final_GHG_2015-2021.csv")
+write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2021/final_GHG_2015-2021.csv",row.names = FALSE)
 
 ### Final plots - just to check : )
 # FCR Site 50 - CH4

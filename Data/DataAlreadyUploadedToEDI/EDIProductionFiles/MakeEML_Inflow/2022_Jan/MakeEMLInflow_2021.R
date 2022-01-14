@@ -21,7 +21,7 @@
 #for github which allows you to submit more than 60 API requests in an hour
 library(EMLassemblyline)
 
-
+check <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv')
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021
 
@@ -144,10 +144,10 @@ make_eml(
   data.table = c("Inflow_2013_2021.csv","2020_WeirWaterLevel.csv","2021_WeirWaterLevel.csv"),
   data.table.description = c("FCR inflow dataset","2020 Weir Water Level","2021 Weir Water Level"),
   other.entity= 'Inflow_Aggregation_EDI_2021.R',
-  other.entity.description = "Weir Water level for rating curve",
+  other.entity.description = "Script for compiling and QAQC of data",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.714.1')
+  package.id = 'edi.714.3')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

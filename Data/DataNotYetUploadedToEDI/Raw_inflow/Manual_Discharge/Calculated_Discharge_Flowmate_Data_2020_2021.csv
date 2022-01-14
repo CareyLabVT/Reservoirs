@@ -1,0 +1,41 @@
+"Date","Site","Discharge_m3_s","FlowmeterSensorID","Notes","test"
+2020-03-30,"F200",0.01949,"flowmate new",NA,NA
+2020-06-22,"F200",0.0481,"flowmate new",NA,NA
+2020-09-02,"F200",0.00831,"flowmate new",NA,NA
+2020-11-02,"F200",0.013221,"flowmate new",NA,NA
+2020-12-02,"F200",0.02201,"flowmate new",NA,NA
+2020-05-25,"F200",0.074055,"flowmate new",NA,NA
+2020-07-06,"F200",0.0158,"flowmate new",NA,NA
+2021-03-22,"F200",0.032415,"flowmate new","",""
+2021-04-26,"F200",0.019635,"flowmate new","",""
+2021-05-24,"F200",0.01019,"flowmate new","",""
+2021-06-21,"F200",6.99e-05,"flowmate new","negative value","negative value"
+2020-07-15,"100",0.00196,"FWE","channel width = 3.5m, lat/long: (37.3646, -79.9732)","channel width = 3.5m, lat/long: (37.3646, -79.9732)"
+2020-07-22,"100",0.00139,"FWE","channel width = 3.4m, lat/long: (37.3647, -79.9733)","channel width = 3.4m, lat/long: (37.3647, -79.9733)"
+2020-07-22,"300",0.00414,"FWE","channel width = 0.9m, lat/long: (37.4094, -79.9700)","channel width = 0.9m, lat/long: (37.4094, -79.9700)"
+2020-08-05,"100",0.00265,"FWE","Channel width ~ 2m","Channel width ~ 2m"
+2020-08-05,"300",0.009015,"FWE","",""
+2020-08-05,"400",0.003455,"FWE","TCT_tunnel","TCT_tunnel"
+2020-08-19,"100",0.00337,"FWE","",""
+2020-08-19,"300",0.0258,"FWE","",""
+2020-09-23,"301",0.0033,"FWE","channel width = 1.8m; DO: 88.1% sat, 9.10 mg/L; First time measuring discharge at this point on SMB (above bridge off fire road)","channel width = 1.8m; DO: 88.1% sat, 9.10 mg/L; First time measuring discharge at this point on SMB (above bridge off fire road)"
+2020-09-23,"300",0.00745,"FWE","Spot on sawmill close to where it enter the reservoir; DO% = 90.4, DO mg/L = 9.37","Spot on sawmill close to where it enter the reservoir; DO% = 90.4, DO mg/L = 9.37"
+2020-09-23,"100",0.00216,"FWE","Full width = 2.4m, not flow past 1m; DO% = 99.5, mg/L = 10.36","Full width = 2.4m, not flow past 1m; DO% = 99.5, mg/L = 10.36"
+2021-04-19,"100",0.02913,"FWE","",""
+2021-04-19,"300",0.0889,"FWE","SMB (this is at point near cove of reservoir)","SMB (this is at point near cove of reservoir)"
+2021-04-19,"400",0.01101,"FWE","TCT_tunnel*using flowmate in stream, level to high to use red bucket method","TCT_tunnel*using flowmate in stream, level to high to use red bucket method"
+2021-05-11,"501",0.00227,"FWE","Discharge right below the tunnel (hard to get to)","Discharge right below the tunnel (hard to get to)"
+2021-05-11,"500",0.002195,"FWE","Discharge where stream crosses road","Discharge where stream crosses road"
+2021-05-11,"301",0.01422,"FWE","SMB from fireroad (now the sampling spot for what was formerly called inf C","SMB from fireroad (now the sampling spot for what was formerly called inf C"
+2021-05-11,"400",0.00469,"FWE","TCT_angelbranch Angel branch was flowing this day","TCT_angelbranch Angel branch was flowing this day"
+2021-07-14,"301",0.00266,"FWE","",""
+2021-08-19,"100",0.00748,"FWE","",""
+2021-08-19,"400",0.29843,"FWE","TCT_left: tunnel was open and angel branch was flowing; this is the left side of the two streams that formed","TCT_left: tunnel was open and angel branch was flowing; this is the left side of the two streams that formed"
+2021-08-19,"301",0.01591,"FWE","",""
+2021-08-19,"500",0.04404,"FWE","",""
+2021-09-23,"100",0.03758,"FWE","",""
+2021-09-23,"400",0.45026,"FWE","TCT_right: tunnel was open and angel branch was flowing; this is the right side of the two streams that formed","TCT_right: tunnel was open and angel branch was flowing; this is the right side of the two streams that formed"
+2021-11-19,"100",0.00281,"FWE","",""
+2021-11-19,"500",0.0008631,"FWE","",""
+2021-11-19,"301",0.01228,"FWE","",""
+2021-11-19,"400",0.00355,"FWE","TCT_tunnel","TCT_tunnel"

@@ -156,7 +156,7 @@ make_eml(
   other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.705.1')
+  package.id = 'edi.705.2')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

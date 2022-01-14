@@ -1,5 +1,3 @@
-Additional Information:
-
 Authorship Contribution Statement:
 	
 CCC developed and led the reservoir monitoring program 2013-present. AGH is the point person for dissolved GHG data collation, QA/QC, and publishing for 2021. RPM was the point person for the dissolved GHG data analysis, collation, QA/QC, and publishing from 2015-2020; ABG co-developed sampling protocol with CCC and was the point person for spring-summer 2015. ASL coordinated GHG data collation, assisted with QA/QC, and data publishing in 2020-2021. BRN conducted all dissolved GHG analysis in 2020-2021 and all QA/QC curves.

@@ -117,6 +117,13 @@ template_table_attributes(path = folder,
                           write.file = TRUE)
 # edit this file in excel
 
+# function below to create a template for offsets csv
+template_table_attributes(path = folder,
+                          data.path = folder,
+                          data.table = "CCR_Depth_offsets_2021.csv",
+                          write.file = TRUE)
+# edit this file in excel
+
 #if you need to make custom units that aren't in the unit dictionary,
 #use the customunits.txt file and the directions on the EMLassemblyline Github to do so
 #taken from other dataframes
@@ -170,7 +177,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.3", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.719.3", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

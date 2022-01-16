@@ -1,0 +1,120 @@
+attributeName	code	definition
+Flag_EXObat_1	0	no flag
+Flag_EXObat_1	1	value removed due to maintenance and set to NA
+Flag_EXObat_1	7	missing data
+Flag_EXObat_9	0	no flag
+Flag_EXObat_9	1	value removed due to maintenance and set to NA
+Flag_EXObat_9	7	missing data
+Flag_EXOcab_1	0	no flag
+Flag_EXOcab_1	1	value removed due to maintenance and set to NA
+Flag_EXOcab_1	7	missing data
+Flag_EXOcab_9	0	no flag
+Flag_EXOcab_9	1	value removed due to maintenance and set to NA
+Flag_EXOcab_9	7	missing data
+Flag_EXOChla_RFU_1	0	no flag
+Flag_EXOChla_RFU_1	1	value removed due to maintenance and set to NA
+Flag_EXOChla_RFU_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOChla_RFU_1	5	questionable value but left in dataset 
+Flag_EXOChla_RFU_1	7	missing data
+Flag_EXOChla_ugL_1	1	value removed due to maintenance and set to NA
+Flag_EXOChla_ugL_1	5	questionable value but left in dataset 
+Flag_EXOChla_ugL_1	7	missing data
+Flag_EXOCond_1	0	no flag
+Flag_EXOCond_1	1	value removed due to maintenance and set to NA
+Flag_EXOCond_1	7	missing data
+Flag_EXOCond_9	0	no flag
+Flag_EXOCond_9	1	value removed due to maintenance and set to NA
+Flag_EXOCond_9	7	missing data
+Flag_EXOdep_1	0	no flag
+Flag_EXOdep_1	1	value removed due to maintenance and set to NA
+Flag_EXOdep_1	7	missing data
+Flag_EXOdep_9	0	no flag
+Flag_EXOdep_9	1	value removed due to maintenance and set to NA
+Flag_EXOdep_9	7	missing data
+Flag_EXODO_obs_1	0	no flag
+Flag_EXODO_obs_1	1	value removed due to maintenance and set to NA
+Flag_EXODO_obs_1	7	missing data
+Flag_EXODO_obs_9	0	no flag
+Flag_EXODO_obs_9	1	value removed due to maintenance and set to NA
+Flag_EXODO_obs_9	7	missing data
+Flag_EXODO_sat_1	0	no flag
+Flag_EXODO_sat_1	1	value removed due to maintenance and set to NA
+Flag_EXODO_sat_1	7	missing data
+Flag_EXODO_sat_9	0	no flag
+Flag_EXODO_sat_9	1	value removed due to maintenance and set to NA
+Flag_EXODO_sat_9	7	missing data
+Flag_EXOfDOM_1	0	no flag
+Flag_EXOfDOM_1	1	value removed due to maintenance and set to NA
+Flag_EXOfDOM_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOfDOM_1	7	missing data
+Flag_EXOfDOM_9	0	no flag
+Flag_EXOfDOM_9	1	value removed due to maintenance and set to NA
+Flag_EXOfDOM_9	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOfDOM_9	7	missing data
+Flag_EXOPhyco_RFU_1	0	no flag
+Flag_EXOPhyco_RFU_1	1	value removed due to maintenance and set to NA
+Flag_EXOPhyco_RFU_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOPhyco_RFU_1	3	3: negative values set to 0
+Flag_EXOPhyco_RFU_1	7	missing data
+Flag_EXOPhyco_ugL_1	1	value removed due to maintenance and set to NA
+Flag_EXOPhyco_ugL_1	7	missing data
+Flag_EXOPres_1	0	no flag
+Flag_EXOPres_1	1	value removed due to maintenance and set to NA
+Flag_EXOPres_1	7	missing data
+Flag_EXOPres_9	0	no flag
+Flag_EXOPres_9	1	value removed due to maintenance and set to NA
+Flag_EXOPres_9	7	missing data
+Flag_EXOSpCond_1	0	no flag
+Flag_EXOSpCond_1	1	value removed due to maintenance and set to NA
+Flag_EXOSpCond_1	7	missing data
+Flag_EXOSpCond_9	0	no flag
+Flag_EXOSpCond_9	1	value removed due to maintenance and set to NA
+Flag_EXOSpCond_9	7	missing data
+Flag_EXOTDS_1	0	no flag
+Flag_EXOTDS_1	1	value removed due to maintenance and set to NA
+Flag_EXOTDS_1	7	missing data
+Flag_EXOTDS_9	0	no flag
+Flag_EXOTDS_9	1	value removed due to maintenance and set to NA
+Flag_EXOTDS_9	7	missing data
+Flag_EXOTemp_1	0	no flag
+Flag_EXOTemp_1	1	value removed due to maintenance and set to NA
+Flag_EXOTemp_1	7	missing data
+Flag_EXOTemp_9	0	no flag
+Flag_EXOTemp_9	1	value removed due to maintenance and set to NA
+Flag_EXOTemp_9	7	missing data
+Flag_EXOwip_1	0	no flag
+Flag_EXOwip_1	1	value removed due to maintenance and set to NA
+Flag_EXOwip_1	7	missing data
+Flag_EXOwip_9	0	no flag
+Flag_EXOwip_9	1	value removed due to maintenance and set to NA
+Flag_EXOwip_9	7	missing data
+Flag_Pres_13	0	no flag
+Flag_Pres_13	1	value removed due to maintenance and set to NA
+Flag_Temp_1	0	no flag
+Flag_Temp_1	1	value removed due to maintenance and set to NA
+Flag_Temp_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_Temp_10	0	no flag
+Flag_Temp_10	1	value removed due to maintenance and set to NA
+Flag_Temp_11	0	no flag
+Flag_Temp_11	1	value removed due to maintenance and set to NA
+Flag_Temp_12	0	no flag
+Flag_Temp_12	1	value removed due to maintenance and set to NA
+Flag_Temp_13	0	no flag
+Flag_Temp_13	1	value removed due to maintenance and set to NA
+Flag_Temp_2	0	no flag
+Flag_Temp_2	1	value removed due to maintenance and set to NA
+Flag_Temp_2	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_Temp_3	0	no flag
+Flag_Temp_3	1	value removed due to maintenance and set to NA
+Flag_Temp_4	0	no flag
+Flag_Temp_4	1	value removed due to maintenance and set to NA
+Flag_Temp_5	0	no flag
+Flag_Temp_5	1	value removed due to maintenance and set to NA
+Flag_Temp_6	0	no flag
+Flag_Temp_6	1	value removed due to maintenance and set to NA
+Flag_Temp_7	0	no flag
+Flag_Temp_7	1	value removed due to maintenance and set to NA
+Flag_Temp_8	0	no flag
+Flag_Temp_8	1	value removed due to maintenance and set to NA
+Flag_Temp_9	0	no flag
+Flag_Temp_9	1	value removed due to maintenance and set to NA

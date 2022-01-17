@@ -155,7 +155,7 @@ make_eml(
   other.entity.description = "data aggregation and quality control script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.123.4')
+  package.id = 'edi.123.5')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

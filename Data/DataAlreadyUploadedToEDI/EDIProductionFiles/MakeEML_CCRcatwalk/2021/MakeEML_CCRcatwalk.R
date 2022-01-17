@@ -170,14 +170,14 @@ make_eml(path = folder,
          in Carvins Cove Reservoir, Virginia, USA in 2021",
          data.table = c("CCR_Catwalk_EDI_2021.csv","CCR_Depth_offsets_2021.csv"),
          data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths"),
-         other.entity = c('CCR_catwalk_QAQC_function_2021.R', 'CCR_catwalk_QAQC_Plots_2021.R','CCRW_maintenance_log_2021.txt' ),
-         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
+         other.entity = c('CCR_catwalk_QAQC_function_2021.R', 'CCR_catwalk_QAQC_Plots_2021.R','CCRW_maintenance_log_2021.txt', 'CCR_sort_by_depth_2021.R' ),
+         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors', 'Applying the depth offset and sorting by sensor depth' ),          
          temporal.coverage = c("2021-04-09", "2021-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.3", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.719.7", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

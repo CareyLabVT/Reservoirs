@@ -13,7 +13,7 @@ Flag_EXOcab_9	1	value removed due to maintenance and set to NA
 Flag_EXOcab_9	7	missing data
 Flag_EXOChla_RFU_1	0	no flag
 Flag_EXOChla_RFU_1	1	value removed due to maintenance and set to NA
-Flag_EXOChla_RFU_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOChla_RFU_1	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 Flag_EXOChla_RFU_1	5	questionable value but left in dataset 
 Flag_EXOChla_RFU_1	7	missing data
 Flag_EXOChla_ugL_1	1	value removed due to maintenance and set to NA
@@ -45,16 +45,16 @@ Flag_EXODO_sat_9	1	value removed due to maintenance and set to NA
 Flag_EXODO_sat_9	7	missing data
 Flag_EXOfDOM_1	0	no flag
 Flag_EXOfDOM_1	1	value removed due to maintenance and set to NA
-Flag_EXOfDOM_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOfDOM_1	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 Flag_EXOfDOM_1	7	missing data
 Flag_EXOfDOM_9	0	no flag
 Flag_EXOfDOM_9	1	value removed due to maintenance and set to NA
-Flag_EXOfDOM_9	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_EXOfDOM_9	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 Flag_EXOfDOM_9	7	missing data
 Flag_EXOPhyco_RFU_1	0	no flag
 Flag_EXOPhyco_RFU_1	1	value removed due to maintenance and set to NA
-Flag_EXOPhyco_RFU_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
-Flag_EXOPhyco_RFU_1	3	3: negative values set to 0
+Flag_EXOPhyco_RFU_1	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOPhyco_RFU_1	3	negative values set to 0
 Flag_EXOPhyco_RFU_1	7	missing data
 Flag_EXOPhyco_ugL_1	1	value removed due to maintenance and set to NA
 Flag_EXOPhyco_ugL_1	7	missing data
@@ -92,7 +92,7 @@ Flag_Pres_13	0	no flag
 Flag_Pres_13	1	value removed due to maintenance and set to NA
 Flag_Temp_1	0	no flag
 Flag_Temp_1	1	value removed due to maintenance and set to NA
-Flag_Temp_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_Temp_1	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 Flag_Temp_10	0	no flag
 Flag_Temp_10	1	value removed due to maintenance and set to NA
 Flag_Temp_11	0	no flag
@@ -103,7 +103,7 @@ Flag_Temp_13	0	no flag
 Flag_Temp_13	1	value removed due to maintenance and set to NA
 Flag_Temp_2	0	no flag
 Flag_Temp_2	1	value removed due to maintenance and set to NA
-Flag_Temp_2	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_Temp_2	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 Flag_Temp_3	0	no flag
 Flag_Temp_3	1	value removed due to maintenance and set to NA
 Flag_Temp_4	0	no flag

@@ -15,33 +15,33 @@ The table below is the position of the sensor, offset to find the depth of the p
 
 Offset Table 
 
-Position		Offset		Depth of the Sensor when full pond
+Position;		Offset;		Depth of the Sensor when full pond
 
-Position 1	18.94		0.1m
+Position_1;	18.94;		0.1m
 
-Postion_2	18.065		1m
+Postion_2;	18.065;		1m
 
-Position_3	17.07		2m
+Position_3;	17.07;		2m
 
-Position_4	16.075		3m
+Position_4;	16.075;		3m
 
-Position_5	15.08		4m
+Position_5;	15.08;		4m
 
-Position_6	14.084		5m
+Position_6;	14.084;		5m
 
-Position_7	13.09		6m
+Position_7;	13.09;		6m
 
-Position_8	12.095		7m
+Position_8;	12.095;		7m
 
-Position_9	11.1		8m
+Position_9;	11.1;		8m
 
-Position_10	9.11		10m
+Position_10;	9.11;		10m
 
-Positioni_11	8.115		11m
+Position_11;	8.115;		11m
 
-Position_12	4.135		15m
+Position_12;	4.135;		15m
 
-Position_13	0.15		19m
+Position_13;	0.15;		19m
 
 
 
@@ -61,13 +61,13 @@ Missing Data Dates and Times:
 The following dates and times are sub daily gaps in the data:
 2021-07-02 14:00:00 -2021-07-02 14:50:00 
 
-Missing EXO2 data at 1.5m
-2021-07-02 13:40:00-2021-07-14 10:10:00
-2021-07-28 11:50:00-2021-08-19 09:00:00
+Missing EXO2 data at 1.5m:
+2021-07-02 13:40:00-2021-07-14 10:10:00,
+2021-07-28 11:50:00-2021-08-19 09:00:00,
 2021-11-18 23:10:00-2021-11-23 09:20:00
 
 
-Missing EXO3 data at 9m
+Missing EXO3 data at 9m:
 2021-09-23 10:30:00-2021-09-27 8:30
 
 EXO Maintenance Issues:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.555.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.52.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019</title>
+    <title>Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir, and Lake Sunapee in southwestern Virginia and Sunapee, New Hampshire, USA during 2014-2021</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -109,7 +109,7 @@
     </creator>
     <pubDate>2022-01-14</pubDate>
     <abstract>
-      <para>Water column chlorophyll a was analyzed from 2014 to 2021 in seven freshwater reservoirs in southwestern Virginia (VA), USA, and one freshwater lake in Sunapee, New Hampshire (NH). These water bodies are: Beaverdam Reservoir (Vinton, VA), Carvins Cove Reservoir (Roanoke, VA), Claytor Lake (Pulaski, VA), Falling Creek Reservoir (Vinton, VA), Gatewood Reservoir (Pulaski, VA), Smith Mountain Lake (Bedford, VA), Spring Hollow Reservoir (Salem, VA), and Lake Sunapee (Sunapee, NH). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia; Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia; and Smith Mountain Lake is jointly treated by Bedford Regional Water Authority and Western Virginia Water Authority as a drinking water source for Franklin County, Virginia. Claytor Lake is utilized for hydroelectric power generation by Appalachian Power Company. Lake Sunapee is a glacial lake known for its oligotrophic (clear-water) properties. The dataset consists of depth profiles of chlorophyll a samples generally measured at the deepest site of each reservoir adjacent to the dam. The water column samples were collected approximately fortnightly from March-April, and weekly from May-October at Falling Creek Reservoir and Beaverdam Reservoir, approximately fortnightly from May-August in most years at Carvins Cove Reservoir, approximately fortnightly from May-August in Gatewood and Spring Hollow Reservoirs from 2014-2016, approximately fortnightly from May-August of 2014 in Smith Mountain Lake, sporadically from May-August of 2014 in Claytor Lake, and weekly from June-August of 2021 in Lake Sunapee. Additional chlorophyll a samples were collected at multiple upstream and inflow sites along tributaries to Beaverdam and Falling Creek Reservoirs in summer 2019. The water samples collected were analyzed for both pheophytin and chlorophyll a to quantify and correct for degraded phytoplankton within the sample. </para>
+      <para>Water column chlorophyll a was analyzed from 2014 to 2019 in seven freshwater reservoirs in southwestern Virginia (VA), USA, and one freshwater lake in Sunapee, New Hampshire (NH). These water bodies are: Beaverdam Reservoir (Vinton, VA), Carvins Cove Reservoir (Roanoke, VA), Claytor Lake (Pulaski, VA), Falling Creek Reservoir (Vinton, VA), Gatewood Reservoir (Pulaski, VA), Smith Mountain Lake (Bedford, VA), Spring Hollow Reservoir (Salem, VA), and Lake Sunapee (Sunapee, NH). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia; Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia; and Smith Mountain Lake is jointly treated by Bedford Regional Water Authority and Western Virginia Water Authority as a drinking water source for Franklin County, Virginia. Claytor Lake is utilized for hydroelectric power generation by Appalachian Power Company. Lake Sunapee is a glacial lake known for its oligotrophic (clear-water) properties. The dataset consists of depth profiles of chlorophyll a samples generally measured at the deepest site of each reservoir adjacent to the dam. The water column samples were collected approximately fortnightly from March-April, and weekly from May-October at Falling Creek Reservoir and Beaverdam Reservoir, approximately fortnightly from May-August in most years at Carvins Cove Reservoir, approximately fortnightly from May-August in Gatewood and Spring Hollow Reservoirs from 2014-2016, approximately fortnightly from May-August of 2014 in Smith Mountain Lake, sporadically from May-August of 2014 in Claytor Lake, and weekly from June-August of 2021 in Lake Sunapee. Additional chlorophyll a samples were collected at multiple upstream and inflow sites along tributaries to Beaverdam and Falling Creek Reservoirs in summer 2019. The water samples collected were analyzed for both pheophytin and chlorophyll a to quantify and correct for degraded phytoplankton within the sample. </para>
     </abstract>
     <keywordSet>
       <keyword>Virginia Tech</keyword>
@@ -335,7 +335,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
             <calendarDate>2014-04-18</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2019-10-04</calendarDate>
+            <calendarDate>2021-12-06</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>
@@ -449,16 +449,16 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
       </relatedProject>
     </project>
     <dataTable>
-      <entityName>chla_master_df_dt.csv</entityName>
+      <entityName>manual_chlorophyll_2014_2021.csv</entityName>
       <entityDescription>Reservoir chlorophyll a dataset</entityDescription>
       <physical>
-        <objectName>chla_master_df_dt.csv</objectName>
-        <size unit="bytes">32040</size>
-        <authentication method="MD5">7cebd93883e4b0b75333600eeba1a53d</authentication>
+        <objectName>manual_chlorophyll_2014_2021.csv</objectName>
+        <size unit="bytes">46044</size>
+        <authentication method="MD5">e5c2b4e19ba9cbf066baf35010cc55e8</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
-            <recordDelimiter>\r\n</recordDelimiter>
+            <recordDelimiter>\n</recordDelimiter>
             <attributeOrientation>column</attributeOrientation>
             <simpleDelimited>
               <fieldDelimiter>,</fieldDelimiter>
@@ -487,7 +487,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Site</attributeName>
-          <attributeDefinition>"50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir "</attributeDefinition>
+          <attributeDefinition>"Sampling site within each reservoir; 50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir; For CCR: 01 =  Site near floating platform at Carvins Cove Reservoir; 02 = Near shore site at Carvins Cove Reservoir; 03 = Pelagic site upstream of boat launch at Carvins Cove Reservoir; 04 = Site near boat launch at Carvins Cove Reservoir; 05 = Pelagic site downstream of boat launch at Carvins Cove Reservoir; For SNP: 50 = Site of the Lake Sunapee Protective Association water quality buoy; 40 = Deepest site in close proximity to the Lake Sunapee Protective Association water quality buoy"</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -581,7 +581,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">-18.4</minimum>
+                  <minimum exclusive="false">-67.1608</minimum>
                   <maximum exclusive="false">36.6</maximum>
                 </bounds>
               </numericDomain>
@@ -594,7 +594,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Flag_Chla</attributeName>
-          <attributeDefinition>"Data flag for chlorophyll a; 0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
+          <attributeDefinition>Data flag for chlorophyll a</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -617,7 +617,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Flag_Pheo</attributeName>
-          <attributeDefinition>"Data flag for pheophytin;  0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
+          <attributeDefinition>Data flag for pheophytin</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -639,7 +639,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>745</numberOfRecords>
+      <numberOfRecords>992</numberOfRecords>
     </dataTable>
   </dataset>
 </eml:eml>

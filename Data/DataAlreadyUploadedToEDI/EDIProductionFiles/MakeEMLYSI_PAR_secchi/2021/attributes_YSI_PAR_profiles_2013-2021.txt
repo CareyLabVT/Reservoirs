@@ -1,0 +1,22 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	"Sampling site within each reservoir; 50 = Deep hole or site nearest to dam in each reservoir; 45 = Upstream pelagic site nearest to the deep hole in each reservoir; 30 = Upstream pelagic site in transitional zone of the reservoir; 20 = Different upstream pelagic site in transitional zone of the reservoir; 10 = Farthest upstream pelagic site in reservoir; 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir or Horse Pen Branch inflow to Carvins Cove Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir or Horse Pen Branch standing water inflow to Carvins Cove Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir, right arm inflow to Beaverdam Reservoir, or Carvin Creek inflow to Carvins Cove Reservoir; 300 = Sawmill Branch inflow site closest to reservoir at Carvins Cove Reservoir; 301 = Sawmill Branch inflow upstream of reservoir at Carvins Cove Reservoir; 400 = Tinker Creek Tunnel Inflow to Carvins Cove Reservoir; 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir"	numeric	dimensionless		NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Depth_m	Water depth where the sample was collected	numeric	meter		NA	value is missing
+Temp_C	Water temperature	numeric	celsius		NA	value is missing
+DO_mgL	Dissolved oxygen (DO) concentration	numeric	milligramsPerLiter		NA	value is missing
+DOSat	Dissolved oxygen (DO) percent saturation	numeric	percent		NA	value is missing
+Cond_uScm	Conductivity	numeric	microSiemenPerCentimeter		NA	value is missing
+Sp_cond_uScm	Specific conductivity	numeric	microSiemenPerCentimeter		NA	value is missing
+PAR_umolm2s	Photosynthetically active radiation	numeric	micromolePerMeterSquaredPerSecond		NA	value is missing
+ORP_mV	oxidation-reduction potential	numeric	millivolt		NA	value is missing
+pH	water pH	numeric	dimensionless		NA	value is missing
+Flag_DateTime	"Data flag for datetime; 0=Time recorded, 1= No time recorded, generalized to noon"	numeric	dimensionless		NA	value is missing
+Flag_Temp	"Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_DO	"Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_DOSat	"Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_Cond	"Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_Sp_Cond	"Data flag for specific conductivity; 0=Not suspect, 1=Sample not taken"	numeric	dimensionless		NA	value is missing
+Flag_PAR	"Data flag for photosynthetically active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_ORP	"Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing
+Flag_pH	"Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection,4=Negative value set to 0"	numeric	dimensionless		NA	value is missing

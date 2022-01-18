@@ -24,6 +24,16 @@
     </creator>
     <creator>
       <individualName>
+        <givenName>Jacob</givenName>
+        <givenName>H.</givenName>
+        <surName>Wynne</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>jacobwynne@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-4221-1247</userId>
+    </creator>
+    <creator>
+      <individualName>
         <givenName>Mary</givenName>
         <givenName>E.</givenName>
         <surName>Lofton</surName>
@@ -34,23 +44,12 @@
     </creator>
     <creator>
       <individualName>
-        <givenName>Whitney</givenName>
-        <givenName>M.</givenName>
-        <surName>Woelmer</surName>
+        <givenName>Kathleen</givenName>
+        <givenName>D.</givenName>
+        <surName>Hamre</surName>
       </individualName>
       <organizationName>Virginia Tech</organizationName>
-      <electronicMailAddress>wwoelmer@vt.edu</electronicMailAddress>
-      <userId directory="https://orcid.org">https://orcid.org/0000-0001-5147-3877</userId>
-    </creator>
-    <creator>
-      <individualName>
-        <givenName>Jacob</givenName>
-        <givenName>H.</givenName>
-        <surName>Wynne</surName>
-      </individualName>
-      <organizationName>Virginia Tech</organizationName>
-      <electronicMailAddress>jacobwynne@vt.edu</electronicMailAddress>
-      <userId directory="https://orcid.org">https://orcid.org/0000-0003-4221-1247</userId>
+      <electronicMailAddress>kdhamre@vt.edu</electronicMailAddress>
     </creator>
     <creator>
       <individualName>
@@ -64,12 +63,21 @@
     </creator>
     <creator>
       <individualName>
-        <givenName>Kathleen</givenName>
-        <givenName>D.</givenName>
-        <surName>Hamre</surName>
+        <givenName>Caroline</givenName>
+        <givenName>E.</givenName>
+        <surName>Bryant</surName>
       </individualName>
       <organizationName>Virginia Tech</organizationName>
-      <electronicMailAddress>kdhamre@vt.edu</electronicMailAddress>
+      <electronicMailAddress>Carolb00@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Arpita</givenName>
+        <givenName>R.</givenName>
+        <surName>Das</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>arpitadas@vt.edu</electronicMailAddress>
     </creator>
     <creator>
       <individualName>
@@ -80,9 +88,28 @@
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>bniederl@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2020-08-18</pubDate>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Whitney</givenName>
+        <givenName>M.</givenName>
+        <surName>Woelmer</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>wwoelmer@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-5147-3877</userId>
+    </creator>
+    <pubDate>2022-01-14</pubDate>
     <abstract>
-      <para>Water column chlorophyll a was analyzed from 2014 to 2019 in seven freshwater reservoirs in southwestern Virginia (VA), USA. These reservoirs are: Beaverdam Reservoir (Vinton, VA), Carvins Cove Reservoir (Roanoke, VA), Claytor Lake (Pulaski, VA), Falling Creek Reservoir (Vinton, VA), Gatewood Reservoir (Pulaski, VA), Smith Mountain Lake (Bedford, VA), and Spring Hollow Reservoir (Salem, VA). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia; Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia; and Smith Mountain Lake is jointly treated by Bedford Regional Water Authority and Western Virginia Water Authority as a drinking water source for Franklin County, Virginia. Claytor Lake is utilized for hydroelectric power generation by the Appalachian Power Company. The dataset consists of depth profiles of chlorophyll a samples generally measured at the deepest site of each reservoir adjacent to the dam. The water column samples were collected approximately fortnightly from March-April, and weekly from May-October at Falling Creek Reservoir and Beaverdam Reservoir, approximately fortnightly from May-August in most years at Carvins Cove Reservoir, approximately fortnightly from May-August in Gatewood and Spring Hollow Reservoirs from 2014-2016, approximately fortnightly from May-August of 2014 in Smith Mountain Lake, and sporadically from May-August of 2014 in Claytor Lake. Additional chlorophyll a samples were collected at multiple upstream and inflow sites along tributaries to Beaverdam and Falling Creek Reservoirs in summer 2019. The water samples collected were analyzed for both pheophytin and chlorophyll a to quantify and correct for degraded phytoplankton within the sample. </para>
+      <para>Water column chlorophyll a was analyzed from 2014 to 2021 in seven freshwater reservoirs in southwestern Virginia (VA), USA, and one freshwater lake in Sunapee, New Hampshire (NH). These water bodies are: Beaverdam Reservoir (Vinton, VA), Carvins Cove Reservoir (Roanoke, VA), Claytor Lake (Pulaski, VA), Falling Creek Reservoir (Vinton, VA), Gatewood Reservoir (Pulaski, VA), Smith Mountain Lake (Bedford, VA), Spring Hollow Reservoir (Salem, VA), and Lake Sunapee (Sunapee, NH). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia; Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia; and Smith Mountain Lake is jointly treated by Bedford Regional Water Authority and Western Virginia Water Authority as a drinking water source for Franklin County, Virginia. Claytor Lake is utilized for hydroelectric power generation by Appalachian Power Company. Lake Sunapee is a glacial lake known for its oligotrophic (clear-water) properties. The dataset consists of depth profiles of chlorophyll a samples generally measured at the deepest site of each reservoir adjacent to the dam. The water column samples were collected approximately fortnightly from March-April, and weekly from May-October at Falling Creek Reservoir and Beaverdam Reservoir, approximately fortnightly from May-August in most years at Carvins Cove Reservoir, approximately fortnightly from May-August in Gatewood and Spring Hollow Reservoirs from 2014-2016, approximately fortnightly from May-August of 2014 in Smith Mountain Lake, sporadically from May-August of 2014 in Claytor Lake, and weekly from June-August of 2021 in Lake Sunapee. Additional chlorophyll a samples were collected at multiple upstream and inflow sites along tributaries to Beaverdam and Falling Creek Reservoirs in summer 2019. The water samples collected were analyzed for both pheophytin and chlorophyll a to quantify and correct for degraded phytoplankton within the sample. </para>
     </abstract>
     <keywordSet>
       <keyword>Virginia Tech</keyword>
@@ -181,8 +208,42 @@ o	Longitude: -79.81721</para>
 -	Verbal Description: Outflow pipe in transitional zone of Beaverdam Reservoir. 
 o	Latitude: 37.314783
 o	Longitude: -79.820864</para>
-      <para>
-From 2014 to 2019, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time from 2014-2018 following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, hypolimnetic oxygenation was conducted from June 3-June 17, July 8-July 22, August 5-August 19 and September 2-November 20. </para>
+      <para>Carvins Cove Reservoir
+-	Site 50
+-	Verbal Description: Deep hole nearest to the dam of Carvins Cove Reservoir. 
+o	Latitude: 37.369712	
+o	Longitude: -79.957976</para>
+      <para>-	Site 1
+-	Verbal Description: Site near floating platform at Carvins Cove Reservoir.
+o	Latitude: 37.3839	
+o	Longitude: -79.9491</para>
+      <para>-	Site 2
+-	Verbal Description: Near shore site at Carvins Cove Reservoir.
+o	Latitude: 37.3850	
+o	Longitude: -79.9510</para>
+      <para>-	Site 3
+-	Verbal Description: Pelagic site upstream of boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3922	
+o	Longitude: -79.9488</para>
+      <para>-	Site 4
+-	Verbal Description: Site near boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3845	
+o	Longitude: -79.9471</para>
+      <para>-	Site 5
+-	Verbal Description: Pelagic site downstream of boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3788
+o	Longitude: -79.9529</para>
+      <para>Lake Sunapee
+-	Site 50
+-	Verbal Description: Site of the Lake Sunapee Protective Association water quality buoy. 
+o	Latitude: 43.391308	
+o	Longitude: -72.058973</para>
+      <para>-	Site 40
+-	Verbal Description: Deepest site in close proximity to the Lake Sunapee Protective Association water quality buoy
+o	Latitude: 43.382772	
+o	Longitude: -72.064545</para>
+      <para>CCC developed and led the reservoir monitoring program 2013-present, and oversaw the collection and analysis of this dataset throughout this time. JHW is the point person for chlorophyll-a data collation and laboratory analysis, QAQC and publishing from 2019 - 2021. ABP led field collection in 2020 and 2021. WMW helped coordinate and supervise chlorophyll-a analysis and processing from 2019-2021. AD and CEB led field prep and post-processing in 2021. MEL was the point person for chl data collection, analysis, and QAQC from 2016–2018. KDH was the point person for chl data collection, analysis, QAQC and publishing from 2014-2015, and JPD was the point person for data collection, analysis, QAQC and publishing for 2013-2014. BRN developed analysis methods, led chemical analyses during COVID 19 (2020-2021), and trained all co-authors on analytical chemistry instruments, analyses, and QAQC best practices.</para>
+      <para>From 2014 to 2019, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time from 2014-2018 following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, hypolimnetic oxygenation was conducted from June 3-June 17, July 8-July 22, August 5-August 19 and September 2-November 20. </para>
       <para>Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279 
 Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002
 Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0
@@ -197,7 +258,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
     </intellectualRights>
     <coverage>
       <geographicCoverage>
-        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <geographicDescription>"Beaverdam Reservoir is located in Vinton, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
           <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
@@ -206,7 +267,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <geographicDescription>"Carvins Cove Reservoir is located in Roanoke, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
           <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
@@ -215,7 +276,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Claytor Lake is located in Pulaski, Virginia, USA </geographicDescription>
+        <geographicDescription>"Claytor Lake is located in Pulaski, Virginia, USA "</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-80.74543</westBoundingCoordinate>
           <eastBoundingCoordinate>-80.576912</eastBoundingCoordinate>
@@ -224,7 +285,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <geographicDescription>"Falling Creek Reservoir is located in Vinton, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
           <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
@@ -233,7 +294,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Gatewood Reservoir is located in Pulaski, Virginia, USA</geographicDescription>
+        <geographicDescription>"Gatewood Reservoir is located in Pulaski, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-80.89188</westBoundingCoordinate>
           <eastBoundingCoordinate>-80.858492</eastBoundingCoordinate>
@@ -242,7 +303,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Smith Mountain Lake is located in Bedford, Franklin and Pittsylvania, Virginia, USA</geographicDescription>
+        <geographicDescription>"Smith Mountain Lake is located in Bedford, Franklin and Pittsylvania, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-79.726699</westBoundingCoordinate>
           <eastBoundingCoordinate>-79.522078</eastBoundingCoordinate>
@@ -251,12 +312,21 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
         </boundingCoordinates>
       </geographicCoverage>
       <geographicCoverage>
-        <geographicDescription>Spring Hollow Reservoir is located in Salem, Virginia, USA</geographicDescription>
+        <geographicDescription>"Spring Hollow Reservoir is located in Salem, Virginia, USA"</geographicDescription>
         <boundingCoordinates>
           <westBoundingCoordinate>-80.179076</westBoundingCoordinate>
           <eastBoundingCoordinate>-80.170407</eastBoundingCoordinate>
           <northBoundingCoordinate>37.231092</northBoundingCoordinate>
           <southBoundingCoordinate>37.217594</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>"Lake Sunapee is located in Sunapee, New Hampshire, USA"</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-72.08948</westBoundingCoordinate>
+          <eastBoundingCoordinate>-72.033127</eastBoundingCoordinate>
+          <northBoundingCoordinate>43.431481</northBoundingCoordinate>
+          <southBoundingCoordinate>43.321181</southBoundingCoordinate>
         </boundingCoordinates>
       </geographicCoverage>
       <temporalCoverage>
@@ -290,12 +360,12 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
 Sampling occurred between the hours of 9:00 and 15:00 EST and are denoted in the DateTime column as 12:00. </para>
           <para>SAMPLE COLLECTION AND EQUIPMENT
 Chlorophyll a 
-unfiltered water samples were collected at the following depths for each reservoir: 0.1, 5, 6, 12, 14, 18, 19, 20, and 21 meters within Carvins Cove Reservoir, which has a Zmax of 21.3 meters at full pond; 0.1, 5, 6, 7, 30, and 34 meters within Claytor Lake; 0.1, 4, 5, 6, 8, 9, 10, 12, 13, 13.5 and 14 meters within Gatewood Reservoir, which has a Zmax of 14 meters; 0.1, 5, 7, 8, 14, 25, 28 and 31 meters within Spring Hollow Reservoir, which has a Zmax of &gt;60 m; 0.1, 6, 7, 8, 25, 28 and 30 meters within Smith Mountain Lake; 0.1, 1.5, 3, 3.5, 4, 5, 6, 6.5, 6.8, 7, 7.5, 9, and 12 meters within Beaverdam Reservoir, which has a Zmax of 13 meters at full pond; and 0.1, 1, 1.6, 2, 2.8, 3.8, 4, 4.1, 4.5, 5, 6, 6.2, 7, and 9 meters within Falling Creek Reservoir, which has a Zmax of 9.3 meters at full pond. A 4-L Van Dorn water sampler was used to collect samples (Wildco, Yulee, Florida, USA) which were stored in opaque 2-L high-density polyethylene bottles. Samples were refrigerated and filtered within 48 hours of collection with GF/C filters and filters were immediately frozen after filtration. Samples were generally analyzed within 4 months of collection date. </para>
+Unfiltered water samples were collected at the following depths for each reservoir or lake: 0.1, 5, 6, 12, 14, 18, 19, 20, and 21 meters within Carvins Cove Reservoir, which has a Zmax of 21.3 meters at full pond; 0.1, 5, 6, 7, 30, and 34 meters within Claytor Lake; 0.1, 4, 5, 6, 8, 9, 10, 12, 13, 13.5 and 14 meters within Gatewood Reservoir, which has a Zmax of 14 meters; 0.1, 5, 7, 8, 14, 25, 28 and 31 meters within Spring Hollow Reservoir, which has a Zmax of &gt;60 m; 0.1, 6, 7, 8, 25, 28 and 30 meters within Smith Mountain Lake; 0.1, 1.5, 3, 3.5, 4, 5, 6, 6.5, 6.8, 7, 7.5, 9, and 12 meters within Beaverdam Reservoir, which has a Zmax of 13 meters at full pond; 0.1, 1, 1.6, 2, 2.8, 3.8, 4, 4.1, 4.5, 5, 6, 6.2, 7, and 9 meters within Falling Creek Reservoir, which has a Zmax of 9.3 meters at full pond; and 0.1, 1, and 9 meters within Lake Sunapee, which has a Zmax of 32 meters. A 4-L Van Dorn water sampler was used to collect samples (Wildco, Yulee, Florida, USA) which were stored in opaque 2-L high-density polyethylene bottles. Samples were refrigerated and filtered within 48 hours of collection with GF/C filters and filters were immediately frozen after filtration. Samples were generally analyzed within 4 months of collection date. </para>
           <para>CHEMICAL ANALYSES AND EQUIPMENT
 Chlorophyll a 
-samples were extracted using a 96% ethanol solution at room temperature for 3-24 hours (Wasmund et al. 2006) and then analyzed by spectrophotometric analysis. To quantify the concentration of pheophytin within the sample, the analysis adopts the acidification recommendation of Parker et al. (2016), in which 240 microliters of 0.1 N HCL was added to the sample. The sample was homogenized and left to sit for 90 seconds for samples analyzed through 2018, or 120 seconds for samples analyzed after 2019. The quantitation of the sample used was the monochromatic spectrophotometric method for chlorophyll a after correction for the presence of pheopigments, to provide a metric of "live" phytoplankton at the time of collection (Lorenzen 1967). The pheophytin concentration (a metric of "dead" but still fluorescing phytoplankton) is also reported. In 2014, total chlorophyll a was corrected for pheophytin but pheophytin values were not recorded. Both extraction and analysis were performed in the absence of direct light to prevent the degradation of chlorophyll a. Samples collected were not always analyzed, leading to occasional incomplete water column profiles for certain dates within the dataset. </para>
+Samples were extracted using a 96% ethanol solution at room temperature for 3-24 hours (Wasmund et al. 2006) and then analyzed by spectrophotometric analysis. To quantify the concentration of pheophytin within the sample, the analysis adopts the acidification recommendation of Parker et al. (2016), in which 240 microliters of 0.1 N HCL was added to the sample. The sample was homogenized and left to sit for 90 seconds for samples analyzed through 2018, or 120 seconds for samples analyzed after 2019. The quantitation of the sample used was the monochromatic spectrophotometric method for chlorophyll a after correction for the presence of pheopigments, to provide a metric of "live" phytoplankton at the time of collection (Lorenzen 1967). The pheophytin concentration (a metric of "dead" but still fluorescing phytoplankton) is also reported. In 2014, total chlorophyll a was corrected for pheophytin but pheophytin values were not recorded. Both extraction and analysis were performed in the absence of direct light to prevent the degradation of chlorophyll a. Samples collected were not always analyzed, leading to occasional incomplete water column profiles for certain dates within the dataset. </para>
           <para>
-REFERENCES
+References
 Lorenzen, C.J. 1967.  Determinations of chlorophyll and pheo-pigments:  spectrophotometric equations.  Limnol. Oceanogr. 12:343-346.
 Parker, S. P., W. B. Bowden, and M. B. Flinn.  2016.  The effect of acid strength and postacidification reaction time on the determination of chlorophyll a in ethanol extracts of aquatic periphyton.  Limnology and Oceanography: Methods 14:839-852.
 Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extraction of chlorophyll samples.  Oceanologica 48(1):125-144.
@@ -317,36 +387,6 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         <role>Principal Investigator</role>
       </personnel>
       <funding>Western Virginia Water Authority</funding>
-      <relatedProject>
-        <title>No project title to report</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Virginia Tech Global Change Center</funding>
-      </relatedProject>
-      <relatedProject>
-        <title>No project title to report</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Fralin Life Sciences Institute</funding>
-      </relatedProject>
       <relatedProject>
         <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
         <personnel>
@@ -392,6 +432,21 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </personnel>
         <funding>National Science Foundation 1933016</funding>
       </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>University of Florida</organizationName>
+          <electronicMailAddress>renato@ece.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
     </project>
     <dataTable>
       <entityName>chla_master_df_dt.csv</entityName>
@@ -414,13 +469,13 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
       <attributeList>
         <attribute>
           <attributeName>Reservoir</attributeName>
-          <attributeDefinition>Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake</attributeDefinition>
+          <attributeDefinition>"Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake"</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
               <nonNumericDomain>
                 <textDomain>
-                  <definition>Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake</definition>
+                  <definition>"Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake"</definition>
                 </textDomain>
               </nonNumericDomain>
             </nominal>
@@ -432,7 +487,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Site</attributeName>
-          <attributeDefinition>50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir</attributeDefinition>
+          <attributeDefinition>"50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir "</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -455,7 +510,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>DateTime</attributeName>
-          <attributeDefinition>Date of sampling. All data were collected in the eastern time zone of the U.S.A., with Eastern Standard Time Observed</attributeDefinition>
+          <attributeDefinition>"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with Eastern Standard Time Observed"</attributeDefinition>
           <storageType>date</storageType>
           <measurementScale>
             <dateTime>
@@ -539,7 +594,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Flag_Chla</attributeName>
-          <attributeDefinition>Data flag for chlorophyll a; 0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)</attributeDefinition>
+          <attributeDefinition>"Data flag for chlorophyll a; 0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -562,7 +617,7 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         </attribute>
         <attribute>
           <attributeName>Flag_Pheo</attributeName>
-          <attributeDefinition>Data flag for pheophytin;  0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)</attributeDefinition>
+          <attributeDefinition>"Data flag for pheophytin;  0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>

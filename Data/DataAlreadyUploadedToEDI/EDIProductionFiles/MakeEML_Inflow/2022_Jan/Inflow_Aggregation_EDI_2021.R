@@ -898,4 +898,4 @@ ggplot(data = Inflow_Final_10, aes(x = DateTime, y = WVWA_Flow_cms)) +
 # limit data to Dec 31, 2021
 Inflow_Final_10 <- Inflow_Final_10[Inflow_Final_10$DateTime < as.POSIXct('2022-01-01 00:00:00'),]
 # Write to CSV
-write_csv(Inflow_Final_10, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv') 
+write.csv(Inflow_Final_10, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv', row.names = FALSE) 

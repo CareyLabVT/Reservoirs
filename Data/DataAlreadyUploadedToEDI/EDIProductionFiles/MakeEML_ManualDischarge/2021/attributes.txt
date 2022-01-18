@@ -1,7 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
-Site	Stream sampling site at each reservoir	categorical				
-Date	"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD		
-Flow_cms	"Discharge flow rate derived using flowmeter, salt injection, or float velocity methods, see metadata for more information"	numeric	cubicMetersPerSecond			
-Method	Code for method used to calculate discharge	categorical				
-Flag_Flow	Flag for flow	categorical				

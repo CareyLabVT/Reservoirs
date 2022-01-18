@@ -112,8 +112,6 @@ qaqc <- function(data_file, maintenance_file, output_file)
   ccrwater$Flag_EXOTDS_9 <- 0
   ccrwater$Flag_EXODO_sat_9 <- 0
   ccrwater$Flag_EXODO_obs_9 <- 0
-  ccrwater$Flag_EXOChla_9 <- 0
-  ccrwater$Flag_EXOPhyco_9 <- 0
   ccrwater$Flag_EXOfDOM_9 <- 0
   ccrwater$Flag_EXOPres_9 <- 0
   ccrwater$Flag_EXOdep_9 <-0
@@ -262,7 +260,7 @@ qaqc <- function(data_file, maintenance_file, output_file)
     # replace relevant data with NAs and set "all" flag while maintenance was in effect
     ccrwater[ccrwater$DateTime >= start & ccrwater$DateTime <= end, maintenance_cols] <- NA
     if(39 %in% bounds){
-      ccrwater[ccrwater$DateTime >= start & ccrwater$DateTime <= end, 84:97] <- 1
+      ccrwater[ccrwater$DateTime >= start & ccrwater$DateTime <= end, 84:95] <- 1
     }
     else if( 5 %in% bounds){
       ccrwater[ccrwater$DateTime >= start & ccrwater$DateTime <= end, 54:66] <- 1

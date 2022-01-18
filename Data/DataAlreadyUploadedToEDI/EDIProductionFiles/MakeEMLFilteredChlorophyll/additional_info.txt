@@ -87,6 +87,49 @@ o	Longitude: -79.81721
 o	Latitude: 37.314783
 o	Longitude: -79.820864
 
+Carvins Cove Reservoir
+-	Site 50
+-	Verbal Description: Deep hole nearest to the dam of Carvins Cove Reservoir. 
+o	Latitude: 37.369712	
+o	Longitude: -79.957976
+
+-	Site 1
+-	Verbal Description: Site near floating platform at Carvins Cove Reservoir.
+o	Latitude: 37.3839	
+o	Longitude: -79.9491
+
+-	Site 2
+-	Verbal Description: Near shore site at Carvins Cove Reservoir.
+o	Latitude: 37.3850	
+o	Longitude: -79.9510
+
+-	Site 3
+-	Verbal Description: Pelagic site upstream of boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3922	
+o	Longitude: -79.9488
+
+-	Site 4
+-	Verbal Description: Site near boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3845	
+o	Longitude: -79.9471
+
+-	Site 5
+-	Verbal Description: Pelagic site downstream of boat launch at Carvins Cove Reservoir.
+o	Latitude: 37.3788
+o	Longitude: -79.9529
+
+Lake Sunapee
+-	Site 50
+-	Verbal Description: Site of the Lake Sunapee Protective Association water quality buoy. 
+o	Latitude: 43.391308	
+o	Longitude: -72.058973
+
+-	Site 40
+-	Verbal Description: Deepest site in close proximity to the Lake Sunapee Protective Association water quality buoy
+o	Latitude: 43.382772	
+o	Longitude: -72.064545
+
+CCC developed and led the reservoir monitoring program 2013-present, and oversaw the collection and analysis of this dataset throughout this time. JHW is the point person for chlorophyll-a data collation and laboratory analysis, QAQC and publishing from 2019 - 2021. ABP led field collection in 2020 and 2021. WMW helped coordinate and supervise chlorophyll-a analysis and processing from 2019-2021. AD and CEB led field prep and post-processing in 2021. MEL was the point person for chl data collection, analysis, and QAQC from 2016–2018. KDH was the point person for chl data collection, analysis, QAQC and publishing from 2014-2015, and JPD was the point person for data collection, analysis, QAQC and publishing for 2013-2014. BRN developed analysis methods, led chemical analyses during COVID 19 (2020-2021), and trained all co-authors on analytical chemistry instruments, analyses, and QAQC best practices.
 
 From 2014 to 2019, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time from 2014-2018 following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, hypolimnetic oxygenation was conducted from June 3-June 17, July 8-July 22, August 5-August 19 and September 2-November 20. 
 

@@ -6,3 +6,4 @@ geographicDescription	northBoundingCoordinate	southBoundingCoordinate	eastBoundi
 "Gatewood Reservoir is located in Pulaski, Virginia, USA"	37.054358	37.03819	-80.858492	-80.89188
 "Smith Mountain Lake is located in Bedford, Franklin and Pittsylvania, Virginia, USA"	37.158577	37.002455	-79.522078	-79.726699
 "Spring Hollow Reservoir is located in Salem, Virginia, USA"	37.231092	37.217594	-80.170407	-80.179076
+"Lake Sunapee is located in Sunapee, New Hampshire, USA"	43.431481	43.321181	-72.033127	-72.08948

@@ -141,6 +141,23 @@ ccrwater=ccrwater%>%
  m_2_21
 #Only use plotly to find DateTime of questionable values
  #ggplotly(m_2_21)
+ 
+# check EXO 1.5m temp data
+ # Plot 2021-current
+ EXOtemp_1 <- ggplot(data = ccrwater, aes(x = DateTime, y = EXOTemp_C_1)) +
+    geom_point()
+ EXOtemp_1
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_1)
+ 
+ # Just the current year
+ EXOtemp_1_21=ccrwater%>%
+    filter(DateTime>current_time_start & DateTime<current_time_end)%>%
+    ggplot(.,aes(x = DateTime, y = EXOTemp_C_1)) +
+    geom_point()
+ EXOtemp_1_21
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_1)
 
 # check 3 temp data
 #Plot From 2021-current
@@ -262,6 +279,22 @@ m_7_21
 #Only use plotly to find DateTime of questionable values
 # ggplotly(m_9_21)
 
+# check EXO 9m temp data
+ # Plot 2021-current
+ EXOtemp_9 <- ggplot(data = ccrwater, aes(x = DateTime, y = EXOTemp_C_9)) +
+    geom_point()
+ EXOtemp_9
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_9)
+ 
+ # Just the current year
+ EXOtemp_9_21=ccrwater%>%
+    filter(DateTime>current_time_start & DateTime<current_time_end)%>%
+    ggplot(.,aes(x = DateTime, y = EXOTemp_C_9)) +
+    geom_point()
+ EXOtemp_9_21
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_9)
 
   # check 10 temp data
    #From 2021-current
@@ -374,7 +407,13 @@ m_7_21
    plot(t2021$DateTime,t2021$ThermistorTemp_C_13, main="Pressure Sensor vs. Temp String", xlab="Time", ylab="degrees C", type='l', col="firebrick4", lwd=1.5, ylim=c(0,35))
    points(t2021$DateTime, t2021$LvlTemp_C_13, col="black", type='l', lwd=1.5)
 
-
+### Plotting depth from pressure sensor 
+   
+   Depth_press_sensor <- ggplot(data = ccrwater, aes(x = DateTime, y = LvlDepth_m_13)) +
+      geom_point()
+   Depth_press_sensor
+   #Only use plotly to find DateTime of questionable values
+      #ggplotly(Depth_press_sensor)
 
 
 ###########################################################################################################################################################################

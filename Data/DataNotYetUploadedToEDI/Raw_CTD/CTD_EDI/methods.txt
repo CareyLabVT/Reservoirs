@@ -1,6 +1,6 @@
 Depth profiles of multiple water-quality variables were collected from 2013 through 2021 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2021, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir. 
 
-The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except before the 2021 field season when calibration was skipped due to the ongoing covid-19 pandemic. 
+The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except during/before the 2021 field season when calibration was delayed until August 2021 due to the ongoing covid-19 pandemic.
 
 Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also include marginal error over the course of the dataset, but this error is unquantified and unflagged. 
 
@@ -25,7 +25,9 @@ OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2021 http
 Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2021 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
 
 Additional Notes
-From 2013 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018).
+From 2013 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018), and the SSS inflow file in Carey et al. (2021).
+
+Carey, C. C., R. Q. Thomas, R. P. McClure, A. G. Hounshell, W. M. Woelmer, H. L. Wander, & A. S. L. Lewis. (2021). CareyLabVT/FCR-GLM: FCR GLM-AED model, data, and code for Carey et al. manuscript (v1.0). Zenodo. https://doi.org/10.5281/zenodo.5528865
 
 Chen, S., C. Lei, C.C. Carey, and J.C. Little. 2016. Modelling the effect of artificial mixing on thermal stability and substance transport in a drinking-water reservoir using a 3D hydrodynamic model. Proceedings of the 20th Australasian Fluid Mechanics Conference. Perth, Australia, 5-8 December 2016.
 

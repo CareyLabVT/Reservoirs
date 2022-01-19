@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.555.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.52.7" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019</title>
+    <title>Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir, and Lake Sunapee in southwestern Virginia and Sunapee, New Hampshire, USA during 2014-2021</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -335,7 +335,7 @@ Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole
             <calendarDate>2014-04-18</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2019-10-04</calendarDate>
+            <calendarDate>2021-12-06</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>
@@ -448,198 +448,5 @@ Wasmund, N., I. Topp, and D. Schories.  2006.  Optimising the storage and extrac
         <funding>National Science Foundation 1933102</funding>
       </relatedProject>
     </project>
-    <dataTable>
-      <entityName>chla_master_df_dt.csv</entityName>
-      <entityDescription>Reservoir chlorophyll a dataset</entityDescription>
-      <physical>
-        <objectName>chla_master_df_dt.csv</objectName>
-        <size unit="bytes">32040</size>
-        <authentication method="MD5">7cebd93883e4b0b75333600eeba1a53d</authentication>
-        <dataFormat>
-          <textFormat>
-            <numHeaderLines>1</numHeaderLines>
-            <recordDelimiter>\r\n</recordDelimiter>
-            <attributeOrientation>column</attributeOrientation>
-            <simpleDelimited>
-              <fieldDelimiter>,</fieldDelimiter>
-            </simpleDelimited>
-          </textFormat>
-        </dataFormat>
-      </physical>
-      <attributeList>
-        <attribute>
-          <attributeName>Reservoir</attributeName>
-          <attributeDefinition>"Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake"</attributeDefinition>
-          <storageType>string</storageType>
-          <measurementScale>
-            <nominal>
-              <nonNumericDomain>
-                <textDomain>
-                  <definition>"Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake"</definition>
-                </textDomain>
-              </nonNumericDomain>
-            </nominal>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Site</attributeName>
-          <attributeDefinition>"50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir "</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>natural</numberType>
-                <bounds>
-                  <minimum exclusive="false">1</minimum>
-                  <maximum exclusive="false">200</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>DateTime</attributeName>
-          <attributeDefinition>"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with Eastern Standard Time Observed"</attributeDefinition>
-          <storageType>date</storageType>
-          <measurementScale>
-            <dateTime>
-              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
-              <dateTimeDomain/>
-            </dateTime>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Depth_m</attributeName>
-          <attributeDefinition>Water depth where the sample was collected or sensor reading was measured</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>meter</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>real</numberType>
-                <bounds>
-                  <minimum exclusive="false">0.1</minimum>
-                  <maximum exclusive="false">34</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Chla_ugL</attributeName>
-          <attributeDefinition>Chlorophyll a concentration</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>microgramsPerLiter</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>real</numberType>
-                <bounds>
-                  <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">158</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Pheo_ugL</attributeName>
-          <attributeDefinition>Pheophytin concentration</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>microgramsPerLiter</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>real</numberType>
-                <bounds>
-                  <minimum exclusive="false">-18.4</minimum>
-                  <maximum exclusive="false">36.6</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Flag_Chla</attributeName>
-          <attributeDefinition>"Data flag for chlorophyll a; 0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>whole</numberType>
-                <bounds>
-                  <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">4</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-        <attribute>
-          <attributeName>Flag_Pheo</attributeName>
-          <attributeDefinition>"Data flag for pheophytin;  0 = No flag, 1 = Sample below detection, 2 = Sample not taken, 3 = Duplicate check failed, 4 = Pigment in extract below detection (&lt;34 ug/L)"</attributeDefinition>
-          <storageType>float</storageType>
-          <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>whole</numberType>
-                <bounds>
-                  <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">4</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
-          </measurementScale>
-          <missingValueCode>
-            <code>NA</code>
-            <codeExplanation>value is missing</codeExplanation>
-          </missingValueCode>
-        </attribute>
-      </attributeList>
-      <numberOfRecords>745</numberOfRecords>
-    </dataTable>
   </dataset>
 </eml:eml>

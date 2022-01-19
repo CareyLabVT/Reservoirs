@@ -10,7 +10,7 @@
 setwd('~/Reservoirs')
 
 # read in chl data
-chl <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/chla_master_df_dt.csv')
+chl <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/manual_chlorophyll_2014_2021.csv')
 
 # (install and) Load EMLassemblyline #####
 #install.packages('devtools')
@@ -54,7 +54,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
                        data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-                       data.table = "chla_master_df_dt.csv",
+                       data.table = "manual_chlorophyll_2014_2021.csv",
                        write.file = TRUE)
 
 
@@ -62,7 +62,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-                          data.table = "chla_master_df_dt.csv",
+                          data.table = "manual_chlorophyll_2014_2021.csv",
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -139,14 +139,15 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019",
-  temporal.coverage = c("2014-04-18", "2019-10-04"),
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir, and Lake Sunapee in southwestern Virginia and Sunapee, New Hampshire, USA during 2014-2021",
+  temporal.coverage = c("2014-04-18", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = "chla_master_df_dt.csv",
+  data.table = "manual_chlorophyll_2014_2021.csv",
   data.table.description = "Reservoir chlorophyll a dataset",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.555.1')
+  package.id = 'edi.52.8') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

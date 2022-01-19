@@ -10,5 +10,5 @@ Renato	J.	Figueiredo	University of Florida	reanto@acis.ufl.edu	0000-0001-9841-60
 Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
 Ryan	P.	McClure	Virginia Tech	ryan333@vt.edu	0000-0001-6370-3852	creator			
 Alexandra	B.	Gerling	Virginia Tech	alexg13@vt.edu		creator			
-Abigail	S.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
+Abigail	S.L.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
 Barbara	R.	Niederlehner	Virginia Tech	bniederl@vt.edu		creator			

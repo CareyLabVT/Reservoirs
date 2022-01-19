@@ -111,7 +111,7 @@ template_categorical_variables(path = 'C:/Users/wwoel/Desktop/Reservoirs_2/Data/
 # Make note of this value, as it will be your package.id below
 
 make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
          data.table = "ManualDischarge_2019_2021.csv",
          data.table.description = "Reservoir Continuum Manual Discharge Data",
          temporal.coverage = c("2019-02-08", "2021-11-19"),
@@ -119,11 +119,13 @@ make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Manu
          user.id =  "ccarey",
          other.entity = c('Collate_QAQC_ManualDischarge_2021.R', 
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+                          'calculate_discharge_flowmate_data_Jan2022.R',
                           'CCR_VolumetricFlow_discharge_calc_example.xlsx'),
          other.entity.description = c('Script used to collate and QAQC data for publication', 
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+                                      'Script used to calculate discharge using flowmate velocity data',
                                       'Example spreadsheet which demonstrates the bucket volumetric calculation') ,
-         package.id = "edi.716.3", #### this is the one that I need to change!!!
+         package.id = "edi.716.4", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####
@@ -144,22 +146,26 @@ make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Manu
 # evaluation check again, until you receive a message with no errors.
 
 ## Step 17: Obtain a package.id. ####
-# INFLOW IS A REVISION: already have an identifier: 202.X (x = revision number)
+# this is a revision to an existing data package: already have an identifier: 202.X (x = revision number)
 ## NOTE: Will need to check geographic coordinates!!!
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021",
-  dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2021",
-  temporal.coverage = c("2013-05-15", "2021-01-10"),
-  maintenance.description = 'ongoing',
-  data.table = c("inflow_for_EDI_2013_10Jan2021.csv","20210108_RatingCurve_WVWA.csv","20210108_RatingCurve_VT.csv"),
-  data.table.description = c("FCR inflow dataset","Rating curve WVWA","Rating curve VT"),
-  other.entity= 'Inflow_Aggregation_EDI_Jan2021.R',
-  other.entity.description = "QA/QC Code for Discharge aggregation",
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.202.7')
+
+make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
+         data.table = "ManualDischarge_2019_2021.csv",
+         data.table.description = "Reservoir Continuum Manual Discharge Data",
+         temporal.coverage = c("2019-02-08", "2021-11-19"),
+         maintenance.description = "ongoing",
+         user.id =  "ccarey",
+         other.entity = c('Collate_QAQC_ManualDischarge_2021.R', 
+                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+                          'calculate_discharge_flowmate_data_Jan2022.R',
+                          'CCR_VolumetricFlow_discharge_calc_example.xlsx'),
+         other.entity.description = c('Script used to collate and QAQC data for publication', 
+                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+                                      'Script used to calculate discharge using flowmate velocity data',
+                                      'Example spreadsheet which demonstrates the bucket volumetric calculation') ,
+         package.id = "edi.454.5", #### this is the one that I need to change!!!
+         user.domain = 'EDI')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

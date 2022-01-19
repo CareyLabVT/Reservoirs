@@ -1,11 +1,10 @@
 keyword	keywordThesaurus
-Virginia Tech	
-Carey Lab	
-Western Virginia Water Authority	
-Falling Creek Reservoir	
-stream discharge	
-streamflow	
-water balance	
-stream	
-Beaverdam Reservoir	
-Carvins Cove Reservoir	
+Virginia Tech	carey lab controlled vocabulary
+Carey Lab	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+discharge	lter controlled vocabulary
+streamflow	lter controlled vocabulary
+water balance	lter controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary

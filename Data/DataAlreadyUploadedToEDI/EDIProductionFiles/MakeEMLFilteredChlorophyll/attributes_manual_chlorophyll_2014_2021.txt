@@ -2,15 +2,23 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	"Three-letter code corresponding to sampled reservoir;  BVR=Beaverdam Reservoir, CCR= Carvins Cove, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake, SNP = Lake Sunapee"	categorical			NA	value is missing
 Site	"Sampling site within each reservoir; 50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir or right arm inflow to Beaverdam Reservoir); 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir; For CCR: 01 =  Site near floating platform at Carvins Cove Reservoir; 02 = Near shore site at Carvins Cove Reservoir; 03 = Pelagic site upstream of boat launch at Carvins Cove Reservoir; 04 = Site near boat launch at Carvins Cove Reservoir; 05 = Pelagic site downstream of boat launch at Carvins Cove Reservoir; For SNP: 50 = Site of the Lake Sunapee Protective Association water quality buoy; 40 = Deepest site in close proximity to the Lake Sunapee Protective Association water quality buoy"	numeric	dimensionless		NA	value is missing
 DateTime	"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with Eastern Standard Time Observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Depth_m	Water depth where the sample was collected or sensor reading was measured 	numeric	meter		NA	value is missing
+Depth_m	Water depth where the sample was collected 	numeric	meter		NA	value is missing
 Chla_ugL	Chlorophyll a concentration	numeric	microgramsPerLiter		NA	value is missing
 Pheo_ugL	Pheophytin concentration	numeric	microgramsPerLiter		NA	value is missing
 Flag_Chla	"Data flag for chlorophyll a; 0 = No flag
 1 = Sample below detection
 2 = Sample not taken 
 3 = Duplicate check failed 
+4 = Pigment in extract below detection (<34 ug/L)
+1 = Sample below detection
+2 = Sample not taken 
+3 = Duplicate check failed 
 4 = Pigment in extract below detection (<34 ug/L)"	numeric	dimensionless		NA	value is missing
 Flag_Pheo	"Data flag for pheophytin; 0 = No flag
+1 = Sample below detection
+2 = Sample not taken 
+3 = Duplicate check failed 
+4 = Pigment in extract below detection (<34 ug/L)
 1 = Sample below detection
 2 = Sample not taken 
 3 = Duplicate check failed 

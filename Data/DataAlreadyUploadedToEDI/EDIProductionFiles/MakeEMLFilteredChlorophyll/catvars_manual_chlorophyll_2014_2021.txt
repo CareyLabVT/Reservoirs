@@ -1,9 +1,11 @@
 attributeName	code	definition
-Reservoir	BVR	Beaverdam Reservoir
-Reservoir	CCR	Carvins Cove Reservoir
-Reservoir	CLY	Claytor Lake
-Reservoir	FCR	Falling Creek Reservoir
-Reservoir	GWR	Gatewood Reservoir
-Reservoir	SHR	Spring Hollow Reservoir
-Reservoir	SML	Smith Mountain Lake
-Reservoir	SNP	Lake Sunapee
+Flag_Chla	0	0 = No flag
+Flag_Chla	1	1 = Sample below detection
+Flag_Chla	2	2 = Sample not taken 
+Flag_Chla	3	3 = Duplicate check failed 
+Flag_Chla	4	4 = Pigment in extract below detection (<34 ug/L)
+Flag_Pheo	0	0 = No flag
+Flag_Pheo	1	1 = Sample below detection
+Flag_Pheo	2	2 = Sample not taken 
+Flag_Pheo	3	3 = Duplicate check failed 
+Flag_Pheo	4	4 = Pigment in extract below detection (<34 ug/L)

@@ -89,7 +89,7 @@ met_timechange=max(which(Met$DateTime=="2019-04-15 10:19:00")) #shows time point
 Met$DateTime[c(1:met_timechange-1)]<-with_tz(force_tz(Met$DateTime[c(1:met_timechange-1)],"Etc/GMT+4"), "Etc/GMT+5") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
 
 #Set end date to years working with 
-#Met=Met%>%filter(DateTime<"2022-01-01 00:00:00")
+Met=Met%>%filter(DateTime<"2022-01-01 00:00:00")
 
 ######################################################################
 #Check for record gaps and day gpas
@@ -326,7 +326,7 @@ Met=Met%>%
   Note_PAR_Total_mmol_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Average_umol_s_m2>2500, "Questionable_value", Note_PAR_Total_mmol_m2))
 
 
-#flagging IR down values in the summer of 2020 that are lower than 400
+#flagging IR down values in the summer of 2020 and 2021 that are lower than 400
 Met=Met%>%
   mutate(
   Flag_InfaredRadiationDown_Average_W_m2=ifelse(DateTime>"2020-06-10 00:00:00"&DateTime<"2020-07-15 23:59:00"&InfaredRadiationDown_Average_W_m2<400,5,Flag_InfaredRadiationDown_Average_W_m2),
@@ -401,13 +401,14 @@ Met=Met%>%
 #create loop putting in maintenance flags 1 + 4 (these are flags for values removed due
 # to maintenance and also flags potentially questionable values)
 for(j in 1:nrow(RemoveMet)){
-  print(j) # #if statement to only write in flag 4 if there are no other flags
+  #print(j) # #if statement to only write in flag 4 if there are no other flags
   if(RemoveMet$flag[j]==4){
-    
+    print(j) # #if statement to only write in flag 4 if there are no other flags
     Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
     Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$flag[j]#when met timestamp is between remove timestamp
     #print(j)#and met column derived from remove column
     #matching time frame, inserting flag
+    Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]] = NA
   }
   #if flag == 1, set parameter to NA, overwrites any other flag
   

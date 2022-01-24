@@ -1,55 +1,60 @@
 attributeName	code	definition
 Flag_All	0	No flag
 Flag_All	1	Value removed due to maintenance and set to NA
-Flag_Chla	0	No flag
-Flag_Chla	1	Value removed due to maintenance and set to NA
-Flag_Chla	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_Chla	3	Negative value set to 0
-Flag_Chla	4	Value removed due to fouling and set to NA
-Flag_Chla	5	Questionable value due to potential fouling
-Flag_Chla	7	Missing data
+Flag_Chla_RFU	0	No flag
+Flag_Chla_RFU	1	Value removed due to maintenance and set to NA
+Flag_Chla_RFU	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Chla_RFU	3	Negative value set to 0
+Flag_Chla_RFU	4	Value removed due to fouling and set to NA
+Flag_Chla_RFU	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_Chla_RFU	7	Missing data
+Flag_Chla_ugL	0	No flag
+Flag_Chla_ugL	1	Value removed due to maintenance and set to NA
+Flag_Chla_ugL	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Chla_ugL	4	Value removed due to fouling and set to NA
+Flag_Chla_ugL	7	Missing data
 Flag_Cond	0	No flag
 Flag_Cond	1	Value removed due to maintenance and set to NA
 Flag_Cond	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_Cond	3	Negative value set to 1
-Flag_Cond	4	Value removed due to fouling and set to NA
-Flag_Cond	5	Questionable value due to potential fouling
+Flag_Cond	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
 Flag_Cond	7	Missing data
 Flag_DO_1_obs	0	No flag
 Flag_DO_1_obs	1	Value removed due to maintenance and set to NA
-Flag_DO_1_obs	3	Negative value set to 2
+Flag_DO_1_obs	3	Negative value set to 0
 Flag_DO_1_obs	7	Missing data
 Flag_DO_1_sat	0	No flag
 Flag_DO_1_sat	1	Value removed due to maintenance and set to NA
-Flag_DO_1_sat	3	Negative value set to 3
+Flag_DO_1_sat	3	Negative value set to 0
 Flag_DO_1_sat	7	Missing data
 Flag_DO_5_obs	0	No flag
 Flag_DO_5_obs	1	Value removed due to maintenance and set to NA
 Flag_DO_5_obs	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_DO_5_obs	3	Negative value set to 4
-Flag_DO_5_obs	5	Questionable value due to potential fouling
-Flag_DO_5_obs	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+Flag_DO_5_obs	3	Negative value set to 0
+Flag_DO_5_obs	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_DO_5_obs	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_9
 Flag_DO_5_obs	7	Missing data
 Flag_DO_5_sat	0	No flag
 Flag_DO_5_sat	1	Value removed due to maintenance and set to NA
 Flag_DO_5_sat	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_DO_5_sat	3	Negative value set to 5
-Flag_DO_5_sat	5	Questionable value due to potential fouling
-Flag_DO_5_sat	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_6
+Flag_DO_5_sat	3	Negative value set to 0
+Flag_DO_5_sat	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_DO_5_sat	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_9
 Flag_DO_5_sat	7	Missing data
 Flag_DO_5_temp	0	No flag
 Flag_DO_5_temp	1	Value removed due to maintenance and set to NA
 Flag_DO_9_obs	0	No flag
 Flag_DO_9_obs	1	Value removed due to maintenance and set to NA
 Flag_DO_9_obs	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_DO_9_obs	3	Negative value set to 6
-Flag_DO_9_obs	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_7
+Flag_DO_9_obs	3	Negative value set to 0
+Flag_DO_9_obs	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_DO_9_obs	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_9
 Flag_DO_9_obs	7	Missing data
 Flag_DO_9_sat	0	No flag
 Flag_DO_9_sat	1	Value removed due to maintenance and set to NA
 Flag_DO_9_sat	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_DO_9_sat	3	Negative value set to 7
-Flag_DO_9_sat	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_8
+Flag_DO_9_sat	3	Negative value set to 0
+Flag_DO_9_sat	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_DO_9_sat	6	Very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_9
 Flag_DO_9_sat	7	Missing data
 Flag_DO_9_temp	0	No flag
 Flag_DO_9_temp	1	Value removed due to maintenance and set to NA
@@ -57,28 +62,38 @@ Flag_DO_9_temp	7	Missing data
 Flag_EXOTemp	0	No flag
 Flag_EXOTemp	1	Value removed due to maintenance and set to NA
 Flag_EXOTemp	7	Missing data
-Flag_fDOM	0	No flag
-Flag_fDOM	1	Value removed due to maintenance and set to NA
-Flag_fDOM	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_fDOM	7	Missing data
-Flag_Phyco	0	No flag
-Flag_Phyco	1	Value removed due to maintenance and set to NA
-Flag_Phyco	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_Phyco	3	Negative value set to 8
-Flag_Phyco	5	Questionable value due to potential fouling
-Flag_Phyco	7	Missing data
-Flag_Pres	0	No flag
-Flag_Pres	1	Value removed due to maintenance and set to NA
-Flag_Pres	7	Missing data
+Flag_fDOM_QSU	0	No flag
+Flag_fDOM_QSU	1	Value removed due to maintenance and set to NA
+Flag_fDOM_QSU	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_fDOM_QSU	7	Missing data
+Flag_fDOM_RFU	0	No flag
+Flag_fDOM_RFU	1	Value removed due to maintenance and set to NA
+Flag_fDOM_RFU	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_fDOM_RFU	7	Missing data
+Flag_LvlPres	0	No flag
+Flag_LvlPres	1	Value removed due to maintenance and set to NA
+Flag_LvlPres	7	Missing data
+Flag_Phyco_RFU	0	No flag
+Flag_Phyco_RFU	1	Value removed due to maintenance and set to NA
+Flag_Phyco_RFU	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Phyco_RFU	3	Negative value set to 0
+Flag_Phyco_RFU	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_Phyco_RFU	7	Missing data
+Flag_Phyco_ugL	0	No flag
+Flag_Phyco_ugL	1	Value removed due to maintenance and set to NA
+Flag_Phyco_ugL	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_Phyco_ugL	3	Negative value set to 0
+Flag_Phyco_ugL	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
+Flag_Phyco_ugL	7	Missing data
 Flag_SpCond	0	No flag
 Flag_SpCond	1	Value removed due to maintenance and set to NA
 Flag_SpCond	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_SpCond	5	Questionable value due to potential fouling
+Flag_SpCond	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
 Flag_SpCond	7	Missing data
 Flag_TDS	0	No flag
 Flag_TDS	1	Value removed due to maintenance and set to NA
 Flag_TDS	2	Outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag_TDS	5	Questionable value due to potential fouling
+Flag_TDS	5	Questionable value due to potential fouling or greater than 4 standard deviations above the mean
 Flag_TDS	7	Missing data
 Flag_Temp_1	0	No flag
 Flag_Temp_1	1	Value removed due to maintenance and set to NA

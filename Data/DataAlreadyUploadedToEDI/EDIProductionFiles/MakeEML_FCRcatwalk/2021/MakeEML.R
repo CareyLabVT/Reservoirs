@@ -20,7 +20,7 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk/2021"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2021"
 
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -127,6 +127,7 @@ template_table_attributes(path = folder,
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
 #identified which variables are categorical
+??template_categorical_variables
 template_categorical_variables(path = folder,
                                data.path = folder,
                                write.file = TRUE)
@@ -163,12 +164,12 @@ make_eml(path = folder,
          data.table.description = "FCR Catwalk Sensor String",
          other.entity = c('FCR_catwalk_QAQC_function_2018_2021.R', 'FCR_catwalk_QAQC_Plots_2018_2021.R','CAT_MaintenanceLog_2021.txt' ),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
-         temporal.coverage = c("2018-07-05", "2021-10-15"),
+         temporal.coverage = c("2018-07-05", "2021-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.3", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.518.6", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

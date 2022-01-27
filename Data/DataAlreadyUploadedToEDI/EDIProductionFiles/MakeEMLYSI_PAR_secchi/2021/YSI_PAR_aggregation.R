@@ -84,6 +84,9 @@ ysi_old$Site[as.Date(ysi_old$DateTime)=="2019-07-18" & ysi_old$Sp_cond_uScm==50.
 
 ysi_old <- ysi_old[!(as.Date(ysi_old$DateTime)=="2019-07-18" & is.na(ysi_old$DO_mgL) & ysi_old$Sp_cond_uScm==50.6),]
 
+#Something happened to one datetime during 2020 EDI push - manually fixing the date for BVR 200 based on files on jacob's computer
+ysi_old$DateTime[is.na(ysi_old$DateTime)] <- "2019-05-30 09:11:00" #13:11 EST
+
 #add in flags
 ysi_old_final <-  ysi_old %>% select(-date) %>%
             mutate(Flag_pH = ifelse(is.na(pH), 1,
@@ -267,8 +270,14 @@ ysi_new <- read_csv(file.path("/Users/heatherwander/Documents/VirginiaTech/resea
 
 ysi <- rbind(ysi_old,ysi_new)
 
-#drop ysi row where depth is NA becuase can't find this in field data sheets
+#drop ysi row where depth is NA because can't find this in field data sheets
 ysi <- ysi[!is.na(ysi$Depth_m),]
+
+# Arrange order of columns for final data table
+ysi <- ysi %>% select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOSat, 
+       Cond_uScm, Sp_cond_uScm, PAR_umolm2s, ORP_mV, pH, Flag_DateTime, Flag_Temp, Flag_DO, Flag_DOSat,
+       Flag_Cond, Flag_Sp_Cond, Flag_PAR, Flag_ORP, Flag_pH) %>%
+  arrange(Reservoir, DateTime, Depth_m) 
 
 write.csv(ysi,file.path("/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/YSI_PAR_profiles_2013-2021.csv"), row.names=FALSE)
 

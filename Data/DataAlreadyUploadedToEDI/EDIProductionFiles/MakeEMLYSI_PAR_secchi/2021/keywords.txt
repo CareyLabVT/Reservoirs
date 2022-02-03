@@ -10,5 +10,6 @@ water temperature	lter controlled vocabulary
 dissolved oxygen	lter controlled vocabulary
 pH	lter controlled vocabulary
 conductivity	lter controlled vocabulary
-photosynthetically active radiation	lter conductivity vocabulary
-secchi depth	lter conductivity vocabulary
+photosynthetically active radiation	lter controlled vocabulary
+secchi depth	lter controlled vocabulary
+Oxidation-reduction potential	carey lab controlled vocabulary 

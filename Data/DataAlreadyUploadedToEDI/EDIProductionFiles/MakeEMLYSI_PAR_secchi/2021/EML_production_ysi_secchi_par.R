@@ -39,7 +39,7 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.715.16") #need a new one each year
+         package.id = "edi.715.20") #need a new one each year
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 
@@ -58,5 +58,5 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.198.7") #2021 is 198.9
+         package.id = "edi.198.9") #2021 is 198.9
 

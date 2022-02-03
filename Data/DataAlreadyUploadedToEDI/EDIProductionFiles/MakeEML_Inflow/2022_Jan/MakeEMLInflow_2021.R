@@ -182,7 +182,7 @@ make_eml(
   other.entity.description = "Script for compiling and QAQC of data",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.207.8')
+  package.id = 'edi.202.8')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

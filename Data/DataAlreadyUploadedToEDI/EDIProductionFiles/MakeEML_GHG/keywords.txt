@@ -11,3 +11,4 @@ lakes	lter controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
+Carey Lab	carey lab controlled vocabulary

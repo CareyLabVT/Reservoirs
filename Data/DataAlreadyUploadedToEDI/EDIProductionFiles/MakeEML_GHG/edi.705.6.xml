@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.705.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2021</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alexandria</givenName>
+        <givenName>G.</givenName>
+        <surName>Hounshell</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>alexgh@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-1616-9399</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alexandra</givenName>
+        <givenName>B.</givenName>
+        <surName>Gerling</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>alexg13@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Abigail</givenName>
+        <givenName>S.L.</givenName>
+        <surName>Lewis</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aslewis@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-9933-4542</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Barbara</givenName>
+        <givenName>R.</givenName>
+        <surName>Niederlehner</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>bniederl@vt.edu</electronicMailAddress>
+    </creator>
+    <pubDate>2022-02-01</pubDate>
+    <abstract>
+      <para>Surface samples and depth profiles of carbon dioxide and methane concentrations were sampled during the ice-free period from 2015 to 2021 in two drinking water reservoirs in southwestern Virginia, USA: Beaverdam Reservoir (Vinton, Virginia) and Falling Creek Reservoir (Vinton, Virginia). Both reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia. The dataset consists of depth profiles of dissolved greenhouse gas (carbon dioxide, methane) samples measured at the deepest site of each reservoir adjacent to the dam. Additional samples were collected at a gauged weir on Falling Creek Reservoir's primary inflow tributary, as surface samples from a wetland adjacent to Falling Creek Reservoir, and from the reservoir outflow. At Beaverdam Reservoir, additional samples were collected at three outflow points below the dam. Samples were collected approximately fortnightly from March-April, weekly from May-October, and monthly in November at Falling Creek Reservoir and Beaverdam Reservoir. In 2019, surface samples along the stream and reservoir continuum from both Falling Creek Reservoir and Beaverdam Reservoir were collected monthly during the summer stratified period.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>greenhouse gas</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Stream Team</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keyword>Carey Lab</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>reservoir</keyword>
+      <keyword>lake</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>depth</keyword>
+      <keyword>methane</keyword>
+      <keyword>carbon dioxide</keyword>
+      <keyword>lakes</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Authorship Contribution Statement:&#13;
+	&#13;
+CCC developed and led the reservoir monitoring program 2013-present. AGH is the point person for dissolved GHG data collation, QA/QC, and publishing for 2021. RPM was the point person for the dissolved GHG data analysis, collation, QA/QC, and publishing from 2015-2020; ABG co-developed sampling protocol with CCC and was the point person for spring-summer 2015. ASL coordinated GHG data collation, assisted with QA/QC, and data publishing in 2020-2021. BRN conducted all dissolved GHG analysis in 2020-2021 and all QA/QC curves.</para>
+      <para>Oxygenation Information:</para>
+      <para>From 2015 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2020, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2021, the HOx was activated during the following time periods: 11 June to 28 June, 26 July to 6 December 2021.</para>
+      <para>Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279</para>
+      <para>Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002</para>
+      <para>Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0</para>
+      <para>McClure, R.P., K.D. Hamre, B.R. Niederlehner, Z.W. Munger, S. Chen, M.E. Lofton, M.E. Schreiber, and C.C. Carey. 2018 Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment 636: 610-620. DOI: 10.1016/j.scitotenv.2018.04.255</para>
+      <para>Munger, Z.W., C.C. Carey, A.B. Gerling, K.D. Hamre, J.P. Doubek, S.D. Klepatzki, R.P. McClure, and M.E. Schreiber. 2016. Effectiveness of hypolimnetic oxygenation for preventing accumulation of Fe and Mn in a drinking water reservoir. Water Research. 106: 1-14. DOI: 10.1016/j.watres.2016.09.038</para>
+      <para>Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole-ecosystem experiments reveal varying responses of phytoplankton functional groups to epilimnetic mixing in a eutrophic reservoir. Water. 11, 222; DOI:10.3390/w11020222</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2015-03-31</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2021-12-06</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>SAMPLE COLLECTION AND EQUIPMENT</para>
+          <para>Samples for greenhouse gas (methane, carbon dioxide) analysis were collected from Falling Creek Reservoir and Beaverdam Reservoir during the ice-free period (March - November) for 2015 - 2021 from the deepest site in each reservoir. Most sampling occurred between the hours of 9:00 and 15:00; however, some sampling occurred outside of these hours, including some overnight sampling. For more information about nighttime sampling, see Doubek et. al. 2018. Exact sampling times were included in the DateTime column starting in 2018. After 2018, exact times, when recorded during sample collection, are indicated in the DateTime column with a Flag_DateTime value of 0. If exact times were not recorded during sample collection, time was standardized to 12:00 and Flag_DateTime was set to 1. Prior to 2018, sample timestamps for samples collected between approximately 9:00 and 15:00 were standardized to noon and Flag_DateTime was set to 1.</para>
+          <para>Samples were collected from several routine depths including: 0.1, 1.6, 3.8, 5.0, 6.2, 8.0 and 9.0 m in Falling Creek Reservoir and 0.1, 3.0, 6.0, 9.0, and 11.0 m for Beaverdam Reservoir. These sampling depths were chosen to approximately match outtake valves in Falling Creek Reservoir and Beaverdam Reservoir. Samples from Falling Creek Reservoir were also collected from a gauged weir on the primary inflow to Falling Creek Reservoir (Site = 100), as surface samples from the wetlands adjacent to the reservoir (Site = 200), and from the reservoir outflow (Site = 1.1). In Beaverdam Reservoir, additional samples were collected from the several sites at the outflow below the dam (Site = 1.1, 1.2, 1.3, 1.4). In summer 2019, additional surface samples were collected along the stream and reservior continuum for both Falling Creek Reservoir and Beaverdam Reservoir as part of the Reservoir Continuum project (Falling Creek Reservoir: Creek Sites = 102, 101, 100, 99, 200; Reservoir Sites = 20, 30, 45, 50; Reservoir Outflow = 01 and Beaverdam Reservoir: Creek Sites = 100, 200; Reservoir Sites = 20, 30, 45, 50; Mid-Reservoir Outflow Pipe = 01). Routine depth samples were collected monthly in March-April and September-November and twice weekly for Falling Creek Reservoir and weekly from Beaverdam Reservoir from May-August. Samples were collected with a 4-L Van Dorn sampler (Wildlife Supply, Yulee, FL, USA) and transferred to into two replicate 20 mL glass vials without exposure to air and crimp sealed. Surface samples were collected via grab samples for all stream and up-stream reservoir locations. Samples were stored on ice and analyzed within 24 hours of collection following McClure et al. (2018).</para>
+          <para>SAMPLE ANALYSIS AND EQUIPMENT</para>
+          <para>Dissolved methane and carbon dioxide concentrations were measured in each water sample on a Gas Chromatograph (GC) with a Flame Ionization Detector (FID) and Thermal Conductivity Detector (TCD) following McClure et al. (2018). Briefly, immediately prior to analysis, a 2-mL headspace was created with Helium (He) by displacing 2-mL of sample water. The headspace was equilibrated by shaking each 20-mL vial at 300 rpm for 15 minutes. The 2-mL headspace was then injected into the GC. The oven temperature was set to 35 degrees C with a carrier gas (He) flow rate of 15 mL/min. CH4 had a retention time of 1.3 min on the FID and CO2 had a retention time of 2.8 min on the TCD. Dissolved concentrations of CH4 and CO2 in water were calculated using the observed head-space concentrations and Henry's Law (McClure et al. 2018). From 2015-2018, samples were analyzed on a GC SRI, Model 8010. From 2019-onwards, samples were analyzed on a Shimadzu Nexis GC-2030.</para>
+          <para>DATA FLAGS</para>
+          <para>Replicate samples (Rep 1 and 2) were often collected for each Date, Site, and Depth. If a second rep was not collected, the data was flagged as '1' (sample was not collected). If the analyzed sample had a value below the minimum detection limit (MDL) the sample was flagged as '2' (sample below MDL). A running MDL was calculated for each GC separately (2015-2018, GC SRI, Model 8010; 2019-onwards, Shimadzu Nexis GC-2030) from routinely measured air concentrations (MDL for each year is presented; 2015 CH4 = 0.00229, CO2 = 3.92; 2016 CH4 = 0.00256, CO2 = 3.83; 2017 CH4 = 0.00210, CO2 = 3.81; 2018 CH4 = 0.00294, CO2 = 3.74; 2019 CH4 = 0.00103, CO2 = 3.74; 2020 CH4 = 0.00103, CO2 = 3.75 umol/L; 2021 CH4 = 0.00252 umol/L, CO2 = 4.36 umol/L). Replicates of each sample were assessed after sample analysis using calculated percent difference between replicate samples as well as the limit of quantification (LOQ = 3*MDL). If the difference between replicate samples was &lt; LOQ, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicates samples was &lt;30%, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicates was &gt;30% but &lt;50%, then the samples were flagged as '3' (difference between reps is above LOQ and above 30% difference and below 50% difference). If the difference between samples was &gt;LOQ and the percent difference between replciates was &gt;50%, then the samples were flagged '4' (difference between reps is above the LOQ and above 50% different). For all flags, replicates were retained in the dataset.</para>
+          <para>REFERENCES</para>
+          <para>Doubek J.P., Campbell K.L., Doubek K.M., Hamre K.D., Lofton M.E., McClure R.P., Ward N.K., Carey C.C. (2018). The effects of hypolimnetic anoxia on the diel vertical migration of freshwater crustacean zooplankton. Ecosphere, 9(7):02332. https://doi.org/10.1002/ecs2.2332</para>
+          <para>Hounshell A.G., McClure R.P., Lofton M.E., Carey C.C. (2020). Whole-ecosystem oxygenation experiments reveal substantially greater hypolimnetic methane concentrations in reservoirs during anoxia. Limnology and Oceaography - Letters, 6: 33-42. https://doi.org/10.1002/lol2.10173</para>
+          <para>McClure R.P., Hamre K.D., Niederlehner B.R., Munger Z.W., Chen S., Lofton M.E., Schreiber M.E., Carey C.C. (2018). Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment, 636. pp. 610-620. https://doi.org/10.1016/j.scitotenv.2018.04.255</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Institute of Critical Technology and Applied Science</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality an Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>University of Florida</organizationName>
+          <electronicMailAddress>reanto@acis.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>GHG Dataset</entityName>
+      <entityDescription>GHG Dataset</entityDescription>
+      <physical>
+        <objectName>final_GHG_2015-2021.csv</objectName>
+        <size unit="bytes">329740</size>
+        <authentication method="MD5">e80442d56e96df51f464aae815b06526</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir; BVR = Beaverdam Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir; BVR = Beaverdam Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>50 = Deep hole or site nearest to dam in each reservoir, 45 = Upstream pelagic site nearest to the deep hole in each reservoir, 30 = Upstream pelagic site in transitional zone of the reservoir, 20 = Different upstream pelagic site in transitional zone of the reservoir, 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir (37.307613,-79.8360878); 100 = Inflow stream to Falling Creek Reservoir (37.30858,-79.83494) or Beaverdam Reservoir (37.31957,-79.82437); 101 = upstream site along inflow to Falling Creek Reservoir (37.309653,-79.830467); 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir (37.311678,-79.827357); 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir (37.30943,-79.83619) or right arm inflow to Beaverdam Reservoir (37.322851,-79.81721); 1 = Outflow site at spillway of Falling Creek Reservoir (37.30247,-79.83692) or Beaverdam Reservoir, 1.1 = Outflow drain below Beaverdam Reservoir (right most, from below dam) and Falling Creek Reservoir dams, 1.2 = Middle outflow below Beaverdam Reservoir, 1.3 = Left-most (from below dam) outflow drain below Beaverdam Reservoir, 1.4 = Pool at bottom of left-most (from below dam) outflow drain below Beaverdam Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">200</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Water depth where the sample was collected</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">11</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Field replicates collected at the same site, date, and depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ch4_umolL</attributeName>
+          <attributeDefinition>Dissolved methane concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.028547288</minimum>
+                  <maximum exclusive="false">790.2280281</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>co2_umolL</attributeName>
+          <attributeDefinition>Dissolved carbon dioxide concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1171.404524</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag_DateTime</attributeName>
+          <attributeDefinition>Flag value for DateTime; 0 = Time recorded; 1 = Time not recorded and set to 12:00</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag_ch4</attributeName>
+          <attributeDefinition>Flag value for methane concentration; 0 = the samples and replicates are good 1 = Sample was either not collected or was not retained due to issues with the GC; 2 = Sample was below the method detection limit; 3 = The difference between the reps are above the limit of quantification and &gt;30% and &lt;50% different from each other. Both replicates were retained but flagged; 4 = The difference between the reps are above the limit of quantification and &gt;50% different from each other. Both replicates were retained but flagged.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag_co2</attributeName>
+          <attributeDefinition>Flag value for carbon dioxide concentration; 0 = the samples and replicates are good 1 = Sample was either not collected or was not retained due to issues with the GC; 2 = Sample was below the method detection limit; 3 = The difference between the reps are above the limit of quantification and &gt;30% and &lt;50% different from each other. Both replicates were retained but flagged; 4 = The difference between the reps are above the limit of quantification and &gt;50% different from each other. Both replicates were retained but flagged.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>5345</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>QA/QC Code</entityName>
+      <entityDescription>R script for GHG QA/QC</entityDescription>
+      <physical>
+        <objectName>GHGforEDI.R</objectName>
+        <size unit="bytes">30386</size>
+        <authentication method="MD5">68db96b34bcf61e9c0111b1ac8134112</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <unitList>
+        <unit id="micromolePerLiter" multiplierToSI="1.00E-06" name="micromolePerLiter" parentSI="molarity" unitType="amountOfSubstanceConcentration">
+          <description>micromole per liter</description>
+        </unit>
+      </unitList>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

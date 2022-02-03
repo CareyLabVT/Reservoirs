@@ -12,6 +12,8 @@ dissolved oxygen	lter controlled vocabulary
 conductivity	lter controlled vocabulary
 specific conductance	lter controlled vocabulary
 chlorophyll a	lter controlled vocabulary
+fDOM	carey lab controlled vocabulary
+dissolved organic matter	carey lab controlled vocabulary
 pressure	lter controlled vocabulary
 physical properties	lter controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary

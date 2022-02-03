@@ -8,14 +8,14 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk
 source(paste0(folder, "FCR_catwalk_QAQC_function_2018_2021.R"))
 
 # download most up to date catwalk data and maintenance log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/CAT_MaintenanceLog.txt"))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/FCR_CAT_MaintenanceLog_2018_2021.txt"))
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv",paste0(folder, "misc_data_files/Catwalk.csv"))
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2021.csv', paste0(folder, "misc_data_files/CAT_2.csv"))
 
 # run standard qaqc function from FCR_catwalk_QAQC_function_2021.R
 data_file <- paste0(folder, 'misc_data_files/Catwalk.csv')#current file from the data logger
 data2_file <- paste0(folder, 'misc_data_files/CAT_2.csv')#manual downloads to add missing data 
-maintenance_file <- paste0(folder, "misc_data_files/CAT_MaintenanceLog_2021.txt")#maintenance file
+maintenance_file <- paste0(folder, "misc_data_files/FCR_CAT_MaintenanceLog_2018_2021.txt")#maintenance file
 output_file <- paste0(folder, "misc_data_files/Catwalk_first_QAQC_2018_2021.csv")#name of the output file
 qaqc(data_file,data2_file, maintenance_file, output_file)#function to do the main qaqc
 
@@ -85,7 +85,7 @@ catdata_flag <- catdata_flag %>%
 
 catdata_flag <- catdata_flag%>%
   mutate(
-    DateTime=as.character(DateTime),#change DateTime to as.character so they line up when making changes
+    #DateTime=as.character(DateTime),#change DateTime to as.character so they line up when making changes
     #For 5m READ NOTE: These are the sections I noticed apparent following in TS and have tried to correct with linear adjustments
     Flag_DO_5_obs = ifelse(DateTime<"2019-08-12 12:35:00" & DateTime>"2019-08-11 00:00:00", 6, Flag_DO_5_obs),
     Flag_DO_5_sat = ifelse(DateTime<"2019-08-12 12:35:00" & DateTime> "2019-08-11 00:00:00", 6, Flag_DO_5_sat),
@@ -731,6 +731,15 @@ Depth_21
 #   }
 # }
 
+#check the flag column
+Flags=catdata_flag%>%
+  select(starts_with("Flag"))
+
+for(b in 1:nrow(Flags)){
+  print(colnames(Flags[b]))
+  print(table(Flags[,b], useNA = "always"))
+}
+
 #Order by date and time
 
 catdata_flag <- catdata_flag[order(catdata_flag$DateTime),]
@@ -757,6 +766,6 @@ catdata_flag <- catdata_flag %>%
 catdata_flag$DateTime <- as.character(catdata_flag$DateTime)
   
   
-write.csv(catdata_flag, paste0(folder, '/Catwalk_EDI_2018_2021.csv'), row.names = FALSE)
+write.csv(catdata_flag, paste0(folder, '/FCR_Catwalk_2018_2021.csv'), row.names = FALSE)
 
 

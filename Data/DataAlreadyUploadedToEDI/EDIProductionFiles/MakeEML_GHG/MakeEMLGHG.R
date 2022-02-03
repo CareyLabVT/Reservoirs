@@ -156,7 +156,7 @@ make_eml(
   other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.705.4')
+  package.id = 'edi.705.6')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -178,18 +178,21 @@ make_eml(
 ## Step 17: Obtain a package.id. ####
 # Need to obtain a package identifier: reserved #551
 make_eml(
-  path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  data.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  eml.path = "C:/Users/ahoun/OneDrive/Desktop/Reservoir/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Sep2020",
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2019",
-  temporal.coverage = c("2015-03-31", "2019-11-20"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2021",
+  temporal.coverage = c("2015-03-31", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = 'DATASET_for_EDI_LOL_MS_31Aug20.csv',
+  data.table = 'final_GHG_2015-2021.csv',
   data.table.description = "GHG Dataset",
   data.table.name = "GHG Dataset",
+  other.entity= 'GHGforEDI.R',
+  other.entity.name = "QA/QC Code",
+  other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.551.2')
+  package.id = 'edi.551.6')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

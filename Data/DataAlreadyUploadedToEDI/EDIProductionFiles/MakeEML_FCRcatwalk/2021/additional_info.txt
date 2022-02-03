@@ -1,7 +1,12 @@
 Author Contribution Statement-
 CCC is the PI on the project, designed the sensor array, coordinated the purchasing and deployment, and helped install the sensors. ABP is the point person for the dataset along with lead of maintenance, data management and QAQC for 2021. BB was the point person in 2018-2020 for maintaining the sensors and ensuring the data were streaming from the sensors to the cloud; WW was a co-point person during these years for data publishing.  
 
-In 2018-2021, hypolimnetic oxygenation water quality management occurred in Falling Creek Reservoir. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014). This system was operated intermittently from April to November 2018 and again in 2019, 2020 and 2021.
+In 2018-2021, hypolimnetic oxygenation water quality management occurred in Falling Creek Reservoir. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014). 
+Below is the oxgenation schedule and when it was operating:
+2018: 23 April-30 July; 9 August-10 September;
+2019: 3 June-17 June; 8 July-19 July; 5 August-19 August; 2 September-1 December;
+2020: 29 June-11 September; 25 September-2 December;
+2021: 11 June-26 June; 26 July-14 September(different controller for oxygen-not sure how well it worked); 14 September-6 December(regular oxygen controller)  
 
-In 2018-2021, hypolimnetic oxygenation water quality management occurred in Falling Creek Reservoir. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014). This system was operated intermittently from April to November 2018 and again in 2019, 2020 and 2021.
+
 Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002

@@ -16,4 +16,6 @@ REFERENCES
 
 Doubek J.P., Campbell K.L., Doubek K.M., Hamre K.D., Lofton M.E., McClure R.P., Ward N.K., Carey C.C. (2018). The effects of hypolimnetic anoxia on the diel vertical migration of freshwater crustacean zooplankton. Ecosphere, 9(7):02332. https://doi.org/10.1002/ecs2.2332
 
+Hounshell A.G., McClure R.P., Lofton M.E., Carey C.C. (2020). Whole-ecosystem oxygenation experiments reveal substantially greater hypolimnetic methane concentrations in reservoirs during anoxia. Limnology and Oceaography - Letters, 6: 33-42. https://doi.org/10.1002/lol2.10173
+
 McClure R.P., Hamre K.D., Niederlehner B.R., Munger Z.W., Chen S., Lofton M.E., Schreiber M.E., Carey C.C. (2018). Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment, 636. pp. 610-620. https://doi.org/10.1016/j.scitotenv.2018.04.255

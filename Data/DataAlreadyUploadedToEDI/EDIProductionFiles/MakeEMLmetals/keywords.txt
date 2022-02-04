@@ -1,4 +1,4 @@
-keyword	keyword Thesaurus
+keyword	keywordThesaurus
 Carey Lab	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary

@@ -1,13 +1,13 @@
 givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	creator
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	contact
-Kathryn	M.	Krueger	Virginia Tech	katiek5@vt.edu	0000-0002-3509-0611	creator
-Kathryn	M.	Krueger	Virginia Tech	katiek5@vt.edu	0000-0002-3509-0611	PI		Virginia Water Resources Research Center	
-Zackary	W.	Munger	Virginia Tech	mungalor@gmail.com	0000-0002-3604-2697	creator
 Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	creator
-Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	PI		Geological Society of America	
-Mary	E.	Lofton	Virginia Tech	melofton@vt.edu	0000-0003-3270-1330	creator
-Ryan	P.	McClure	Virginia Tech	Ryan333@vt.edu	0000-0001-6370-3852	creator
+Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	PI		Geological Society of America
+Kathryn	M.	Krueger	Virginia Tech	kmkvb13@gmail.com	0000-0002-3509-0611	creator
+Kathryn	M.	Krueger	Virginia Tech	kmkvb13@gmail.com	0000-0002-3509-0611	PI		Virginia Water Resources Research Center	
+Zackary	W.	Munger	Virginia Tech	mungalor@gmail.com	0000-0002-3604-2697	creator	
+Cissy	L.	Ming	Virginia Tech	cissym@vt.edu	0000-0003-0316-2315	creator
+Adrienne	 	Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality	Institute of Critical Technology and Applied Science	

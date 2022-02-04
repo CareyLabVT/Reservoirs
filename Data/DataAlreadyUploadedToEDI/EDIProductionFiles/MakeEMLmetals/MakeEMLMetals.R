@@ -1,7 +1,7 @@
 ##MakeEMLMetals
 ##Author: Mary Lofton
 ##Date: 07SEP19
-##Edited for Metals by: Nick Hammond on 12/16/2019
+##Edited for Metals by: Cissy Ming on 01/31/2022
 
 
 #good site for step-by-step instructions
@@ -47,22 +47,22 @@ library(EMLassemblyline)
 ??template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/FCR_BVR Metals Data/EDI",
+template_core_metadata(path = "C:/Users/Cissy/Documents/EDI Publishing",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/FCR_BVR Metals Data/EDI",
-                          data.path = "C:/FCR_BVR Metals Data/EDI",
-                          data.table = "Metals_EDI_current.csv",
+template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing",
+                          data.path = "C:/Users/Cissy/Documents/EDI Publishing",
+                          data.table = "Metals_2014_2021.csv",
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/FCR_BVR Metals Data/EDI",
-                             data.path = "C:/FCR_BVR Metals Data/EDI",
-                             data.table = "Metals_EDI_current.csv",
+template_geographic_coverage(path = "C:/Users/Cissy/Documents/EDI Publishing",
+                             data.path = "C:/Users/Cissy/Documents/EDI Publishing",
+                             data.table = "Metals_2014_2021.csv",
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -109,8 +109,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/FCR_BVR Metals Data/EDI",
-                               data.path = "C:/FCR_BVR Metals Data/EDI",
+template_categorical_variables(path = "C:/Users/Cissy/Documents/EDI Publishing",
+                               data.path = "C:/Users/Cissy/Documents/EDI Publishing",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -128,25 +128,26 @@ template_categorical_variables(path = "C:/FCR_BVR Metals Data/EDI",
 # table (e.g., edi.123)
 # Make note of this value, as it will be your package.id below
 
+
 #Step 17: Make EML
 # View documentation for this function
 ?make_eml
 
 # Run this function
 make_eml(
-  path = "C:/FCR_BVR Metals Data/EDI",
-  data.path = "C:/FCR_BVR Metals Data/EDI",
-  eml.path = "C:/FCR_BVR Metals Data/EDI",
-  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2020",
-  temporal.coverage = c("2014-04-01", "2020-12-02"),
+  path = "C:/Users/Cissy/Documents/EDI Publishing",
+  data.path = "C:/Users/Cissy/Documents/EDI Publishing",
+  eml.path = "C:/Users/Cissy/Documents/EDI Publishing",
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2021",
+  temporal.coverage = c("2014-04-01", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_EDI_current.csv",
+  data.table = "Metals_2014_2021.csv",
   data.table.description = "Reservoir iron and manganese chemistry dataset",
-  other.entity = "Metals_QAQC.R",
+  other.entity = "Metals_QAQC_2014_2021.R",
   other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.127.5')
+  package.id = 'edi.718.4')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -183,19 +184,19 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/FCR_BVR Metals Data/EDI",
-  data.path = "C:/FCR_BVR Metals Data/EDI",
-  eml.path = "C:/FCR_BVR Metals Data/EDI",
-  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2020",
-  temporal.coverage = c("2014-04-01", "2019-12-02"),
+  path = "C:/Users/Cissy/Documents/EDI Publishing",
+  data.path = "C:/Users/Cissy/Documents/EDI Publishing",
+  eml.path = "C:/Users/Cissy/Documents/EDI Publishing",
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2021",
+  temporal.coverage = c("2014-04-01", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_EDI_current.csv",
+  data.table = "Metals_2014_2021.csv",
   data.table.description = "Reservoir iron and manganese chemistry dataset",
   other.entity = "Metals_QAQC.R",
   other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.455.5')
+  package.id = 'edi.455.6')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

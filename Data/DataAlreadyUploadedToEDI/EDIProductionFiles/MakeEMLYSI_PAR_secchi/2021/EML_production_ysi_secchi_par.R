@@ -58,5 +58,5 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.198.9") #2021 is 198.9
+         package.id = "edi.198.10") #2021 is 198.9 or 198.10 (republished)
 

@@ -1,0 +1,2 @@
+geographicDescription	northBoundingCoordinate	eastBoundingCoordinate	southBoundingCoordinate	westBoundingCoordinate
+Beaverdam Reservoir is located in Vinton, Virginia, USA	37.322865	-79.813848	37.311961	-79.824834

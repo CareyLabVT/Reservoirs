@@ -1,0 +1,19 @@
+attributeName	code	definition
+Flag	1	data removed because of maintenance
+Notes	no thermoster connected took thermoster from BVR to replace a broken one at FCR	no thermoster connected took thermoster from BVR to replace a broken one at FCR
+Notes	reprogramed the data logger to read the bottom three sensors so no data recorded	reprogramed the data logger to read the bottom three sensors so no data recorded
+Notes	sensor string up for cleaning	sensor string up for cleaning
+Notes	sensor string up for cleaning and calibrated DO sensor	sensor string up for cleaning and calibrated DO sensor
+Notes	sensor string up for cleaning and calibrated DO sensors	sensor string up for cleaning and calibrated DO sensors
+Notes	the bottom three sensors were not programed to be read into the datafile	the bottom three sensors were not programed to be read into the datafile
+Notes	wire into the data logger came loose and did not record data	wire into the data logger came loose and did not record data
+Parameter	All_BVR	The sensors are all out of the water for cleaning or maintenance
+Parameter	Lvl_psi	Any maintenance done to the pressures sensor
+Parameter	wtr_1	Any maintenance done to the thermistor at position 1
+Parameter	wtr_11	Any maintenance done to the thermistor at position 11
+Parameter	wtr_12	Any maintenance done to the thermistor at position 12
+Parameter	wtr_13	Any maintenance done to the thermistor at position 13
+Parameter	wtr_pt_13	Any maintenance done to the pressures sensor
+Reservoir	BVR	BVR
+Site	50	number of the site closest to the dam 
+Station	BVR_sensor_string	measured by the sensors at the platform at Beaverdam Reservoir

@@ -1,1 +1,2 @@
-Author Contribution Statement-CCC is the PI project and set up the meteorological station. ABP is the point person for the data set along with leading the maintenance, data management and QAQC from 2020 - current. BB was the point person, as well as, led the maintenance, data management and QAQC from 2018-2019. 
+Author Contribution Statement-
+CCC is the PI project and set up the meteorological station. ABP is the point person for the data set along with leading the maintenance, data management and QAQC from 2020 - current. BB was the point person, as well as, led the maintenance, data management and QAQC from 2018-2019. 

@@ -11,13 +11,13 @@ source(paste0(folder, "BVR_platform_QAQC_function_2020_2021.R"))
 #manually downloaded from the datalogger that fills in missing data from the streamed data 
 #maintenance log so we can flag when the sensors were being worked on or other problems
 download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',paste0(folder, "/bvre-waterquality.csv")) 
-download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2021.csv',paste0(folder, "/BVRmanualplatform.csv") )
+download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2021.csv',paste0(folder, "/BVRmanualplatform.csv"))
 download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log_2020_2021.txt"))
 
 # run standard qaqc these are where the data entered in the function are defined
-data_file <- paste0(folder, '/bvre-waterquality.csv')
-data2_file <- paste0(folder, '/BVRmanualplatform.csv')
-maintenance_file <- paste0(folder, "/BVR_maintenance_log_2020_2021.txt")
+data_file <- paste0(folder, '/bvre-waterquality.csv')#this is from github and pushed every 4 hours
+data2_file <- paste0(folder, '/BVRmanualplatform.csv')# this is data downloaded directly from the data logger and gets up dated periodiclly to account for missing data gaps
+maintenance_file <- paste0(folder, "/BVR_maintenance_log_2020_2021.txt") #this is the maintenance log for QAQC purposes
 output_file <- paste0(folder, "/BVRplatform_clean.csv")
 qaqc(data_file, data2_file, maintenance_file, output_file)
 
@@ -25,12 +25,11 @@ qaqc(data_file, data2_file, maintenance_file, output_file)
 # read in qaqc function output
 bvrdata_clean <- read.csv(output_file) 
 
-# subset file to only unpublished data
-
+# subset file to only publish for the current year
 bvrdata_clean = bvrdata_clean%>%
   filter(DateTime<"2022-01-01 00:00")
 
-#check the flag column
+#check the flag column to make sure there are no NAs in the Flag column
 Flags=bvrdata_clean%>%
   select(starts_with("Flag"))
 
@@ -76,16 +75,16 @@ bvrdata_clean$DateTime<-as.POSIXct(bvrdata_clean$DateTime, "%Y-%m-%d %H:%M", tz 
 
 #Figure out when Thermistor 3 is out of the water by graphing
 
- Temp_3 <- bvrdata_clean%>%
-filter(DateTime>"2021-09-10 00:00" & DateTime<"2021-09-11 00:00")%>%
-  #select(DateTime, ThermistorTemp_C_1, ThermistorTemp_C_2, ThermistorTemp_C_3, Lvl_psi_13,Depth_m_13, Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_LvlPres )
-  ggplot(., aes(x = DateTime)) +
-  geom_point(aes(y=ThermistorTemp_C_2, color="blue"))+
-  geom_point(aes(y=ThermistorTemp_C_3, color="red"))+
-  #geom_point(aes(y=ThermistorTemp_C_4, color='green')) +
-  geom_point(aes(y=Lvl_psi_13, color='black'))
-# Temp_3
- ggplotly(Temp_3)
+#  Temp_3 <- bvrdata_clean%>%
+# filter(DateTime>"2021-09-10 00:00" & DateTime<"2021-09-11 00:00")%>%
+#   #select(DateTime, ThermistorTemp_C_1, ThermistorTemp_C_2, ThermistorTemp_C_3, Lvl_psi_13,Depth_m_13, Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_LvlPres )
+#   ggplot(., aes(x = DateTime)) +
+#   geom_point(aes(y=ThermistorTemp_C_2, color="blue"))+
+#   geom_point(aes(y=ThermistorTemp_C_3, color="red"))+
+#   #geom_point(aes(y=ThermistorTemp_C_4, color='green')) +
+#   geom_point(aes(y=Lvl_psi_13, color='black'))
+# # Temp_3
+#  ggplotly(Temp_3)
 
 # Once that depth  is determined we can use that to determine the depth from the surface the thermistor.
 # when readings are out of the water and need to be changed to NA and the depth of each reading which can be done

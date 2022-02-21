@@ -144,14 +144,14 @@ make_eml(path = folder,
                           'BVR_maintenance_log_2020_2021.txt', 'BVR_Depth_offsets_2020_2021.csv', 'BVR_sort_by_depth_2020_2021.R'),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC includes plots to check QAQC',
                                       'Maintenance log for BVR platform sensors', 'Table of depth of sensors below the water used in BVR_sort_by_depth_2020_2021.R script',
-                                      'Script in R to give a depth reading to each sensor reading and sort the reading into depth instead of postion'),
+                                      'Script in R to give a depth reading to each sensor reading and sort the readings by depth instead of postion'),
          temporal.coverage = c("2020-06-18", "2021-12-31"),
          #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.8") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         package.id = "edi.157.12") # Put your package.id here, followed by .1 (for 1st version). This is for staging
 
 
 #THIS IS FOR PUBLISHING 

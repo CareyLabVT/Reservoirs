@@ -10,7 +10,7 @@ setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Ice")
 # # Load devtools
 # library(devtools)
 # 
-#devtools::install_github("EDIorg/EMLassemblyline")
+devtools::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
@@ -27,7 +27,7 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 import_templates(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
                  license = "CCBY",
-                 data.files = c("Ice_Data.csv"))
+                 data.files = c("Ice_Data_2013_2021.csv"))
 
 # Edit each of these files for your current data package upload, by copying and 
 # pasting the relevant information from the EDI_metadata_template you prepared

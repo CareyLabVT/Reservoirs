@@ -78,7 +78,7 @@ bvr_by_depth=bvr_pre_05APR21%>%
   filter(!is.na(Sensor_depth))%>%
   select(-Offset_before_05APR21, -Offset_after_05APR21, -Distance_above_sediments, -Depth_m_13)
 
-###########For Heather. This keeps the data in the long format and adds the EXO ############################
+########### This keeps the data in the long format and adds the EXO ############################
 #This data frame is ver very very long
 
 #Puts the EXO data into a long format with the right columns
@@ -126,7 +126,7 @@ temp_long=bvr_by_depth%>%
 
 
 #write the csv  
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
+setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/")
 write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FALSE)
 
 ################################# END FOR HLW FOR FLARE ########################################
@@ -158,27 +158,27 @@ write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FA
 # change back to a wide data form. This puts the readings into depth columns but that means it does introduce
 # NAs as the water depth changes. To do this thermistor in position 1 is dropped because thermistor 1 and thermistor 2
 # are less than 1m apart and can't have two values in one time point for 1 depth. 
-bvr_wide=bvr_by_depth%>%
-  filter(Position>1)%>%
-  select(c(-Sensor_depth, -Rounded_depth_hundreth, -Position))%>%
-  mutate(Sensor=paste(Sensor,Units,Rounded_depth_whole,"m", sep = "_"))%>%
-  pivot_wider(
-    id_cols=c(Reservoir, Site, DateTime),
-    names_from = Sensor,
-    names_sep = "_",
-    values_from = Reading)%>%
-    mutate(ThermistorTemp_C_surface=ThermistorTemp_C_0_m)%>%
-  select(Reservoir, Site, DateTime, ThermistorTemp_C_surface, ThermistorTemp_C_1_m,ThermistorTemp_C_2_m,
-         ThermistorTemp_C_3_m, ThermistorTemp_C_4_m, ThermistorTemp_C_5_m, ThermistorTemp_C_6_m, ThermistorTemp_C_7_m, ThermistorTemp_C_8_m,
-         ThermistorTemp_C_9_m, ThermistorTemp_C_10_m, ThermistorTemp_C_11_m, RDO_mgL_2_m, RDO_mgL_3_m, RDO_mgL_4_m, RDO_mgL_5_m, 
-         RDOsat_percent_2_m, RDOsat_percent_3_m, RDOsat_percent_4_m, RDOsat_percent_5_m, RDOTemp_C_2_m, RDOTemp_C_3_m, RDOTemp_C_4_m,RDOTemp_C_5_m, 
-         RDO_mgL_10_m, RDO_mgL_11_m, RDO_mgL_12_m, RDOsat_percent_10_m, RDOsat_percent_11_m, RDOsat_percent_12_m, RDOTemp_C_11_m, RDOTemp_C_12_m, 
-         Lvl_psi_10_m, Lvl_psi_11_m, Lvl_psi_12_m,LvlTemp_C_10_m,LvlTemp_C_11_m,LvlTemp_C_12_m)
+# bvr_wide=bvr_by_depth%>%
+#   filter(Position>1)%>%
+#   select(c(-Sensor_depth, -Rounded_depth_hundreth, -Position))%>%
+#   mutate(Sensor=paste(Sensor,Units,Rounded_depth_whole,"m", sep = "_"))%>%
+#   pivot_wider(
+#     id_cols=c(Reservoir, Site, DateTime),
+#     names_from = Sensor,
+#     names_sep = "_",
+#     values_from = Reading)%>%
+#     mutate(ThermistorTemp_C_surface=ThermistorTemp_C_0_m)%>%
+#   select(Reservoir, Site, DateTime, ThermistorTemp_C_surface, ThermistorTemp_C_1_m,ThermistorTemp_C_2_m,
+#          ThermistorTemp_C_3_m, ThermistorTemp_C_4_m, ThermistorTemp_C_5_m, ThermistorTemp_C_6_m, ThermistorTemp_C_7_m, ThermistorTemp_C_8_m,
+#          ThermistorTemp_C_9_m, ThermistorTemp_C_10_m, ThermistorTemp_C_11_m, RDO_mgL_2_m, RDO_mgL_3_m, RDO_mgL_4_m, RDO_mgL_5_m, 
+#          RDOsat_percent_2_m, RDOsat_percent_3_m, RDOsat_percent_4_m, RDOsat_percent_5_m, RDOTemp_C_2_m, RDOTemp_C_3_m, RDOTemp_C_4_m,RDOTemp_C_5_m, 
+#          RDO_mgL_10_m, RDO_mgL_11_m, RDO_mgL_12_m, RDOsat_percent_10_m, RDOsat_percent_11_m, RDOsat_percent_12_m, RDOTemp_C_11_m, RDOTemp_C_12_m, 
+#          Lvl_psi_10_m, Lvl_psi_11_m, Lvl_psi_12_m,LvlTemp_C_10_m,LvlTemp_C_11_m,LvlTemp_C_12_m)
   
 # add the EXO back in 
-  bvr_wide=bvr_wide%>%
-    merge(.,EXO, by="DateTime")
+  # bvr_wide=bvr_wide%>%
+  #   merge(.,EXO, by="DateTime")
   
 # write the csv  
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform")
-  write.csv(bvr_wide, 'BVR_bydepth_2020_2021.csv', row.names = FALSE)
+#setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021")
+#  write.csv(bvr_wide, 'BVR_bydepth_2020_2021.csv', row.names = FALSE)

@@ -26,7 +26,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = 'BVR_platform_2020_2021.csv',
+ data.table = 'BVR_platform_data_2020_2021.csv',
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -138,11 +138,11 @@ template_categorical_variables(path = folder,
 
 make_eml(path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2020-2021",
-         data.table = 'BVR_platform_2020_2021.csv',
+         data.table = 'BVR_platform_data_2020_2021.csv',
          data.table.description = 'All water quality parameters measured at Beaverdam Reservoir during 2020-2021',
          other.entity = c('BVR_platform_QAQC_function_2020_2021.R', 'BVR_platform_QAQC_Plot_2020_2021.R',
                           'BVR_maintenance_log_2020_2021.txt', 'BVR_Depth_offsets_2020_2021.csv', 'BVR_sort_by_depth_2020_2021.R'),
-         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC includes plots to check QAQC',
+         other.entity.description = c('Automated QAQC script', 'Script to run the QAQC function and includes plots to check QAQC',
                                       'Maintenance log for BVR platform sensors', 'Table of depth of sensors below the water used in BVR_sort_by_depth_2020_2021.R script',
                                       'Script in R to give a depth reading to each sensor reading and sort the readings by depth instead of postion'),
          temporal.coverage = c("2020-06-18", "2021-12-31"),
@@ -151,53 +151,11 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.12") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         #package.id = "edi.157.16" # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         package.id = "edi.725.2") # This is for the final version
 
 
-#THIS IS FOR PUBLISHING 
 
-make_eml(path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
-         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
-         in Beaverdam Reservoir, Virginia, USA in 2020",
-         data.table = c('BVR_EDI_2020.csv', 'BVR_Maintenance_2020.csv', 'BVR_Depth_offsets_2020.csv'),
-         data.table.name = c('BVR_EDI_2020', 'BVR_Maintenance_2020', 'BVR_Depth_offsets_2020'),
-         data.table.description = c('All water quality parameters measured at Beaverdam during 2020',
-                                    'The log of all maintenance applied to the sensors',
-                                    'The position, offset, and distance above the sediment for the sensors'),
-         other.entity = c("qaqc_function_first_level.R",'BVR_QAQC_second_level.R','BVR_sort_by_depth_2020.R'),
-         other.entity.name = c("qaqc_function_first_level",'BVR_QAQC_second_level', 'BVR_sort_by_depth'),
-         other.entity.description = c("First Level function used in the BVR_QAQC_second_level script to take out maintenance times and other qaqc steps",
-                                      'Second level data aggregation and QA/QC R script',
-                                      'Applying the depth offset and sorting by sensor depth'),
-         temporal.coverage = c("2020-06-18", "2020-12-31"),
-         #geographic.description = c("Beaverdam Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
-         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
-         maintenance.description = "ongoing", 
-         user.id = "ccarey",
-         user.domain = 'EDI',
-         package.id = "edi.725.1") # Put your package.id here, followed by .1 (for 1st version)
-
-
-#PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
-#  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK
-# ??!!! SO AM COPYING & PASTING THE .XML FILE BACK INTO THE GITHUB DIRECTORY. WORTH A TRY TO RUN IT OUT OF THERE
-# NEXT TIME WE UPDATE THE MET DATA IN THE FUTURE. I ALSO DELETED THE ZIP FILES 
-setwd("/Users/cayelan/Desktop/MakeEML_MetData")
-make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2018",
-         data.table = c('Met_final_2015_2018.csv', 'Met_Maintenance_2015_2018.csv'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2018',
-                                    'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'Met_QAQC.R',
-         other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2020-06-18", "2018-12-31"),
-         #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
-         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
-         maintenance.description = "ongoing", 
-         user.id = "ccarey",
-         user.domain = 'EDI',
-         package.id = "edi.157.1") # Put your package.id here, followed by .1 (for 1st version)
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

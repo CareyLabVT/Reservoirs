@@ -21,6 +21,7 @@ maintenance_file <- paste0(folder, "/BVR_maintenance_log_2020_2021.txt") #this i
 output_file <- paste0(folder, "/BVRplatform_clean.csv")
 qaqc(data_file, data2_file, maintenance_file, output_file)
 
+maintenance <- read.csv(maintenance_file)
 
 # read in qaqc function output
 bvrdata_clean <- read.csv(output_file) 
@@ -263,7 +264,8 @@ Temp_11
 ggplotly(Temp_11)
 
 m_11_21=bvrdata_clean%>%
-  filter(DateTime>start_time & DateTime<end_time)%>%
+  #filter(DateTime>start_time & DateTime<end_time)%>%
+  filter(DateTime>"2021-03-30 00:00" & DateTime<"2021-04-03 00:00")%>%
   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_11)) +
   geom_point()
 m_11_21
@@ -422,9 +424,9 @@ ggplotly(EXODOsat_1_5_21)
 #ctd$Date<-as.POSIXct(ctd$Date,format = "%Y-%m-%d %H:%M:%S")
 
 #read in YSI to check the DO 
-#download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/YSI_PAR_profiles_2013-2021.csv", "ysi.csv")
-#ysi=read.csv("ysi.csv")
-#ysi$DateTime<-as.POSIXct(ysi$DateTime,format = "%Y-%m-%d %H:%M:%S, tz=EST")
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/YSI_PAR_profiles_2013-2021.csv", "ysi.csv")
+# ysi=read.csv("ysi.csv")
+# ysi$DateTime<-as.POSIXct(ysi$DateTime,format = "%Y-%m-%d %H:%M:%S", tz="EST")
 
 #get the bottom DO values to compare with DO_13
 #ctd_bottom=ctd%>%
@@ -443,9 +445,20 @@ ggplotly(EXODOsat_1_5_21)
 #  group_by(DateTime)%>%
 # summarise(mean_DO=mean(DO_mgL))
 
-#plot(bvrdata_clean$DateTime, bvrdata_clean$RDO_mgL_13, type='l')
+
+# ysi_exo=ysi%>%
+#  filter(Reservoir=="BVR")%>%
+#  filter(DateTime>"2020-06-01 00:00:00")%>%
+#  select(DateTime, Depth_m, DO_mgL, DOSat)%>%
+#  filter(Depth_m<3)
+#  group_by(DateTime)%>%
+# summarise(mean_DO=mean(DO_mgL))
+
+#plot(bvrdata_clean$DateTime, bvrdata_clean$EXODOsat_percent_1_5, type='l')
+#points(bvrdata_clean$DateTime, bvrdata_clean$RDOsat_percent_6, type='l', col="blue")
 #points(ctd_bottom$Date, ctd_bottom$mean_DO, type='p', col= "red", cex= 1.0)
 #points(ysi_bottom$DateTime, ysi_bottom$mean_DO, type = "p", col = "purple")
+#points(ysi_exo$DateTime, ysi_exo$DOSat, type = "p", col = "red")
   
 #Check the EXO against the CTD and YSI
 #ctd_1_5=ctd%>%
@@ -686,7 +699,8 @@ Lvl_pressure
 #ggplotly(Lvl_pressure)
 
 Lvl_pressure_21 <- bvrdata_clean%>%
-  filter(DateTime>start_time & DateTime<end_time)%>%
+  #filter(DateTime>start_time & DateTime<end_time)%>%
+  filter(DateTime>"2021-03-30 00:00" & DateTime<"2021-04-03 00:00")%>%
   ggplot(., aes(x = DateTime, y = Lvl_psi_13)) +
   geom_point()
 Lvl_pressure_21
@@ -746,4 +760,4 @@ bvrdata_clean=bvrdata_clean[order(bvrdata_clean$DateTime),]
 
 setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/")
 
-write.csv(bvrdata_clean, 'BVR_platform_2020_2021.csv', row.names = FALSE, quote=FALSE)
+write.csv(bvrdata_clean, 'BVR_platform_data_2020_2021.csv', row.names = FALSE, quote=FALSE)

@@ -1,0 +1,9 @@
+DataStream, TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, notes
+CCRM, 2021-12-03 13:32:00 EST, 2021-12-03 14:11:00 EST, Rain_mm_Tot, 10, 1, checked_rain_gauge
+CCRM, 2021-12-03 13:23:00 EST, 2021-12-03 13:30:00 EST, PAR_Den_Avg, 5, 1, sensor_cleaned
+CCRM, 2021-12-03 13:23:00 EST, 2021-12-03 13:30:00 EST, PAR_Tot_Tot, 6, 1, sensor_cleaned
+CCRM, 2021-12-03 14:15:00 EST, 2021-12-03 14:25:00 EST, SR01Dn_Avg, 14, 1, sensor_cleaned
+CCRM, 2021-12-03 14:00:00 EST, 2021-12-03 14:18:00 EST, IR01DnCo_Avg, 16, 1, sensor_cleaned
+CCRM, 2021-12-03 13:50:00 EST, 2021-12-03 14:00:00 EST, IR01UpCo_Avg, 15, 1, sensor_cleaned
+CCRM, 2021-12-03 14:37:00 EST, 2021-12-03 14:46:00 EST, AirTC_Avg, 8, 1, sensor_cleaned
+CCRM, 2021-12-03 14:37:00 EST, 2021-12-03 14:46:00 EST, RH, 9, 1, sensor_cleaned

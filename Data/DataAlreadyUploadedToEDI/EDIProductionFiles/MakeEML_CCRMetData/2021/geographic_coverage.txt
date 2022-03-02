@@ -1,2 +1,2 @@
-geographicDescription	northBoundingCoordinate	southBoundingCoordinate	eastBoundingCoordinate	westBoundingCoordinate
-"Carvins Cove Reservoir is located in Hollins, Virginia, USA"	37.409127	37.36534	-79.978642	-79.944052
+geographicDescription	northBoundingCoordinate	eastBoundingCoordinate	southBoundingCoordinate	westBoundingCoordinate
+Carvins Cove Reservoir is located in Roanoke, Virginia, USA	37.409127	-79.944052	37.365345	-79.978642

@@ -20,16 +20,16 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 #Files on GitHub
 #Files needed to add a depth column to your data:
 #This the file from EDI. This is the same out put as if you ran the BVR QAQC scripts
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/BVR_platform_2020_2021.csv", paste0(folder, "BVR_platform_2020_2021.csv"))
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/BVR_platform_data_2020_2021.csv", paste0(folder, "BVR_platform_data_2020_2021.csv"))
 
 #This is the file of the offset depths of each sensor and needed to calculate the depth of each sensor at each reading.
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/BVR_Depth_offsets_2020_2021.csv", paste0(folder, "BVR_Depth_offsets_2020_2021.csv"))
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/BVR_Depth_offsets_2020_2021.csv", paste0(folder, "BVR_Depth_offsets_2020_2021.csv"))
 
 #Files can also be downloaded from EDI.
 
 #read in data but make sure your file path is right
-bvr=read.csv(paste0(folder, "/BVR_platform_2020_2021.csv"))
-depth=read.csv(paste0(folder, "/BVR_Depth_offsets_2020_2021.csv"))
+bvr=read.csv(paste0(folder, "BVR_platform_data_2020_2021.csv"))
+depth=read.csv(paste0(folder, "BVR_Depth_offsets_2020_2021.csv"))
 
 
 ########This has to happen whether you want to end up with a data frame in the long format or the wide format########################

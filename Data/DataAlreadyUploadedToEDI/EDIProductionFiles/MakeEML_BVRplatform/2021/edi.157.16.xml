@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.157.8" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.157.16" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -31,19 +31,10 @@
       <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
     </creator>
-    <creator>
-      <individualName>
-        <givenName>Bethany</givenName>
-        <givenName>J.</givenName>
-        <surName>Bookout</surName>
-      </individualName>
-      <organizationName>Virginia Tech</organizationName>
-      <electronicMailAddress>bethanyb18@vt.edu</electronicMailAddress>
-      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8394-926X</userId>
-    </creator>
-    <pubDate>2022-02-15</pubDate>
+    <pubDate>2022-03-01</pubDate>
     <abstract>
-      <para>We monitored water quality in Beaverdam Reservoir (Vinton, Virginia, USA) with high-frequency (10-minute) sensors in 2020-2021. Beaverdam Reservoir is owned and managed by the Western Virginia Water Authority as a secondary drinking water source for Roanoke, Virginia. Depth profiles of water temperature were measured on ~1-meter intervals from the surface of the reservoir to 0.5 m above the sediments. Dissolved oxygen was monitored at 1.5 m, in the mid-water column at 2.37-4.65 m depth, and bottom waters at 0.5 m above the sediments, which corresponded to 9.7-11.98 m depth. A YSI EXO2 sonde measured temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, fluorescent dissolved organic matter, and turbidity at ~1.5 m depth. Due to variable water levels in the reservoir, the position of some sensors are held stationary to the sediments and presented as positions (thermistor temperature, dissolved oxygen, and pressure sensor), whereas the EXO2 sonde variables (temperature, dissolved oxygen, pressure, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, fluorescent dissolved organic matter, and turbidity) were deployed on a buoy to move with the changing water level and remain at 1.5 m depth from the water’s surface. All variables were measured at the deepest site of the reservoir adjacent to the dam. &#13;
+      <para>We monitored water quality in Beaverdam Reservoir (Vinton, Virginia, USA) with high-frequency (10-minute) sensors in 2020-2021. Beaverdam Reservoir is owned and managed by the Western Virginia Water Authority as a secondary drinking water source for Roanoke, Virginia. This reservoir experiences substantial water level changes over the years due to its position at the headwaters of its catchment as well as management, and ranged from 10.2 to 12.48m (mean=11.31m, median=11.38m) during the monitoring period. Depth profiles of water temperature were measured by thermistors on ~1-meter intervals above the surface of the reservoir to 0.5 m above the sediments, complemented by dissolved oxygen and pressure sensors deployed at depth. These sensors (thermistor temperature, dissolved oxygen, and pressure) were held stationary as the water depth fluctuated from 10.2-12.48m. A YSI EXO2 sonde measuring temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, fluorescent dissolved organic matter, and turbidity was attached to a buoy that moved with the changing water level and thus was kept at a constant ~1.5 m depth. Dissolved oxygen was monitored at three different positions: 1.5 m from the EXO2, in the mid-water column at 2.37-4.65 m depth, and bottom waters at 9.70-11.92 m depth. All variables were measured at the deepest site of the reservoir adjacent to the dam.</para>
+      <para>&#13;
 </para>
     </abstract>
     <keywordSet>
@@ -81,6 +72,10 @@
       <keyword>high-frequency sensors</keyword>
       <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
     </keywordSet>
+    <additionalInfo>
+      <para>CCC is the PI on the project, designed the sensor array, coordinated the purchasing and deployment, and led purchasing. ABP is the point person for the data set along with leading the maintenance, data management and QAQC from 2020 - current. &#13;
+</para>
+    </additionalInfo>
     <intellectualRights>
       <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
     </intellectualRights>
@@ -121,113 +116,117 @@
     <methods>
       <methodStep>
         <description>
-          <para>Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir in 2020-2021 using water temperature thermistors, dissolved oxygen sensors, pressure sensors,  and a YSI EXO2 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 18 June 2020 to 31 December 2021. We deployed the 13 thermistors on a chain, with the deepest located about 0.5 m above the sediments. Because the water level in Beaverdam Reservoir varied from 9.70-12.48 m (mean=10.81 m, median=10.88 m) during the monitoring period, we will refer to the thermistors, dissolved oxygen, and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth, which roughly corresponds to the depth of the sensors at full pond in Beaverdam Reservoir (13.4 m). The thermistor closest to the top is labeled 1 and the deepest is labeled 13, with the intervening thermistors located at approximately ~1 m intervals. The dissolved oxygen sensors were deployed at positions 6 and 13, and the pressure sensor at position 13. </para>
-          <para>To determine the variable depths of each sensor over time, we used observed water level and the pressure sensor at position 13 (which was fixed at  about 0.5 m above the sediments) to get the actual depth of the sensor based on when it is just above the surface of the water. We converted the pressure readings to depth in meters using 1 psi=0.70544 m from the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). We then determine when the sensors are at the surface or just above the water. In 2020, for thermistor 1, this happens on 2 July 2020 12:40, whereas the offset for thermistor 2 was on 14 July 20:00. Since the other sensors were never out of the water in 2020 we then assume they are equidistant from each other.  We subtracted the offset of position 2 from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (6 cm). We then divided that number by the number of sensors below position 2 (11), which was equal to 1.038 m, the depth between the sensors at position 3-13. This number(1.038) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (11.478) and subtracted 1.038 to get 10.44, which is the depth of the sensor at position 3 from the pressure sensor. </para>
-          <para>On 05 April 2021 at 13:30, we secured the pressure sensor so it is in line with the thermistor at position 13 therefore the offset at position 13 is 0. At the end of the year in 2021 we recalculated the depth offsets for sensors at positions 3-13 because we moved the pressure sensor and the thermistor at position 3 was out of the water. We could use this information to determine the depth of the sensor based on when it came out of the water at 10 September 2021 11:10. Since no other sensors below position 3 were out of the water we assume they are equidistant from each other and calculate the distance between sensors to be 1.047m. When or if other sensors have readings at the surface of the water we can confirm the depth of the sensors at more positions.  </para>
-          <para>Thus, to calculate the depth from the surface of each sensor, first subtract the unique offset for each sensor from column Depth_m_13, which is the depth of the pressure transducer at position 13 in meters.  Below is a table with the position of the sensor, the offset and the distance above the sediments.  &#13;
+          <para>Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir in 2020-2021 using water temperature thermistors, dissolved oxygen sensors, pressure sensors,  and a YSI EXO2 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 18 June 2020 to 31 December 2021. We deployed the 13 thermistors on a chain, with the deepest located about 0.5 m above the sediments. Because the water level in Beaverdam Reservoir varied from 10.20-12.48 m (mean=11.31 m, median=11.38 m) during the monitoring period, we will refer to the thermistors, dissolved oxygen, and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth, which roughly corresponds to the depth of the sensors at full pond in Beaverdam Reservoir (13.4 m). The thermistor closest to the top is labeled 1 and the deepest is labeled 13, with the intervening thermistors located at approximately ~1 m intervals. The dissolved oxygen sensors were deployed at positions 6 and 13, and the pressure sensor at position 13. </para>
+          <para>To determine the variable depths of each sensor over time, we used the pressure sensor at position 13 (which was fixed at  about 0.5 m above the sediments) to get the actual depth of the sensor when it is at the surface of the water. To do this, we converted the pressure readings from psi to depth in meters using 1 psi=0.70544 m found in the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). We then determine the date and time when the sensors were at the surface and the corresponding depth reading. This depth was put in the offset table (BVR_Depth_offsets_2020_2021.csv) and used to determine the depth of the sensor when it is below the surface and when the thermistor was out of the water. For those positions that were never out of the water we assumed they were equidistnace from each other and divided the length of the temp string when the deepest thermistor was at the suface by the number of postions still under the water. This number was the distance between the thermistors underwater. We took the depth of the deepest thermistor when it was at the surface and subtracted the distance between the postions to get the rest of the offsets.  &#13;
+In 2020, for thermistor 1, the sensor was at the surface on 2 July 2020 12:40, whereas the offset for thermistor 2 was on 14 July 20:00. Since the other sensors were never out of the water in 2020, we subtracted the offset of position 2 (the deepest thermistor that was at the surface) from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (6 cm). We then divided that number by the number of sensors below position 2 (11), which was equal to 1.038 m, the distance between the sensors at position 3-13. This number (1.038) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (11.478) and subtracted 1.038 to get 10.44, which is the distance of the sensor at position 3 from the pressure sensor. </para>
+          <para>On 05 April 2021 at 13:30, we secured the pressure sensor so it was in line with the thermistor at position 13, therefore the offset at position 13 is 0. At the end of the year in 2021 we recalculated the depth offsets for sensors at positions 3-13 because we moved the pressure sensor and the thermistor at position 3 was out of the water. The thermistor at position 3 was at the surface on 10 September 2021 11:10. Since no other sensors below position 3 were out of the water we assume they were equidistant from each other and calculate the distance between sensors to be 1.047m. When or if other sensors are at the surface of the water, we can confirm the depth of the sensors at more positions.  </para>
+          <para>Thus, to calculate the depth from the surface of each sensor, first subtract the unique offset for each sensor from column Depth_m_13, which is the depth of the pressure transducer at position 13 in meters.  Below is a table with the position of the sensor, the offset before and after the pressure sensor was moved, and the distance above the sediments.  &#13;
 Since the EXO2 was deployed on a buoy that fluctuates with the water level changes, its sensors were always 1.5 m below the surface, regardless of water level. </para>
-          <para> Offset Table&#13;
-The table below is the position of the sensor, offset to find the depth of the position from the top of the water at a given time, and the distance above the sediments when the sensors were deployed. To determine the depth of each position at a given time, you first need to go to the column Depth_m_13, which has the unique offset for the position. The R script, BVR_sort_by_depth_2020_2021.csv, attached to this package will do this for you and sort the depths into columns by the meter and variable (Temperature, Dissolved Oxygen, Dissolved oxygen saturation, and pressure).</para>
-          <para>Offset Table 2020_2021&#13;
-Position;	Offset_before_05APR21;		Offset_after_05APR21;	Distance from sediments.&#13;
-Position_1;	11.82m;					11.82m;			12.5m.&#13;
-Position_2;	11.478m;				11.478m;		11.5m.&#13;
-Position_3;	10.44m;					10.47m;			10.5m.&#13;
-Position_4;	9.402m;					9.423m;			9.5m.&#13;
-Position_5;	8.364m;					8.376m;			8.5m.&#13;
-Position_6;	7.326m;					7.329m;			7.5m.&#13;
-Position_7;	6.288m;					6.282m;			6.5m.&#13;
-Position_8;	5.25m;					5.235m;			5.5m.&#13;
-Position_9;	4.212m;					4.188m;			4.5m.&#13;
-Position_10;	3.174m;					3.141m;			3.5m.&#13;
-Position_11;	2.136m;					2.094m;			2.5m.&#13;
-Position_12;	1.098m;					1.047m;			1.5m.&#13;
-Position_13;	0.06m;					0m;			0.5m.</para>
-          <para>Calibration: </para>
-          <para>The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO Sonde sensors, except for temperature, were factory calibrated before being deployed on 18 June 2020.</para>
-          <para>EXO Depth: &#13;
-On 13 August 2020 at 11:30, the EXO2 was redeployed 0.41m lower than before and stayed at this lower position for the rest of the year. On 05 April 2021 at 13:40, the EXO2 was redeployed because the original floating buoy had filled with water and sunk just below the surface. We recalibrated the depth sensor on the EXO2 and deployed the buoy at 1.5m using a boat fender and multipurpose clothesline wire. Because the EXO2 is vented but the cable is not, changes in barometric pressure are not accounted for. The EXO is currently deployed on a buoy at 1.5m regardless of the depth reading and usually sits at this depth unless there are issues with the buoy. On 09 November 2021 the water level had dropped so the EXO2 cable was taut and not supported by the buoy, more cable was let out until the buoy was floating again.   </para>
-          <para>DO Maintenance: &#13;
-InSitu RDO Pro-X Dissolved Oxygen Sensors were calibrated on 16 September 2020, 26 October 2020, 8 March 2021 and checked on 26 October 2021.  The caps to the DO sensors were replaced on October 26, 2021 with the calibration checked but not calibrated. The antifouling guard was removed on October 26, 2021 due to concerns of lack of water exchange with the sensor and increased fouling. </para>
-          <para>EXO2 DO sensor was calibrated on 16 September 2020, 26 October 2020,  8 March 2021, 12 July 2021 with air saturated water. The DO cap was changed on 12 July 2021. </para>
-          <para>fDOM Maintenance:&#13;
-EXO2 fDOM sensor was 0 calibrated on 5 April 2021.  </para>
+          <para>Offset Table:</para>
+          <para>The table below is the position of the sensor, offset to find the depth of the position from the top of the water at a given time, and the distance above the sediments when the sensors were deployed. The R script, BVR_sort_by_depth_2020_2021.csv, attached to this package will calculate a depth for each sensor reading. The commented out section will sort the reading into columns by depth and variable, but this introuduces a lot of NAs into the data set.  </para>
+          <para>Offset Table 2020_2021</para>
+          <para>Position;	Offset_before_05APR21;		Offset_after_05APR21;	Distance from sediments.</para>
+          <para>Position_1;	11.82m;					11.82m;			12.5m.</para>
+          <para>Position_2;	11.478m;				11.478m;		11.5m.</para>
+          <para>Position_3;	10.44m;					10.47m;			10.5m.</para>
+          <para>Position_4;	9.402m;					9.423m;			9.5m.</para>
+          <para>Position_5;	8.364m;					8.376m;			8.5m.</para>
+          <para>Position_6;	7.326m;					7.329m;			7.5m.</para>
+          <para>Position_7;	6.288m;					6.282m;			6.5m.</para>
+          <para>Position_8;	5.25m;					5.235m;			5.5m.</para>
+          <para>Position_9;	4.212m;					4.188m;			4.5m.</para>
+          <para>Position_10;	3.174m;					3.141m;			3.5m.</para>
+          <para>Position_11;	2.136m;					2.094m;			2.5m.</para>
+          <para>Position_12;	1.098m;					1.047m;			1.5m.</para>
+          <para>Position_13;	0.06m;					0m;			0.5m.</para>
           <para>&#13;
-Missing Data and Issues</para>
-          <para>Missing Data Dates and Times:&#13;
+Calibration: </para>
+          <para>The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 Sonde sensors, except for temperature, were factory calibrated before being deployed on 18 June 2020.</para>
+          <para>EXO Depth: &#13;
+On 13 August 2020 at 11:30, the EXO2 was redeployed 0.41m lower than before and stayed at this lower position for the rest of the year. On 05 April 2021 at 13:40, the EXO2 was redeployed because the original floating buoy had filled with water and sunk just below the surface. We recalibrated the depth sensor on the EXO2 and deployed the buoy at 1.5m using a boat fender and multipurpose clothesline wire. On 09 November 2021 the water level had dropped so the EXO2 cable was taut and not supported by the buoy, more cable was let out until the buoy was floating again. Because the EXO2 was vented but the cable was not, changes in barometric pressure were not accounted for. The EXO2 was currently deployed on a buoy at 1.5m regardless of the depth reading and usually sits at this depth unless there were issues with the buoy. &#13;
+   </para>
+          <para>DO Maintenance:&#13;
+ &#13;
+InSitu RDO Pro-X Dissolved Oxygen Sensors were calibrated on 16 September 2020, 26 October 2020, 8 March 2021, and checked on 26 October 2021.  The caps to the DO sensors were replaced on 26 Ocotober 2021 with the calibration checked but not calibrated. The antifouling guard was removed on 26 October 2021 due to concerns of lack of water exchange with the sensor. </para>
+          <para>EXO2 DO sensor was calibrated on 16 September 2020, 26 October 2020, 8 March 2021, 12 July 2021 with air saturated water. The DO cap was changed on 12 July 2021. We did see an increase in DO saturation when the cap was changed. </para>
+          <para>fDOM Maintenance:</para>
+          <para>EXO2 fDOM sensor was 0 calibrated on 5 April 2021.  </para>
+          <para>&#13;
+Missing Data:&#13;
 The CR6 program on the datalogger underwent maintenance on 13 August 2020, 5 October 2020,  7 December 2020, 5 April 2021, 31 May 2021, and 24 August 2021 so no data were recorded during these times: 2020-08-13 05:20-05:50, 2020-10-05 09:20-12:00, 2020-12-07 10:10-10:40, 2021-04-05 13:20:00-14:40:00, 2021-05-31 08:50:00-09:10:00, and 2021-08-24 07:30:00- 07:50:00. </para>
           <para>The turbidity sensor on the EXO2 was added to the data frame on 5 April 2021. </para>
           <para>&#13;
 QAQC Methods:</para>
           <para>Maintenance data gaps:&#13;
-The sensor string was regularly brought up to the surface for routine maintenance, the dates and times of which were recorded in the BVR_MaintenanceLog_2020_2021.txt file. To account for these gaps in sensor data, we used an automated QAQC script (BVR_qaqc_1.R), which indexed the dates and times recorded in the maintenance log and set the data to NA and the Flag_All column set to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA and Flag_All to 1 manually.  Any other maintenance, outlier and questionable values were also recorded in the maintenance log. </para>
+The sensor string was regularly brought up to the surface for routine maintenance and cleaning, the dates and times of which were recorded in the BVR_MaintenanceLog_2020_2021.txt file. To account for these gaps in sensor data, we used an automated QAQC script (BVR_platform_QAQC_function_2020_2021.R script), which indexed the dates and times recorded in the maintenance log and set the data to NA and the corresponding flag columns to 1. Any other maintenance, outlier and questionable values were also recorded in the maintenance log. </para>
           <para>QAQC Dissolved Oxygen values: &#13;
-After the sensors are pulled up DO values are changed to NA and flagged up to 2 hours after the sensors are back in the water. This ensures the sensors equilibrate after a cleaning and being in air.&#13;
-Thermistors: &#13;
-Thermistors 11, 12, and 13 were not programmed until 5 October 2020, so all readings prior to that time are NA and given a “flag 1” for maintenance.  In Flag_Temp_11, Flag_Temp_12, and Flag_Temp_13. When the water level was lower than thermistors at position 1 through 3  and they were reading the temperature of the air, their readings were changed to NA and given a “flag 2”.&#13;
-EXO Maintenance and QAQC:&#13;
-The EXO2 was removed from the reservoir on 06 December 2021 11:00 and sent back to YSI(Yellow Springs, OH) for Winter Maintenance&#13;
-EXO Chlorophyll-a and Phycocyanin: &#13;
-The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see ‘chla and phyco qaqc’ section of BVR_platform_QAQC_function_2020_2021.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. </para>
-          <para>EXO fDOM &#13;
-fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘fdom qaqc’ section of  BVR_platform_QAQC_function_2020_2021.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
+After the sensors are pulled up DO values are changed to NA and flagged up to 2 hours after the sensors are back in the water. This ensures the sensors equilibrate after a cleaning and being in air.</para>
+          <para>Thermistors: &#13;
+Thermistors 11, 12, and 13 were not programmed until 5 October 2020, so all readings prior to that time are NA and given a “flag 1” for maintenance.  In Flag_Temp_11, Flag_Temp_12, and Flag_Temp_13. When the water level was lower than thermistors at position 1 through 3  and they were reading the temperature of the air, their readings were changed to NA and given a “flag 2”.</para>
+          <para>EXO Maintenance and QAQC:&#13;
+The EXO2 was removed from the reservoir on 06 December 2021 11:00 and sent back to YSI (Yellow Springs, OH) for winter maintenance.</para>
+          <para>EXO Chlorophyll-a and Phycocyanin: &#13;
+The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see chla and phyco qaqc section of BVR_platform_QAQC_function_2020_2021.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. </para>
+          <para>EXO fDOM: &#13;
+fDOM sensor data underwent a QAQC process to remove extreme outliers (see fdom qaqc section of  BVR_platform_QAQC_function_2020_2021.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
           <para>EXO conductivity, Specific Conductivity and Total Dissolved Solids:&#13;
-These sensors underwent a QAQC process to remove extreme outliers(see cond, spcond and TDS qaqc sensor of  BVR_platform_QAQC_function_2020_2021.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
+These sensors underwent a QAQC process to remove extreme outliers (see cond, spcond and TDS qaqc sensor of  BVR_platform_QAQC_function_2020_2021.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
           <para>EXO Turbidity: &#13;
-These sensors underwent a QAQC process to remove extreme outliers(see turbidity qaqc sensor of  BVR_platform_QAQC_function_2020_2021.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
+These sensors underwent a QAQC process to remove extreme outliers (see turbidity qaqc sensor of  BVR_platform_QAQC_function_2020_2021.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. </para>
           <para>&#13;
 Instruments, manual, and serial numbers used in 2021-current:&#13;
 Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.</para>
-          <para>NexSens T-Node FR Thermistors (June 2020 - current)&#13;
+          <para>NexSens T-Node FR Thermistors (June 2020 - current);&#13;
 https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf&#13;
-Serial No. 03903; 1 (June 2020-October 22, 2020)&#13;
-Serial No.             : 1 (December 2, 2020-December 31, 2020)&#13;
-Serial No. 04034; 2&#13;
-Serial No. 04043; 3&#13;
-Serial No. 04052; 4&#13;
-Serial No. 04053; 5&#13;
-Serial No. 04058; 6&#13;
-Serial No. 04072; 7&#13;
-Serial No. 04075; 8&#13;
-Serial No. 04080; 9&#13;
-Serial No. 04091; 10&#13;
-Serial No. 04092; 11&#13;
-Serial No. 04102; 12&#13;
-Serial No. 04169; 13</para>
-          <para>InSitu RDO Pro-X Dissolved Oxygen Sensor (June 2020 - current)&#13;
-https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf&#13;
-Serial No. 733819; 6&#13;
-Calibration from September 16, 2020 to October 26, 2020; slope = 1.1209, offset = 0.00&#13;
-Calibration from October 26, 2020 to March 8, 2021; slope = 1.0897, offset = 0.00&#13;
-Calibration from March 8, 2021 to October 26, 2021; slope=1.1217, offset=0.00&#13;
-DO cap changed on October 26, 2021-DO checked but not calibrated&#13;
-Serial No. 733787; 13&#13;
-Calibration from September 16, 2020 to October 26, 2020; slope = 1.1664, offset = 0.00&#13;
-Calibration from October 26, 2020 to December 31, 2020; slope = 1.1370, offset = 0.00&#13;
-Calibration from March 8, 2021 to October 26, 2021; slope=1.1392, offset=0.00&#13;
-DO cap changed on October 26, 2021-DO checked but not calibrated</para>
-          <para>YSI EXO2 Sonde Serial No. 19H101129 (June 2020 - current)&#13;
-https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	&#13;
-Wiped Conductivity/Temperature Sensor Serial No. 19G100537&#13;
-Central Wiper for Conductivity/Temperature Sensor Serial No. 19G104137&#13;
-Dissolved Oxygen Sensor Serial No. 19H101129&#13;
-Total Algae Sensor Serial No. 18F103685&#13;
-fDOM Sensor Serial No. 18E105388&#13;
-Calibration 0 point on April 5, 2021. Pre-Calibration value=-0.10 RFU. Post-Calibration value=0.00RFU&#13;
-Turbidity Sensor Serial No.19H101145 &#13;
-Pressure Transducer Serial No. 19A103659&#13;
-YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (June 2020- July 2021)&#13;
-Calibration from September 16, 2020 to October 26, 2020; DO Gain=1.09&#13;
-Calibration from October 26, 2020 to March 8, 2021; DO Gain=1.08&#13;
-Calibration from March 8, 2021 to July 12, 2021; DO Gain=1.06&#13;
-YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 21D103611 (July 2021- current)&#13;
-Calibration from July 12, 2021 to current; DO gain=1.11</para>
+Serial No. 03903; 1 (June 2020-October 22, 2020).&#13;
+Serial No.      ; 1 (December 2, 2020-current).&#13;
+Serial No. 04034; 2.&#13;
+Serial No. 04043; 3.&#13;
+Serial No. 04052; 4.&#13;
+Serial No. 04053; 5.&#13;
+Serial No. 04058; 6.&#13;
+Serial No. 04072; 7.&#13;
+Serial No. 04075; 8.&#13;
+Serial No. 04080; 9.&#13;
+Serial No. 04091; 10.&#13;
+Serial No. 04092; 11.&#13;
+Serial No. 04102; 12.&#13;
+Serial No. 04169; 13.</para>
+          <para>InSitu RDO Pro-X Dissolved Oxygen Sensor (June 2020 - current);&#13;
+https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf</para>
+          <para>Serial No. 733819; 6:&#13;
+Calibration from September 16, 2020 to October 26, 2020; slope = 1.1209, offset = 0.00.&#13;
+Calibration from October 26, 2020 to March 8, 2021; slope = 1.0897, offset = 0.00.&#13;
+Calibration from March 8, 2021 to October 26, 2021; slope=1.1217, offset=0.00.&#13;
+DO cap changed on October 26, 2021-DO checked but not calibrated.</para>
+          <para>Serial No. 733787; 13:&#13;
+Calibration from September 16, 2020 to October 26, 2020; slope = 1.1664, offset = 0.00.&#13;
+Calibration from October 26, 2020 to December 31, 2020; slope = 1.1370, offset = 0.00.&#13;
+Calibration from March 8, 2021 to October 26, 2021; slope=1.1392, offset=0.00.&#13;
+DO cap changed on October 26, 2021-DO checked but not calibrated.</para>
+          <para>YSI EXO2 Sonde Serial No. 19H101129 (June 2020 - current);&#13;
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf&#13;
+ 	&#13;
+Wiped Conductivity/Temperature Sensor Serial No. 19G100537.</para>
+          <para>Central Wiper for Conductivity/Temperature Sensor Serial No. 19G104137.</para>
+          <para>Dissolved Oxygen Sensor Serial No. 19H101129.</para>
+          <para>Total Algae Sensor Serial No. 18F103685.</para>
+          <para>fDOM Sensor Serial No. 18E105388.&#13;
+Calibration 0 point on April 5, 2021. Pre-Calibration value=-0.10 RFU. Post-Calibration value=0.00RFU.</para>
+          <para>Turbidity Sensor Serial No.19H101145.&#13;
+ &#13;
+Pressure Transducer Serial No. 19A103659.</para>
+          <para>YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (June 2020- July 2021)&#13;
+Calibration from September 16, 2020 to October 26, 2020; DO Gain=1.09.&#13;
+Calibration from October 26, 2020 to March 8, 2021; DO Gain=1.08.&#13;
+Calibration from March 8, 2021 to July 12, 2021; DO Gain=1.06.</para>
+          <para>YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 21D103611 (July 2021- current)&#13;
+Calibration from July 12, 2021 to current; DO gain=1.11.</para>
           <para>&#13;
-Campbell Scientific Stainless-Steel Pressure Transducer CS451 (June 2020-current)&#13;
+Campbell Scientific Stainless-Steel Pressure Transducer CS451 (June 2020-current);&#13;
 https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf&#13;
 Serial No. &#13;
-		</para>
-          <para>Please note: When pulling the file via EDI's API, we recommend using the function "read.csv" instead of "read_csv". The function 'read_csv' identifies the columns for the VT data and associated flags as "logical" instead of "double" due to &gt;100 NA's at the beginning of the dataset. This is avoided when using the function "read.csv".&#13;
+		&#13;
 		</para>
         </description>
       </methodStep>
@@ -246,21 +245,6 @@ Serial No. &#13;
         <role>Principal Investigator</role>
       </personnel>
       <funding>Western Virginia Water Authority N/A</funding>
-      <relatedProject>
-        <title>N/A</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Virginia Tech Global Change Center N/A</funding>
-      </relatedProject>
       <relatedProject>
         <title>N/A</title>
         <personnel>
@@ -338,12 +322,12 @@ Serial No. &#13;
       </relatedProject>
     </project>
     <dataTable>
-      <entityName>BVR_platform_2020_2021.csv</entityName>
+      <entityName>BVR_platform_data_2020_2021.csv</entityName>
       <entityDescription>All water quality parameters measured at Beaverdam Reservoir during 2020-2021</entityDescription>
       <physical>
-        <objectName>BVR_platform_2020_2021.csv</objectName>
+        <objectName>BVR_platform_data_2020_2021.csv</objectName>
         <size unit="bytes">31439663</size>
-        <authentication method="MD5">204b728cd4637ce59f5bd82cd7e43b40</authentication>
+        <authentication method="MD5">bd52d0e91f0c7af9411bc8c26172d4a3</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -358,13 +342,13 @@ Serial No. &#13;
       <attributeList>
         <attribute>
           <attributeName>Reservoir</attributeName>
-          <attributeDefinition>Three-letter code corresponding to sampled reservoir;BVR=Beaverdam Reservoir</attributeDefinition>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
               <nonNumericDomain>
                 <textDomain>
-                  <definition>Three-letter code corresponding to sampled reservoir;BVR=Beaverdam Reservoir</definition>
+                  <definition>Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir</definition>
                 </textDomain>
               </nonNumericDomain>
             </nominal>
@@ -376,7 +360,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Site</attributeName>
-          <attributeDefinition>Sampling site within each reservoir;50=Deep hole or site nearest to dam in the reservoir, attached to the platform</attributeDefinition>
+          <attributeDefinition>Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -412,7 +396,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_1</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 1 (highest elevation above sediments)</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 1 (highest elevation above sediments)</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -435,7 +419,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_2</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 2</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 2</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -458,7 +442,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_3</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 3</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 3</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -481,7 +465,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_4</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 4</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 4</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -504,7 +488,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_5</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 5</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 5</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -527,7 +511,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_6</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 6</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 6</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -550,7 +534,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_7</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 7</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 7</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -573,7 +557,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_8</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 8</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 8</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -596,7 +580,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_9</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 9</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 9</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -619,7 +603,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_10</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 10</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 10</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -642,7 +626,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_11</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 11</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 11</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -688,7 +672,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>ThermistorTemp_C_13</attributeName>
-          <attributeDefinition>water temperature measured by thermistor at position 13 (located at 0.5 m above sediments)</attributeDefinition>
+          <attributeDefinition>Water temperature measured by thermistor at position 13 (located at 0.5 m above sediments)</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -826,7 +810,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>RDOTemp_C_13</attributeName>
-          <attributeDefinition>Water temperature as measured by the DO sonde at position 13 as measured by the RDO Sensor</attributeDefinition>
+          <attributeDefinition>Water temperature at position 13 as measured by the RDO Sensor</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -1286,7 +1270,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Depth_m_13</attributeName>
-          <attributeDefinition>Depth of the pressure sensor at position 13 in meters calculated by Lvl_psi_0m_13 * 0.70455</attributeDefinition>
+          <attributeDefinition>Depth of the pressure sensor at position 13 in meters derived from Lvl_psi_13 where 1psi=0.70455m (See Methods)</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -1309,7 +1293,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>LvlTemp_C_13</attributeName>
-          <attributeDefinition>water temperature at position 13 as measured by the water level logger</attributeDefinition>
+          <attributeDefinition>Water temperature at position 13 as measured by the water level logger</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -1417,7 +1401,7 @@ Serial No. &#13;
                   </codeDefinition>
                   <codeDefinition>
                     <code>2</code>
-                    <definition>negative or outlier value removed and set to NA see Methods section for more detail on QAQC process</definition>
+                    <definition>negative or outlier value removed and set to NA; see Methods section for more detail on QAQC process</definition>
                   </codeDefinition>
                 </enumeratedDomain>
               </nonNumericDomain>
@@ -1490,10 +1474,6 @@ Serial No. &#13;
                     <code>1</code>
                     <definition>value removed due to maintenance and set to NA</definition>
                   </codeDefinition>
-                  <codeDefinition>
-                    <code>5</code>
-                    <definition>questionable value but left in the dataset</definition>
-                  </codeDefinition>
                 </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
@@ -1514,6 +1494,10 @@ Serial No. &#13;
                   <codeDefinition>
                     <code>1</code>
                     <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>questionable value but left in the dataset</definition>
                   </codeDefinition>
                 </enumeratedDomain>
               </nonNumericDomain>
@@ -1781,7 +1765,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_RDO_mgL_13</attributeName>
-          <attributeDefinition>Data flag for DO data at position 13(RDO_mgL_13, RDOsat_percent_13)</attributeDefinition>
+          <attributeDefinition>Data flag for DO data at position 13 (RDO_mgL_13, RDOsat_percent_13)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -1864,7 +1848,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOTemp_C_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 Temperature data (EXOTemp_C_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 temperature data at 1.5 meters depth (EXOTemp_C_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -1893,7 +1877,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOCond_uScm_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 conductivity data (EXOCond_uScm_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 conductivity data at 1.5 meters depth (EXOCond_uScm_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -1926,7 +1910,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOSpCond_uScm_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 specific conductance data (EXOSpCond _uScm_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 specific conductance data at 1.5 meters depth (EXOSpCond _uScm_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -1959,7 +1943,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOTDS_mgL_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 total dissolved solids data (EXOTDS_mgL_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 total dissolved solids data at 1.5 meters depth (EXOTDS_mgL_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -1992,7 +1976,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXODOsat_percent_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 DO saturation(EXODOsat_percent_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 DO saturation at 1.5 meters depth (EXODOsat_percent_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2050,7 +2034,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOChla_RFU_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 chlorophyll data in RFU at 1.5 meters depth(EXOChla_RFU_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 chlorophyll data in RFU at 1.5 meters depth (EXOChla_RFU_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2083,7 +2067,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOChla_ugL_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 chlorophyll data in ugL at 1.5 meters depth(EXOChla_ugL_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 chlorophyll data in ugL at 1.5 meters depth (EXOChla_ugL_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2116,7 +2100,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOBGAPC_RFU_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 phycocyanin data in RFU at 1.5 meters depth(EXOBGAPC_RFU_1_5)_</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 phycocyanin data in RFU at 1.5 meters depth (EXOBGAPC_RFU_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2153,7 +2137,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOBGAPC_ugL_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 phycocyanin data in ugL at 1.5 meters depth (EXOBGAPC _ugL_1_5)_</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 phycocyanin data in ugL at 1.5 meters depth (EXOBGAPC _ugL_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2190,7 +2174,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOfDOM_RFU_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data in RFU at 1.5 meters depth(EXOfDOM_RFU_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data in RFU at 1.5 meters depth (EXOfDOM_RFU_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2223,7 +2207,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_EXOfDOM_QSU_1_5</attributeName>
-          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data in QSU at 1.5 meters depth(EXO2fDOM_QSU_1_5)</attributeDefinition>
+          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data in QSU at 1.5 meters depth (EXO2fDOM_QSU_1_5)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2434,7 +2418,7 @@ Serial No. &#13;
         </attribute>
         <attribute>
           <attributeName>Flag_Lvl_psi_13</attributeName>
-          <attributeDefinition>Data flag for pressure sensor measuring pressure in psi, calculated depth in meters from psi and temperature from pressure sensor measured in celsius (Lvl_psi_13, Depth_m_13,LvlTemp_C_13)</attributeDefinition>
+          <attributeDefinition>Data flag for pressure sensor (Lvl_psi_13, LvlTemp_C_13)</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
             <nominal>
@@ -2447,6 +2431,10 @@ Serial No. &#13;
                   <codeDefinition>
                     <code>1</code>
                     <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>questionable value but left in the dataset</definition>
                   </codeDefinition>
                   <codeDefinition>
                     <code>7</code>
@@ -2480,8 +2468,8 @@ Serial No. &#13;
       <entityDescription>Final script to run QAQC includes plots to check QAQC</entityDescription>
       <physical>
         <objectName>BVR_platform_QAQC_Plot_2020_2021.R</objectName>
-        <size unit="bytes">27121</size>
-        <authentication method="MD5">65bae7e4899163d0627fdfcd3bcabf27</authentication>
+        <size unit="bytes">28008</size>
+        <authentication method="MD5">d61982852c777233c1632b12d6632456</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
@@ -2495,8 +2483,8 @@ Serial No. &#13;
       <entityDescription>Maintenance log for BVR platform sensors</entityDescription>
       <physical>
         <objectName>BVR_maintenance_log_2020_2021.txt</objectName>
-        <size unit="bytes">6514</size>
-        <authentication method="MD5">1634ea7f16b467f98e04c8a682b405da</authentication>
+        <size unit="bytes">7336</size>
+        <authentication method="MD5">ac4732973e58fd076efd5dcddc0c5545</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
@@ -2522,11 +2510,11 @@ Serial No. &#13;
     </otherEntity>
     <otherEntity>
       <entityName>BVR_sort_by_depth_2020_2021.R</entityName>
-      <entityDescription>Script in R to give a depth reading to each sensor reading and sort the reading into depth instead of postion</entityDescription>
+      <entityDescription>Script in R to give a depth reading to each sensor reading and sort the readings by depth instead of postion</entityDescription>
       <physical>
         <objectName>BVR_sort_by_depth_2020_2021.R</objectName>
-        <size unit="bytes">6879</size>
-        <authentication method="MD5">6ec9fb4c777134576e19b9eebe67f2b7</authentication>
+        <size unit="bytes">10565</size>
+        <authentication method="MD5">d9277bfcf89ec6488ae7da626d95fec3</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

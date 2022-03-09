@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir, BVR=Beaverdam Reservoir	categorical			NA	value is missing
-Site	Sampling site within each reservoir	numeric	dimensionless		NA	value is missing
+Site	Sampling site within each reservoir; 50=deepest site near dam	numeric	dimensionless		NA	value is missing
 Date	Date of ice-on or ice-off	Date		YYYY-MM-DD	NA	value is missing
 Year	Year of observation	Date		YYYY	NA	value is missing
 DayOfYear	Date of observation	Date		DD	NA	value is missing

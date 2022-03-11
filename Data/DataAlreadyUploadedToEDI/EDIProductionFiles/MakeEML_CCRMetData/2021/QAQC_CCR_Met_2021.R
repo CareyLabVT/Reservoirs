@@ -231,10 +231,6 @@ Met=Met%>%
 
 
 #Infared radiation cleaning
-#fix infrared radiation voltage reading after airtemp correction
-#only need to do this for data from 2015 to  2016-07-25 10:12:00
-
-
 
 #Mean correction for InfRadDown (needs to be after voltage correction)
 #Using 2018 data, taking the mean and sd of values on DOY to correct to
@@ -411,6 +407,12 @@ Met=Met%>%
     Note_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationDown_Average_W_m2),
     ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), NA, ShortwaveRadiationDown_Average_W_m2))
 
+# High questionable values when no one was at the reservoir on April 12- April 15th
+
+Met=Met%>%
+  mutate(
+    Flag_ShortwaveRadiationDown_Average_W_m2=ifelse(DateTime>"2021-04-12 00:00" & DateTime<"2021-04-15 23:59" & ShortwaveRadiationDown_Average_W_m2>80 & !is.na(ShortwaveRadiationDown_Average_W_m2), 5, Flag_ShortwaveRadiationDown_Average_W_m2),
+    Note_ShortwaveRadiationDown_Average_W_m2=ifelse(DateTime>"2021-04-12 00:00" & DateTime<"2021-04-15 23:59" & ShortwaveRadiationDown_Average_W_m2>80 & !is.na(ShortwaveRadiationDown_Average_W_m2), "Questionable_value_left_in_dataset", Note_ShortwaveRadiationDown_Average_W_m2))
 
 
 #Remove albedo outliers
@@ -449,6 +451,7 @@ for(b in 20:32){
   print(colnames(Met[b]))
   print(table(Met[,b],useNA="always"))
 }
+
 
 ####6) Make plots to view data #####
 #plots to check for any wonkiness

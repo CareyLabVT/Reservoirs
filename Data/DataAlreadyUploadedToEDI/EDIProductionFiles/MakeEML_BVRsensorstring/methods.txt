@@ -1,0 +1,149 @@
+Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir in 2016-2020 using water temperature HOBOs, dissolved oxygen sensor (MiniDot Logger), and a YSI EXO2 sonde. Various senor data were collected every fifteen minutes from 21 July 2016 11:00 EST-7 November 2017 15:30 EST, and every ten minutes from 12 June 2018 13:40 EST-9 July 2020 11:50 EST. We deployed the HOBOs on a chain with sensors about 1m apart from 0.1m to 10.5m. Because the water level in Beaverdam Reservoir varied the HOBOS were approximatley at the assigned depth. The dissolved oxygen sensor was deployed at 10m until dissolved oxygen was 0 mg/L and then moved to 5m. It was moved back to 10m when the reservoir started to statify, when the dissolved oxygen was at 0 mg/L it was moved back to 5m. The YSI sonde was deployed at 1.5m. 
+
+Sensor Deployments:
+
+Hobos were deployed from:
+
+21 July 2016-05 May 2017 at 1m, 4m and 10m. 
+
+07 July 2017-07 November 2017 at 0.1m, 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m, 10.5m. 
+
+06 December 2018-16 May 2019 at 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m.
+
+27 June 2019-15 November 2019 at 0.1m, 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m.
+
+14 May 2020-09 July 2020 at 1m, 2m, 3m, 7m. 
+
+
+MiniDot was deployed from: 
+
+06 December 2018-2019-27 June 2019 at 10m.
+
+27 June 2019-16 March 2020 at 5m.
+
+16 March 2020-14 May 2020 at 10m.
+
+14 May 2020-11 June 2020 at 5m. 
+
+EXO2 was deployed at 1.5m on: 
+
+07 October 2019-19 February 2020.
+
+16 March 2020-14 May 2020. 
+
+No sensors were deployed on 2017-05-05 11:00:00-2017-07-07 11:00:00, 2017-11-07 15:30:00-2018-12-06 13:40:00, 2019-05-16 12:00:00-2019-06-27 14:10:00.
+
+Calibration: 
+
+The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 Sonde sensors, except for temperature, were factory calibrated before being deployed on 07 October 2019.
+  
+
+QAQC Methods:
+
+All measurements when the sensors were out of the water were not included in the data set or if the values were in the data set they were changed to NA and flagged with a "flag 2". According to the QAQC plots the HOBO at 0.1m was out of the water after 30 August 2019 10:00 EST and changed to NA and flagged with a 2. 
+
+All dates and times were changed to EST. Times were rounded to every 15 minutes from 21 July 2016 EST-7 November 2017 15:30 EST, and rounded to every 10 minutes from 12 June 2018 13:40 EST-9 July 2020 11:50 EST. During the 07 July 2017-07 November 2017 HOBO deployment the one at 5m was set to record every ten seconds as oppposed to every 10 minutes, therefore it stopped recording on 13 July 2017 12:00:00 EST. To match the other readings, I averaged the readings over the fifteen minute period and flaged these data with a "flag 4".  
+
+Negative values besides water temerature were changed to 0 and given a "flag 3".
+
+EXO Chlorophyll-a and Phycocyanin: 
+The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see chla and phyco qaqc section of BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. 
+
+EXO fDOM: 
+The fDOM sensor data underwent a QAQC process to remove extreme outliers (see fdom qaqc section of  BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. 
+
+EXO conductivity, Specific Conductivity and Total Dissolved Solids:
+These sensors underwent a QAQC process to remove extreme outliers (see cond, spcond and TDS qaqc sensor of  BVR_sensorstring_Collate_QAQC_2016_2020.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. 
+
+EXO Turbidity: 
+These sensors underwent a QAQC process to remove extreme outliers (see turbidity qaqc sensor of  BVR_sensorstring_Collate_QAQC_2016_2020.R script)  following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. 
+
+
+Instruments, manual, and serial numbers used in 2016-2020:
+Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+
+HOBO Pendant Temperature/Light 64K Data Logger (Bourne, MA), https://www.onsetcomp.com/files/manual_pdfs/9556-M%20UA-002%20Manual.pdf:
+
+Serial No. 10789305; 1m (July 2016-May 2017, July 2017-November 2017)
+
+Serial No. 10789306; 4m (July 2016-May 2017, July 2017-November 2017)
+
+Serial No. 10789308; 10m (July 2016-May 2017, July 2017-November 2017), 1m (December 2018-June 2019) 
+
+Serial No. 10523600; 0.1m (July 2017-November 2017)
+
+Serial No. 2413143; 2m (July 2017-November 2017)
+
+Serial No. 890815; 3m (July 2017-November 2017)
+
+Serial No. 874433; 5m (July 2017-November 2017)
+
+Serial No. 2413148; 6m (July 2017-November 2017)
+
+Serial No. 874430; 7m (July 2017-November 2017)
+
+Serial No. 890800; 8m (July 2017-November 2017)
+
+Serial No. 10523605; 9m (July 2017-November 2017)
+
+Serial No. 874426; 10.5m (July 2017-November 2017)
+
+Serial No. 874434; 0.1m (June 2019-November 2019)
+
+Serial No. 10789315; 0.1m (May 2020-July 2020), 1m (June 2019-November 2019)
+
+Serial No. 9860323; 2m (December 2018-June 2019, June 2019-November 2019, May 2020-July 2020)
+
+Serial No. 2413147; 3m (December 2018-June 2019, June 2019-November 2019, May 2020-July 2020)
+
+Serial No. 10647210; 4m (June 2019-November 2019)
+
+Serial No. 10789311; 4m (December 2018-June 2019)
+
+Serial No. 2407065; 5m (June 2019-November 2019)
+
+Serial No. 874439; 5m (December 2018-June 2019)
+
+Serial No. 10647214; 6m (December 2018-June 2019)
+
+Serial No. 10647217; 6m (June 2019-November 2019)
+
+Serial No. 10647209; 7m (December 2018-June 2019, June 2019-November 2019, May 2020-July 2020)
+
+Serial No. 10789313; 8m (December 2018-June 2019, June 2019-November 2019)
+
+Serial No. 10523598; 9m (December 2018-June 2019)
+
+Serial No. 2413142; 9m (June 2019-November 2019)
+
+Serial No. 2413140; 10m (June 2019-November 2019)
+
+Serial No. 2407063: 10m (December 2018-June 2019)
+
+
+miniDOT Logger Precision Measurment Engineering, Inc. (Vista, CA), Serial No. 7392-024261 (December 2018-May 2020);
+https://www.pme.com/wp-content/uploads/PME-miniDOT-Manual-2021.pdf
+
+YSI EXO2 Sonde Serial No. 19H101129 (October 2019- May 2020);
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf
+ 	
+Wiped Conductivity/Temperature Sensor Serial No. 19G100537.
+
+Central Wiper for Conductivity/Temperature Sensor Serial No. 19G104137.
+
+Dissolved Oxygen Sensor Serial No. 19H101129.
+
+Total Algae Sensor Serial No. 18F103685.
+
+fDOM Sensor Serial No. 18E105388.
+
+Turbidity Sensor Serial No.19H101145.
+ 
+Pressure Transducer Serial No. 19A103659.
+
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (October 2019- May 2020)
+
+
+
+		
+		

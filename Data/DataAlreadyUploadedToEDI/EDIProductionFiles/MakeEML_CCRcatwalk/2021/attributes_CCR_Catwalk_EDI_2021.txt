@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character				
-Site	Sampling site within each reservoir; 51=Site nearest to dam in the reservoir, attached to the platform 	numeric	dimensionless			
+Site	Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform 	numeric	dimensionless			
 DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss		
 ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (highest elevation above sediments)	numeric	celsius			
 ThermistorTemp_C_2	water temperature measured by thermistor at position 2	numeric	celsius			

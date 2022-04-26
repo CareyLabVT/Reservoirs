@@ -3,15 +3,16 @@
 ##Date: 21 July 2019
 ## Updated: 07 Feb 2020, A. Hounshell
 
-setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021")
+
 # # Install devtools
-install.packages("devtools")
-# 
-# # Load devtools
+
+
 library(devtools)
-# 
-devtools::install_github("EDIorg/EMLassemblyline")
+install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021"
+
 
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData
@@ -27,8 +28,8 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
 template_table_attributes(
- path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
- data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+ path = folder,
+ data.path = folder,
  data.table = 'FCR_Met_final_2015_2021.csv')
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -99,16 +100,16 @@ template_table_attributes(
 
 # Run this function for your dataset
 
-template_categorical_variables(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
-                               data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
-template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
-                             data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+template_geographic_coverage(path = folder,
+                             data.path = folder,
                              data.table = 'FCR_Met_final_2015_2021.csv',
                              empty = TRUE,
                              write.file = TRUE)
@@ -137,22 +138,23 @@ template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToE
 # zip.dir: Change the name of the module files zip folder
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
-make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021",
+make_eml(path = folder,
+         data.path = folder,
+         eml.path = folder,
          dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2021",
-         data.table = c('FCR_Met_final_2015_2021.csv', 'FCR_Met_Maintenance_2015_2021.csv'),
-         data.table.name = c('FCR_Met_final_2015_2021', 'FCR_Met_Maintenance_2015_2021'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2021',
-                                    'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'FCR_MET_QAQC_2021.R',
-         other.entity.name = 'FCR_MET_QAQC_2021',
-         other.entity.description = 'Data aggregation and QA/QC R script',
+         data.table = 'FCR_Met_final_2015_2021.csv',
+         data.table.name = 'FCR_Met_final_2015_2021',
+         data.table.description = 'All meteorological parameters measured at Falling Creek Reservoir during 2015-2021',
+         other.entity = c('FCR_MET_QAQC_2015_2021.R','FCR_Met_Maintenance_2015_2021.txt'),
+         other.entity.name = c('FCR_MET_QAQC_2015_2021',"FCR_Met_Maintenance_2015_2021"),
+         other.entity.description = c('Data aggregation and QA/QC R script','The log of all maintenance applied to the meteorological station'),
          temporal.coverage = c("2015-07-07", "2021-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.8") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2020 was "edi.389.5"
+         package.id = "edi.389.6") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2020 was "edi.389.5"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
@@ -160,15 +162,18 @@ make_eml(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFile
 # ??!!! SO AM COPYING & PASTING THE .XML FILE BACK INTO THE GITHUB DIRECTORY. WORTH A TRY TO RUN IT OUT OF THERE
 # NEXT TIME WE UPDATE THE MET DATA IN THE FUTURE. I ALSO DELETED THE ZIP FILES 
 setwd("/Users/cayelan/Desktop/MakeEML_MetData")
-make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2018",
-         data.table = c('Met_final_2015_2018.csv', 'Met_Maintenance_2015_2018.csv'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2018',
-                                    'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'Met_QAQC.R',
-         other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2018-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
+make_eml(path = folder,
+         data.path = folder,
+         eml.path = folder,
+         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2021",
+         data.table = 'FCR_Met_final_2015_2021.csv',
+         data.table.name = 'FCR_Met_final_2015_2021',
+         data.table.description = 'All meteorological parameters measured at Falling Creek Reservoir during 2015-2021',
+         other.entity = c('FCR_MET_QAQC_2021.R','FCR_Met_Maintenance_2015_2021.csv'),
+         other.entity.name = c('FCR_MET_QAQC_2021',"FCR_Met_Maintenance_2015_2021"),
+         other.entity.description = c('Data aggregation and QA/QC R script','The log of all maintenance applied to the meteorological station'),
+         temporal.coverage = c("2015-07-07", "2021-12-31"),
+         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",

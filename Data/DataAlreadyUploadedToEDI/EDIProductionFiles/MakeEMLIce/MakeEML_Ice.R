@@ -10,7 +10,7 @@ setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Ice")
 # # Load devtools
 # library(devtools)
 # 
-#devtools::install_github("EDIorg/EMLassemblyline")
+devtools::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
@@ -27,7 +27,7 @@ library(EMLassemblyline)
 #Step 5: Import the core metadata templates
 import_templates(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
                  license = "CCBY",
-                 data.files = c("Ice_Data.csv"))
+                 data.files = c("Ice_Data_2013_2022.csv"))
 
 # Edit each of these files for your current data package upload, by copying and 
 # pasting the relevant information from the EDI_metadata_template you prepared
@@ -115,16 +115,19 @@ define_catvars(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/Fallin
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
 make_eml(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
-         dataset.title = "Ice cover data for Falling Creek Reservoir, Vinton, Virginia, USA for 2013-2021",
-         data.files = c('Ice_Data.csv'),
-         data.files.description = c('All ice-on and ice-off data recorded for Falling Creek Reservoir during 2013-2021'),
-         temporal.coverage = c("2014-01-06", "2021-02-23"),
+         data.path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
+         eml.path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/FallingCreek/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLIce",
+         dataset.title = "Ice cover data for Falling Creek Reservoir and Beaverdam Reservoir, Vinton, Virginia, USA for 2013-2022",
+         data.table = c('Ice_Data_2013_2022.csv'),
+         data.table.name = c('Ice_Data_2013_2022.csv'),
+         data.table.description = c('Ice-on and ice-off data recorded for Falling Creek Reservoir and Beaverdam Reservoir during 2013-2022'),
+         temporal.coverage = c("2014-01-06", "2022-02-11"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
-         affiliation = 'EDI',
-         package.id = "edi.456.3") # Put your package.id here, followed by .1 (for 1st version)
+         user.domain = 'EDI',
+         package.id = "edi.456.4") #456.3 Put your package.id here, followed by .1 (for 1st version)
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK

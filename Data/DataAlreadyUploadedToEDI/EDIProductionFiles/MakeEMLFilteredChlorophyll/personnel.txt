@@ -9,9 +9,9 @@ Renato	J. 	Figueiredo	University of Florida	renato@ece.ufl.edu	0000-0001-9841-60
 Jacob	H. 	Wynne	Virginia Tech 	jacobwynne@vt.edu	0000-0003-4221-1247	creator			
 Mary 	E. 	Lofton	Virginia Tech 	melofton@vt.edu	0000-0003-3270-1330	creator			
 Kathleen	D. 	Hamre	Virginia Tech 	kdhamre@vt.edu		creator			
-Jonathan 	P. 	Doubek	Virginia Tech 	jdoubek@lssu.edu	0000-0003-2651-4715	creator			
-Caroline	E.	Bryant	Virginia Tech	Carolb00@vt.edu		creator			
 Arpita	R.	Das	Virginia Tech	arpitadas@vt.edu		creator			
+Caroline	E.	Bryant	Virginia Tech	Carolb00@vt.edu		creator			
+Jonathan 	P. 	Doubek	Virginia Tech 	jdoubek@lssu.edu	0000-0003-2651-4715	creator			
 Barbara	R. 	Niederlehner	Virginia Tech 	bniederl@vt.edu		creator			
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Whitney	M. 	Woelmer	Virginia Tech 	wwoelmer@vt.edu	0000-0001-5147-3877	creator			

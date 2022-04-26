@@ -28,7 +28,7 @@ template_geographic_coverage(path = "/Users/heatherwander/Documents/VirginiaTech
 
 # Run this function for staging data
 make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
-         dataset.title = "Secchi depth data and discrete depth profiles of photosynthetically active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2018",
+         dataset.title = "Secchi depth data and discrete depth profiles of photosynthetically active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
          data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
          eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
          data.table = c("Secchi_depth_2013-2021.csv",
@@ -39,15 +39,15 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.715.2") #need a new one each year
+         package.id = "edi.715.20") #need a new one each year
 
-
+#staging environment - https://portal-s.edirepository.org/nis/login.jsp
 
 
 ################################
 # Run this function when ready for REAL EDI environment
 make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
-         dataset.title = "Secchi depth data and discrete depth profiles of photosynthetically active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2018",
+         dataset.title = "Secchi depth data and discrete depth profiles of photosynthetically active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
          data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
          eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021",
          data.table = c("Secchi_depth_2013-2021.csv",
@@ -58,5 +58,5 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.198.7") #2021 is 198.9
+         package.id = "edi.198.10") #2021 is 198.9 or 198.10 (republished)
 

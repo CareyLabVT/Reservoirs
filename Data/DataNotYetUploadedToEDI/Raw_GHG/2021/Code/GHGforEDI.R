@@ -486,6 +486,13 @@ final <- rbind(ghg_hist_time,ghg_all)
 final <- final %>% 
   arrange(DateTime,Reservoir,Site,Depth_m)
 
+### Create a DateTime Flag for non-recorded times (i.e., 12:00)
+final <- final %>% 
+  mutate(Time = format(DateTime,"%H:%M:%S")) %>% 
+  mutate(Flag_DateTime = ifelse(Time == "12:00:00", 1, 0)) %>% 
+  select(-Time) %>% 
+  relocate(Flag_DateTime,.before=flag_ch4)
+
 # Some depths are funky
 final <- final %>% 
   mutate(Site = ifelse(Depth_m == 100, 100,

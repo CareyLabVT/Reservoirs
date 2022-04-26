@@ -1,0 +1,74 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	character			NA	value is missing
+Site	Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform	categorical			NA	value is missing
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+HoboTemp_C_0.1	Water temperature measured by HOBO loggers at 0.1m	numeric	celsius		NA	value is missing
+HoboTemp_C_1	Water temperature measured by HOBO loggers at 1m	numeric	celsius		NA	value is missing
+HoboTemp_C_2	Water temperature measured by HOBO loggers at 2m	numeric	celsius		NA	value is missing
+HoboTemp_C_3	Water temperature measured by HOBO loggers at 3m	numeric	celsius		NA	value is missing
+HoboTemp_C_4	Water temperature measured by HOBO loggers at 4m	numeric	celsius		NA	value is missing
+HoboTemp_C_5	Water temperature measured by HOBO loggers at 5m	numeric	celsius		NA	value is missing
+HoboTemp_C_6	Water temperature measured by HOBO loggers at 6m	numeric	celsius		NA	value is missing
+HoboTemp_C_7	Water temperature measured by HOBO loggers at 7m	numeric	celsius		NA	value is missing
+HoboTemp_C_8	Water temperature measured by HOBO loggers at 8m	numeric	celsius		NA	value is missing
+HoboTemp_C_9	Water temperature measured by HOBO loggers at 9m	numeric	celsius		NA	value is missing
+HoboTemp_C_10	Water temperature measured by HOBO loggers at 10m	numeric	celsius		NA	value is missing
+HoboTemp_C_10.5	Water temperature measured by HOBO loggers at 10.5m	numeric	celsius		NA	value is missing
+MiniDotTemp_C_5	Water temperature measured by MiniDot logger at 5m	numeric	celsius		NA	value is missing
+MiniDotObs_mgL_5	Dissolved Oxygen (DO) concentration at 5m as measured by the MiniDot logger	numeric	milligramsPerLiter		NA	value is missing
+MiniDotSat_percent_5	Dissolved Oxygen (DO) percent saturation at 5m as measured by the MiniDot logger	numeric	percent		NA	value is missing
+MiniDotTemp_C_10	Water temperature measured by MiniDot logger at 10m	numeric	celsius		NA	value is missing
+MiniDotObs_mgL_10	Dissolved Oxygen (DO) concentration at 10m as measured by the MiniDot Logger	numeric	milligramsPerLiter		NA	value is missing
+MiniDotSat_percent_10	Dissolved Oxygen (DO) percent saturation at 10m as measured by the MiniDot logger	numeric	percent		NA	value is missing
+EXOTemp_C_1_5	water temperature at 1.5 meter depth as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
+EXOCond_uScm_1_5	Conductivity at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_1_5	Specific conductance at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOTDS_mgL_1_5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXODOsat_percent_1_5	Dissolved Oxygen percent saturation at 1.5 meter depth as measured by the EXO2 Sonde	numeric	percent		NA	value is missing
+EXODO_mgL_1_5	Dissolved Oxygen at 1.5 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOChla_RFU_1_5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOChla_ugL_1_5	Total Chlorophyll a in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
+EXOBGAPC_RFU_1_5	Blue-Green Algae phycocyanin in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOBGAPC_ugL_1_5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOfDOM_RFU_1_5	Fluorescent Dissolved Organic Matter in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_1_5	Fluorescent Dissolved Organic Matter in QSU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
+EXOTurbidity_FNU_1_5	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
+EXO_pressure_psi	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
+EXO_depth_m	Depth of the EXO2 sonde 	numeric	meter		NA	value is missing
+EXO_battery_V	Voltage of the EXO2 sonde internal batteries	numeric	volt		NA	value is missing
+EXO_wiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde	numeric	volt		NA	value is missing
+Flag_HoboTemp_C_0.1	Data flag for temperature data at 0.1m (HoboTemp_C_0.1)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_1	Data flag for temperature data at 1m (HoboTemp_C_1)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_2	Data flag for temperature data at 2m (HoboTemp_C_2)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_3	Data flag for temperature data at 3m (HoboTemp_C_3)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_4	Data flag for temperature data at 4m (HoboTemp_C_4)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_5	Data flag for temperature data at 5m (HoboTemp_C_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_6	Data flag for temperature data at 6m (HoboTemp_C_6)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_7	Data flag for temperature data at 7m (HoboTemp_C_7)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_8	Data flag for temperature data at 8m (HoboTemp_C_8)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_9	Data flag for temperature data at 9m (HoboTemp_C_9)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_10	Data flag for temperature data at 10m (HoboTemp_C_10)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_HoboTemp_C_10.5	Data flag for temperature data at 10.5m (HoboTemp_C_10.5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotTemp_C_5	Data flag for DO temperature data in celsius at 5m (MiniDotTemp_C_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotObs_mgL_5	Data flag for DO observation data in mgL at 5m (MiniDotObs_mgL_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotSat_percent_5	Data flag for DO saturation data in percent at 5m (MiniDotSat_percent_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotTemp_C_10	Data flag for DO temperature data in celsius at 10m (MiniDotTemp_C_10)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotObs_mgL_10	Data flag for DO observation data in mgL at 10m (MiniDotObs_mgL_10)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_MiniDotSat_percent_10	Data flag for DO saturation data in percent at 10m (MiniDotSat_percent_10)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOTemp_C_1_5	Data flag for EXO2 temperature data at 1.5 meters depth (EXOTemp_C_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOCond_uScm_1_5	Data flag for EXO2 conductivity data at 1.5 meters depth (EXOCond_uScm_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOSpCond_uScm_1_5	Data flag for EXO2 specific conductance data at 1.5 meters depth (EXOSpCond _uScm_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOTDS_mgL_1_5	Data flag for EXO2 total dissolved solids data at 1.5 meters depth (EXOTDS_mgL_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXODOsat_percent_1_5	Data flag for EXO2 DO saturation at 1.5 meters depth (EXODOsat_percent_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXODO_mgL_1_5	Data flag for EXO2 DO data in mgL at 1.5 meters depth (EXODO_mgL_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;3=Negative value changed to 0 except temperature;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOChla_RFU_1_5	Data flag for EXO2 chlorophyll data in RFU at 1.5 meters depth (EXOChla_RFU_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOChla_ugL_1_5	Data flag for EXO2 chlorophyll data in ugL at 1.5 meters depth (EXOChla_ugL_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOBGAPC_RFU_1_5	Data flag for EXO2 phycocyanin data in RFU at 1.5 meters depth (EXOBGAPC_RFU_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOBGAPC_ugL_1_5	Data flag for EXO2 phycocyanin data in ugL at 1.5 meters depth (EXOBGAPC _ugL_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOfDOM_RFU_1_5	Data flag for EXO2 fluorescent dissolved organic matter data in RFU at 1.5 meters depth (EXOfDOM_RFU_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOfDOM_QSU_1_5	Data flag for EXO2 fluorescent dissolved organic matter data in QSU at 1.5 meters depth (EXO2fDOM_QSU_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXOTurbidity_FNU_1_5	Data flag for EXO2 turbidity data in FNU at 1.5 meters depth (EXOTurbidity_FNU_1_5)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXO_pressure_psi	Data flag for EXO2 pressure sensor in psi (EXO_pressure_psi)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXO_depth_m	Data flag for EXO2 depth sensor in meters (EXO_depth_m)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXO_battery_V	Data flag for EXO2 battery in volts (EXO_battery_V)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			
+Flag_EXO_wiper_V	Data flag for EXO2 wiper in volts (EXO_wiper_V)	categorical 	0 = no flag;1=missing data;2=Changed to NA because it is an outlier. See methods;4 = Averaged over time step. See methods;5 = questionable value but left in dataset			

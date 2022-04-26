@@ -1,1 +1,1 @@
-﻿
+Authorship contribution statement: CCC developed and coordinated the ice monitoring dataset, led data analyses, and is responsible for maintaining the dataset over time. ABP led the FCR meteorology dataset and FCR and BVR sensor dataset needed for the ice cover classification, and led winter fieldwork.

@@ -1,0 +1,95 @@
+attributeName	code	definition
+Flag_EXO_battery_V	0	no flag
+Flag_EXO_battery_V	1	missing data
+Flag_EXO_depth_m	0	no flag
+Flag_EXO_depth_m	1	missing data
+Flag_EXO_pressure_psi	0	no flag
+Flag_EXO_pressure_psi	1	missing data
+Flag_EXO_wiper_V	0	no flag
+Flag_EXO_wiper_V	1	missing data
+Flag_EXOBGAPC_RFU_1_5	0	no flag
+Flag_EXOBGAPC_RFU_1_5	1	missing data
+Flag_EXOBGAPC_RFU_1_5	2	Changed to NA because it is an outlier. See methods
+Flag_EXOBGAPC_RFU_1_5	5	questionable value but left in dataset
+Flag_EXOBGAPC_ugL_1_5	0	no flag
+Flag_EXOBGAPC_ugL_1_5	1	missing data
+Flag_EXOBGAPC_ugL_1_5	2	Changed to NA because it is an outlier. See methods
+Flag_EXOBGAPC_ugL_1_5	5	questionable value but left in dataset
+Flag_EXOChla_RFU_1_5	0	no flag
+Flag_EXOChla_RFU_1_5	1	missing data
+Flag_EXOChla_RFU_1_5	2	Changed to NA because it is an outlier. See methods
+Flag_EXOChla_RFU_1_5	5	questionable value but left in dataset
+Flag_EXOChla_ugL_1_5	0	no flag
+Flag_EXOChla_ugL_1_5	1	missing data
+Flag_EXOChla_ugL_1_5	2	Changed to NA because it is an outlier. See methods
+Flag_EXOChla_ugL_1_5	5	questionable value but left in dataset
+Flag_EXOCond_uScm_1_5	0	no flag
+Flag_EXOCond_uScm_1_5	1	missing data
+Flag_EXODO_mgL_1_5	0	no flag
+Flag_EXODO_mgL_1_5	1	missing data
+Flag_EXODOsat_percent_1_5	0	no flag
+Flag_EXODOsat_percent_1_5	1	missing data
+Flag_EXOfDOM_QSU_1_5	0	no flag
+Flag_EXOfDOM_QSU_1_5	1	missing data
+Flag_EXOfDOM_RFU_1_5	0	no flag
+Flag_EXOfDOM_RFU_1_5	1	missing data
+Flag_EXOSpCond_uScm_1_5	0	no flag
+Flag_EXOSpCond_uScm_1_5	1	missing data
+Flag_EXOTDS_mgL_1_5	0	no flag
+Flag_EXOTDS_mgL_1_5	1	missing data
+Flag_EXOTemp_C_1_5	0	no flag
+Flag_EXOTemp_C_1_5	1	missing data
+Flag_EXOTurbidity_FNU_1_5	0	no flag
+Flag_EXOTurbidity_FNU_1_5	1	missing data
+Flag_EXOTurbidity_FNU_1_5	2	Changed to NA because it is an outlier. See methods
+Flag_EXOTurbidity_FNU_1_5	5	questionable value but left in dataset
+Flag_HoboTemp_C_0.1	0	no flag
+Flag_HoboTemp_C_0.1	1	missing data
+Flag_HoboTemp_C_0.1	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_1	0	no flag
+Flag_HoboTemp_C_1	1	missing data
+Flag_HoboTemp_C_10	0	no flag
+Flag_HoboTemp_C_10	1	missing data
+Flag_HoboTemp_C_10	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_10.5	0	no flag
+Flag_HoboTemp_C_10.5	1	missing data
+Flag_HoboTemp_C_10.5	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_2	0	no flag
+Flag_HoboTemp_C_2	1	missing data
+Flag_HoboTemp_C_2	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_3	0	no flag
+Flag_HoboTemp_C_3	1	missing data
+Flag_HoboTemp_C_4	0	no flag
+Flag_HoboTemp_C_4	1	missing data
+Flag_HoboTemp_C_5	0	no flag
+Flag_HoboTemp_C_5	1	missing data
+Flag_HoboTemp_C_5	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_5	4	Averaged over time step. See methods
+Flag_HoboTemp_C_6	0	no flag
+Flag_HoboTemp_C_6	1	missing data
+Flag_HoboTemp_C_6	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_7	0	no flag
+Flag_HoboTemp_C_7	1	missing data
+Flag_HoboTemp_C_7	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_8	0	no flag
+Flag_HoboTemp_C_8	1	missing data
+Flag_HoboTemp_C_8	2	Changed to NA because it is an outlier. See methods
+Flag_HoboTemp_C_9	0	no flag
+Flag_HoboTemp_C_9	1	missing data
+Flag_HoboTemp_C_9	2	Changed to NA because it is an outlier. See methods
+Flag_MiniDotObs_mgL_10	0	no flag
+Flag_MiniDotObs_mgL_10	1	missing data
+Flag_MiniDotObs_mgL_5	0	no flag
+Flag_MiniDotObs_mgL_5	1	missing data
+Flag_MiniDotObs_mgL_5	2	Changed to NA because it is an outlier. See methods
+Flag_MiniDotSat_percent_10	0	no flag
+Flag_MiniDotSat_percent_10	1	missing data
+Flag_MiniDotSat_percent_5	0	no flag
+Flag_MiniDotSat_percent_5	1	missing data
+Flag_MiniDotSat_percent_5	2	Changed to NA because it is an outlier. See methods
+Flag_MiniDotTemp_C_10	0	no flag
+Flag_MiniDotTemp_C_10	1	missing data
+Flag_MiniDotTemp_C_5	0	no flag
+Flag_MiniDotTemp_C_5	1	missing data
+Flag_MiniDotTemp_C_5	2	Changed to NA because it is an outlier. See methods
+Site	50	Beaverdam Reservoir

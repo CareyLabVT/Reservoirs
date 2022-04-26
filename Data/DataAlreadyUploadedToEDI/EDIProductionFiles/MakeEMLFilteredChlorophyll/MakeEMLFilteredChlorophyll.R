@@ -143,10 +143,33 @@ make_eml(
   temporal.coverage = c("2014-04-18", "2021-12-06"),
   maintenance.description = 'ongoing',
   data.table = "manual_chlorophyll_2014_2021.csv",
-  data.table.description = "Reservoir chlorophyll a dataset",
+  data.table.description = "Manual chlorophyll a data at multiple sites",
+  other.entity = c('flagging_chla_pub.R',
+                   'chla_qaqc_2022.R'),
+  other.entity.description = c('Script used to collate and flag data for publication up to 2020',
+                               'Script used to collate and flag data for publication after 2020') ,
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.52.8') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+
+
+# make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
+#          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
+#          data.table = "ManualDischarge_2019_2021.csv",
+#          data.table.description = "Reservoir Continuum Manual Discharge Data",
+#          temporal.coverage = c("2019-02-08", "2021-11-19"),
+#          maintenance.description = "ongoing",
+#          user.id =  "ccarey",
+#          other.entity = c('Collate_QAQC_ManualDischarge_2021.R', 
+#                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+#                           'calculate_discharge_flowmate_data_Jan2022.R',
+#                           'CCR_VolumetricFlow_discharge_calc_example.xlsx'),
+#          other.entity.description = c('Script used to collate and QAQC data for publication', 
+#                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+#                                       'Script used to calculate discharge using flowmate velocity data',
+#                                       'Example spreadsheet which demonstrates the bucket volumetric calculation') ,
+#          package.id = "edi.716.4", #### this is the one that I need to change!!!
+#          user.domain = 'EDI')
 
 
 ## Step 8: Check your data product! ####

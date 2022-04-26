@@ -18,3 +18,6 @@ Note that temperatures at shallow depths may be less accurate as the sensor adju
 
 TRANSMISSION DATA
 On 28Aug19, the transmission sensor malfunctioned and so values from this point on in 2019 are not reported.
+
+WORKFLOW FOR QUALITY ASSURANCE AND QUALITY CONTROL OF DATA
+The file FluoroProbe_QAQC_2014_2021.R includes code for collating and conducting quality checks on FluoroProbe data from the most recent calendar year. This includes writing visualizations of each FluoroProbe cast collected, checking temperature and transmission profiles, ensuring that sampling location information is included with each cast, and trimming the cast to eliminate observations that are compromised due to quenching at the water's surface or interference by particulate matter near the sediments.

@@ -155,7 +155,7 @@ make_eml(
   other.entity.description = "data aggregation and quality control script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.123.5')
+  package.id = 'edi.123.6')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -192,19 +192,19 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2020",
-  temporal.coverage = c("2014-05-04", "2020-12-02"),
+  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
+  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
+  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2021",
+  temporal.coverage = c("2014-05-04", "2021-12-06"),
   maintenance.description = 'ongoing',
-  data.table = "FluoroProbe.csv",
+  data.table = "FluoroProbe_2014_2021.csv",
   data.table.description = "Reservoir FluoroProbe dataset",
-  other.entity = "FluoroProbe_QAQC.R",
+  other.entity = "FluoroProbe_QAQC_2014_2021.R",
   other.entity.description = "data aggregation and quality control script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.272.5')
+  package.id = 'edi.272.6')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

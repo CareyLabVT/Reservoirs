@@ -1,0 +1,10 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; FCR=Falling Creek Reservoir, BVR=Beaverdam Reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir; 50=deepest site near dam	numeric	dimensionless		NA	value is missing
+Date	Date of ice-on or ice-off	Date		YYYY-MM-DD	NA	value is missing
+Year	Year of observation	Date		YYYY	NA	value is missing
+DayOfYear	Date of observation	Date		DD	NA	value is missing
+IceOn	This value indicates if ice-on occurred	numeric	dimensionless		NA	value is missing
+IceOff	This value indicates if ice-off occurred	numeric	dimensionless		NA	value is missing
+Method	Code for method used to determine ice-on or ice-off; V=Visual observation of ice presence or absence; T=Temperature Inverse Stratification method (see methods for details)	categorical			NA	value is missing
+Flag_IceValue	Flag for ice-on or ice-off; 0=no flag; 1=indicate ice periods without visual observations or additional dissolved oxygen data for double verification of ice	numeric	dimensionless		NA	value is missing

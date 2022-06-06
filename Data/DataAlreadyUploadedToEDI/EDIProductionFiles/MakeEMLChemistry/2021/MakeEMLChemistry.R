@@ -2,8 +2,8 @@
 ##Author: Mary Lofton
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
-##Date: 10Apr21
-#11Nov21 - fixing the NO3NO2 flagging issue and adding data that was rerun after publishing in april (HLW)
+##5Jun2022 - 2021 nutrient aggregation
+#NOTE - XX samples need to be rerun with 2022 samples - will need to average/add these data when we publish 2022 field season samples (HLW)
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -13,36 +13,29 @@
 library(tidyverse)
 library(viridis)
 
-old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2019/chemistry.csv")
-new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
+old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry_2013_2020.csv")
+new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/2021_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
-#add the 4 flag to 2019 samples that have negative values (~7 TP samples; already all have a 3 flag so assigning flag as 43)
-old$Flag_TP[old$TP_ugL < 0] <- 43
-
-#add a catch here for the ~7 2019 TP samples that are negative and were not set to 0
-old$TP_ugL[old$TP_ugL < 0] <- 0
-
-#rearrange cols to match 2020 EDI pub order
-new <- new %>% select(colnames(new[,c(1:5,7,6,10,12,11,16:19,24,9,8,13,15,14,22,21,20,23)]))
-
 #get cols in same order
-old <- old[names(new)]
+new <- new[names(old)]
 
-#pull out 2019 samples run in 2020
-dups <- new[new$DateTime==as.Date("2019-05-30") | new$DateTime==as.Date("2019-07-18"),]
-
-#manually merge the 2020 sample data with the 2019 sample rows (n=4 samples)
-old[old$DateTime==as.Date("2019-05-30") & old$Site==30 & old$Reservoir=="FCR",c(11:14,21:24)] <- dups[1, c(11:14,21:24)] #add DOC
-old[old$DateTime==as.Date("2019-07-18") & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(6,7,16,17)] <- dups[2, c(6,7,16,17)] #add TN/TP
-old[old$DateTime==as.Date("2019-07-18") & old$Site==102 & old$Reservoir=="FCR",c(8:14,18:24)] <- dups[3, c(8:14,18:24)] #add np and DOC
-old[old$DateTime==as.Date("2019-07-18") & old$Site==200 & old$Reservoir=="FCR",c(6,7,16,17)] <- dups[4, c(6,7,16,17)] #add 
-
-#drop 2019 from new sample list 
-new <- new[!(new$DateTime %in% dups$DateTime),]
-
+#merge old and new dfs
 chem <- rbind(old, new) 
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry_2013_2020.csv",row.names = FALSE)
+
+#replace NA flags with 0
+chem$Flag_DateTime[is.na(chem$Flag_DateTime)] <- 0
+chem$Flag_TN[is.na(chem$Flag_TN)] <- 0
+chem$Flag_TP[is.na(chem$Flag_TP)] <- 0
+chem$Flag_NH4[is.na(chem$Flag_NH4)] <- 0
+chem$Flag_NO3NO2[is.na(chem$Flag_NO3NO2)] <- 0
+chem$Flag_SRP[is.na(chem$Flag_SRP)] <- 0
+chem$Flag_DOC[is.na(chem$Flag_DOC)] <- 0
+chem$Flag_DIC[is.na(chem$Flag_DIC)] <- 0
+chem$Flag_DC[is.na(chem$Flag_DC)] <- 0
+chem$Flag_DN[is.na(chem$Flag_DN)] <- 0
+
+write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/chemistry_2013_2021.csv",row.names = FALSE)
 
 #select columns for plotting
 raw_chem <- chem [,(names(chem) %in% c("Reservoir","Site","DateTime",

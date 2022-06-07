@@ -12,6 +12,7 @@
 #append this year's chemistry to last year's published data
 library(tidyverse)
 library(viridis)
+library(plotly)
 
 old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry_2013_2020.csv")
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/2021_chemistry_collation_final_nocommas.csv")
@@ -65,8 +66,44 @@ chemistry_long <- raw_chem %>%
   mutate(DateTime = as.Date(DateTime))
 
 # FCR deep hole data time series plot
-ggplot(subset(chemistry_long, metric=="NO3NO2_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
+ggplot(subset(chemistry_long, metric=="NH4_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
 geom_point(cex=2) + theme_bw()
+
+
+#plots for each variable by reservoir 
+fcrplots <- chemistry_long %>% 
+  filter(Reservoir == 'FCR') %>% 
+  #filter(Site == 50) %>% 
+  #filter(Depth_m %in% c(0.1, 1.6, 3.8, 5, 6.2, 8, 9)) %>%  #If you want to just see the routine depths 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  ggtitle("FCR chem")+
+  theme_bw()+
+  facet_wrap(~metric, scales = 'free_y')
+
+fcrplots
+
+bvrplots <- chemistry_long %>% 
+  filter(Reservoir == 'BVR') %>% 
+  # filter(Site == 50) %>% 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  ggtitle("BVR chem")+
+  theme_bw()+
+  facet_wrap(~metric, scales = 'free_y')
+
+bvrplots
+
+ccrplots <- chemistry_long %>% 
+  filter(Reservoir == 'CCR') %>% 
+  # filter(Site == 50) %>% 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  ggtitle("CCR chem")+
+  theme_bw()+
+  facet_wrap(~metric, scales = 'free_y')
+
+ccrplots
 
 
 # (install and) Load EMLassemblyline #####

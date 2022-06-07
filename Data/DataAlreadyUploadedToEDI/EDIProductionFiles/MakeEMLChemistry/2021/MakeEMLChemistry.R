@@ -82,6 +82,7 @@ fcrplots <- chemistry_long %>%
   facet_wrap(~metric, scales = 'free_y')
 
 fcrplots
+#ggplotly(fcrplots) #interactive plot 
 
 bvrplots <- chemistry_long %>% 
   filter(Reservoir == 'BVR') %>% 

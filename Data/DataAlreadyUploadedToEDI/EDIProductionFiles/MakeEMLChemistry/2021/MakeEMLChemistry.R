@@ -143,22 +143,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                       data.table = "chemistry_2013_2020.csv",
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+                       data.table = "chemistry_2013_2021.csv",
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                          data.table = "chemistry_2013_2020.csv",
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+                          data.table = "chemistry_2013_2021.csv",
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -207,8 +207,8 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -244,7 +244,7 @@ make_eml(
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.890.1') #reserve new staging environment package id each year
+  package.id = 'edi.890.3') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

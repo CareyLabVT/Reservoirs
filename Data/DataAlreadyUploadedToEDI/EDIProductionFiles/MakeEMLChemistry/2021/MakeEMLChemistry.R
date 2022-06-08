@@ -66,7 +66,7 @@ chemistry_long <- raw_chem %>%
   mutate(DateTime = as.Date(DateTime))
 
 # FCR deep hole data time series plot
-ggplot(subset(chemistry_long, metric=="NH4_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
+ggplot(subset(chemistry_long, metric=="TN_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
 geom_point(cex=2) + theme_bw()
 
 
@@ -232,17 +232,19 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2020",
-  temporal.coverage = c("2013-04-04", "2020-12-02"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
+  temporal.coverage = c("2013-04-04", "2022-04-19"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry_2013_2020.csv",
+  data.table = "chemistry_2013_2021.csv",
   data.table.description = "Reservoir water chemistry dataset",
+  other.entity = "2021_chemistry_collation.R",
+  other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.525.6')
+  package.id = 'edi.890.1') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -281,14 +283,16 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2020",
-  temporal.coverage = c("2013-04-04", "2020-12-02"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
+  temporal.coverage = c("2013-04-04", "2022-04-19"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry_2013_2020.csv",
+  data.table = "chemistry_2013_2021.csv",
   data.table.description = "Reservoir water chemistry dataset",
+  other.entity = "2021_chemistry_collation.R",
+  other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.199.9') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION

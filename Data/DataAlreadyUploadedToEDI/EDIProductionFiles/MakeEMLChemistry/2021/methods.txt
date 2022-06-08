@@ -8,6 +8,8 @@ SAMPLE COLLECTION AND EQUIPMENT
 
 "Soluble reactive phosphorus (SRP), nitrate (NO3), ammonium (NH4), dissolved organic carbon (DOC), dissolved inorganic carbon (DIC), and total dissolved nitrogen (DN) water samples were collected at specified depths for each reservoir using a Van Dorn water sampler and were filtered with a 0.7 um glass fiber filter (Thomas Scientific GF/F) before being stored in acid-washed 125 mL polypropylene bottles. Samples were generally analyzed within six months of collection date."
 
+ISCO blurb HERE!!!
+
 CHEMICAL ANALYSES AND EQUIPMENT
 
 "TN and TP samples were digested with alkaline persulfate (Patton and Kryskalla 2003) and then analyzed colorimetrically using flow injection analysis (APHA 2005).  TN was analyzed using the cadmium reduction method (APHA 1998) and TP was analyzed using the ascorbic acid method (Murphy and Riley 1962) on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA)."
@@ -20,7 +22,7 @@ DN samples were combusted using the Vario TOC Cube from Elemantar at 850 degrees
 
 METHOD DETECTION LIMITS
 
-"Starting in 2020, we changed our Method Detection Limit (MDL) calculations and adopted that which is described in the USEPA second revision (USEPA 2020). This new analytical MDL calculation relies on independent digestions across multiple runs. [TO BE CONTINUED...]"
+"Starting in 2020, we changed our Method Detection Limit (MDL) calculations and adopted those which are described in the USEPA second revision (USEPA 2020). The new analytical MDL calculations rely on data obtained from independent digestions over multiple runs, rather than that from a single day's run, to more accirately capture instrument performance and variability throughout the year."
 
 "DATA FLAGS: We note that measurements with multiple flags are coded as a multiple-digit number (e.g., a flag of '43' indicates there was 4 = negative value set to zero and 3 = sample below detection). No delimiter was added to separate flag codes in those columns. For data with a '74' flag, data were set to 0 before averaging to get the final sample value."
 

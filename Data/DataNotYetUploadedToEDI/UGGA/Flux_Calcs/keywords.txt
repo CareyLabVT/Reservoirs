@@ -1,13 +1,14 @@
 keyword	keywordThesaurus
-greenhouse gas emissions	
-Virginia Tech	
-Stream Team	
-Western Virginia Water Authority	
-Falling Creek Reservoir	
-Beaverdam Reservoir	
-reservoir	
-lake	
-methane	
-carbon dioxide	
-diffusive flux	
+greenhouse gas	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+Stream Team	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+reservoir	cuahsi controlled vocabulary
+lake	cuahsi controlled vocabulary
+methane	lter controlled vocabulary
+carbon dioxide	lter controlled vocabulary
 diffusion	
+carbon flux	lter controlled vocabulary
+gas flux	lter controlled vocabulary

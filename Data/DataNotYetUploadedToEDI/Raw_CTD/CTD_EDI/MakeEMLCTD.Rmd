@@ -7,7 +7,11 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
+
+I don't have the new serial number for the pH probe- flagging that to add later!
+
 
 ```{r}
 # Install and load devtools
@@ -42,11 +46,10 @@ library(EMLassemblyline)
 
 # Define Categorical Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #template_categorical_variables(path = "C:/Users/Owner/Dropbox/MakeEMLCTD")
-read.csv("CTD_2013_2021.csv")
 
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 make_eml(path = getwd(),
-         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2021",
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2021",
          data.table = "CTD_2013_2021.csv",
          data.table.name = "CTD dataset 2013-2021",
          data.table.description = c("Reservoir CTD dataset"),
@@ -57,6 +60,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.706.2")
+         package.id = "edi.200.12")
 ```
 

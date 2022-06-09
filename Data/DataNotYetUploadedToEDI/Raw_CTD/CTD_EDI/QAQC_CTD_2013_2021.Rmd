@@ -195,7 +195,6 @@ Fix issues in existing dataset
 dt1 = dt1%>%
   filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR") #these profiles are duplicated and listed as both FCR and BVR
 dt1$Reservoir[as.Date(dt1$Date)%in% as.Date(c("2017-07-06","2017-10-08"))]<-"BVR" #incorrectly listed as FCR
-
 #"2017-08-27","2017-09-03" have a few oxygen values but mostly NA. Current flag is 1 (sample not taken) for missing values, so I will leave the remaining data
 ```
 
@@ -242,7 +241,8 @@ summary(as.factor(ctd$Reservoir))
 ctd1 <- read.csv("CTD_Meta_2021.csv") #Load saved data
 ctd = ctd1 %>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
-         Reservoir = as.factor(Reservoir))
+         Reservoir = as.factor(Reservoir))%>%
+  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR")
 
 #Flag codes
 #0=Not suspect, 
@@ -278,50 +278,50 @@ ctd_flagged = ctd %>% #Add flags
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
     DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
     
+    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
     DO_mgL = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_mgL), #DO pump wasn't working for these casts
     Flag_DO = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO),
     Flag_DO = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
-    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
     
     #DO pSat
     Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
+    Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
     DO_pSat = ifelse(DO_pSat < 0, 0, DO_pSat), #Flag pSat<0
     DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_pSat), #DO pump wasn't working for these casts
     Flag_DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO_pSat),
     Flag_DO_pSat = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO_pSat), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
-    Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
   
     #COND
-    Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
-    Cond_uScm = ifelse(Cond_uScm < 0, 0, Cond_uScm), #FLag Cond < 0
     Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond), #Flag NA
+    Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
+    Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0
     
     #SPECCOND
-    Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
-    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, 0, Spec_Cond_uScm), #FLag Cond < 0
     Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond), #Flag NA
+    Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
+    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, NA, Spec_Cond_uScm), #Flag Cond < 0
     
     #CHLA
+    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
     Flag_Chla = ifelse(Chla_ugL < 0,4,Flag_Chla),
     Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), #Flag Chla <0
-    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
     
     #TURB
+    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb), #Flag NA
     Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
     Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
-    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb), #Flag NA
     
     #pH
+    Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
     Flag_pH = ifelse(pH < 0,4,Flag_pH),
     pH = ifelse(pH < 0, 0, pH), #Flag pH < 0 
     pH = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),NA,pH), #pH sensor broke in summer 2020
     Flag_pH = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),2,Flag_pH),
-    Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
     
     #ORP
+    Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP), #Flag NA
     ORP_mV = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),NA,ORP_mV), #ORP sensor was capped in 2021 because pH sensor was broken
     Flag_ORP = ifelse(Date > as.Date("2020-08-04")& Date < as.Date("2021-12-01"),2,Flag_ORP),
-    Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP), #Flag NA
   
     #PAR
     Flag_PAR = ifelse(is.na(PAR_umolm2s),2,Flag_PAR), #Flag NA
@@ -354,6 +354,7 @@ write.csv(ctd_flagged, "ctd_2021_flagged.csv")
 
 ```{r}
 final = dt1 %>% #Join new data with published dataset
+  filter(!Date %in% ctd_flagged$Date)%>%
   full_join(ctd_flagged)%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
   select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Cond_uScm, Spec_Cond_uScm, Chla_ugL, Turb_NTU, pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp, Flag_DO, Flag_Cond, Flag_SpecCond, Flag_Chla, Flag_Turb, Flag_pH, Flag_ORP, Flag_PAR, Flag_DescRate)
@@ -384,25 +385,27 @@ CTD_fix=final%>%
   
   mutate(
     #Fix historical pH issues
-    
     #Flag suspect values
     Flag_pH = ifelse((month(Date)==6&year(Date)==2019)|
               (as.Date(Date) == as.Date("2019-11-20"))|
               (month(Date)==7&year(Date)==2017)|
               (month(Date)==2&year(Date)==2019),8,Flag_pH),
-    
     #pH outside of reasonable range
     pH = ifelse(as.Date(Date) %in% as.Date(c("2019-07-08","2018-12-06")),NA,pH), 
     Flag_pH = ifelse(as.Date(Date) %in% as.Date(c("2019-07-08","2018-12-06")),2,Flag_pH),
     
     
     #There are a few negative DO values
-    Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
-    DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
+    Flag_DO = ifelse(!is.na(DO_mgL)&DO_mgL < 0,4,Flag_DO),
+    DO_mgL = ifelse(!is.na(DO_mgL)&DO_mgL < 0, 0, DO_mgL), #Flag DO<0
     
     #And Turbidity
-    Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
-    Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
+    Flag_Turb = ifelse(!is.na(Turb_NTU)&Turb_NTU < 0,4,Flag_Turb),
+    Turb_NTU = ifelse(!is.na(Turb_NTU)&Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
+    
+    #And PAR
+    Flag_PAR = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR),
+    PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s), #Flag turbidity <0
   )
 
 write.csv(CTD_fix,"CTD_2013_2021.csv", row.names = FALSE)
@@ -416,7 +419,7 @@ qaqc = ctd_flagged
 qaqc = read.csv("CTD_2013_2021.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2017:2020))%>%
+  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2019))%>%
   sample_frac(.1)%>%
   ggplot(aes(x = Date, y = Depth_m, color = DO_mgL, shape = as.factor(Flag_DO)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+

@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+
 ```{r}
 ugga_2021 = read_csv("../UGGA_Raw/2021/TextFiles/20220106_Flux_Output.csv")
 ugga_2020 = read_csv("../UGGA_Raw/2020/TextFiles/2020_season_Flux_Output.csv")
@@ -39,7 +40,8 @@ ugga_comb = ugga_2021%>%
          "ch4_R2",
          "ch4_flux_umolCm2s",
          "Flag_co2_flux_umolCm2s",
-         "Flag_ch4_flux_umolCm2s")
+         "Flag_ch4_flux_umolCm2s")%>%
+  arrange(Date)
 
 ugga_flagged = ugga_comb%>%
   mutate(Flag_co2_flux_umolCm2s = ifelse(co2_R2<0.9,1,Flag_co2_flux_umolCm2s),
@@ -89,6 +91,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.704.4")
+         package.id = "edi.1082.1")
 ```
 

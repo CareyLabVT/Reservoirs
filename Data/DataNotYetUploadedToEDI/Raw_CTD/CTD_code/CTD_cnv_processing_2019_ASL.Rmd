@@ -16,8 +16,8 @@ source("ctd_functions.R") #Load Carey Lab ctd functions
 source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
-DATE_TEXT <- "14-Dec-2021" #format should be "01-Aug-2019"
-SITE <- "fcr50"
+DATE_TEXT <- "24-Feb-2022" #format should be "01-Aug-2019"
+SITE <- "bvr"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
@@ -37,7 +37,7 @@ CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
   -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
   -You can ignore the "unrecognized SBE name" warning message
 ```{r}
-SCAN_NUMBER <- 160
+SCAN_NUMBER <- 20
 ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
 ```
 
@@ -53,7 +53,7 @@ catwalk_compare = F
 #Create dataframes and catwalk comparison for the whole season at fcr50
 if(SITE %in% c("fcr50", "bvr50")){
   pacman::p_load(tidyverse, zoo, lubridate, rLakeAnalyzer,reshape2,akima,dplyr,gridExtra,grid,colorRamps,RCurl)
-  if(year(as.Date(DATE_TEXT, format = "%d-%b-%Y")) == 2021){
+  if(year(as.Date(DATE_TEXT, format = "%d-%b-%Y")) == 2022){
     forCatwalkComparison <- fcr_data_wrangling(SITE)
   }
   #Compare to catwalk

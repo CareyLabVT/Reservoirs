@@ -17,7 +17,7 @@ old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemi
 new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/2020_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
-#add the 4 to 2019 samples that have negative values (~7 TP samples; already all have a 3 flag so assigning flag as 43)
+#add the 4 flag to 2019 samples that have negative values (~7 TP samples; already all have a 3 flag so assigning flag as 43)
 old$Flag_TP[old$TP_ugL < 0] <- 43
 
 #add a catch here for the ~7 2019 TP samples that are negative and were not set to 0
@@ -33,10 +33,10 @@ old <- old[names(new)]
 dups <- new[new$DateTime==as.Date("2019-05-30") | new$DateTime==as.Date("2019-07-18"),]
 
 #manually merge the 2020 sample data with the 2019 sample rows (n=4 samples)
-old[old$DateTime==as.Date("2019-05-30") & old$Site==30 & old$Reservoir=="FCR",c(10:13,19:22)] <- dups[1, c(10:13,19:22)]
-old[old$DateTime==as.Date("2019-07-18") & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(5,6,14,15)] <- dups[2, c(5,6,14,15)]
-old[old$DateTime==as.Date("2019-07-18") & old$Site==102 & old$Reservoir=="FCR",c(7:13,16:22)] <- dups[3, c(7:13,16:22)]
-old[old$DateTime==as.Date("2019-07-18") & old$Site==200 & old$Reservoir=="FCR",c(5,6,14,15)] <- dups[4, c(5,6,14,15)]
+old[old$DateTime==as.Date("2019-05-30") & old$Site==30 & old$Reservoir=="FCR",c(11:14,21:24)] <- dups[1, c(11:14,21:24)] #add DOC
+old[old$DateTime==as.Date("2019-07-18") & old$Site==20 & old$Reservoir=="FCR" & old$Rep==1 ,c(6,7,16,17)] <- dups[2, c(6,7,16,17)] #add TN/TP
+old[old$DateTime==as.Date("2019-07-18") & old$Site==102 & old$Reservoir=="FCR",c(8:14,18:24)] <- dups[3, c(8:14,18:24)] #add np and DOC
+old[old$DateTime==as.Date("2019-07-18") & old$Site==200 & old$Reservoir=="FCR",c(6,7,16,17)] <- dups[4, c(6,7,16,17)] #add 
 
 #drop 2019 from new sample list 
 new <- new[!(new$DateTime %in% dups$DateTime),]

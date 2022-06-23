@@ -1,7 +1,7 @@
 #Title: Script for aggregating and QAQCing FP txt files for publication to EDI
 #Author: Mary Lofton
 #Date: 16DEC19
-#Last updated: 05JAN22
+#Last updated: 23JUN22
 
 rm(list=ls())
 
@@ -10,7 +10,7 @@ rm(list=ls())
 pacman::p_load(tidyverse, lubridate)
 
 # Load in column names for .txt files to get template
-col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20210308_BVR_50.txt", n_max = 0))
+col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20220224_BVR_50.txt", n_max = 0))
 
 # Load in all txt files
 fp_casts <- dir(path = "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe", pattern = paste0("*.txt")) %>%
@@ -37,8 +37,8 @@ unique(fp2$Site)
 # Rename and select useful columns; drop metrics we don't use or publish such as cell count;
 # eliminate shallow depths because of quenching
 fp3 <- fp2 %>%
-  mutate(DateTime = `Date/Time`, GreenAlgae_ugL = as.numeric(`Green Algae`), Bluegreens_ugL = as.numeric(`Bluegreen`),
-         BrownAlgae_ugL = as.numeric(`Diatoms`), MixedAlgae_ugL = as.numeric(`Cryptophyta`), YellowSubstances_ugL = as.numeric(`Yellow substances`),
+  mutate(DateTime = `Date/Time`, GreenAlgae_ugL = as.numeric(`Green Algae...2`), Bluegreens_ugL = as.numeric(`Bluegreen...3`),
+         BrownAlgae_ugL = as.numeric(`Diatoms...4`), MixedAlgae_ugL = as.numeric(`Cryptophyta...5`), YellowSubstances_ugL = as.numeric(`Yellow substances...9`),
          TotalConc_ugL = as.numeric(`Total conc.`), Transmission = as.numeric(`Transmission`), Depth_m = as.numeric(`Depth`), Temp_degC = as.numeric(`Temp. Sample`),
          RFU_525nm = as.numeric(`LED 3 [525 nm]`), RFU_570nm = as.numeric(`LED 4 [570 nm]`), RFU_610nm = as.numeric(`LED 5 [610 nm]`),
          RFU_370nm = as.numeric(`LED 6 [370 nm]`), RFU_590nm = as.numeric(`LED 7 [590 nm]`), RFU_470nm = as.numeric(`LED 8 [470 nm]`),
@@ -66,6 +66,10 @@ for (i in 1:length(unique(fp3$cast))){
   }
   fp4 <- bind_rows(fp4, profile_trim)
 } 
+
+##if you are creating a file for work-in-progress (mid-field-season,
+## for example) you can write to file now
+write.csv(fp4, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2022_working.csv", row.names = FALSE)
 
 #create png plots for every cast for QAQC purposes (algal biomass)
 #these are just written to a file I temporarily create on my desktop

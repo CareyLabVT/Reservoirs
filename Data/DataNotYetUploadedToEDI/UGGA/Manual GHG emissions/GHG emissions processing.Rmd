@@ -1,0 +1,76 @@
+---
+title: "Manual GHG emissions"
+author: "Abby Lewis"
+date: "6/23/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(gridExtra)
+```
+
+
+```{r}
+ugga_full = read.csv("Fix_hat_BVR_ghg.csv")
+
+colnames(ugga_full)[c(1,2)]<- c("CH4_ppm","CO2_ppm")
+
+ugga=ugga_full%>%
+  select(CH4_ppm,CO2_ppm,Site, Reservoir, `Sample.ID`,Rep,`Date.Time.Sampled`,`Water.Vial`,Note)%>%
+  rename(DateTime = `Date.Time.Sampled`)%>%
+  mutate(Date = as.Date(DateTime, format = "%Y-%m-%d %H:%M"),
+         DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M"))%>%
+  #filter(nchar(Water.Vial) == 0)%>%
+  mutate(Sample.ID = ifelse(!is.na(Sample.ID)&Sample.ID == 6,0,Sample.ID))
+
+pdf("CO2.pdf")
+plot_list = list()
+i = 1
+for(date in unique(ugga$Date[!is.na(ugga$Date)])){
+    #for(rep in c(1,2)){
+      for(site in unique(ugga$Site[!is.na(ugga$Site)])){
+        data = ugga%>%
+          filter(Date == date,
+                 #Rep == rep,
+                 Site == site)
+        p = data%>%
+          ggplot(aes(x = Sample.ID, y = CO2_ppm, color = as.factor(Rep)))+
+          geom_point()+
+          geom_line()+
+          ggtitle(paste0(format(as.Date(date, origin = "1970-01-01"), "%Y-%m-%d")," Site: ",site))
+        plot_list[[i]] = p
+        i = i+1
+      }
+    #}
+}
+do.call("grid.arrange", c(plot_list, ncol=2))
+dev.off()
+
+
+pdf("CH4.pdf")
+plot_list = list()
+i = 1
+for(date in unique(ugga$Date[!is.na(ugga$Date)])){
+    #for(rep in c(1,2)){
+      for(site in unique(ugga$Site[!is.na(ugga$Site)])){
+        data = ugga%>%
+          filter(Date == date,
+                 #Rep == rep,
+                 Site == site)
+        p = data%>%
+          ggplot(aes(x = Sample.ID, y = CH4_ppm, color = as.factor(Rep)))+
+          geom_point()+
+          geom_line()+
+          ggtitle(paste0(format(as.Date(date, origin = "1970-01-01"), "%Y-%m-%d")," Site: ",site))
+        plot_list[[i]] = p
+        i = i+1
+      }
+    #}
+}
+do.call("grid.arrange", c(plot_list, ncol=2))
+dev.off()
+```
+

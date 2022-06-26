@@ -11,7 +11,7 @@ Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborati
 Renato	J.	Figueiredo	University of Florida	renato@ece.ufl.edu	0000-0001-9841-6060	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933102
 Heather	L.	Wander	Virginia Tech	hwander@vt.edu	0000-0002-3762-6045	creator		
 Dexter	W.	Howard	Virginia Tech	dwh1998@vt.edu	0000-0002-6118-2149	creator	
-Barbara	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator	
+B.	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator	
 Whitney	M.	Woelmer	Virginia Tech	wwoelmer@vt.edu	0000-0001-5147-3877	creator			
 Mary	E.	Lofton	Virginia Tech	melofton@vt.edu	0000-0003-3270-1330	creator			
 Alexandra	B.	Gerling	Virginia Tech	alexg13@vt.edu	0000-0001-5280-6709	creator			

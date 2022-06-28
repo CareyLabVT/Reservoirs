@@ -150,7 +150,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
                        data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                       data.table = "chemistry_2013_2021.csv",
+                       data.table = c("chemistry_2013_2021.csv", "reservoir_site_descriptions.csv"),
                        write.file = TRUE)
 
 
@@ -158,7 +158,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                          data.table = "chemistry_2013_2021.csv",
+                          data.table = c("chemistry_2013_2021.csv","reservoir_site_descriptions.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -238,13 +238,15 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
   temporal.coverage = c("2013-04-04", "2022-04-19"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry_2013_2021.csv",
-  data.table.description = "Reservoir water chemistry dataset",
+  data.table = c("chemistry_2013_2021.csv", 
+                 "reservoir_site_descriptions.csv"),
+  data.table.description = c("Reservoir water chemistry dataset",
+                             "Description, latitude, and longitude of reservoir sampling sites"),
   other.entity = "2021_chemistry_collation.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.890.3') #reserve new staging environment package id each year
+  package.id = 'edi.890.9') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -289,8 +291,10 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
   temporal.coverage = c("2013-04-04", "2022-04-19"),
   maintenance.description = 'ongoing',
-  data.table = "chemistry_2013_2021.csv",
-  data.table.description = "Reservoir water chemistry dataset",
+  data.table = c("chemistry_2013_2021.csv",
+                 "reservoir_site_descriptions.csv"),
+  data.table.description = c("Reservoir water chemistry dataset",
+                             "Description, latitude, and longitude of reservoir sampling sites"),
   other.entity = "2021_chemistry_collation.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',

@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir	character			NA	value is missing
-Site	 Sampling site at each reservoir	numeric	dimensionless		NA	value is missing
+Site	Sampling site at each reservoir	numeric	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	value is missing
 Rep	"Field replicates collected at the same site, date, and depth"	numeric	dimensionless		NA	value is missing

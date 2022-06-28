@@ -74,17 +74,20 @@ write.csv(fp4, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoro
 #create png plots for every cast for QAQC purposes (algal biomass)
 #these are just written to a file I temporarily create on my desktop
 #for EDI day
-for (i in 1:length(unique(fp4$cast))){
+for (i in 1:length(unique(fp4$cast))){ #for every unique FP cast
   profile = subset(fp4, cast == unique(fp4$cast)[i])
   castname = profile$x[1]
+  
   profile2 = profile %>%
     select(Depth_m, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, TotalConc_ugL)%>%
     gather(GreenAlgae_ugL:TotalConc_ugL, key = spectral_group, value = ugL)
+  
   profile_plot <- ggplot(data = profile2, aes(x = ugL, y = Depth_m, group = spectral_group, colour = spectral_group))+
     geom_path(size = 1)+
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
+  
   filename = paste0("C:/Users/Mary Lofton/Desktop/FP_plots_2021/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
 

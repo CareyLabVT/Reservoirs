@@ -351,7 +351,7 @@ flux_all_2%>%
 flux_all_2%>%
   filter(Site==50)%>%
   ggplot(aes(x = as.Date(Date_real),y=co2_flux_umolCm2s))+
-  #geom_smooth()+
+  geom_smooth()+
   geom_point()+
   geom_vline(xintercept = as.Date("2022-05-29"))+
   ylab("CO2 flux (µumol/m2/s)")+
@@ -359,4 +359,4 @@ flux_all_2%>%
   ggtitle("BVR Site 50")
 
 # Export out fluxes
-write_csv(flux_all_2,"./2020_season_Flux_Output.csv") #change this!
+write_csv(flux_all_2,"./2022_season_Flux_Output.csv") #change this!

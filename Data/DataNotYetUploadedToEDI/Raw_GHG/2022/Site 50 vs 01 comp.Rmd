@@ -1,0 +1,91 @@
+---
+title: "GHG 50 vs 01 comparison"
+author: "Abby Lewis"
+date: "6/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+ghg = read_csv("final_GHG_2015-June2022.csv")
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1,50))%>%
+  ggplot(aes(x = DateTime, y = Depth_m, color = ch4_umolL))+
+  geom_point()+
+  scale_y_reverse()+
+  facet_wrap(~Site)
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1,50),
+         Depth_m == 3)%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Site)))+
+  geom_point()+
+  ggtitle("3 m")
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1,50),
+         Depth_m == 0.1)%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Site)))+
+  geom_point()+
+  ggtitle("0.1 m")
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1),
+         Depth_m %in% c(4,3,0.1))%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Depth_m)))+
+  scale_color_discrete(name = "Depth (m)")+
+  geom_point()+
+  ggtitle("Site 01")
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1,50),
+         Depth_m == 0.1)%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, color = as.factor(Site)))+
+  geom_point()+
+  ggtitle("0.1 m")
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(1),
+         Depth_m %in% c(4,3,0.1))%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, color = as.factor(Depth_m)))+
+  scale_color_discrete(name = "Depth (m)")+
+  geom_point()+
+  ggtitle("Site 01")
+
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(50),
+         Depth_m%in%c(0.1,3,6))%>%
+  ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Depth_m)))+
+  scale_color_discrete(name = "Depth (m)")+
+  geom_point()+
+  ggtitle("Site 50")
+
+ghg%>%
+  filter(year(DateTime)==2022,
+         Reservoir == "BVR",
+         Site %in% c(50),
+         Depth_m%in%c(0.1,3,6))%>%
+  ggplot(aes(x = DateTime, y = co2_umolL, color = as.factor(Depth_m)))+
+  scale_color_discrete(name = "Depth (m)")+
+  geom_point()+
+  ggtitle("Site 50")
+```
+

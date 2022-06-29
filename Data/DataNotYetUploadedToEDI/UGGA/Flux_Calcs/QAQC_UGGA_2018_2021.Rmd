@@ -70,6 +70,26 @@ max(ugga_comb$Date)
 ```
 
 ```{r}
+uggs = read_csv("UGGA_2018_2021.csv")
+
+uggs = uggs%>%
+  mutate(Year = year(Date))
+
+year(uggs$Date)<-2019
+
+uggs%>%
+  filter(Reservoir=="FCR",
+         Site == 50)%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date,y=ch4_flux_umolCm2s, color = Year))+
+  geom_point()+
+  geom_smooth()+
+  ggtitle("FCR")
+```
+
+
+
+```{r}
 # Install and load devtools
 install.packages("devtools")
 library(devtools)

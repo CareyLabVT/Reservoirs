@@ -7,6 +7,7 @@
 ### Publishing GHG data from RPM: 2015-2019
 
 ### Updated for 2021 GHG data publication, A. Hounshell, 10 Jan 2022
+### Updated for May 2022 GHG data publication, A. Hounshell, 30 June 2022
 
 ###############################################################################
 
@@ -145,10 +146,10 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2021",
-  temporal.coverage = c("2015-03-31", "2021-12-06"),
+  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2022",
+  temporal.coverage = c("2015-03-31", "2022-05-23"),
   maintenance.description = 'ongoing',
-  data.table = 'final_GHG_2015-2021.csv',
+  data.table = 'final_GHG_2015-May2022.csv',
   data.table.description = "GHG Dataset",
   data.table.name = "GHG Dataset",
   other.entity= 'GHGforEDI.R',
@@ -156,7 +157,7 @@ make_eml(
   other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.705.6')
+  package.id = 'edi.928.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

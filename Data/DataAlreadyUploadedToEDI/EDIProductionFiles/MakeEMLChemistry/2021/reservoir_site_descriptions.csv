@@ -11,7 +11,7 @@ BVR,51,Littoral site west of deep pelagic site (50),37.31267,-79.816592
 CCR,51,Site aadjacent to dam,37.3697,-79.958
 FCR,99,Farthest downstream site on inflow stream,37.307613,79.8360878
 BVR,100,Inflow stream,37.31957,-79.82437
-CCR,100,Horse Pen Branch standing water inflow,37.3646,-79.9733
+CCR,100,Horse Pen Branch inflow,37.3646,-79.9733
 FCR,100,Inflow stream,37.30858,-79.83494
 FCR,100.1,ISCO Site at the weir,37.30858,-79.83494
 CCR,101,Horse Pen Branch standing water inflow,37.3654,-79.972

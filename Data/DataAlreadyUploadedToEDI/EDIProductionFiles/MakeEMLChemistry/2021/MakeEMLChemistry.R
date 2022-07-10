@@ -299,7 +299,7 @@ make_eml(
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.9') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.10') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

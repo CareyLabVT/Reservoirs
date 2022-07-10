@@ -12,11 +12,11 @@ Lake	cushy controlled vocabulary
 Lakes	lter controlled vocabulary
 Stream Team	carey lab controlled vocabulary
 nitrate	lter controlled vocabulary
-soluble reactive phosphorous	lter controlled vocabulary
+soluble reactive phosphorus	lter controlled vocabulary
 phosphate	lter controlled vocabulary
 dissolved organic carbon	lter controlled vocabulary
 dissolved inorganic carbon	lter controlled vocabulary
 ammonium	lter controlled vocabulary
 total nitrogen	lter controlled vocabulary
 total dissolved nitrogen	lter controlled vocabulary
-total phosphorous	lter controlled vocabulary
+total phosphorus	lter controlled vocabulary

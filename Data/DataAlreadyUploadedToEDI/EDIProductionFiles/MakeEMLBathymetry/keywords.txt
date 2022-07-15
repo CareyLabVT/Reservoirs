@@ -1,0 +1,14 @@
+keyword	keywordThesaurus
+Virginia Tech	carey lab controlled vocabulary
+Carey Lab	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Surface area	carey lab controlled vocabulary
+Volume	carey lab controlled vocabulary
+Bathymetry	cuahsi controlled vocabulary
+Liter	cuahsi controlled vocabulary
+Square meter	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Depth	LTER controlled vocabulary

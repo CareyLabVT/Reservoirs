@@ -1,0 +1,169 @@
+---
+title: "CNV Processing"
+output: html_notebook
+---
+2019 CTD Processing for cnv files
+First written by ASL 02 Aug 2019
+
+# Load packages and assign global variables
+```{r}
+#First written by RPM April 2018
+#06 June 2019 updated by RPM
+
+### Load OCE Libraries and Carey Lab ctd functions###
+pacman::p_load(oce, ocedata, tidyverse, lubridate)
+source("ctd_functions_CTD8188.R") #Load Carey Lab ctd functions
+source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
+
+#Specify global variables
+DATE_TEXT <- "27-Jun-2022" #format should be "01-Aug-2019"
+SITE <- "fcr50"
+SAMPLER <- ""
+MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
+
+
+
+
+#Advanced customization
+REP <- "_S8188003" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
+AUTO_NAME <- TRUE #If using a nonstandard name format. Must also fill in NAME_OVERRIDE below
+NAME_OVERRIDE <- "MSN2_CTD_CASTS_072419/072519_bvr50_d" #For example, "080119_fcr50"
+AUTO_FOLDER <- TRUE 
+CSV_FOLDER_OVERRIDE <- "" #Enter "MSN_CTD_DATA" here for MSN data
+```
+
+
+#Choose the scan number that starts the cast
+  -Verify that this starts above 0 dbar, only includes the downcast, and both plots are identical
+  -You can ignore the "unrecognized SBE name" warning message
+```{r}
+SCAN_NUMBER <- 0
+ctdTrimmed <- trim_ctd(SCAN_NUMBER, DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE)
+```
+
+Everything else should be automated, just run this chunk of code!
+```{r}
+epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, REP, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, CSV_FOLDER_OVERRIDE, MAX_DEPTH)
+
+on = as_datetime(c("2021-06-11 10:40:00"))
+off = as_datetime(c("2021-01-01"))
+
+#catwalk_compare = F
+
+#Create dataframes and catwalk comparison for the whole season at fcr50
+#if(SITE %in% c("fcr50", "bvr50")){
+#  pacman::p_load(tidyverse, zoo, lubridate, rLakeAnalyzer,reshape2,akima,dplyr,gridExtra,grid,colorRamps,RCurl)
+#  if(year(as.Date(DATE_TEXT, format = "%d-%b-%Y")) == 2022){
+#    forCatwalkComparison <- fcr_data_wrangling(SITE)
+#  }
+  #Compare to catwalk
+#  if(catwalk_compare == T){
+#      ctd_vs_catwalk(on,off, SITE) #This step takes a couple minutes
+#  }
+#}
+```
+
+
+
+Do not run during normal processing:
+```{r}
+library(lubridate)
+startDate = as.Date("2020-06-15")
+
+ctd <- read_csv("../CTD_season_csvs/CTD_notmatlab_ready_2019_fcr50.csv")
+ctd$Date <- force_tz(ctd$Date+13*60*60, tz = "America/New_York")
+dates <- unique(ctd$Date)
+cat_init <- read_csv(file = getURL("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv"),skip = 1)
+cat <- cat_init %>% 
+  select(TIMESTAMP, doobs_1, doobs_5, doobs_9,EXO_depth,wtr_1, wtr_2, wtr_3, wtr_4, wtr_5, wtr_6, wtr_7, wtr_8, wtr_9, dotemp_5, dotemp_9) %>%
+  filter(doobs_1 != "NAN") %>%
+  filter(doobs_5 != "NAN") %>%
+  filter(doobs_9 != "NAN") %>%
+  filter(TIMESTAMP != "NAN") %>%
+  filter(TIMESTAMP != "YYYY_MM_DD_HH_MM_SS")%>%
+  mutate(TIMESTAMP = as.POSIXct(TIMESTAMP, format = "%Y-%m-%d %H:%M:%S"))%>%
+  filter(TIMESTAMP >= startDate)
+cats <- cat[which.min(abs(as.POSIXct(cat$TIMESTAMP)-dates[1])),]
+for(i in 2:length(dates)){
+  cats_new <- cat[which.min(abs(as.POSIXct(cat$TIMESTAMP)-dates[i])),]
+  cats <- cats%>%
+    full_join(cats_new)
+}
+cats[2:8]<-lapply(cats[2:8], as.numeric)
+ysi <- read.csv("../ysi_22jun20.csv")
+
+for(i in 1:length(dates)){
+  ctd_toPlot =ctd%>%
+    filter(Date == dates[i])
+  xlim = range(c(cats$wtr_1,ysi$Temp_C,ctd$Temp_C))
+  plot(ctd_toPlot$Temp_C,-ctd_toPlot$Depth_m, type = "l", xlab = "Temp (ºC)", ylab = "Depth (m)",xlim = xlim)
+  if (i==2){
+    points(ysi$Temp_C, -ysi$Depth_m, col = "blue", pch = 16)
+  }
+  #points(cats$wtr_1[i],-cats$EXO_depth[1],col = "red", pch = 16)
+  #points(cats$dotemp_5[i],-cats$EXO_depth[1]+1.6-5,col = "red", pch = 16)
+  #points(cats$dotemp_9[i],-cats$EXO_depth[1]+1.6-9,col = "red", pch = 16)
+  points(cats$wtr_1[i],-1,col = "hotpink", pch = 16)
+  points(cats$wtr_2[i],-2,col = "hotpink", pch = 16)
+  points(cats$wtr_3[i],-3,col = "hotpink", pch = 16)
+  points(cats$wtr_4[i],-4,col = "hotpink", pch = 16)
+  points(cats$wtr_5[i],-5,col = "hotpink", pch = 16)
+  points(cats$wtr_6[i],-6,col = "hotpink", pch = 16)
+  points(cats$wtr_7[i],-7,col = "hotpink", pch = 16)
+  points(cats$wtr_8[i],-8,col = "hotpink", pch = 16)
+  points(cats$wtr_9[i],-9,col = "hotpink", pch = 16)
+  points(cats$dotemp_5[i],-5,col = "hotpink", pch = 16)
+  points(cats$dotemp_9[i],-9,col = "hotpink", pch = 16)
+  legend("bottomright", c("catwalk","catwalk adj","ysi"), col = c("hotpink","red","blue"),pch = 16,)
+  
+  xlim = range(c(cats$doobs_1,ysi$DO_mgL,ctd$DO_mgL))
+  plot(ctd_toPlot$DO_mgL,-ctd_toPlot$Depth_m, type = "l", xlab = "DO (mg/L)", ylab = "Depth (m)", xlim = xlim)
+  if (i==2){
+    points(ysi$DO_mgL, -ysi$Depth_m, col = "blue", pch = 16)
+  }
+  #points(cats$doobs_1[i],-cats$EXO_depth[1],col = "red", pch = 16)
+  #points(cats$doobs_5[i],-cats$EXO_depth[1]+1.6-5,col = "red", pch = 16)
+  #points(cats$doobs_9[i],-cats$EXO_depth[1]+1.6-9,col = "red", pch = 16)
+  points(cats$doobs_1[i],-1.6,col = "hotpink", pch = 16)
+  points(cats$doobs_5[i],-5,col = "hotpink", pch = 16)
+  points(cats$doobs_9[i],-9,col = "hotpink", pch = 16)
+  legend("bottomright", c("catwalk","ysi"), col = c("hotpink","blue"),pch = 16,)
+  abline(v = 2)
+}
+dates
+```
+
+```{r}
+sit_1.6 = read.csv("../csv_outputs/072121_fcr50_sit_1.6m.csv")%>%
+  mutate(row = row_number())%>%
+  mutate(Date = as_datetime(Date)+hours(14)+seconds(row/4))
+
+cat <- read_csv(file = getURL("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/Catwalk.csv"),skip = 1)
+
+cat = cat%>%
+  mutate(TIMESTAMP = as_datetime(TIMESTAMP))%>%
+  filter(TIMESTAMP>as_datetime("2021-07-21 11:42:00"),
+         TIMESTAMP<as_datetime("2021-07-21 14:13:00"))
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = DO_mgL))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(doobs_1)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = DO_pSat))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(dosat_1)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = Depth_m))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(EXO_depth)), data = cat)
+
+sit_1.6%>%
+  ggplot(aes(x=Date, y = Temp_C))+
+  geom_line()+
+  geom_point(aes(x = TIMESTAMP, y = as.numeric(EXO_wtr_1)), data = cat)
+
+```
+

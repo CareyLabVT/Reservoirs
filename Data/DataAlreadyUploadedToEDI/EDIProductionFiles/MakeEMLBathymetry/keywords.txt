@@ -12,3 +12,4 @@ Square meter	cuahsi controlled vocabulary
 Lake	cuahsi controlled vocabulary
 Reservoir	cuahsi controlled vocabulary
 Depth	LTER controlled vocabulary
+Hypsometry	carey lab controlled vocabulary

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.939.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.939.2" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -57,9 +57,9 @@
       <organizationName>Western Virginia Water Authority</organizationName>
       <electronicMailAddress>info@westernvawater.org</electronicMailAddress>
     </creator>
-    <pubDate>2022-07-15</pubDate>
+    <pubDate>2022-07-16</pubDate>
     <abstract>
-      <para>This data package includes bathymetric data for Falling Creek and Beaverdam Reservoirs, both located in Vinton, VA, USA. Bathymetric data were collected using an Acoustic Doppler Current Profiler (ADCP) and processed using WinRiver II and ArcGIS. Water level can vary in these reservoirs; at the time of sampling, maximum depth in FCR was ~9.3 m and maximum depth in BVR was ~13.5 m.</para>
+      <para>This data package includes bathymetric data for Falling Creek and Beaverdam Reservoirs, both located in Vinton, VA, USA. Bathymetric data were collected using an Acoustic Doppler Current Profiler (ADCP) and processed using WinRiver II and ArcGIS. Water level can vary in these reservoirs; at the time of sampling, maximum depth in FCR was ~9.3 m and maximum depth in BVR was ~13.5 m. The data are presented as hypsometric relationships of surface area and volume for 0.3-1.0 m depth intervals in the two reservoirs.</para>
     </abstract>
     <keywordSet>
       <keyword>Virginia Tech</keyword>
@@ -69,6 +69,7 @@
       <keyword>Beaverdam Reservoir</keyword>
       <keyword>Surface area</keyword>
       <keyword>Volume</keyword>
+      <keyword>Hypsometry</keyword>
       <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
@@ -137,7 +138,7 @@
     <methods>
       <methodStep>
         <description>
-          <para>Bathymetric data for Falling Creek Reservoir and Beaverdam Reservoir (Vinton, VA, USA) were estimated following standard methods (e.g., Wahl and Vermeyen 1998). Both reservoirs are owned and operated as primary and secondary drinking water supplies, respectively, by the Western Virginia Water Authority (WVWA). The data were collected using an Acoustic Doppler Current Profiler (ADCP; RD Instruments, San Diego, CA, USA) operated from a moving boat when both reservoirs were at full pond: ~9.3 m for Falling Creek Reservoir and ~13.5 m for Beaverdam Reservoir. Global positioning system (GPS) data were collected simultaneously with the ADCP data collection, which consisted of multiple transects across both waterbodies. The Falling Creek Reservoir data were collected in summer 2012 and the Beaverdam Reservoir data were collected in July 2014. The ADCP and GPS data were processed using WinRiver II software (RD Instruments). To determine bathymetric contours, summary statistics were generated using ArcGIS (Esri, Redlands, CA, USA). These bathymetric data have subsequently been used for reservoir ecosystem modeling and tracking the effects of water level changes on reservoir volume and surface area. </para>
+          <para>Bathymetric data for Falling Creek Reservoir and Beaverdam Reservoir (Vinton, VA, USA) were estimated following standard methods (e.g., Wahl and Vermeyen 1998). Both reservoirs are owned and operated as primary and secondary drinking water supplies, respectively, by the Western Virginia Water Authority (WVWA). The data were collected using an Acoustic Doppler Current Profiler (ADCP; RD Instruments, San Diego, CA, USA) operated from a moving boat when both reservoirs were at full pond: ~9.3 m for Falling Creek Reservoir and ~13.5 m for Beaverdam Reservoir. Global positioning system (GPS) data were collected simultaneously with the ADCP data collection, which consisted of multiple transects across both waterbodies. The Falling Creek Reservoir data were collected in summer 2012 and the Beaverdam Reservoir data were collected in July 2014. The ADCP and GPS data were processed using WinRiver II software (RD Instruments). To determine bathymetric contours, summary statistics were generated using ArcGIS (Esri, Redlands, CA, USA). The data are presented as hypsometric relationships of surface area and volume for 0.3-1.0 m depth intervals in the two reservoirs. These bathymetric data have subsequently been used for reservoir ecosystem modeling and tracking the effects of water level changes on reservoir volume and surface area. </para>
           <para>References</para>
           <para>Wahl, T. and T. Vermeyen (1998). Acoustic Doppler Current Profiler (ADCP) Measurements of Velocity Fields on Upper Klamath Lake Approaching the A-Canal Intake. USBR Report.</para>
         </description>

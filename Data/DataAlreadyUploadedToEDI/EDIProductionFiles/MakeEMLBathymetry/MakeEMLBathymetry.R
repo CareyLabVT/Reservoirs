@@ -10,4 +10,4 @@ make_eml(
   data.table.description = c("Data table including bathymetric summary statistics for both reservoirs"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.939.1')
+  package.id = 'edi.939.2')

@@ -10,8 +10,6 @@ pacman::p_load('akima', 'tidyverse','dplyr','reshape2','gridExtra','grid','color
 
 # load libraries
 library(akima)
-library(dplyr)
-library(ggplot2)
 library(tidyverse)
 library(reshape2)
 library(gridExtra)
@@ -20,7 +18,6 @@ library(colorRamps)
 library(RColorBrewer)
 library(rLakeAnalyzer)
 library(lubridate) #for Julian date 
-library(tidyr)
 
 
 #### CCR heatmaps CTD data ####

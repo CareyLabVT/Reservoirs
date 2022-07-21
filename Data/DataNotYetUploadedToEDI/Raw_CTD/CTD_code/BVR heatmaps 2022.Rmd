@@ -1,0 +1,168 @@
+---
+title: "CTD Meta Processing"
+author: "Abby Lewis"
+date: "12/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+# This reads all the files into the R environment
+files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
+files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
+files <- files[grepl("bvr",files)] #That are from bvr
+files <- files[substring(files,5,6)=="22"]
+files <- files[files!="051722_bvr50_0002.csv"]
+
+#This reads the first file in
+ctd = read_csv(paste0("../csv_outputs/",files[1])) 
+location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
+ctd = ctd%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')%>%
+    select(-Salinity)
+
+# Loop through and pull all the files in
+for (i in 2:length(files)){
+  new = read_csv(paste0("../csv_outputs/",files[i]))
+  location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
+  new = new%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')%>%
+    select(-Salinity)
+  ctd = ctd %>%
+    full_join(new)
+}
+write_csv(ctd, "../CTD_season_csvs/CTD_BVR_2022.csv")
+```
+
+```{r}
+ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
+    mutate(Site = ifelse(Site==1,40,Site))%>%
+  filter(month(Date)>=5)
+
+#Decrease dataset size by triming to 0.1m depth intervals
+depths <- seq(0,11, by = .1)
+newDepths <- depths
+df.final<- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  ctd_atThisDepth <- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  ctd_atThisDepth = ctd_atThisDepth%>%
+    filter(abs(Depth_m-newDepths[i])<0.1) #only include if the measured depth is within 0.1 of the depth we are labeling it
+  ctd_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,ctd_atThisDepth)
+}
+
+vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV","PAR_umolm2s","Desc_rate")
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  Sites = c(50,40)
+  for(site in Sites){
+    bvr<- df.final%>%
+      mutate(Year = year(Date),
+             Date = as.Date(Date))%>%
+      filter(Site == site,
+             Reservoir == "BVR",
+             !is.na(get(var)))
+    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), 1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+    interp = interp%>%
+      full_join(bvr_interp%>%mutate(Site=site))
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  #Heatmap
+  jpeg(paste0("../2022_BVR_drawdown_figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x, y=y))+
+    geom_raster(aes(fill = z))+
+    scale_y_reverse(expand = c(0,0))+
+    labs(x = "", y = "Depth (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    scale_x_date(expand = c(0,0))+
+    theme(panel.border = element_rect(fill = NA))+
+    facet_grid(rows= vars(Site),
+               cols = vars(Year),
+               scales = "free",
+               space = "free"
+               )
+  print(p)
+  dev.off()
+}
+```
+Elevation instead of depth
+```{r}
+ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
+    mutate(Site = ifelse(Site==1,40,Site))%>%
+  filter(month(Date)>=5)
+
+#Decrease dataset size by triming to 0.1m depth intervals
+depths <- seq(0,11, by = .1)
+newDepths <- depths
+df.final<- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  ctd_atThisDepth <- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  ctd_atThisDepth = ctd_atThisDepth%>%
+    filter(abs(Depth_m-newDepths[i])<0.1) #only include if the measured depth is within 0.1 of the depth we are labeling it
+  ctd_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,ctd_atThisDepth)
+}
+
+df.final = df.final%>%
+  group_by(Date, Site)%>%
+  mutate(Depth_m = max(Depth_m)-Depth_m)
+
+vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV","PAR_umolm2s","Desc_rate")
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  Sites = c(50,40)
+  for(site in Sites){
+    bvr<- df.final%>%
+      mutate(Year = year(Date),
+             Date = as.Date(Date))%>%
+      filter(Site == site,
+             Reservoir == "BVR",
+             !is.na(get(var)))
+    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), 1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+    interp = interp%>%
+      full_join(bvr_interp%>%mutate(Site=site))
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  #Heatmap
+  jpeg(paste0("../2022_BVR_drawdown_figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x, y=y))+
+    geom_raster(aes(fill = z))+
+    scale_y_continuous(expand = c(0,0))+
+    labs(x = "", y = "Depth (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    scale_x_date(expand = c(0,0))+
+    theme(panel.border = element_rect(fill = NA))+
+    facet_grid(rows= vars(Site),
+               cols = vars(Year),
+               scales = "free",
+               space = "free"
+               )
+  print(p)
+  dev.off()
+}
+```

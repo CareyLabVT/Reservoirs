@@ -7,14 +7,26 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
 ```
 
 ```{r}
-ghg = read_csv("final_GHG_2015-June2022.csv")
+#ghg = read_csv("final_GHG_2015-June2022.csv")
+ghg = read_excel("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9)
+ghg = ghg[c(1,2,3,4,14,15)]
+colnames(ghg)= c("DateTime","Site","Depth_m","Reservoir","ch4_umolL","co2_umolL")
+ghg = ghg%>%
+  mutate(Site = as.numeric(Site),
+         ch4_umolL = as.numeric(ch4_umolL),
+         co2_umolL = as.numeric(co2_umolL))%>%
+  mutate(Site = ifelse(Site == 1,40,Site))
+
+
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1,50))%>%
+         Site %in% c(40,50))%>%
   ggplot(aes(x = DateTime, y = Depth_m, color = ch4_umolL))+
   geom_point()+
   scale_y_reverse()+
@@ -23,7 +35,7 @@ ghg%>%
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1,50),
+         Site %in% c(40,50),
          Depth_m == 3)%>%
   ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Site)))+
   geom_point()+
@@ -32,7 +44,7 @@ ghg%>%
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1,50),
+         Site %in% c(40,50),
          Depth_m == 0.1)%>%
   ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Site)))+
   geom_point()+
@@ -41,7 +53,7 @@ ghg%>%
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1),
+         Site %in% c(40),
          Depth_m %in% c(4,3,0.1))%>%
   ggplot(aes(x = DateTime, y = ch4_umolL, color = as.factor(Depth_m)))+
   scale_color_discrete(name = "Depth (m)")+
@@ -51,7 +63,7 @@ ghg%>%
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1,50),
+         Site %in% c(40,50),
          Depth_m == 0.1)%>%
   ggplot(aes(x = DateTime, y = co2_umolL, color = as.factor(Site)))+
   geom_point()+
@@ -60,7 +72,7 @@ ghg%>%
 ghg%>%
   filter(year(DateTime)==2022,
          Reservoir == "BVR",
-         Site %in% c(1),
+         Site %in% c(40),
          Depth_m %in% c(4,3,0.1))%>%
   ggplot(aes(x = DateTime, y = co2_umolL, color = as.factor(Depth_m)))+
   scale_color_discrete(name = "Depth (m)")+

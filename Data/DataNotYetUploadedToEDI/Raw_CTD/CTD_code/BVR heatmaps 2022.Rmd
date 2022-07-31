@@ -14,7 +14,7 @@ library(colorRamps)
 library(rLakeAnalyzer)
 ```
 
-Pull in CTD data from EDI and plot changes resulting from drawdown in 2020, 2021 control
+Pull in CTD data from EDI and plot changes resulting from drawdown in 2022, 2021 control
 ```{r}
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/12/0a62d1946e8d9a511bc1404e69e59b8c" 
 infile1 <- tempfile()
@@ -22,7 +22,7 @@ try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
                    
- dt1 <-read.csv(infile1,header=F 
+ ctd_hist <-read.csv(infile1,header=F 
           ,skip=1
             ,sep=","  
         , col.names=c(
@@ -262,11 +262,20 @@ for(var in vars){
 ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Date = as.Date(Date))%>%
-    mutate(Site = ifelse(Site==1,40,Site))%>%
+    mutate(Site = ifelse(Site==1,40,Site))
+
+ctd_bvr_hist = ctd_hist%>%
+  mutate(Date = as.Date(Date))%>%
+  filter(Reservoir == "BVR",
+         Site == 50,
+         year(Date)==2021)
+
+ctd = ctd%>%
+  full_join(ctd_bvr_hist)%>%
   filter(month(Date)>=5)
 
 #Decrease dataset size by triming to 0.1m depth intervals
-depths <- seq(0,11, by = .1)
+depths <- seq(0,11, by = .01)
 newDepths <- depths
 df.final<- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
 df.final$Depth_m <- newDepths[1]
@@ -287,41 +296,47 @@ strat = df.final%>%
   summarize(buoy_freq = max(buoyancy.freq(Temp_C,Depth_m)),
             thermo = thermo.depth(Temp_C,Depth_m),
             epi = meta.depths(Temp_C,Depth_m)[1],
-            hypo = meta.depths(Temp_C,Depth_m)[2])
+            hypo = meta.depths(Temp_C,Depth_m)[2])%>%
+  mutate(Year = year(Date))
+strat$Date_22 = strat$Date
+year(strat$Date_22)=2022
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
 
 jpeg("../2022_BVR_drawdown_figs/Buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
 strat%>%
   filter(Site==50)%>%
-  ggplot(aes(x = Date, y = buoy_freq))+
+  ggplot(aes(x = Date_22, y = buoy_freq, color = as.factor(Year)))+
   geom_point()+
   ylab("Buoyancy frequency (sec^-2)")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  facet_wrap(~Site)
+  xlab("Date")
+#+facet_wrap(~Year, scales = "free_x")
 dev.off()
 
 jpeg("../2022_BVR_drawdown_figs/Thermo_depth.jpg",res = 300, units = "in",width = 6, height = 4)
 strat%>%
   filter(Site==50)%>%
-  ggplot(aes(x = Date, y = thermo))+
+  ggplot(aes(x = Date_22, y = thermo, color = as.factor(Year)))+
   geom_point()+
+  geom_line()+
   ylab("Thermocline: depth from surface (m)")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  facet_wrap(~Site)
+  xlab("Date")#+facet_wrap(~Site)
 dev.off()
 
 jpeg("../2022_BVR_drawdown_figs/Epi_thickness.jpg",res = 300, units = "in",width = 6, height = 4)
 strat%>%
   filter(Site==50)%>%
-  ggplot(aes(x = Date, y = epi))+
+  ggplot(aes(x = Date_22, y = epi, color = as.factor(Year)))+
   geom_point()+
+  geom_line()+
   ylab("Epilimnion thickness (m)")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  facet_wrap(~Site)
+  xlab("Date")#+facet_wrap(~Site)
 dev.off()
 
 bathy = read.csv("../2022_BVR_drawdown_figs/Bathymetry_comb.csv")%>%
@@ -365,15 +380,95 @@ for(date in unique(site50$Date)){
   schmidts = c(schmidts, schmidt.stability(wtr = temps$Temp_C, depths = temps$Depth_m, bthA = baths$SA_m2, bthD = baths$Depth_m, sal = rep(0,length(temps$Temp_C))))
 }
 
-schmidt_df = data.frame(Date = unique(site50$Date), Schmidt = schmidts)
+schmidt_df = data.frame(Date = unique(site50$Date), Schmidt = schmidts)%>%
+  mutate(Year = year(Date))
+schmidt_df$Date_22 = schmidt_df$Date
+year(schmidt_df$Date_22)=2022
 
 jpeg("../2022_BVR_drawdown_figs/Schmidt_stability.jpg", width = 6, height = 4, res = 300, units = "in")
 schmidt_df%>%
-  ggplot(aes(x = Date, y = Schmidt))+
+  ggplot(aes(x = Date_22, y = Schmidt, color = as.factor(Year)))+
   geom_point()+
+  geom_line()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Schmidt stability (J/m^2)")
+  ylab("Schmidt stability (J/m^2)")+
+  xlab("Date")
 dev.off()
+```
+
+Determine interflow depth
+```{r}
+ysi = read_excel("2022_YSI_PAR_Profiles.xlsx")%>%
+  mutate(Site = as.numeric(Site))
+
+inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/198/10/b3bd353312f9e37ca392e2a5315cc9da" 
+infile2 <- tempfile()
+try(download.file(inUrl2,infile2,method="curl"))
+if (is.na(file.size(infile2))) download.file(inUrl2,infile2,method="auto")
+
+                   
+ dt2 <-read.csv(infile2,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "DOSat",     
+                    "Cond_uScm",     
+                    "Sp_cond_uScm",     
+                    "PAR_umolm2s",     
+                    "ORP_mV",     
+                    "pH",     
+                    "Flag_DateTime",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_DOSat",     
+                    "Flag_Cond",     
+                    "Flag_Sp_Cond",     
+                    "Flag_PAR",     
+                    "Flag_ORP",     
+                    "Flag_pH"    ), check.names=TRUE)%>%
+   mutate(DateTime = as.POSIXct(DateTime))
+               
+unlink(infile2)
+
+ysi_filt = ysi%>%
+  full_join(dt2)%>%
+  filter(Reservoir == "FCR", 
+         Site == "100")%>%
+  mutate(Year = as.factor(year(DateTime)),
+         Date_22 = DateTime)%>%
+  filter(month(DateTime)<=8,
+         month(DateTime)>=4)
+year(ysi_filt$Date_22)<- 2022
+
+ysi_filt
+
+ctd <- read.csv("../CTD_season_csvs/CTD_FCR_2022.csv")%>% #load saved data
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
+         Date = as.Date(Date))
+
+ctd%>%
+  filter(Date %in% as.Date(ysi_filt$DateTime))
+
+depths = c()
+dates = c()
+for(date in as.Date(ysi_filt$DateTime)){
+  new = ctd%>%
+    filter(Date == date,
+           !is.na(Temp_C))
+  if(nrow(new)>0){
+    dates = c(dates, date)
+  }
+  temp = ysi_filt$Temp_C[as.Date(ysi_filt$DateTime)==date]
+  depths = c(depths,new$Depth_m[which.min(abs(new$Temp_C - temp))])
+}
+inflow_depth = data.frame(Date = as.Date(dates, origin = "1970-01-01"), Depth_m = depths)
+
 ```
 

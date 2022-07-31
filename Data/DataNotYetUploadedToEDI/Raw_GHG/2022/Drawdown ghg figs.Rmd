@@ -26,8 +26,8 @@ for(var in vars){
   Sites = c(40,50)
   for(site in Sites){
     bvr<- ghg%>%
-      mutate(Year = year(DateTime),
-             Date = as.Date(DateTime))%>%
+      mutate(Date = as.Date(DateTime),
+             Year = year(Date))%>%
       filter(Site == site,
              Reservoir == "BVR",
              !is.na(get(var)))
@@ -58,5 +58,73 @@ for(var in vars){
   print(p)
   dev.off()
 }
+```
+
+```{r}
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/551/6/38d72673295864956cccd6bbba99a1a3" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Rep",     
+                    "ch4_umolL",     
+                    "co2_umolL",     
+                    "flag_DateTime",     
+                    "flag_ch4",     
+                    "flag_co2"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+
+
+ghg = read_xlsx("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9, col_types = c("date",rep("guess",51)))
+ghg = ghg[c(1,2,3,4,14,15)]
+colnames(ghg)= c("DateTime","Site","Depth_m","Reservoir","ch4_umolL","co2_umolL")
+ghg = ghg%>%
+  mutate(Site = as.numeric(Site),
+         ch4_umolL = as.numeric(ch4_umolL),
+         co2_umolL = as.numeric(co2_umolL))%>%
+  full_join(dt1%>%
+              mutate(DateTime=as_datetime(DateTime)))%>%
+  mutate(Site = ifelse(Site == 1,40,Site),
+         DateTime=as.Date(DateTime),
+         Date_22 = DateTime,
+         Year = year(DateTime))
+year(ghg$Date_22)=2022
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+jpeg(paste0("./Drawdown Figs/BVR_co2_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+ghg%>%
+  filter(Site==100,
+         year(DateTime)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y = co2_umolL, color = as.factor(Year)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point()+
+  ylab("CO2 (umolL)")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg(paste0("./Drawdown Figs/BVR_ch4_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+ghg%>%
+  filter(Site==100,
+         year(DateTime)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y = ch4_umolL, color = as.factor(Year)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point()+
+  ylab("CH4 (umolL)")+
+  theme(axis.title.x = element_blank())
+dev.off()
 ```
 

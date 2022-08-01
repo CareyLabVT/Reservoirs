@@ -7,6 +7,7 @@
                  # B08Mar 11m, TN+TP, (cant find reason for repeat, averaging both )
                  #B09Aug 10m DOC (cant find reason for repeat, averaging both )
 #NOTE for 2022 field sample publication - we removed n=9 samples w/ suspect data (sampleIDs in the 2021 MakeEMLChemistry script) so reran them after 2021 data was published - need to bring that data in (average/replace 2021 runs)
+#ALSO, need to replace B01 site with B40 pre-2022
 
 library(tidyverse)
 library(dplyr)

@@ -1,0 +1,62 @@
+---
+title: "Drawdown metals"
+author: "Abby Lewis"
+date: "7/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+ghg = read_excel("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9)
+ghg = ghg[c(1,2,3,4,14,15)]
+colnames(ghg)= c("DateTime","Site","Depth_m","Reservoir","ch4_umolL","co2_umolL")
+ghg = ghg%>%
+  mutate(Site = as.numeric(Site),
+         ch4_umolL = as.numeric(ch4_umolL),
+         co2_umolL = as.numeric(co2_umolL))%>%
+  mutate(Site = ifelse(Site == 1,40,Site))
+
+vars = c("co2_umolL","ch4_umolL")
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  Sites = c(40,50)
+  for(site in Sites){
+    bvr<- ghg%>%
+      mutate(Year = year(DateTime),
+             Date = as.Date(DateTime))%>%
+      filter(Site == site,
+             Reservoir == "BVR",
+             !is.na(get(var)))
+    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+    interp = interp%>%
+      full_join(bvr_interp%>%mutate(Site=site))
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  #Heatmap
+  jpeg(paste0("./Drawdown Figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x, y=y))+
+    geom_raster(aes(fill = z))+
+    scale_y_reverse(expand = c(0,0))+
+    labs(x = "", y = "Depth (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    scale_x_date(expand = c(0,0))+
+    theme(panel.border = element_rect(fill = NA))+
+    facet_grid(rows= vars(Site),
+               cols = vars(Year),
+               scales = "free",
+               space = "free"
+               )
+  print(p)
+  dev.off()
+}
+```
+

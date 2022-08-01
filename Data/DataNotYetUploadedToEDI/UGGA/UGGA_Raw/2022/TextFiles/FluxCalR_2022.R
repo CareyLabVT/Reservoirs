@@ -4,7 +4,7 @@
 # Script following: https://github.com/junbinzhao/FluxCalR
 
 # Load in 'remotes' package
-pacman::p_load(remotes,tidyverse,FluxCalR,lubridate)
+pacman::p_load(remotes,tidyverse,lubridate)
 
 # Install FluxCalR (if not already installed! If installed, skip to library(FluxCalR))
 remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
@@ -53,10 +53,21 @@ flux_lgr_14 <- LoadLGR(file ="./gga_2001-12-31_f0013.txt",
                        time_format = "mdy_HMS")
 flux_lgr_15 <- LoadLGR(file ="./gga_2001-12-31_f0011.txt",
                        time_format = "mdy_HMS")
-flux_lgr_16 <- LoadLGR(file ="./gga_2001-12-31_f0011.txt",
+flux_lgr_16 <- LoadLGR(file ="./gga_2001-12-31_f0034.txt",
                        time_format = "mdy_HMS")
-flux_lgr_17 <- LoadLGR(file ="./gga_2001-12-31_f0010.txt",
+flux_lgr_17 <- LoadLGR(file ="./gga_2001-12-31_f0035.txt",
                        time_format = "mdy_HMS")
+flux_lgr_18 <- LoadLGR(file ="./gga_2001-12-31_f0036.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_19 <- LoadLGR(file ="./gga_2001-12-31_f0037.txt",
+                       time_format = "mdy_HMS")
+flux_lgr_20 <- LoadLGR(file ="./gga_2001-12-31_f0038.txt",
+                       time_format = "mdy_HMS")
+#issue with gga_2001-12-31_f0038.txt --> ch4 went up to 40
+flux_lgr_22 <- LoadLGR(file ="./gga_2001-12-31_f0040.txt",
+                       time_format = "mdy_HMS")
+#41-43 are downloading data
+
 
 # Select times when the UGGA was on/off the water
 # Select the time point BEFORE the peak for both reps
@@ -97,6 +108,14 @@ time_cue_16 <- SelCue(flux_lgr_16,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c("BVR"), Site = c(50), Date_real = as.Date("2022-05-05"))
 time_cue_17 <- SelCue(flux_lgr_17,flux="CH4",cue="End",save=F)%>%
   mutate(Reservoir = c("BVR"), Site = c(1), Date_real = as.Date("2022-05-05"))
+time_cue_18 <- SelCue(flux_lgr_18,flux="CH4",cue="End",save=F)%>%
+  mutate(Reservoir = c("BVR"), Site = c(1), Date_real = as.Date("2022-06-27"))
+time_cue_19 <- SelCue(flux_lgr_19,flux="CH4",cue="End",save=F)%>%
+  mutate(Reservoir = c("BVR"), Site = c(50), Date_real = as.Date("2022-06-27"))
+time_cue_20 <- SelCue(flux_lgr_20,flux="CH4",cue="End",save=F)%>%
+  mutate(Reservoir = c("BVR"), Site = c(1), Date_real = as.Date("2022-07-05"))
+time_cue_22 <- SelCue(flux_lgr_22,flux="CH4",cue="End",save=F)%>%
+  mutate(Reservoir = c("BVR"), Site = c(50), Date_real = as.Date("2022-07-05"))
 
 # Then calculate fluxes
 Flux_output2 <- FluxCal(data = flux_lgr_2, # Dataframe loaded in
@@ -250,10 +269,50 @@ Flux_output16 <- FluxCal(data = flux_lgr_16, # Dataframe loaded in
                          output = FALSE)
 
 Flux_output17 <- FluxCal(data = flux_lgr_17, # Dataframe loaded in
-                         win = 4, # Window length = 4 minutes
+                         win = 3, # Window length = 4 minutes
                          vol = 0.020876028*1000, # Volume of trap in liters
                          area = 0.1451465, # Area of trap in m^2
                          df_cue = time_cue_17, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         other = c("Reservoir","Site","Date_real"),
+                         output = FALSE)
+
+Flux_output18 <- FluxCal(data = flux_lgr_18, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_18, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         other = c("Reservoir","Site","Date_real"),
+                         output = FALSE)
+
+Flux_output19 <- FluxCal(data = flux_lgr_19, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_19, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         other = c("Reservoir","Site","Date_real"),
+                         output = FALSE)
+
+Flux_output20 <- FluxCal(data = flux_lgr_20, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_20, # End times selected using SelCue
+                         cue_type = "End", # Designate that these times are for the end
+                         ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
+                         other = c("Reservoir","Site","Date_real"),
+                         output = FALSE)
+
+Flux_output22 <- FluxCal(data = flux_lgr_22, # Dataframe loaded in
+                         win = 4, # Window length = 4 minutes
+                         vol = 0.020876028*1000, # Volume of trap in liters
+                         area = 0.1451465, # Area of trap in m^2
+                         df_cue = time_cue_22, # End times selected using SelCue
                          cue_type = "End", # Designate that these times are for the end
                          ext = 1, # Multiplier for time window to look at data (5 min x 1 = use full 5 min interval)
                          other = c("Reservoir","Site","Date_real"),
@@ -275,7 +334,11 @@ flux_output <- rbind(#Flux_output2,
                      Flux_output14,
                      Flux_output15,
                      Flux_output16,
-                     Flux_output17
+                     Flux_output17,
+                     Flux_output18,
+                     Flux_output19,
+                     Flux_output20,
+                     Flux_output22
                      )
 
 # Get together for publication to EDI
@@ -291,9 +354,6 @@ flux_ch4 <- flux_output %>%
 
 flux_all <- left_join(flux_co2,flux_ch4,by=c("Num","Date","Start","End","Ta","Reservoir","Site","Date_real"))
 
-# NOTE: For 2020 - all data came from FCR at site 50
-# THIS IS NOT THE CASE FOR ALL YEARS - you'll have to go back into the field sheets and
-# look to see what reservoir the data came from (should all be at site 50 : )
 flux_all <- flux_all %>% 
   rename(Rep = Num, Temp_C = Ta) %>% 
   mutate (co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0)

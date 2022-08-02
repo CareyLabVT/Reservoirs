@@ -1,6 +1,7 @@
 # Script to pull in YSI and PAR data from multiple reservoirs and years ####
 # Updated 11Jan2021 HLW and JHW
 # Updated 19Jan2022 by HLW
+#NOTE that for 2022 - fcr 100 15aug 2016 do sat is wrong (and same as do == 5.97) --> replace with NA if can't trace back
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load other packages

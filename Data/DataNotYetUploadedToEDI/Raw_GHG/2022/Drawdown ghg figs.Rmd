@@ -8,8 +8,13 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(readxl)
+library(lubridate)
+library(akima)
+library(colorRamps)
 ```
 
+Heatmaps (2022)
 ```{r}
 ghg = read_excel("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9)
 ghg = ghg[c(1,2,3,4,14,15)]
@@ -60,6 +65,7 @@ for(var in vars){
 }
 ```
 
+Combined with historical data
 ```{r}
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/551/6/38d72673295864956cccd6bbba99a1a3" 
 infile1 <- tempfile()
@@ -126,5 +132,77 @@ ghg%>%
   ylab("CH4 (umolL)")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+vars = c("co2_umolL","ch4_umolL")
+Years = c(2021,2022)
+Sites = c(40,50)
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  for(site in Sites){
+    for(year in (Years)){
+      bvr<- ghg%>%
+        mutate(Date = as.Date(DateTime),
+               Year = year(Date))%>%
+        filter(Site == site,
+               Year == year,
+               Reservoir == "BVR",
+               !is.na(get(var)),
+               year(DateTime)%in%c(2021,2022))%>%
+        arrange(co2_umolL)
+      if(nrow(bvr)>0){
+        bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+        interp = interp%>%
+          full_join(bvr_interp%>%mutate(Site=site))
+      }
+    }
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  #Heatmap
+  jpeg(paste0("./Drawdown Figs/BVR_",var,"_heatmap_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x, y=y))+
+    geom_raster(aes(fill = z))+
+    scale_y_reverse(expand = c(0,0))+
+    labs(x = "", y = "Depth (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    scale_x_date(expand = c(0,0))+
+    theme(panel.border = element_rect(fill = NA))+
+    facet_grid(cols= vars(Site),
+               rows = vars(Year),
+               scales = "free",
+               space = "free"
+               )
+  print(p)
+  dev.off()
+}
+```
+
+```{r}
+ugga = read_csv("../../UGGA/UGGA_Raw/2022/TextFiles/2022_season_Flux_Output.csv")%>%
+  mutate(Date = as.Date(Date))
+
+ugga%>%
+  filter(co2_R2>.5)%>%
+  ggplot(aes(x = Date_real, y = co2_flux_umolCm2s))+
+  geom_point()+
+  facet_wrap(~Site)
+
+ugga%>%
+  filter(ch4_R2>.8)%>%
+  group_by(Date_real,Site)%>%
+  summarize(mean=mean(ch4_flux_umolCm2s),
+            sd = sd(ch4_flux_umolCm2s))%>%
+  mutate(sd = ifelse(sd==0,NA,sd))%>%
+  ggplot(aes(x = Date_real))+
+  geom_point(aes(y=mean), color = "blue")+
+  geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), color = "blue")+
+  facet_wrap(~Site)+
+  geom_line(aes(y=mean), color = "blue")+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))
 ```
 

@@ -97,6 +97,7 @@ Make heatmaps (using depth, not elevation)
 ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
     mutate(Site = ifelse(Site==1,40,Site))%>%
+  full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
   filter(month(Date)>=5)
 
 #Decrease dataset size by triming to 0.1m depth intervals
@@ -113,19 +114,25 @@ for (i in 2:length(depths)){ #loop through all depths and add the closest values
 }
 
 vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV","PAR_umolm2s","Desc_rate")
+Sites = c(50,40)
+Years = c(2021,2022)
 for(var in vars){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
-  Sites = c(50,40)
   for(site in Sites){
-    bvr<- df.final%>%
-      mutate(Year = year(Date),
-             Date = as.Date(Date))%>%
-      filter(Site == site,
-             Reservoir == "BVR",
-             !is.na(get(var)))
-    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-    interp = interp%>%
-      full_join(bvr_interp%>%mutate(Site=site))
+    for(year in Years){
+        bvr<- df.final%>%
+          mutate(Year = year(Date),
+                 Date = as.Date(Date))%>%
+          filter(Site == site,
+                 Year == year,
+                 Reservoir == "BVR",
+                 !is.na(get(var)))
+        if(nrow(bvr)>0){
+          bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+          interp = interp%>%
+            full_join(bvr_interp%>%mutate(Site=site))
+      }
+    }
   }
   interp = interp%>%
     filter(!is.na(Site))
@@ -158,7 +165,9 @@ Elevation instead of depth
 ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
     mutate(Site = ifelse(Site==1,40,Site))%>%
-  filter(month(Date)>=5)
+  full_join(ctd_hist%>%mutate(Date=as.Date(Date))%>% filter(Reservoir=="BVR"))%>%
+  filter(month(Date)>=5,
+         month(Date)<=8)
 
 #Decrease dataset size by trimming to 0.1m depth intervals
 depths <- seq(0,11, by = .1)
@@ -173,16 +182,61 @@ for (i in 2:length(depths)){ #loop through all depths and add the closest values
   df.final <- rbind(df.final,ctd_atThisDepth)
 }
 
-df.final = df.final%>%
-  group_by(Date, Site)%>%
-  mutate(Depth_m = max(Depth_m)-Depth_m)
+#Load YSI data from EDI
+inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/198/9/b3bd353312f9e37ca392e2a5315cc9da" 
+infile2 <- tempfile()
+try(download.file(inUrl2,infile2,method="curl"))
+if (is.na(file.size(infile2))) download.file(inUrl2,infile2,method="auto")
+ ysi <-read.csv(infile2,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "DOSat",     
+                    "Cond_uScm",     
+                    "Sp_cond_uScm",     
+                    "PAR_umolm2s",     
+                    "ORP_mV",     
+                    "pH",     
+                    "Flag_DateTime",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_DOSat",     
+                    "Flag_Cond",     
+                    "Flag_Sp_Cond",     
+                    "Flag_PAR",     
+                    "Flag_ORP",     
+                    "Flag_pH"    ), check.names=TRUE)
+               
+unlink(infile2)
 
-ctd_depths = df.final%>%
-  mutate(Date = as.Date(Date))%>%
-  group_by(Date,Site)%>%
-  summarize(WaterLevel = max(Depth_m))%>%
-  group_by(Site)%>%
-  mutate(max = max(WaterLevel))
+#Format YSI data
+ysi_formatted = ysi%>%
+  filter(!is.na(DO_mgL),
+         Site == 50)%>% #Only the deepest site
+  mutate(Date = as.Date(DateTime))%>%
+  select("Reservoir",
+         "Site",
+         "Date",
+         "Depth_m",
+         "DO_mgL",
+         "pH")%>%
+  #We are only using YSI to fill in gaps in CTD data. Select data for those gaps here
+  filter((Date>=as.Date("2021-04-01")&Date<as.Date("2021-9-01")))%>%
+  mutate(method = "ysi")
+
+
+# Combine CTD and YSI data
+df.final = df.final%>%
+  full_join(ysi_formatted)%>%
+  group_by(Date, Site)%>%
+  mutate(Depth_m = max(Depth_m)-Depth_m,
+         DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL))
 
 #library(RCurl)
 #sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
@@ -204,25 +258,49 @@ ctd_depths = df.final%>%
 #  full_join(sensor_depth%>%mutate(Site=40,
 #                                  WaterLevel = WaterLevel-5.5))
 
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 
 vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV","PAR_umolm2s","Desc_rate")
+Sites = c(50,40)
+Years = c(2021,2022)
+
+ctd_depths = df.final%>%
+  mutate(Date = as.Date(Date),
+         Year = year(Date))%>%
+  filter(Year %in% Years,
+         Site %in% Sites,
+         Reservoir == "BVR",
+         is.na(method))%>%
+  group_by(Date,Site,Year)%>%
+  summarize(WaterLevel = max(Depth_m))%>%
+  group_by(Site)%>%
+  mutate(max = max(WaterLevel))
+
+df.final%>%
+  filter(Date=="2021-05-31")
+
 for(var in vars){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
-  Sites = c(50,40)
   for(site in Sites){
-    bvr<- df.final%>%
-      mutate(Year = year(Date),
-             Date = as.Date(Date))%>%
-      filter(Reservoir == "BVR",
-             !is.na(get(var)))%>%
-    group_by(Site)%>%
-    mutate(max = max(Depth_m))
-    bvr_site<- bvr%>%
-      filter(Site == site)
-    bvr_interp <- interp2xyz(interp(bvr_site$Date,bvr_site$Depth_m,bvr_site[[var]],xo = seq(min(bvr_site$Date), max(bvr_site$Date), .1),yo = seq(min(bvr_site$Depth_m), max(bvr_site$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-    interp = interp%>%
-      full_join(bvr_interp%>%mutate(Site=site))
+    for(year in Years){
+      bvr<- df.final%>%
+        mutate(Year = year(Date),
+               Date = as.Date(Date))%>%
+        filter(Reservoir == "BVR",
+               !is.na(get(var)),
+               Site %in% Sites,
+               Year %in% Years)%>%
+        group_by(Site)%>%
+        mutate(max = max(Depth_m))
+      bvr_site<- bvr%>%
+        filter(Site == site,
+               Year == year)
+      if(nrow(bvr_site)>0){
+        bvr_interp <- interp2xyz(interp(bvr_site$Date,bvr_site$Depth_m,bvr_site[[var]],xo = seq(min(bvr_site$Date), max(bvr_site$Date), .1),yo = seq(min(bvr_site$Depth_m), max(bvr_site$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+        interp = interp%>%
+          full_join(bvr_interp%>%mutate(Site=site))
+      }
+    }
   }
   interp = interp%>%
     filter(!is.na(Site))
@@ -255,9 +333,9 @@ for(var in vars){
     theme_classic()+
     theme(panel.border = element_rect(fill = NA))+
     facet_grid(rows= vars(Site),
+               cols = vars(Year),
                scales = "free",
-               space = "free"
-               )
+               space = "free_y")
   print(p)
   dev.off()
 }
@@ -513,4 +591,5 @@ for(date in as.Date(ysi_filt$DateTime)){
 inflow_depth = data.frame(Date = as.Date(dates, origin = "1970-01-01"), Depth_m = depths)
 
 ```
+
 

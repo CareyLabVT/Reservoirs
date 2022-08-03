@@ -419,4 +419,4 @@ flux_all_2%>%
   ggtitle("BVR Site 50")
 
 # Export out fluxes
-write_csv(flux_all_2,"./2022_season_Flux_Output.csv") #change this!
+write_csv(flux_all_2,"./2022_season_Flux_Output.csv")

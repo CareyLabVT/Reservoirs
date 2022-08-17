@@ -12,6 +12,7 @@ library(readxl)
 library(lubridate)
 library(akima)
 library(colorRamps)
+library(LakeMetabolizer)
 ```
 
 Heatmaps (2022)
@@ -186,23 +187,128 @@ ugga = read_csv("../../UGGA/UGGA_Raw/2022/TextFiles/2022_season_Flux_Output.csv"
   mutate(Date = as.Date(Date))
 
 ugga%>%
-  filter(co2_R2>.5)%>%
   ggplot(aes(x = Date_real, y = co2_flux_umolCm2s))+
   geom_point()+
-  facet_wrap(~Site)
+  facet_wrap(~Site)+
+  geom_smooth()+
+  theme(axis.title.x = element_blank())
 
+jpeg("./Drawdown Figs/BVR_methane_emission.jpg", res = 300, width = 4, height = 4, units = "in")
 ugga%>%
-  filter(ch4_R2>.8)%>%
   group_by(Date_real,Site)%>%
   summarize(mean=mean(ch4_flux_umolCm2s),
             sd = sd(ch4_flux_umolCm2s))%>%
-  mutate(sd = ifelse(sd==0,NA,sd))%>%
+  mutate(Site = ifelse(Site==1,40,Site))%>%
   ggplot(aes(x = Date_real))+
   geom_point(aes(y=mean), color = "blue")+
   geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), color = "blue")+
-  facet_wrap(~Site)+
+  facet_grid(rows = vars(Site))+
   geom_line(aes(y=mean), color = "blue")+
+  ylab("Methane emission (µmol/m2/s)")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg("./Drawdown Figs/BVR_co2_emission.jpg", res = 300, width = 4, height = 4, units = "in")
+ugga%>%
+  group_by(Date_real,Site)%>%
+  summarize(mean=mean(co2_flux_umolCm2s),
+            sd = sd(co2_flux_umolCm2s))%>%
+  mutate(Site = ifelse(Site==1,40,Site))%>%
+  ggplot(aes(x = Date_real))+
+  geom_point(aes(y=mean), color = "blue")+
+  geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), color = "blue")+
+  facet_grid(rows = vars(Site))+
+  geom_line(aes(y=mean), color = "blue")+
+  ylab("CO2 emission (µmol/m2/s)")+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+ugga_sum = ugga%>%
+              mutate(Site=ifelse(Site==1,40,Site))%>%
+              group_by(Site,Date_real, Reservoir)%>%
+              summarize(co2_flux_umolCm2s = mean(co2_flux_umolCm2s, na.rm = T),
+                        ch4_flux_umolCm2s = mean(ch4_flux_umolCm2s, na.rm = T),
+                        Temp_C = mean(Temp_C,na.rm = T))
+
+
+ghg%>%
+  filter(Depth_m==0.1,
+         Reservoir == "BVR",
+         Site %in% c(40,50))%>%
+  group_by(Reservoir, Site, DateTime)%>%
+  summarize(co2_umolL=mean(co2_umolL))%>%
+  full_join(ugga_sum, by = c("Reservoir","Site", "DateTime"="Date_real"))%>%
+  filter(!is.na(co2_flux_umolCm2s))%>%
+  ggplot(aes(x = co2_umolL,y = co2_flux_umolCm2s, color = Temp_C, shape = as.factor(Site)))+
+  geom_point()
+
+ghg%>%
+  filter(Depth_m==0.1,
+         Reservoir == "BVR",
+         Site %in% c(40,50),
+         year(DateTime)%in%c(2022))%>%
+  group_by(Reservoir, Site, DateTime)%>%
+  summarize(ch4_umolL=mean(ch4_umolL))%>%
+  full_join(ugga_sum, by = c("Reservoir","Site", "DateTime"="Date_real"))%>%
+  ggplot(aes(x = ch4_umolL,y = ch4_flux_umolCm2s, color = Temp_C,shape = as.factor(Site)))+
+  geom_point()
+
+ghg_to_join = ghg%>%
+  filter(Depth_m==0.1)%>%
+  group_by(Reservoir, Site, DateTime)%>%
+  summarize(ch4_umolL=mean(ch4_umolL),
+            co2_umolL = mean(co2_umolL))%>%
+  full_join(ugga_sum, by = c("Reservoir","Site", "DateTime"="Date_real"))%>%
+  select(-Temp_C)
+  
+
+met = read.csv("./Other drawdown data/FCRmet.csv", skip = 1)%>%
+  filter(nchar(TIMESTAMP)!=0,
+         TIMESTAMP != "TS")
+
+met_rename = met%>%
+  rename(wnd = WS_ms_Avg,
+         datetime = TIMESTAMP)%>%
+  mutate(wnd = as.numeric(wnd))
+u10 = wind.scale(met_rename, wnd.z = 2)
+ts.data = rmv.vars(met_rename,"wnd", ignore.offset = T)
+ts.data = merge(ts.data,u10)
+k600_cole = k.cole(ts.data)
+
+surface = read.csv("./Other drawdown data/CTD_surface.csv")%>%
+  mutate(Date = as.Date(Date))
+
+with_temp = k600_cole%>%
+  mutate(datetime = as_datetime(datetime),
+         Date = as.Date(datetime))%>%
+  group_by(Date)%>%
+  summarize(k600 = mean(k600))%>%
+  full_join(surface)%>%
+  filter(!is.na(Temp_C),
+         !is.na(k600))%>%
+  left_join(ghg_to_join%>%rename(Date=DateTime))
+
+with_temp$GEV_co2 = k600.2.kGAS.base(with_temp$k600, with_temp$Temp_C, gas="CO2")
+with_temp$flux_co2 = with_temp$GEV_co2*(412-with_temp$co2_umolL*44.1)
+with_temp$GEV_ch4 = k600.2.kGAS.base(with_temp$k600, with_temp$Temp_C, gas="CH4")
+with_temp$flux_ch4 = with_temp$GEV_ch4*(with_temp$co2_umolL*16.04-1.7)
+
+with_temp%>%
+  filter(!is.na(flux_co2),
+         !is.na(co2_flux_umolCm2s))%>%
+  ggplot(aes(x = flux_co2, y = co2_flux_umolCm2s))+
+  geom_point()
+
+with_temp%>%
+  filter(!is.na(flux_ch4),
+         !is.na(ch4_flux_umolCm2s))%>%
+  ggplot(aes(x = flux_ch4, y = ch4_flux_umolCm2s))+
+  geom_point()
 ```
 

@@ -181,6 +181,7 @@ for (i in 2:length(depths)){ #loop through all depths and add the closest values
   ctd_atThisDepth$Depth_m <- newDepths[i]
   df.final <- rbind(df.final,ctd_atThisDepth)
 }
+df.final.raw = df.final
 
 #Load YSI data from EDI
 inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/198/9/b3bd353312f9e37ca392e2a5315cc9da" 
@@ -225,18 +226,41 @@ ysi_formatted = ysi%>%
          "Date",
          "Depth_m",
          "DO_mgL",
+         "DOSat",
          "pH")%>%
   #We are only using YSI to fill in gaps in CTD data. Select data for those gaps here
-  filter((Date>=as.Date("2021-04-01")&Date<as.Date("2021-9-01")))%>%
-  mutate(method = "ysi")
+  filter((Date>=as.Date("2021-04-01")&Date<as.Date("2021-9-01")),
+         )%>%
+  mutate(DO_mgL = ifelse(Date<=as.Date("2021-07-01"),NA,DO_mgL),
+         DO_pSat = ifelse(Date<=as.Date("2021-07-01"),NA,DOSat))%>%
+  mutate(method = "ysi")%>%
+  select(-DOSat)
 
+ctd_depths = df.final%>%
+  mutate(Date = as.Date(Date),
+         Year = year(Date))%>%
+  filter(Year %in% Years,
+         Site %in% Sites,
+         Reservoir == "BVR"
+         )%>%
+  group_by(Date,Site,Year)%>%
+  summarize(WaterLevel = max(Depth_m))%>%
+  group_by(Site)%>%
+  mutate(max = max(WaterLevel))
 
 # Combine CTD and YSI data
-df.final = df.final%>%
-  full_join(ysi_formatted)%>%
+df.final = df.final.raw%>%
   group_by(Date, Site)%>%
-  mutate(Depth_m = max(Depth_m)-Depth_m,
-         DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL))
+  mutate(max = max(Depth_m),
+         DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL))%>%
+  full_join(ysi_formatted%>%rename(pH_ysi = pH, DO_mgL_ysi = DO_mgL, DO_pSat_ysi = DO_pSat))%>%
+  mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
+         DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
+         DO_pSat=ifelse(is.na(DO_pSat),DO_pSat_ysi,DO_pSat))%>%
+  mutate(Depth_m = max -Depth_m)
+
+df.final%>%
+  filter(method=="ysi")
 
 #library(RCurl)
 #sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
@@ -264,17 +288,8 @@ vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","D
 Sites = c(50,40)
 Years = c(2021,2022)
 
-ctd_depths = df.final%>%
-  mutate(Date = as.Date(Date),
-         Year = year(Date))%>%
-  filter(Year %in% Years,
-         Site %in% Sites,
-         Reservoir == "BVR",
-         is.na(method))%>%
-  group_by(Date,Site,Year)%>%
-  summarize(WaterLevel = max(Depth_m))%>%
-  group_by(Site)%>%
-  mutate(max = max(WaterLevel))
+ysi%>%
+  filter(Depth_m==15)
 
 df.final%>%
   filter(Date=="2021-05-31")
@@ -288,6 +303,7 @@ for(var in vars){
                Date = as.Date(Date))%>%
         filter(Reservoir == "BVR",
                !is.na(get(var)),
+               !is.na(Depth_m),
                Site %in% Sites,
                Year %in% Years)%>%
         group_by(Site)%>%
@@ -347,6 +363,13 @@ ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Date = as.Date(Date))%>%
     mutate(Site = ifelse(Site==1,40,Site))
+
+#ctd_01 = ctd%>%
+#  full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
+#  group_by(Date, Site, Reservoir)%>%
+#  filter(Depth_m == Depth_m[which.min(abs(Depth_m-0.1))])
+#
+#write.csv(ctd_01,"CTD_surface.csv", row.names = F)
 
 ctd_bvr_hist = ctd_hist%>%
   mutate(Date = as.Date(Date))%>%
@@ -429,7 +452,8 @@ dev.off()
 oxy = df.final%>%
   filter(DO_mgL<3)%>%
   group_by(Date,Site)%>%
-  summarize(tdo3 = Temp_C[which.min(Depth_m)])%>%
+  summarize(tdo3 = Temp_C[which.min(Depth_m)],
+            Depth_m = min(Depth_m))%>%
   mutate(Year = as.factor(year(Date)),
          Date_22 = Date)
 year(oxy$Date_22)=2022
@@ -443,6 +467,19 @@ oxy%>%
   ylab("Temperature at which DO > 3")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
+  xlab("Date")#+facet_wrap(~Site)
+dev.off()
+
+jpeg("../2022_BVR_drawdown_figs/Depth_DO3.jpg",res = 300, units = "in",width = 6, height = 4)
+oxy%>%
+  filter(Site==50)%>%
+  ggplot(aes(x = Date_22, y = Depth_m, color = Year))+
+  geom_point()+
+  geom_line()+
+  ylab("Depth at which DO > 3")+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_y_reverse()+
   xlab("Date")#+facet_wrap(~Site)
 dev.off()
 
@@ -518,6 +555,7 @@ schmidt_df%>%
   xlab("Date")
 dev.off()
 ```
+
 
 Determine interflow depth
 ```{r}

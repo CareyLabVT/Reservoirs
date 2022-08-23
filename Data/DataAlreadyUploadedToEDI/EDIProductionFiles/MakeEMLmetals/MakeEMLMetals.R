@@ -16,10 +16,18 @@ install.packages('devtools')
 library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+
+
+
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
+
+# Named the file pathway as folder so I don't need to rewrite the whole file pathway name each time
+# For the future don't have files for EDI on personal folders
+#folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals"
+
 
 
 #Step 1: Create a directory for your dataset

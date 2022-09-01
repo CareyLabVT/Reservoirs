@@ -701,7 +701,8 @@ ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
     mutate(Site = ifelse(Site==1,40,Site))%>%
   full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
-  filter(month(Date)>=5)
+  filter(month(Date)>=5,
+         month(Date)<10)
 
 unique(ctd$Date)
 

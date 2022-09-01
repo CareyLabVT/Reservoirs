@@ -7,6 +7,17 @@ pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2022/"
 source(paste0(folder, "FCR_catwalk_QAQC_function_2018_2022.R"))
 
+
+# Create a misc_data_files folder if one doesn't already exist
+
+misc_folder <-paste0(folder, "misc_data_files")
+
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+
 # download most up to date catwalk data and maintenance log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt",paste0(folder, "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt"))
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv",paste0(folder, "misc_data_files/fcre-waterquality.csv"))

@@ -12,18 +12,18 @@ source(paste0(folder, "BVR_platform_QAQC_function_2020_2022.R"))
 #maintenance log so we can flag when the sensors were being worked on or other problems
 download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',paste0(folder, "/bvre-waterquality.csv")) 
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2022.csv',paste0(folder, "/BVRmanualplatform.csv"))
-download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log_2020_2021.txt"))
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log_2020_2022.txt"))
 
 # run standard qaqc these are where the data entered in the function are defined
 data_file <- paste0(folder, '/bvre-waterquality.csv')#this is from github and pushed every 4 hours
 data2_file <- paste0(folder, '/BVRmanualplatform.csv')# this is data downloaded directly from the data logger and gets up dated periodiclly to account for missing data gaps
-maintenance_file <- paste0(folder, "/BVR_maintenance_log_2020_2021.txt") #this is the maintenance log for QAQC purposes
+maintenance_file <- paste0(folder, "/BVR_maintenance_log_2020_2022.txt") #this is the maintenance log for QAQC purposes
 output_file <- paste0(folder, "/BVRplatform_clean.csv")
 qaqc(data_file, data2_file, maintenance_file, output_file)
 
 
 # read in qaqc function output
-bvrdata_clean <- read.csv(output_file) 
+bvrdata_clean <- read_csv(output_file) 
 
 # subset file to only publish for the current year
 bvrdata_clean = bvrdata_clean%>%

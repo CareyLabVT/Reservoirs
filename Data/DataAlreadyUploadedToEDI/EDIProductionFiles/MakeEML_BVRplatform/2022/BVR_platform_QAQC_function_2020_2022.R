@@ -19,11 +19,6 @@ qaqc <- function(data_file, data2_file,
                          "EXO_cablepower_V", "EXO_wiper_V", "Lvl_psi_13", "LvlTemp_C_13")
  
   
- 
-  
- #Fouling factor for Chla on EXO
-  EXO_FOULING_FACTOR <- 4
-  
   #Adjustment period of time to stabilization after cleaning in seconds
   ADJ_PERIOD = 2*60*60 
   
@@ -31,15 +26,20 @@ qaqc <- function(data_file, data2_file,
   
   # read bvrwalk data and maintenance log
   # NOTE: date-times throughout this script are processed as UTC
-  bvrdata1 <- read_csv(data_file, skip=1, col_names = BVRDATA_COL_NAMES,
-                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  # read_csv was not working for me on 01 SEP 22 so went to read.csv
+  # Maybe it will work again 
+  # bvrdata1 <- read_csv(data_file, skip=1, col_names = BVRDATA_COL_NAMES,
+  #col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  bvrdata1 <- read.csv(data_file, skip=1, col.names = BVRDATA_COL_NAMES)
+    
+  bvrdata1$DateTime=ymd_hms(bvrdata1$DateTime)#convert the DateTime column
+  
+  bvrdata1[,-1] <- sapply(bvrdata1[, -1], as.numeric)#converts all columns to numeric minus the DateTime
  
 
  bvrdata2<-read_csv(data2_file, skip=1, col_names = BVRDATA_COL_NAMES,
                     col_types = cols(.default = col_double(), DateTime = col_datetime()))
- 
- 
-
  
  bvrdata= bvrdata1%>%
    rbind(.,bvrdata2)%>% #combine manual and most recent files
@@ -211,6 +211,8 @@ qaqc <- function(data_file, data2_file,
   
   ##################################################################################################################  
   #Set negative DO values to 0 and Flag_DO for NA values
+  
+  
   bvrdata <- bvrdata %>%  #RDO at 5m
     mutate(Flag_RDO_mgL_6 = ifelse(RDO_mgL_6 < 0 & !is.na(RDO_mgL_6) , 3, Flag_RDO_mgL_6),#Add a flag for DO<0
            Flag_RDOsat_percent_6 = ifelse(RDOsat_percent_6 < 0 & !is.na(RDOsat_percent_6) , 3, Flag_RDOsat_percent_6),
@@ -229,8 +231,83 @@ qaqc <- function(data_file, data2_file,
     )
   
   ########################################################################################################################  
-  # find chla and phyo on the EXO sonde sensor data that differs from the mean by more than the standard deviation times a given factor, and
+  # Creating the QAQC Leading and Lagging Function
+  # Things that are needed to input the column, the FOULING_FACTOR
+  
+#   variable=bvrdata$EXOChla_RFU_1_5
+#   flag=bvrdata$Flag_EXOChla_RFU_1_5
+#   fouling_factor=4
+#   
+#   flag <- bvrdata[,paste0("Flag_", colnames(bvrdata[g]))]
+#   
+#   ?lapply
+#   
+#   LeadingLagging <- function(variable,fouling_factor){
+#     
+#     flag <- paste0("Flag_", colnames(variable))
+#     var_mean <- mean(variable, na.rm = TRUE)
+#     var_threshold <- fouling_factor * sd(variable, na.rm = TRUE)
+#     
+#     
+#     bvrdata3 <- bvrdata %>% 
+#       mutate(var_lag = lag(variable, 1),
+#              var_lead = lead(variable, 1))%>%#These mutates create columns for current fDOM, fDOM before and fDOM after. These are used to run ifelse QAQC loops
+#       mutate(flag = ifelse(variable < 0 & !is.na(variable), 3, flag)) %>% 
+#       mutate(variable = ifelse(var_lag < 0 & !is.na(var_lag), 0, variable)) %>% 
+#       mutate(variable = ifelse((abs(var_lag - variable) > (var_threshold))  & (abs(var_lead - variable) > (var_threshold) & !is.na(variable)), 
+#                                       NA, variable)) %>%   
+#       mutate(flag = ifelse((abs(var_lag - variable) > (var_threshold))  & (abs(var_lead - variable) > (var_threshold)) & !is.na(variable), 
+#                                            2, flag)) %>%
+#       mutate(flag = ifelse(is.na(flag), 2, flag))%>%
+#       select( -var_lag, -var_lead)%>%
+#       # flag EXO sonde sensor data of value above 4 * standard deviation at other times but leave them in the dataset
+#       mutate(flag = ifelse(! is.na(variable) & abs(variable - var_mean) > var_threshold,
+#                                          5, flag))
+#   }
+#   
+#   LeadingLagging(bvrdata$EXOChla_RFU_1_5,bvrdata$Flag_EXOChla_RFU_1_5,4)  
+#   LeadingLagging(variable,flag,fouling_factor) 
+#   
+#   
+# for (g in c(27:29,32:38)){
+#   variable <-bvrdata[,colnames(bvrdata[g])]
+#   flag <- bvrdata[,paste0("Flag_", colnames(bvrdata[g]))]
+#   
+#   if(g == 32|33){
+#     LeadingLagging(bvrdata[,g], 4)
+# }
+#   else {
+#     LeadingLagging(variable, flag, 2)
+#   }
+#   }
+#   
+  
+#  print(g)}
+#  if(g=="EXO_chal"|33) {
+#    print(g)
+#    #LeadingLagging(bvrdata[,g], 4)
+#  }
+#}
+          
+  #index only the colummns with EXO at the beginning
+  #exo_idx <-grep("^EXO",colnames(bvrdata))
+  
+  #create list of the Flag columns that need to be changed to 2
+  #exo_flag <- c(66:84)
+  
+  
+  #Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
+  #bvrdata[which(bvrdata$EXO_depth_m < 0.5), exo_idx] <- NA
+  #Flag the data that was removed with 2 for outliers
+  #bvrdata[which(bvrdata$EXO_depth_m<0.5),exo_flag]<- 2
+           
+  
+  
+  
+    # find chla and phyo on the EXO sonde sensor data that differs from the mean by more than the standard deviation times a given factor, and
   # replace with NAs between October 2018 and March 2019, due to sensor fouling
+  
+  EXO_FOULING_FACTOR <-4
   Chla_RFU_1_5_mean <- mean(bvrdata$EXOChla_RFU_1_5, na.rm = TRUE)
   Chla_ugL_1_5_mean <- mean(bvrdata$EXOChla_ugL_1_5, na.rm = TRUE)
   BGAPC_RFU_1_5_mean <- mean(bvrdata$EXOBGAPC_RFU_1_5, na.rm = TRUE)
@@ -511,7 +588,8 @@ qaqc <- function(data_file, data2_file,
     depth_1=Depth_m_13-11.82, #Gets depth of thermistor 1
     depth_2=Depth_m_13-11.478, #Gets depth of thermistor 2
     depth_3=Depth_m_13-10.47, #Gets depth of thermistor 3
-    depth_4=Depth_m_13-9.423) #Gets depth of thermistor 4. This will have to be recalculated if/when the thermistor comees out of the water. 
+    depth_4=Depth_m_13-9.423,
+    depth_5=Depth_m_13-8.376) #Gets depth of thermistor 4. This will have to be recalculated if/when the thermistor comees out of the water. 
   
   
   #change the temp to NA when the thermistor is clearly out of the water which we used to determine the depth of the temp string
@@ -539,16 +617,23 @@ qaqc <- function(data_file, data2_file,
     Flag_ThermistorTemp_C_3= ifelse(!is.na(depth_3) & depth_3<0 ,2,Flag_ThermistorTemp_C_3),
     ThermistorTemp_C_3=ifelse(!is.na(depth_3) & depth_3<0,NA,ThermistorTemp_C_3))
   
-  #for thermistor at position 3 when it was out of the water 
+  #for thermistor at position 4 when it was out of the water 
   bvrdata=bvrdata%>%
     mutate(
     Flag_ThermistorTemp_C_4= ifelse(!is.na(depth_4) & depth_4<0 ,2,Flag_ThermistorTemp_C_4),
     ThermistorTemp_C_4=ifelse(!is.na(depth_4) & depth_4<0,NA,ThermistorTemp_C_4))
   
+  #for thermistor at position 5 when it was out of the water 
+  bvrdata=bvrdata%>%
+    mutate(
+      Flag_ThermistorTemp_C_5= ifelse(!is.na(depth_5) & depth_5<0 ,2,Flag_ThermistorTemp_C_5),
+      ThermistorTemp_C_5=ifelse(!is.na(depth_5) & depth_5<0,NA,ThermistorTemp_C_5))
+  
+  
   
   #take out the depth columns for thermisotrs depths after you set the values to NA
   bvrdata=bvrdata%>%
-    select(-depth_1,-depth_2, -depth_3, -depth_4)
+    select(-depth_1,-depth_2, -depth_3, -depth_4, -depth_5)
   
   
   

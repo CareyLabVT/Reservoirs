@@ -1,0 +1,331 @@
+---
+title: "Fluoro"
+author: "Abby Lewis"
+date: "2022-07-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+fluora_22 = read.csv("./Data/FluoroProbe_2022_working.csv")
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/6/6b3151c0fdd913e02641363c2b00ae57" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "GreenAlgae_ugL",     
+                    "Bluegreens_ugL",     
+                    "BrownAlgae_ugL",     
+                    "MixedAlgae_ugL",     
+                    "YellowSubstances_ugL",     
+                    "TotalConc_ugL",     
+                    "Transmission",     
+                    "Temp_degC",     
+                    "RFU_525nm",     
+                    "RFU_570nm",     
+                    "RFU_610nm",     
+                    "RFU_370nm",     
+                    "RFU_590nm",     
+                    "RFU_470nm",     
+                    "Flag_GreenAlgae",     
+                    "Flag_BluegreenAlgae",     
+                    "Flag_BrownAlgae",     
+                    "Flag_MixedAlgae",     
+                    "Flag_TotalConc",     
+                    "Flag_Temp",     
+                    "Flag_Transmission",     
+                    "Flag_525nm",     
+                    "Flag_570nm",     
+                    "Flag_610nm",     
+                    "Flag_370nm",     
+                    "Flag_590nm",     
+                    "Flag_470nm"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+fluora = fluora_22%>%
+  full_join(dt1)
+flo_select = fluora%>%
+  select(Reservoir, Site, Depth_m, DateTime, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)
+
+flo_all = flo_select%>%
+  filter(Reservoir == "BVR", Site == 50,
+         year(DateTime)%in% c(2021,2022))%>%
+  mutate(DateTime= as.Date(DateTime))%>%
+  pivot_longer(!c(Reservoir,Site,Depth_m,DateTime))%>%
+  group_by(DateTime, name)%>%
+  summarize(max = max(value),
+            depth = Depth_m[which.max(value)])%>%
+  mutate(Year = as.factor(year(DateTime)),
+         Date_22 = DateTime)
+year(flo_all$Date_22) <- 2022
+
+jpeg("./Figs/phyto_max_all.jpg",width = 6, height= 8, units = "in", res = 300)
+flo_all%>%
+  ggplot(aes(x = Date_22, y = max, color = Year))+
+  geom_line()+
+  ylab("Maximum concentration (ug/L)")+
+  facet_wrap(~name, scales = "free_y", nrow = 3)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme(axis.title.x = element_blank(),
+        legend.position = "bottom")
+dev.off()
+
+jpeg("./Figs/phyto_depth_all.jpg",width = 6, height= 8, units = "in", res = 300)
+flo_all%>%
+  ggplot(aes(x = Date_22, y = depth, color = Year))+
+  geom_line()+
+  ylab("Depth of maximum concentration (m)")+
+  facet_wrap(~name, scales = "free_y",nrow=3)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme(axis.title.x = element_blank(),
+        legend.position = "bottom")
+dev.off()
+
+flo_sum = flo_select%>%
+  filter(Reservoir == "BVR", Site == 50)%>%
+  mutate(DateTime= as.Date(DateTime))%>%
+  group_by(DateTime)%>%
+  summarize(max_tot = max(TotalConc_ugL),
+            max_blue = max(Bluegreens_ugL),
+            max_green = max(GreenAlgae_ugL),
+            depth_blue = Depth_m[which.max(Bluegreens_ugL)],
+            depth_max = Depth_m[which.max(TotalConc_ugL)],
+            depth_green = Depth_m[which.max(GreenAlgae_ugL)],
+            blue_pct = Bluegreens_ugL[Depth_m == depth_max]/max_tot)%>%
+  mutate(Year = as.factor(year(DateTime)),
+         Date_22 = DateTime)
+year(flo_sum$Date_22) = 2022
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = depth_blue, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Depth of max bluegreen conc (m)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = max_blue, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Max bluegreen conc (ugL)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = max_tot, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Maximum algal conc (ugL)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = depth_blue, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Depth of max bluegreen conc (m)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = depth_max, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Max phyto conc (ugL)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = depth_green, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Depth of max green algae conc (m)")+
+  theme(axis.title.x = element_blank())
+
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = max_green, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Max green conc (ugL)")+
+  theme(axis.title.x = element_blank())
+
+jpeg("./Figs/phyto_blue_pct.jpg",width = 6, height= 4, units = "in", res = 300)
+flo_sum%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22))+
+  geom_line(aes(y = blue_pct, color = Year))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Contribution of bluegreens to max phyto peak")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+
+flo_all%>%
+  filter(name == "TotalConc_ugL")%>%
+  ggplot(aes(x = DateTime, y = depth, color = max))+
+  geom_point()+
+  scale_y_reverse()
+
+fluora%>%
+  filter(Reservoir=="BVR",
+         Site==50)%>%
+  mutate(DateTime = as.Date(DateTime))%>%
+  ggplot(aes(x = DateTime, y = Depth_m, color = TotalConc_ugL))+
+  geom_point(size = .5)+
+  scale_color_gradientn(colours = blue2green2red(100), na.value="white", name = "Total algal conc")+
+  scale_y_reverse()+
+  theme_bw()
+
+#Decrease dataset size by trimming to 0.1m depth intervals
+fluora_bvr = fluora%>%
+  mutate(DateTime = as.Date(DateTime))%>%
+  filter(Reservoir=="BVR", Site==50,
+         month(DateTime)>=5,
+         month(DateTime)<=7)
+depths <- seq(0,11, by = .1)
+newDepths <- depths
+df.final<- fluora_bvr %>% group_by(DateTime, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  fluora_atThisDepth <- fluora_bvr %>% group_by(DateTime, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  fluora_atThisDepth = fluora_atThisDepth%>%
+    filter(abs(Depth_m-newDepths[i])<0.1) #only include if the measured depth is within 0.1 of the depth we are labeling it
+  fluora_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,fluora_atThisDepth)
+}
+df.final.raw = df.final
+
+df.final = df.final.raw%>%
+  group_by(DateTime, Site)%>%
+  mutate(max = max(Depth_m),
+         Depth_m = max -Depth_m)
+
+#library(RCurl)
+#sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+
+#sensor_depth = sensor%>%
+#  mutate(DateTime = as.POSIXct(TIMESTAMP),
+#         WaterLevel = Lvl_psi*0.70455)%>%
+#  filter(year(DateTime)==2022,
+#         WaterLevel>7.5)%>%
+#  arrange(DateTime)%>%
+#  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
+#  mutate(Date = as.Date(DateTime))%>%
+#  group_by(Date)%>%
+#  summarize(WaterLevel = mean(WaterLevel))%>%
+#  mutate(Year = year(Date),
+#         Site = 50)
+
+#sensor_depth = sensor_depth%>%
+#  full_join(sensor_depth%>%mutate(Site=40,
+#                                  WaterLevel = WaterLevel-5.5))
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+
+vars = c("GreenAlgae_ugL", "Bluegreens_ugL", "BrownAlgae_ugL", "MixedAlgae_ugL", "YellowSubstances_ugL","TotalConc_ugL")
+Sites = c(50)
+Years = c(2021,2022)
+
+fluora_depths = df.final%>%
+  mutate(Date = as.Date(DateTime),
+         Year = year(DateTime))%>%
+  filter(Year %in% Years,
+         Site %in% Sites,
+         Reservoir == "BVR"
+         )%>%
+  group_by(DateTime,Site,Year)%>%
+  summarize(WaterLevel = max(Depth_m))%>%
+  group_by(Site)%>%
+  mutate(max = max(WaterLevel))
+
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  for(site in Sites){
+    for(year in Years){
+      bvr<- df.final%>%
+        mutate(Year = year(DateTime),
+               Date = as.Date(DateTime))%>%
+        filter(Reservoir == "BVR",
+               !is.na(get(var)),
+               !is.na(Depth_m),
+               Site %in% Sites,
+               Year %in% Years)%>%
+        group_by(Site)%>%
+        mutate(max = max(Depth_m))
+      bvr_site<- bvr%>%
+        filter(Site == site,
+               Year == year)
+      if(nrow(bvr_site)>0){
+        bvr_interp <- interp2xyz(interp(bvr_site$DateTime,bvr_site$Depth_m,bvr_site[[var]],xo = seq(min(bvr_site$DateTime), max(bvr_site$DateTime), .1),yo = seq(min(bvr_site$Depth_m), max(bvr_site$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+        interp = interp%>%
+          full_join(bvr_interp%>%mutate(Site=site))
+      }
+    }
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  bvr_maxes = bvr%>%
+    group_by(Site)%>%
+    summarize(max = unique(max))
+  
+  #sensor_depth_plot = sensor_depth%>%
+  #  full_join(bvr_maxes)%>%
+  #  filter(Date>= min(bvr$Date),
+  #         Date<= max(bvr$Date),
+  #         WaterLevel<=max)
+  
+  #Heatmap
+  jpeg(paste0("./Figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x))+
+    geom_raster(aes(fill = z, y=y))+
+    geom_ribbon(data = fluora_depths, aes(x = DateTime, ymin= WaterLevel, ymax = max), fill = "white")+
+    scale_y_continuous(expand = c(0,0))+
+    labs(x = "", y = "Height above sediments (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="white", name = var)+
+    geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
+    geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+    scale_x_date(expand = c(0,0))+
+    theme_classic()+
+    theme(panel.border = element_rect(fill = NA))+
+    facet_grid(cols = vars(Year),
+               scales = "free",
+               space = "free_y")
+  print(p)
+  dev.off()
+}
+```
+

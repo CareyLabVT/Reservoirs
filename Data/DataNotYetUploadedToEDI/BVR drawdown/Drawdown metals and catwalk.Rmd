@@ -738,3 +738,65 @@ metals%>%
   ggplot(aes(x = Date_22, y = SFe_ppb,color = Year))+
   geom_point()
 ```
+
+
+```{r}
+metals = read_csv("./Data/Drawdown Metals_updated.csv")
+metals%>%
+  filter(Reservoir=="BVR")%>%
+  select(-Reservoir)%>%
+  group_by(Sample_Date)%>%
+  filter(40%in%Site)%>%
+  pivot_longer(cols = contains("_pp"))%>%
+  pivot_wider(names_from = Site, values_from =value, names_prefix = "Site_")%>%
+  filter(!is.na(Site_40),
+         !is.na(Site_50))%>%
+  ggplot(aes(x = Site_50, y = Site_40))+
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
+  facet_wrap_equal(~name, scales = "free")
+```
+
+```{r}
+FacetEqualWrap <- ggproto(
+  "FacetEqualWrap", FacetWrap,
+  
+  train_scales = function(self, x_scales, y_scales, layout, data, params) {
+    
+    # doesn't make sense if there is not an x *and* y scale
+    if (is.null(x_scales) || is.null(x_scales)) {
+        stop("X and Y scales required for facet_equal_wrap")
+    }
+    
+    # regular training of scales
+    ggproto_parent(FacetWrap, self)$train_scales(x_scales, y_scales, layout, data, params)
+    
+    # switched training of scales (x and y and y on x)
+    for (layer_data in data) {
+      match_id <- match(layer_data$PANEL, layout$PANEL)
+      
+      x_vars <- intersect(x_scales[[1]]$aesthetics, names(layer_data))
+      y_vars <- intersect(y_scales[[1]]$aesthetics, names(layer_data))
+      
+      SCALE_X <- layout$SCALE_X[match_id]
+      ggplot2:::scale_apply(layer_data, y_vars, "train", SCALE_X, x_scales)
+      
+      SCALE_Y <- layout$SCALE_Y[match_id]
+      ggplot2:::scale_apply(layer_data, x_vars, "train", SCALE_Y, y_scales)
+    }
+    
+  }
+)
+
+facet_wrap_equal <- function(...) {
+  # take advantage of the sanitizing that happens in facet_wrap
+  facet_super <- facet_wrap(...)
+  
+  ggproto(NULL, FacetEqualWrap,
+    shrink = facet_super$shrink,
+    params = facet_super$params
+  )
+}
+```
+
+

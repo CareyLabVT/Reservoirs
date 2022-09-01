@@ -1,0 +1,108 @@
+---
+title: "BVR water level"
+author: "Abby Lewis"
+date: "7/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(RCurl)
+sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+
+sensor_depth = sensor%>%
+  mutate(DateTime = as.POSIXct(TIMESTAMP),
+         WaterLevel = Lvl_psi*0.70455)%>%
+  filter(year(DateTime)==2022,
+         month(DateTime)>3,
+         WaterLevel>7.5)%>%
+  arrange(DateTime)%>%
+  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(WaterLevel = mean(WaterLevel))%>%
+  mutate(Year = year(Date),
+         Site = 50)
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+jpeg("./Figs/WaterLevel.jpeg", width = 4, height = 4, units = "in", res = 300)
+sensor_depth%>%
+  ggplot(aes(x = Date, y = WaterLevel))+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none")
+dev.off()
+
+sensor_depth = sensor%>%
+  mutate(DateTime = as.POSIXct(TIMESTAMP),
+         WaterLevel = Lvl_psi*0.70455)%>%
+  #filter(WaterLevel>7.5)%>%
+  arrange(DateTime)%>%
+  filter(!lag(WaterLevel)-WaterLevel>0.05)%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(WaterLevel = mean(WaterLevel))%>%
+  mutate(Year = year(Date),
+         Site = 50)%>%
+  filter(!lag(WaterLevel)-WaterLevel>0.05)
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+jpeg("./Figs/WaterLevel_long.jpeg", width = 6, height = 4, units = "in", res = 300)
+sensor_depth%>%
+  ggplot(aes(x = Date, y = WaterLevel))+
+  geom_line()+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none")
+dev.off()
+
+
+jpeg("./Figs/WaterLevel_long_lines.jpeg", width = 6, height = 4, units = "in", res = 300)
+sensor_depth%>%
+  ggplot(aes(x = Date, y = WaterLevel))+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none")
+dev.off()
+
+library(readxl)
+hist = read_excel("./Data/09Apr20_BVR_WaterLevelDaily.xlsx")%>%
+  rename(WaterLevel = BVR_WaterLevel_m)
+
+full = hist%>%
+  full_join(sensor_depth)
+
+p = full%>%
+  ggplot(aes(x = Date, y = WaterLevel))+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none")
+p
+library(plotly)
+ggplotly(p)
+
+jpeg("./Figs/full_timeseries.jpg", width = 6, height = 4, units = "in", res = 300)
+p
+dev.off()
+```
+

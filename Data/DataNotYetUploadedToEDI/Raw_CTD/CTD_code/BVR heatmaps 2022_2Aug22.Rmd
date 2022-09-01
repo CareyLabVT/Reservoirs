@@ -692,3 +692,63 @@ schmidt%>%
 
 ```
 
+Light attenuation/light extinction
+```{r}
+#Using the equation here
+#https://www.esf.edu/efb/schulz/Limnology/Light.html
+
+ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
+    mutate(Site = ifelse(Site==1,40,Site))%>%
+  full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
+  filter(month(Date)>=5)
+
+unique(ctd$Date)
+
+atten_k = ctd%>%
+  filter(!is.na(PAR_umolm2s))%>%
+  group_by(Date)%>%
+  filter(sum(Depth_m<0)>0)%>%
+  mutate(I0 = mean(PAR_umolm2s[Depth_m<0], na.rm = T))%>%
+  filter(Depth_m>0)%>%
+  summarize(I0 = unique(I0),
+            k = coef(lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m)),
+            r2 = summary(lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m))$r.squared)%>%
+  filter(r2>0.9)
+
+atten_k$Date_22<-atten_k$Date
+year(atten_k$Date_22)=2022
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+jpeg("../2022_BVR_drawdown_figs/Light attenuation.jpg", width = 6, height = 4, res = 300, units = "in")
+atten_k%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year%in%c(2022,2021))%>%
+  ggplot(aes(x = Date_22, y = k, color = Year))+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = as.POSIXct(Dates), lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Light attenuation coefficient")+
+  theme_bw()+
+  xlab("")
+dev.off()
+  
+data = ctd%>%filter(Date=="2018-11-19 00:00:00	")
+i0 = data%>%
+  filter(Depth_m<0)%>%
+  summarize(mean(PAR_umolm2s))
+logI0 = c(log(i0)$'mean(PAR_umolm2s)')
+lm1 = lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m, data = data%>%filter(Depth_m>.1))
+summary(lm1)
+slope = coef(lm1)
+summary(lm1)$r.squared
+
+data%>%
+  ggplot(aes(x = Depth_m, y = log(PAR_umolm2s)))+
+  geom_point()+
+  geom_abline(intercept = logI0, slope = slope)
+
+summary(ctd$PAR_umolm2s)
+```
+

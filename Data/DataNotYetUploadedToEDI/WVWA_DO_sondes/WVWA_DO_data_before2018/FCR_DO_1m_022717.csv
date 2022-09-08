@@ -1,0 +1,37 @@
+
+Advanced Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7, coef 8, coef 9
+,Temperature(degC),unknown,0.000000,0.00,0.000000,0.000000,0.000000,0.000000,0.000000,0.00,0.00
+,Pressure(psi),unknown,0.000001,-0.000219,1.003133,-0.000022,0.001997,0.421111,0.000000,1.000000,0.000000
+,Power(V),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO(ppm),12-Jul-13 16:45,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO Temp(degC),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+
+Field Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7
+,Temperature(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Pressure(psi),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Power(V),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO(ppm),12-Jul-13 16:45,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO Temp(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+
+Sensor/Session information
+SensorSN, 21230023 ,,Modbus Addr., 3 
+Sensor Type,DO2,,Initialized w/fw Rev,"2. 131"
+Sensor Name,FCR DO 1m  (3),,Uploaded,"Aqua4Plus 1.9.501"
+Session Name,FCR_DO_1m_022717,,Exported,"Aqua4Plus 1.9.501"
+# Records,  4 
+Statistical Data,,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC),
+,Sensor Range,Custom,Custom,Custom,Custom,Custom,
+,Minimum,6.000000,14.055102,13.055903,10.879999,8.650000,
+,Maximum,9.062500,15.260513,13.801103,12.309999,10.480000,
+,Mean,7.593750,14.954496,13.361435,11.672499,9.150000,
+,Variance,1.5322266,0.2696552,0.0779118,0.2624188,0.5923502,
+,Std Deviation,1.2378314,0.5192833,0.2791269,0.5122682,0.7696429,
+,,,,,,,
+,,,,,,,
+Rec #,Date/Time,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC)
+1,27-Feb-17 13:08:36,6.000000,14.055102,13.204943,10.879999,10.480000
+2,27-Feb-17 13:23:36,6.812500,15.248205,13.801103,12.309999,8.790000
+3,27-Feb-17 13:38:36,8.500000,15.254162,13.055903,11.789999,8.679999
+4,27-Feb-17 13:53:36,9.062500,15.260513,13.383791,11.709999,8.650000

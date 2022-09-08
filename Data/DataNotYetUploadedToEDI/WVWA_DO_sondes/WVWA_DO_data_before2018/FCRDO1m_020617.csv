@@ -1,0 +1,36 @@
+
+Advanced Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7, coef 8, coef 9
+,Temperature(degC),unknown,0.000000,0.00,0.000000,0.000000,0.000000,0.000000,0.000000,0.00,0.00
+,Pressure(psi),unknown,0.000001,-0.000219,1.003133,-0.000022,0.001997,0.421111,0.000000,1.000000,0.000000
+,Power(V),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO(ppm),12-Jul-13 16:45,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO Temp(degC),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+
+Field Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7
+,Temperature(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Pressure(psi),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Power(V),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO(ppm),12-Jul-13 16:45,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO Temp(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+
+Sensor/Session information
+SensorSN, 21230023 ,,Modbus Addr., 3 
+Sensor Type,DO2,,Initialized w/fw Rev,"2. 131"
+Sensor Name,FCR DO 1m  (3),,Uploaded,"Aqua4Plus 1.9.501"
+Session Name,FCRDO1m_101416,,Exported,"Aqua4Plus 1.9.501"
+# Records,  3 
+Statistical Data,,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC),
+,Sensor Range,Custom,Custom,Custom,Custom,Custom,
+,Minimum,16.812500,15.265603,11.446272,8.650000,16.219999,
+,Maximum,17.062500,15.275098,12.191471,8.730000,16.240000,
+,Mean,16.937500,15.270510,11.813903,8.686666,16.230000,
+,Variance,0.0104167,0.0000151,0.0926030,0.0010889,0.0000667,
+,Std Deviation,0.1020621,0.0038829,0.3043073,0.0329984,0.0081654,
+,,,,,,,
+,,,,,,,
+Rec #,Date/Time,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC)
+1,14-Oct-16 16:15:00,17.062500,15.275098,11.803967,8.730000,16.219999
+2,14-Oct-16 16:30:00,16.937500,15.270829,12.191471,8.650000,16.230000
+3,14-Oct-16 16:45:00,16.812500,15.265603,11.446272,8.679999,16.240000

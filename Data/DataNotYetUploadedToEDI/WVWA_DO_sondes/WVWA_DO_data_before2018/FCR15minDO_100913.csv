@@ -1,0 +1,37 @@
+
+Advanced Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7, coef 8, coef 9
+,Temperature(degC),unknown,0.000000,0.00,0.000000,0.000000,0.000000,0.000000,0.000000,0.00,0.00
+,Pressure(psi),unknown,0.000001,-0.000219,1.003133,-0.000022,0.001997,0.421111,0.000000,1.000000,0.000000
+,Power(V),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO(ppm),12-Jul-13 16:45,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+,DO Temp(degC),unknown,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
+
+Field Calibration Data
+,,Cal Date,coef 1, coef 2, coef 3, coef 4, coef 5, coef 6, coef 7
+,Temperature(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Pressure(psi),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,Power(V),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO(ppm),12-Jul-13 16:45,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+,DO Temp(degC),unknown,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000
+
+Sensor/Session information
+SensorSN, 21230023 ,,Modbus Addr., 1 
+Sensor Type,DO2,,Initialized w/fw Rev,"2. 131"
+Sensor Name,FCR DO (1),,Uploaded,"Aqua4Plus 1.9.501"
+Session Name,FCR15minDO,,Exported,"Aqua4Plus 1.9.501"
+# Records,  4 
+Statistical Data,,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC),
+,Sensor Range,Custom,Custom,Custom,Custom,Custom,
+,Minimum,28.375000,13.879995,13.652063,5.139999,30.449997,
+,Maximum,31.062500,13.897395,13.860719,5.259999,32.859997,
+,Mean,29.875000,13.888564,13.771295,5.194999,31.554998,
+,Variance,0.9511719,0.0000395,0.0066639,0.0020250,0.9376236,
+,Std Deviation,0.9752804,0.0062883,0.0816328,0.0450000,0.9683097,
+,,,,,,,
+,,,,,,,
+Rec #,Date/Time,Temperature(degC),Pressure(psi),Power(V),DO(ppm),DO Temp(degC)
+1,12-Aug-13 17:00:00,28.375000,13.879995,13.860719,5.259999,30.449997
+2,12-Aug-13 17:15:00,29.812500,13.886599,13.830912,5.139999,32.859997
+3,12-Aug-13 17:30:00,31.062500,13.890266,13.741487,5.169999,32.089996
+4,12-Aug-13 17:45:00,30.250000,13.897395,13.652063,5.209999,30.820000

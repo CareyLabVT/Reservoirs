@@ -700,11 +700,12 @@ Light attenuation/light extinction
 ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
     mutate(Site = ifelse(Site==1,40,Site))%>%
-  full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
+  full_join(ctd_hist%>%
+              mutate(Date=as.Date(Date))%>%
+              filter(Reservoir=="BVR"))%>%
   filter(month(Date)>=5,
-         month(Date)<10)
-
-unique(ctd$Date)
+         month(Date)<10,
+         Site == 50)
 
 atten_k = ctd%>%
   filter(!is.na(PAR_umolm2s))%>%
@@ -713,8 +714,9 @@ atten_k = ctd%>%
   mutate(I0 = mean(PAR_umolm2s[Depth_m<0], na.rm = T))%>%
   filter(Depth_m>0)%>%
   summarize(I0 = unique(I0),
-            k = coef(lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m)),
-            r2 = summary(lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m))$r.squared)%>%
+            k = coef(lm(I(log(PAR_umolm2s)-log(I0))~ 0 + Depth_m)),
+            r2 = summary(lm(I(log(PAR_umolm2s)-log(I0))~ 0 + Depth_m))$r.squared,
+            Zeu = min(Depth_m[PAR_umolm2s<I0/100]))%>%
   filter(r2>0.9)
 
 atten_k$Date_22<-atten_k$Date
@@ -728,28 +730,35 @@ atten_k%>%
   filter(Year%in%c(2022,2021))%>%
   ggplot(aes(x = Date_22, y = k, color = Year))+
   geom_line()+
+  geom_point()+
   geom_vline(data=lines,aes(xintercept = as.POSIXct(Dates), lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Light attenuation coefficient")+
   theme_bw()+
   xlab("")
 dev.off()
-  
-data = ctd%>%filter(Date=="2018-11-19 00:00:00	")
-i0 = data%>%
-  filter(Depth_m<0)%>%
-  summarize(mean(PAR_umolm2s))
-logI0 = c(log(i0)$'mean(PAR_umolm2s)')
-lm1 = lm(I(log(PAR_umolm2s)-logI0)~ 0 + Depth_m, data = data%>%filter(Depth_m>.1))
-summary(lm1)
-slope = coef(lm1)
-summary(lm1)$r.squared
 
-data%>%
-  ggplot(aes(x = Depth_m, y = log(PAR_umolm2s)))+
-  geom_point()+
-  geom_abline(intercept = logI0, slope = slope)
+ctd%>%
+  filter(Date=="2022-05-09 08:06:53	")
 
 summary(ctd$PAR_umolm2s)
+
+#strat is defined in a code chunk above
+jpeg("../2022_BVR_drawdown_figs/Zeu_thermo.jpg", width = 6, height = 4, res = 300, units = "in")
+strat%>%
+  filter(Site==50)%>%
+  select(-Date_22)%>%
+  mutate(Date = as.Date(Date),
+         Year = as.factor(year(Date)))%>%
+  full_join(atten_k%>%
+              mutate(Date = as.Date(Date)))%>%
+  filter(year(Date)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y = Zeu/thermo, color = Year))+
+  geom_line()+
+  ylab("Euphotic zone:mixed layer depth")+
+  xlab("")+
+  geom_hline(yintercept = 1)+
+  theme_bw()
+dev.off()
 ```
 

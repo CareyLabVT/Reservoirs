@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(rLakeAnalyzer)
 library(lubridate)
+library(rLakeAnalyzer)
 ```
 
 ```{r}
@@ -96,5 +97,357 @@ meta_depths%>%
   ggplot(aes(x = Date_22, y = value, color = Year))+
   geom_line()+
   facet_wrap(~name)
+```
+
+```{r}
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
+  filter(Sensor=="ThermistorTemp")
+
+#Load bathymetry
+bathy = read.csv("./Data/Bathymetry_comb.csv")%>%
+  filter(Reservoir == "BVR")
+
+ctd_depths = cat_long%>%
+  mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
+  filter(!is.na(Reading))%>%
+  group_by(Date)%>%
+  dplyr::summarize(WaterLevel = mean(Reservoir_depth))
+
+flexible_bathy = ctd_depths%>%
+  mutate(Reservoir = "BVR")%>%
+  full_join(bathy)%>%
+  group_by(Date)%>%
+  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(WaterLevel)) + 1)%>%
+  filter(Depth_m>=0)
+
+catwalk_format = cat_long%>%
+  filter(!is.na(Reading))%>%
+  mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
+  group_by(Date, Sensor_depth)%>%
+  summarize(Reading=mean(Reading,na.rm = T))
+
+schmidts = c()
+for(date in unique(catwalk_format$Date)){
+  temps = catwalk_format%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  schmidts = c(schmidts, schmidt.stability(wtr = temps$Reading, depths = temps$Sensor_depth, bthA = baths$SA_m2, bthD = baths$Depth_m, sal = rep(0,length(temps$Reading))))
+}
+
+schmidt_df = data.frame(Date = unique(catwalk_format$Date), Schmidt = schmidts)%>%
+  mutate(Year = year(Date))
+schmidt_df$Date_22 = schmidt_df$Date
+year(schmidt_df$Date_22)=2022
+
+
+###
+# PLOT RESULTS
+###
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+
+jpeg("./Figs/Schmidt_exo.jpg",res = 300, units = "in",width = 6, height = 4)
+schmidt_df%>%
+  filter(Year %in% c(2021,2022),
+         !is.na(Schmidt))%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
+  geom_point()+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Schmidt stability (J/m^2)")+
+  theme_bw()+
+  xlab("Date")
+dev.off()
+
+meta_depths_raw = catwalk_format%>%
+  mutate(Depth_simple = round(Sensor_depth))%>%
+  group_by(Date,Depth_simple)%>%
+  summarize(Temp_C = mean(Reading),
+            Depth_m = mean(Sensor_depth))%>%
+  group_by(Date)%>%
+  summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
+            hypo_depth = meta.depths(Temp_C, Depth_m)[2],
+            max_depth = max(Depth_m),
+            min_depth = min(Depth_m))
+
+meta_depths = meta_depths_raw%>%
+  filter(!epi_depth == hypo_depth)%>%
+  select(-max_depth, -min_depth)%>%
+  filter(!abs(lag(epi_depth)-epi_depth)>3,
+         !abs(lead(epi_depth)-epi_depth)>3,
+         !abs(lag(hypo_depth)-hypo_depth)>3,
+         !abs(lead(hypo_depth)-hypo_depth)>3)%>%
+  pivot_longer(c(epi_depth,hypo_depth))
+
+meta_depths$Date_22 = meta_depths$Date
+year(meta_depths$Date_22)=2022
+
+jpeg("./Figs/meta_depths.jpg",res = 300, units = "in",width = 6, height = 4)
+meta_depths%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<9)%>%
+  ggplot(aes(x = Date_22, y = value, color = Year))+
+  geom_point()+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_wrap(~name)+
+  ylab("Depth (m)")+
+  xlab("")+
+  theme_bw()
+dev.off()
+
+
+jpeg("./Figs/res_diagram_layers.jpg",res = 300, units = "in",width = 6, height = 4)
+meta_depths_raw%>%
+  filter(!epi_depth == hypo_depth)%>%
+  select(-min_depth)%>%
+  filter(!abs(lag(epi_depth)-epi_depth)>3,
+         !abs(lead(epi_depth)-epi_depth)>3,
+         !abs(lag(hypo_depth)-hypo_depth)>3,
+         !abs(lead(hypo_depth)-hypo_depth)>3)%>%
+  mutate(hypo_width = max_depth-hypo_depth,
+         meta_width = hypo_depth-epi_depth)%>%
+  select(Date,epi_depth,hypo_width,meta_width)%>%
+  pivot_longer(c(epi_depth,hypo_width,meta_width))%>%
+  mutate(Year = as.factor(year(Date)),
+         name = factor(name, levels = c("epi_depth","meta_width","hypo_width")))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<9)%>%
+  ggplot(aes(x = Date, y = value, fill = name))+
+    geom_area()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_wrap(~Year, scales = "free_x")+
+  theme_bw()
+dev.off()
+
+meta_ratio = flexible_bathy%>%
+  left_join(meta_depths%>%pivot_wider(names_from = name, values_from = value))%>%
+  filter(!is.na(epi_depth))%>%
+  group_by(Date)%>%
+  summarize(depth_above_epi = max(Depth_m[Depth_m<(epi_depth)]),
+            epi_and_below = sum(Volume_L[Depth_m<=depth_above_epi]),
+            correction = (1-(epi_depth-depth_above_epi))*Volume_L[Depth_m==depth_above_epi],
+            epi_volume = epi_and_below-correction,
+            depth_above_hypo = max(Depth_m[Depth_m<(hypo_depth)]),
+            hypo_and_above = sum(Volume_L[Depth_m<=depth_above_hypo]),
+            correction_hypo = (hypo_depth-depth_above_hypo)*Volume_L[Depth_m==depth_above_epi],
+            hypo_volume = hypo_and_above-correction_hypo,
+            epi_hypo_ratio = epi_volume/hypo_volume
+  )
+
+meta_ratio$Date_22 = meta_ratio$Date
+year(meta_ratio$Date_22) = 2022
+
+jpeg("./Figs/epi_meta_ratio.jpg",res = 300, units = "in",width = 6, height = 4)
+meta_ratio%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<10)%>%
+  ggplot(aes(x = Date_22, y= epi_hypo_ratio, color = Year))+
+  geom_point()+
+  geom_smooth()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  ylab("Ratio of epilimnetic volume:hypolimnetic volume")+
+  xlab("")
+dev.off()
+  
+
+thermo_raw = catwalk_format%>%
+  filter(!is.na(Reading))%>%
+  mutate(Depth_simple = floor(Sensor_depth))%>%
+  group_by(Date,Depth_simple)%>%
+  summarize(Temp_C = mean(Reading),
+            Depth_m = mean(Sensor_depth))%>%
+  arrange(Date,Depth_m)%>%
+  group_by(Date)%>%
+  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
+  summarize(thermo = thermo.depth(Temp_C, Depth_m))
+  
+thermo_raw$Date_22 = thermo_raw$Date
+year(thermo_raw$Date_22)=2022
+
+jpeg("./Figs/thermocline_depth.jpg",res = 300, units = "in",width = 6, height = 4)
+thermo_raw%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<9)%>%
+  ggplot(aes(x = Date_22, y= thermo, color = Year))+
+  geom_point()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  ylab("Thermocline depth (m)")+
+  xlab("")
+dev.off()
+
+buoyancy_raw = catwalk_format%>%
+  filter(!is.na(Reading))%>%
+  mutate(Depth_simple = floor(Sensor_depth))%>%
+  group_by(Date,Depth_simple)%>%
+  summarize(Temp_C = mean(Reading),
+            Depth_m = mean(Sensor_depth))%>%
+  arrange(Date,Depth_m)%>%
+  group_by(Date)%>%
+  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
+  summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
+            Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
+
+buoy_max = buoyancy_raw%>%
+  group_by(Date)%>%
+  summarize(max = max(buoy_freq))
+  
+buoy_max$Date_22 = buoy_max$Date
+year(buoy_max$Date_22)=2022
+
+jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
+buoy_max%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<9)%>%
+  ggplot(aes(x = Date_22, y= max, color = Year))+
+  geom_point()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  ylab("Maximum buoyancy frequency")+
+  xlab("")
+dev.off()
+```
+
+Lake number
+```{r}
+layer_dens = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  temps = catwalk_format%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  thermo = thermo_raw%>%
+    filter(Date == date)
+  if(!is.na(thermo$thermo)){
+    layer_dens = c(layer_dens, 
+                   layer.density(top = 0, 
+                                 bottom = thermo$thermo, 
+                                 wtr = temps$Reading, 
+                                 depths = temps$Sensor_depth, 
+                                 bthA = baths$SA_m2, 
+                                 bthD = c(0,baths$Depth_m[2:length(baths$Depth_m)])))
+    dates = c(dates, date)
+  }
+}
+
+dens_df = data.frame(Date = dates, Density = layer_dens)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+
+
+
+met = read.csv("./Data/FCRmet.csv", skip = 1)
+
+met1 = met%>%
+  filter(nchar(TIMESTAMP)>3)%>%
+  mutate(Date = as.Date(as.POSIXct(TIMESTAMP)))%>%
+  group_by(Date)%>%
+  summarize(wind = mean(as.numeric(WS_ms_Avg)))
+
+met_dens_comb = met1%>%
+  left_join(dens_df)%>%
+  filter(!is.na(Density))
+
+met_dens_comb$uStar = uStar(wndSpeed = met_dens_comb$wind, 
+                            wndHeight = 2.4,#Adrienne's approximation
+                            averageEpiDense = met_dens_comb$Density)
+
+
+
+hypo_dens = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  temps = catwalk_format%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  thermo = thermo_raw%>%
+    filter(Date == date)
+  if(!is.na(thermo$thermo)){
+    hypo_dens = c(hypo_dens, 
+                  layer.density(top = thermo$thermo, 
+                                bottom = max(baths$Depth_m), 
+                                wtr = temps$Reading, 
+                                depths = temps$Sensor_depth, 
+                                bthA = baths$SA_m2, 
+                                bthD = c(baths$Depth_m)))
+    dates = c(dates, date)
+  }
+}
+
+hypo_dens_df = data.frame(Date = dates, Density = hypo_dens)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+
+
+
+lake_num = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  uStar_calc = met_dens_comb%>%
+    filter(Date == date)
+  meta = meta_depths%>%
+    pivot_wider()%>%
+    filter(Date == date)
+  St_calc = schmidt_df%>%
+    filter(Date==date)
+  hypo = hypo_dens_df%>%
+    filter(Date==date)
+
+  num = lake.number(bthA = baths$SA_m2, 
+                    bthD = baths$Depth_m,
+                    uStar = uStar_calc$uStar,
+                    St = St_calc$Schmidt,
+                    metaT = meta$epi_depth,
+                    metaB = meta$hypo_depth,
+                    averageHypoDense = hypo$Density
+                    )
+  if(!is_empty(num)){
+    dates = c(dates, date)
+    lake_num = c(lake_num, num)
+  }
+  
+}
+
+lake_number_df = data.frame(Date = dates, lake_num = lake_num)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+lake_number_df$Date_22 = lake_number_df$Date
+year(lake_number_df$Date_22)=2022
+
+jpeg("./Figs/Lake number.jpg",res = 300, units = "in",width = 6, height = 4)
+lake_number_df%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = lake_num, color = Year))+
+  geom_point()+
+  geom_smooth()+
+  ylab("Lake number")+
+  theme_bw()+
+  theme(axis.title.x = element_blank())
+dev.off()
 ```
 

@@ -1,0 +1,88 @@
+---
+title: "Chemistry"
+author: "Abby Lewis"
+date: "2022-09-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+FacetEqualWrap <- ggproto(
+  "FacetEqualWrap", FacetWrap,
+  
+  train_scales = function(self, x_scales, y_scales, layout, data, params) {
+    
+    # doesn't make sense if there is not an x *and* y scale
+    if (is.null(x_scales) || is.null(x_scales)) {
+        stop("X and Y scales required for facet_equal_wrap")
+    }
+    
+    # regular training of scales
+    ggproto_parent(FacetWrap, self)$train_scales(x_scales, y_scales, layout, data, params)
+    
+    # switched training of scales (x and y and y on x)
+    for (layer_data in data) {
+      match_id <- match(layer_data$PANEL, layout$PANEL)
+      
+      x_vars <- intersect(x_scales[[1]]$aesthetics, names(layer_data))
+      y_vars <- intersect(y_scales[[1]]$aesthetics, names(layer_data))
+      
+      SCALE_X <- layout$SCALE_X[match_id]
+      ggplot2:::scale_apply(layer_data, y_vars, "train", SCALE_X, x_scales)
+      
+      SCALE_Y <- layout$SCALE_Y[match_id]
+      ggplot2:::scale_apply(layer_data, x_vars, "train", SCALE_Y, y_scales)
+    }
+    
+  }
+)
+
+facet_wrap_equal <- function(...) {
+  # take advantage of the sanitizing that happens in facet_wrap
+  facet_super <- facet_wrap(...)
+  
+  ggproto(NULL, FacetEqualWrap,
+    shrink = facet_super$shrink,
+    params = facet_super$params
+  )
+}
+```
+
+```{r}
+carbon = read_csv("./Data/2022_TOC_collation.csv")
+carbon%>%
+  filter(Reservoir=="BVR")%>%
+  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
+  select(Depth_m, Site, Date, DOC_mgL, DIC_mgL, DC_mgL, DN_mgL)%>%
+  group_by(Date, Depth_m)%>%
+  filter(40%in%Site)%>%
+  pivot_longer(cols = contains("_mg"))%>%
+  pivot_wider(names_from = Site, values_from =value, names_prefix = "Site_")%>%
+  filter(!is.na(Site_40),
+         !is.na(Site_50))%>%
+  ggplot(aes(x = Site_50, y = Site_40))+
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
+  facet_wrap_equal(~name, scales = "free")
+
+nuts = read_csv("./Data/2022_soluble_NP_collation.csv")
+nuts%>%
+  filter(Reservoir=="BVR")%>%
+  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
+  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
+  group_by(Date, Depth_m)%>%
+  filter(40%in%Site)%>%
+  pivot_longer(cols = contains("_ug"))%>%
+  pivot_wider(names_from = Site, values_from =value, names_prefix = "Site_")%>%
+  filter(!is.na(Site_40),
+         !is.na(Site_50))%>%
+  ggplot(aes(x = Site_50, y = Site_40))+
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
+  facet_wrap_equal(~name, scales = "free")
+```
+

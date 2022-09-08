@@ -739,24 +739,6 @@ metals%>%
   geom_point()
 ```
 
-
-```{r}
-metals = read_csv("./Data/Drawdown Metals_updated.csv")
-metals%>%
-  filter(Reservoir=="BVR")%>%
-  select(-Reservoir)%>%
-  group_by(Sample_Date)%>%
-  filter(40%in%Site)%>%
-  pivot_longer(cols = contains("_pp"))%>%
-  pivot_wider(names_from = Site, values_from =value, names_prefix = "Site_")%>%
-  filter(!is.na(Site_40),
-         !is.na(Site_50))%>%
-  ggplot(aes(x = Site_50, y = Site_40))+
-  geom_point()+
-  geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
-  facet_wrap_equal(~name, scales = "free")
-```
-
 ```{r}
 FacetEqualWrap <- ggproto(
   "FacetEqualWrap", FacetWrap,
@@ -797,6 +779,24 @@ facet_wrap_equal <- function(...) {
     params = facet_super$params
   )
 }
+```
+
+
+```{r}
+metals = read_csv("./Data/Drawdown Metals_updated.csv")
+metals%>%
+  filter(Reservoir=="BVR")%>%
+  select(-Reservoir)%>%
+  group_by(Sample_Date)%>%
+  filter(40%in%Site)%>%
+  pivot_longer(cols = contains("_pp"))%>%
+  pivot_wider(names_from = Site, values_from =value, names_prefix = "Site_")%>%
+  filter(!is.na(Site_40),
+         !is.na(Site_50))%>%
+  ggplot(aes(x = Site_50, y = Site_40))+
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
+  facet_wrap_equal(~name, scales = "free")
 ```
 
 

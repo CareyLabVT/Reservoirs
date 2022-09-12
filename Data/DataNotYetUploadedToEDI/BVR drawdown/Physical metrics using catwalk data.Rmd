@@ -11,6 +11,8 @@ library(tidyverse)
 library(rLakeAnalyzer)
 library(lubridate)
 library(rLakeAnalyzer)
+library(akima)
+library(colorRamps)
 ```
 
 ```{r}
@@ -124,7 +126,8 @@ catwalk_format = cat_long%>%
   filter(!is.na(Reading))%>%
   mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
   group_by(Date, Sensor_depth)%>%
-  summarize(Reading=mean(Reading,na.rm = T))
+  summarize(Reading=mean(Reading,na.rm = T),
+            Reservoir_depth = mean(Reservoir_depth))
 
 schmidts = c()
 for(date in unique(catwalk_format$Date)){
@@ -165,12 +168,14 @@ meta_depths_raw = catwalk_format%>%
   mutate(Depth_simple = round(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
   summarize(Temp_C = mean(Reading),
-            Depth_m = mean(Sensor_depth))%>%
+            Depth_m = mean(Sensor_depth),
+            Reservoir_depth = mean(Reservoir_depth))%>%
   group_by(Date)%>%
   summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
             hypo_depth = meta.depths(Temp_C, Depth_m)[2],
             max_depth = max(Depth_m),
-            min_depth = min(Depth_m))
+            min_depth = min(Depth_m),
+            Reservoir_depth = mean(Reservoir_depth))
 
 meta_depths = meta_depths_raw%>%
   filter(!epi_depth == hypo_depth)%>%
@@ -229,15 +234,16 @@ dev.off()
 
 meta_ratio = flexible_bathy%>%
   left_join(meta_depths%>%pivot_wider(names_from = name, values_from = value))%>%
-  filter(!is.na(epi_depth))%>%
+  filter(!is.na(epi_depth),
+         !is.na(hypo_depth))%>%
   group_by(Date)%>%
   summarize(depth_above_epi = max(Depth_m[Depth_m<(epi_depth)]),
             epi_and_below = sum(Volume_L[Depth_m<=depth_above_epi]),
             correction = (1-(epi_depth-depth_above_epi))*Volume_L[Depth_m==depth_above_epi],
             epi_volume = epi_and_below-correction,
             depth_above_hypo = max(Depth_m[Depth_m<(hypo_depth)]),
-            hypo_and_above = sum(Volume_L[Depth_m<=depth_above_hypo]),
-            correction_hypo = (hypo_depth-depth_above_hypo)*Volume_L[Depth_m==depth_above_epi],
+            hypo_and_above = sum(Volume_L[Depth_m>=depth_above_hypo]),
+            correction_hypo = unique(hypo_depth-depth_above_hypo)*Volume_L[Depth_m==depth_above_hypo],
             hypo_volume = hypo_and_above-correction_hypo,
             epi_hypo_ratio = epi_volume/hypo_volume
   )
@@ -267,11 +273,13 @@ thermo_raw = catwalk_format%>%
   mutate(Depth_simple = floor(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
   summarize(Temp_C = mean(Reading),
-            Depth_m = mean(Sensor_depth))%>%
+            Depth_m = mean(Sensor_depth),
+            Reservoir_depth = mean(Reservoir_depth))%>%
   arrange(Date,Depth_m)%>%
   group_by(Date)%>%
   filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  summarize(thermo = thermo.depth(Temp_C, Depth_m))
+  summarize(thermo = thermo.depth(Temp_C, Depth_m),
+            Reservoir_depth = mean(Reservoir_depth))
   
 thermo_raw$Date_22 = thermo_raw$Date
 year(thermo_raw$Date_22)=2022
@@ -290,6 +298,42 @@ thermo_raw%>%
   ylab("Thermocline depth (m)")+
   xlab("")
 dev.off()
+
+
+meta_ratio = flexible_bathy%>%
+  left_join(thermo_raw)%>%
+  filter(!is.na(thermo))%>%
+  group_by(Date)%>%
+  summarize(depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
+            thermo_and_just_below = sum(Volume_L[Depth_m<=depth_above_thermo]),
+            correction = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
+            epi_volume = thermo_and_just_below-correction,
+            hypo_and_above = sum(Volume_L[Depth_m>=depth_above_thermo]),
+            correction_hypo = unique(thermo-depth_above_thermo)*Volume_L[Depth_m==depth_above_thermo],
+            hypo_volume = hypo_and_above-correction_hypo,
+            epi_hypo_ratio = epi_volume/hypo_volume
+  )
+
+meta_ratio$Date_22 = meta_ratio$Date
+year(meta_ratio$Date_22) = 2022
+
+jpeg("./Figs/epi_hypo_ratio.jpg",res = 300, units = "in",width = 6, height = 4)
+meta_ratio%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<10)%>%
+  ggplot(aes(x = Date_22, y= epi_hypo_ratio, color = Year))+
+  geom_point()+
+  geom_smooth()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  ylab("Ratio of epilimnetic volume:hypolimnetic volume")+
+  xlab("")
+dev.off()
+
+
 
 buoyancy_raw = catwalk_format%>%
   filter(!is.na(Reading))%>%
@@ -449,5 +493,82 @@ lake_number_df%>%
   theme_bw()+
   theme(axis.title.x = element_blank())
 dev.off()
+```
+
+```{r}
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
+  filter(Sensor=="ThermistorTemp")
+
+var = c("Reading") #Temp_C
+
+filt = cat_long%>%
+  mutate(Date = as.Date(DateTime),
+         Year = year(Date),
+         Height = Reservoir_depth-Sensor_depth,
+         Rounded_depth_tenth = round(Height,1))%>%
+  filter(!is.na(get(var)),
+         Reservoir == "BVR")%>%
+  ungroup()%>%
+  select(Date, Rounded_depth_tenth,Reading, Year)%>%
+  group_by(Year, Date, Rounded_depth_tenth)%>%
+  dplyr::summarize(Reading=mean(Reading, na.rm = T))%>%
+  rename(Sensor_depth = Rounded_depth_tenth)
+
+depth_sum = cat_long%>%
+  mutate(Date = as.Date(DateTime),
+         Year = year(Date))%>%
+  filter(Reservoir == "BVR")%>%
+  ungroup()%>%
+  select(Date, Reservoir_depth,Year)%>%
+  group_by(Year, Date)%>%
+  dplyr::summarize(Reservoir_depth=mean(Reservoir_depth, na.rm = T))%>%
+  ungroup()%>%
+  filter(!Year == 2020)%>%
+  mutate(max = max(Reservoir_depth))
+
+Years = c(2021,2022)
+interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+for(year in Years){
+    bvr<- filt%>%
+      filter(Year == year)%>%
+      ungroup()%>%
+      mutate(random = sample(1:n(),n()))%>%
+      arrange(random)
+    
+    if(nrow(bvr)>0){
+      bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Sensor_depth,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), 1),yo = seq(min(bvr$Sensor_depth), max(bvr$Sensor_depth), by = .05), duplicate = "mean"),data.frame = T)
+      interp = interp%>%
+        full_join(bvr_interp)
+    }
+    
+}
+
+#Heatmap
+jpeg(paste0("./Figs/BVR_catwalk_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+p = interp%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"),
+         Year = year(x))%>%
+  filter(!is.na(z))%>%
+  ggplot()+
+  geom_raster(aes(x=x, y=y,fill = z))+
+  geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white")+
+  geom_line(data = thermo_raw%>%
+              mutate(Year=year(Date))%>%
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
+  geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
+  labs(x = "", y = "Depth (m)")+
+  scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = "Temperature (ºC)")+
+  scale_x_date(expand = c(0,0))+
+  scale_y_continuous(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))+
+  facet_grid(cols = vars(Year),
+             scales = "free",
+             space = "free"
+             )
+print(p)
+dev.off()
+
+thermo_raw
 ```
 

@@ -7,10 +7,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(RCurl)
+library(tidyverse)
+library(lubridate)
 ```
 
 ```{r}
-library(RCurl)
 sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
 
 sensor_depth = sensor%>%

@@ -74,7 +74,7 @@ schmidt_df%>%
   mutate(Year = as.factor(Year))%>%
   ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
   geom_point()+
-  geom_line()+
+  geom_smooth()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
@@ -156,7 +156,6 @@ schmidt_df%>%
   mutate(Year = as.factor(Year))%>%
   ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
   geom_point()+
-  geom_line()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
@@ -294,6 +293,7 @@ thermo_raw%>%
   geom_point()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
+  scale_y_reverse()+
   theme_bw()+
   ylab("Thermocline depth (m)")+
   xlab("")
@@ -362,6 +362,7 @@ buoy_max%>%
          month(Date)<9)%>%
   ggplot(aes(x = Date_22, y= max, color = Year))+
   geom_point()+
+  geom_smooth()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
@@ -369,6 +370,32 @@ buoy_max%>%
   xlab("")
 dev.off()
 ```
+
+
+```{r}
+jpeg("./Figs/res_diagram_layers_thermo.jpg",res = 300, units = "in",width = 6, height = 4)
+thermo_raw%>%
+  filter(!thermo == Reservoir_depth)%>%
+  mutate(hypo_width = Reservoir_depth-thermo)%>%
+  select(Date,thermo,hypo_width)%>%
+  rename(epi_width = thermo)%>%
+  pivot_longer(c(epi_width,hypo_width))%>%
+  mutate(Year = as.factor(year(Date)),
+         name = factor(name, levels = c("epi_width","hypo_width")))%>%
+  filter(Year %in% c(2021,2022),
+         month(Date)>4,
+         month(Date)<10)%>%
+  ggplot(aes(x = Date, y = value, fill = name))+
+  geom_area()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
+  theme_bw()+
+  ylab("Height above sediments (m)")
+dev.off()
+```
+
+
 
 Lake number
 ```{r}
@@ -495,13 +522,15 @@ lake_number_df%>%
 dev.off()
 ```
 
+
+Heatmap
 ```{r}
 cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
   filter(Sensor=="ThermistorTemp")
 
 var = c("Reading") #Temp_C
 
-filt = cat_long%>%
+filt_no_surf = cat_long%>%
   mutate(Date = as.Date(DateTime),
          Year = year(Date),
          Height = Reservoir_depth-Sensor_depth,
@@ -513,6 +542,24 @@ filt = cat_long%>%
   group_by(Year, Date, Rounded_depth_tenth)%>%
   dplyr::summarize(Reading=mean(Reading, na.rm = T))%>%
   rename(Sensor_depth = Rounded_depth_tenth)
+
+surf = cat_long%>%
+  mutate(Date = as.Date(DateTime),
+         Year = year(Date))%>%
+  group_by(Date, Year)%>%
+  summarize(Reading = Reading[which.min(Sensor_depth)],
+            Sensor_depth = mean(Reservoir_depth))
+
+bottom = cat_long%>%
+  mutate(Date = as.Date(DateTime),
+         Year = year(Date))%>%
+  group_by(Date, Year)%>%
+  summarize(Reading = Reading[which.max(Sensor_depth)],
+            Sensor_depth = 0)
+  
+filt = filt_no_surf%>%
+  full_join(surf)%>%
+  full_join(bottom)
 
 depth_sum = cat_long%>%
   mutate(Date = as.Date(DateTime),
@@ -551,24 +598,211 @@ p = interp%>%
   filter(!is.na(z))%>%
   ggplot()+
   geom_raster(aes(x=x, y=y,fill = z))+
-  geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white")+
+  geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.2)+
   geom_line(data = thermo_raw%>%
               mutate(Year=year(Date))%>%
               filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
-  geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
-              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
-  labs(x = "", y = "Depth (m)")+
-  scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = "Temperature (ºC)")+
+  #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
+  #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
+  labs(y = "Height above sediments (m)")+
+  #scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = "Temperature (ºC)")+
   scale_x_date(expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
-  theme(panel.border = element_rect(fill = NA))+
+  theme(panel.border = element_rect(fill = NA),
+        axis.title.x=element_blank())+
   facet_grid(cols = vars(Year),
              scales = "free",
              space = "free"
-             )
+             )+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_fill_gradientn(name = "Water temperature\n(°C)",
+                       limits = c(-1, 30),
+                       colours = c("#313695", "#4575b4", "#74add1",
+                                   "#abd9e9", "#e0f3f8", "#ffffbf", "#fee090",
+                                   "#fdae61", "#f46d43", "#d73027", "#a50026" ))
 print(p)
 dev.off()
+```
 
-thermo_raw
+Adding secchi to heatmap
+```{r}
+secchi = read_excel("./Data/2022_Secchi_depth.xlsx")
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/198/10/375f87747001e1681b0e805d00cc1341" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Secchi_m",     
+                    "Flag_DateTime",     
+                    "Flag_Secchi"    ), check.names=TRUE)%>%
+   mutate(DateTime = as.Date(DateTime))
+               
+unlink(infile1)
+
+secchi_plot = secchi%>%
+  full_join(dt1)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  filter(Reservoir == "BVR",
+         Site == 50)%>%
+  mutate(Year = year(Date),
+         Date_22 = Date)
+year(secchi_plot$Date_22)<- 2022
+
+secchi_heatmap = secchi_plot%>%
+  filter(Year %in% c(2021,2022))%>%
+  full_join(depth_sum)%>%
+  filter(!is.na(Secchi_m))%>%
+  mutate(Secchi_height = Reservoir_depth-Secchi_m)
+
+p+
+  geom_line(aes(x = Date, y = Secchi_height), data = secchi_heatmap, size = 2, color = "darkgreen")+
+  geom_line(aes(x = Date, y = Secchi_height), data = secchi_heatmap, color = "white")
+  
+```
+
+
+2021 vs 2022 depth
+```{r}
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")
+
+depths = cat_long%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(Depth_m = mean(Reservoir_depth))%>%
+  mutate(Year = year(Date))
+depths$Date_22 = depths$Date
+year(depths$Date_22)=2022
+
+jpeg(paste0("./Figs/Depth2022vs2021.jpeg"),width = 8, height = 4, units = "in", res = 300)
+depths%>%
+  filter(Year %in% c(2021,2022))%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = Depth_m, color = Year))+
+  geom_line()+
+  theme_bw()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme(axis.title.x = element_blank())+
+  ylab("Reservoir Depth (m)")+
+  geom_point(aes(x=as.Date("2022-06-01"),y=0), alpha = 0)
+dev.off()
+```
+
+2021 vs 2022 volume
+```{r}
+depths = cat_long%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(Reservoir_depth = mean(Reservoir_depth))%>%
+  mutate(Year = year(Date))
+
+flexible_bathy = depths%>%
+  mutate(Reservoir = "BVR")%>%
+  full_join(bathy)%>%
+  group_by(Date)%>%
+  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(Reservoir_depth)) + 1)%>%
+  filter(Depth_m>=-1)
+
+vol_sum = flexible_bathy%>%
+  group_by(Date)%>%
+  summarize(depth_above_water = Depth_m[Depth_m<0],
+            total_plus = sum(Volume_L[Depth_m>0]),
+            correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
+            total = total_plus-correction)%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022))
+
+vol_sum$Date_22 = vol_sum$Date
+year(vol_sum$Date_22)=2022
+
+jpeg(paste0("./Figs/Vol2022vs2021.jpeg"),width = 8, height = 4, units = "in", res = 300)
+vol_sum%>%
+  ggplot(aes(x = Date_22, y = total, color = Year))+
+  geom_line()+
+  geom_point(aes(x=as.Date("2022-06-01"),y=0), alpha = 0)+
+  ylab("Reservoir volume")+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  theme(axis.title.x = element_blank())
+dev.off()
+```
+
+
+
+```{r}
+depths = cat_long%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(Reservoir_depth = mean(Reservoir_depth))%>%
+  mutate(Year = year(Date))
+
+flexible_bathy = depths%>%
+  mutate(Reservoir = "BVR")%>%
+  full_join(bathy)%>%
+  group_by(Date)%>%
+  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(Reservoir_depth)) + 1)%>%
+  filter(Depth_m>=-1)
+
+meta_ratio = flexible_bathy%>%
+  left_join(thermo_raw%>%select(-Reservoir_depth))%>%
+  filter(!is.na(thermo))%>%
+  group_by(Date)%>%
+  summarize(depth_above_water = Depth_m[Depth_m<0],
+            depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
+            surf_correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
+            epi_plus = sum(Volume_L[Depth_m<=depth_above_thermo]),
+            correction = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
+            epi_volume = epi_plus-correction-surf_correction,
+            hypo_and_above = sum(Volume_L[Depth_m>=depth_above_thermo]),
+            correction_hypo = unique(thermo-depth_above_thermo)*Volume_L[Depth_m==depth_above_thermo],
+            hypo_volume = hypo_and_above-correction_hypo,
+            epi_hypo_ratio = epi_volume/hypo_volume
+  )
+
+meta_ratio$Date_22 = meta_ratio$Date
+year(meta_ratio$Date_22) = 2022
+
+jpeg("./Figs/Vol_split_2022vs2021.jpeg",width = 6, height = 4, units = "in", res = 300)
+meta_ratio%>%
+  mutate(Year=as.factor(year(Date)))%>%
+  filter(!Year==2020,
+         month(Date)>4,
+         month(Date)<11)%>%
+  select(Date_22, Year, epi_volume,hypo_volume)%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  ggplot(aes(x = Date_22,y=value, color = Year))+
+  geom_line()+
+  facet_wrap(~name)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme(axis.title.x = element_blank())+
+  ylab("Volume")
+dev.off()
+
+meta_ratio%>%
+  mutate(Year=as.factor(year(Date)))%>%
+  filter(!Year==2020,
+         month(Date)>4,
+         month(Date)<11)%>%
+  select(Date_22, Year, epi_volume,hypo_volume)%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  ggplot(aes(x = Date_22, y = value, fill = name))+
+  geom_area()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
+  theme_bw()+
+  ylab("Volume")
 ```
 

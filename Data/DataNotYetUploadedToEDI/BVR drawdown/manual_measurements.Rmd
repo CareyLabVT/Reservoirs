@@ -70,6 +70,7 @@ secchi_plot%>%
   geom_smooth(method= "lm")
 ```
 
+
 ```{r}
 ysi = read_excel("./Data/2022_YSI_PAR_Profiles.xlsx")%>%
   mutate(Site = as.numeric(Site))

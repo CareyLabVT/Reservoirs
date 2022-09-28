@@ -7,9 +7,16 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(colorRamps)
+
+#Define drawdown lines
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 ```
 
 ```{r}
+#Load data
 fluora_22 = read.csv("./Data/FluoroProbe_2022_working.csv")
 
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/6/6b3151c0fdd913e02641363c2b00ae57" 
@@ -56,11 +63,15 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                
 unlink(infile1)
 
+#Combine current and historical data
 fluora = fluora_22%>%
   full_join(dt1)
+
+#Select just the variables we are interested in
 flo_select = fluora%>%
   select(Reservoir, Site, Depth_m, DateTime, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)
 
+#Filter to BVR 2021 and 2022, pivot to format for figures
 flo_all = flo_select%>%
   filter(Reservoir == "BVR", Site == 50,
          year(DateTime)%in% c(2021,2022))%>%
@@ -71,8 +82,9 @@ flo_all = flo_select%>%
             depth = Depth_m[which.max(value)])%>%
   mutate(Year = as.factor(year(DateTime)),
          Date_22 = DateTime)
-year(flo_all$Date_22) <- 2022
+year(flo_all$Date_22) <- 2022 #Making a date column where year is the same to standardize x-axes
 
+#Plot maximum concentration for each spectral group
 jpeg("./Figs/phyto_max_all.jpg",width = 6, height= 8, units = "in", res = 300)
 flo_all%>%
   ggplot(aes(x = Date_22, y = max, color = Year))+
@@ -85,6 +97,7 @@ flo_all%>%
         legend.position = "bottom")
 dev.off()
 
+#Plot the depth of peak biomass for each spectral group
 jpeg("./Figs/phyto_depth_all.jpg",width = 6, height= 8, units = "in", res = 300)
 flo_all%>%
   ggplot(aes(x = Date_22, y = depth, color = Year))+
@@ -97,6 +110,7 @@ flo_all%>%
         legend.position = "bottom")
 dev.off()
 
+#Summarize the depth and concentration of peaks for bluegreens and totals to get bluegreens as a % of the total peak
 flo_sum = flo_select%>%
   filter(Reservoir == "BVR", Site == 50)%>%
   mutate(DateTime= as.Date(DateTime))%>%
@@ -112,8 +126,7 @@ flo_sum = flo_select%>%
          Date_22 = DateTime)
 year(flo_sum$Date_22) = 2022
 
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
-
+#Plot the depth of the bluegreen peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -123,6 +136,7 @@ flo_sum%>%
   ylab("Depth of max bluegreen conc (m)")+
   theme(axis.title.x = element_blank())
 
+#Plot the magnitude of the bluegreen peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -132,6 +146,7 @@ flo_sum%>%
   ylab("Max bluegreen conc (ugL)")+
   theme(axis.title.x = element_blank())
 
+#Plot the magnitude of the total peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -141,15 +156,7 @@ flo_sum%>%
   ylab("Maximum algal conc (ugL)")+
   theme(axis.title.x = element_blank())
 
-flo_sum%>%
-  filter(Year %in% c(2021,2022))%>%
-  ggplot(aes(x = Date_22))+
-  geom_line(aes(y = depth_blue, color = Year))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Depth of max bluegreen conc (m)")+
-  theme(axis.title.x = element_blank())
-
+#Plot the depth of the total peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -159,6 +166,7 @@ flo_sum%>%
   ylab("Max phyto conc (ugL)")+
   theme(axis.title.x = element_blank())
 
+#Plot the depth of the green algae peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -168,6 +176,7 @@ flo_sum%>%
   ylab("Depth of max green algae conc (m)")+
   theme(axis.title.x = element_blank())
 
+#Plot the magnitude of the green algae peak
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22))+
@@ -177,6 +186,7 @@ flo_sum%>%
   ylab("Max green conc (ugL)")+
   theme(axis.title.x = element_blank())
 
+#Plot the percent of the total peak that is made up of bluegreens
 jpeg("./Figs/phyto_blue_pct.jpg",width = 6, height= 4, units = "in", res = 300)
 flo_sum%>%
   filter(Year %in% c(2021,2022))%>%
@@ -187,24 +197,10 @@ flo_sum%>%
   ylab("Contribution of bluegreens to max phyto peak")+
   theme(axis.title.x = element_blank())
 dev.off()
+```
 
-
-flo_all%>%
-  filter(name == "TotalConc_ugL")%>%
-  ggplot(aes(x = DateTime, y = depth, color = max))+
-  geom_point()+
-  scale_y_reverse()
-
-fluora%>%
-  filter(Reservoir=="BVR",
-         Site==50)%>%
-  mutate(DateTime = as.Date(DateTime))%>%
-  ggplot(aes(x = DateTime, y = Depth_m, color = TotalConc_ugL))+
-  geom_point(size = .5)+
-  scale_color_gradientn(colours = blue2green2red(100), na.value="white", name = "Total algal conc")+
-  scale_y_reverse()+
-  theme_bw()
-
+Heatmaps
+```{r}
 #Decrease dataset size by trimming to 0.1m depth intervals
 fluora_bvr = fluora%>%
   mutate(DateTime = as.Date(DateTime))%>%
@@ -229,32 +225,12 @@ df.final = df.final.raw%>%
   mutate(max = max(Depth_m),
          Depth_m = max -Depth_m)
 
-#library(RCurl)
-#sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
-
-#sensor_depth = sensor%>%
-#  mutate(DateTime = as.POSIXct(TIMESTAMP),
-#         WaterLevel = Lvl_psi*0.70455)%>%
-#  filter(year(DateTime)==2022,
-#         WaterLevel>7.5)%>%
-#  arrange(DateTime)%>%
-#  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
-#  mutate(Date = as.Date(DateTime))%>%
-#  group_by(Date)%>%
-#  summarize(WaterLevel = mean(WaterLevel))%>%
-#  mutate(Year = year(Date),
-#         Site = 50)
-
-#sensor_depth = sensor_depth%>%
-#  full_join(sensor_depth%>%mutate(Site=40,
-#                                  WaterLevel = WaterLevel-5.5))
-
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
-
+#Define specifications to make heatmaps
 vars = c("GreenAlgae_ugL", "Bluegreens_ugL", "BrownAlgae_ugL", "MixedAlgae_ugL", "YellowSubstances_ugL","TotalConc_ugL")
 Sites = c(50)
 Years = c(2021,2022)
 
+#Prep data for heatmaps
 fluora_depths = df.final%>%
   mutate(Date = as.Date(DateTime),
          Year = year(DateTime))%>%
@@ -267,6 +243,7 @@ fluora_depths = df.final%>%
   group_by(Site)%>%
   mutate(max = max(WaterLevel))
 
+#For loops to generate multiple heatmaps
 for(var in vars){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
   for(site in Sites){

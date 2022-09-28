@@ -700,6 +700,11 @@ dev.off()
 
 2021 vs 2022 volume
 ```{r}
+bathy = read.csv("./Data/Bathymetry_comb.csv")%>%
+  filter(Reservoir == "BVR")
+
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")
+
 depths = cat_long%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
@@ -721,6 +726,13 @@ vol_sum = flexible_bathy%>%
             total = total_plus-correction)%>%
   mutate(Year = as.factor(year(Date)))%>%
   filter(Year %in% c(2021,2022))
+
+to_export_vol = vol_sum%>%
+  select(Date, total)%>%
+  rename(Volume_L = total)%>%
+  mutate(Reservoir = "BVR")
+
+write.csv(to_export_vol, "./Data/BVR_volume_exported.csv", row.names = F)
 
 vol_sum$Date_22 = vol_sum$Date
 year(vol_sum$Date_22)=2022

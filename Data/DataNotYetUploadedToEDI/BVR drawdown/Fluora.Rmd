@@ -1,7 +1,7 @@
 ---
 title: "Fluoro"
 author: "Abby Lewis"
-date: "2022-07-31"
+date: "Last updated: 2022-10-14 MEL"
 output: html_document
 ---
 
@@ -10,11 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(colorRamps)
+library(RCurl)
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 ```
-
+Load data
 ```{r}
 #Load data
 fluora_22 = read.csv("./Data/FluoroProbe_2022_working.csv")
@@ -71,7 +72,53 @@ fluora = fluora_22%>%
 flo_select = fluora%>%
   select(Reservoir, Site, Depth_m, DateTime, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)
 
-#Filter to BVR 2021 and 2022, pivot to format for figures
+#Filter to BVR 2021 and 2022
+flo_compare = flo_select%>%
+  filter(Reservoir == "BVR", Site == 50,
+         year(DateTime)%in% c(2021,2022))%>%
+  mutate(Date= as.Date(DateTime)) %>%
+  group_by(Date)%>%
+  slice(which.min(abs(as.numeric(Depth_m) - 1))) %>%
+  select(Date, TotalConc_ugL, Bluegreens_ugL)
+
+
+#read in EXO data
+sensor_raw <- read.csv("./Data/bvre-waterquality.csv")
+head(sensor_raw)
+colnames(sensor_raw)
+sensor = sensor_raw %>%
+  filter(year(TIMESTAMP) %in% c(2021:2022)) %>%
+  mutate(Date = as.Date(TIMESTAMP),
+         Chla_1 = as.numeric(Chla_1),
+         BGAPC_1 = as.numeric(BGAPC_1)) %>%
+  group_by(Date) %>%
+  summarize(median_Chla_ugL = median(Chla_1, na.rm = TRUE),
+            median_BGAPC_ugL = median(BGAPC_1, na.rm = TRUE))
+
+#Compare FP and EXO chl-a
+comp <- left_join(flo_compare, sensor, by = "Date") 
+comp$cyano_bloom_dates <- comp$Date
+comp$cyano_bloom_dates[c(1:24,29:38)] <- NA
+
+jpeg("./Figs/BVR_EXOChla_vs_FPTotal.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = comp, aes(x = median_Chla_ugL, y = TotalConc_ugL, label = cyano_bloom_dates))+
+  geom_point(size = 2)+
+  geom_text(hjust=0, vjust=0)+
+  theme_bw()
+dev.off()
+
+jpeg("./Figs/BVR_EXOBGAPC_vs_FPBluegreens.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = comp, aes(x = median_BGAPC_ugL, y = Bluegreens_ugL, label = cyano_bloom_dates))+
+  geom_point(size = 2)+
+  geom_text(hjust=0, vjust=0)+
+  xlim(0,4.2)+
+  theme_bw()
+dev.off()
+
+```
+
+```{r}
+#Pivot to format for figures
 flo_all = flo_select%>%
   filter(Reservoir == "BVR", Site == 50,
          year(DateTime)%in% c(2021,2022))%>%

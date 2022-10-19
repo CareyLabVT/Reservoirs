@@ -126,7 +126,7 @@ catwalk_format = cat_long%>%
   filter(!is.na(Reading))%>%
   mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
   group_by(Date, Sensor_depth)%>%
-  summarize(Reading=mean(Reading,na.rm = T),
+  dplyr::summarize(Reading=mean(Reading,na.rm = T),
             Reservoir_depth = mean(Reservoir_depth))
 
 schmidts = c()
@@ -271,13 +271,13 @@ thermo_raw = catwalk_format%>%
   filter(!is.na(Reading))%>%
   mutate(Depth_simple = floor(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
-  summarize(Temp_C = mean(Reading),
+  dplyr::summarize(Temp_C = mean(Reading),
             Depth_m = mean(Sensor_depth),
             Reservoir_depth = mean(Reservoir_depth))%>%
   arrange(Date,Depth_m)%>%
   group_by(Date)%>%
   filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  summarize(thermo = thermo.depth(Temp_C, Depth_m),
+  dplyr::summarize(thermo = thermo.depth(Temp_C, Depth_m),
             Reservoir_depth = mean(Reservoir_depth))
   
 thermo_raw$Date_22 = thermo_raw$Date
@@ -708,7 +708,7 @@ cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/E
 depths = cat_long%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(Reservoir_depth = mean(Reservoir_depth))%>%
+  dplyr::summarize(Reservoir_depth = mean(Reservoir_depth))%>%
   mutate(Year = year(Date))
 
 flexible_bathy = depths%>%
@@ -720,7 +720,7 @@ flexible_bathy = depths%>%
 
 vol_sum = flexible_bathy%>%
   group_by(Date)%>%
-  summarize(depth_above_water = Depth_m[Depth_m<0],
+  dplyr::summarize(depth_above_water = Depth_m[Depth_m<0],
             total_plus = sum(Volume_L[Depth_m>0]),
             correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
             total = total_plus-correction)%>%
@@ -748,6 +748,17 @@ vol_sum%>%
   theme_bw()+
   theme(axis.title.x = element_blank())
 dev.off()
+
+jpeg("./Figs/Volume_for_Adrienne.jpg",width = 6, height = 4, units = "in", res = 300)
+to_export_vol%>%
+  filter(Date>="2022-04-01")%>%
+  ggplot(aes(x = Date, y = Volume_L))+
+  geom_area(fill = "grey50", color = "grey50")+
+  geom_vline(data=lines_new,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  ylab("Volume (L)")+
+  theme(axis.title.x = element_blank())
+dev.off()
 ```
 
 
@@ -756,7 +767,7 @@ dev.off()
 depths = cat_long%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(Reservoir_depth = mean(Reservoir_depth))%>%
+  dplyr::summarize(Reservoir_depth = mean(Reservoir_depth))%>%
   mutate(Year = year(Date))
 
 flexible_bathy = depths%>%
@@ -770,7 +781,7 @@ meta_ratio = flexible_bathy%>%
   left_join(thermo_raw%>%select(-Reservoir_depth))%>%
   filter(!is.na(thermo))%>%
   group_by(Date)%>%
-  summarize(depth_above_water = Depth_m[Depth_m<0],
+  dplyr::summarize(depth_above_water = Depth_m[Depth_m<0],
             depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
             surf_correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
             epi_plus = sum(Volume_L[Depth_m<=depth_above_thermo]),
@@ -805,7 +816,7 @@ dev.off()
 meta_ratio%>%
   mutate(Year=as.factor(year(Date)))%>%
   filter(!Year==2020,
-         month(Date)>4,
+         month(Date)>=4,
          month(Date)<11)%>%
   select(Date_22, Year, epi_volume,hypo_volume)%>%
   pivot_longer(cols = c(epi_volume,hypo_volume))%>%
@@ -816,5 +827,28 @@ meta_ratio%>%
   facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
   theme_bw()+
   ylab("Volume")
+
+lines_new = data.frame(Dates = as.Date(c(NA, "2022-05-19",NA, "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","open"), status = c("init","init","final","init"), Year = 2022)
+
+jpeg("./Figs/Volume_for_Adrienne.jpg",width = 6, height = 4, units = "in", res = 300)
+meta_ratio%>%
+  mutate(Year=as.factor(year(Date)))%>%
+  filter(Year==2022,
+         month(Date)>=4,
+         month(Date)<11)%>%
+  select(Date_22, Year, epi_volume,hypo_volume)%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  ggplot(aes(x = Date_22, y = value, fill = name))+
+  scale_fill_manual(values = c("grey50","grey50"))+
+  geom_area(color = "grey50")+
+  geom_vline(data=lines_new,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_x_date(expand = c(0,0))+
+  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
+  theme_bw()+
+  theme(legend.position = "none",
+        axis.title.x = element_blank())+
+  ylab("Volume (L)")
+dev.off()
 ```
 

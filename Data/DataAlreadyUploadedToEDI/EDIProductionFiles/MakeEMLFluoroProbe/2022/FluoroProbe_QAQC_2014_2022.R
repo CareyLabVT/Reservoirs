@@ -165,7 +165,7 @@ fp6 <- fp4
 #merge two datasets - previously published data package + this year's data
 
 #read in old data and check column names of old and new and DateTime format
-fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020/FluoroProbe.csv")
+fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021/FluoroProbe_2014_2021.csv")
 
 #convert time zone of old data; usually defaults to UTC when read in
 attr(fp_og$DateTime, "tzone") <- "America/New_York"
@@ -221,8 +221,8 @@ fp_final <- bind_rows(fp_og, fp9) %>%
   arrange(Reservoir, Site, DateTime)
 
 #write the csv for publication!
-write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021/FluoroProbe_2014_2021.csv", row.names = FALSE)
-fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021/FluoroProbe_2014_2021.csv")
+write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022_temp.csv", row.names = FALSE)
+fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022_temp.csv")
 
 #Congrats you are done! Go have a cookie :-)
 

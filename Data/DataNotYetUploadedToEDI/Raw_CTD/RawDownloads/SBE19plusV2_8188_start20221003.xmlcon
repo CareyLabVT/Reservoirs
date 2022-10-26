@@ -7,7 +7,7 @@
     <Mode>0</Mode>
     <!-- Serial RS-232 Sensor: 10 = WET Labs. -->
     <SerialRS232C_Sensor>10</SerialRS232C_Sensor>
-    <SampleIntervalSeconds>60</SampleIntervalSeconds>
+    <SampleIntervalSeconds>10</SampleIntervalSeconds>
     <ScansToAverage>1</ScansToAverage>
     <SurfaceParVoltageAdded>0</SurfaceParVoltageAdded>
     <ScanTimeAdded>0</ScanTimeAdded>
@@ -19,11 +19,11 @@
       <Sensor index="0" SensorID="58" >
         <TemperatureSensor SensorID="58" >
           <SerialNumber>8188</SerialNumber>
-          <CalibrationDate>11-Apr-22</CalibrationDate>
-          <A0>1.26864596e-003</A0>
-          <A1>2.68050976e-004</A1>
-          <A2>-4.39844958e-007</A2>
-          <A3>1.55569325e-007</A3>
+          <CalibrationDate>21-Aug-22</CalibrationDate>
+          <A0>1.26528397e-003</A0>
+          <A1>2.69180636e-004</A1>
+          <A2>-5.65571102e-007</A2>
+          <A3>1.60236871e-007</A3>
           <Slope>1.00000000</Slope>
           <Offset>0.0000</Offset>
         </TemperatureSensor>
@@ -31,7 +31,7 @@
       <Sensor index="1" SensorID="3" >
         <ConductivitySensor SensorID="3" >
           <SerialNumber>8188</SerialNumber>
-          <CalibrationDate>11-Apr-22</CalibrationDate>
+          <CalibrationDate>21-Aug-22</CalibrationDate>
           <UseG_J>1</UseG_J>
           <!-- Cell const and series R are applicable only for wide range sensors. -->
           <SeriesR>0.0000</SeriesR>
@@ -46,10 +46,10 @@
             <CPcor>-9.57000000e-008</CPcor>
           </Coefficients>
           <Coefficients equation="1" >
-            <G>-1.00929560e+000</G>
-            <H>1.43776822e-001</H>
-            <I>-3.80322614e-004</I>
-            <J>4.85882355e-005</J>
+            <G>-1.00956200e+000</G>
+            <H>1.43922862e-001</H>
+            <I>-4.34358337e-004</I>
+            <J>5.32869425e-005</J>
             <CPcor>-9.57000000e-008</CPcor>
             <CTcor>3.2500e-006</CTcor>
             <!-- WBOTC not applicable unless ConductivityType = 1. -->
@@ -62,16 +62,16 @@
       <Sensor index="2" SensorID="46" >
         <PressureSensor SensorID="46" >
           <SerialNumber>8188</SerialNumber>
-          <CalibrationDate>07-Apr-22</CalibrationDate>
-          <PA0>1.56420095e-001</PA0>
-          <PA1>4.82179349e-004</PA1>
-          <PA2>-4.16049563e-013</PA2>
-          <PTEMPA0>-5.77065666e+001</PTEMPA0>
-          <PTEMPA1>5.34389310e+001</PTEMPA1>
-          <PTEMPA2>-5.77283694e-001</PTEMPA2>
-          <PTCA0>5.24467745e+005</PTCA0>
-          <PTCA1>2.87819682e+001</PTCA1>
-          <PTCA2>-6.34277811e-001</PTCA2>
+          <CalibrationDate>11-Aug-22</CalibrationDate>
+          <PA0>1.62794185e-001</PA0>
+          <PA1>4.83584930e-004</PA1>
+          <PA2>-3.97548787e-012</PA2>
+          <PTEMPA0>-5.70955636e+001</PTEMPA0>
+          <PTEMPA1>5.24856726e+001</PTEMPA1>
+          <PTEMPA2>-2.28149804e-001</PTEMPA2>
+          <PTCA0>5.24480263e+005</PTCA0>
+          <PTCA1>2.81719406e+001</PTCA1>
+          <PTCA2>-5.84268386e-001</PTCA2>
           <PTCB0>2.52208750e+001</PTCB0>
           <PTCB1>5.75000000e-004</PTCB1>
           <PTCB2>0.00000000e+000</PTCB2>
@@ -81,17 +81,17 @@
       <Sensor index="3" SensorID="20" >
         <FluoroWetlabECO_AFL_FL_Sensor SensorID="20" >
           <SerialNumber>FLNTURT-7096</SerialNumber>
-          <CalibrationDate>2/24/22</CalibrationDate>
-          <ScaleFactor>6.00000000e+000</ScaleFactor>
+          <CalibrationDate>01-Sep-2022</CalibrationDate>
+          <ScaleFactor>5.00000000e+001</ScaleFactor>
           <!-- Dark output -->
-          <Vblank>0.0670</Vblank>
+          <Vblank>0.0680</Vblank>
         </FluoroWetlabECO_AFL_FL_Sensor>
       </Sensor>
       <Sensor index="4" SensorID="67" >
         <TurbidityMeter SensorID="67" >
           <SerialNumber>FLNTURT-7096</SerialNumber>
-          <CalibrationDate>2/24/22</CalibrationDate>
-          <ScaleFactor>2.000000</ScaleFactor>
+          <CalibrationDate>01-Sep-2022</CalibrationDate>
+          <ScaleFactor>197.000000</ScaleFactor>
           <!-- Dark output -->
           <DarkVoltage>0.067000</DarkVoltage>
         </TurbidityMeter>
@@ -99,7 +99,7 @@
       <Sensor index="5" SensorID="38" >
         <OxygenSensor SensorID="38" >
           <SerialNumber>4269</SerialNumber>
-          <CalibrationDate>06-Apr-22</CalibrationDate>
+          <CalibrationDate>16-Aug-22</CalibrationDate>
           <Use2007Equation>1</Use2007Equation>
           <CalibrationCoefficients equation="0" >
             <!-- Coefficients for Owens-Millard equation. -->
@@ -112,16 +112,16 @@
           </CalibrationCoefficients>
           <CalibrationCoefficients equation="1" >
             <!-- Coefficients for Sea-Bird equation - SBE calibration in 2007 and later. -->
-            <Soc>4.2643e-001</Soc>
-            <offset>-0.4930</offset>
-            <A>-4.1190e-003</A>
-            <B> 2.1656e-004</B>
-            <C>-3.1646e-006</C>
+            <Soc>4.2506e-001</Soc>
+            <offset>-0.4922</offset>
+            <A>-4.5893e-003</A>
+            <B> 1.8653e-004</B>
+            <C>-2.0781e-006</C>
             <D0> 2.5826e+000</D0>
             <D1> 1.92634e-004</D1>
             <D2>-4.64803e-002</D2>
             <E> 3.6000e-002</E>
-            <Tau20> 2.4400</Tau20>
+            <Tau20> 2.3100</Tau20>
             <H1>-3.3000e-002</H1>
             <H2> 5.0000e+003</H2>
             <H3> 1.4500e+003</H3>
@@ -131,17 +131,17 @@
       <Sensor index="6" SensorID="76" >
         <PARLog_SatlanticSensor SensorID="76" >
           <SerialNumber>2209</SerialNumber>
-          <CalibrationDate>1/14/22</CalibrationDate>
-          <a0>9.8861e-001</a0>
-          <a1>8.0845e-001</a1>
-          <Im>1.3589e+000</Im>
-          <Multiplier>1.0000e+000</Multiplier>
+          <CalibrationDate>14-Jan-2022</CalibrationDate>
+          <a0>0.98861000</a0>
+          <a1>0.80845000</a1>
+          <Im>1.35890000</Im>
+          <Multiplier>1.00000000</Multiplier>
         </PARLog_SatlanticSensor>
       </Sensor>
       <Sensor index="7" SensorID="20" >
         <FluoroWetlabECO_AFL_FL_Sensor SensorID="20" >
           <SerialNumber>FL3-7350</SerialNumber>
-          <CalibrationDate>3/10/22</CalibrationDate>
+          <CalibrationDate>10-Mar-2022</CalibrationDate>
           <ScaleFactor>4.26000000e-002</ScaleFactor>
           <!-- Dark output -->
           <Vblank>50.0000</Vblank>
@@ -150,7 +150,7 @@
       <Sensor index="8" SensorID="20" >
         <FluoroWetlabECO_AFL_FL_Sensor SensorID="20" >
           <SerialNumber>FL3-7350</SerialNumber>
-          <CalibrationDate>3/10/22</CalibrationDate>
+          <CalibrationDate>10-Mar-2022</CalibrationDate>
           <ScaleFactor>4.23000000e-002</ScaleFactor>
           <!-- Dark output -->
           <Vblank>48.0000</Vblank>
@@ -159,7 +159,7 @@
       <Sensor index="9" SensorID="19" >
         <FluoroWetlabCDOM_Sensor SensorID="19" >
           <SerialNumber>FL3-7350</SerialNumber>
-          <CalibrationDate>3/10/22</CalibrationDate>
+          <CalibrationDate>10-Mar-2022</CalibrationDate>
           <ScaleFactor>0.090</ScaleFactor>
           <!-- Dark output -->
           <Vblank>50.000</Vblank>

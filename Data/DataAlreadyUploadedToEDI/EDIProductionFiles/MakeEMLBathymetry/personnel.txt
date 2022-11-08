@@ -2,7 +2,9 @@ givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	ro
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	contact			
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator			
 Abigail	S. L.	Lewis	Virginia Tech	aslewis@vt.edu	0000-0001-9933-4542	creator			
+Dexter	W.	Howard	Virginia Tech	dwh1998@vt.edu	0000-0002-6118-2149	creator			
+Whitney	M.	Woelmer	Virginia Tech	wwoelmer@vt.edu	0000-0001-5147-3877	creator			
 Paul	A.	Gantzer	Virginia Tech	paul.gantzer@gmail.com		creator			
 Kevin	A.	Bierlein	Virginia Tech	kabierle@vt.edu		creator			
-		WVWA	Western Virginia Water Authority	info@westernvawater.org		creator			
+	 	WVWA	Western Virginia Water Authority	info@westernvawater.org		creator			
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	NA	Western Virginia Water Authority	NA

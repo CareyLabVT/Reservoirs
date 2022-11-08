@@ -4,6 +4,7 @@ Carey Lab	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
 Surface area	carey lab controlled vocabulary
 Volume	carey lab controlled vocabulary
 Bathymetry	cuahsi controlled vocabulary
@@ -13,3 +14,5 @@ Lake	cuahsi controlled vocabulary
 Reservoir	cuahsi controlled vocabulary
 Depth	LTER controlled vocabulary
 Hypsometry	carey lab controlled vocabulary
+Area	cuahsi controlled vocabulary
+Watershed	LTER controlled vocabulary

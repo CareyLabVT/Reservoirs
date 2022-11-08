@@ -17,7 +17,8 @@ library(LakeMetabolizer)
 
 Heatmaps (2022)
 ```{r}
-ghg = read_excel("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9)
+#ghg = read_excel("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9)
+ghg = read.csv("GHG_MEGA_GC_SHEET_EXCEL_2022.csv", skip = 9)
 ghg = ghg[c(1,2,3,4,14,15)]
 colnames(ghg)= c("DateTime","Site","Depth_m","Reservoir","ch4_umolL","co2_umolL")
 ghg = ghg%>%
@@ -110,7 +111,7 @@ year(ghg$Date_22)=2022
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
 
-jpeg(paste0("./Drawdown Figs/BVR_co2_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+jpeg(paste0("./Drawdown Figs/BVR_weir_co2_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
 ghg%>%
   filter(Site==100,
          year(DateTime)%in%c(2021,2022))%>%
@@ -118,11 +119,27 @@ ghg%>%
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   geom_point()+
+  geom_line()+
   ylab("CO2 (umolL)")+
   theme(axis.title.x = element_blank())
 dev.off()
 
-jpeg(paste0("./Drawdown Figs/BVR_ch4_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+jpeg(paste0("./Drawdown Figs/BVR_0.1m_co2_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+ghg%>%
+  filter(Site==50,
+         Depth_m ==0.1,
+         Reservoir=="BVR",
+         year(DateTime)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y = co2_umolL, color = as.factor(Year)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point()+
+  geom_line()+
+  ylab("CO2 (umolL)")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg(paste0("./Drawdown Figs/BVR_weir_ch4_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
 ghg%>%
   filter(Site==100,
          year(DateTime)%in%c(2021,2022))%>%
@@ -130,6 +147,22 @@ ghg%>%
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   geom_point()+
+  geom_line()+
+  ylab("CH4 (umolL)")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg(paste0("./Drawdown Figs/BVR_0.1_ch4_2021_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+ghg%>%
+  filter(Site==50,
+         Depth_m ==0.1,
+         Reservoir=="BVR",
+         year(DateTime)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y = ch4_umolL, color = as.factor(Year)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point()+
+  geom_line()+
   ylab("CH4 (umolL)")+
   theme(axis.title.x = element_blank())
 dev.off()
@@ -180,6 +213,7 @@ for(var in vars){
   print(p)
   dev.off()
 }
+
 ```
 
 ```{r}

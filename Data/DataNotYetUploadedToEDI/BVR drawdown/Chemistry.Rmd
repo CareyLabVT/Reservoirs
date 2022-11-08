@@ -8,6 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
+#Define drawdown lines
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 ```
 
 ```{r}
@@ -53,7 +56,7 @@ facet_wrap_equal <- function(...) {
 ```
 
 ```{r}
-carbon = read_csv("./Data/2022_TOC_collation.csv")
+carbon = read_csv("../NutrientData/collation/2022/2022_TOC_collation.csv")
 carbon%>%
   filter(Reservoir=="BVR")%>%
   mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
@@ -69,7 +72,7 @@ carbon%>%
   geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
   facet_wrap_equal(~name, scales = "free")
 
-nuts = read_csv("./Data/2022_soluble_NP_collation.csv")
+nuts = read_csv("../NutrientData/collation/2022/2022_soluble_NP_collation.csv")
 nuts%>%
   filter(Reservoir=="BVR")%>%
   mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
@@ -84,5 +87,129 @@ nuts%>%
   geom_point()+
   geom_abline(slope = 1, intercept = 0, alpha = 0.7, lty = 2) +
   facet_wrap_equal(~name, scales = "free")
+
+chem = nuts%>%
+  full_join(carbon)%>%
+  filter(Reservoir=="BVR",
+         Site == 50)%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%y %H:%M"))
+```
+
+```{r}
+nuts%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
+  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
+  ggplot(aes(x = Date, y = PO4_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()
+
+nuts%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
+  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
+  ggplot(aes(x = Date, y = NH4_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()
+
+nuts%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
+  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
+  ggplot(aes(x = Date, y = NO3NO2_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()
+```
+Heatmaps
+```{r}
+library(RCurl)
+sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+
+sensor_depth = sensor%>%
+  mutate(DateTime = as.POSIXct(TIMESTAMP),
+         WaterLevel = Lvl_psi*0.70455)%>%
+  filter(DateTime>=min(chem_bvr$DateTime, na.rm = T),
+         DateTime<=max(chem_bvr$DateTime, na.rm = T),
+         WaterLevel>7.5)%>%
+  arrange(DateTime)%>%
+  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(WaterLevel = mean(WaterLevel))%>%
+  mutate(Year = year(Date),
+         Site = 50)%>%
+  group_by(Site)%>%
+  mutate(max = max(WaterLevel))
+
+chem_bvr = chem%>%
+  left_join(sensor_depth%>%rename(DateTime=Date))%>%select(-max)%>%
+  mutate(height = WaterLevel-Depth_m)%>%
+  arrange(height)
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+
+vars = c("NH4_ugL","PO4_ugL","DOC_mgL","NO3NO2_ugL")
+for(var in vars){
+  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  Sites = c(50)
+  for(site in Sites){
+    bvr<- chem_bvr%>%
+      mutate(Year = year(DateTime),
+             Date = as.Date(DateTime))%>%
+      filter(Site == site,
+             !is.na(get(var)),
+             !is.na(Depth_m))%>%
+      arrange(NH4_ugL)%>%
+      mutate(max = max(height))
+    
+    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$height,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$height), max(bvr$height), by = .01), duplicate = "mean"),data.frame = T)
+    
+    interp = interp%>%
+      full_join(bvr_interp%>%mutate(Site=site))
+  }
+  interp = interp%>%
+    filter(!is.na(Site))
+  
+  #Heatmap
+  jpeg(paste0("./Figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  p = interp%>%
+    mutate(x = as.Date(x, origin = "1970-01-01"),
+           Year = year(x))%>%
+    ggplot(aes(x=x))+
+    geom_raster(aes(fill = z, y = y))+
+    scale_y_continuous(expand = c(0,0))+
+    labs(x = "", y = "Depth (m)")+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    geom_ribbon(data = sensor_depth, aes(x = Date, ymin= WaterLevel, ymax = max), fill = "white")+
+    geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+    scale_x_date(expand = c(0,0))+
+    theme_classic()+
+    theme(panel.border = element_rect(fill = NA))+
+    geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
+    facet_grid(rows= vars(Site),
+               cols = vars(Year),
+               scales = "free",
+               space = "free"
+               )
+  print(p)
+  dev.off()
+}
+```
+
+```{r}
+chem%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, PO4_ugL,DOC_mgL)%>%
+  pivot_longer(cols = c(PO4_ugL,DOC_mgL))%>%
+  filter(!is.na(value))%>%
+  ggplot(aes(x = DateTime, y = value, color = name))+
+  geom_point()+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))
 ```
 

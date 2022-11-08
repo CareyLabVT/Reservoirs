@@ -716,8 +716,11 @@ atten_k = ctd%>%
   summarize(I0 = unique(I0),
             k = coef(lm(I(log(PAR_umolm2s)-log(I0))~ 0 + Depth_m)),
             r2 = summary(lm(I(log(PAR_umolm2s)-log(I0))~ 0 + Depth_m))$r.squared,
-            Zeu = min(Depth_m[PAR_umolm2s<I0/100]))%>%
+            Zeu = min(Depth_m[PAR_umolm2s<I0/100]),
+            Zeu_0.1 = min(Depth_m[PAR_umolm2s<I0/1000]))%>%
   filter(r2>0.9)
+
+write.csv(atten_k,"attenuation_calc.csv",row.names = F)
 
 atten_k$Date_22<-atten_k$Date
 year(atten_k$Date_22)=2022

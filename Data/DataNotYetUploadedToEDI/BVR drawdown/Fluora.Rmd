@@ -15,6 +15,7 @@ library(RCurl)
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 ```
+
 Load and wrangle FP data
 ```{r}
 #Load data
@@ -82,6 +83,7 @@ flo_compare = flo_select%>%
   select(Date, TotalConc_ugL, Bluegreens_ugL)
 
 ```
+
 Load EXO data for comparison to FP
 ```{r}
 #read in EXO data
@@ -118,6 +120,7 @@ ggplot(data = comp, aes(x = median_BGAPC_ugL, y = Bluegreens_ugL, label = cyano_
 dev.off()
 
 ```
+
 Calculate Cmax depth
 ```{r}
 #data wrangling
@@ -178,6 +181,7 @@ dev.off()
 #should probably think about this relative to photic zone depth and/or thermocline depth --> are these already calculated?
 
 ```
+
 Calculate mean biomass
 ```{r}
 mean_biom <- flo_metrics %>%

@@ -16,3 +16,4 @@ Depth	LTER controlled vocabulary
 Hypsometry	carey lab controlled vocabulary
 Area	cuahsi controlled vocabulary
 Watershed	LTER controlled vocabulary
+Hypsography	carey lab controlled vocabulary

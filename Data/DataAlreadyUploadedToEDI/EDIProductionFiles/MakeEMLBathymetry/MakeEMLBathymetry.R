@@ -13,4 +13,4 @@ make_eml(
   other.entity.description = c("Spatial data for bathymetry from all reservoirs","Spatial data for watershed area from all reservoirs"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.971.1')
+  package.id = 'edi.971.3')

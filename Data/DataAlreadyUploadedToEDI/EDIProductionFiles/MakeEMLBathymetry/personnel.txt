@@ -6,5 +6,6 @@ Dexter	W.	Howard	Virginia Tech	dwh1998@vt.edu	0000-0002-6118-2149	creator
 Whitney	M.	Woelmer	Virginia Tech	wwoelmer@vt.edu	0000-0001-5147-3877	creator			
 Paul	A.	Gantzer	Virginia Tech	paul.gantzer@gmail.com		creator			
 Kevin	A.	Bierlein	Virginia Tech	kabierle@vt.edu		creator			
+John	C.	Little	Virginia Tech	jcl@vt.edu	0000-0003-2965-9557	creator			
 	 	WVWA	Western Virginia Water Authority	info@westernvawater.org		creator			
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	NA	Western Virginia Water Authority	NA

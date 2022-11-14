@@ -98,7 +98,7 @@ ICP[, c(3:31)] <- sapply(ICP[, c(3:31)], as.numeric)
 ICP[, c(3:31)] <- ICP[, c(3:31)]/1000 
 
 #write to a csv
-write.csv(ICP,'mydircsv/ICP_data_2022.csv')
+write.csv(ICP,paste0(mydircsv,'/ICP_data_2022.csv'))
 
 # Read in the times metals and nutrients data were taken to add times collected to observations
 # ABP still working on this because I am having authentification errors

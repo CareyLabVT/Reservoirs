@@ -8,6 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(lubridate)
+library(akima)
+library(colorRamps)
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
@@ -123,16 +126,67 @@ nuts%>%
   geom_line()+
   geom_point()
 ```
+
+```{r}
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/199/10/aa2ccc23688fc908f9d61cb217210a3d" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Rep",     
+                    "TN_ugL",     
+                    "TP_ugL",     
+                    "NH4_ugL",     
+                    "NO3NO2_ugL",     
+                    "SRP_ugL",     
+                    "DOC_mgL",     
+                    "DIC_mgL",     
+                    "DC_mgL",     
+                    "DN_mgL",     
+                    "Flag_DateTime",     
+                    "Flag_TN",     
+                    "Flag_TP",     
+                    "Flag_NH4",     
+                    "Flag_NO3NO2",     
+                    "Flag_SRP",     
+                    "Flag_DOC",     
+                    "Flag_DIC",     
+                    "Flag_DC",     
+                    "Flag_DN"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+dt1 = dt1%>%
+  mutate(DateTime=as.Date(DateTime))%>%
+  rename(PO4_ugL = SRP_ugL)
+
+chem_full = chem%>%
+  full_join(dt1)%>%
+  filter(Reservoir=="BVR",
+         Site==50,
+         year(DateTime)%in% c(2021,2022))
+```
+
 Heatmaps
 ```{r}
-library(RCurl)
-sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")
 
-sensor_depth = sensor%>%
-  mutate(DateTime = as.POSIXct(TIMESTAMP),
-         WaterLevel = Lvl_psi*0.70455)%>%
-  filter(DateTime>=min(chem_bvr$DateTime, na.rm = T),
-         DateTime<=max(chem_bvr$DateTime, na.rm = T),
+sensor_depth = cat_long%>%
+  select(DateTime,Reservoir_depth)%>%
+  unique()%>%
+  mutate(DateTime = as.POSIXct(DateTime))%>%
+  rename(WaterLevel = Reservoir_depth)%>%
+  filter(DateTime>=min(chem_full$DateTime, na.rm = T),
+         DateTime<=max(chem_full$DateTime, na.rm = T),
          WaterLevel>7.5)%>%
   arrange(DateTime)%>%
   filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
@@ -142,33 +196,47 @@ sensor_depth = sensor%>%
   mutate(Year = year(Date),
          Site = 50)%>%
   group_by(Site)%>%
-  mutate(max = max(WaterLevel))
+  mutate(max = max(WaterLevel))%>%
+  filter(month(Date)>4,
+         month(Date)<8)
 
-chem_bvr = chem%>%
+chem_bvr = chem_full%>%
   left_join(sensor_depth%>%rename(DateTime=Date))%>%select(-max)%>%
   mutate(height = WaterLevel-Depth_m)%>%
-  arrange(height)
+  arrange(height)%>%
+  filter(!is.na(height),
+         month(DateTime)>4,
+         month(DateTime)<8)
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
 
 vars = c("NH4_ugL","PO4_ugL","DOC_mgL","NO3NO2_ugL")
+years = c(2021,2022)
+
 for(var in vars){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
+  bvr_comb = chem_bvr%>%
+    filter(Depth_m==1000000)
   Sites = c(50)
-  for(site in Sites){
-    bvr<- chem_bvr%>%
-      mutate(Year = year(DateTime),
-             Date = as.Date(DateTime))%>%
-      filter(Site == site,
-             !is.na(get(var)),
-             !is.na(Depth_m))%>%
-      arrange(NH4_ugL)%>%
-      mutate(max = max(height))
-    
-    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$height,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$height), max(bvr$height), by = .01), duplicate = "mean"),data.frame = T)
-    
-    interp = interp%>%
-      full_join(bvr_interp%>%mutate(Site=site))
+  for(year in years){
+    for(site in Sites){
+      bvr<- chem_bvr%>%
+        mutate(Year = year(DateTime),
+               Date = as.Date(DateTime))%>%
+        filter(Site == site,
+               !is.na(get(var)),
+               !is.na(Depth_m),
+               Year==year)%>%
+        arrange(NH4_ugL)
+      
+      bvr_interp <- interp2xyz(interp(bvr$Date,bvr$height,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$height), max(bvr$height), by = .01), duplicate = "mean"),data.frame = T)
+      
+      interp = interp%>%
+        full_join(bvr_interp%>%mutate(Site=site))
+      bvr_comb = bvr_comb%>%
+        full_join(bvr)%>%
+        mutate(max = max(height))
+    }
   }
   interp = interp%>%
     filter(!is.na(Site))
@@ -181,7 +249,7 @@ for(var in vars){
     ggplot(aes(x=x))+
     geom_raster(aes(fill = z, y = y))+
     scale_y_continuous(expand = c(0,0))+
-    labs(x = "", y = "Depth (m)")+
+    labs(x = "", y = "Height above sediments (m)")+
     scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
     geom_ribbon(data = sensor_depth, aes(x = Date, ymin= WaterLevel, ymax = max), fill = "white")+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
@@ -189,7 +257,7 @@ for(var in vars){
     scale_x_date(expand = c(0,0))+
     theme_classic()+
     theme(panel.border = element_rect(fill = NA))+
-    geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
+    geom_point(data = bvr_comb, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     facet_grid(rows= vars(Site),
                cols = vars(Year),
                scales = "free",
@@ -200,16 +268,89 @@ for(var in vars){
 }
 ```
 
+Compare P, DOC, and fluora
 ```{r}
-chem%>%
+#Load data
+fluora_22 = read.csv("./Data/FluoroProbe_2022_working.csv")
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/6/6b3151c0fdd913e02641363c2b00ae57" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "GreenAlgae_ugL",     
+                    "Bluegreens_ugL",     
+                    "BrownAlgae_ugL",     
+                    "MixedAlgae_ugL",     
+                    "YellowSubstances_ugL",     
+                    "TotalConc_ugL",     
+                    "Transmission",     
+                    "Temp_degC",     
+                    "RFU_525nm",     
+                    "RFU_570nm",     
+                    "RFU_610nm",     
+                    "RFU_370nm",     
+                    "RFU_590nm",     
+                    "RFU_470nm",     
+                    "Flag_GreenAlgae",     
+                    "Flag_BluegreenAlgae",     
+                    "Flag_BrownAlgae",     
+                    "Flag_MixedAlgae",     
+                    "Flag_TotalConc",     
+                    "Flag_Temp",     
+                    "Flag_Transmission",     
+                    "Flag_525nm",     
+                    "Flag_570nm",     
+                    "Flag_610nm",     
+                    "Flag_370nm",     
+                    "Flag_590nm",     
+                    "Flag_470nm"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+#Combine current and historical data
+fluora = fluora_22%>%
+  full_join(dt1)
+
+fluora_surface=fluora%>%
+  mutate(DateTime = as.Date(DateTime))%>%
+  group_by(DateTime)%>%
+  filter(Depth_m == min(Depth_m),
+         Reservoir=="BVR",
+         Site==50,
+         Depth_m<.5)
+
+sum_plot = chem%>%
   filter(Depth_m ==0.1)%>%
   select(DateTime, PO4_ugL,DOC_mgL)%>%
-  pivot_longer(cols = c(PO4_ugL,DOC_mgL))%>%
-  filter(!is.na(value))%>%
+  full_join(fluora_surface%>%
+              filter(year(DateTime)==2022))%>%
+  select(DateTime, PO4_ugL,DOC_mgL,Bluegreens_ugL,TotalConc_ugL)%>%
+  pivot_longer(cols = c(PO4_ugL,DOC_mgL,Bluegreens_ugL,TotalConc_ugL))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<8)
+
+maxes = sum_plot%>%
+  group_by(name)%>%
+  summarize(max_date = DateTime[which.max(value)])
+
+sum_plot%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
   geom_point()+
   geom_line()+
+  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_wrap(~name, scales = "free_y", ncol = 1)
 ```
 

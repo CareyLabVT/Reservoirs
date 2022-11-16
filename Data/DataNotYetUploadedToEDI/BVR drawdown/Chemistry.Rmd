@@ -11,51 +11,10 @@ library(tidyverse)
 library(lubridate)
 library(akima)
 library(colorRamps)
+source("custom_facets.R")
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
-```
-
-```{r}
-FacetEqualWrap <- ggproto(
-  "FacetEqualWrap", FacetWrap,
-  
-  train_scales = function(self, x_scales, y_scales, layout, data, params) {
-    
-    # doesn't make sense if there is not an x *and* y scale
-    if (is.null(x_scales) || is.null(x_scales)) {
-        stop("X and Y scales required for facet_equal_wrap")
-    }
-    
-    # regular training of scales
-    ggproto_parent(FacetWrap, self)$train_scales(x_scales, y_scales, layout, data, params)
-    
-    # switched training of scales (x and y and y on x)
-    for (layer_data in data) {
-      match_id <- match(layer_data$PANEL, layout$PANEL)
-      
-      x_vars <- intersect(x_scales[[1]]$aesthetics, names(layer_data))
-      y_vars <- intersect(y_scales[[1]]$aesthetics, names(layer_data))
-      
-      SCALE_X <- layout$SCALE_X[match_id]
-      ggplot2:::scale_apply(layer_data, y_vars, "train", SCALE_X, x_scales)
-      
-      SCALE_Y <- layout$SCALE_Y[match_id]
-      ggplot2:::scale_apply(layer_data, x_vars, "train", SCALE_Y, y_scales)
-    }
-    
-  }
-)
-
-facet_wrap_equal <- function(...) {
-  # take advantage of the sanitizing that happens in facet_wrap
-  facet_super <- facet_wrap(...)
-  
-  ggproto(NULL, FacetEqualWrap,
-    shrink = facet_super$shrink,
-    params = facet_super$params
-  )
-}
 ```
 
 ```{r}
@@ -98,34 +57,6 @@ chem = nuts%>%
   mutate(DateTime = as.Date(DateTime, format = "%m/%d/%y %H:%M"))
 ```
 
-```{r}
-nuts%>%
-  filter(Reservoir=="BVR", Site==50)%>%
-  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
-  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
-  ggplot(aes(x = Date, y = PO4_ugL, color = as.factor(Depth_m)))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  geom_line()+
-  geom_point()
-
-nuts%>%
-  filter(Reservoir=="BVR", Site==50)%>%
-  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
-  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
-  ggplot(aes(x = Date, y = NH4_ugL, color = as.factor(Depth_m)))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  geom_line()+
-  geom_point()
-
-nuts%>%
-  filter(Reservoir=="BVR", Site==50)%>%
-  mutate(Date = as.Date(DateTime, format = "%m/%d/%y %H:%M"))%>%
-  select(Depth_m, Site, Date, NH4_ugL, PO4_ugL, NO3NO2_ugL)%>%
-  ggplot(aes(x = Date, y = NO3NO2_ugL, color = as.factor(Depth_m)))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  geom_line()+
-  geom_point()
-```
 
 ```{r}
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/199/10/aa2ccc23688fc908f9d61cb217210a3d" 
@@ -174,7 +105,78 @@ chem_full = chem%>%
   filter(Reservoir=="BVR",
          Site==50,
          year(DateTime)%in% c(2021,2022))
+
+chem_full$Date_22<-chem_full$DateTime
+chem_full$Year = year(chem_full$DateTime)
+year(chem_full$Date_22)<-2022
+
+chem_full%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  ggplot(aes(x = Date_22, y = PO4_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()+
+  facet_wrap(~Year)
+
+chem_full%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  ggplot(aes(x = Date_22, y = NH4_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()+
+  facet_wrap(~Year)
+
+chem_full%>%
+  filter(Reservoir=="BVR", Site==50)%>%
+  ggplot(aes(x = Date_22, y = NO3NO2_ugL, color = as.factor(Depth_m)))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_line()+
+  geom_point()+
+  facet_wrap(~Year)
 ```
+
+```{r}
+chem_boxplot = chem_full%>%
+  filter(Reservoir=="BVR", Site==50,
+         month(DateTime)>4,month(DateTime)<10)%>%
+  mutate(period = factor(ifelse(Date_22<"2022-05-19","before May 19","after"),levels = c("before May 19","after")),
+         Year = as.factor(Year))%>%
+  group_by(DateTime)%>%
+  filter(Depth_m==0.1|Depth_m == max(Depth_m))%>%
+  mutate(Layer = ifelse(Depth_m==0.1,"top (0.1 m)","bottom (lowest depth sampled)"))
+
+library(ggpubr)
+p1 = chem_boxplot%>%
+  ungroup()%>%
+  filter(Layer == "top (0.1 m)")%>%
+  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,Year,Layer)%>%
+  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL"))%>%
+  ggplot(aes(x = period, y = value,color = Year))+
+  geom_boxplot(outlier.alpha = 0)+
+  geom_point(position = position_jitterdodge())+
+  facet_grid(cols = vars(Layer), rows = vars(name), scales= "free")+
+  stat_compare_means(label = "p.format",vjust = -1)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(expand = expansion(mult = c(0.1,.4)))
+
+p2 = chem_boxplot%>%
+  ungroup()%>%
+  filter(Layer == "bottom (lowest depth sampled)")%>%
+  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,Year,Layer)%>%
+  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL"))%>%
+  ggplot(aes(x = period, y = value,color = Year))+
+  geom_boxplot(outlier.alpha = 0)+
+  geom_point(position = position_jitterdodge())+
+  facet_grid(cols = vars(Layer), rows = vars(name), scales= "free")+
+  stat_compare_means(label = "p.format",vjust = -1)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(expand = expansion(mult = c(0.1,.4)))
+
+ggarrange(p1,p2, common.legend = T, legend = "bottom")
+```
+
 
 Heatmaps
 ```{r}
@@ -325,27 +327,34 @@ fluora = fluora_22%>%
   full_join(dt1)
 
 fluora_surface=fluora%>%
+  filter(Reservoir=="BVR",
+         Site==50,
+         Depth_m<1)%>%
   mutate(DateTime = as.Date(DateTime))%>%
   group_by(DateTime)%>%
-  filter(Depth_m == min(Depth_m),
-         Reservoir=="BVR",
-         Site==50,
-         Depth_m<.5)
+  mutate(min_depth = min(Depth_m))%>%
+  filter(Depth_m==min_depth)
 
-sum_plot = chem%>%
+
+fluora_surface$DateTime
+
+sum_plot = chem_full%>%
   filter(Depth_m ==0.1)%>%
   select(DateTime, PO4_ugL,DOC_mgL)%>%
   full_join(fluora_surface%>%
-              filter(year(DateTime)==2022))%>%
+              filter(year(DateTime)%in% c(2021,2022)))%>%
   select(DateTime, PO4_ugL,DOC_mgL,Bluegreens_ugL,TotalConc_ugL)%>%
   pivot_longer(cols = c(PO4_ugL,DOC_mgL,Bluegreens_ugL,TotalConc_ugL))%>%
   filter(!is.na(value),
          month(DateTime)>4,
-         month(DateTime)<8)
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime))%>%
+  mutate(name = factor(name, levels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL")))
 
 maxes = sum_plot%>%
-  group_by(name)%>%
-  summarize(max_date = DateTime[which.max(value)])
+  group_by(name, Year)%>%
+  summarize(max_date = DateTime[which.max(value)])%>%
+  filter(Year=="2022")
 
 sum_plot%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
@@ -354,6 +363,6 @@ sum_plot%>%
   geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  facet_wrap(~name, scales = "free_y", ncol = 1)
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free")
 ```
 

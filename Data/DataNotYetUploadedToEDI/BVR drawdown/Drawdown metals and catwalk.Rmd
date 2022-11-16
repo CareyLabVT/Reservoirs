@@ -217,6 +217,49 @@ for(var in vars){
 }
 ```
 
+Boxplot summaries
+```{r}
+chem_boxplot = metals%>%
+  filter(Reservoir=="BVR", Site==50,
+         month(Date)>4,month(Date)<10)%>%
+  mutate(period = factor(ifelse(Date_22<"2022-05-19","before May 19","after"),levels = c("before May 19","after")),
+         Year = as.factor(Year))%>%
+  group_by(Date)%>%
+  filter(Depth_m==0.1|Depth_m == max(Depth_m))%>%
+  mutate(Layer = ifelse(Depth_m==0.1,"top (0.1 m)","bottom (lowest depth sampled)"))
+
+library(ggpubr)
+p1 = chem_boxplot%>%
+  ungroup()%>%
+  filter(Layer == "top (0.1 m)")%>%
+  select(period, TFe_mgL,SFe_mgL,TMn_mgL,SMn_mgL,Year,Layer)%>%
+  pivot_longer(cols = c("TFe_mgL","SFe_mgL","TMn_mgL","SMn_mgL"))%>%
+  ggplot(aes(x = period, y = value,color = Year))+
+  geom_boxplot(outlier.alpha = 0)+
+  geom_point(position = position_jitterdodge())+
+  facet_grid(cols = vars(Layer), rows = vars(name), scales= "free")+
+  stat_compare_means(label = "p.format",vjust = -1)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(expand = expansion(mult = c(0.1,.4)))
+
+p2 = chem_boxplot%>%
+  ungroup()%>%
+  filter(Layer == "bottom (lowest depth sampled)")%>%
+  select(period, TFe_mgL,SFe_mgL,TMn_mgL,SMn_mgL,Year,Layer)%>%
+  pivot_longer(cols = c("TFe_mgL","SFe_mgL","TMn_mgL","SMn_mgL"))%>%
+  ggplot(aes(x = period, y = value,color = Year))+
+  geom_boxplot(outlier.alpha = 0)+
+  geom_point(position = position_jitterdodge())+
+  facet_grid(cols = vars(Layer), rows = vars(name), scales= "free")+
+  stat_compare_means(label = "p.format",vjust = -1)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_y_continuous(expand = expansion(mult = c(0.1,.4)))
+
+ggarrange(p1,p2, common.legend = T, legend = "bottom")
+```
+
 
 Weir figures
 ```{r}

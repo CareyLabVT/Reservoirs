@@ -20,6 +20,16 @@ BVR metals heatmaps
 metals = read_csv("./Data/Drawdown Metals_updated.csv")
 vars = c("TFe_ppb","SFe_ppb","TMn_ppb","SMn_ppb","TNa_ppb","SNa_ppb","TMg_ppb","SMg_ppb","TSi_ppb","SSi_ppb","TP_ppb","SP_ppb","TS_ppm","SS_ppm")
 
+metals_new = read.csv("../Metals_Data/Raw_Data/2022/ICP_data_2022.csv")%>%
+  select(-X)%>%
+  rename(Li_mgL = X7Li, Na_mgL = X23Na, Mg_mgL = X24Mg, Al_mgL = X27Al, Si_mgL = X29Si, P_mgL = X31P, S_mgL = X34S, Cl_mgL = X35Cl, K_mgL = X39K, Ca_mgL = X44Ca, Ti_mgL = X48Ti, V_mgL = X51V, Cr_mgL = X52Cr, Fe_mgL = X54Fe, Mn_mgL = X55Mn, Co_mgL = X59Co, Ni_mgL = X60Ni, Cu_mgL = X65Cu, Zn_mgL = X66Zn, As_mgL = X75As, Se_mgL = X78Se, Sr_mgL = X88Sr, Mo_mgL = X95Mo, Ag_mgL = X107Ag, Cd_mgL = X111Cd, Sn_mgL = X120Sn, Ba_mgL = X138Ba, Pb_mgL = X208Pb, U_mgL = X238U, Depth_m = 'Sample.Depth..m.')%>%
+  mutate(Date=as.Date(Date))%>%
+  select(-Sample)%>%
+  filter(!Site==100.1)%>%
+  pivot_wider(names_from = Filter, 
+              values_from = contains("mgL"),
+              names_glue = "{Filter}{.value}")
+
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/6/57912981e3e857c85924484806492446" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
@@ -45,110 +55,81 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                     "Flag_SMn"    ), check.names=TRUE)%>%
    mutate(DateTime = as.Date(DateTime))%>%
    filter(year(DateTime)==2021)%>%
-   rename(Sample_Date = DateTime)%>%
-   mutate(TFe_ppb = TFe_mgL*1000,
-          SFe_ppb = SFe_mgL*1000,
-          TMn_ppb = TMn_mgL*1000,
-          SMn_ppb = SMn_mgL*1000,)%>%
-   select(-TFe_mgL,-SFe_mgL,-SMn_mgL,-TMn_mgL)
+   rename(Date = DateTime) #%>%
+   #mutate(TFe_ppb = TFe_mgL*1000,
+   #       SFe_ppb = SFe_mgL*1000,
+   #       TMn_ppb = TMn_mgL*1000,
+   #       SMn_ppb = SMn_mgL*1000,)%>%
+   #select(-TFe_mgL,-SFe_mgL,-SMn_mgL,-TMn_mgL)
                
 unlink(infile1)
 
-metals = metals%>%
+metals = metals_new%>%
   full_join(metals_edi)%>%
-  filter(month(Sample_Date)>=4,month(Sample_Date)<=8)
+  filter(month(Date)>=4,month(Date)<=9)
+
+metals$Date_22 = metals$Date
+year(metals$Date_22)=2022
+year(metals$Date)[year(metals$Date)==22]<-2022
+metals$Year = as.factor(year(metals$Date))
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
-
-Years=c(2021,2022)
-for(var in vars){
-  interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
-  Sites = c(50)
-  for(site in Sites){
-    for (year in Years){
-      bvr<- metals%>%
-        mutate(Year = year(Sample_Date),
-               Date = as.Date(Sample_Date))%>%
-        filter(Site == site,
-               Reservoir == "BVR",
-               !is.na(get(var)),
-               Year == year)%>%
-        arrange(TFe_ppb)
-      if(nrow(bvr)>0){
-        bvr_interp <- interp2xyz(interp(bvr$Date,bvr$Depth_m,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$Depth_m), max(bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-        interp = interp%>%
-          full_join(bvr_interp%>%mutate(Site=site))
-      }
-    }
-  }
-  interp = interp%>%
-    filter(!is.na(Site))
-  
-  #Heatmap
-  jpeg(paste0("./Figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
-  p = interp%>%
-    mutate(x = as.Date(x, origin = "1970-01-01"),
-           Year = year(x))%>%
-    ggplot(aes(x=x, y=y))+
-    geom_raster(aes(fill = z))+
-    scale_y_reverse(expand = c(0,0))+
-    labs(x = "", y = "Depth (m)")+
-    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
-    geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-    scale_x_date(expand = c(0,0))+
-    theme(panel.border = element_rect(fill = NA))+
-    facet_grid(rows= vars(Site),
-               cols = vars(Year),
-               scales = "free",
-               space = "free"
-               )
-  print(p)
-  dev.off()
-}
-
-metals$Date_22 = metals$Sample_Date
-year(metals$Date_22)=2022
-metals$Year = as.factor(year(metals$Sample_Date))
 
 jpeg("./Figs/Surface iron (ppb).jpeg", res = 300, width = 6, height = 4, units = "in")
 metals%>%
   filter(Reservoir == "BVR",
          Depth_m == 0.1,
-         !is.na(TFe_ppb))%>%
+         !is.na(TFe_mgL),
+         Site==50)%>%
   ggplot(aes(x = Date_22))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  geom_point(aes(color = Year,y = TFe_ppb))+
+  geom_point(aes(color = Year,y = TFe_mgL))+
   theme_bw()+
-  ylab("Surface iron (ppb)")+
+  ylab("Surface iron (mg/L)")+
   theme(axis.title.x = element_blank())
 dev.off()
 
-summary(as.factor(metals$Reservoir))
+jpeg("./Figs/Surface iron ST ratio.jpeg", res = 300, width = 6, height = 4, units = "in")
+metals%>%
+  filter(Reservoir == "BVR",
+         Depth_m == 0.1,
+         !is.na(TFe_mgL),
+         !SFe_mgL<0,
+         !TFe_mgL<0,
+         Site==50,
+         !SFe_mgL/TFe_mgL>1)%>%
+  ggplot(aes(x = Date_22))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point(aes(color = Year,y = SFe_mgL/TFe_mgL))+
+  theme_bw()+
+  ylab("Surface iron SFe/TFe ratio")+
+  theme(axis.title.x = element_blank())
+dev.off()
 ```
 
 
 BVR heatmaps with sensor data (elevation rather than depth)
 ```{r}
-metals = read_csv("./Data/Drawdown Metals_updated.csv")%>%
-  filter(Reservoir == "BVR")%>%
-  group_by(Sample_Date,Depth_m, Site)%>%
-  summarize(TFe_ppb = mean(TFe_ppb,na.rm = T),
-            TMn_ppb = mean(TMn_ppb,na.rm = T),
-            SFe_ppb = mean(SFe_ppb,na.rm = T),
-            SMn_ppb = mean(SMn_ppb,na.rm = T))%>%
-  ungroup()
+#metals = read_csv("./Data/Drawdown Metals_updated.csv")%>%
+#  filter(Reservoir == "BVR")%>%
+#  group_by(Sample_Date,Depth_m, Site)%>%
+#  summarize(TFe_ppb = mean(TFe_ppb,na.rm = T),
+#            TMn_ppb = mean(TMn_ppb,na.rm = T),
+#            SFe_ppb = mean(SFe_ppb,na.rm = T),
+#            SMn_ppb = mean(SMn_ppb,na.rm = T))%>%
+#  ungroup()
   
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")
 
-library(RCurl)
-sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
-
-sensor_depth = sensor%>%
-  mutate(DateTime = as.POSIXct(TIMESTAMP),
-         WaterLevel = Lvl_psi*0.70455)%>%
-  filter(DateTime>=min(metals$Sample_Date),
-         DateTime<=max(metals$Sample_Date),
+sensor_depth = cat_long%>%
+  select(DateTime,Reservoir_depth)%>%
+  unique()%>%
+  mutate(DateTime = as.POSIXct(DateTime))%>%
+  rename(WaterLevel = Reservoir_depth)%>%
+  filter(DateTime>=min(chem_full$DateTime, na.rm = T),
+         DateTime<=max(chem_full$DateTime, na.rm = T),
          WaterLevel>7.5)%>%
   arrange(DateTime)%>%
   filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
@@ -158,53 +139,74 @@ sensor_depth = sensor%>%
   mutate(Year = year(Date),
          Site = 50)%>%
   group_by(Site)%>%
-  mutate(max = max(WaterLevel))
+  mutate(max = max(WaterLevel))%>%
+  filter(month(Date)>4,
+         month(Date)<9)
 
-metals = metals%>%
-  left_join(sensor_depth%>%rename(Sample_Date=Date))%>%select(-max)%>%
+metals_plot = metals%>%
+  left_join(sensor_depth%>%select(-max)%>%mutate(Year = as.factor(Year)))%>%
   mutate(height = WaterLevel-Depth_m)%>%
-  arrange(height)
+  arrange(height)%>%
+  filter(Reservoir=="BVR",
+         Site==50,
+         month(Date)>4,
+         month(Date)<9)
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
 
-vars = c("TFe_ppb","SFe_ppb","TMn_ppb","SMn_ppb")
+vars = colnames(metals)[!colnames(metals)%in%c("Sample","Date","Reservoir","Depth_m","Site","Date_22","Year")&!grepl("Flag",colnames(metals))]
+years = c(2021,2022)
+#vars = c("TFe_mgL","SFe_mgL","TMn_mgL","SMn_mgL")
+#Sites = c(50)
 for(var in vars){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
-  Sites = c(50)
-  for(site in Sites){
-    bvr<- metals%>%
-      mutate(Year = year(Sample_Date),
-             Date = as.Date(Sample_Date))%>%
-      filter(Site == site,
-             !is.na(get(var)))%>%
-      arrange(TFe_ppb)%>%
-      mutate(max = max(height))
+  bvr_comb = metals_plot%>%
+    filter(Depth_m==1000000)%>%
+    select(Date,height)
+  #for(site in Sites){
+  for(year in years){
+    bvr<- metals_plot%>%
+      filter(#Site == site,
+             !is.na(get(var)),
+             Year==year)%>%
+      arrange(TFe_mgL)%>%
+      mutate(max = max(height),
+             height = ifelse(height<0,0,height))
     
-    bvr_interp <- interp2xyz(interp(bvr$Date,bvr$height,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$height), max(bvr$height), by = .01), duplicate = "mean"),data.frame = T)
-    
-    interp = interp%>%
-      full_join(bvr_interp%>%mutate(Site=site))
+    if(nrow(bvr)>0){
+      bvr_interp <- interp2xyz(interp(bvr$Date,bvr$height,bvr[[var]],xo = seq(min(bvr$Date), max(bvr$Date), .1),yo = seq(min(bvr$height), max(bvr$height), by = .01), duplicate = "mean"),data.frame = T) 
+      
+      interp = interp%>%
+        full_join(bvr_interp%>%mutate(Site=site))
+      
+      bvr_comb = bvr_comb%>%
+        full_join(bvr%>%select(Date,height))%>%
+        mutate(max = max(height),
+               Year = year(Date))
+    }
+  #}
   }
-  interp = interp%>%
-    filter(!is.na(Site))
+  #interp = interp%>%
+  #  filter(!is.na(Site))
   
   #Heatmap
-  jpeg(paste0("./Figs/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
+  jpeg(paste0("./Figs/Metals_heatmaps/BVR_",var,"_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
   p = interp%>%
+    filter(!is.na(x))%>%
     mutate(x = as.Date(x, origin = "1970-01-01"),
            Year = year(x))%>%
     ggplot(aes(x=x))+
     geom_raster(aes(fill = z, y = y))+
     scale_y_continuous(expand = c(0,0))+
     labs(x = "", y = "Depth (m)")+
-    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = var)+
+    scale_fill_gradientn(colours = blue2green2red(100), na.value="gray", name = var)+
     geom_ribbon(data = sensor_depth, aes(x = Date, ymin= WaterLevel, ymax = max), fill = "white")+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
     scale_x_date(expand = c(0,0))+
     theme_classic()+
     theme(panel.border = element_rect(fill = NA))+
-    geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
+    geom_point(data = bvr_comb, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     facet_grid(rows= vars(Site),
                cols = vars(Year),
                scales = "free",

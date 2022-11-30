@@ -149,8 +149,8 @@ library(ggpubr)
 p1 = chem_boxplot%>%
   ungroup()%>%
   filter(Layer == "top (0.1 m)")%>%
-  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,Year,Layer)%>%
-  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL"))%>%
+  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,DOC_mgL,Year,Layer)%>%
+  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL","DOC_mgL"))%>%
   ggplot(aes(x = period, y = value,color = Year))+
   geom_boxplot(outlier.alpha = 0)+
   geom_point(position = position_jitterdodge())+
@@ -163,8 +163,8 @@ p1 = chem_boxplot%>%
 p2 = chem_boxplot%>%
   ungroup()%>%
   filter(Layer == "bottom (lowest depth sampled)")%>%
-  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,Year,Layer)%>%
-  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL"))%>%
+  select(period, PO4_ugL,NH4_ugL,NO3NO2_ugL,DOC_mgL,Year,Layer)%>%
+  pivot_longer(cols = c("PO4_ugL","NH4_ugL","NO3NO2_ugL","DOC_mgL"))%>%
   ggplot(aes(x = period, y = value,color = Year))+
   geom_boxplot(outlier.alpha = 0)+
   geom_point(position = position_jitterdodge())+

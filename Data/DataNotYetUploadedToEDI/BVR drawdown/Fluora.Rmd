@@ -1,11 +1,15 @@
 ---
 title: "Fluoro"
 author: "Abby Lewis"
-date: "Last updated: 2022-10-14 MEL"
+date: "Last updated: 2022-11-29 MEL"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
+#clear environment
+rm(list=ls())
+
+#load packages and set options
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
@@ -14,6 +18,7 @@ library(RCurl)
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+
 ```
 
 Load and wrangle FP data
@@ -123,11 +128,16 @@ dev.off()
 
 Calculate Cmax depth
 ```{r}
-#data wrangling
+#data wrangling to get dataframe ready to calculate metrics
+
+#figure out doy for pre, during, and post draw-down
+yday("2022-05-19")
+yday("2022-06-28")
+
 flo_metrics = flo_select%>%
   filter(Reservoir == "BVR", Site == 50,
          year(DateTime)%in% c(2021,2022))%>%
-  mutate(Date= as.Date(DateTime))
+  mutate(Date= as.Date(DateTime)) 
 
 #how many days have we?
 length(unique(flo_metrics$Date))
@@ -161,24 +171,252 @@ Cmax[i,1] <- as.character(dat$Date[1])
 
 }
 
-colnames(Cmax) <- c("Date","green","cyano","diatom","crypto","total")
+colnames(Cmax) <- c("Date","green","cyano","brown","crypto","total")
 
-Cmax <- Cmax %>%
+#read in light attenuation calculations and look @ Cmax relative to pz depth
+pz <- read_csv("./Data/attenuation_calc.csv") %>%
+  mutate(Date = date(Date))
+#note that we only have pz for May-July of 2021 and 2022
+
+Cmax <- tibble(Cmax) %>%
+  mutate(Date = date(Date))
+
+cmpz <- left_join(Cmax, pz, by = "Date") %>%
+  mutate(green_rel_pz = (Zeu-green)/Zeu,
+         cyano_rel_pz = (Zeu-cyano)/Zeu,
+         brown_rel_pz = (Zeu-brown)/Zeu,
+         crypto_rel_pz = (Zeu-crypto)/Zeu,
+         total_rel_pz = (Zeu-total)/Zeu,
+         green_rel_pz_0.1 = (Zeu_0.1-green)/Zeu_0.1,
+         cyano_rel_pz_0.1 = (Zeu_0.1-cyano)/Zeu_0.1,
+         brown_rel_pz_0.1 = (Zeu_0.1-brown)/Zeu_0.1,
+         crypto_rel_pz_0.1 = (Zeu_0.1-crypto)/Zeu_0.1,
+         total_rel_pz_0.1 = (Zeu_0.1-total)/Zeu_0.1) %>%
+  select(-(green:r2))
+
+
+
+
+
+
+#data wrangling to plot
+Cmax_plot <- Cmax %>%
   mutate(Year = year(Date)) %>%
   gather(green:total, key = "spectral_group", value = "Cmax_depth")
 
+cmpz_plot <- cmpz %>%
+  filter(!is.na(Zeu)) %>%
+  mutate(Year = year(Date)) %>%
+  gather(green_rel_pz:total_rel_pz_0.1, key = "spectral_group", value = "Cmax_depth_rel_pz") %>%
+  mutate(pz_calc = ifelse(grepl("0.1",spectral_group),"0.1%","1%"))
+
+cmpz_1 <- cmpz_plot %>% filter(pz_calc == "1%")
+cmpz_0.1 <- cmpz_plot %>% filter(pz_calc == "0.1%")
+
 #plot
 jpeg("./Figs/Cmax_depth.jpeg", res = 300, width = 6, height = 4, units = "in")
-ggplot(data = Cmax, aes(x = spectral_group, y = Cmax_depth, fill = as.factor(Year)))+
+ggplot(data = subset(Cmax_plot,Cmax_plot$spectral_group != "crypto"), aes(x = spectral_group, y = Cmax_depth, fill = as.factor(Year)))+
   geom_boxplot()+
   scale_y_reverse()+
   theme_classic()+
   xlab("Spectral group")+
   ylab("Cmax depth (m)")+
-  labs(fill = "Year")
+  labs(fill = "Year")+
+  annotate("text",
+           x = c(1, 2),
+           y = c(0, 0),
+           label = c("**", "**"),
+           family = "", fontface = 3, size=8)
 dev.off()
 
-#should probably think about this relative to photic zone depth and/or thermocline depth --> are these already calculated?
+#data wrangling to plot Zeu
+pz_plot <- pz %>%
+  mutate(Year = year(Date)) %>%
+  filter(Year %in% c(2021,2022)) %>%
+  select(-(I0:r2)) %>%
+  gather(Zeu:Zeu_0.1, key = "perc_light", value = "pz_depth")
+
+jpeg("./Figs/pz.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = pz_plot, aes(x = perc_light, y = pz_depth, fill = as.factor(Year)))+
+  geom_boxplot()+
+  theme_bw()+
+  scale_y_reverse()+
+  ggtitle("this is ONLY May-July")+
+  xlab("")+
+  ylab("Photic zone depth (m)")+
+  labs(fill = "Year")+
+  annotate("text",
+           x = c(1, 2),
+           y = c(0, 0),
+           label = c("***", "***"),
+           family = "", fontface = 3, size=8)+
+  scale_x_discrete(labels=c("Zeu" = "1% light", "Zeu_0.1" = "0.1% light"))
+dev.off()
+
+jpeg("./Figs/Cmax_depth_pz_1.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = subset(cmpz_1, cmpz_1$spectral_group != "crypto_rel_pz"), aes(x = spectral_group, y = Cmax_depth_rel_pz, fill = as.factor(Year)))+
+  geom_boxplot()+
+  geom_hline(yintercept = 0)+
+  theme_bw()+
+  ggtitle("Photic zone = 1% light; this is ONLY May-July")+
+  xlab("Spectral group")+
+  ylab("Cmax depth standardized to photic zone depth")+
+  labs(fill = "Year")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  scale_x_discrete(labels=c("green_rel_pz" = "Green algae", "cyano_rel_pz" = "Cyanobacteria",
+                              "brown_rel_pz" = "Brown algae", "total_rel_pz" = "Total phyto."))
+dev.off()
+
+jpeg("./Figs/Cmax_depth_pz_0.1.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = subset(cmpz_0.1, cmpz_0.1$spectral_group != "crypto_rel_pz_0.1"), aes(x = spectral_group, y = Cmax_depth_rel_pz, fill = as.factor(Year)))+
+  geom_boxplot()+
+  geom_hline(yintercept = 0)+
+  theme_bw()+
+  ggtitle("Photic zone = 0.1% light; this is ONLY May-July")+
+  xlab("Spectral group")+
+  ylab("Cmax depth standardized to photic zone depth")+
+  labs(fill = "Year")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  scale_x_discrete(labels=c("green_rel_pz_0.1" = "Green algae", "cyano_rel_pz_0.1" = "Cyanobacteria",
+                              "brown_rel_pz_0.1" = "Brown algae", "total_rel_pz_0.1" = "Total phyto."))
+dev.off()
+
+#stats: 
+
+#Welch's t-test pz depth for 2021 vs. 2022 by percent light
+#1% light
+t_2021 <- pz_plot %>%
+  filter(Year == 2021 & perc_light == "Zeu") %>%
+  select(pz_depth)
+t_2022 <- pz_plot %>%
+  filter(Year == 2022 & perc_light == "Zeu") %>%
+  select(pz_depth)
+t.test(t_2021, t_2022)
+
+#0.1% light
+t_2021 <- pz_plot %>%
+  filter(Year == 2021 & perc_light == "Zeu_0.1") %>%
+  select(pz_depth)
+t_2022 <- pz_plot %>%
+  filter(Year == 2022 & perc_light == "Zeu_0.1") %>%
+  select(pz_depth)
+t.test(as.numeric(t_2021$pz_depth[2:7]), as.numeric(t_2022$pz_depth))
+
+
+#Welch's t-test unstandardized Cmax depth for 2021 vs. 2022 by spectral group
+
+#total phytos
+t_2021 <- Cmax_plot %>%
+  filter(Year == 2021 & spectral_group == "total") %>%
+  select(Cmax_depth)
+t_2022 <- Cmax_plot %>%
+  filter(Year == 2022 & spectral_group == "total") %>%
+  select(Cmax_depth)
+t.test(t_2021, t_2022)
+
+#brown algae
+b_2021 <- Cmax_plot %>%
+  filter(Year == 2021 & spectral_group == "brown") %>%
+  select(Cmax_depth)
+b_2022 <- Cmax_plot %>%
+  filter(Year == 2022 & spectral_group == "brown") %>%
+  select(Cmax_depth)
+t.test(b_2021, b_2022)
+
+#cyanobacteria
+c_2021 <- Cmax_plot %>%
+  filter(Year == 2021 & spectral_group == "cyano") %>%
+  select(Cmax_depth)
+c_2022 <- Cmax_plot %>%
+  filter(Year == 2022 & spectral_group == "cyano") %>%
+  select(Cmax_depth)
+t.test(c_2021, c_2022)
+
+#green algae
+g_2021 <- Cmax_plot %>%
+  filter(Year == 2021 & spectral_group == "green") %>%
+  select(Cmax_depth)
+g_2022 <- Cmax_plot %>%
+  filter(Year == 2022 & spectral_group == "green") %>%
+  select(Cmax_depth)
+t.test(g_2021, g_2022)
+
+#Welch's t-test standardized Cmax depth (pz = 1% light) for 2021 vs. 2022 by spectral group
+
+#total phytos
+t_2021 <- cmpz_1 %>%
+  filter(Year == 2021 & spectral_group == "total_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+t_2022 <- cmpz_1 %>%
+  filter(Year == 2022 & spectral_group == "total_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+t.test(t_2021, t_2022)
+
+#brown algae
+b_2021 <- cmpz_1 %>%
+  filter(Year == 2021 & spectral_group == "brown_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+b_2022 <- cmpz_1 %>%
+  filter(Year == 2022 & spectral_group == "brown_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+t.test(b_2021, b_2022)
+
+#cyanobacteria
+c_2021 <- cmpz_1 %>%
+  filter(Year == 2021 & spectral_group == "cyano_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+c_2022 <- cmpz_1 %>%
+  filter(Year == 2022 & spectral_group == "cyano_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+t.test(c_2021, c_2022)
+
+#green algae
+g_2021 <- cmpz_1 %>%
+  filter(Year == 2021 & spectral_group == "green_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+g_2022 <- cmpz_1 %>%
+  filter(Year == 2022 & spectral_group == "green_rel_pz") %>%
+  select(Cmax_depth_rel_pz)
+t.test(g_2021, g_2022)
+
+#Welch's t-test standardized Cmax depth (pz = 0.1% light) for 2021 vs. 2022 by spectral group
+
+#total phytos
+t_2021 <- cmpz_0.1 %>%
+  filter(Year == 2021 & spectral_group == "total_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+t_2022 <- cmpz_0.1 %>%
+  filter(Year == 2022 & spectral_group == "total_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+t.test(t_2021, t_2022)
+
+#brown algae
+b_2021 <- cmpz_0.1 %>%
+  filter(Year == 2021 & spectral_group == "brown_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+b_2022 <- cmpz_0.1 %>%
+  filter(Year == 2022 & spectral_group == "brown_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+t.test(b_2021, b_2022)
+
+#cyanobacteria
+c_2021 <- cmpz_0.1 %>%
+  filter(Year == 2021 & spectral_group == "cyano_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+c_2022 <- cmpz_0.1 %>%
+  filter(Year == 2022 & spectral_group == "cyano_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+t.test(c_2021, c_2022)
+
+#green algae
+g_2021 <- cmpz_0.1 %>%
+  filter(Year == 2021 & spectral_group == "green_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+g_2022 <- cmpz_0.1 %>%
+  filter(Year == 2022 & spectral_group == "green_rel_pz_0.1") %>%
+  select(Cmax_depth_rel_pz)
+t.test(g_2021, g_2022)
 
 ```
 
@@ -194,9 +432,16 @@ mean_biom <- flo_metrics %>%
   group_by(Date) %>%
   summarize_at(vars(green:total), mean, na.rm = TRUE) %>%
   mutate(Year = year(Date)) %>%
-  gather(green:total, key = "spectral_group", value = "Mean_biomass")
+  gather(green:total, key = "spectral_group", value = "Mean_biomass") %>%
+  mutate(DOY = yday(Date)) %>%
+  mutate(drawdown = ifelse(DOY <= 139, "pre",
+                           ifelse(DOY > 139 & DOY <= 179, "during",
+                                  ifelse(DOY > 179, "post","eek!")))) %>%
+  mutate(drawdown = factor(drawdown, levels = c("pre","during","post")))
 
-#plot
+#plots for Res Group
+
+#compare 2021 vs 2022
 jpeg("./Figs/Mean_biomass.jpeg", res = 300, width = 6, height = 4, units = "in")
 ggplot(data = mean_biom, aes(x = spectral_group, y = Mean_biomass, fill = as.factor(Year)))+
   geom_boxplot()+
@@ -205,6 +450,116 @@ ggplot(data = mean_biom, aes(x = spectral_group, y = Mean_biomass, fill = as.fac
   ylab("Mean biomass (ug/L)")+
   labs(fill = "Year")
 dev.off()
+
+#cmpare 2021 vs 2022 for pre, during, and post-drawdown
+
+# New facet label names for spectral groups
+sg.labs <- c("Brown algae","Cyanobacteria","Green algae","Total phyto.")
+names(sg.labs) <- c("brown","cyano","green","total")
+
+jpeg("./Figs/Mean_biomass_by_period.jpeg", res = 300, width = 8, height = 4, units = "in")
+ggplot(data = subset(mean_biom, mean_biom$spectral_group != "crypto"), aes(x = drawdown, y = Mean_biomass, fill = as.factor(Year)))+
+  geom_boxplot()+
+  facet_grid(cols = vars(spectral_group), labeller = labeller(spectral_group = sg.labs))+
+  theme_classic()+
+  xlab("Drawdown period")+
+  ylab("Mean biomass (ug/L)")+
+  labs(fill = "Year")
+dev.off()
+
+#plot for WVWA
+jpeg("./Figs/Mean_biomass_WVWA.jpeg", res = 300, width = 5, height = 3.33, units = "in")
+ggplot(data = subset(mean_biom, mean_biom$spectral_group != "crypto"), aes(x = spectral_group, y = Mean_biomass, fill = as.factor(Year)))+
+  geom_boxplot()+
+  theme_classic()+
+  xlab("Spectral group")+
+  ylab("Mean biomass (ug/L)")+
+  scale_x_discrete(labels = c("Brown algae","Cyanobacteria","Green algae","Total phyto."))+
+  annotate("text",
+           x = c(2, 3, 4),
+           y = c(80, 80, 80),
+           label = c("*", "*", "*"),
+           family = "", fontface = 3, size=8)+
+  labs(fill = "Year")
+dev.off()
+
+#stats: 
+
+#Welch's t-test for 2021 vs. 2022 by spectral group
+
+#total phytos
+t_2021 <- mean_biom %>%
+  filter(Year == 2021 & spectral_group == "total") %>%
+  select(Mean_biomass)
+t_2022 <- mean_biom %>%
+  filter(Year == 2022 & spectral_group == "total") %>%
+  select(Mean_biomass)
+t.test(t_2021, t_2022)
+
+#brown algae
+b_2021 <- mean_biom %>%
+  filter(Year == 2021 & spectral_group == "brown") %>%
+  select(Mean_biomass)
+b_2022 <- mean_biom %>%
+  filter(Year == 2022 & spectral_group == "brown") %>%
+  select(Mean_biomass)
+t.test(b_2021, b_2022)
+
+#cyanobacteria
+c_2021 <- mean_biom %>%
+  filter(Year == 2021 & spectral_group == "cyano") %>%
+  select(Mean_biomass)
+c_2022 <- mean_biom %>%
+  filter(Year == 2022 & spectral_group == "cyano") %>%
+  select(Mean_biomass)
+t.test(c_2021, c_2022)
+
+#green algae
+g_2021 <- mean_biom %>%
+  filter(Year == 2021 & spectral_group == "green") %>%
+  select(Mean_biomass)
+g_2022 <- mean_biom %>%
+  filter(Year == 2022 & spectral_group == "green") %>%
+  select(Mean_biomass)
+t.test(g_2021, g_2022)
+
+#Welch's t-test for 2021 vs. 2022 and drawdown period by spectral group
+dp <- unique(mean_biom$drawdown)
+sg <- unique(mean_biom$spectral_group)
+
+final <- data.frame("Spectral_group" = NA,
+                    "drawdown" = NA,
+                    "Mean_biom_2021" = NA,
+                    "Mean_biom_2022" = NA,
+                    "p" = NA)
+
+for (s in sg){
+  curr_sg <- mean_biom %>% filter(spectral_group == s)
+  
+  for(d in dp){
+    curr_dp <- curr_sg %>% filter(drawdown == d)
+    
+  y1 <- curr_dp %>%
+  filter(Year == 2021) %>%
+  select(Mean_biomass)
+  
+  y2 <- curr_dp %>%
+  filter(Year == 2022) %>%
+  select(Mean_biomass)
+  
+  curr_t <- t.test(y1, y2)
+  
+  temp <- data.frame("Spectral_group" = s,
+                    "drawdown" = d,
+                    "Mean_biom_2021" = mean(y1$Mean_biomass, na.rm = TRUE),
+                    "Mean_biom_2022" = mean(y2$Mean_biomass, na.rm = TRUE),
+                    "p" = curr_t$p.value)
+  final <- rbind(final, temp)
+  }
+}
+
+sig <- final %>% filter(p < 0.05)
+
 ```
 
 Calculate peak width

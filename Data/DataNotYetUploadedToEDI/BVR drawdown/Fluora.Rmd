@@ -467,6 +467,17 @@ ggplot(data = subset(mean_biom, mean_biom$spectral_group != "crypto"), aes(x = d
   labs(fill = "Year")
 dev.off()
 
+#cyano plot for WVWA
+jpeg("./Figs/cyanos_by_period_WVWA.jpeg", res = 300, width = 3, height = 3.5, units = "in")
+ggplot(data = subset(mean_biom, mean_biom$spectral_group == "cyano"), aes(x = drawdown, y = Mean_biomass, fill = as.factor(Year)))+
+  geom_boxplot()+
+  facet_grid(cols = vars(spectral_group), labeller = labeller(spectral_group = sg.labs))+
+  theme_classic()+
+  xlab("Drawdown period")+
+  ylab("Mean biomass (ug/L)")+
+  labs(fill = "Year")
+dev.off()
+
 #plot for WVWA
 jpeg("./Figs/Mean_biomass_WVWA.jpeg", res = 300, width = 5, height = 3.33, units = "in")
 ggplot(data = subset(mean_biom, mean_biom$spectral_group != "crypto"), aes(x = spectral_group, y = Mean_biomass, fill = as.factor(Year)))+

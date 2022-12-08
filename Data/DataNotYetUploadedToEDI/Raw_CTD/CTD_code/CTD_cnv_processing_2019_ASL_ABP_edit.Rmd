@@ -13,11 +13,11 @@ First written by ASL 02 Aug 2019
 ### Load OCE Libraries and Carey Lab ctd functions###
 pacman::p_load(oce, ocedata, tidyverse, lubridate)
 source("ctd_functions_CTD8188.R") #Load Carey Lab ctd functions
-source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
+#source("CTD_matlab_functions.R") #Load Carey Lab ctd function for creating the glm aed dataset and a file for matlab
 
 #Specify global variables
-DATE_TEXT <- "15-Jul-2022" #format should be "01-Aug-2019"
-SITE <- "bvr50"
+DATE_TEXT <- "24-Oct-2022" #format should be "01-Aug-2019"
+SITE <- "fcr50"
 SAMPLER <- ""
 MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
@@ -25,7 +25,7 @@ MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
 
 
 #Advanced customization
-REP <- "_S8188001" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
+REP <- "_S8188003" #If multiple casts were taken this will be _a, _b, _c, etc. Be sure to include an underscore if there is one in the file name
 AUTO_NAME <- TRUE #If using a nonstandard name format. Must also fill in NAME_OVERRIDE below
 NAME_OVERRIDE <- "MSN2_CTD_CASTS_072419/072519_bvr50_d" #For example, "080119_fcr50"
 AUTO_FOLDER <- TRUE 

@@ -561,18 +561,18 @@
 #     </FluoroWetlabCDOM_Sensor>
 #   </sensor>
 # </Sensors>
-# datcnv_date = Nov 18 2022 13:22:23, 7.26.7.129 [datcnv_vars = 15]
+# datcnv_date = Dec 12 2022 16:31:46, 7.26.7.129 [datcnv_vars = 15]
 # datcnv_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S8188001.hex C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plusV2_8188_start20221003.xmlcon
 # datcnv_skipover = 0
 # datcnv_ox_hysteresis_correction = yes
 # datcnv_ox_tau_correction = yes
-# filter_date = Nov 18 2022 13:22:56, 7.26.7.129
+# filter_date = Dec 12 2022 16:32:33, 7.26.7.129
 # filter_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S8188001.cnv
 # filter_low_pass_tc_A = 0.500
 # filter_low_pass_tc_B = 1.000
 # filter_low_pass_A_vars = sbeox0Mg/L sbeox0PS specc c0uS/cm tv290C
 # filter_low_pass_B_vars = depFM dz/dtM prdM prdE
-# alignctd_date = Nov 18 2022 13:24:02, 7.26.7.129
+# alignctd_date = Dec 12 2022 16:33:09, 7.26.7.129
 # alignctd_in = C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S8188001.cnv
 # alignctd_adv = dz/dtM 1.000, sbeox0PS 1.000, specc 1.000, c0uS/cm 1.000, flECO-AFL 1.000, turbWETntu0 1.000                                                                                                                        
 # file_type = ascii

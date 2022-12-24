@@ -1,5 +1,5 @@
-# 2021 nutrient chemistry collation
-#includes TNTP, DOC, and np 2021
+# 2022 nutrient chemistry collation
+#includes TNTP, DOC, and np 2022
 #Note: flags are aggregated without commas for final EDI upload
 #figure out what to do when dups are super different
 #NOTE: samples were rerun and need to integrate/average/select values appropriately
@@ -7,15 +7,19 @@
                  # B08Mar 11m, TN+TP, (cant find reason for repeat, averaging both )
                  #B09Aug 10m DOC (cant find reason for repeat, averaging both )
 #NOTE for 2022 field sample publication - we removed n=9 samples w/ suspect data (sampleIDs in the 2021 MakeEMLChemistry script) so reran them after 2021 data was published - need to bring that data in (average/replace 2021 runs)
+#Welp, looks like we got rid of all samples so unfortunately no 2021 data to bring in
+
+#set working directory
+setwd("./Data/DataNotYetUploadedToEDI/NutrientData/")
 
 library(tidyverse)
 library(dplyr)
 library(lubridate)
 
-TNTP <- read.csv("./collation/2021/2021_TNTP_collation.csv")
+TNTP <- read.csv("./collation/2022/2022_TNTP_collation.csv")
 
 #delete F 06dec21 wet because no reason to believe that we went to the wetland on this day...
-TNTP <- TNTP[TNTP$SampleID_lachat !="F06dec21 wet T",]
+#TNTP <- TNTP[TNTP$SampleID_lachat !="F06dec21 wet T",]
 
 #drop samplID col 
 TNTP <- TNTP [,!(names(TNTP) %in% c("SampleID_lachat"))]
@@ -154,7 +158,7 @@ for (i in 1:nrow(TNTP)) {
 ############################################
 
 #read in 2020_chemistry_collation for DOC 
-doc <- read.csv("./collation/2021/2021_TOC_collation.csv")
+doc <- read.csv("./collation/2022/2022_TOC_collation.csv")
 
 # create flag columns
 # no flag value = 0
@@ -168,6 +172,8 @@ doc$Flag_DN <- 0
 doc <- doc %>% 
   mutate(Flag_DOC = ifelse(Notes_DOC == "run_NPOC", 8, Flag_DOC ) )
 
+#ignore this sample because I think we are going to rerun using NPOC later
+doc <- doc[!(doc$Notes_DOC=="rerun so delete"),]
 
 #order doc df
 doc <- doc %>% arrange(Reservoir, DateTime, Site, Depth_m)
@@ -364,7 +370,7 @@ for (i in 1:nrow(doc)) {
 ############################################################
 ############################################################
 #read in soluble data
-np <- read.csv("./collation/2021/2021_soluble_NP_collation.csv")
+np <- read.csv("./collation/2022/2022_soluble_NP_collation.csv")
 
 #convert to character string for subsetting below
 np$SampleID_lachat <- as.character(np$SampleID_lachat)

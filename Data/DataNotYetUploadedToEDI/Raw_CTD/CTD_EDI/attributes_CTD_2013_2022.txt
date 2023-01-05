@@ -14,7 +14,7 @@ pH	Water pH	numeric	dimensionless		NA	No data
 ORP_mV	Reduction potential	numeric	millivolt		NA	No data
 PAR_umolm2s	Photosynthetically active radiation	numeric	micromolePerMeterSquaredPerSecond		NA	No data
 Desc_rate	Descent rate	numeric	metersPerSecond		NA	No data
-Flag_Temp	"Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=No sensor on CTD, 6=Measurement removed (above water)"	numeric	dimensionless			
+Flag_Temp	"Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=No sensor on CTD"	numeric	dimensionless			
 Flag_DO	"Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=No sensor on CTD, 6=Measurement removed (above water)"	numeric	dimensionless			
 Flag_Cond	"Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to NA, 5=No sensor on CTD, 6=Measurement removed (above water)"	numeric	dimensionless			
 Flag_SpecCond	"Data flag for specific conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to NA, 5=No sensor on CTD, 6=Measurement removed (above water)"	numeric	dimensionless			

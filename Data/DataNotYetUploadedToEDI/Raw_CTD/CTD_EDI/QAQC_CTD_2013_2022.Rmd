@@ -160,11 +160,12 @@ dt1 = dt1%>%
   mutate(Cond_uScm=ifelse(as.Date(Date)==as.Date("2017-03-12")&Reservoir=="FCR",NA,Cond_uScm),
          Flag_Cond=ifelse(as.Date(Date)==as.Date("2017-03-12")&Reservoir=="FCR",2,Flag_Cond)) #Instrument malfunction
 
-#2019 (and some 2020) flags are messed up. Need to check things other than conductivity too
-dt1%>%
-  filter(is.na(Flag_Cond))
-
-#I think there are some things that are flagged as set to 0 but actually NA
+#2019 (and some 2020) flags are messed up (145 rows total)
+dt1 = dt1%>%
+  mutate(Flag_Cond=ifelse(is.na(Flag_Cond)&is.na(Cond_uScm),2,Flag_Cond),
+         Flag_SpecCond=ifelse(is.na(Flag_SpecCond)&is.na(Spec_Cond_uScm),2,Flag_SpecCond),
+         Flag_Chla=ifelse(is.na(Flag_Chla)&is.na(Chla_ugL),2,Flag_Chla),
+         Flag_Turb=ifelse(is.na(Flag_Turb)&is.na(Turb_NTU),2,Flag_Turb))
 ```
 
 
@@ -173,10 +174,11 @@ dt1%>%
 # This reads all the files into the R environment
 files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
 files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-omit <- c("100719_bvr_sedtrap.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv", "072121_fcr50_sit_1.6m.csv", "072621_fcr_50_sit_anoxic.csv")#fill in with any files you need to omit
+omit <- c("100719_bvr_sedtrap.csv","072121_fcr50_sit_1.6m.csv", "072621_fcr_50_sit_anoxic.csv")#fill in with any files you need to omit
 files <- files[!files %in% omit]
-#files <- files[file.mtime(paste0("../csv_outputs/",files))>as.Date("2021-02-01")] #Only read files that have been modified this year
-files <- c(files,"071819_fcr50.csv","090419_fcr50.csv","090419_bvr50.csv","090419_bvr50_b.csv") #Reprocessing these files in 2021
+files <- files[!grepl("8188",files)]
+files <- files[file.mtime(paste0("../csv_outputs/",files))>as.Date("2022-01-01")] #Only read files that have been modified this year
+#files <- c(files,"071819_fcr50.csv","090419_fcr50.csv","090419_bvr50.csv","090419_bvr50_b.csv") #Reprocessing these files in 2021
 
 #This reads the first file in
 ctd = read_csv(paste0("../csv_outputs/",files[1])) 
@@ -201,13 +203,13 @@ for (i in 2:length(files)){
   ctd = ctd %>%
     full_join(new)
 }
-write_csv(ctd, "CTD_Meta_2021.csv")
+write_csv(ctd, "CTD_Meta_2022.csv")
 
 summary(as.factor(ctd$Reservoir))
 ```
 
 ```{r}
-ctd1 <- read.csv("CTD_Meta_2021.csv") #Load saved data
+ctd1 <- read.csv("CTD_Meta_2022.csv") #Load saved data
 ctd = ctd1 %>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Reservoir = as.factor(Reservoir))%>%
@@ -218,9 +220,9 @@ ctd = ctd1 %>%
 #1=Sample not taken, 
 #2=Instrument malfunction, 
 #3=Sample below detection,
-#4=Negative value set to 0,
+#4=Negative value set to 0 or NA
 #5=No sensor on CTD,
-#6=Measurement removed (above water)
+#6=Measurement above water (removed for most vars)
 #7=Datetime missing time (date is meaningful but not time)
 #8=Measurement outside of expected range but retained in dataset
 
@@ -246,29 +248,37 @@ ctd_flagged = ctd %>% #Add flags
     #DO
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
     DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
-    
     Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
+    
+    DO_mgL = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36")),NA,DO_mgL), #DO is crazy low and clearly wrong on this cast
+    DO_mgL = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,DO_mgL), #SSS manipulation messed with this cast
     DO_mgL = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_mgL), #DO pump wasn't working for these casts
-    Flag_DO = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO),
+    Flag_DO = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17","2022-05-17 10:17:36","2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO),
     Flag_DO = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
     
     #DO pSat
     Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
     Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
     DO_pSat = ifelse(DO_pSat < 0, 0, DO_pSat), #Flag pSat<0
+    DO_pSat = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36")),NA,DO_pSat), #DO is crazy low and clearly wrong on this cast
+    DO_pSat = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,DO_pSat), #SSS manipulation messed with this cast
     DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),NA,DO_pSat), #DO pump wasn't working for these casts
-    Flag_DO_pSat = ifelse(Date %in% as.POSIXct(c("2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO_pSat),
+    Flag_DO_pSat = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17","2022-05-17 12:17:36","2019-09-04 11:33:00", "2019-09-04 10:12:19")),2,Flag_DO_pSat),
     Flag_DO_pSat = ifelse(Date > as.Date("2021-06-26")& Date < as.Date("2021-12-01"),2, Flag_DO_pSat), #Oxygen sensor reading too high in the hypolimnion and too low at the surface
   
     #COND
     Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond), #Flag NA
     Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
-    Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0
+    Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0. 
+    Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,Cond_uScm), #SSS manipulation messed with this cast
+    Flag_Cond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),2,Flag_Cond),
     
     #SPECCOND
     Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond), #Flag NA
     Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
-    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, NA, Spec_Cond_uScm), #Flag Cond < 0
+    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, NA, Spec_Cond_uScm), #Flag Cond < 0.
+    Spec_Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,Spec_Cond_uScm), #SSS manipulation messed with this cast
+    Flag_SpecCond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),2,Flag_SpecCond),
     
     #CHLA
     Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
@@ -307,18 +317,24 @@ colnames(ctd_flagged)
 
 summary(ctd_flagged)
 
-## CTD times in 2021 are incorrect
-hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2021])))
+## CTD times in 2022 are incorrect
+hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2022])))
+unique(ctd_flagged$Date)
 #CTD date - date from field notes
-as_datetime("2021-04-25 22:43:12 CDT")-as_datetime("2021-04-26 11:45:00 EDT")
-as_datetime("2021-07-07 01:06:56 CDT")-as_datetime("2021-07-07 14:20:00")
-#~13 hours
+as_datetime("2022-02-24 08:01:48 CST")-as_datetime("2022-02-24 10:02:00 EDT")
+as_datetime("2022-11-08 08:09:27 CST")-as_datetime("2022-11-08 10:10:00 EST")
+#~2 hours
 
-ctd_flagged$Date[ctd_flagged$Date>as.Date("2020-01-01")&ctd_flagged$Date<as.Date("2021-12-01")] = ctd_flagged$Date[ctd_flagged$Date>as.Date("2020-01-01")&ctd_flagged$Date<as.Date("2021-12-01")]+hours(13)
+ctd_flagged$Date[ctd_flagged$Date>as.Date("2021-12-01")&ctd_flagged$Date<as.Date("2023-01-01")] = ctd_flagged$Date[ctd_flagged$Date>as.Date("2021-12-01")&ctd_flagged$Date<as.Date("2023-01-01")]+hours(2)#to align with published data
+
+#Making sure historical data stays correct
+ctd_flagged$Date[ctd_flagged$Date>as.Date("2020-01-01")&ctd_flagged$Date<as.Date("2021-12-01")] = ctd_flagged$Date[ctd_flagged$Date>as.Date("2020-01-01")&ctd_flagged$Date<as.Date("2021-12-01")]+hours(13)#to align with published data
 ctd_flagged$Date[year(ctd_flagged$Date) == 2018] = ctd_flagged$Date[year(ctd_flagged$Date) == 2018]-hours(4) #to align with published data
-hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2021])))
-#Looks much better!
-write.csv(ctd_flagged, "ctd_2021_flagged.csv")
+
+hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2022])))
+#Looks better!
+
+write.csv(ctd_flagged, "ctd_2022_flagged.csv")
 ```
 
 ```{r}
@@ -377,7 +393,7 @@ CTD_fix=final%>%
     PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s), #Flag turbidity <0
   )
 
-write.csv(CTD_fix,"CTD_2013_2021.csv", row.names = FALSE)
+write.csv(CTD_fix,"CTD_2013_2022.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -385,12 +401,12 @@ library(akima)
 library(colorRamps)
 library(plotly)
 qaqc = ctd_flagged
-qaqc = read.csv("CTD_2013_2021.csv")%>%
+qaqc = read.csv("CTD_2013_2022.csv")%>%
   mutate(Date = as_datetime(Date))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2019))%>%
+  filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = DO_mgL, shape = as.factor(Flag_DO)))+
+  ggplot(aes(x = Date, y = Depth_m, color = Temp_C, shape = as.factor(Flag_Temp)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()
@@ -398,6 +414,7 @@ ggplotly(qaqc_plotly)
 
 summary(qaqc)
 
+unique(p$Site)
 
 depths <- seq(0.5,9, by = .5) #These are the depths we are using as of 02 Aug 19. 
 newDepths <- depths

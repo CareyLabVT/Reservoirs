@@ -16,23 +16,18 @@ library(lubridate)
 
 
 ```{r}
-# Package ID: edi.200.11 Cataloging System:https://pasta.edirepository.org.
-# Data set title: Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2020.
+# Package ID: edi.200.12 Cataloging System:https://pasta.edirepository.org.
+# Data set title: Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2021.
 # Data set creator:  Cayelan Carey - Virginia Tech 
 # Data set creator:  Abigail Lewis - Virginia Tech 
 # Data set creator:  Ryan McClure - Virginia Tech 
 # Data set creator:  Alexandra Gerling - Virginia Tech 
-# Data set creator:  Shengyang Chen - University of Sydney 
+# Data set creator:  Adrienne Breef-Pilz - Virginia Tech 
 # Data set creator:  Arpita Das - Virginia Tech 
-# Data set creator:  Jonathan Doubek - Virginia Tech 
-# Data set creator:  Dexter Howard - Virginia Tech 
-# Data set creator:  Mary Lofton - Virginia Tech 
-# Data set creator:  Kathleen Hamre - Virginia Tech 
-# Data set creator:  Heather Wander - Virginia Tech 
 # Contact:  Cayelan Carey -  Virginia Tech  - cayelan@vt.edu
 # Stylesheet v2.11 for metadata conversion into program: John H. Porter, Univ. Virginia, jporter@virginia.edu 
 
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/11/d771f5e9956304424c3bc0a39298a5ce" 
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/12/0a62d1946e8d9a511bc1404e69e59b8c" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -152,50 +147,24 @@ dt1$PAR_umolm2s <- ifelse((trimws(as.character(dt1$PAR_umolm2s))==trimws("NA")),
 suppressWarnings(dt1$PAR_umolm2s <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$PAR_umolm2s))==as.character(as.numeric("NA"))),NA,dt1$PAR_umolm2s))
 dt1$Desc_rate <- ifelse((trimws(as.character(dt1$Desc_rate))==trimws("NA")),NA,dt1$Desc_rate)               
 suppressWarnings(dt1$Desc_rate <- ifelse(!is.na(as.numeric("NA")) & (trimws(as.character(dt1$Desc_rate))==as.character(as.numeric("NA"))),NA,dt1$Desc_rate))
-
-
-# Here is the structure of the input data frame:
-str(dt1)                            
-attach(dt1)                            
-# The analyses below are basic descriptions of the variables. After testing, they should be replaced.                 
-
-summary(Reservoir)
-summary(Site)
-summary(Date)
-summary(Depth_m)
-summary(Temp_C)
-summary(DO_mgL)
-summary(DO_pSat)
-summary(Cond_uScm)
-summary(Spec_Cond_uScm)
-summary(Chla_ugL)
-summary(Turb_NTU)
-summary(pH)
-summary(ORP_mV)
-summary(PAR_umolm2s)
-summary(Desc_rate)
-summary(Flag_Temp)
-summary(Flag_DO)
-summary(Flag_Cond)
-summary(Flag_SpecCond)
-summary(Flag_Chla)
-summary(Flag_Turb)
-summary(Flag_pH)
-summary(Flag_ORP)
-summary(Flag_PAR)
-summary(Flag_DescRate) 
-                # Get more details on character variables
-                 
-summary(as.factor(dt1$Reservoir))
-detach(dt1)                            
 ```
 
 Fix issues in existing dataset
 ```{r}
+#The site labeled BVR for 2013-10-16 is a duplicate of the FCR data (confirmed this is a FCR cast based on depth and DO). Removing BVR
 dt1 = dt1%>%
-  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR") #these profiles are duplicated and listed as both FCR and BVR
-dt1$Reservoir[as.Date(dt1$Date)%in% as.Date(c("2017-07-06","2017-10-08"))]<-"BVR" #incorrectly listed as FCR
-#"2017-08-27","2017-09-03" have a few oxygen values but mostly NA. Current flag is 1 (sample not taken) for missing values, so I will leave the remaining data
+  filter(as.Date(Date)!=as.Date("2013-10-16")|Reservoir!="BVR")
+
+#FCR 2017-03-12 12:00:00 has crazy high conductivity. Removing and flagging as instrument malfunction
+dt1 = dt1%>%
+  mutate(Cond_uScm=ifelse(as.Date(Date)==as.Date("2017-03-12")&Reservoir=="FCR",NA,Cond_uScm),
+         Flag_Cond=ifelse(as.Date(Date)==as.Date("2017-03-12")&Reservoir=="FCR",2,Flag_Cond)) #Instrument malfunction
+
+#2019 (and some 2020) flags are messed up. Need to check things other than conductivity too
+dt1%>%
+  filter(is.na(Flag_Cond))
+
+#I think there are some things that are flagged as set to 0 but actually NA
 ```
 
 

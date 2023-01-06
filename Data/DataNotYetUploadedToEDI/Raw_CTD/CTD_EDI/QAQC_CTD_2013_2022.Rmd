@@ -213,7 +213,8 @@ ctd1 <- read.csv("CTD_Meta_2022.csv") #Load saved data
 ctd = ctd1 %>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
          Reservoir = as.factor(Reservoir))%>%
-  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR")
+  filter(Date!=as.POSIXct("2019-07-18 9:39:15")|Reservoir!="BVR")%>%
+  mutate(Site==ifelse(Site==1,40,Site))
 
 #Flag codes
 #0=Not suspect, 

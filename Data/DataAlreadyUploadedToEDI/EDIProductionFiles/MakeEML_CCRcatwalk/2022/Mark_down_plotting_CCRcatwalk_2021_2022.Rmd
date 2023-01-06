@@ -108,12 +108,18 @@ RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
 Flags=ccrwater%>%
   select(starts_with("Flag"))
 
+# for loop that counts number of NAs in each column, should be zero since everything should have a flag number or 0
+ for (i in colnames(Flags)){
+   print(sum(is.na(Flags[i])))
+   }
+
 # Make a table with the number of times a flag was used
 for(f in 1:nrow(Flags)){
   print(colnames(Flags[f]))
   print(table(Flags[,f], useNA = "always"))
 }
 ```
+
 ```{r Let's get our graphing data frame}
 
 ccrwater2 <-ccrwater
@@ -429,6 +435,7 @@ m_7_21
     #Just the current year
    comp_13_21=ccrwater2%>%
     filter(DateTime>current_time_start & DateTime<current_time_end)%>%
+     ggplot(aes(x = DateTime, y = ThermistorTemp_C_13))+
      geom_point(aes(y=ThermistorTemp_C_13, color="Therm"))+ 
       geom_point(aes(y=LvlTemp_C_13, color="Pressure"))+
       labs(y=expression(''*~degree*C*'')) +
@@ -464,6 +471,8 @@ m_7_21
                        values = c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1m"="yellow","2m"="gold", 
                                   "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
                                   "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="cornsilk", "EXO_9m"="blue4",    "10m"="darkslateblue","11m"="magenta2", "15m"="darkmagenta", "19m"="black"))
+
+All_temp_ccr
   
 # This is all the temps and just the current year
 
@@ -492,6 +501,8 @@ Cur_temp_ccr=ccrwater2%>%
                        values = c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1m"="yellow","2m"="gold", 
                                   "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
                                   "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="cornsilk", "EXO_9m"="blue4",    "10m"="darkslateblue","11m"="magenta2", "15m"="darkmagenta", "19m"="black"))
+
+Cur_temp_ccr
   
 ```
 
@@ -511,12 +522,14 @@ Cur_temp_ccr=ccrwater2%>%
 # Right now the depth of the reservoir is commented out. 
    a=ccrwater2%>%
     #filter(DateTime>"2021-05-17 00:00" & DateTime<"2021-05-20 00:00")%>%
-    ggplot(., aes(x=DateTime))+
+    ggplot(aes(x=DateTime))+
     geom_line(aes(y=CR3000Panel_Temp_C, color="black"))+
     geom_line(aes(y=ThermistorTemp_C_1, color="red"))+
-    geom_line(aes(y=ThermistorTemp_C_2, color="blue"))
+    geom_line(aes(y=ThermistorTemp_C_2, color="blue"))+
     geom_line(aes(y=ThermistorTemp_C_3, color="green"))+
- #   geom_line(aes(y=LvlDepth_m_13, color="purple"))
+    geom_line(aes(y=LvlDepth_m_13, color="purple"))
+   
+   a
 ```
 
 ```{r EXO 1.5m depth}
@@ -667,7 +680,7 @@ Cur_temp_ccr=ccrwater2%>%
 
 # Plot the chla and the daily mean on the same graph
  plot(ccrwater2$DateTime, ccrwater2$EXOChla_ugL_1)
- points(chl_mean$DateTime, chl_mean$daily_mean, type="l", col="green")
+ points(chl_mean_1$DateTime, chl_mean_1$daily_mean, type="l", col="green")
 
  
 # Chla-RFU
@@ -680,7 +693,7 @@ Cur_temp_ccr=ccrwater2%>%
 
 # Just the current year
  chl_rfu_21=ccrwater2%>%
-   filter(DateTime>current_time_end)%>%
+  filter(DateTime>current_time_start & DateTime<current_time_end)%>%
    ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1)) +
    geom_point()
  chl_rfu_21
@@ -735,6 +748,7 @@ Cur_temp_ccr=ccrwater2%>%
   filter(DateTime>current_time_start & DateTime<current_time_end)%>%
    ggplot(.,aes(x = DateTime, y = EXOfDOM_RFU_1)) +
    geom_point()
+ fDOM_rfu_1_21
 #Only use plotly to find DateTime of questionable values
  #ggplotly(fDOM_rfu_1_21)
  
@@ -751,6 +765,7 @@ Cur_temp_ccr=ccrwater2%>%
   filter(DateTime>current_time_start & DateTime<current_time_end)%>%
    ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_1)) +
    geom_point()
+ fDOM_qsu_1_21
 #Only use plotly to find DateTime of questionable values
  #ggplotly(fDOM_qsu_1_21)
 ```
@@ -769,6 +784,7 @@ Cur_temp_ccr=ccrwater2%>%
     filter(DateTime>current_time_start & DateTime<current_time_end)%>%
      ggplot(.,aes(x = DateTime, y = EXOfDOM_RFU_9)) +
      geom_point()
+   fDOM_rfu_9_21
 #Only use plotly to find DateTime of questionable values
    #ggplotly(fDOM_rfu_9_21)
  
@@ -785,6 +801,7 @@ Cur_temp_ccr=ccrwater2%>%
     filter(DateTime>current_time_start & DateTime<current_time_end)%>%
      ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_9)) +
      geom_point()
+   fDOM_qsu_9_21
 #Only use plotly to find DateTime of questionable values
  #ggplotly(fDOM_qsu_9_21)
 ```

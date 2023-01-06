@@ -123,7 +123,7 @@ detach(dt1)
 
 ## Load in data from 2022 - via the MEGA GHG Datasheet
 #Load this year's data
-ghgs <- read_excel("./Data/DataNotYetUploadedToEDI/Raw_GHG/2022/GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx",sheet=2, skip=6)
+ghgs <- read_excel("./Data/DataNotYetUploadedToEDI/Raw_GHG/2022/GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx",sheet=2, na = c("","NA"))
 
 #Change column names to match EDI standard
 colnames(ghgs)[1:5] <- c("DateTime","Station","Depth_m","Reservoir","Rep")
@@ -147,6 +147,7 @@ ghgs <- ghgs %>%
 
 ghgs <- ghgs%>%
   select(DateTime,Station,Depth_m,Reservoir,Rep,ch4_umolL,co2_umolL)%>% #Select only the columns we are using
+  filter(!is.na(Depth_m), !Depth_m=="NA")%>%
   mutate(DateTime = as.POSIXct(DateTime, "%Y-%m-%d %HH:%MM", tz="EST"), #Make sure columns are the correct type
          Depth_m = as.numeric(Depth_m), # CHANGE TO as.numeric AFTER NAMING IS FINALIZED
          Reservoir = as.factor(Reservoir)) %>%
@@ -603,7 +604,7 @@ final <- final %>%
   mutate(Site = ifelse(Reservoir == "BVR" & Site == 1, 40, Site))
 
 ### Save GHG file!
-write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2022/final_GHG_2015-May2022.csv",row.names = FALSE)
+write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2022/final_GHG_2015-Dec2022.csv",row.names = FALSE)
 
 ### Final plots - just to check : )
 # FCR Site 50 - CH4
@@ -653,3 +654,4 @@ final %>%
   filter(Reservoir == "BVR", Site != 50) %>% 
   ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Site)))+
   geom_point()
+

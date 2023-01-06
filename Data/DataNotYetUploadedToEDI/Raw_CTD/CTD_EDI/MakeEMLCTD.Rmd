@@ -15,11 +15,11 @@ I don't have the new serial number for the pH probe- flagging that to add later!
 
 ```{r}
 # Install and load devtools
-install.packages("devtools")
-library(devtools)
+#install.packages("devtools")
+#library(devtools)
 
 # Install and load EMLassemblyline
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 # Import Templates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,6 +60,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.200.12")
+         package.id = "edi.964.1")
 ```
 

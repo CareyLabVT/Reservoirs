@@ -1,3 +1,8 @@
-Author contributions:
+Author contributions for this revision:
 
-CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ASL was the point person for CTD data collation, QAQC, and maintenance from 2019–2021, and automated CTD data processing based on scripts created by RPM. RPM was the point person for CTD data collation, QAQC, and maintenance from 2015-2018, and automated CTD data processing based on a workflow created by ABG. ABG was the point person for CTD data collation, QAQC, and maintenance from 2013–2015 and developed the FCR sampling program. ABP is a collaborator on the 2021 data publication for leading the field sampling campaign and assisting in CTD maintenance, and AD is a collaborator on the 2021 data publication for processing data from 2018–2021.
+CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ABP led the field crew, and ASL and ABP coordinated sensor maintenance in 2022. ASL led data collation, QAQC, and publishing.
+
+
+Acknowledgments and contributions on previous revisions:
+
+CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ASL was the point person for CTD data collation, QAQC, and maintenance from 2019–2022, and automated CTD data processing based on scripts created by Ryan P. McClure (RPM). RPM was the point person for CTD data collation, QAQC, and maintenance from 2015-2018, and automated CTD data processing based on a workflow created by Alexandra B. Gerling (ABG). ABG was the point person for CTD data collation, QAQC, and maintenance from 2013–2015 and developed the FCR sampling program. Arpita Das processed CTD data from 2018–2021.

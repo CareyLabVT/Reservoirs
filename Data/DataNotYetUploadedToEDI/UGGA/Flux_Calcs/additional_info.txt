@@ -1,3 +1,0 @@
-Author contributions:
-
-CCC developed and led the reservoir monitoring program, and oversaw UGGA purchasing, use, and maintenance throughout 2018-2021. ASL is the point person for 2018-2021 data collation, QAQC, and publishing. AGH was the point person for UGGA data collection in 2020 and developed an automated QAQC script for UGGA data processing. RPM was the point person for UGGA data collection from 2018–2019. ABP is a collaborator on the 2021 publication because she was the 2021 field season lead and assisted in UGGA maintenance. 

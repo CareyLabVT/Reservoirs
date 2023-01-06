@@ -23,7 +23,7 @@ wd <- setwd("~/Desktop/github/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_
 # This can be used as a record of what files you have already corrected.
 flux_lgr_2 <- LoadLGR(file ="./gga_2001-12-31_f0032.txt",
                       time_format = "mdy_HMS")%>%
-  filter(year(Time)>2020)
+  filter(as_datetime(Time)>as_datetime("2022-06-20 12:04:02"))
 flux_lgr_3 <- LoadLGR(file ="./gga_2001-12-31_f0031.txt",
                       time_format = "mdy_HMS")
 flux_lgr_4 <- LoadLGR(file ="./gga_2001-12-31_f0027.txt",
@@ -36,7 +36,7 @@ flux_lgr_6 <- LoadLGR(file ="./gga_2001-12-31_f0024.txt",
   filter(year(Time)>2020)
 flux_lgr_7 <- LoadLGR(file ="./gga_2001-12-31_f0023.txt",
                       time_format = "mdy_HMS")%>%
-  filter(year(Time)>2020)
+  filter(as_datetime(Time)>as_datetime("2022-06-13 11:13:02"))
 flux_lgr_8 <- LoadLGR(file ="./gga_2001-12-31_f0020.txt",
                       time_format = "mdy_HMS")
 flux_lgr_9 <- LoadLGR(file ="./gga_2001-12-31_f0019.txt",
@@ -169,7 +169,7 @@ Flux_output6 <- FluxCal(data = flux_lgr_6, # Dataframe loaded in
                         output = FALSE)
 
 Flux_output7 <- FluxCal(data = flux_lgr_7, # Dataframe loaded in
-                        win = 4, # Window length = 4 minutes
+                        win = 3, # Window length = 4 minutes
                         vol = 0.020876028*1000, # Volume of trap in liters
                         area = 0.1451465, # Area of trap in m^2
                         df_cue = time_cue_7, # End times selected using SelCue
@@ -319,12 +319,12 @@ Flux_output22 <- FluxCal(data = flux_lgr_22, # Dataframe loaded in
                          output = FALSE)
 
 # Combine all flux outputs
-flux_output <- rbind(#Flux_output2,
+flux_output <- rbind(Flux_output2,
                      Flux_output3,
                      Flux_output4,
                      Flux_output5,
                      Flux_output6,
-                     #Flux_output7,
+                     Flux_output7,
                      Flux_output8,
                      Flux_output9,
                      Flux_output10,
@@ -417,6 +417,10 @@ flux_all_2%>%
   ylab("CO2 flux (µumol/m2/s)")+
   xlab("Date")+
   ggtitle("BVR Site 50")
+
+flux_all_2 = flux_all_2%>%
+  mutate(Date=Date_real)%>%
+  select(-Date_real)
 
 # Export out fluxes
 write_csv(flux_all_2,"./2022_season_Flux_Output.csv")

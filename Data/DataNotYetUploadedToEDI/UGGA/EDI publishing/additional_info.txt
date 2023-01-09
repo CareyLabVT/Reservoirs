@@ -1,0 +1,8 @@
+Contributions to the 2022 revision:
+
+CCC developed and led the reservoir monitoring program, and ABP led the field crew in 2022. ASL and ABP coordinated sensor maintenance. ASL led data collation, QAQC, and publishing.
+
+
+Other acknowledgments and historical contributions:
+
+CCC developed and led the reservoir monitoring program, and oversaw UGGA purchasing, use, and maintenance throughout 2018-2022. ASL was the point person for 2018-2022 data collation, QAQC, and publishing. AGH was the point person for UGGA data collection in 2020 and developed an automated QAQC script for UGGA data processing. RPM was the point person for UGGA data collection from 2018–2019. ABP was the field season lead in 2021 and 2022 and assisted in UGGA maintenance during this time. 

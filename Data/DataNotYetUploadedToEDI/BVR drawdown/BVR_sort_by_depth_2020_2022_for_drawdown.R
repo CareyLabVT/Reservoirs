@@ -58,19 +58,19 @@ depth=read.csv(paste0(folder, "BVR_Depth_offsets_2020_2022.csv"))
 # the EXO has its own depth sensor which is calibrated to the atmosphere. 
 # It is also on a buoy so should be about 1.5m 
 EXO=bvr%>%
-  select(Reservoir, Site, DateTime, starts_with("EXO"))
+  dplyr::select(Reservoir, Site, DateTime, starts_with("EXO"))
 
 
-# Select the sensors on the temp string because they are stationary.
+# dplyr::select the sensors on the temp string because they are stationary.
 # Then pivot the data frame longer to merge the offset file so you can add a depth to each sensor reading
 bvr_new=bvr%>%
-  select(Reservoir,Site,DateTime, starts_with("Ther"), starts_with("RDO"), starts_with("Lvl"),Depth_m_13)%>%
+  dplyr::select(Reservoir,Site,DateTime, starts_with("Ther"), starts_with("RDO"), starts_with("Lvl"),Depth_m_13)%>%
   pivot_longer(-c(Reservoir,Site,DateTime,Depth_m_13), names_to="Sensor", values_to="Reading", values_drop_na=FALSE)%>%
   separate(Sensor,c("Sensor","Units","Position"),"_")%>%
   mutate(Position=as.numeric(Position))%>%
   full_join(.,depth, by="Position")%>%#add in the offset file
-  select(-Reservoir.y, -Site.y)%>%
-  rename(c(Reservoir.x="Reservoir", Site.x="Site"))
+  dplyr::select(-Reservoir.y, -Site.y)%>%
+  dplyr::rename(c(Reservoir.x="Reservoir", Site.x="Site"))
 
 
 # The pressure sensor was moved to be in line with the bottom thermistor. The top two thermistors has slid closer to each other
@@ -96,10 +96,10 @@ bvr_by_depth=bvr_pre_05APR21%>%
   rbind(.,bvr_post_05APR21)%>%
   filter(!is.na(Reading))%>%
   filter(!is.na(Sensor_depth))%>%
-  select(-Offset_before_05APR21, -Offset_after_05APR21, -Distance_above_sediments)%>%
+  dplyr::select(-Offset_before_05APR21, -Offset_after_05APR21, -Distance_above_sediments)%>%
   mutate(Reservoir_depth=Depth_m_13+0.5)%>%
-  select(Reservoir, Site,DateTime, Sensor, Units, Reading, Sensor_depth, Rounded_depth_hundreth, Depth_m_13, Reservoir_depth)
-  #select(-Offset_before_05APR21, -Offset_after_05APR21, -Distance_above_sediments, -Depth_m_13)
+  dplyr::select(Reservoir, Site,DateTime, Sensor, Units, Reading, Sensor_depth, Rounded_depth_hundreth, Depth_m_13, Reservoir_depth)
+  #dplyr::select(-Offset_before_05APR21, -Offset_after_05APR21, -Distance_above_sediments, -Depth_m_13)
 
 
 write.csv(bvr_by_depth, paste0(folder,'BVR_longoutput_FLARE_2020_2021.csv'), row.names = FALSE)
@@ -119,11 +119,11 @@ Variable <-c("temperature","cond","spcond","tds","oxygen",
              "fdom","fdom", "turb")
 df<-data.frame(Sensor, Variable) 
 
-# Now that's created with can put the EXO data into long format. Select the columns and then piviot longer. Add columns for
+# Now that's created with can put the EXO data into long format. dplyr::select the columns and then piviot longer. Add columns for
 # method which is the name of the sensor and one for the deth. Then merge with df to get the variable names, take out 
-# the NA readings and then select only the columns you need. 
+# the NA readings and then dplyr::select only the columns you need. 
 EXO_long=EXO%>%
-  select(Reservoir, Site, DateTime, EXOTemp_C_1_5, EXOCond_uScm_1_5, EXOSpCond_uScm_1_5, EXOTDS_mgL_1_5, EXODOsat_percent_1_5,
+  dplyr::select(Reservoir, Site, DateTime, EXOTemp_C_1_5, EXOCond_uScm_1_5, EXOSpCond_uScm_1_5, EXOTDS_mgL_1_5, EXODOsat_percent_1_5,
          EXODO_mgL_1_5, EXOChla_RFU_1_5, EXOChla_ugL_1_5, EXOBGAPC_RFU_1_5, EXOBGAPC_ugL_1_5,
          EXOfDOM_RFU_1_5, EXOfDOM_QSU_1_5,EXOTurbidity_FNU_1_5)%>%
   pivot_longer(-c(Reservoir,Site,DateTime), names_to="Sensor", values_to="Reading", values_drop_na=FALSE)%>%
@@ -132,7 +132,7 @@ EXO_long=EXO%>%
   mutate(Depth=1.5)%>%
   merge(.,df, by="Sensor")%>%
   filter(!is.na(Reading))%>%
-  select(Reservoir,Site, DateTime, Method, Variable, Units, Reading, Depth)
+  dplyr::select(Reservoir,Site, DateTime, Method, Variable, Units, Reading, Depth)
 
 
 # Get the bvr_by_depth (thermistor and RDO) data frame ready to merge with EXO_long
@@ -145,10 +145,10 @@ Method<-c("thermistor", "do_sensor", "do_sensor", "do_sensor", "pressure_sensor"
 df2<-data.frame(Sensor, Variable, Method)
 
 temp_long=bvr_by_depth%>%
-  select(Reservoir,Site,DateTime,Sensor, Units, Reading, Rounded_depth_hundreth)%>%
-  rename("Depth"=Rounded_depth_hundreth)%>%
+  dplyr::select(Reservoir,Site,DateTime,Sensor, Units, Reading, Rounded_depth_hundreth)%>%
+  dplyr::rename("Depth"=Rounded_depth_hundreth)%>%
    merge(.,df2, by="Sensor")%>%
-   select(Reservoir,Site, DateTime, Method, Variable, Units, Reading, Depth)
+   dplyr::select(Reservoir,Site, DateTime, Method, Variable, Units, Reading, Depth)
  
  HLW_FLARE_output=rbind(temp_long,EXO_long)
 
@@ -162,7 +162,7 @@ write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FA
 #The rounding takes care of this but then have to eliminate the top thermistor. 
 # add the depth range for the depth column. Ex. 3m is made up of sensor depths from 2.5m to 3.49m
 # bvr_new=bvr_new%>%
-#   select(Reservoir, Site, DateTime, Sensor, Reading, Units, Sensor_depth)%>%
+#   dplyr::select(Reservoir, Site, DateTime, Sensor, Reading, Units, Sensor_depth)%>%
 #     mutate(Depth = 0)%>%
 #     mutate(Depth = ifelse(is.na(Sensor_depth), NA, Depth))%>%
 #     mutate(Depth = ifelse(Sensor_depth <= 0, NA, Depth))%>%
@@ -188,7 +188,7 @@ write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FA
 # are less than 1m apart and can't have two values in one time point for 1 depth. 
 # bvr_wide=bvr_by_depth%>%
 #   filter(Position>1)%>%
-#   select(c(-Sensor_depth, -Rounded_depth_hundreth, -Position))%>%
+#   dplyr::select(c(-Sensor_depth, -Rounded_depth_hundreth, -Position))%>%
 #   mutate(Sensor=paste(Sensor,Units,Rounded_depth_whole,"m", sep = "_"))%>%
 #   pivot_wider(
 #     id_cols=c(Reservoir, Site, DateTime),
@@ -196,7 +196,7 @@ write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FA
 #     names_sep = "_",
 #     values_from = Reading)%>%
 #     mutate(ThermistorTemp_C_surface=ThermistorTemp_C_0_m)%>%
-#   select(Reservoir, Site, DateTime, ThermistorTemp_C_surface, ThermistorTemp_C_1_m,ThermistorTemp_C_2_m,
+#   dplyr::select(Reservoir, Site, DateTime, ThermistorTemp_C_surface, ThermistorTemp_C_1_m,ThermistorTemp_C_2_m,
 #          ThermistorTemp_C_3_m, ThermistorTemp_C_4_m, ThermistorTemp_C_5_m, ThermistorTemp_C_6_m, ThermistorTemp_C_7_m, ThermistorTemp_C_8_m,
 #          ThermistorTemp_C_9_m, ThermistorTemp_C_10_m, ThermistorTemp_C_11_m, RDO_mgL_2_m, RDO_mgL_3_m, RDO_mgL_4_m, RDO_mgL_5_m, 
 #          RDOsat_percent_2_m, RDOsat_percent_3_m, RDOsat_percent_4_m, RDOsat_percent_5_m, RDOTemp_C_2_m, RDOTemp_C_3_m, RDOTemp_C_4_m,RDOTemp_C_5_m, 

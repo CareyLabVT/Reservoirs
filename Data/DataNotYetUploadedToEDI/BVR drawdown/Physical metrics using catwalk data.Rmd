@@ -33,7 +33,7 @@ ctd_depths = cat_long%>%
   mutate(Date = as.Date(as.POSIXct(datetime)))%>%
   filter(!is.na(Temp_C))%>%
   group_by(Date)%>%
-  summarize(WaterLevel = max(Depth_m))
+  dplyr::summarize(WaterLevel = max(Depth_m))
 
 flexible_bathy = ctd_depths%>%
   mutate(Reservoir = "BVR")%>%
@@ -84,9 +84,9 @@ dev.off()
 
 meta_depths = catwalk_format%>%
   group_by(Date,Depth_m)%>%
-  summarize(Temp_C = mean(Temp_C))%>%
+  dplyr::summarize(Temp_C = mean(Temp_C))%>%
   group_by(Date)%>%
-  summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
+  dplyr::summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
             hypo_depth = meta.depths(Temp_C, Depth_m)[2])%>%
   pivot_longer(c(epi_depth,hypo_depth))
 
@@ -166,11 +166,11 @@ dev.off()
 meta_depths_raw = catwalk_format%>%
   mutate(Depth_simple = round(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
-  summarize(Temp_C = mean(Reading),
+  dplyr::summarize(Temp_C = mean(Reading),
             Depth_m = mean(Sensor_depth),
             Reservoir_depth = mean(Reservoir_depth))%>%
   group_by(Date)%>%
-  summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
+  dplyr::summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
             hypo_depth = meta.depths(Temp_C, Depth_m)[2],
             max_depth = max(Depth_m),
             min_depth = min(Depth_m),
@@ -178,7 +178,7 @@ meta_depths_raw = catwalk_format%>%
 
 meta_depths = meta_depths_raw%>%
   filter(!epi_depth == hypo_depth)%>%
-  select(-max_depth, -min_depth)%>%
+  dplyr::select(-max_depth, -min_depth)%>%
   filter(!abs(lag(epi_depth)-epi_depth)>3,
          !abs(lead(epi_depth)-epi_depth)>3,
          !abs(lag(hypo_depth)-hypo_depth)>3,
@@ -209,14 +209,14 @@ dev.off()
 jpeg("./Figs/res_diagram_layers.jpg",res = 300, units = "in",width = 6, height = 4)
 meta_depths_raw%>%
   filter(!epi_depth == hypo_depth)%>%
-  select(-min_depth)%>%
+  dplyr::select(-min_depth)%>%
   filter(!abs(lag(epi_depth)-epi_depth)>3,
          !abs(lead(epi_depth)-epi_depth)>3,
          !abs(lag(hypo_depth)-hypo_depth)>3,
          !abs(lead(hypo_depth)-hypo_depth)>3)%>%
   mutate(hypo_width = max_depth-hypo_depth,
          meta_width = hypo_depth-epi_depth)%>%
-  select(Date,epi_depth,hypo_width,meta_width)%>%
+  dplyr::select(Date,epi_depth,hypo_width,meta_width)%>%
   pivot_longer(c(epi_depth,hypo_width,meta_width))%>%
   mutate(Year = as.factor(year(Date)),
          name = factor(name, levels = c("epi_depth","meta_width","hypo_width")))%>%
@@ -236,7 +236,7 @@ meta_ratio = flexible_bathy%>%
   filter(!is.na(epi_depth),
          !is.na(hypo_depth))%>%
   group_by(Date)%>%
-  summarize(depth_above_epi = max(Depth_m[Depth_m<(epi_depth)]),
+  dplyr::summarize(depth_above_epi = max(Depth_m[Depth_m<(epi_depth)]),
             epi_and_below = sum(Volume_L[Depth_m<=depth_above_epi]),
             correction = (1-(epi_depth-depth_above_epi))*Volume_L[Depth_m==depth_above_epi],
             epi_volume = epi_and_below-correction,
@@ -304,7 +304,7 @@ meta_ratio = flexible_bathy%>%
   left_join(thermo_raw)%>%
   filter(!is.na(thermo))%>%
   group_by(Date)%>%
-  summarize(depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
+  dplyr::summarize(depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
             thermo_and_just_below = sum(Volume_L[Depth_m<=depth_above_thermo]),
             correction = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
             epi_volume = thermo_and_just_below-correction,
@@ -339,17 +339,17 @@ buoyancy_raw = catwalk_format%>%
   filter(!is.na(Reading))%>%
   mutate(Depth_simple = floor(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
-  summarize(Temp_C = mean(Reading),
+  dplyr::summarize(Temp_C = mean(Reading),
             Depth_m = mean(Sensor_depth))%>%
   arrange(Date,Depth_m)%>%
   group_by(Date)%>%
   filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
+  dplyr::summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
             Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
 
 buoy_max = buoyancy_raw%>%
   group_by(Date)%>%
-  summarize(max = max(buoy_freq))
+  dplyr::summarize(max = max(buoy_freq))
   
 buoy_max$Date_22 = buoy_max$Date
 year(buoy_max$Date_22)=2022
@@ -377,7 +377,7 @@ jpeg("./Figs/res_diagram_layers_thermo.jpg",res = 300, units = "in",width = 6, h
 thermo_raw%>%
   filter(!thermo == Reservoir_depth)%>%
   mutate(hypo_width = Reservoir_depth-thermo)%>%
-  select(Date,thermo,hypo_width)%>%
+  dplyr::select(Date,thermo,hypo_width)%>%
   rename(epi_width = thermo)%>%
   pivot_longer(c(epi_width,hypo_width))%>%
   mutate(Year = as.factor(year(Date)),
@@ -433,7 +433,7 @@ met1 = met%>%
   filter(nchar(TIMESTAMP)>3)%>%
   mutate(Date = as.Date(as.POSIXct(TIMESTAMP)))%>%
   group_by(Date)%>%
-  summarize(wind = mean(as.numeric(WS_ms_Avg)))
+  dplyr::summarize(wind = mean(as.numeric(WS_ms_Avg)))
 
 met_dens_comb = met1%>%
   left_join(dens_df)%>%
@@ -538,23 +538,23 @@ filt_no_surf = cat_long%>%
   filter(!is.na(get(var)),
          Reservoir == "BVR")%>%
   ungroup()%>%
-  select(Date, Rounded_depth_tenth,Reading, Year)%>%
+  dplyr::select(Date, Rounded_depth_tenth,Reading, Year)%>%
   group_by(Year, Date, Rounded_depth_tenth)%>%
   dplyr::summarize(Reading=mean(Reading, na.rm = T))%>%
-  rename(Sensor_depth = Rounded_depth_tenth)
+  dplyr::rename(Sensor_depth = Rounded_depth_tenth)
 
 surf = cat_long%>%
   mutate(Date = as.Date(DateTime),
          Year = year(Date))%>%
   group_by(Date, Year)%>%
-  summarize(Reading = Reading[which.min(Sensor_depth)],
+  dplyr::summarize(Reading = Reading[which.min(Sensor_depth)],
             Sensor_depth = mean(Reservoir_depth))
 
 bottom = cat_long%>%
   mutate(Date = as.Date(DateTime),
          Year = year(Date))%>%
   group_by(Date, Year)%>%
-  summarize(Reading = Reading[which.max(Sensor_depth)],
+  dplyr::summarize(Reading = Reading[which.max(Sensor_depth)],
             Sensor_depth = 0)
   
 filt = filt_no_surf%>%
@@ -566,7 +566,7 @@ depth_sum = cat_long%>%
          Year = year(Date))%>%
   filter(Reservoir == "BVR")%>%
   ungroup()%>%
-  select(Date, Reservoir_depth,Year)%>%
+  dplyr::select(Date, Reservoir_depth,Year)%>%
   group_by(Year, Date)%>%
   dplyr::summarize(Reservoir_depth=mean(Reservoir_depth, na.rm = T))%>%
   ungroup()%>%
@@ -579,7 +579,7 @@ for(year in Years){
     bvr<- filt%>%
       filter(Year == year)%>%
       ungroup()%>%
-      mutate(random = sample(1:n(),n()))%>%
+      dplyr::mutate(random = sample(1:n(),n()))%>%
       arrange(random)
     
     if(nrow(bvr)>0){
@@ -599,9 +599,9 @@ p = interp%>%
   ggplot()+
   geom_raster(aes(x=x, y=y,fill = z))+
   geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.2)+
-  geom_line(data = thermo_raw%>%
-              mutate(Year=year(Date))%>%
-              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
+  #geom_line(data = thermo_raw%>%
+  #            mutate(Year=year(Date))%>%
+  #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
   #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
   labs(y = "Height above sediments (m)")+
@@ -678,7 +678,7 @@ cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/E
 depths = cat_long%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(Depth_m = mean(Reservoir_depth))%>%
+  dplyr::summarize(Depth_m = mean(Reservoir_depth))%>%
   mutate(Year = year(Date))
 depths$Date_22 = depths$Date
 year(depths$Date_22)=2022
@@ -728,7 +728,7 @@ vol_sum = flexible_bathy%>%
   filter(Year %in% c(2021,2022))
 
 to_export_vol = vol_sum%>%
-  select(Date, total)%>%
+  dplyr::select(Date, total)%>%
   rename(Volume_L = total)%>%
   mutate(Reservoir = "BVR")
 
@@ -778,7 +778,7 @@ flexible_bathy = depths%>%
   filter(Depth_m>=-1)
 
 meta_ratio = flexible_bathy%>%
-  left_join(thermo_raw%>%select(-Reservoir_depth))%>%
+  left_join(thermo_raw%>%dplyr::select(-Reservoir_depth))%>%
   filter(!is.na(thermo))%>%
   group_by(Date)%>%
   dplyr::summarize(depth_above_water = Depth_m[Depth_m<0],
@@ -802,7 +802,7 @@ meta_ratio%>%
   filter(!Year==2020,
          month(Date)>4,
          month(Date)<11)%>%
-  select(Date_22, Year, epi_volume,hypo_volume)%>%
+  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
   pivot_longer(cols = c(epi_volume,hypo_volume))%>%
   ggplot(aes(x = Date_22,y=value, color = Year))+
   geom_line()+
@@ -813,20 +813,30 @@ meta_ratio%>%
   ylab("Volume")
 dev.off()
 
+jpeg("./Figs/Vol_filled_2022vs2021.jpeg",width = 4.5, height = 4.5, units = "in", res = 300)
 meta_ratio%>%
   mutate(Year=as.factor(year(Date)))%>%
   filter(!Year==2020,
-         month(Date)>=4,
-         month(Date)<11)%>%
-  select(Date_22, Year, epi_volume,hypo_volume)%>%
+         month(Date)>=5,
+         month(Date)<10)%>%
+  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
   pivot_longer(cols = c(epi_volume,hypo_volume))%>%
-  ggplot(aes(x = Date_22, y = value, fill = name))+
+  mutate(name = ifelse(name=="epi_volume","Epilimnetic volume","Hypolimnetic volume"),
+         name = factor(name,levels = c("Epilimnetic volume","Hypolimnetic volume")))%>%
+  ggplot(aes(x = Date_22, y = value/1000, fill = name))+
+  scale_fill_manual(values = c("#77c7fc","#104466"))+
   geom_area()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
   theme_bw()+
-  ylab("Volume")
+  ylab("Volume (m3)")+
+  theme(axis.title.x = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+dev.off()
 
 lines_new = data.frame(Dates = as.Date(c(NA, "2022-05-19",NA, "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","open"), status = c("init","init","final","init"), Year = 2022)
 
@@ -836,7 +846,7 @@ meta_ratio%>%
   filter(Year==2022,
          month(Date)>=4,
          month(Date)<11)%>%
-  select(Date_22, Year, epi_volume,hypo_volume)%>%
+  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
   pivot_longer(cols = c(epi_volume,hypo_volume))%>%
   ggplot(aes(x = Date_22, y = value, fill = name))+
   scale_fill_manual(values = c("grey50","grey50"))+

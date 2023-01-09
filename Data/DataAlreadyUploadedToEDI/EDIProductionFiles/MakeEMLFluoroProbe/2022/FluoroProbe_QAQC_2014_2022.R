@@ -88,7 +88,7 @@ for (i in 1:length(unique(fp4$cast))){ #for every unique FP cast
     ggtitle(castname)+
     theme_bw()
   
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_plots_2021/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2022/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
 
 }
@@ -104,7 +104,7 @@ for (i in 1:length(unique(fp4$cast))){
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_temp_plots_2021/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_temp_plots_2022/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
@@ -118,7 +118,7 @@ for (i in 1:length(unique(fp4$cast))){
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("C:/Users/Mary Lofton/Desktop/FP_trans_plots_2021/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_trans_plots_2022/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
@@ -143,11 +143,11 @@ for (i in 1:length(unique(fp4$cast))){
 #   
 # }
 
-#QAQC note that 20210531_BVR_50 had casts from both BVR and FCR in it, so 
-#deleted the FCR cast from this file
+#QAQC note that 20220607_FCR_50 had casts from both BVR and FCR in it, so 
+#deleted the BVR cast from this file
 
 #use this code if you have problematic temp casts that need to be eliminated
-#not necessary for 2021
+#not necessary for 2022
 # bad_temp_casts <- c("20200824_FCR_50.txt")
 # 
 # fp5 <- fp4 %>%
@@ -195,9 +195,9 @@ colnames(fp8)
 
 #ADD FLAGS
 
-#2021: no need to flag algal profiles at this time
-#2021: no need to flag temp profiles at this time
-#2021: no need to flag transmission at this time
+#2022: no need to flag algal profiles at this time
+#2022: no need to flag temp profiles at this time
+#2022: no need to flag transmission at this time
 
 fp9 <- fp8 %>%
   mutate(Flag_GreenAlgae = 0,
@@ -221,8 +221,8 @@ fp_final <- bind_rows(fp_og, fp9) %>%
   arrange(Reservoir, Site, DateTime)
 
 #write the csv for publication!
-write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022_temp.csv", row.names = FALSE)
-fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022_temp.csv")
+write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022.csv", row.names = FALSE)
+fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022.csv")
 
 #Congrats you are done! Go have a cookie :-)
 

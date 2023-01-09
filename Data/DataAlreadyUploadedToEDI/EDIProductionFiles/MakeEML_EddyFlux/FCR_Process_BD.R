@@ -4,6 +4,7 @@
 
 ### Original code from Brenda D'Achuna, 21 May 2021
 ### Modified by Alex Hounshell on 21 May 2021
+### Modified by Adrienne Breef-Pilz on 03 Jan 2023
 
 ####################################################################
 
@@ -13,14 +14,16 @@ rm(list = ls())
 # Download/load libraries
 pacman::p_load(lubridate,readr,ggpubr,openair,REddyProc,ggplot2,dplyr)
 
-# Set working directory - up-date for your specific working directory
-wd <- getwd()
-setwd(wd)
+# Set working directory - up-date for your specific working directory. 
+mydir = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/Data/"
+#wd <- getwd()
+#setwd(wd)
 
 # Read compiled file: From Eddy Pro using basic processing
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
-ec <- read_csv("./Data/20220121_EddyPro_cleaned.csv")
+
+ec <- read_csv(paste0(mydir,"EddyPro_Cleaned_2023-01-03.csv"))
 
 # Format time
 ec$datetime <- as.POSIXct(paste(ec$date, ec$time), format="%Y-%m-%d %H:%M", tz="EST")
@@ -31,7 +34,7 @@ ec$datetime <- as_datetime(ec$datetime)
 # Constrain to study time period: 2020-04-05 (time series start date) to
 # last 30 minute period - UPDATE WITH EACH NEW SET OF DATA!
 ts <- seq.POSIXt(as.POSIXct("2020-04-05 00:00:00",'%Y-%m-%d %H:%M:%S', tz="EST"), 
-                 as.POSIXct("2022-01-11 09:30:00",'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
+                 as.POSIXct("2022-12-31 23:30:00",'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
 ts2 <- data.frame(datetime = ts)
 
 # Join Eddy Flux data with list of dates+time
@@ -54,10 +57,10 @@ ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)
 ec2 %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100-sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# 83% data for CO2; 70% data for CH4
+# 79% data for CO2; 90% data for CH4 for 2020-2022
 
 # Check data availability by month
-ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
+co2_month=ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100-sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
 #################################################################

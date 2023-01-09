@@ -206,7 +206,6 @@ current.ec<-out.file2%>%
   mutate(date=ymd(date))%>% #converts date to correct format
   mutate(time=strptime(time, format = "%H:%M"))%>% #converts time to postix
   mutate(time=as_hms(time))%>% #takes out the date and just leaves the time
-  rbind(.,bigcsv)%>%
   rename(Tau_kgms2 = Tau,
          H_wm2 = H,
          LE_wm2 = LE,
@@ -263,7 +262,8 @@ current.ec<-out.file2%>%
          un_ch4_flux_umolm2s = un_ch4_flux,
          u_var_ms = u_var,
          v_var_ms = v_var,
-         w_var_ms = w_var)
+         w_var_ms = w_var)%>%
+        rbind(.,bigcsv)
 
 
 ## Add flag for missing data: 3 = missing data
@@ -279,7 +279,7 @@ ec_all <- current.ec %>%
 # Output data
 write_csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_", Sys.Date(),".csv"))
 
-write_csv(ec, "./EDI/20220130_EddyPro_Cleaned.csv")
+#write_csv(ec, "./EDI/20220130_EddyPro_Cleaned.csv")
 
 #######Plot Year or Multi Year long fluxes###########
 

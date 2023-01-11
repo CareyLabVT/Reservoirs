@@ -12,7 +12,7 @@ The sensor string was regularly brought up to the surface for routine maintenanc
 Missing Data Gaps:
 
 Missing Data Gaps EXO: 
-2018-08-20 14:30-2018-08-27 17:50; 2018-09-25 10:40-2018-10-01 11:00; 2020-12-02 12:50-2020-12-27 11:50-removed for maintenance; 2021-04-26 11:00-13:00-Removed for calibration; 2021-12-13 10:25:00- 2021-12-14 12:25:00; 2021-06-15 11:40-2021-06-18 10:20-Connection issue so no data was streaming; 2021-12-13 10:25:00- 2021-12-14 12:25:00 -Removed for cleaning;"2022-05-05 08:30:00-08:50:00 
+2018-08-20 14:30-2018-08-27 17:50; 2018-09-25 10:40-2018-10-01 11:00; 2020-12-02 12:50-2020-12-27 11:50-removed for maintenance; 2021-04-26 11:00-13:00-Removed for calibration; 2021-12-13 10:25:00- 2021-12-14 12:25:00; 2021-06-15 11:40-2021-06-18 10:20-Connection issue so no data was streaming; 2021-12-13 10:25:00- 2021-12-14 12:25:00 -Removed for cleaning;"2022-05-05 08:30:00-08:50:00;2022-12-12 10:30:00-2022-12-17 15:50:00-Removed for cleaning/calibration/servicing; 2022-12-29 03:10:00-2023-01-02 16:20:00-Issue with connection to the datalogger and not data was recorded
 Dissolved Oxygen sondes at 5 and 9 m
 Maintenance performed on the sensors-
 When the oxygenation system is first activated, we have observed a rapid fouling of the 9m Do probe, which we typically flag with a  5 or 6.
@@ -58,14 +58,16 @@ This equation will give you the values in the RDO_mgL_9_adjusted and RDOsat_perc
 
  
 Water temperature (thermistors)
+2022: 
+The temerature was tangled from May 23-25, 2022 and againg from August 8-9, 2022. See FCR_CAT_MaintenanceLog_2018_2022.txt for exact times. Data for the thermistors, RDO sensors and pressure sensor were removed and flagged with 1. 
 
 2021:
-Thermistors at 1m(SN 3724) and 4m(SN 3747) were reading higher than normal (See below late October-December 2020) and were removed on January 7, 2021 14:30 and replaced on February 26, 2021 12:00 with SN 3966 and SN 4013. No data was recorded at those depths and was flagged in the Flag_All column and individual flag columns of the sensors affected. 
+Thermistors at 1m(SN 3724) and 4m(SN 3747) were reading higher than normal (See below late October-December 2020) and were removed on January 7, 2021 14:30 and replaced on February 26, 2021 12:00 with SN 3966 and SN 4013. No data was recorded at those depths and was flagged for those sensors affected.  
 
-The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for all the temperature sensors with a data flag of 1 in the Flag_All column and individual flag columns of the sensors affected. 
+The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for all the temperature sensors with a data flag of 1 for those sensors affected.  
  
 2020:
-The temperature string was tangled after some maintenance on October 9th, 2020 and was fixed on October 11, 2020. Consequently, there was a data gap for the temperature sensors at 5, 6, 7, 8 and 9 m from October 9-11, 2020, with a data flag of 1 in the Flag_All column and individual flag columns of the sensors affected.
+The temperature string was tangled after some maintenance on October 9th, 2020 and was fixed on October 11, 2020. Consequently, there was a data gap for the temperature sensors at 5, 6, 7, 8 and 9 m from October 9-11, 2020, with a data flag of 1 for those sensors affected. 
 
 On October 19, 2020, the NexSens T-Node FR Thermistor (Serial No. 3718) deployed at 0.1 m stopped working and read NA until October 20, when we took the thermistor from 2 m and put it at 0.1 m. There was a data gap at 2m from October 20-22, 2020. We put the NexSens T-Node Thermistor (Serial No. 3903) from Beaverdam Reservoir, another one of our sites, at 0.1 m in FCR and returned the 2 m thermistor back to its original depth at  2 m on October 22, 2020. Consequently, there was a data gap for 0.1 m temperature from October 19-20, 2020 and a data gap for 2 m temperature from October 20-22, 2020, all flagged with data code 1 .
 
@@ -73,12 +75,24 @@ In late October-December 2020, two of the Nexus T-Node FR Thermistors (at 1 m an
 
 Pressure Transducer at 9 m
 
-The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for data from the pressure transducer with a data flag of 1 in the Flag_All column and individual flag columns of the sensors affected. 
+The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for data from the pressure transducer with a data flag of 1 for all sensors that were affected. 
 
+
+
+EXO Chlorophyll-a and Phycocyanin QAQC
+The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of FCR_catwalk_QAQC_function_2018_2022.R script). Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. In October 1st, 2018- March 3rd, 2019 outliers were identified as the absolute values greater than four standard deviations from the average measurement. These outliers were set to NA and flagged as 4 in the Flag_Chla or Flag_Phyo. After March 3rd, 2019 outlier values identified this what were left in the dataset and flagged as 5 for questionable value. 
+
+EXO fDOM QAQC
+fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of FCR_catwalk_QAQC_function_2018_2022.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2.   
+
+EXO Conductivity, specific conductance and Total Dissolved Solids(TDS) 
+Conductivity, specific conductance and TDS sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of FCR_catwalk_QAQC_function_2018_2022.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. During the summer of 2020 there were some high conductivity events. FOr any value above 42 microsemanis for conductivity, conductivity, specific conductivity and TDS were flagged as 5 but not removed from the data set. 
+
+All other observations went through the same extreme QAQC processing for extreme outliers (see ‘Leading and Lagging QAQC’ section of FCR_catwalk_QAQC_function_2018_2022.R script). 
 
 EXO sonde
 2022 Maintenance:
-On March 17, 2022, the dissolved oxygen sensor was calibrated. The dissolved oxygen sensor was calibrated with a one point 100 percent air saturation (DO Gain 1.10). 
+On March 17, June 27, and December 15, 2022 , the dissolved oxygen sensor was calibrated. The dissolved oxygen sensor was calibrated with a one point 100 percent air saturation for March and June (DO Gain 1.10) with a 2 point calibration in December (DO Gain 1.23). A turbidiy sensor was added on May 2, 2022. See section Instruments, manual, and serial numbers for more information.  
 
 2021 Maintenance:
 On March 22, 2021, the dissolved oxygen sensor and depth sensor were calibrated. The dissolved oxygen sensor was calibrated with a one point 100 percent air saturation. On April 16, 2021, the fluorescent dissolved organic matter(fDOM) sensor was calibrated with a one point calibration in DI water or a 0 point calibration. The chlorophyll sensor was checked with DI water but was not calibrated. Due to a bad calibration of the fDOM sensor it was recalibrated on April 26, 2021 and all data were set to NA during that time. On June 15, 2021 a one point 100 percent air saturation calibration was done on the dissolved oxygen sensor. On August 16, 2021 a two point calibration was done on the dissolved oxygen sensor with 100 percent air saturation and a 0 percent calibration.  On December 13, 2021 the EXO was brought in the lab for a deep clean, o ring maintenance, and zero calibration check of chlorophyll and fDOm and redeployed the next day. 
@@ -104,15 +118,6 @@ Phycocyanin: Probe reads 13.36 RFU in 16 standard-calibrated. Probe reads 13.37 
 fDOM Sensor Serial No. 18C100625, Pass
 Probe reads 275.69 uncalibrated QSU in 300 QSU standard- calibrated to 300QSU. Probe reads 92.18 uncalibrated RFU in 100 RFU standard- calibrated to 100 RFU
 
-
-EXO Chlorophyll-a and Phycocyanin QAQC
-The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see ‘chla and phyco qaqc’ section of FCR_catwalk_QAQC_function_2018_2021.R script). Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. In October 1st, 2018- March 3rd, 2019 outliers were identified as the absolute values greater than four standard deviations from the average measurement. These outliers were set to NA and flagged as 4 in the Flag_Chla or Flag_Phyo. After March 3rd, 2019 outlier values identified this what were left in the dataset and flagged as 5 for questionable value. 
-
-EXO fDOM QAQC
-fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘fdom qaqc’ section of FCR_catwalk_QAQC_function_2018_2021.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. Any value greater than 4 standard deviations above the mean was flagged with a 5 and left in the dataset.  
-
-EXO Conductivity, specific conductance and Total Dissolved Solids(TDS) 
-Conductivity, specific conductance and TDS sensor data underwent a QAQC process to remove extreme outliers (see ‘fdom cond, spcond and TDS’ section of FCR_catwalk_QAQC_function_2018_2021.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2.  Any value greater than 4 standard deviations above the mean was flagged with a 5 and left in the dataset.  During the summer of 2020 there were some high conductivity events. Any value above 42 microsemanis for conductivity and specific conductivity were flagged and over 30 mg/L for TDS were flagged as 5 but not removed from the data set. 
 
 Instruments, manual, and serial numbers used in 2018,  2019, 2020, 2021, and 2022:
 Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
@@ -140,7 +145,11 @@ Serial No. 584491; Depth 5m
 Calibration from July 5, 2018 to December 19, 2018; slope = 1.0361, offset = 0.00
 Calibration from August 17, 2020 to September 15, 2020; slope = 1.1074, offset = 0.00
 Calibration from October 19, 2020 to August 31st, 2021; slope = 1.1447, offset = 0.00
-Calibration from March 17, 2022 to current; slope = 1.1066, offset = 0.00  
+Calibration from March 17, 2022 to July 25, 2022; slope = 1.1066, offset = 0.00 
+Calibration from July 25, 2022 to current ; slope=1.0923, offset=0
+
+
+ 
 Serial No. 584488; Depth 9m
 Calibration from July 5, 2018 to August 20, 2018; slope = 1.0743, offset = 0.00
 Calibration from August 20, 2018 to December 19, 2018; slope = 1.0000, offset = 0.00
@@ -148,8 +157,8 @@ Calibration from August 17, 2020 to September 15, 2020; slope = 1.1656, offset =
 Calibration from September 15, 2020 to October 19, 2020; slope = 1.0916, offset = 0.00
 Calibration from October 19, 2020 to August 17, 2021; slope = 1.1221; offset = 0.00
 Calibration from August 17, 2021 to March 17, 2022; slope = 1.1534; offset = 0.0054
-Calibration from March 17, 2022 to current; slope = 1.1911; offset = 0.0056
-
+Calibration from March 17, 2022 to July 25, 2022; slope = 1.1911; offset = 0.0056
+Calibration from July 25, 2022 to current; slope=1.1484; offset = 0.0054
 
 Campbell Scientific Stainless-Steel Pressure Transducer CS451 (May 2020-current)
 https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf
@@ -159,11 +168,15 @@ Serial No. 29010799
 YSI EXO2 Sonde Serial No. 18D103367 (August 2018 - current)
 https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 
 Wiped Conductivity/Temperature Sensor Serial No. 18C102992
+Calibration on December 15, 2022; pre: 98.6 uS/cm; 100.0 uS/cm; cell constant=0.48
 Central Wiper for Conductivity/Temperature Sensor Serial No. 18D101236
 Total Algae Sensor Serial No. 18D102222
+Calibration on December 15, 2022; pre: -0.51 RFU, pre: 12.58 RFU; post: 0.00 RFU, post: 16.00 RFU
 fDOM Sensor Serial No. 18C100625
 Calibration on April 16, 2021; pre: 1.38 RFU, 4.68 QSU; post: 0.00 RFU, -0.01 QSU - that was a bad calibration
-Calibration on April 26, 2021; pre: 0.34 RFU, 1.13 QSU ; post: 0.00 RFU, 0.00 QSU
+Calibration on April 26, 2021; pre: 0.34 RFU, 1.13 QSU; post: 0.00 RFU, 0.00 QSU
+Calibration on June 27, 2022; pre: 0.46 RFU, 0.57 QSU; post: 0.00 RFU, 0.00 QSU
+Calibration on December 15, 2022; pre: 0.27 RFU, 0.07 QSU; post: 0.00RFU, 0.00 QSU 
 Turbidity Sensor Serial No. 19H101144-added on 02 May 22
 Pressure Transducer Serial No. 17K100864
 Dissolved Oxygen Sensor Serial No. 18D101168
@@ -173,7 +186,11 @@ Calibration from August 17, 2020 to September 15, 2020; DO Gain=1.13
 Calibration from September 15, 2020 to October 19, 2020; DO Gain=1.11
 Calibration from October 19, 2020 to December 2, 2020; DO Gain=1.12
 Calibration fromDecember 27, 2020 to December 31, 2020; DO Gain=1.10
-Calibration from March 22, 2021 to June 15, 2021; DO Gain=1.10
+Calibration from March 22, 2021 to June 15, 2021; DO Gain=1.10; pre = 91.1% sat; post = 100.1% sat
 Calibration from June 15, 2021 to August 16, 2021; DO Gain=1.13
 Calibration from August 16, 2021 to March 17, 2022; DO Gain= 1.10
-Calibration from March 17, 2022 to current; DO Gain=1.10
+Calibration from March 17, 2022 to June 27, 2022; DO Gain=1.10; pre = 91.0% sat; post = 99.9% sat
+Calibration from June 27, 2022 to December 14, 2022; DO Gain=1.10; pre = 91.1% sat; post = 100% sat
+Calibration from December 14, 2022 to current; DO Gain = 1.23; pre = 1.7%; post = -0.2% sat; pre = 91.3% sat; post = 101.1% sat
+
+

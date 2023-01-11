@@ -42,7 +42,7 @@ EXO_cablepower_V	Measure of power being used by the cable connected to the CR6 d
 EXO_wiper_V	Wiper brush cleaning system activation signal as measured by the EXO sonde	numeric	volt		NA	value is missing
 Lvl_psi_9	Measure of the pressure from the bottom sensor in the string which is about 9m	numeric	psig		NA	value is missing
 LvlTemp_C_9	Water temperature at the last sensor in the string (about 9m) as measured by the pressure transducer	numeric	celsius		NA	value is missing
-Depth_m_9	Depth of the pressure sensor at 9m derived from Lvl_psi_9 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
+LvlDepth_m_9	Depth of the pressure sensor at 9m derived from Lvl_psi_9 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
 RECORD	The nth record collected since the instrument was turned on or the program was altered	numeric	number		NA	value is missing
 CR6_Batt_V	The battery voltage of the CR6 at that time	numeric	volt		NA	value is missing
 CR6Panel_Temp_C	Panel temperature of the CR6 data logger	numeric	celsius		NA	value is missing

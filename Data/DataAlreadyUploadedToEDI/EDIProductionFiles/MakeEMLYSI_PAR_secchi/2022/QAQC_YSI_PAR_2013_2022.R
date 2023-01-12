@@ -151,7 +151,12 @@ ysi <- ysi %>% select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOSat,
        Flag_Cond, Flag_Sp_Cond, Flag_PAR, Flag_ORP, Flag_pH) %>%
   arrange(Reservoir, DateTime, Depth_m) 
 
-write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
+#change saome variable names and flags to include units in the final df
+names(ysi) <- c(names(ysi)[1:6],"DOsat_percent","Cond_uScm","SpCond_uScm",names(ysi)[10:13],"Flag_Temp_C","Flag_DO_mgL",
+                "Flag_DOsat_percent","Flag_Cond_uScm","Flag_SpCond_uScm",
+                "Flag_PAR_umolm2s","Flag_ORP_mV","Flag_pH")
+
+write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
 
 #### YSI diagnostic plots ####
 ysi_long <- ysi %>% 

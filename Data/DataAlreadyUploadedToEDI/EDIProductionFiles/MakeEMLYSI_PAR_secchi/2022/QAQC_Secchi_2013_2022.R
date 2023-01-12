@@ -76,6 +76,9 @@ secchi <- rbind(secchi_old,secchi_new)
 secchi <- secchi %>% select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi) %>%
   arrange(Reservoir, DateTime) 
 
+#add units to flag column for final df
+names(secchi)[6] <- "Flag_Secchi_m" 
+
 write.csv(secchi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/Secchi_depth_2013-2022.csv"), row.names=FALSE)
 
 #### secchi diagnostic plots ####

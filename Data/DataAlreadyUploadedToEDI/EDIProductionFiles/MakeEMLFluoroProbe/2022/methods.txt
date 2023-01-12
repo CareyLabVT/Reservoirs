@@ -1,0 +1,23 @@
+﻿SAMPLING TIMES
+Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately November to March in 2014-2021. 
+
+SAMPLING INSTRUMENT
+Sampling was conducted using a bbe Moldaenke FluoroProbe, which was sent to bbe Moldaenke for calibration and maintenance yearly according to the standards and practices of bbe Moldaenke between December-April in 2016-2018 and 2020. The probe was not sent for calibration during the winters of 2019 or 2021. The FluoroProbe uses fluorescence from six LED wavelengths (525 nm, 570 nm, 610 nm, 370 nm, 590 nm, 470 nm) to calculate biomass of four phytoplankton spectral groups (green algae, brown algae, bluegreen algae, and mixed assemblages) by comparing the sample spectrum to the fluorescence spectra of individual algal divisions measured during calibration. See Beutler et al. 2002 for an explanation of the principles of operation of the FluoroProbe.
+
+Beutler, M. et al. A fluorometric method for the differentiation of algal populations in vivo and in situ. Photosynth. Res. 72, 39–53 (2002).
+
+CAVEATS OF FLUORESCENCE-BASED DATA
+Measurements taken near the water's surface may be less accurate due to quenching of photosynthetic pigments at high light intensities, such as might be experienced at shallow depths.
+
+Due to differences in water color among different water bodies, a universal yellow substances offset may not be appropriate for all sampled water bodies. Dissolved organic carbon (DOC) in the reservoirs reported here tends to be low (2-5 mgL), but direct comparisons of phytoplankton biomass values among reservoirs should be treated with caution.
+Measurements taken near the bottom of the water column or during high-turbidity events may be less accurate due to interference of high amounts of particulate matter with the fluorescence signal.
+
+TEMPERATURE DATA
+The temperature sensor was malfunctioning in 2017-2018 and so the 2017-2018 temperature data are not reported at this time. In addition, three days of data in 2019 and one day in 2020 have compromised temperature data: 02Sept19, 04Sept19, 11Sept19, and 24Aug20.
+Note that temperatures at shallow depths may be less accurate as the sensor adjusts to the water temperature. It is recommended that temperature values in the first ~1 m of the water column be treated with caution.
+
+TRANSMISSION DATA
+On 28Aug19, the transmission sensor malfunctioned and so values from this point on in 2019 are not reported.
+
+WORKFLOW FOR QUALITY ASSURANCE AND QUALITY CONTROL OF DATA
+The file FluoroProbe_QAQC_2014_2021.R includes code for collating and conducting quality checks on FluoroProbe data from the most recent calendar year. This includes writing visualizations of each FluoroProbe cast collected, checking temperature and transmission profiles, ensuring that sampling location information is included with each cast, and trimming the cast to eliminate observations that are compromised due to quenching at the water's surface or interference by particulate matter near the sediments.

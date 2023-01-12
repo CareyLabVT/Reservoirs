@@ -145,11 +145,12 @@ Thermistor 1
 # ggplotly(m_1)
 
 # #Just the current year
- m_1_21=catdata%>%
-  filter(DateTime>ymd_hms(ymd_hms(ymd_hms(current_time_start))) & DateTime<ymd_hms(ymd_hms(ymd_hms(current_time_end))))%>%
+  m_1_21=catdata%>%
+  filter(DateTime > as.POSIXct(current_time_start) & DateTime < as.POSIXct(current_time_end)) %>%
    ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_surface)) +
    geom_point()
  m_1_21
+ 
 #Only use plotly to find DateTime of questionable values
  #ggplotly(m_1_21)
 ```

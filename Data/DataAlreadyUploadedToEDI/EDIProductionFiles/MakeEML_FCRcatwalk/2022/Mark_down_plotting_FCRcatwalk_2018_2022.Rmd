@@ -190,7 +190,7 @@ Thermistor 1
     geom_point()
  EXOtemp_1_21
  #Only use plotly to find DateTime of questionable values
- # ggplotly(EXOtemp_1)
+ # ggplotly(EXOtemp_1_21)
 ```
 
 ```{r Thermistor at 2m}
@@ -209,7 +209,7 @@ Thermistor 1
    geom_point()
  m_3_21
 #Only use plotly to find DateTime of questionable values
-# ggplotly(m_3_21)
+ #ggplotly(m_3_21)
 ```
 
 ```{r Thermistor at 3m}
@@ -228,7 +228,7 @@ Thermistor 1
    geom_point()
  m_4_21
 #Only use plotly to find DateTime of questionable values
-# ggplotly(m_4_21)
+ #ggplotly(m_4_21)
 ```
 
 ```{r Thermistor at 4m}
@@ -284,7 +284,7 @@ m_6_21
    
    
     #Just the current year
-   comp_6_21=ccrwater2%>%
+   comp_6_21=catdata%>%
     filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
      ggplot(.,aes(x = DateTime))+
      geom_point(aes(y=ThermistorTemp_C_5, color="Therm"))+ 
@@ -313,7 +313,7 @@ m_6_21
    geom_point()
 m_7_21
 # plotly so you can pick out the questionable values
- #ggplotly(m_7_21)
+# ggplotly(m_7_21)
 ```
 
 ```{r Thermistor at 7m}
@@ -351,7 +351,7 @@ m_7_21
    geom_point()
  m_9_21
 #Only use plotly to find DateTime of questionable values
-# ggplotly(m_9_21)
+ ggplotly(m_9_21)
 ```
 
 ```{r Thermistor at 9m}
@@ -389,7 +389,7 @@ m_7_21
    
    
     #Just the current year
-   comp_9_21=ccrwater2%>%
+   comp_9_21=catdata%>%
     filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
      ggplot(.,aes(x = DateTime))+
      geom_point(aes(y=ThermistorTemp_C_9, color="Therm"))+ 
@@ -408,20 +408,17 @@ m_7_21
 
  All_temp_fcr=catdata%>%
     ggplot(.,aes(x = DateTime))+
-    geom_line(aes(y=ThermistorTemp_C_1, color="0.1m"))+
-    geom_line(aes(y=ThermistorTemp_C_2, color="1m"))+
+    geom_line(aes(y=ThermistorTemp_C_surface , color="0.1m"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1m"))+  
+    geom_line(aes(y=ThermistorTemp_C_2, color="2m"))+
     geom_line(aes(y=EXOTemp_C_1, color="EXO_1.6m")) +
-    geom_line(aes(y=ThermistorTemp_C_3, color="2m"))+
-    geom_line(aes(y=ThermistorTemp_C_4, color="3m"))+
-    geom_line(aes(y=ThermistorTemp_C_5, color="4m"))+
-    geom_line(aes(y=ThermistorTemp_C_6, color="5m"))+
-    geom_line(aes(y=ThermistorTemp_C_7, color="6m"))+
-    geom_line(aes(y=ThermistorTemp_C_8, color="7m"))+
-    geom_line(aes(y=ThermistorTemp_C_9, color="8m"))+
-    geom_line(aes(y=ThermistorTemp_C_10, color="9m"))+
-    geom_line(aes(y=ThermistorTemp_C_11, color="11m"))+
-    geom_line(aes(y=ThermistorTemp_C_12, color="15m"))+
-    geom_line(aes(y=ThermistorTemp_C_13, color="19m"))+
+    geom_line(aes(y=ThermistorTemp_C_3, color="3m"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4m"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5m"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6m"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7m"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8m"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9m"))+
     labs(y=expression(''*~degree*C*'')) +
     scale_color_manual(name = "Depth",
                        breaks = c("0.1m", "1m","EXO_1.6m", "2m", "3m", "4m", "5m", "6m", "7m",                                         "8m","9m"),
@@ -435,23 +432,23 @@ All_temp_fcr
 Cur_temp_fcr=catdata%>%
    filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
     ggplot(.,aes(x = DateTime))+
-    geom_line(aes(y=ThermistorTemp_C_1, color="0.1m"))+
-    geom_line(aes(y=ThermistorTemp_C_2, color="1m"))+
+    geom_line(aes(y=ThermistorTemp_C_surface , color="0.1m"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1m"))+  
+    geom_line(aes(y=ThermistorTemp_C_2, color="2m"))+
     geom_line(aes(y=EXOTemp_C_1, color="EXO_1.6m")) +
-    geom_line(aes(y=ThermistorTemp_C_3, color="2m"))+
-    geom_line(aes(y=ThermistorTemp_C_4, color="3m"))+
-    geom_line(aes(y=ThermistorTemp_C_5, color="4m"))+
-    geom_line(aes(y=ThermistorTemp_C_6, color="5m"))+
-    geom_line(aes(y=ThermistorTemp_C_7, color="6m"))+
-    geom_line(aes(y=ThermistorTemp_C_8, color="7m"))+
-    geom_line(aes(y=ThermistorTemp_C_9, color="8m"))+
-    geom_line(aes(y=ThermistorTemp_C_10, color="9m"))+
+    geom_line(aes(y=ThermistorTemp_C_3, color="3m"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4m"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5m"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6m"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7m"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8m"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9m"))+
     labs(y=expression(''*~degree*C*'')) +
     scale_color_manual(name = "Depth",
                        breaks = c("0.1m", "1m","EXO_1.6m", "2m", "3m", "4m", "5m", "6m", "7m",                                         "8m","9m"),
                        values = c("0.1m"="firebrick4", "1m"="firebrick1","EXO_1.6m"="black" ,      "2m"="DarkOrange1","3m"="gold", "4m"="greenyellow","5m"="medium sea green", "6m"="sea green",
                   "7m"="DeepSkyBlue4", "8m"="blue2", "9m"="blue4"))
-Cur_temp_ccr
+Cur_temp_fcr
   
 ```
 
@@ -468,7 +465,7 @@ Cur_temp_ccr
 
 Depth_press_sensor_current <- catdata%>%
   filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
-  ggplot(data = catdata, aes(x = DateTime, y = LvlDepth_m_9)) +
+  ggplot(aes(x = DateTime, y = LvlDepth_m_9)) +
       geom_point()
    Depth_press_sensor_current
    #Only use plotly to find DateTime of questionable values
@@ -481,7 +478,7 @@ Depth_press_sensor_current <- catdata%>%
 #Making sure I didn't miss any times when the EXO was out of place according to the depth sensor
 
 #Depth from the 1m EXO
- Depth_1 <- ggplot(data = catdata, aes(x = DateTime, y = EXO_depth_m_1)) +
+ Depth_1 <- ggplot(data = catdata, aes(x = DateTime, y = EXODepth_m)) +
    geom_line()
  Depth_1
 #Only use plotly to find DateTime of questionable values
@@ -490,7 +487,7 @@ Depth_press_sensor_current <- catdata%>%
 #Just the current year
  Depth_1_21=catdata%>%
   filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
-  ggplot(.,aes(x = DateTime, y = EXO_depth_m_1)) +
+  ggplot(.,aes(x = DateTime, y = EXODepth_m)) +
    geom_point()
  Depth_1_21
 #Only use plotly to find DateTime of questionable values
@@ -521,7 +518,7 @@ Depth_press_sensor_current <- catdata%>%
    geom_point()
  EXODO_21
 #Only use plotly to find DateTime of questionable values
- #ggplotly(EXODO_21)
+ ggplotly(EXODO_21)
  
  EXODOsat_21=catdata%>%
   filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
@@ -657,6 +654,7 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
    ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1)) +
    geom_point()
  chl_rfu_21
+# ggplotly(chl_rfu_21)
 ```
 
 
@@ -690,6 +688,7 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
   filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
    ggplot(.,aes(x = DateTime, y = EXOBGAPC_ugL_1)) +
    geom_point()
+# ggplotly(phyco_ugl_21)
 #Only use plotly to find DateTime of questionable values
  #ggplotly(phyco_ugl_21)
 ```
@@ -728,7 +727,7 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
    geom_point()
  fDOM_qsu_1_21
 #Only use plotly to find DateTime of questionable values
- #ggplotly(fDOM_qsu_1_21)
+# ggplotly(fDOM_qsu_1_21)
 ```
 
 
@@ -828,7 +827,7 @@ See below:
 
 This is the column order to figure out the column numer for *colnumber* and *flagcol*:
 
-"DateTime"                      "RECORD"                        "CR6_Batt_V"                   
+"DateTime"                      "RECORD"                        "CR6_Battery_V"                   
  [4] "CR6Panel_Temp_C"               "ThermistorTemp_C_surface"      "ThermistorTemp_C_1"           
  [7] "ThermistorTemp_C_2"            "ThermistorTemp_C_3"            "ThermistorTemp_C_4"           
 [10] "ThermistorTemp_C_5"            "ThermistorTemp_C_6"            "ThermistorTemp_C_7"           
@@ -839,9 +838,9 @@ This is the column order to figure out the column numer for *colnumber* and *fla
 [25] "EXOSpCond_uScm_1"              "EXOTDS_mgL_1"                 "EXODOsat_percent_1"           
 [28] "EXODO_mgL_1"                   "EXOChla_RFU_1"                 "EXOChla_ugL_1"                
 [31] "EXOBGAPC_RFU_1"                "EXOBGAPC_ugL_1"                "EXOfDOM_RFU_1"                
-[34] "EXOfDOM_QSU_1"                 "EXOTurbidity_FNU_1"            "EXO_pressure_psi"             
-[37] "EXO_depth_m"                   "EXO_battery_V"                 "EXO_cablepower_V"             
-[40] "EXO_wiper_V"                   "Lvl_psi_9"                     "LvlTemp_C_9"                  
+[34] "EXOfDOM_QSU_1"                 "EXOTurbidity_FNU_1"            "EXOpressure_psi"             
+[37] "EXODepth_m"                   "EXOBattery_V"                 "EXOcablepower_V"             
+[40] "EXOwiper_V"                   "Lvlpsi_9"                     "LvlTemp_C_9"                  
 [43] "Flag_ThermistorTemp_C_surface" "Flag_ThermistorTemp_C_1"  "Flag_ThermistorTemp_C_2"      
 [46] "Flag_ThermistorTemp_C_3"       "Flag_ThermistorTemp_C_4"       "Flag_ThermistorTemp_C_5"      
 [49] "Flag_ThermistorTemp_C_6"       "Flag_ThermistorTemp_C_7"       "Flag_ThermistorTemp_C_8"      
@@ -851,9 +850,9 @@ This is the column order to figure out the column numer for *colnumber* and *fla
 [61] "Flag_EXOSpCond_uScm_1"         "Flag_EXOTDS_mgL_1"             "Flag_EXODOsat_percent_1"      
 [64] "Flag_EXODO_mgL_1"              "Flag_EXOChla_RFU_1"            "Flag_EXOChla_ugL_1"           
 [67] "Flag_EXOBGAPC_RFU_1"           "Flag_EXOBGAPC_ugL_1"           "Flag_EXOfDOM_RFU_1"           
-[70] "Flag_EXOfDOM_QSU_1"            "Flag_EXOTurbidity_FNU_1"       "Flag_EXO_pressure_psi"        
-[73] "Flag_EXO_depth_m"              "Flag_EXO_battery_V"            "Flag_EXO_cablepower_V"        
-[76] "Flag_EXO_wiper_V"              "Flag_Lvl_psi_9"                "Flag_LvlTemp_C_9"             
+[70] "Flag_EXOfDOM_QSU_1"            "Flag_EXOTurbidity_FNU_1"       "Flag_EXOpressure_psi"        
+[73] "Flag_EXODepth_m"              "Flag_EXOBattery_V"            "Flag_EXOcablepower_V"        
+[76] "Flag_EXOwiper_V"              "Flag_Lvlpsi_9"                "Flag_LvlTemp_C_9"             
    
 
 If you make any changes to the maintenance log you have to run the qaqc_fcr function again so the changes are incorporated. Make sure to re download the Maintenance log.  
@@ -869,17 +868,17 @@ These are the final steps before publishing the final csv.I like to put DateTime
 catdata <- catdata[order(catdata$DateTime),]
 
 #rearrange the cols. They should already be in order but just making sure. 
- catdata_flag <- catdata_flag %>%
+ catdata <- catdata %>%
   select(Reservoir, Site, DateTime, ThermistorTemp_C_surface:ThermistorTemp_C_9,
          RDO_mgL_5, RDOsat_percent_5, RDO_mgL_5_adjusted, RDOsat_percent_5_adjusted,
          RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted,
          RDOTemp_C_9,EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1,
          EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1,
-         EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXO_pressure_psi, EXO_depth_m, EXO_battery_V,          EXO_cablepower_V,EXO_wiper_V, Lvl_psi_9, LvlTemp_C_9, Depth_m_9, RECORD, CR6_Batt_V,          CR6Panel_Temp_C,Flag_ThermistorTemp_C_surface:Flag_ThermistorTemp_C_9,Flag_RDO_mgL_5, Flag_RDOsat_percent_5, Flag_RDOTemp_C_5,
+         EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXOpressure_psi, EXODepth_m, EXOBattery_V,          EXOcablepower_V,EXOwiper_V, Lvlpsi_9, LvlTemp_C_9, LvlDepth_m_9, RECORD, CR6Battery_V,          CR6Panel_Temp_C,Flag_ThermistorTemp_C_surface:Flag_ThermistorTemp_C_9,Flag_RDO_mgL_5, Flag_RDOsat_percent_5, Flag_RDOTemp_C_5,
          Flag_RDO_mgL_9, Flag_RDOsat_percent_9, Flag_RDOTemp_C_9,Flag_EXOTemp_C_1, Flag_EXOCond_uScm_1, Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,
          Flag_EXODOsat_percent_1, Flag_EXODO_mgL_1, Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1, Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,
-         Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXO_pressure_psi, Flag_EXO_depth_m, Flag_EXO_battery_V, Flag_EXO_cablepower_V,
-         Flag_EXO_wiper_V, Flag_Lvl_psi_9, Flag_LvlTemp_C_9)
+         Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXOpressure_psi, Flag_EXODepth_m, Flag_EXOBattery_V, Flag_EXOcablepower_V,
+         Flag_EXOwiper_V, Flag_Lvlpsi_9, Flag_LvlTemp_C_9)
 
 # convert datetimes to characters so that they are properly formatted in the output file
   catdata$DateTime <- as.character(catdata$DateTime)

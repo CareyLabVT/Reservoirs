@@ -3,14 +3,14 @@
 qaqc_fcr <- function(data_file, data2_file, maintenance_file, output_file)
 {
  
-  CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
+  CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
                         "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
                         "ThermistorTemp_C_9", "RDO_mgL_5", "RDOsat_percent_5", "RDOTemp_C_5", "RDO_mgL_9",
                         "RDOsat_percent_9", "RDOTemp_C_9", "EXO_Date", "EXO_Time", "EXOTemp_C_1", "EXOCond_uScm_1",
                         "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1","EXOTurbidity_FNU_1",
-                        "EXO_pressure_psi", "EXO_depth_m", "EXO_battery_V", "EXO_cablepower_V", "EXO_wiper_V","Lvl_psi_9", "LvlTemp_C_9")
+                        "EXOpressure_psi", "EXODepth_m", "EXOBattery_V", "EXOcablepower_V", "EXOwiper_V","Lvlpsi_9", "LvlTemp_C_9")
   
   #Adjustment period of time to stabilization after cleaning in seconds
   ADJ_PERIOD = 2*60*60 
@@ -349,9 +349,9 @@ exo_idx <-grep("^EXO",colnames(catdata))
 exo_flag <- grep("^Flag_EXO.*_1$",colnames(catdata))
 
 #Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
-catdata[which(catdata$EXO_depth_m < 0.55), exo_idx] <- NA
+catdata[which(catdata$EXODepth_m < 0.55), exo_idx] <- NA
 #Flag the data that was removed with 2 for outliers
-catdata[which(catdata$EXO_depth_m<0.55),exo_flag]<- 2
+catdata[which(catdata$EXODepth_m<0.55),exo_flag]<- 2
 
 #change the temp string and pressure sensor to NA if the psi is less than XXXXX and Flag as 2
 
@@ -362,9 +362,9 @@ temp_idx <-grep("^Ther*|^RDO*|^Lvl*",colnames(catdata))
 temp_flag <- grep("^Flag_Ther*|^Flag_RDO*|^Flag_Lvl*",colnames(catdata))
 
 #Change the EXO data to NAs when the pressure sensor is less than 9.94 psi which is roughly 7m and not due to maintenance
-catdata[which(catdata$Lvl_psi_9 < 9.94), temp_idx] <- NA
+catdata[which(catdata$Lvlpsi_9 < 9.94), temp_idx] <- NA
 #Flag the data that was removed with 2 for outliers
-catdata[which(catdata$Lvl_psi_9< 9.94),temp_flag]<- 2
+catdata[which(catdata$Lvlpsi_9< 9.94),temp_flag]<- 2
 
 ############## Leading and Lagging QAQC ##########################
 # This finds the point that is way out of range from the leading and lagging point 
@@ -469,7 +469,7 @@ catdata <- catdata %>%
 ############ Convert psi to depth for pressure sensor ###################
   
   #create depth column
-  catdata=catdata%>%mutate(LvlDepth_m_9=Lvl_psi_9*0.70455)#1psi=2.31ft, 1ft=0.305m
+  catdata=catdata%>%mutate(LvlDepth_m_9=Lvlpsi_9*0.70455)#1psi=2.31ft, 1ft=0.305m
   
 
 ##########Put everything in the right place##################################################################################  
@@ -488,13 +488,13 @@ catdata <- catdata %>%
                                 RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted, RDOTemp_C_9,
                                 EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1,
                                 EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1,
-                                EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXO_pressure_psi, EXO_depth_m, EXO_battery_V, EXO_cablepower_V,
-                                EXO_wiper_V, Lvl_psi_9, LvlTemp_C_9, LvlDepth_m_9, RECORD, CR6_Batt_V, CR6Panel_Temp_C,
+                                EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXOpressure_psi, EXODepth_m, EXOBattery_V, EXOcablepower_V,
+                                EXOwiper_V, Lvlpsi_9, LvlTemp_C_9, LvlDepth_m_9, RECORD, CR6Battery_V, CR6Panel_Temp_C,
                                 Flag_ThermistorTemp_C_surface:Flag_ThermistorTemp_C_9,Flag_RDO_mgL_5, Flag_RDOsat_percent_5, Flag_RDOTemp_C_5,
                                 Flag_RDO_mgL_9, Flag_RDOsat_percent_9, Flag_RDOTemp_C_9,Flag_EXOTemp_C_1, Flag_EXOCond_uScm_1, Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,
                                 Flag_EXODOsat_percent_1, Flag_EXODO_mgL_1, Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1, Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,
-                                Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXO_pressure_psi, Flag_EXO_depth_m, Flag_EXO_battery_V, Flag_EXO_cablepower_V,
-                                Flag_EXO_wiper_V, Flag_Lvl_psi_9, Flag_LvlTemp_C_9)
+                                Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXOpressure_psi, Flag_EXODepth_m, Flag_EXOBattery_V, Flag_EXOcablepower_V,
+                                Flag_EXOwiper_V, Flag_Lvlpsi_9, Flag_LvlTemp_C_9)
   
   #order by date and time
   catdata <- catdata[order(catdata$DateTime),]

@@ -133,7 +133,7 @@ There is a lot data and lots of plots. It will most likely crash if you try to r
 chunk at a time. 
 
 ## Temperature 
-Thermistor 1
+Thermistor 1 There will be large gaps where the thermistor is out of the water
 ```{r Thermistor 1}
  m_1 <- ggplot(data = ccrwater2, aes(x = DateTime, y = ThermistorTemp_C_1)) +
   geom_point()
@@ -537,7 +537,7 @@ Cur_temp_ccr
 #Making sure I didn't miss any times when the EXO was out of place according to the depth sensor
 
 #Depth from the 1m EXO
- Depth_1 <- ggplot(data = ccrwater2, aes(x = DateTime, y = EXO_depth_m_1)) +
+ Depth_1 <- ggplot(data = ccrwater2, aes(x = DateTime, y = EXODepth_m_1)) +
    geom_point()
  Depth_1
 #Only use plotly to find DateTime of questionable values
@@ -546,7 +546,7 @@ Cur_temp_ccr
 #Just the current year
  Depth_1_21=ccrwater2%>%
   filter(DateTime>current_time_start & DateTime<current_time_end)%>%
-  ggplot(.,aes(x = DateTime, y = EXO_depth_m_1)) +
+  ggplot(.,aes(x = DateTime, y = EXODepth_m_1)) +
    geom_point()
  Depth_1_21
 #Only use plotly to find DateTime of questionable values
@@ -555,7 +555,7 @@ Cur_temp_ccr
  
 ```{r EXO depth 9m}
  #Depth from the 9m EXO
- Depth_9 <- ggplot(data = ccrwater2, aes(x = DateTime, y = EXO_depth_m_9)) +
+ Depth_9 <- ggplot(data = ccrwater2, aes(x = DateTime, y = EXODepth_m_9)) +
    geom_point()
  Depth_9
  #Only use plotly to find DateTime of questionable values
@@ -564,7 +564,7 @@ Cur_temp_ccr
  #Just the current year
  Depth_9_21=ccrwater2%>%
    filter(DateTime>current_time_start & DateTime<current_time_end)%>%
-   ggplot(.,aes(x = DateTime, y = EXO_depth_m_9)) +
+   ggplot(.,aes(x = DateTime, y = EXODepth_m_9)) +
    geom_point()
  Depth_9_21
  #Only use plotly to find DateTime of questionable values
@@ -938,11 +938,11 @@ ccrwater <- ccrwater[order(ccrwater$DateTime),]
                         ThermistorTemp_C_13, EXOTemp_C_1, EXOCond_uScm_1,
                         EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, EXODO_mgL_1, EXOChla_RFU_1,
                         EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, EXOfDOM_RFU_1, EXOfDOM_QSU_1,
-                        EXO_pressure_psi_1, EXO_depth_m_1, EXO_battery_V_1, EXO_cablepower_V_1,EXO_wiper_V_1,
+                        EXOPressure_psi_1, EXODepth_m_1, EXOBattery_V_1, EXOCablepower_V_1,EXOWiper_V_1,
                         EXOTemp_C_9, EXOCond_uScm_9,
                         EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
-                        EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXO_pressure_psi_9, EXO_depth_m_9,EXO_battery_V_9,
-                        EXO_cablepower_V_9, EXO_wiper_V_9,Lvl_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
+                        EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXOPressure_psi_9, EXODepth_m_9,EXOBattery_V_9,
+                        EXOCablepower_V_9, EXOWiper_V_9,LvlPressure_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
                         RECORD, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
 
   

@@ -1,19 +1,19 @@
 "Reservoir","Site","Site_description","Latitude","Longitude"
-"BVR",40,"Pelagic site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir",37.314783,-79.820864
-"BVR",50,"Deep hole or site nearest to dam",37.31288,-79.8159
-"CCR",7,"Carvins Creek Stream cove",37.4056,-79.9741
-"CCR",8,"Sawmill Branch cove",37.4071,-79.9681
-"CCR",10,"Upstream site near two cove confluence",37.40417,-79.96814
-"CCR",20,"Mid reservoir near Angel Branch cove",37.39677,-79.95061
-"CCR",21,"Angel Branch Cove",37.3978,-79.9488
-"CCR",30,"Mid reservoir site",37.38369,-79.95029
-"CCR",50,"Deepest site of reservoir near dam",37.3706,-79.9582
-"FCR",10,"Upstream pelagic site at deepest point of transect across the reservoir",37.308619,-79.836774
-"FCR",20,"Upstream pelagic site at deepest point of transect across the reservoir",37.30769,-79.8371
-"FCR",30,"Upstream pelagic site at deepest point of transect across the reservoir",37.30534,-79.8383
-"FCR",40,"Upstream pelagic site at deepest point of transect across the reservoir",37.3045477861234,-79.8384818899407
-"FCR",45,"Upstream pelagic site at deepest point of transect across the reservoir",37.30418,-79.8383
-"FCR",47,"Upstream pelagic site at deepest point of transect across eastern cove of reservoir",37.3036559790386,-79.837237344957
-"FCR",50,"Deep hole or site nearest to dam",37.30325,-79.8373
-"GWR",50,"Deep hole or site nearest to dam",37.0443528070071,-80.8632991493157
-"SHR",50,"Deep hole or site nearest to dam",37.2308522269357,-80.1759001355518
+"BVR",40,"Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir",37.314783,-79.820864
+"BVR",50,"Pelagic deep hole site nearest to dam; at BVR platform closest to dam",37.31288,-79.8159
+"CCR",7,"Littoral site of where Carvins Creek enters into Carvins Cove Reservoir",37.4056,-79.9741
+"CCR",8,"Littoral site of where Sawmill Branch enters into Carvins Cove Reservoir",37.4071,-79.9681
+"CCR",10,"Pelagic upstream site in central depth transect at confluence of Carvins Cove and Sawmill Branch inflow arms into Carvins Cove Reservoir",37.40417,-79.96814
+"CCR",20,"Pelagic upstream site in central depth transect of Carvins Cove Reservoir near Angell Branch cove; approximately halfway between Carvins Creek inflow and boat launch",37.39677,-79.95061
+"CCR",21,"Littoral site of where Angell Branch enters into Carvins Cove Reservoir",37.3978,-79.9488
+"CCR",30,"Pelagic upstream site in central depth transect of Carvins Cove Reservoir (in between sites 1 and 2)",37.38369,-79.95029
+"CCR",50,"Pelagic deep hole site of Carvins Cove Reservoir near dam (also site 6 for Ironman sampling); the closest access point to the dam via boat and 21 m at full pond",37.3706,-79.9582
+"FCR",10,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; halfway between confluence of Tunnel Branch and Falling Creek inflows",37.308619,-79.836774
+"FCR",20,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; adjacent to where Tunnel Branch inflow enters into the reservoir",37.30769,-79.8371
+"FCR",30,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; approximately halfway between dam and Falling Creek inflow",37.30534,-79.8383
+"FCR",40,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; reservoir transitional zone where distinct epilimnion/hypolimnion layers form",37.3045477861234,-79.8384818899407
+"FCR",45,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; where reservoir flow enters into the deep hole basin of the reservoir",37.30418,-79.8383
+"FCR",47,"Pelagic upstream site in deep hole basin of Falling Creek Reservoir; where eastern cove of reservoir meets central deep hole basin",37.3036559790386,-79.837237344957
+"FCR",50,"Pelagic deep hole site nearest to Falling Creek Reservoir dam; at end of FCR catwalk",37.30325,-79.8373
+"GWR",50,"Pelagic deep hole hole nearest to dam at Gatewood Reservoir",37.0443528070071,-80.8632991493157
+"SHR",50,"Pelagic deep hole hole nearest to dam at Spring Hollow Reservoir",37.2308522269357,-80.1759001355518

@@ -1,6 +1,6 @@
 
 AUTHORSHIP STATEMENT
-CCC developed and led the reservoir monitoring program 2013-present, and oversaw FluoroProbe purchasing, use, and maintenance throughout this time. ABP led the 2022 field season, downloaded FluoroProbe sensor data regularly, and oversaw daily use of the instrument, including maintaining battery charge. MEL assisted with troubleshooting and led data collation and publication in 2022.
+CCC developed and led the reservoir monitoring program, and oversaw FluoroProbe purchasing, use, and maintenance throughout 2014-present. ABP led the field crew, oversaw use of the instrument, and downloaded data in 2022. MEL assisted with troubleshooting and led data collation and publication in 2022.
 
 ACKNOWLEDGEMENTS
 This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Whitney Woelmer and Abigail Lewis for providing friendly reviews of these data and metadata.

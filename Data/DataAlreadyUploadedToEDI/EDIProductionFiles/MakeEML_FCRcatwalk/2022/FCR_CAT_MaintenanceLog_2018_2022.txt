@@ -181,7 +181,7 @@ CAT, 2022-09-26 11:00:00 EST, 2022-09-26 12:10:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2022-10-03 10:50:00 EST, 2022-10-03 11:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-10-11 13:30:00 EST, 2022-10-11 14:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-11-28 12:40:00 EST, 2022-11-28 13:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
-CAT, 2022-12-12 10:30:00 EST, 2022-12-17 15:50:00 EST, EXO*, c(21:40), 1, c(59:76), EXO up for cleaning and calibration and replaced with CCR EXO while getting serviced
-CAT, 2022-12-17 15:50:00 EST, 2023_12-31 23:50:00 EST, Turb*, 35, 7, 71, CCR EXO doesn't have a turbidity sensor so it is not measured CHANGE WHEN NEW FCR EXO BACK
+CAT, 2022-12-12 10:30:00 EST, 2022-12-17 15:50:00 EST, EXO*, c(21:40), 1, c(59:76), EXO up for cleaning and calibration and replaced with BVR EXO while getting serviced
+CAT, 2022-12-17 15:50:00 EST, 2023_12-31 23:50:00 EST, Turb*, 35, 7, 71, BVR EXO doesn't have a turbidity sensor so it is not measured CHANGE WHEN NEW FCR EXO BACK
 CAT, 2022-12-29 03:10:00 EST, 2023-01-02 16:20:00 EST, EXO*, c(21:40), 7, c(59:76), EXO had a connection issue was not connected to the data logger therefore no data was collected
 CAT, 2023-01-02 16:25:00 EST, 2023-01-02 16:35:00 EST, EXO*, c(21:40), 1, c(59:76), EXO up for toubleshooting connection issues

@@ -1,18 +1,18 @@
-"Date","Site","Discharge_m3_s","FlowmeterSensorID","Notes"
-2019-02-08,"F200",0.03084576,"ModelFP111",""
-2019-03-18,"F200",0.03343656,"Model FP III",""
-2019-04-01,"F200",0.02426208,"Model FP III",""
-2019-04-15,"F200",0.15718536,"Model FP III",""
-2019-04-22,"F200",0.076788264,"Model FP III",""
-2019-04-29,"F200",0.03681984,"Model FP III","simple flowmeter, not deep enough to read"
-2019-05-06,"F200",0.0292608,"Model FP III","Edge water 0.15"
-2019-05-13,"F200",0.00042672,"Model FP III","Flow probe would not read above 0.0 velocity in any flowing water"
-2019-05-20,"F200",0.006545,"MMB_2000656",""
-2019-05-27,"F200",0.00577,"MMB_2000656",""
-2019-06-03,"F200",-0.00538,"MMB_2000656","Doesn't make sense. Water is clearly flowing toward FCR"
-2019-06-17,"F200",0.01805,"Maddy's flowmeter",""
-2019-06-10,"F200",0.02725,"Maddy's flowmeter",""
-2019-06-24,"F200",0.01835,"Maddy's flowmeter",""
-2019-07-01,"F200",0.0089,"Maddy's flowmeter",""
-2019-06-27,"F200",0.01105,"Maddy's flowmeter",""
-2019-07-18,"F200",0.00595,"Maddy's flowmeter",""
+Date,Site,Discharge_m3_s,FlowmeterSensorID,Notes
+2019-02-08,F200,0.03084576,ModelFP111,
+2019-03-18,F200,0.03343656,Model FP III,
+2019-04-01,F200,0.02426208,Model FP III,
+2019-04-15,F200,0.15718536,Model FP III,
+2019-04-22,F200,0.076788264,Model FP III,
+2019-04-29,F200,0.03681984,Model FP III,"simple flowmeter, not deep enough to read"
+2019-05-06,F200,0.0292608,Model FP III,Edge water 0.15
+2019-05-13,F200,0.00042672,Model FP III,Flow probe would not read above 0.0 velocity in any flowing water
+2019-05-20,F200,0.006545,MMB_2000656,
+2019-05-27,F200,0.00577,MMB_2000656,
+2019-06-03,F200,-0.00538,MMB_2000656,Doesn't make sense. Water is clearly flowing toward FCR
+2019-06-17,F200,0.01805,Maddy's flowmeter,
+2019-06-10,F200,0.02725,Maddy's flowmeter,
+2019-06-24,F200,0.01835,Maddy's flowmeter,
+2019-07-01,F200,0.0089,Maddy's flowmeter,
+2019-06-27,F200,0.01105,Maddy's flowmeter,
+2019-07-18,F200,0.00595,Maddy's flowmeter,

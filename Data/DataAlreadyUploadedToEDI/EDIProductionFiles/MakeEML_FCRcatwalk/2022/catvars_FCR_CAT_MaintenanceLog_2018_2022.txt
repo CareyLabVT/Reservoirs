@@ -1,0 +1,7 @@
+attributeName	code	definition
+flag	1	value removed due to maintenance and set to NA
+flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+flag	5	questionable value due to potential fouling
+flag	6	very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+flag	7	missing data
+flag	8	Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020

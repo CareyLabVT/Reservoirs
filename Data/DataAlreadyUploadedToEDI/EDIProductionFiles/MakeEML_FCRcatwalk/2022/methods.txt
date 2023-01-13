@@ -1,14 +1,16 @@
-Methods:
+###########################################################
+# DESCRIPTION OF DATASET
 Data from multiple water quality sensors were collected from a fixed platform at the deep hole of Falling Creek Reservoir (located at 37.30325,	-79.8373 and referred to as Site F50) in 2018-2022. Data were collected using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were collected every ten minutes from July 2018 to December 2022. We deployed the thermistors and 5 and 9 m dissolved oxygen sensors in July 2018 and the EXO2 sonde at 1 m depth was deployed in August 2018. The EXO2 sonde was moved from 1.0 m to 1.6 m depth on 2019-05-20 at 12:40:00 (1.6 m is the depth of one of the outtake valves for drinking water treatment). As the EXO2 sonde has been moored near the outtake valve at 1.6 m (assuming full pond), the exact depth of the EXO2 sonde varied slightly over time due to small water level changes in the reservoir. We deployed a pressure transducer at 9 m in May 2020 to help track water level changes. 
 
-At the time of deployment in summer 2018, the thermistor string was factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The in situ dissolved oxygen sensors were calibrated using a one point calibration according to the standards and practices outlined in the user manual. The YSI EXO2 Sonde sensors, except for temperature, were user-calibrated as outlined in the user manual and KOR EXO software. 
-The reservoir has an oxygenation system that has been manipulated for whole ecosystem experiments throughout the deployment of the sensors. This results in various oxygen conditions over time. Because of this, different levels of QAQC are done to the sensors but especially the dissolved oxygen sensors at 5m and 9m. See Additional Info for more information about oxygenation regimes. 
+At the time of deployment in summer 2018, the thermistor string was factory-calibrated and verified against a NIST-traceable thermistor. The in situ dissolved oxygen sensors were calibrated using a one point calibration according to the standards and practices outlined in the user manual. The YSI EXO2 Sonde sensors, except for temperature, were user-calibrated as outlined in the user manual and KOR EXO software. 
+The reservoir has an oxygenation system that has been manipulated for whole ecosystem experiments throughout the deployment of the sensors. This results in various oxygen conditions over time. Because of this, different levels of QAQC are done to the sensors but especially the dissolved oxygen sensors at 5m and 9m. See the end of this section for more information about oxygenation regimes. 
 
-Maintenance/Issues
-All maintenance, calibration times and sensor issues are recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt. The text below explains the issues and how they were dealt with in the data. 
+###########################################################
+DETAILED DESCRIPTION OF MAINTENANCE AND ISSUES FOR EACH SENSOR GROUP
+All maintenance, calibration times and sensor issues are recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt. The text below explains specific issues and how they were dealt with in the data. 
 
 Maintenance data gaps:
-The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt file. To account for this, we used an automated QAQC script (FCR_catwalk_QAQC_function_2018_2022.R) which indexed the dates and times recorded in the maintenance log and set the data to NA and the other Flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA in the corresponding Flag column.   
+The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt file. To account for this, we used an automated QAQC script (FCR_catwalk_QAQC_function_2018_2022.R) which indexes the dates and times recorded in the maintenance log and set the data to NA and the corresponding Flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA, with corresponding Flags set to 1.   
 
 Missing Data Gaps:
 EXO: 
@@ -22,12 +24,11 @@ EXO:
 
 Dissolved Oxygen sondes at 5 and 9 m:
 Maintenance performed on the sensors-
-When the oxygenation system is first activated, we have observed a rapid fouling of the 9m Do probe, which we typically flag with a 5 (questionable value due to potential fouling) or 6 (very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5), based on comparison with other sensors.
+When the oxygenation system is first activated, we have observed a rapid fouling of the 9m DO probe, which we typically flag with a 5 (questionable value due to potential fouling) or 6 (very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5), based on comparison with other sensors.
 
-2021-
 At 9m there were some high oxygen readings on 2021-06-07-2021-06-08 about 3 hours after the temperature string had been pulled up. There was no oxygen at 9m, as the oxygenation system had not been turned on yet,  so these readings were changed to NA and flagged. 
 The oxygenation was first turned on 11 June at 9:40EST but we were having issues with the oxygen regulator so we were unsure how well the system was working until the regulator was fixed and deployed on 14 September 2021 at 13:30 EST. During this time we have flagged the data with a flag of 5 because of the fluctuations from the system. 
-The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for both DO sensors with a data flag of 1 in the Flag_All column and individual flag columns of the sensors affected. The 9m RDO-PRO_X sensor was calibrated on August 18th, 2021 with a two point calibration using 100 percent air saturation and a 0 percent saturation with a sodium sulfite solution. On August 24, 2021, the anti-fouling caps on the RDO-PRO-X sensors were removed as they were causing fouling especially in anoxic hypolimnion. The RDO-PRO-X sensor cap at 5m was replaced on August 31st, 2021 and checked with a 100 percent air saturation and 0 percent saturation.
+The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for both DO sensors with a data flag of 1 for the flag columns of the sensors affected. The 9m RDO-PRO_X sensor was calibrated on August 18th, 2021 with a two point calibration using 100 percent air saturation and a 0 percent saturation with a sodium sulfite solution. On August 24, 2021, the anti-fouling caps on the RDO-PRO-X sensors were removed as they were causing fouling especially in anoxic hypolimnion. The RDO-PRO-X sensor cap at 5m was replaced on August 31st, 2021 and checked with a 100 percent air saturation and 0 percent saturation.
 
 2020-On August 7, 2020, the RDO-PRO-X Sensor caps at 5 m and 9 m were replaced. Both dissolved oxygen sensors were calibrated on August 17, 2020 using a one point 100 percent air saturation calibration. 
 
@@ -122,6 +123,9 @@ On August 7, 2020, the YSI EXO (1.6 m) Optical Dissolved Oxygen Sensor Cap (Seri
 
 The YSI EXO sonde was removed from the reservoir on December 2, 2020 for manufacturer cleaning, maintenance, and calibration. It was re-deployed in the reservoir on December 27, 2020. Below is the status of each sensor: pass or fail, and the calibration, or maintenance  information. All sensors were calibrated by the manufacturer on December 21, 2020 unless otherwise stated. 
 
+
+#################################################################
+CALIBRATION INFORMATION
 YSI EXO2 Sonde Serial No. 18D103367, Pass
 Replaced power-communication circuit board due to issues at final testing, depth sensor passed
 Wiped Conductivity/Temperature Sensor Serial No. 18C102992, Pass
@@ -212,4 +216,7 @@ Calibration from March 17, 2022 to June 27, 2022; DO Gain=1.10; pre = 91.0% sat;
 Calibration from June 27, 2022 to December 14, 2022; DO Gain=1.10; pre = 91.1% sat; post = 100% sat
 Calibration from December 14, 2022 to current; DO Gain = 1.23; pre = 1.7%; post = -0.2% sat; pre = 91.3% sat; post = 101.1% sat
 
+##############################################################################
+OXYGENATION INFORMATION
 
+Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.

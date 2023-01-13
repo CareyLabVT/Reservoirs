@@ -1,5 +1,4 @@
-# 11-Jan-2021 
-# edit 02 NOV 2021 by ABP
+# 13-01-2022
 # Script written by WW
 
 
@@ -20,7 +19,7 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2021/"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2022/"
 
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -113,14 +112,19 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "CCR_Catwalk_EDI_2021.csv",
+                          data.table = "CCR_Catwalk_EDI_2021_2022.csv",
                           write.file = TRUE)
 # edit this file in excel
 
 # function below to create a template for offsets csv
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "CCR_Depth_offsets_2021.csv",
+                          data.table = "CCR_Depth_offsets_2021_2022.csv",
+                          write.file = TRUE)
+
+template_table_attributes(path = folder,
+                          data.path = folder,
+                          data.table = "CCR_hobos_20_21.csv",
                           write.file = TRUE)
 # edit this file in excel
 
@@ -165,19 +169,18 @@ template_categorical_variables(path = folder,
 make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
-         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
-         in Carvins Cove Reservoir, Virginia, USA in 2021",
-         data.table = c("CCR_Catwalk_EDI_2021.csv","CCR_Depth_offsets_2021.csv"),
-         data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths"),
-         other.entity = c('CCR_catwalk_QAQC_function_2021.R', 'CCR_catwalk_QAQC_Plots_2021.R','CCRW_maintenance_log_2021.txt', 'CCR_sort_by_depth_2021.R' ),
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
+         total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2022",
+         data.table = c("CCR_Catwalk_EDI_2021_2022.csv","CCR_Depth_offsets_2021_2022.csv", "CCR_hobos_20_21.csv"),
+         data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths", "CCR HOBO Temperature String 2020-2021"),
+         other.entity = c('CCR_catwalk_QAQC_function_2021_2022.R', 'Mark_down_plotting_CCRcatwalk_2021_2022.Rmd','CCRW_maintenance_log_2021_2022.txt', 'CCR_sort_by_depth_2021_2022.R' ),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors', 'Applying the depth offset and sorting by sensor depth' ),          
-         temporal.coverage = c("2021-04-09", "2021-12-31"),
+         temporal.coverage = c("2020-07-29", "2022-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.9", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.13", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

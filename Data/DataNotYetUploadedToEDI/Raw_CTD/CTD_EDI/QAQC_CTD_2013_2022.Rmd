@@ -245,6 +245,8 @@ ctd_flagged = ctd %>% #Add flags
   mutate(
     #TEMP
     Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp), #Flag NA temperatures
+    Temp_C = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36","2022-04-12 06:59:17")),NA,Temp_C), #Issues with cond/temp/DO on these casts
+    Flag_Temp = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36","2022-04-12 06:59:17")),2,Flag_Temp),
   
     #DO
     Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
@@ -271,15 +273,17 @@ ctd_flagged = ctd %>% #Add flags
     Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond), #Flag NA
     Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
     Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0. 
+    Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36")),NA,Cond_uScm), #Issues with cond/temp/DO on this cast
     Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,Cond_uScm), #SSS manipulation messed with this cast
-    Flag_Cond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),2,Flag_Cond),
+    Flag_Cond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17","2022-05-17 10:17:36")),2,Flag_Cond),
     
     #SPECCOND
     Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond), #Flag NA
     Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
     Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, NA, Spec_Cond_uScm), #Flag Cond < 0.
+    Spec_Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-05-17 10:17:36")),NA,Spec_Cond_uScm), #Issues with cond/temp/DO on this cast
     Spec_Cond_uScm = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),NA,Spec_Cond_uScm), #SSS manipulation messed with this cast
-    Flag_SpecCond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17")),2,Flag_SpecCond),
+    Flag_SpecCond = ifelse(Date %in% as.POSIXct(c("2022-04-12 06:59:17","2022-05-17 10:17:36")),2,Flag_SpecCond),
     
     #CHLA
     Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
@@ -322,8 +326,8 @@ summary(ctd_flagged)
 hist(hour(unique(ctd_flagged$Date[year(ctd_flagged$Date) == 2022])))
 unique(ctd_flagged$Date)
 #CTD date - date from field notes
-as_datetime("2022-02-24 08:01:48 CST")-as_datetime("2022-02-24 10:02:00 EDT")
-as_datetime("2022-11-08 08:09:27 CST")-as_datetime("2022-11-08 10:10:00 EST")
+as_datetime("2022-02-24 08:01:48 EST")-as_datetime("2022-02-24 10:02:00 EDT")
+as_datetime("2022-11-08 08:09:27 EST")-as_datetime("2022-11-08 10:10:00 EST")
 #~2 hours
 
 ctd_flagged$Date[ctd_flagged$Date>as.Date("2021-12-01")&ctd_flagged$Date<as.Date("2023-01-01")] = ctd_flagged$Date[ctd_flagged$Date>as.Date("2021-12-01")&ctd_flagged$Date<as.Date("2023-01-01")]+hours(2)#to align with published data
@@ -434,11 +438,11 @@ library(colorRamps)
 library(plotly)
 qaqc = ctd_flagged
 qaqc = read.csv("CTD_2013_2022.csv")%>%
-  mutate(Date = as_datetime(Date))
+  mutate(Date = as_datetime(DateTime))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
+  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = Temp_C, shape = as.factor(Flag_Temp)))+
+  ggplot(aes(x = Date, y = Depth_m, color = Temp_C, shape = as.factor(Flag_Temp_C)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()

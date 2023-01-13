@@ -1,6 +1,6 @@
 Depth profiles of multiple water-quality variables were collected from 2013 through 2022 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA). Profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2022, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir. 
 
-The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except during/before the 2021 field season when calibration was delayed until August 2021 due to the ongoing covid-19 pandemic.
+The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except during/before the 2021 field season when calibration was delayed until August 2021 due to the ongoing COVID-19 pandemic.
 
 Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. 
 

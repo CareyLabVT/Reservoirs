@@ -26,10 +26,16 @@ raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductio
 names(raw_profiles)[names(raw_profiles) == 'SpCond_uScm'] <- 'Sp_cond_uScm'
 
 #date format
-raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%m/%d/%y %H:%M"))
+raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ))#"%m/%d/%y %H:%M"
 
 #make depth numeric
 raw_profiles$Depth_m <- as.numeric(raw_profiles$Depth_m)
+
+#rename notes col
+names(raw_profiles)[20] <- "Notes"
+
+#add flag datetime col
+raw_profiles$Flag_DateTime <- NA
 
 #QAQC data + add flags
 profiles <- raw_profiles %>%
@@ -87,6 +93,11 @@ profiles <- raw_profiles %>%
          Cond_uScm, Sp_cond_uScm, PAR_umolm2s, ORP_mV, pH, Flag_DateTime, Flag_Temp, Flag_DO, Flag_DOSat,
          Flag_Cond, Flag_Sp_Cond, Flag_PAR, Flag_ORP, Flag_pH) %>%
   arrange(Reservoir, DateTime, Depth_m) 
+
+#manually replace NA flags with 0
+profiles$Flag_Sp_Cond[is.na(profiles$Flag_Sp_Cond)] <- 0
+profiles$Flag_DOSat[is.na(profiles$Flag_DOSat)] <- 0
+profiles$Flag_DateTime[is.na(profiles$Flag_DateTime)] <- 0
 
 # Write to CSV (using write.csv for now; want ISO format embedded?)
 write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
@@ -155,6 +166,9 @@ ysi <- ysi %>% select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOSat,
 names(ysi) <- c(names(ysi)[1:6],"DOsat_percent","Cond_uScm","SpCond_uScm",names(ysi)[10:13],"Flag_Temp_C","Flag_DO_mgL",
                 "Flag_DOsat_percent","Flag_Cond_uScm","Flag_SpCond_uScm",
                 "Flag_PAR_umolm2s","Flag_ORP_mV","Flag_pH")
+
+#change all ccr site 100 to 101
+ysi$Site[ysi$Reservoir=="CCR" & ysi$Site==100] <- 101
 
 write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
 

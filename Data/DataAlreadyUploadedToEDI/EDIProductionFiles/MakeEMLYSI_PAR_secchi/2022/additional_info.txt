@@ -1,6 +1,6 @@
 Authorship Contribution Statement: 
 
-CCC developed and led the reservoir monitoring program. ABP is point person for this data package. HLW led data publication and QAQC. ABP led the field crew and contributed substantially to sampling. BG and GH digitized all field data and led field prep.
+CCC developed and led the reservoir monitoring program. ABP was point person for this data package in 2022. HLW led data publication and QAQC in 2022. ABP led the field crew and contributed substantially to sampling; BG and GH digitized all field data and led field prep in 2022.
 
 Acknowledgments and historical contributions:
 

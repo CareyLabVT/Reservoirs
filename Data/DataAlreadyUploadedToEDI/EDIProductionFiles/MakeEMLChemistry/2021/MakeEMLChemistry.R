@@ -242,7 +242,7 @@ make_eml(
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "2021_chemistry_collation.R",
+  other.entity = "QAQC_chemistry_2013_2022.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',

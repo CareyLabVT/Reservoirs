@@ -1,11 +1,11 @@
 # Steps for setting up EML metadata ####
 library(devtools)
-install_github("EDIorg/EMLassemblyline", force=T)
+#install_github("EDIorg/EMLassemblyline", force=T)
 library(EMLassemblyline)
 
 #Create site description file
 #Install the required googlesheets4 package
-install.packages('googlesheets4')
+#install.packages('googlesheets4')
 
 #Load the library 
 library(googlesheets4)
@@ -69,11 +69,14 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
                         "site_descriptions.csv"),
          data.table.description = c("Secchi depth data from five reservoirs in southwestern Virginia", 
                                     "Discrete depths of water temperature, dissolved oxygen, conductivity, photosynthetically active radiation, redox potential, and pH in five southwestern Virginia reservoirs"),
+         other.entity = c("QAQC_YSI_PAR_2013_2022.R", "QAQC_Secchi_2013_2022.R"),
+         other.entity.description = c("YSI and PAR QAQC script for most recent data publication",
+                                      "Secchi QAQC script for most recent data publication"),
          temporal.coverage = c("2013-08-30", "2022-12-12"),
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1003.2") #need a new one each year
+         package.id = "edi.1003.4") #need a new one each year
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 
@@ -89,6 +92,9 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
                         "site_descriptions.csv"),
          data.table.description = c("Secchi depth data from five reservoirs in southwestern Virginia", 
                                     "Discrete depths of water temperature, dissolved oxygen, conductivity, photosynthetically active radiation, redox potential, and pH in five southwestern Virginia reservoirs"),
+         other.entity = c("QAQC_YSI_PAR_2013_2022.R", "QAQC_Secchi_2013_2022.R"),
+         other.entity.description = c("YSI and PAR QAQC script for most recent data publication",
+                                      "Secchi QAQC script for most recent data publication"),
          temporal.coverage = c("2013-08-30", "2022-12-12"),
          maintenance.description = "ongoing", 
          user.domain = "EDI",

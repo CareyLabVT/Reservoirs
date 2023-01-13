@@ -41,7 +41,7 @@
       <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
     </creator>
-    <pubDate>2023-01-12</pubDate>
+    <pubDate>2023-01-13</pubDate>
     <abstract>
       <para>Depth profiles of fluorescence-based phytoplankton biomass were sampled using a bbe Moldaenke FluoroProbe during 2014 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the town of Pulaski, Virginia. The dataset consists of depth profiles of fluorescence-based phytoplankton biomass measured at the deepest site of each reservoir adjacent to the dam, except in Falling Creek Reservoir, where depth profiles were also taken at four upstream sites ranging from the riverine to the lacustrine zone during 2016-2019. Casts were taken approximately weekly from May-October and monthly from November-April. Casts were collected at Beaverdam and Falling Creek Reservoirs during all years (2014-2022); casts were collected at Carvins Cove Reservoir during 2014-2016 and 2018-2022; casts were collected at Spring Hollow Reservoir during 2014-2016 and 2019; and casts were collected at Gatewood Reservoir in 2015-2016.</para>
     </abstract>
@@ -246,7 +246,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <physical>
         <objectName>FluoroProbe_2014_2022.csv</objectName>
         <size unit="bytes">14027274</size>
-        <authentication method="MD5">c51ff192d069f6724ef1e2af614c7b5e</authentication>
+        <authentication method="MD5">39bbeabfe570c138f34514a280f3fdb0</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1128,8 +1128,8 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <entityDescription>data aggregation and quality control script</entityDescription>
       <physical>
         <objectName>FluoroProbe_QAQC_2014_2022.R</objectName>
-        <size unit="bytes">10368</size>
-        <authentication method="MD5">3734b1e132e1e17319a3ae412ae3654e</authentication>
+        <size unit="bytes">10369</size>
+        <authentication method="MD5">9aa7d826a3e9deff27a38a0410626e64</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

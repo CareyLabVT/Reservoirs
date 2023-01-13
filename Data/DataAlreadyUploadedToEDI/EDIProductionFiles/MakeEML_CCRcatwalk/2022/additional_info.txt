@@ -1,2 +1,2 @@
-Author Contribution Statement-
-CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. DWH is the point person for this data set for 2021. He installed the sensors, led maintenance, and field sampling at CCR. ABP is a co-point person for 2021 as she has done the maintenance and data management. She led the installation of the sensors and working with vendors for sensor updates.  
+Authorship Statement:
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP is a co-point person for 2021-2022 as she has done the maintenance and data management. She led the installation of the sensors and working with vendors for sensor updates.  DWH was the point person for this data set in 2021-2022. He installed the sensors, led maintenance, and field sampling at CCR. FEO helped with data publication to EDI and writing of metadata. 

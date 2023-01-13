@@ -16,16 +16,16 @@ RDO_mgL_5	Dissolved Oxygen (DO) concentration at 5 meter depth as measured by th
 RDOsat_percent_5	Dissolved Oxygen (DO) percent saturation at 5 meter depth as measured by the RDO Sensor	numeric	dimensionless		NA	value is missing
 RDO_mgL_5_adjusted	"One period in summer 2019 appears to have had extensive fouling on the 5 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profile. This column gives the adjusted values. Added in the 2019 revision. Values not adjusted are the same as values from RDO_mgL_5. "	numeric	milligramsPerLiter		NA	value is missing
 RDOsat_percent_5_adjusted	"One period in summer 2019 appears to have had extensive fouling on the 5 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profiler. This column gives the adjusted values. Added in the 2019 revision. Values not adjusted are the same as values from RDOsat_percent_5."	numeric	dimensionless		NA	value is missing
-RDOTemp_C_5	Water temperature as measured by the DO sonde at 5 meter depth as measured by the RDO Sensor	numeric	celsius		NA	value is missing
+RDOTemp_C_5	Water temperature as measured by the RDO sonde at 5 meter depth 	numeric	celsius		NA	value is missing
 RDO_mgL_9	Dissolved Oxygen (DO) concentration at 9 meter depth as measured by the RDO Sensor	numeric	milligramsPerLiter		NA	value is missing
 RDOsat_percent_9	Dissolved Oxygen (DO) percent saturation at 9 meter depth as measured by the RDO Sensor	numeric	dimensionless		NA	value is missing
 RDO_mgL_9_adjusted	"Two periods in summer 2019 and four periods in 2020 appears to have had extensive fouling on the 9 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profiler. This column gives the adjusted values. Added in the 2019 and 2020 revision. Values not adjusted are the same as values from RDO_mgL_9."	numeric	milligramsPerLiter		NA	value is missing
 RDOsat_percent_9_adjusted	"Two periods in summer 2019 and four periods in 2020 appears to have had extensive fouling on the 9 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profiler. This column gives the adjusted values. Added in the 2019 and 2020 revision. Values not adjusted are the same as values from RDOsat_percent_9."	numeric	dimensionless		NA	value is missing
-RDOTemp_C_9	Water temperature as measured by the DO sonde at 9 meter depth as measured by the RDO Sensor	numeric	celsius		NA	value is missing
+RDOTemp_C_9	Water temperature as measured by the RDO sonde at 9 meter depth 	numeric	celsius		NA	value is missing
 EXOTemp_C_1	Water temperature at 1.6 meter depth as measured by the EXO Sonde	numeric	celsius		NA	value is missing
 EXOCond_uScm_1	Conductivity at 1.6 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
 EXOSpCond_uScm_1	Specific conductance at 1.6 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.6 meter depth as measured by the EXO Sonde as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.6 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
 EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.6 meter depth as measured by the EXO Sonde	numeric	dimensionless		NA	value is missing
 EXODO_mgL_1	Dissolved Oxygen at 1.6 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
 EXOChla_RFU_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
@@ -70,10 +70,10 @@ Flag_EXODOsat_percent_1	Data flag for EXO2 DO saturation data at 1.6 meter depth
 Flag_EXODO_mgL_1	Data flag for EXO2 DO data in miligrams per liter at 1.6 meter depth (EXODO_mgL_1)	categorical			NA	value is missing
 Flag_EXOChla_RFU_1	Data flag for EXO2 chlorophyll data measured in Relative Fluorescence Units (EXOChla_RFU_1)	categorical			NA	value is missing
 Flag_EXOChla_ugL_1	Data flag for EXO2 chlorophyll data measured in micrograms per liter (EXOChla_ugL_1)	categorical			NA	value is missing
-Flag_EXOBGAPC_RFU_1	Data flag for EXO2 phycocyanin data measured in Relative Fluorescence Units (EXOBGAPC_RFU_1) 	categorical			NA	value is missing
-Flag_EXOBGAPC_ugL_1	Data flag for EXO2 phycocyanin data measured in micrograms per liter(EXOBGAPC _ugL_1) 	categorical			NA	value is missing
-Flag_EXOfDOM_RFU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Relative Fluorescence Units (EXOfDOM_RFU_1)	categorical			NA	value is missing
-Flag_EXOfDOM_QSU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Quinine Sulfate Units(EXOfDOM_QSU_1)	categorical			NA	value is missing
+Flag_EXOBGAPC_RFU_1	Data flag for EXO2 phycocyanin data measured in micrograms per liter(EXOBGAPC _RFU_1) 	categorical			NA	value is missing
+Flag_EXOBGAPC_ugL_1	Data flag for EXO2 phycocyanin data measured in micrograms per liter (EXOBGAPC_ugL_1)	categorical			NA	value is missing
+Flag_EXOfDOM_RFU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Relative Fluorescence Units (EXOfDOM_RFU_1)	categorical			NA	value is missing
+Flag_EXOfDOM_QSU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Relative Fluorescence Units (EXOfDOM_QSU_1)	categorical			NA	value is missing
 Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU (EXOTurbidity_FNU_1)	categorical			NA	value is missing
 Flag_EXOpressure_psi	Data flag for EXO2 pressure sensor in psi (EXO_pressure_psi)	categorical			NA	value is missing
 Flag_EXODepth_m	Data flag for EXO2 depth sensor in meters (EXO_depth_m)	categorical			NA	value is missing

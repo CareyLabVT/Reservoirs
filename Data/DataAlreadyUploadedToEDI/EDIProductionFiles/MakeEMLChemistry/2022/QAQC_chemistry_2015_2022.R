@@ -1,5 +1,5 @@
-# 2021 nutrient chemistry collation
-#includes TNTP, DOC, and np 20201
+# 2022 nutrient chemistry collation
+#includes TNTP, DOC, and np
 #Note: flags are aggregated without commas for final EDI upload
 #figure out what to do when dups are super different
 #NOTE: samples were rerun and need to integrate/average/select values appropriately
@@ -7,16 +7,13 @@
                  # B08Mar 11m, TN+TP, (cant find reason for repeat, averaging both )
                  #B09Aug 10m DOC (cant find reason for repeat, averaging both )
 #NOTE for 2022 field sample publication - we removed n=9 samples w/ suspect data (sampleIDs in the 2021 MakeEMLChemistry script) so reran them after 2021 data was published - need to bring that data in (average/replace 2021 runs)
-#ALSO, need to replace B01 site with B40 pre-2022
+#too bad that these samples got tossed from the 2021-2022 field season transition, so these data are lost :(
 
 library(tidyverse)
 library(dplyr)
 library(lubridate)
 
 TNTP <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/collation/2022/2022_TNTP_collation.csv")
-
-#delete F 06dec21 wet because no reason to believe that we went to the wetland on this day...
-TNTP <- TNTP[TNTP$SampleID_lachat !="F06dec21 wet T",]
 
 #drop samplID col 
 TNTP <- TNTP [,!(names(TNTP) %in% c("SampleID_lachat"))]
@@ -173,6 +170,13 @@ doc <- doc %>%
 #order doc df
 doc <- doc %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
+#deleting CCR 14Oct22 site 400 bc is being rerun at a later date (hopefully!)
+doc <- doc[!(doc$Notes_DOC=="rerun so delete"),]
+
+#add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
+doc$Flag_DateTime <- 0
+doc$Flag_DateTime[grep("Flag_DateTime", doc$Notes_DOC)] <- 1
+
 #get rid of notes col
 doc<- doc %>% select(-Notes_DOC, Date.NOTES)
 
@@ -245,8 +249,8 @@ for (i in 1:nrow(doc)) {
 
 # clean up DOC data
 # look for duplicate values and average them, while adding flag = 7
-doc_dups <- duplicated(doc[,1:4],fromLast = TRUE) 
-table(doc_dups)['TRUE']
+doc_dups <- duplicated(doc[,1:4],fromLast = FALSE) 
+table(doc_dups)['TRUE'] 
 
 # create col to put average of reps into
 doc$DOC_mgLAVG <- 'NA'
@@ -298,16 +302,6 @@ doc <- doc %>% select(-c(DOC_mgLAVG, DIC_mgLAVG, DC_mgLAVG, DN_mgLAVG))
 #keep/format rep col
 doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
 
-
-
-#from last year 
-#drop 20Jul20 5m because there are two samples with this label when one should be 8m
-# doc <- doc[!(doc$DateTime=="7/20/20 0:00" & doc$Depth_m==5),] 
-
-#delete F 06dec21 wet because no reason to believe that we went to the wetland on this day...
-doc <- doc[doc$SampleID_DOC !="F 06dec21 wet",]
-
-
 #################################################################
 #      rolling spiked blank for most recent field season 
 #       (TIC TC TNb rolling 06oct22.xlsx) -   
@@ -324,7 +318,7 @@ doc <- doc[doc$SampleID_DOC !="F 06dec21 wet",]
 
 # DIC
 for (i in 1:nrow(doc)) {
-  if(doc$DIC_mgL[i] <0.47 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DIC_mgL[i] <0.70 & !is.na(doc$DIC_mgL[i])){
     if(doc$Flag_DIC[i]>0){
       doc$Flag_DIC[i] <- paste0(doc$Flag_DIC[i], 3)
       
@@ -334,7 +328,7 @@ for (i in 1:nrow(doc)) {
 
 # DOC
 for (i in 1:nrow(doc)) {
-  if(doc$DOC_mgL[i] <0.45){
+  if(doc$DOC_mgL[i] <0.84){
     if(doc$Flag_DOC[i]>0){
       doc$Flag_DOC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -345,7 +339,7 @@ for (i in 1:nrow(doc)) {
 
 # DC
 for (i in 1:nrow(doc)) {
-  if(doc$DC_mgL[i] < 0.69 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DC_mgL[i] < 0.85 & !is.na(doc$DIC_mgL[i])){
     if(doc$Flag_DC[i]>0){
       doc$Flag_DC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -355,14 +349,13 @@ for (i in 1:nrow(doc)) {
 
 # DN
 for (i in 1:nrow(doc)) {
-  if(doc$DN_mgL[i] <0.11){
+  if(doc$DN_mgL[i] <0.05){
     if(doc$Flag_DN[i]>0){
       doc$Flag_DN[i] <- paste0(doc$Flag_DN[i], 3)
       
     }else{doc$Flag_DN[i] <- 3}
   }
 }
-
 
 ############################################################
 ############################################################
@@ -381,7 +374,7 @@ np <- np[!is.na(np$NH4_ugL) | !is.na(np$PO4_ugL) | !is.na(np$NO3NO2_ugL),]
 
 #add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
 np$Flag_DateTime <- 0
-np$Flag_DateTime[grep("datetime_flag!", np$Notes_lachat)] <- 1
+np$Flag_DateTime[grep("Flag_DateTime", np$Notes_lachat)] <- 1
 
 
 ##############################################
@@ -434,35 +427,6 @@ for (i in 1:nrow(np)) {
 # average dups and those with two reps
 np_dups <- duplicated(np[,1:4]) 
 table(np_dups)['TRUE']
-
-
-##addressing samples that were rerun for a specific analyte 
-
-#B15Jun 11m SRP - rows 52 and 53
-np$PO4_ugL[np$DateTime=="6/15/21 16:52" & np$RunDate=="7/20/21"] <- NA #set inital SRP to NA
-np$NH4_ugL[np$DateTime=="6/15/21 16:52" & np$RunDate=="1/26/22"] <- NA #set rerun NH4 to NA
-np$NO3NO2_ugL[np$DateTime=="6/15/21 16:52" & np$RunDate=="1/26/22"] <- NA #set rerun NO3 to NA
-
-#B21Sep21 10m NH4 - rows 83 and 84
-np$NH4_ugL[np$DateTime=="9/21/21 10:41" & np$RunDate=="10/5/21"] <- NA #set inital NH4 to NA
-np$NO3NO2_ugL[np$DateTime=="9/21/21 10:41" & np$RunDate=="1/26/22"] <- NA #set rerun NO3 to NA
-np$PO4_ugL[np$DateTime=="9/21/21 10:41" & np$RunDate=="1/26/22"] <- NA #set rerun SRP to NA
-
-#C19Aug21 21m NH4+NO3 - rows 145 and 146 
-np$NH4_ugL[np$DateTime=="8/19/21 12:00" & np$RunDate=="10/5/21" & np$Depth_m==21] <- NA #set inital NH4 to NA
-np$NO3NO2_ugL[np$DateTime=="8/19/21 12:00" & np$RunDate=="10/5/21" & np$Depth_m==21] <- NA #set inital NO3 to NA
-np$PO4_ugL[np$DateTime=="8/19/21 12:00" & np$RunDate=="1/26/22"] <- NA #set rerun SRP to NA
-
-#F08feb21 0.1m NO3 - rows 228 and 229
-np$NO3NO2_ugL[np$DateTime=="2/8/21 11:22" & np$RunDate=="6/16/21"] <- NA #set inital NO3 to NA
-np$NH4_ugL[np$DateTime=="2/8/21 11:22" & np$RunDate=="1/26/22"] <- NA #set rerun NH4 to NA
-np$PO4_ugL[np$DateTime=="2/8/21 11:22" & np$RunDate=="1/26/22"] <- NA #set rerun SRP to NA
-
-#F26jul21 1.6m for NO3 - rows 335 and 336
-np$NO3NO2_ugL[np$DateTime=="7/26/21 12:50" & np$RunDate=="10/5/21"] <- NA #set inital NO3 to NA
-np$NH4_ugL[np$DateTime=="7/26/21 12:50" & np$RunDate=="1/26/22"] <- NA #set rerun NH4 to NA
-np$PO4_ugL[np$DateTime=="7/26/21 12:50" & np$RunDate=="1/26/22"] <- NA #set rerun SRP to NA
-
 
 # create col to put average of reps into
 np$NH4_ugLAVG <- 'NA'
@@ -535,7 +499,7 @@ np$Rep <- ifelse(np$Rep=="R2" & !is.na(np$Rep),2,1)
 ###############################################
 
 for (i in 1:nrow(np)) {
-  if(np$NH4_ugL[i] <7.3){
+  if(np$NH4_ugL[i] <4.5){
     if(np$Flag_NH4[i]>0){
       np$Flag_NH4[i] <- paste0(np$Flag_NH4[i], 3)
       
@@ -553,7 +517,7 @@ for (i in 1:nrow(np)) {
 }
 
 for (i in 1:nrow(np)) {
-  if(np$NO3NO2_ugL[i] < 3.7){
+  if(np$NO3NO2_ugL[i] < 3.4){
     if(np$Flag_NO3NO2[i]>0){
       np$Flag_NO3NO2[i] <- paste0(np$Flag_NO3NO2[i], 3)
       
@@ -561,13 +525,9 @@ for (i in 1:nrow(np)) {
   }
 }
 
-#delete F 06dec21 wet because no reason to believe that we went to the wetland on this day...
-np <- np[np$SampleID_lachat!="F 06dec21 wet",]
-
 ##########################################################
 #add demonic intrusion flags for ?? 
 #np$Flag_NO3NO2[which(np$DateTime=='2019-05-23 12:00:00' & np$Depth_m==3.0 & np$NO3NO2_ugL==30.5)] <- "5"
-
 
 
 ###########################
@@ -576,7 +536,12 @@ np <- np[np$SampleID_lachat!="F 06dec21 wet",]
 
 #rename PO4_ugL to SRP_ugL and Flag_PO4 to Flag_SRP
 colnames(np)[which(names(np) == "PO4_ugL")] <- "SRP_ugL"
-colnames(np)[which(names(np) == "Flag_PO4")] <- "Flag_SRP"
+colnames(np)[which(names(np) == "Flag_PO4")] <- "Flag_SRP_ugL"
+
+#add units to other flag columns
+colnames(np)[c(13,15)] <- c("Flag_NH4_ugL","Flag_NO3NO2_ugL")
+colnames(doc)[c(13:16)] <- c("Flag_DC_mgL","Flag_DIC_mgL","Flag_DOC_mgL","Flag_DN_mgL")
+
 
 #make sure all are in same datetime format 
 TNTP <- TNTP %>% 
@@ -618,28 +583,28 @@ chem_final <-chem %>% mutate(SRP_ugL = round(SRP_ugL, 0),
                 DC_mgL = round(DC_mgL, 1),
                 DN_mgL = round(DN_mgL, 3))
 
-chem_final <- chem_final %>% mutate(Flag_TP= as.numeric(Flag_TP),
-                        Flag_TN= as.numeric(Flag_TN),
-                        Flag_NH4 = as.numeric(Flag_NH4),
-                        Flag_SRP = as.numeric(Flag_SRP),
-                        Flag_NO3NO2 = as.numeric(Flag_NO3NO2),
-                        Flag_DOC = as.numeric(Flag_DOC),
-                        Flag_DIC = as.numeric(Flag_DIC),
-                        Flag_DC = as.numeric(Flag_DC),
-                        Flag_DN = as.numeric(Flag_DN))
+chem_final <- chem_final %>% mutate(Flag_TP_ugL= as.numeric(Flag_TP_ugL),
+                        Flag_TN_ugL= as.numeric(Flag_TN_ugL),
+                        Flag_NH4_ugL = as.numeric(Flag_NH4_ugL),
+                        Flag_SRP_ugL = as.numeric(Flag_SRP_ugL),
+                        Flag_NO3NO2_ugL = as.numeric(Flag_NO3NO2_ugL),
+                        Flag_DOC_mgL = as.numeric(Flag_DOC_mgL),
+                        Flag_DIC_mgL = as.numeric(Flag_DIC_mgL),
+                        Flag_DC_mgL = as.numeric(Flag_DC_mgL),
+                        Flag_DN_mgL = as.numeric(Flag_DN_mgL))
 
 
 #change all NAs to 0 in flag columns
 chem_final$Flag_DateTime <- ifelse(is.na(chem_final$Flag_DateTime), 0, chem_final$Flag_DateTime)
-chem_final$Flag_DC <- ifelse(is.na(chem_final$Flag_DC), 0, chem_final$Flag_DC)
-chem_final$Flag_DN <- ifelse(is.na(chem_final$Flag_DN), 0, chem_final$Flag_DN)
-chem_final$Flag_DIC <- ifelse(is.na(chem_final$Flag_DIC), 0, chem_final$Flag_DIC)
-chem_final$Flag_DOC <- ifelse(is.na(chem_final$Flag_DOC), 0, chem_final$Flag_DOC)
-chem_final$Flag_TP <- ifelse(is.na(chem_final$Flag_TP), 0, chem_final$Flag_TP)
-chem_final$Flag_TN <- ifelse(is.na(chem_final$Flag_TN), 0, chem_final$Flag_TN)
-chem_final$Flag_NH4 <- ifelse(is.na(chem_final$Flag_NH4), 0, chem_final$Flag_NH4)
-chem_final$Flag_NO3NO2 <- ifelse(is.na(chem_final$Flag_NO3NO2), 0, chem_final$Flag_NO3NO2)
-chem_final$Flag_SRP <- ifelse(is.na(chem_final$Flag_SRP), 0, chem_final$Flag_SRP)
+chem_final$Flag_DC_mgL <- ifelse(is.na(chem_final$Flag_DC_mgL), 0, chem_final$Flag_DC_mgL)
+chem_final$Flag_DN_mgL <- ifelse(is.na(chem_final$Flag_DN_mgL), 0, chem_final$Flag_DN_mgL)
+chem_final$Flag_DIC_mgL <- ifelse(is.na(chem_final$Flag_DIC_mgL), 0, chem_final$Flag_DIC_mgL)
+chem_final$Flag_DOC_mgL <- ifelse(is.na(chem_final$Flag_DOC_mgL), 0, chem_final$Flag_DOC_mgL)
+chem_final$Flag_TP_ugL <- ifelse(is.na(chem_final$Flag_TP_ugL), 0, chem_final$Flag_TP_ugL)
+chem_final$Flag_TN_ugL <- ifelse(is.na(chem_final$Flag_TN_ugL), 0, chem_final$Flag_TN_ugL)
+chem_final$Flag_NH4_ugL <- ifelse(is.na(chem_final$Flag_NH4_ugL), 0, chem_final$Flag_NH4_ugL)
+chem_final$Flag_NO3NO2_ugL <- ifelse(is.na(chem_final$Flag_NO3NO2_ugL), 0, chem_final$Flag_NO3NO2_ugL)
+chem_final$Flag_SRP_ugL <- ifelse(is.na(chem_final$Flag_SRP_ugL), 0, chem_final$Flag_SRP_ugL)
 
 
 #order chem
@@ -648,5 +613,8 @@ chem_final<- chem_final %>% arrange(Reservoir, DateTime, Site, Depth_m)
 #drop sun samples
 chem_final <- chem_final[chem_final$Reservoir!="SUN",]
 
-write.csv(chem_final, "./FinalData/2021_chemistry_collation_final_nocommas.csv")
+#also drop ISCO samples bc being published in separate data product
+chem_final <- chem_final[chem_final$Site!=100.1,]
+
+write.csv(chem_final, "./Data/DataNotYetUploadedToEDI/NutrientData/FinalData/2022_chemistry_collation_final_nocommas.csv")
 

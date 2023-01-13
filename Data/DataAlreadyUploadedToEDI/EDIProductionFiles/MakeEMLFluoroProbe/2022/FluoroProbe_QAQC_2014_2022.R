@@ -7,7 +7,7 @@ rm(list=ls())
 
 # load packages
 #install.packages('pacman')
-pacman::p_load(tidyverse, lubridate)
+pacman::p_load(tidyverse, lubridate, googlesheets4)
 
 # Load in column names for .txt files to get template
 col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20220224_BVR_50.txt", n_max = 0))
@@ -165,7 +165,24 @@ fp6 <- fp4
 #merge two datasets - previously published data package + this year's data
 
 #read in old data and check column names of old and new and DateTime format
-fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021/FluoroProbe_2014_2021.csv")
+#2022: rename columns following new protocols where units are included in Flag columns
+#and water temperature is always named Temp_C
+fp_og <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021/FluoroProbe_2014_2021.csv") %>%
+  rename(Temp_C = Temp_degC,
+         Transmission_perc = Transmission,
+         Flag_GreenAlgae_ugL = Flag_GreenAlgae,
+         Flag_BluegreenAlgae_ugL = Flag_BluegreenAlgae,
+         Flag_BrownAlgae_ugL = Flag_BrownAlgae,
+         Flag_MixedAlgae_ugL = Flag_MixedAlgae,
+         Flag_TotalConc_ugL = Flag_TotalConc,
+         Flag_Temp_C = Flag_Temp, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
+         Flag_Transmission_perc = Flag_Transmission,
+         Flag_RFU_525nm = Flag_525nm,
+         Flag_RFU_570nm = Flag_570nm,
+         Flag_RFU_610nm = Flag_610nm,
+         Flag_RFU_370nm = Flag_370nm,
+         Flag_RFU_590nm = Flag_590nm,
+         Flag_RFU_470nm = Flag_470nm)
 
 #convert time zone of old data; usually defaults to UTC when read in
 attr(fp_og$DateTime, "tzone") <- "America/New_York"
@@ -200,29 +217,48 @@ colnames(fp8)
 #2022: no need to flag transmission at this time
 
 fp9 <- fp8 %>%
-  mutate(Flag_GreenAlgae = 0,
-         Flag_BluegreenAlgae = 0,
-         Flag_BrownAlgae = 0,
-         Flag_MixedAlgae = 0,
-         Flag_TotalConc = 0,
-         Flag_Temp = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission = 0,
-         Flag_525nm = 0,
-         Flag_570nm = 0,
-         Flag_610nm = 0,
-         Flag_370nm = 0,
-         Flag_590nm = 0,
-         Flag_470nm = 0)
+  mutate(Flag_GreenAlgae_ugL = 0,
+         Flag_BluegreenAlgae_ugL = 0,
+         Flag_BrownAlgae_ugL = 0,
+         Flag_MixedAlgae_ugL = 0,
+         Flag_TotalConc_ugL = 0,
+         Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
+         Flag_Transmission_perc = 0,
+         Flag_RFU_525nm = 0,
+         Flag_RFU_570nm = 0,
+         Flag_RFU_610nm = 0,
+         Flag_RFU_370nm = 0,
+         Flag_RFU_590nm = 0,
+         Flag_RFU_470nm = 0) %>%
+  rename(Temp_C = Temp_degC,
+         Transmission_perc = Transmission) 
 
 colnames(fp9)
+colnames(fp_og)
 
 #final merge!
 fp_final <- bind_rows(fp_og, fp9) %>%
-  arrange(Reservoir, Site, DateTime)
+  arrange(DateTime, Reservoir, Site)
+colnames(fp_final)
 
 #write the csv for publication!
 write.csv(fp_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022.csv", row.names = FALSE)
 fp <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/FluoroProbe_2014_2022.csv")
+
+#add in the site descriptions
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383') 
+
+#identify sites in FP dataset
+fp_sites <- unique(paste(fp_final$Reservoir,fp_final$Site, sep = "_"))
+
+#limit site descriptions to sites that are actually in FP dataset
+final_sites <- sites %>%
+  mutate(fp_site = paste(Reservoir,Site, sep = "_")) %>%
+  filter(fp_site %in% fp_sites) %>%
+  select(-fp_site)
+
+#write site descriptions to file
+write.csv(final_sites, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022/site_descriptions.csv", row.names = FALSE)
 
 #Congrats you are done! Go have a cookie :-)
 

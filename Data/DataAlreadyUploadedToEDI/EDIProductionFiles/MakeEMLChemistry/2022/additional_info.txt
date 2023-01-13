@@ -1,0 +1,19 @@
+Author contribution statement: CCC developed and led the reservoir monitoring program 2013-present. HLW was the point person for running water chemistry analyses and QAQC from 2019-2021 and led the data publication during this time. DWH co-led data publication and QAQC with HLW in 2021. BRN oversaw all sample analysis in 2020-2021, as well as developed analytical chemistry methods and QAQC procedures and oversaw analytical chemistry instrumentation and training of all co-authors throughout 2013-2021. WMW co-led data publication, analyses, and QAQC with HLW in 2020. MEL led data publication, analysis, and QAQC from 2015-2019. ABG led analysis and QAQC from 2013-2015. ABP led the field crew and contributed substantially to sampling in 2021.
+
+
+Information on oxygenation at Falling Creek Reservoir: 
+From 2013 to 2021, multiple whole-ecosystem manipulations were conducted at Falling Creek Reservoir. These manipulations include intermittent operation of hypolimnetic oxygenation and pulsed epilimnetic mixing engineering systems. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014) and for a detailed description of the epilimnetic mixing engineered system, see Chen et al. (2017). These systems were operated over time following Table 1 in Gerling et al. (2016), Table 1 in Munger et al. (2016), and Table 2 in McClure et al. (2018). In 2019, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. In 2020, the HOx was activated during the following time periods: 29 June to 11 September, 25 September to 02 December. 2021 operation can be found in the SSS inflow file in Carey et al. (2021).
+
+Carey, C. C., R. Q. Thomas, R. P. McClure, A. G. Hounshell, W. M. Woelmer, H. L. Wander, & A. S. L. Lewis. (2021). CareyLabVT/FCR-GLM: FCR GLM-AED model, data, and code for Carey et al. manuscript (v1.0). Zenodo. https://doi.org/10.5281/zenodo.5528865
+
+Chen, S., C. Lei, C.C. Carey, P.A. Gantzer, and J.C. Little. 2017. Predicting hypolimnetic oxygenation and epilimnetic mixing in a shallow eutrophic reservoir using a coupled three-dimensional hydrodynamic model. Water Resources Research. 53: 470-484. DOI: 10.1002/2016WR019279
+
+Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002
+
+Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0
+
+McClure, R.P., K.D. Hamre, B.R. Niederlehner, Z.W. Munger, S. Chen, M.E. Lofton, M.E. Schreiber, and C.C. Carey. 2018 Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment 636: 610-620. DOI: 10.1016/j.scitotenv.2018.04.255
+
+Munger, Z.W., C.C. Carey, A.B. Gerling, K.D. Hamre, J.P. Doubek, S.D. Klepatzki, R.P. McClure, and M.E. Schreiber. 2016. Effectiveness of hypolimnetic oxygenation for preventing accumulation of Fe and Mn in a drinking water reservoir. Water Research. 106: 1-14. DOI: 10.1016/j.watres.2016.09.038
+
+Lofton, M.E., McClure, R.P., Chen, S., Little, J.C., and C.C. Carey. 2019. Whole-ecosystem experiments reveal varying responses of phytoplankton functional groups to epilimnetic mixing in a eutrophic reservoir. Water. 11, 222; DOI:10.3390/w11020222

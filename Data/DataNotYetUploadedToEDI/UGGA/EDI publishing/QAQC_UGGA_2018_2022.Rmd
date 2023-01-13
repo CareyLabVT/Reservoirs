@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(lubridate)
 ```
 
 Download historical data
@@ -117,9 +118,8 @@ ugga_comb = ugga_2018_2021%>%
 
 ugga_flagged = ugga_comb%>%
   mutate(Flag_co2_flux_umolCm2s = ifelse(co2_R2<0.9,1,Flag_co2_flux_umolCm2s),
-         Flag_ch4_flux_umolCm2s = ifelse(ch4_R2<0.9,1,Flag_ch4_flux_umolCm2s))
-
-summary(ugga_flagged)
+         Flag_ch4_flux_umolCm2s = ifelse(ch4_R2<0.9,1,Flag_ch4_flux_umolCm2s),
+         Site = ifelse(Site==1&Reservoir=="BVR",40,Site))
 
 write.csv(ugga_flagged, "UGGA_2018_2022.csv", row.names = F)
 
@@ -137,7 +137,7 @@ ugga_comb%>%
   geom_point()
 dev.off()
 
-min(ugga_comb$Date) ### ISSUE WITH 2022 DATES!!
+min(ugga_comb$Date)
 max(ugga_comb$Date)
 ```
 
@@ -163,26 +163,46 @@ uggs%>%
 
 ```{r}
 # Install and load devtools
-install.packages("devtools")
+#install.packages("devtools")
 library(devtools)
 
 # Install and load EMLassemblyline
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+
+# Add site descriptions
+
+#Install the required googlesheets4 package
+#install.packages('googlesheets4')
+#Load the library 
+library(googlesheets4)
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+data<- read_csv("UGGA_2018_2022.csv") #This is the line you need to modify!
+trim_sites = function(data,sites){
+  data_res_site=data%>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites%>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+    filter(res_site%in%data_res_site$res_site)%>%
+    select(-res_site)
+}
+sites_trimmed = trim_sites(data,sites) 
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
 
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 make_eml(path = getwd(),
          dataset.title = "Time series of methane and carbon dioxide diffusive fluxes using an Ultraportable Greenhouse Gas Analyzer (UGGA) for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2018–2022",
-         data.table = "UGGA_2018_2022.csv",
-         data.table.name = "UGGA dataset 2018-2022",
-         data.table.description = c("UGGA diffusive flux dataset from FCR and BVR"),
+         data.table = c("UGGA_2018_2022.csv","site_descriptions.csv"),
+         data.table.name = c("UGGA dataset 2018-2022","Sample site descriptions"),
+         data.table.description = c("UGGA diffusive flux dataset from FCR and BVR","Descriptions of sampling sites, including lat/long"),
          other.entity = c('RawData.zip', "QAQC_UGGA_2018_2022.Rmd"),
          other.entity.name = c('Raw UGGA files and code', "Data compilation and publishing script"),
          other.entity.description = c('Raw data from the Ultraportable Greenhouse Gas Analyzer and code used to translate these data into the diffusive flux rates presented in this data table', "Code used to compile and QAQC all years of UGGA data, then publish to EDI"),
-         temporal.coverage = c("2018-05-07", "2021-07-05"),
+         temporal.coverage = c("2018-05-07", "2022-07-05"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1082.1")
+         package.id = "edi.1002.5")
 ```
 

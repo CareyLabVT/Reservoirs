@@ -1,0 +1,29 @@
+"Reservoir","Site","Site_description","Latitude","Longitude"
+"BVR",40,"Pelagic site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir",37.314783,-79.820864
+"BVR",50,"Deep hole or site nearest to dam",37.31288,-79.8159
+"BVR",51,"Littoral site west of site 50 (deep pelagic site)",37.31267,-79.816592
+"BVR",100,"Inflow stream",37.31957,-79.82437
+"BVR",200,"Right arm inflow",37.322851,-79.81721
+"CCR",50,"Deepest site of reservoir near dam",37.3706,-79.9582
+"CCR",100,"Horse Pen Branch inflow",37.3646,-79.9733
+"CCR",101,"Horse Pen Branch standing water inflow",37.3654,-79.972
+"CCR",201,"Carvins Creek Stream via fireroad near red barns",37.3958,-79.9937
+"CCR",300,"Sawmill Branch inflow site closest to reservoir",37.4094,-79.9699
+"CCR",301,"Sawmill Branch inflow upstream of reservoir",37.4169,-79.9771
+"CCR",400,"Tinker Creek Tunnel Inflow",37.399,-79.9485
+"CCR",500,"Catawaba Creek Tunnel inflow downstream of tunnel emergence",37.4073,-79.9852
+"CCR",501,"Catawaba Creek Tunnel inflow emergence",37.4082,-79.9897
+"FCR",1,"Outflow site at spillway",37.30247,-79.83692
+"FCR",10,"Upstream pelagic site at deepest point of transect across the reservoir",37.308619,-79.836774
+"FCR",20,"Upstream pelagic site at deepest point of transect across the reservoir",37.30769,-79.8371
+"FCR",30,"Upstream pelagic site at deepest point of transect across the reservoir",37.30534,-79.8383
+"FCR",40,"Upstream pelagic site at deepest point of transect across the reservoir",37.3045477861234,-79.8384818899407
+"FCR",45,"Upstream pelagic site at deepest point of transect across the reservoir",37.30418,-79.8383
+"FCR",50,"Deep hole or site nearest to dam",37.30325,-79.8373
+"FCR",99,"Farthest downstream site on inflow stream",37.307613,79.8360878
+"FCR",100,"Inflow stream",37.30858,-79.83494
+"FCR",101,"Upstream site along inflow",37.309653,-79.830467
+"FCR",102,"Furthest upstream site on inflow stream",37.311678,-79.827357
+"FCR",200,"Secondary inflow (wetland) stream",37.30943,-79.83619
+"GWR",50,"Deep hole or site nearest to dam",37.0443528070071,-80.8632991493157
+"SHR",50,"Deep hole or site nearest to dam",37.2308522269357,-80.1759001355518

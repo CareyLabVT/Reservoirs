@@ -1,8 +1,8 @@
 Contributions to the 2022 revision:
 
-CCC developed and led the reservoir monitoring program, and ABP led the field crew in 2022. ASL and ABP coordinated sensor maintenance. ASL led data collation, QAQC, and publishing.
+CCC developed and led the reservoir monitoring program. ASL led data collation, processing, QAQC, and publishing in 2022. ABP led the field crew and contributed substantially to fieldwork; ASL and ABP coordinated sensor maintenance in 2022. 
 
 
-Other acknowledgments and historical contributions:
+Acknowledgments and historical contributions:
 
-CCC developed and led the reservoir monitoring program, and oversaw UGGA purchasing, use, and maintenance throughout 2018-2022. ASL was the point person for 2018-2022 data collation, QAQC, and publishing. AGH was the point person for UGGA data collection in 2020 and developed an automated QAQC script for UGGA data processing. RPM was the point person for UGGA data collection from 2018–2019. ABP was the field season lead in 2021 and 2022 and assisted in UGGA maintenance during this time. 
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork. 

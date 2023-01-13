@@ -20,8 +20,8 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2022"
-
+folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2022")
+folder
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020
@@ -113,7 +113,7 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "FCR_Catwalk_2018_2022.csv",
+                          data.table = "FCR_Catwalk_EDI_2018_2022.csv",
                           write.file = TRUE)
 # edit this file in excel
 
@@ -131,6 +131,7 @@ template_table_attributes(path = folder,
 template_categorical_variables(path = folder,
                                data.path = folder,
                                write.file = TRUE)
+## THIS WILL FAIL IF YOU HAVE MORE THAN ONE ATTRIBUTES FILE IN YOUR DIRECTORY
 # edit this file in excel
 
 
@@ -160,17 +161,18 @@ make_eml(path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths 
          in Falling Creek Reservoir, Virginia, USA in 2018-2022",
-         data.table = "FCR_Catwalk_2018_2022.csv",
+         data.table = "FCR_Catwalk_EDI_2018_2022.csv",
          data.table.description = "FCR Catwalk Sensor String",
-         other.entity = c('FCR_catwalk_QAQC_function_2018_2022.R', 'FCR_catwalk_QAQC_Plots_2018_2022.R','FCR_CAT_MaintenanceLog_2018_2022.txt' ),
+         other.entity = c('FCR_catwalk_QAQC_function_2018_2022.R', 'Mark_down_plotting_FCRcatwalk_2018_2022.Rmd','FCR_CAT_MaintenanceLog_2018_2022.txt' ),
          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
-         temporal.coverage = c("2018-07-05", "2022-05-31"),
+         temporal.coverage = c("2018-07-05", "2022-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.11", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.518.14", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
+
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
 # then login using one of the Carey Lab usernames and passwords. 

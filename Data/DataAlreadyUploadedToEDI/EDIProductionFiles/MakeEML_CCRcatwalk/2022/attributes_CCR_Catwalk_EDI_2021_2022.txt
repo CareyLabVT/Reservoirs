@@ -2,31 +2,31 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character				
 Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform "	numeric	dimensionless			
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss		
-ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (highest elevation above sediments)	numeric	celsius			
-ThermistorTemp_C_2	water temperature measured by thermistor at position 2	numeric	celsius			
-ThermistorTemp_C_3	water temperature measured by thermistor at position 3	numeric	celsius			
-ThermistorTemp_C_4	water temperature measured by thermistor at position 4	numeric	celsius			
-ThermistorTemp_C_5	water temperature measured by thermistor at position 5	numeric	celsius			
-ThermistorTemp_C_6	water temperature measured by thermistor at position 6	numeric	celsius			
-ThermistorTemp_C_7	water temperature measured by thermistor at position 7	numeric	celsius			
-ThermistorTemp_C_8	water temperature measured by thermistor at position 8	numeric	celsius			
-ThermistorTemp_C_9	water temperature measured by thermistor at position 9	numeric	celsius			
-ThermistorTemp_C_10	water temperature measured by thermistor at position 10	numeric	celsius			
-ThermistorTemp_C_11	water temperature measured by thermistor at position 11	numeric	celsius			
-ThermistorTemp_C_12	water temperature measured by thermistor at position 12	numeric	celsius			
-ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (located at 0.5 m above sediments)	numeric	celsius			
+ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius			
+ThermistorTemp_C_2	water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_4	water temperature measured by thermistor at position 4 (3 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_5	water temperature measured by thermistor at position 5 (4 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_6	water temperature measured by thermistor at position 6 (5 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_7	water temperature measured by thermistor at position 7 (6 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_8	water temperature measured by thermistor at position 8 (7 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meter below thermistor 1)	numeric	celsius			
+ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meter below thermistor 1; located at 0.5 m above sediments)	numeric	celsius			
 EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO Sonde	numeric	celsius			
 EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter			
 EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter			
 EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.5 m as measured by the EXO Sonde as measured by the EXO2 Sonde	numeric	milligramsPerLiter			
 EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.5 m as measured by the EXO2 Sonde	numeric	dimensionless			
 EXODO_mgL_1	Dissolved Oxygen at 1.5 m as measured by the EXO2 Sonde	numeric	milligramsPerLiter			
-EXOChla_RFU_1	Total Chlorophyll a in RFU at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOChla_ugL_1	Total Chlorophyll a in ug/L at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
-EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin in RFU  at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin in ug/L at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
-EXOfDOM_RFU_1	Fluorescent  Dissolved Organic Matter in RFU at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter in QSU at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits			
+EXOChla_RFU_1	Total Chlorophyll a at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
+EXOChla_ugL_1	Total Chlorophyll a in at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
+EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
+EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
+EXOfDOM_RFU_1	Fluorescent  Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
+EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits			
 EXOPressure_psi_1	Gauge pressure of EXO2 sonde at 1.5 m 	numeric	psig			
 EXODepth_m_1	Depth of the EXO sonde at 1.5 m measured by the EXO2 sonde.	numeric	meter			
 EXOBattery_V_1	Voltage of the EXO2 sonde at 1.5 m internal batteries.	numeric	volt			

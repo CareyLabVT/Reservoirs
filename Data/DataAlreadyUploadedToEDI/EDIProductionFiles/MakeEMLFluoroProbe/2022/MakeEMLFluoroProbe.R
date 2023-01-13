@@ -1,6 +1,6 @@
 ##MakeEMLFluoroProbe
 ##Author: Mary Lofton
-##Date: 13JAN22
+##Date: 12JAN23
 
 #good sites for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -59,6 +59,11 @@ template_core_metadata(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/
 template_table_attributes(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
                           data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
                           data.table = "FluoroProbe.csv",
+                          write.file = TRUE)
+
+template_table_attributes(path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+                          data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+                          data.table = "site_descriptions.csv",
                           write.file = TRUE)
 
 
@@ -143,19 +148,19 @@ template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Res
 
 # Run this function
 make_eml(
-  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2021",
-  temporal.coverage = c("2014-05-04", "2021-12-06"),
+  path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  eml.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  temporal.coverage = c("2014-05-04", "2022-12-16"),
   maintenance.description = 'ongoing',
-  data.table = "FluoroProbe_2014_2021.csv",
-  data.table.description = "Reservoir FluoroProbe dataset",
-  other.entity = "FluoroProbe_QAQC_2014_2021.R",
+  data.table = c("FluoroProbe_2014_2022.csv", "site_descriptions.csv"),
+  data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions"),
+  other.entity = "FluoroProbe_QAQC_2014_2022.R",
   other.entity.description = "data aggregation and quality control script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.123.6')
+  package.id = 'edi.996.3')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -192,19 +197,19 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  data.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  eml.path = "C:/Users/Mary Lofton/Documents/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2021",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2021",
-  temporal.coverage = c("2014-05-04", "2021-12-06"),
+  path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  eml.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  temporal.coverage = c("2014-05-04", "2022-12-16"),
   maintenance.description = 'ongoing',
-  data.table = "FluoroProbe_2014_2021.csv",
-  data.table.description = "Reservoir FluoroProbe dataset",
-  other.entity = "FluoroProbe_QAQC_2014_2021.R",
+  data.table = c("FluoroProbe_2014_2022.csv", "site_descriptions.csv"),
+  data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions"),
+  other.entity = "FluoroProbe_QAQC_2014_2022.R",
   other.entity.description = "data aggregation and quality control script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.272.6')
+  package.id = 'edi.272.7')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

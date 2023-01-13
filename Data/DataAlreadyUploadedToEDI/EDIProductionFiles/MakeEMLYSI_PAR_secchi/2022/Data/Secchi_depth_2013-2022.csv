@@ -1,4 +1,4 @@
-"Reservoir","Site","DateTime","Secchi_m","Flag_DateTime","Flag_Secchi"
+"Reservoir","Site","DateTime","Secchi_m","Flag_DateTime","Flag_Secchi_m"
 "BVR",50,2013-08-30 08:00:00,2.3,0,0
 "BVR",50,2013-08-30 08:00:00,2.3,0,0
 "BVR",50,2013-10-16 08:00:00,4.4,0,0

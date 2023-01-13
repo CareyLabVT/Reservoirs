@@ -76,10 +76,10 @@ make_eml(path = getwd(),
          other.entity = 'QAQC_CTD_2013_2022.Rmd',
          other.entity.name = 'CTD QAQC script',
          other.entity.description = c('QAQC script for reference'),
-         temporal.coverage = c("2013-03-07", "2022-11-28"),
+         temporal.coverage = c("2013-03-07", "2022-12-12"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.993.1") #updated 2022
+         package.id = "edi.993.2") #updated 2022
 ```
 

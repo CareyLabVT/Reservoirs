@@ -231,14 +231,14 @@ fp9 <- fp8 %>%
          Flag_RFU_590nm = 0,
          Flag_RFU_470nm = 0) %>%
   rename(Temp_C = Temp_degC,
-         Transmission_perc = Transmission)
+         Transmission_perc = Transmission) 
 
 colnames(fp9)
 colnames(fp_og)
 
 #final merge!
 fp_final <- bind_rows(fp_og, fp9) %>%
-  arrange(Reservoir, Site, DateTime)
+  arrange(DateTime, Reservoir, Site)
 colnames(fp_final)
 
 #write the csv for publication!

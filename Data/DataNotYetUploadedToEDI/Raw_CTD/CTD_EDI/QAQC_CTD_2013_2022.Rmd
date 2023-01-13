@@ -440,7 +440,7 @@ qaqc = ctd_flagged
 qaqc = read.csv("CTD_2013_2022.csv")%>%
   mutate(Date = as_datetime(DateTime))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "FCR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
+  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
   sample_frac(.1)%>%
   ggplot(aes(x = Date, y = Depth_m, color = Temp_C, shape = as.factor(Flag_Temp_C)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+

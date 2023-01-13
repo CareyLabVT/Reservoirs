@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
-Site	Sampling site within each reservoir	numeric	dimensionless			
+Site	Sampling site within each reservoir (see site_descriptions.csv file included in this data package)	numeric	dimensionless			
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss		
 Depth_m	Water depth where the sensor reading was measured; negative values indicate height above the water’s surface 	numeric	meter		NA	No data
 Temp_C	Water temperature	numeric	celsius		NA	No data

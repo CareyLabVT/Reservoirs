@@ -10,12 +10,14 @@ pacman::p_load(tidyverse,lubridate, plotly,plyr)
 
 #download the data from the EDI folder on GitHub
 
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2021/CCR_Catwalk_EDI_2021.csv", "CCR_Catwalk_EDI_2021.csv")
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles//MakeEML_CCRcatwalk/2021/CCR_Depth_offsets_2021.csv", "CCR_Depth_offset_2021.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2022/CCR_Catwalk_EDI_2021_2022.csv",
+              "CCR_Catwalk_EDI_2021_2022.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles//MakeEML_CCRcatwalk/2022/CCR_Depth_offsets_2021_2022.csv", 
+              "CCR_Depth_offset_2021_2022.csv")
 
 #read in data
-ccr=read.csv("CCR_Catwalk_EDI_2021.csv")
-depth=read.csv("CCR_Depth_offsets_2021.csv")
+ccr=read.csv("CCR_Catwalk_EDI_2021_2022.csv")
+depth=read.csv("CCR_Depth_offsets_2021_2022.csv")
 
 #take out EXO data so you can add it back in later
 EXO=ccr%>%
@@ -60,7 +62,7 @@ ccr_new2=ccr_new%>%
          ThermistorTemp_C_9.5_m,ThermistorTemp_C_10_m,ThermistorTemp_C_10.5_m, ThermistorTemp_C_11_m, ThermistorTemp_C_13.5_m,
          ThermistorTemp_C_14_m,ThermistorTemp_C_14.5_m,ThermistorTemp_C_15_m,
          ThermistorTemp_C_17.5_m,ThermistorTemp_C_18_m,ThermistorTemp_C_18.5_m,ThermistorTemp_C_19_m,
-         Lvl_psi_17.5_m,Lvl_psi_18_m,Lvl_psi_18.5_m,Lvl_psi_19_m,LvlTemp_C_17.5_m,LvlTemp_C_18_m,
+         LvlPressure_psi_17.5_m,LvlPressure_psi_18_m,LvlPressure_psi_18.5_m,LvlPressure_psi_19_m,LvlTemp_C_17.5_m,LvlTemp_C_18_m,
          LvlTemp_C_18.5_m,LvlTemp_C_19_m)
 
 #add the EXO back in 
@@ -68,4 +70,4 @@ ccr_new2=ccr_new%>%
     merge(.,EXO)
   
 #write the csv  
-  write.csv(ccr_new2, 'CCR_EDI_bydepth_2021.csv', row.names = FALSE, quote=FALSE)
+  write.csv(ccr_new2, 'CCR_EDI_bydepth_2021_2022.csv', row.names = FALSE, quote=FALSE)

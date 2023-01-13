@@ -4,7 +4,7 @@
 pacman::p_load(tidyverse, lubridate, scales, viridis)
 
 #load in collated 2019 data 
-raw_chem <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/FinalData/2022_chemistry_collation_final_nocommas.csv")
+raw_chem <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
 
 #date format
 raw_chem$DateTime <- as.Date(raw_chem$DateTime, "%Y-%m-%d %H:%M:%S")

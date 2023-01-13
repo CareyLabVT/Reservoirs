@@ -12,7 +12,7 @@ library(googlesheets4)
 library(tidyverse)
 
 #set up permissions
-gs4_auth(cache = FALSE)
+#gs4_auth(cache = FALSE)
 
 #read in all sites from google drive
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
@@ -73,7 +73,7 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.994.1") #need a new one each year
+         package.id = "edi.1003.2") #need a new one each year
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 

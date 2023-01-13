@@ -14,28 +14,17 @@ library(tidyverse)
 library(viridis)
 library(plotly)
 
-old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2020/chemistry_2013_2020.csv")
-new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/2021_chemistry_collation_final_nocommas.csv")
+old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/chemistry_2013_2021.csv")
+new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
+
+#change column names to match new format
+
+#also drop ISCO samples bc being published in separate data product
+old <- old[old$Site!=100.1,]
 
 #get cols in same order
 new <- new[names(old)]
-
-#removing the 9 samples that will be rerun with 2022 field samples
-#B09Aug21 10m DOC, B22Nov21 9m NO3, B12Oct21 9m SRP, B08Mar21 11m TP, B23Aug21 11m TP,
-#C19Aug21 21m NH4, NO3, and SRP, C23Sep21 20m TN, C19Nov21 0.1m TN, F12Jul21 3.8m TP
-new$DOC_mgL[new$DateTime=="2021-08-09 11:10:00" & new$Reservoir=="BVR" & new$Depth_m==10] <- NA
-new$NO3NO2_ugL[new$DateTime=="2021-11-22 10:18:00" & new$Reservoir=="BVR" & new$Depth_m==9] <- NA
-new$SRP_ugL[new$DateTime=="2021-10-12 11:53:00" & new$Reservoir=="BVR" & new$Depth_m==9] <- NA
-new$TP_ugL[new$DateTime=="2021-03-08 10:58:00" & new$Reservoir=="BVR" & new$Depth_m==11] <- NA
-new$TP_ugL[new$DateTime=="2021-08-23 10:39:00" & new$Reservoir=="BVR" & new$Depth_m==11] <- NA
-new$NO3NO2_ugL[new$DateTime=="2021-08-19 12:00:00" & new$Reservoir=="CCR" & new$Depth_m==21 & new$Site==50] <- NA
-new$NH4_ugL[new$DateTime=="2021-08-19 12:00:00" & new$Reservoir=="CCR" & new$Depth_m==21 & new$Site==50] <- NA
-new$SRP_ugL[new$DateTime=="2021-08-19 12:00:00" & new$Reservoir=="CCR" & new$Depth_m==21 & new$Site==50] <- NA
-new$TN_ugL[new$DateTime=="2021-09-23 13:55:00" & new$Reservoir=="CCR" & new$Depth_m==20] <- NA
-new$TN_ugL[new$DateTime=="2021-11-19 12:11:00" & new$Reservoir=="CCR" & new$Depth_m==0.1 & new$Site==50] <- NA
-new$TP_ugL[new$DateTime=="2021-07-12 09:40:00" & new$Reservoir=="FCR" & new$Depth_m==3.8] <- NA
-
 
 #merge old and new dfs
 chem <- rbind(old, new) 

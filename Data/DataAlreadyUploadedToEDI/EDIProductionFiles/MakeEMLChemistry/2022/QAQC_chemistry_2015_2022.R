@@ -606,15 +606,15 @@ chem_final$Flag_NH4_ugL <- ifelse(is.na(chem_final$Flag_NH4_ugL), 0, chem_final$
 chem_final$Flag_NO3NO2_ugL <- ifelse(is.na(chem_final$Flag_NO3NO2_ugL), 0, chem_final$Flag_NO3NO2_ugL)
 chem_final$Flag_SRP_ugL <- ifelse(is.na(chem_final$Flag_SRP_ugL), 0, chem_final$Flag_SRP_ugL)
 
-
 #order chem
 chem_final<- chem_final %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
 #drop sun samples
 chem_final <- chem_final[chem_final$Reservoir!="SUN",]
 
-#also drop ISCO samples bc being published in separate data product
-chem_final <- chem_final[chem_final$Site!=100.1,]
+#remove NA rows
+chem_final <- chem_final[!is.na(chem_final$Reservoir),]
 
-write.csv(chem_final, "./Data/DataNotYetUploadedToEDI/NutrientData/FinalData/2022_chemistry_collation_final_nocommas.csv")
+#save final df
+write.csv(chem_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
 

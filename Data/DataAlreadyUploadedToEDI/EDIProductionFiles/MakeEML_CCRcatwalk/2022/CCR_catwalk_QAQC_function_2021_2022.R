@@ -10,11 +10,11 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
                         "ThermistorTemp_C_13","EXO_Date_1", "EXO_Time_1", "EXOTemp_C_1", "EXOCond_uScm_1",
                         "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
                         "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
-                        "EXO_pressure_psi_1", "EXO_depth_m_1", "EXO_battery_V_1", "EXO_cablepower_V_1", "EXO_wiper_V_1",
+                        "EXOPressure_psi_1", "EXODepth_m_1", "EXOBattery_V_1", "EXOCablepower_V_1", "EXOWiper_V_1",
                         "EXO_Date_9", "EXO_Time_9", "EXOTemp_C_9", "EXOCond_uScm_9",
                         "EXOSpCond_uScm_9", "EXOTDS_mgL_9", "EXODOsat_percent_9", "EXODO_mgL_9", 
-                        "EXOfDOM_RFU_9", "EXOfDOM_QSU_9","EXO_pressure_psi_9", "EXO_depth_m_9", "EXO_battery_V_9",
-                         "EXO_cablepower_V_9", "EXO_wiper_V_9","Lvl_psi_13", "LvlTemp_C_13")
+                        "EXOfDOM_RFU_9", "EXOfDOM_QSU_9","EXOPressure_psi_9", "EXODepth_m_9", "EXOBattery_V_9",
+                         "EXOCablepower_V_9", "EXOWiper_V_9","LvlPressure_psi_13", "LvlTemp_C_13")
   
   #Adjustment period of time to stabilization after cleaning in seconds
   ADJ_PERIOD = 2*60*60 
@@ -226,9 +226,9 @@ exo_flag9 <-grep("^Flag_EXO.*_9$",colnames(ccrwater))
 
 
 #Change the EXO data to NAs when the EXO is above 6m and not due to maintenance
-ccrwater[which(ccrwater$EXO_depth_m_9 < 7), exo_idx9] <- NA
+ccrwater[which(ccrwater$EXODepth_m_9 < 7), exo_idx9] <- NA
 #Flag the data that was removed with 2 for outliers
-ccrwater[which(ccrwater$EXO_depth_m_9 < 7),exo_flag9]<- 2
+ccrwater[which(ccrwater$EXODepth_m_9 < 7),exo_flag9]<- 2
   
 ############## Leading and Lagging QAQC ##########################
 # This finds the point that is way out of range from the leading and lagging point 
@@ -271,7 +271,7 @@ ccrwater<-ccrwater%>%select(-c(Var, Var_lag, Var_lead))
 
 ####Add a depth column and take out observations when sensor is in the air#######################################   
 #Convert the PSI of the pressure sensor to meters. 1psi=2.31ft, 1ft=0.305m
-ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(Lvl_psi_13*0.70455) )
+ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(LvlPressure_psi_13*0.70455) )
 
 # The distance of the sesnor away from the pressure sensor
 ccrwater=ccrwater%>%
@@ -312,11 +312,11 @@ for(b in c(100:102)){
   ThermistorTemp_C_13, EXOTemp_C_1, EXOCond_uScm_1,
   EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1, EXODO_mgL_1, EXOChla_RFU_1,
   EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1, EXOfDOM_RFU_1, EXOfDOM_QSU_1,
-  EXO_pressure_psi_1, EXO_depth_m_1, EXO_battery_V_1, EXO_cablepower_V_1, EXO_wiper_V_1,
+  EXOPressure_psi_1, EXODepth_m_1, EXOBattery_V_1, EXOCablepower_V_1, EXOWiper_V_1,
   EXOTemp_C_9, EXOCond_uScm_9,
   EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
-  EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXO_pressure_psi_9, EXO_depth_m_9, EXO_battery_V_9,
-  EXO_cablepower_V_9, EXO_wiper_V_9,Lvl_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
+  EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXOPressure_psi_9, EXODepth_m_9, EXOBattery_V_9,
+  EXOCablepower_V_9, EXOWiper_V_9,LvlPressure_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
   RECORD, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
   
   

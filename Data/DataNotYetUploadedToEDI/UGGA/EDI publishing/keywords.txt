@@ -12,3 +12,4 @@ carbon dioxide	lter controlled vocabulary
 diffusion	carey lab controlled vocabulary
 carbon flux	lter controlled vocabulary
 gas flux	lter controlled vocabulary
+diffusive flux	carey lab controlled vocabulary

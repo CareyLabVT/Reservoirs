@@ -17,6 +17,26 @@ rm(list = ls())
 # Find and set-up working directory
 wd <- getwd()
 setwd(wd)
+library(tidyverse)
+
+# Add site descriptions
+
+#Install the required googlesheets4 package
+install.packages('googlesheets4')
+#Load the library 
+library(googlesheets4)
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+data<- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Dissolved_GHG_2015_2022.csv") #This is the line you need to modify!
+trim_sites = function(data,sites){
+  data_res_site=data%>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites%>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+    filter(res_site%in%data_res_site$res_site)%>%
+    select(-res_site)
+}
+sites_trimmed = trim_sites(data,sites) 
+write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/site_descriptions.csv", row.names=F)# Write to file
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
@@ -49,31 +69,31 @@ library(EMLassemblyline)
 #categorical variables and want to report our geographic location
 
 # View documentation for these functions
-?template_core_metadata
-?template_table_attributes
-?template_categorical_variables #don't run this till later
-?template_geographic_coverage
+#?template_core_metadata
+#?template_table_attributes
+#?template_categorical_variables #don't run this till later
+#?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                       license = "CCBY",
-                       file.type = ".txt",
-                       write.file = TRUE)
-
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                          data.table = c("final_GHG_2015-2021.csv"),
-                          write.file = TRUE)
-
-
-#we want empty to be true for this because we don't include lat/long
-#as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                             data.table = c("final_GHG_2015-2021.csv"),
-                             empty = TRUE,
-                             write.file = TRUE)
-
+#template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                       license = "CCBY",
+#                       file.type = ".txt",
+#                       write.file = TRUE)
+#
+#template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                          data.table = c("final_GHG_2015-Dec2022.csv"),
+#                          write.file = TRUE)
+#
+#
+##we want empty to be true for this because we don't include lat/long
+##as columns within our dataset but would like to provide them
+#template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                             data.table = c("final_GHG_2015-Dec2022.csv"),
+#                             empty = TRUE,
+#                             write.file = TRUE)
+#
 #Step 6: Script your workflow
 #that's what this is, silly!
 
@@ -106,16 +126,16 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 #grab attribute names and definitions from your metadata word document
 #for units....
 # View and search the standard units dictionary
-view_unit_dictionary()
+#view_unit_dictionary()
 #put flag codes and site codes in the definitions cell
 #force reservoir to categorical
 
 #Step 14: Categorical variables
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-                               write.file = TRUE)
+#template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+#                               write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category - NONE
 
@@ -149,15 +169,15 @@ make_eml(
   dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2022",
   temporal.coverage = c("2015-03-31", "2022-05-23"),
   maintenance.description = 'ongoing',
-  data.table = 'final_GHG_2015-May2022.csv',
-  data.table.description = "GHG Dataset",
-  data.table.name = "GHG Dataset",
-  other.entity= 'GHGforEDI.R',
+  data.table = c('Dissolved_GHG_2015_2022.csv','site_descriptions.csv'),
+  data.table.description = c("GHG Dataset","Descriptions of sites in this dataset with lat/long coordinates"),
+  data.table.name = c("GHG Dataset","Site Descriptions"),
+  other.entity= 'QAQC_GHG_2022.R',
   other.entity.name = "QA/QC Code",
   other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.928.3')
+  package.id = 'edi.997.4')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -177,23 +197,6 @@ make_eml(
 # evaluation check again, until you receive a message with no errors.
 
 ## Step 17: Obtain a package.id. ####
-# Need to obtain a package identifier: reserved #551
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2021",
-  temporal.coverage = c("2015-03-31", "2021-12-06"),
-  maintenance.description = 'ongoing',
-  data.table = 'final_GHG_2015-2021.csv',
-  data.table.description = "GHG Dataset",
-  data.table.name = "GHG Dataset",
-  other.entity= 'GHGforEDI.R',
-  other.entity.name = "QA/QC Code",
-  other.entity.description = "R script for GHG QA/QC",
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.551.6')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

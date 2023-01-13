@@ -1,8 +1,7 @@
-Author contributions for this revision:
+Contributions to the 2022 revision:
 
-CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ABP led the field crew, and ASL and ABP coordinated sensor maintenance in 2022. ASL led data collation, QAQC, and publishing.
+CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ASL led data collation, QAQC, and publishing in 2022. ABP led the field crew, contributed substantially to fieldwork, maintained the instrument, and processed data in 2022. ASL and ABP coordinated sensor calibration in 2022.
 
+Acknowledgments and historical contributions:
 
-Acknowledgments and contributions on previous revisions:
-
-CCC developed and led the reservoir monitoring program 2013-present, and oversaw CTD purchasing, use, and maintenance throughout this time. ASL was the point person for CTD data collation, QAQC, and maintenance from 2019–2022, and automated CTD data processing based on scripts created by Ryan P. McClure (RPM). RPM was the point person for CTD data collation, QAQC, and maintenance from 2015-2018, and automated CTD data processing based on a workflow created by Alexandra B. Gerling (ABG). ABG was the point person for CTD data collation, QAQC, and maintenance from 2013–2015 and developed the FCR sampling program. Arpita Das processed CTD data from 2018–2021.
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.

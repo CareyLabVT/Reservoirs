@@ -65,13 +65,13 @@ section under missing.
 # run standard qaqc function from FCR_catwalk_QAQC_function_2018_2022.R
 
 #current file from the data logger
-data_file <-'misc_data_files/fcre-waterquality.csv'
+data_file <-file.path(getwd(), 'misc_data_files/fcre-waterquality.csv')
 #manual downloads to add missing data 
-data2_file <-'misc_data_files/CAT_2.csv'
+data2_file <-file.path(getwd(), 'misc_data_files/CAT_2.csv')
 #maintenance file
-maintenance_file <- "FCR_CAT_MaintenanceLog_2018_2022.txt"
+maintenance_file <-file.path(getwd(),  "FCR_CAT_MaintenanceLog_2018_2022.txt")
 #name of the output file
-output_file <-"misc_data_files/Catwalk_first_QAQC_2018_2022.csv"
+output_file <- file.path(getwd(), "misc_data_files/Catwalk_first_QAQC_2018_2022.csv")
 
 
 # Run the QAQC function
@@ -589,11 +589,18 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
  #ggplotly(RDO9_21)
  
  RDO9sat_21=catdata%>%
-  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(DateTime>ymd_hms('2022-11-01 00:00:00') & DateTime<ymd_hms('2022-11-15 00:00:00'))%>%
    ggplot(.,aes(x = DateTime, y = RDOsat_percent_9)) +
+      geom_point(aes(x = DateTime, y = RDOsat_percent_5, col = 'pink')) +
    geom_point()
  RDO9sat_21
-#Only use plotly to find DateTime of questionable values
+ 
+ # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00, this was following a field day so maybe something strange happened, flag as 5
+ 
+ catdata$Flag_RDO_mgL_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
+ catdata$Flag_RDOsat_percent_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
+
+ #Only use plotly to find DateTime of questionable values
  #ggplotly(RDO9sat_21)
 ```
 

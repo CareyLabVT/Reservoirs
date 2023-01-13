@@ -9,6 +9,7 @@ reservoir	cuahsi controlled vocabulary
 lake	cuahsi controlled vocabulary
 methane	lter controlled vocabulary
 carbon dioxide	lter controlled vocabulary
-diffusion	
+diffusion	carey lab controlled vocabulary
 carbon flux	lter controlled vocabulary
 gas flux	lter controlled vocabulary
+diffusive flux	carey lab controlled vocabulary

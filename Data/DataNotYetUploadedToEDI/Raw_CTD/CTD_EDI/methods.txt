@@ -21,7 +21,7 @@ FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2022
 
 Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2022 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
 
-OxidationReductionPotentialSensor SensorID = 41 SERIAL NO. 0363 2017 - 2022 http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
+pH and OxidationReductionPotentialSensor SERIAL NO. 0363 2017 - 2022 (replaced in 2022) http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
 
 Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2022 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
 

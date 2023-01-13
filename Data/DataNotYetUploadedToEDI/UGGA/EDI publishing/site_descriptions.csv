@@ -1,5 +1,6 @@
 "Reservoir","Site","Site_description","Latitude","Longitude"
-"BVR",50,"Deep hole or site nearest to dam",37.31288,-79.8159
+"BVR",40,"Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir",37.314783,-79.820864
+"BVR",50,"Pelagic deep hole site nearest to dam; at BVR platform closest to dam",37.31288,-79.8159
 "FCR",10,"Upstream pelagic site at deepest point of transect across the reservoir",37.308619,-79.836774
 "FCR",20,"Upstream pelagic site at deepest point of transect across the reservoir",37.30769,-79.8371
 "FCR",30,"Upstream pelagic site at deepest point of transect across the reservoir",37.30534,-79.8383

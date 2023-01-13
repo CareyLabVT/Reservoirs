@@ -118,9 +118,8 @@ ugga_comb = ugga_2018_2021%>%
 
 ugga_flagged = ugga_comb%>%
   mutate(Flag_co2_flux_umolCm2s = ifelse(co2_R2<0.9,1,Flag_co2_flux_umolCm2s),
-         Flag_ch4_flux_umolCm2s = ifelse(ch4_R2<0.9,1,Flag_ch4_flux_umolCm2s))
-
-summary(ugga_flagged)
+         Flag_ch4_flux_umolCm2s = ifelse(ch4_R2<0.9,1,Flag_ch4_flux_umolCm2s),
+         Site = ifelse(Site==1&Reservoir=="BVR",40,Site))
 
 write.csv(ugga_flagged, "UGGA_2018_2022.csv", row.names = F)
 
@@ -204,6 +203,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1002.4")
+         package.id = "edi.1002.5")
 ```
 

@@ -1,115 +1,83 @@
-Depth profiles of multiple water quality variables were collected off of the dam at Carvins Cove in 2021-2022 using water temperature thermistors, pressure sensors, and a YSI EXO2 and a EXO3 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 09 April 2021 to 31 December 2021. We deployed the 13 thermistors on a chain, with the deepest located at 19 meters when the reservoir is at full pond. Because the water level in Carvins Cove Reservoir varied from 17.5-19.0 m (mean=18.25 m, median=18.20 m) during the monitoring period, we will refer to the thermistors and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth. These positions were selected based on depth when the reservoir is at full pond. The thermistor closest to the top (to represent 0.1m at full pond) is labeled 1 and the 8 m thermistor (when at full pond) is labeled 9, with the intervening thermistors located at approximately 1 m intervals. Thermistors 10 and 11 are deployed to represent 10 m and 11 m when at full pond respectively. Thermistor 12 and 13 are deployed to represent 15m and 19m when at full pond respectively. The pressure sensor is deployed 0.15m below the thermistor at position 13. The YSI EXO3 sonde was deployed at 9m on 09 April 2021 at 14:00. The temperature string and pressure sensor was first deployed on 11 May 2021 in the correct position. Prior to that values were changed to NA. The EXO2 at 1.5m was deployed on 01 July 2021, although the data is not streaming wirelessly and needs to be manually downloaded (see the EXO maintenance for missing data gaps). 
+Data from multiple water quality sensors were collected from a fixed point, near the dam of Carvins Cove reservoir (Site 51, Lat: 37.3697,	Long: -79.958). 
 
-To determine the variable depths of each sensor over time, we converted the pressure readings to depth using 1 psi=0.70544 m from the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). The offset values for positions 1 and 2 were determined to be the depth of the pressure transducer on the day that each thermistor was first at the surface of the water. For thermistor 1, the offset was equal to the depth of the pressure transducer on 25 May 2021 16:50, whereas the offset for thermistor 2 was equal to the depth of the pressure transducer on its deployment on 30 November 2021 16:20. Since the other sensors were equidistant from each other and the water level was never low enough to expose them out of the water, we subtracted the offset of position 2 from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (15 m). We then divided that number by the number of whole meters below position 2 (18), which was equal to 0.995 m, which represents the depth between the deeper sensors. This number was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (18.125) and subtracted 0.995 to get 17.07, which is the depth of the sensor below the water. In 2022, while looking at plots I changed the offset for the first 2 thermistors which better refelct when the sensors are out of the water. 
+Depth profiles of water temperature were measured at Carvins Cove Reservoir from July 2020 through August 2021 using HOBO thermistors that were deployed from a buoy at fixed depths from the surface. HOBO thermistors were deployed at 1-meter intervals from 0.1 m below the surface of the reservoir to 10 m depth and additionally at 15 and 20 m. A HOBO thermistor was also deployed in the Sawmill Branch inflow from July 2020 - April 2021, at approximately 0.5 m depth. 
 
+Depth profiles of multiple water quality variables were collected off of the dam at Carvins Cove Reservoir in 2021-2022 using water temperature thermistors, pressure sensors, and a YSI EXO2 and an EXO3 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 9 April 2021 to 31 December 2022. There are 13 NexSense thermistors on a chain and  when the reservoir is at full pond the deepest thermistor is at 19 meters.  Because the water level in Carvins Cove Reservoir varied from 17.7-19.6 m (mean=18.7 m, median=18.6 m) during the monitoring period, we will refer to the thermistors and the pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth. These positions were selected based on the depth when the reservoir is at full pond. The thermistor closest to the top (to represent 0.1 m at full pond) is labeled 1 and the 8 m thermistor (when at full pond) is labeled 9, with the intervening thermistors located at approximately 1 m intervals. Thermistors 10 and 11 are deployed to represent 10 m and 11 m when at full pond, respectively. Thermistors 12 and 13 are deployed to represent 15 m and 19 m when at full pond, respectively. The pressure sensor is deployed 0.15 m below the thermistor at position 13. The YSI EXO3 sonde was deployed at 9 m on 9 April 2021 at 14:00. The temperature string and pressure sensor was first deployed on 11 May 2021. The EXO2 at 1.5 m was deployed on 1 July 2021, although the data is not streaming wirelessly and needs to be manually downloaded (see the EXO maintenance for missing data). 
 
-Thus, to calculate the depth of each sensor’s position, first subtract the unique offset for each sensor from column LvlDepth_m_13, which is the depth of the pressure transducer at position 13 in meters.  Below is a table with the position of the sensor, the offset and the distance above the sediments.  
-Since the EXO2 was deployed on a buoy that fluctuates with the water level changes, its sensors were always 1.5 m below the surface, regardless of water level. For the EXO3 at 9m there is a depth sensor on the instrument so each reading has a depth associated with it. The depth of the EXO3 was always between ThermistorTemp_C_9 and ThermistorTemp_C_10.
+To determine the variable depths of each sensor over time, we converted the pressure readings to depth using the relationship 1 psi=0.70544 m from the pressure gauge manual (Campbell Scientific CS451, https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). The offset values for positions 1 and 2 were determined to be the depth of the pressure transducer on the day that each thermistor was first at the surface of the water. For thermistor 1, the offset was equal to the depth of the pressure transducer on 25 May 2021 16:50, whereas the offset for thermistor 2 was equal to the depth of the pressure transducer on its deployment on 30 November 2021 16:20. Since the other sensors were equidistant from each other and the water level was never low enough to expose them out of the water, we subtracted the offset of position 2 from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (15 m). We then divided that number by the number of whole meters below position 2 (18), which was equal to 0.995 m, which represents the depth between the deeper sensors. This number was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (18.065) and subtracted 0.995 to get 17.07, which is the depth of the sensor below the water. 
 
+Thus, to calculate the depth of each sensor’s position, first subtract the unique offset for each sensor from data table column LvlDepth_m_13, which is the depth of the pressure transducer at position 13 in meters. Below is a table with the position of the sensor, the offset, and the distance above the sediments. 
+
+Since the EXO2 was deployed on a buoy that fluctuates with the water level changes, its sensors were always 1.5 m below the surface, regardless of water level. For the EXO3 at 9 m, there is a depth sensor on the instrument so each reading has a depth associated with it. The depth of the EXO3 was always between ThermistorTemp_C_9 and ThermistorTemp_C_10.
 
 Offset Table
-
-The table below is the position of the sensor, offset to find the depth of the position from the top of the water at a given time, and the depth of the sensors when the pond is full. To determine the depth of each position at a given time, you first need to go to the column LvlDepth_m_13, and subtract the offset for that position. The R script, CCR_sort_by_depth_2021.csv, attached to this package will do this for you and sort the depths into columns by the 0.5 meter and variable (Temperature, Dissolved Oxygen, Dissolved oxygen saturation, and pressure). It is sorted into 0.5m increments because there were some issues with having two readings for 1 depth bin. 
-
+The table below is the position of the sensor, offset to find the depth of the position from the top of the water at a given time, and the depth of the sensors when the reservoir depth was at full pond. To determine the depth of each position at a given time, you first need to go to the column LvlDepth_m_13, and subtract the offset for that position. The R script, CCR_sort_by_depth_2021_2022.csv, attached to this package will do this for you and sort the depths into columns by the 0.5 meter and variable (Temperature, Dissolved Oxygen, Dissolved oxygen saturation, and Pressure). It is sorted into 0.5 m increments because there were some issues with having two readings for 1 depth bin. 
 
 
 Offset Table 
-
-Position;		Offset;		Depth of the Sensor when full pond
-
-Position_1;	19.08;		0.1m
-
-Postion_2;	18.125;		1m
-
-Position_3;	17.07;		2m
-
-Position_4;	16.075;		3m
-
-Position_5;	15.08;		4m
-
-Position_6;	14.084;		5m
-
-Position_7;	13.09;		6m
-
-Position_8;	12.095;		7m
-
-Position_9;	11.1;		8m
-
-Position_10;	9.11;		10m
-
-Position_11;	8.115;		11m
-
-Position_12;	4.135;		15m
-
-Position_13;	0.15;		19m
+Position	Offset		Depth of the Sensor when full pond
+Position 1	18.94		0.1m
+Postion_2	18.065		1m
+Position_3	17.07		2m
+Position_4	16.075		3m
+Position_5	15.08		4m
+Position_6	14.084		5m
+Position_7	13.09		6m
+Position_8	12.095		7m
+Position_9	11.1		8m
+Position_10	9.11		10m
+Positioni_11	8.115		11m
+Position_12	4.135		15m
+Position_13	0.15		19m
 
 
-
-The thermistor string was factory calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 and EXO3 Sonde sensors, except for temperature, were factory calibrated before being deployed on 1 July 2021 and 9 April 2021. The EXO2 fdom and chlorophyll were zero calibrated on 1 July 2021 and the EXO3 fdom and chlorophyll sensors were zero calibrated on 02 April 2021. The EXO2 dissolved oxygen sensor was calibrated on 1 July 2021 and the EXO3 dissolved oxygen sensor was calibrated on 09 April 2021. 
+The thermistor string was factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 and EXO3 Sonde sensors, except for temperature, were factory calibrated before being deployed on 1 July 2021 and 9 April 2021. The EXO2 FDOM and chlorophyll were zero calibrated on 1 July 2021 and the EXO3 FDOM and chlorophyll sensors were zero calibrated on 2 April 2021. The EXO2 dissolved oxygen sensor was calibrated on 1 July 2021 and the EXO3 dissolved oxygen sensor was calibrated on 09 April 2021. 
 
 Missing Data and Issues
 
 Thermistors:
-The thermistor and other sensor data are potentially influenced by nightly  management interventions at 3:00 am. At 3:00 am most nights there are slight changes in water temperature values. This is believed to be caused by blow offs of air from water intake valves used to clear debris from intake pipes. This release of air can lead to short term changes in thermal stratifications patterns. These events seem to only affect the temperature values at 3:00 am and occur  predominantly in the summer months. 
+The thermistor and other sensor data are potentially influenced by nightly management interventions at 3:00 am. At 3:00 am on most nights there are slight changes in water temperature values. This is believed to be caused by blow-offs of air from water intake valves used to clear debris from intake pipes. This release of air can lead to short term changes in thermal stratification patterns. These events seem to only affect the temperature values at 3:00 am and occur predominantly in the summer months. 
 
 QAQC Methods:
 
-Maintenance data gaps:
-Any time the temperature string, EXO2 or EXO3 was brought to the surface for routine maintenance, the dates and times were recorded in the CCR_MaintenanceLog_2021_2022.txt file. To account for these gaps in sensor data, we used an automated QAQC script (CCR_catwalk_QAQC_function_2021.R), which indexed the dates and times recorded in the maintenance log and set the affected data to NA and set the appropriate flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA and flagged as 1.  
+Maintenance data gaps and QAQC:
+Any time the temperature string, EXO2 or EXO3 was brought to the surface for routine maintenance, the dates and times were recorded in the CCRW_MaintenanceLog_2021_2022.txt file. To account for these gaps in sensor data, we used an automated QAQC function(CCR_catwalk_QAQC_function_2021_2022.R) which is used in the  , which indexed the dates and times recorded in the maintenance log and set the affected data to NA and set the appropriate flag columns to 1. Any data points outside of the immediate time frame that the sensor string was pulled up for maintenance do not reflect ambient conditions due to sensor re-equilibration and were also set to NA and flagged as 1.  In 2022 we added another QAQC step which identified and removed extreme outliers. For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL these are  4 standard deviations above or below the previous observation and the past observation. The rest of the other variables in the dataset used 2 standard deviations. All outliers were changed to NA and given a flag of 2. 
+
+
 
 Missing Data Dates and Times:
 The following dates and times are sub daily gaps in the data:
 2021-07-02 14:00:00 - 2021-07-02 14:50:00 
-2022-04-05 12:00:00 - 2022-04-05 14:00:00 
-2022-04-20 13:00:00 - 2022-04-20 13:40:00 
-2022-04-20 14:00:00 - 2022-04-20 15:00:00 
-2022-05-12 10:00:00 - 2022-05-12 10:30:00 
-2022-09-29 14:00:00 - 2022-09-29 15:00:00 
-2022-10-17 17:30:00 - 2022-10-17 18:10:00 
 
-
-Missing EXO2 data at 1.5m:
+Missing EXO2 data at 1.5m
 2021-07-02 13:40:00 - 2021-07-14 10:10:00;
 2021-07-28 11:50:00 - 2021-08-19 09:00:00;
 2021-11-18 23:10:00 - 2021-11-23 09:20:00;
-2022-12-12 13:20:00 - 2022-12-16 14:20:00:
-2022-12-16 14:30:00 - 2022-12-31 23:50:00 
+2022-12-12 13:2000 - Current
 
-
-Missing EXO3 data at 9m:
+Missing EXO3 data at 9m
 2021-09-23 10:30:00 - 2021-09-27 8:30;
-2022-01-26 17:10:00 - 2022-04-20 15:10:00;
+2022-01-14 00:00:00  -  2022-01-26 17:00:00 
+2022-01-26 17:10:00  -  2022-04-20 15:10:00 
 2022-12-12 13:20:00 - 2022-12-16 14:20:00 
-
 EXO Maintenance Issues:
-The central wiper (SN21A100323) on the EXO3 was malfunctioning during September 2021. All the values for the EXO3 were removed during 07 September 2021 15:30 to 27 September 2021 8:30, this is documented in the CCRW_maintenance_log_2021.txt. The central wiper was returned for maintenance and the central wiper(21A100324) on the EXO2 was moved to the EXO3 leaving the EXO2 without a central wiper. After this we made fortnightly to monthly trips to the reservoir to manually clean the EXO2 sensors with water and download data. This is documented in the maintenance log CCRW_maintenance_log_2021_2022.txt.
+In 2022 both of the EXOs were removed for cleaning and calibration on 12 December 2022. The EXO3 was returned on 16 December 2022 while the EXO2 was moved and placed at Beaverdam Reservoir for the winter.  
+The central wiper (SN: 21A100323) on the EXO3 was malfunctioning during September 2021. All of the values for the EXO3 were removed during 7 September 2021 15:30 to 27 September 2021 8:30, this is documented in the CCRW_maintenance_log_2021_2022.txt. The central wiper was returned for maintenance and the central wiper (SN: 21A100324) on the EXO2 was moved to the EXO3 leaving the EXO2 without a central wiper. After this we made fortnightly to monthly trips to the reservoir to manually clean the EXO2 sensors with water and download data. This is documented in the maintenance log CCRW_maintenance_log_2021_2022.txt. A new wiper (SN: 21M102801 ) was installed on the EXO2 on 9 February 2022 10:30. 
 
-2022: The central wiper on the EXO3 malfuncted again so we sent the wiper back along with the EXO3. It was removed on 2022-01-26 17:10:00 and returned 2022-04-20 15:10:00. The new cable came in and once the EXO3 came back both EXOs were attached to the data logger and streaming. Both EXOs were brought back to the lab for cleaning and calibration on 2022-12-12 13:20:00. The EXO3 was retunred to the reservoir on 2022-12-16 14:20:00 while the EOX2 was placed at Falling Creek Reservoir which is another near by reservoir we monitor while that EXO2 was sent back for maintenance. 
-
-
-All Observations underwent an extreme outlier check where if an observations is 2 or 4 standard deviations above or below the the leading or lagging observations than it is removed and flagged (see 'Leading and Lagging QAQC’ section of CCR_catwalk_QAQC_function_2021_2022.R script). 
+The central wiper (21A100324) on the EXO3 failed again so data was removed from 14 January - 26 January 2022. After this the EXO3 and the wiper were sent back for servicing. The EXO3 was returned on 20 April 2022 with a new central wiper (SN: 22B106313)
 
 EXO Chlorophyll-a and Phycocyanin: 
-The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of CCR_catwalk_QAQC_function_2021_2022.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Chla or Flag_Phyco column as a value of 2. 
+At 1.5 m, the EXO2 only recorded RFU and not micrograms per liter. There are two separate flag columns to note the difference. 
 
-At 1.5m the EXO2 only recorded RFU and not micrograms per liter. There are two separate flag columns to note the difference. 
-
-EXO fDOM: 
-fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of CCR_catwalk_QAQC_function_2021_2022.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. 
-
-EXO Conductivity, Specific Conductivity and Total Dissolved Solids (TDS): 
-Conductivity sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of CCR_catwalk_QAQC_function_2021_2022.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_Cond column as a value of 2. 
 
 EXO depth:
-If the EXO2 is above 1.0m, which normally sits at 1.5m, and the data has not been flagged for maintenance then all EXO2 data is changed to NA and flagged with a 2, as the EXO2 is out of position. These values occur when the Water Authority blows air throw the water intake pipes which leads to a huge waves that moves the 1.5m EXO out of position. 
-If the EOX3 is above 7m, which normally sits at 9m, and the data has not been flagged for maintenance then all EXO3 data is changed to NA and flagged with a 2m as the EXO2 is out of position. These changes in position could have been due to debris from storms hitting sensors and causing them to be displaced, which happened 2 times during the year.
+If the EXO2 is above 1.0 m, which normally sits at 1.5m, and the data have not been flagged for maintenance, then all EXO2 data are changed to NA and flagged with a 2, as the EXO2 is out of position. The EXO2 is out of position about once a day when the Water Authority sends water through the intake pipes to clear out debris. 
+If the EOX3 is above 7 m, which normally sits at 9 m, and the data have not been flagged for maintenance then all EXO3 data is changed to NA and flagged with a 2 as the EXO2 is out of position. These changes in position could have been due to debris from storms hitting sensors and causing them to be displaced, which happened two times during the year.
 
-Instruments, manual, and serial numbers used in 2021:
+Instruments, manual, and serial numbers used  2021-2022:
 Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
 
-
-
-NexSens T-Node FR Thermistors (May 2021 - current)
+NexSens T-Node FR Thermistors (May 2021 - December 2022)
 https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf
 Serial No. 03882; 1 
 Serial No. 03884; 2
@@ -125,38 +93,46 @@ Serial No. 04039; 11
 Serial No. 04086; 12
 Serial No. 04151; 13
 
-
-YSI EXO2 Sonde Serial No. 21A102475(July 2021 - current)
+YSI EXO2 Sonde Serial No. 21A102475 (1 July 2021 - December 2022)
 https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	
-Wiped Conductivity/Temperature Sensor Serial No. 20M101641 (Swapped at some point)
-Wiped Conductivity/Temperature Sensor Serial No. 20M101642(current)
-
-
-
-
-Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324(July - 23 September 2021)
-Central Wiper for Conductivity/Temperature Sensor Serial No.21M102801(DATE - current)
-Dissolved Oxygen Sensor Serial No. 21A100459
+Wiped Conductivity/Temperature Sensor Serial No. 20M101642
+Calibrated on December 15, 2022; pre: 98.0 uScm; post: 100 uScm
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324 (1 July 2021 - 23 September 2021)
+Central Wiper for Conductivity/Temperature Sensor Serial No.21M102801 (9 February 2022 - current)
 Total Algae Sensor Serial No. 21A100782
+Chlorophyll:
+Calibrated on July 1, 2021; pre: -0.18 RFU, post: 0.00 RFU
+Calibrated on November 21, 2021; pre: -0.16 RFU, post: 0.00 RFU
+Calibrated on December 15, 2022; pre: -0.21 RFU, post: 0.00 RFU; pre: 13.93 RFU, post: 16.40 RFU
+Phycocyanin: 
+Calibrated on July 1, 2022; pre:-0.8 RFU , post: 0.00 RFU
+Calibrated on November 21, 2021; pre: -0.57 RFU, post: 0.00 RFU
+Calibrated on December 15, 2022; pre: -1.30 RFU, post: 0.00 RFU; pre: 16.31 RFU, post: 16.00 RFU
 fDOM Sensor Serial No. 21A100961 
-Calibration on DATE; pre: XXX RFU, 4.68 QSU; post: XXXX RFU, XXXX QSU 
-Calibration on DATE; pre: XXX RFU, 1.13 QSU ; post: XXX RFU, XXXX QSU
-
-YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103492
-
+Calibration on December 15, 2022; pre: -0.26 RFU, -0.67 QSU; post: 0.00 RFU, 0.00 QSU 
+Dissolved Oxygen Sensor Serial No.21A100459
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103493
+Calibrated on July 1, 2021; pre: 93.2% Sat, post: 102.0% Sat; DO Gain: 1.09
+Calibrated on November 23, 2021; pre: 96.6% Sat, post: 96.6% Sat; DO Gain: 1.00
+Calibrated on December 14, 2022; pre: -1.0% Sat, post: -0.2% Sat; pre: 94.4% Sat, post: 100.1% Sat, DO Gain= 1.01
 
 YSI EXO3 Sonde Serial No. 21A102218(April 2021 - current)
 Central Wiper for Conductivity/Temperature Sensor Serial No.21A100323(April - 23 September 2021)
-Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324(23 September 2021-current)
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324(23 September 2021-20 April 2022)
 Central Wiper for Conductivity/Temperature Sensor Serial No.22B106313(20 April 2022-current)
-Wiped Conductivity/Temperature Sensor Serial No. 20M101642 (Swapped at some point)
 Wiped Conductivity/Temperature Sensor Serial No. 20M101641
-Dissolved Oxygen Sensor Serial No.21A100458
-Calibrated on April 9, 2021; pre: 93.7% Sat, post: 100% Sat, DO Gain: 1.07
-Calibrated on 
+Calibrated on December 15, 2022; pre: 97.8 uScm; post: 100 uScm
 fDOM Sensor Serial No. 21A100960
+Calibration on December 15, 2022; pre: 0.17 RFU, 0.07 QSU; post: 0.00 RFU, 0.00 QSU
 Pressure Transducer Serial No. 20M102610
-YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103493
+Dissolved Oxygen Sensor Serial No. 21A100458
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103492
+Calibrated on April 9, 2021; pre: 94.9% Sat, post: 96.3% Sat; DO Gain: 1.01
+Calibrated on July 2, 2021; pre: 96.4% Sat, post: 95.6% Sat, DO Gain: 0.99
+Calibrated on April 20, 2022; pre: 93.7% Sat, post: 100% Sat, DO Gain: 1.07
+Calibrated on December 14, 2022; pre: -0.1% Sat, Post: -0.2% Sat, pre: 92.1% Sat, post : 99.3% Sat, DO Gain: 1.08
+
+
 
 Campbell Scientific Stainless-Steel Pressure Transducer CS451 (May 2021-December 2022)
 https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf

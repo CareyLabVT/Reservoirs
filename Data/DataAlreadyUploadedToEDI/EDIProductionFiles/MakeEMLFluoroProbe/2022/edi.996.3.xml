@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.996.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.996.3" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -76,7 +76,7 @@
     <additionalInfo>
       <para>
 AUTHORSHIP STATEMENT
-CCC developed and led the reservoir monitoring program 2013-present, and oversaw FluoroProbe purchasing, use, and maintenance throughout this time. ABP led the 2022 field season, downloaded FluoroProbe sensor data regularly, and oversaw daily use of the instrument, including maintaining battery charge. MEL assisted with troubleshooting and led data collation and publication in 2022.</para>
+CCC developed and led the reservoir monitoring program, and oversaw FluoroProbe purchasing, use, and maintenance throughout 2014-present. ABP led the field crew, oversaw use of the instrument, and downloaded data in 2022. MEL assisted with troubleshooting and led data collation and publication in 2022.</para>
       <para>ACKNOWLEDGEMENTS
 This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Whitney Woelmer and Abigail Lewis for providing friendly reviews of these data and metadata.</para>
       <para>
@@ -681,7 +681,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_GreenAlgae_ugL</attributeName>
-          <attributeDefinition>Data flag for green algae</attributeDefinition>
+          <attributeDefinition>Data flag for green algae; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -704,7 +704,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_BluegreenAlgae_ugL</attributeName>
-          <attributeDefinition>Data flag for bluegreen algae</attributeDefinition>
+          <attributeDefinition>Data flag for bluegreen algae; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -727,7 +727,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_BrownAlgae_ugL</attributeName>
-          <attributeDefinition>Data flag for brown algae</attributeDefinition>
+          <attributeDefinition>Data flag for brown algae; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -750,7 +750,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_MixedAlgae_ugL</attributeName>
-          <attributeDefinition>Data flag for mixed algae</attributeDefinition>
+          <attributeDefinition>Data flag for mixed algae; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -773,7 +773,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_TotalConc_ugL</attributeName>
-          <attributeDefinition>Data flag for total phytoplankton</attributeDefinition>
+          <attributeDefinition>Data flag for total phytoplankton; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -796,7 +796,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_Temp_C</attributeName>
-          <attributeDefinition>Data flag for water temperature</attributeDefinition>
+          <attributeDefinition>Data flag for water temperature; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -819,7 +819,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_Transmission_perc</attributeName>
-          <attributeDefinition>Data flag for transmission</attributeDefinition>
+          <attributeDefinition>Data flag for transmission; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -842,7 +842,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_525nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 525 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 525 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -865,7 +865,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_570nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 570 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 570 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -888,7 +888,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_610nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 610 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 610 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -911,7 +911,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_370nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 370 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 370 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -934,7 +934,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_590nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 590 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 590 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -957,7 +957,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
         </attribute>
         <attribute>
           <attributeName>Flag_RFU_470nm</attributeName>
-          <attributeDefinition>Data flag for fluorescence at 470 nm</attributeDefinition>
+          <attributeDefinition>Data flag for fluorescence at 470 nm; 0 = no flag; 2 = instrument malfunction</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -986,8 +986,8 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <entityDescription>Sampling site descriptions</entityDescription>
       <physical>
         <objectName>site_descriptions.csv</objectName>
-        <size unit="bytes">961</size>
-        <authentication method="MD5">7ed2e7410ba949ee872a3b81b247f8cd</authentication>
+        <size unit="bytes">1524</size>
+        <authentication method="MD5">89da35a16a070052cdecfbe7ef4c3625</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>

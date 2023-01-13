@@ -17,16 +17,16 @@ RFU_610nm	Relative fluorescence units of excitation in response to light wavelen
 RFU_370nm	Relative fluorescence units of excitation in response to light wavelength of 370 nm	numeric	relativeFluorescenceUnits		NA	value is missing
 RFU_590nm	Relative fluorescence units of excitation in response to light wavelength of 590 nm	numeric	relativeFluorescenceUnits		NA	value is missing
 RFU_470nm	Relative fluorescence units of excitation in response to light wavelength of 470 nm	numeric	relativeFluorescenceUnits		NA	value is missing
-Flag_GreenAlgae_ugL	Data flag for green algae	numeric	dimensionless		NA	value is missing
-Flag_BluegreenAlgae_ugL	Data flag for bluegreen algae	numeric	dimensionless		NA	value is missing
-Flag_BrownAlgae_ugL	Data flag for brown algae	numeric	dimensionless		NA	value is missing
-Flag_MixedAlgae_ugL	Data flag for mixed algae	numeric	dimensionless		NA	value is missing
-Flag_TotalConc_ugL	Data flag for total phytoplankton	numeric	dimensionless		NA	value is missing
-Flag_Temp_C	Data flag for water temperature	numeric	dimensionless		NA	value is missing
-Flag_Transmission_perc	Data flag for transmission	numeric	dimensionless		NA	value is missing
-Flag_RFU_525nm	Data flag for fluorescence at 525 nm	numeric	dimensionless		NA	value is missing
-Flag_RFU_570nm	Data flag for fluorescence at 570 nm	numeric	dimensionless		NA	value is missing
-Flag_RFU_610nm	Data flag for fluorescence at 610 nm	numeric	dimensionless		NA	value is missing
-Flag_RFU_370nm	Data flag for fluorescence at 370 nm	numeric	dimensionless		NA	value is missing
-Flag_RFU_590nm	Data flag for fluorescence at 590 nm	numeric	dimensionless		NA	value is missing
-Flag_RFU_470nm	Data flag for fluorescence at 470 nm	numeric	dimensionless		NA	value is missing
+Flag_GreenAlgae_ugL	Data flag for green algae; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_BluegreenAlgae_ugL	Data flag for bluegreen algae; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_BrownAlgae_ugL	Data flag for brown algae; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_MixedAlgae_ugL	Data flag for mixed algae; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_TotalConc_ugL	Data flag for total phytoplankton; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_Temp_C	Data flag for water temperature; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_Transmission_perc	Data flag for transmission; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_525nm	Data flag for fluorescence at 525 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_570nm	Data flag for fluorescence at 570 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_610nm	Data flag for fluorescence at 610 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_370nm	Data flag for fluorescence at 370 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_590nm	Data flag for fluorescence at 590 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing
+Flag_RFU_470nm	Data flag for fluorescence at 470 nm; 0 = no flag; 2 = instrument malfunction	numeric	dimensionless		NA	value is missing

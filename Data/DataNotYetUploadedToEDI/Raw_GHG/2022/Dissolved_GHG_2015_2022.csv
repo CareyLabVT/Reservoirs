@@ -1,4 +1,4 @@
-"Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_DateTime","flag_ch4","flag_co2"
+"Reservoir","Site","DateTime","Depth_m","Rep","CH4_umolL","CO2_umolL","Flag_DateTime","Flag_CH4_umolL","Flag_CO2_umolL"
 "FCR","100",2015-03-31 12:00:00,0.1,"1",0.007076873,NA,1,0,1
 "FCR","100",2015-03-31 12:00:00,0.1,"2",NA,NA,1,1,1
 "FCR","50",2015-03-31 12:00:00,0.1,"1",0.067583484,8.824011711,1,0,0

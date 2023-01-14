@@ -19,90 +19,21 @@ Pull in CTD data from EDI and plot changes resulting from drawdown in 2022, 2021
 
 read data from EDI
 ```{r}
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/12/0a62d1946e8d9a511bc1404e69e59b8c" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
-                   
- ctd_hist <-read.csv(infile1,header=F 
-          ,skip=1
-            ,sep=","  
-        , col.names=c(
-                    "Reservoir",     
-                    "Site",     
-                    "Date",     
-                    "Depth_m",     
-                    "Temp_C",     
-                    "DO_mgL",     
-                    "DO_pSat",     
-                    "Cond_uScm",     
-                    "Spec_Cond_uScm",     
-                    "Chla_ugL",     
-                    "Turb_NTU",     
-                    "pH",     
-                    "ORP_mV",     
-                    "PAR_umolm2s",     
-                    "Desc_rate",     
-                    "Flag_Temp",     
-                    "Flag_DO",     
-                    "Flag_Cond",     
-                    "Flag_SpecCond",     
-                    "Flag_Chla",     
-                    "Flag_Turb",     
-                    "Flag_pH",     
-                    "Flag_ORP",     
-                    "Flag_PAR",     
-                    "Flag_DescRate"    ), check.names=TRUE)
-               
-unlink(infile1)
+#Fill in with new EDI pub when ready
 ```
 
-Read data from 2022
+Read data from EDI publication locally (Jan 2023)
 ```{r}
-# This reads all the files into the R environment
-files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
-files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-files <- files[grepl("bvr",files)] #That are from bvr
-files <- files[substring(files,5,6)=="22"]
-files <- files[files!="051722_bvr50_0002.csv"]
+ctd_edi <- read.csv("../CTD_EDI/CTD_2013_2022.csv")
 
-#This reads the first file in
-ctd = read_csv(paste0("../csv_outputs/",files[1])) 
-location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
-ctd = ctd%>%
-    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-    dplyr::rename(PAR_umolm2s = PAR,
-           Desc_rate = 'Descent Rate (m/s)')%>%
-    select(-Salinity)
-
-# Loop through and pull all the files in
-for (i in 2:length(files)){
-  new = read_csv(paste0("../csv_outputs/",files[i]))
-  location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
-  new = new%>%
-    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-    dplyr::rename(PAR_umolm2s = PAR,
-           Desc_rate = 'Descent Rate (m/s)')%>%
-    select(-Salinity)
-  ctd = ctd %>%
-    full_join(new)
-}
-write_csv(ctd, "../CTD_season_csvs/CTD_BVR_2022.csv")
+ctd = ctd_edi%>% #load saved data
+  mutate(Date = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))%>%
+  filter(Reservoir=="BVR")
 ```
+
 
 Elevation instead of depth
 ```{r}
-ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
-  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
-    mutate(Site = ifelse(Site==1,40,Site))%>%
-  full_join(ctd_hist%>%mutate(Date=as.Date(Date))%>% filter(Reservoir=="BVR"))%>%
-  filter(month(Date)>=1,
-         month(Date)<=12)
-  
-
 #Decrease dataset size by trimming to 0.1m depth intervals
 depths <- seq(0,11, by = .1)
 newDepths <- depths
@@ -172,7 +103,7 @@ ysi_formatted = ysi%>%
   select(-DOSat)%>%
   filter(Date!="2021-05-31"|Depth_m<=10)
 
-Years = c(2022)
+Years = c(2021,2022)
 Sites = c(50)
 
 # Combine CTD and YSI data
@@ -189,9 +120,9 @@ df.final = df.final.raw%>%
   mutate(max = max(Depth_m))%>%
   mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
          DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
-         DO_pSat=ifelse(is.na(DO_pSat),DO_pSat_ysi,DO_pSat))%>%
+         DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent))%>%
   mutate(Depth_m = max -Depth_m)%>%
-  mutate(Turb_NTU=ifelse(Turb_NTU>10&Depth_m<0.3,NA,Turb_NTU)) #Sediment got mixed up in early 2022
+  mutate(Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
 
 max(df.final$Date[year(df.final$Date)==2021])
 df.final%>%
@@ -199,7 +130,7 @@ df.final%>%
          year(Date)==2021)%>%
   arrange(Date)
 
-ctd_depths = df.final.raw%>%
+ctd_depths = df.final%>%
   mutate(Date = as.Date(Date),
          Year = year(Date))%>%
   filter(Year %in% Years,
@@ -233,12 +164,36 @@ ctd_depths = df.final.raw%>%
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 
-vars = c("Temp_C","Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV","PAR_umolm2s","Desc_rate")
-vars = c("Turb_NTU")
+vars = c("Temp_C",
+         #"Chla_ugL",
+         #"Turbidity_NTU",
+         #"Cond_uScm",
+         #"SpCond_uScm",
+         "DO_mgL",
+         "DOsat_percent"
+         #"pH",
+         #"ORP_mV",
+         #"PAR_umolm2s",
+         #"DescRate_ms"
+         )
+names = c("Temperature (ºC)", 
+          #"Chlorophyll-a (ug/L)", 
+          #"Turbidity (NTU)", 
+          #Conductivity (µScm)", 
+          #Specific Conductance (µScm)",
+          "Dissolved Oxygen\n(mg/L)",
+          "DO Saturation (%)"
+          #"pH",
+          #"ORP (mV)",
+          #"PAR (umol/m2/s)",
+          #"Descent Rate (m/s)"
+          )
+#vars = c("Turb_NTU")
 
 color_freya = c("#313695", "#4575b4", "#74add1","#abd9e9", "#e0f3f8", "#ffffbf", "#fee090","#fdae61", "#f46d43", "#d73027", "#a50026")
 
-for(var in vars){
+for(i in 1:length(vars)){
+  var = vars[i]
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
   for(site in Sites){
     for(year in Years){
@@ -285,14 +240,13 @@ for(var in vars){
     geom_ribbon(data = ctd_depths, aes(x = Date, ymin= WaterLevel, ymax = max), fill = "white",color = "black",lwd=.2)+
     scale_y_continuous(expand = c(0,0))+
     labs(x = "", y = "Height above sediments (m)")+
-    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(color_freya)}else{color_freya}, na.value="white", name = var)+
+    scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(color_freya)}else{color_freya}, na.value="white", name = names[i])+
     geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
     scale_x_date(expand = c(0,0))+
-    theme_classic()+
     theme(panel.border = element_rect(fill = NA))+
-    facet_grid(rows= vars(Site),
+    facet_grid(#rows= vars(Site),
                cols = vars(Year),
                scales = "free",
                space = "free_y")

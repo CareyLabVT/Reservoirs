@@ -123,7 +123,11 @@ dt1 = dt1 %>%
   mutate(Depth_m = ifelse(Site==6,6,Depth_m),
          Site = ifelse(Site==6,50,Site),
          Depth_m = ifelse(Site==10&Reservoir=="BVR",10,Depth_m),
-         Site = ifelse(Site==10&Reservoir=="BVR",50,Site))#Some issues with 2021 data
+         Site = ifelse(Site==10&Reservoir=="BVR",50,Site),
+         Site = ifelse(Depth_m==100,100,Site),
+         Depth_m = ifelse(Depth_m==100,0.1,Depth_m),
+         Site = ifelse(Depth_m==200,200,Site),
+         Depth_m = ifelse(Depth_m==200,0.1,Depth_m))#Some issues with 2021 data
 
 #############################################################################
 

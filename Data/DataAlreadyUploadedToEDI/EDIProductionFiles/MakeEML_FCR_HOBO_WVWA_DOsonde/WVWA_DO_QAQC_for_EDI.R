@@ -7,6 +7,14 @@
 pacman::p_load(tidyverse, lubridate, xts, cowplot, plotly, scales, patchwork)
 library(zoo) #for na.approx
 
+#### Check out HOBOs ####
+hobos <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/misc_data_files/FCR_HOBO_15_16_17_18_DWH_7jan23_forEDI.csv")
+hobos_long <- pivot_longer(hobos, cols = c(4:12))
+
+hobosplot <- hobos_long %>% 
+  ggplot(aes(x= DateTime, y = value, col = name))+
+  geom_line()
+hobosplot
 
 #### Looking at raw WVWA DO sonde on catwalk ####
 
@@ -87,10 +95,10 @@ ggplot(data = dosonde_qaqc1, aes(x = Date, y = DO1m_Temperature2_C))+
   geom_line()
 
 ggplot(data = dosonde_qaqc1, aes(x = Date, y = DO8m_Dissolved_Oxygen_ppm))+
-  geom_line()
+  geom_point()
 
 ggplot(data = dosonde_qaqc1, aes(x = Date, y = DO8m_Temperature2_C))+
-  geom_line()
+  geom_point()
 
 #QAQC2; remove values after 1 jan 2019 where 1m DO goes awry
 head(dosonde_qaqc1)
@@ -105,7 +113,11 @@ head(dosonde_qaqc2)
 
 sd_1m <- sd(dosonde_qaqc2$DO1m_Dissolved_Oxygen_ppm, na.rm = TRUE)
 sd_8m <- sd(dosonde_qaqc2$DO8m_Dissolved_Oxygen_ppm, na.rm = TRUE)
+sd_1m_temp <- sd(dosonde_qaqc2$DO1m_Temperature2_C, na.rm = TRUE)
+sd_8m_temp <- sd(dosonde_qaqc2$DO8m_Temperature2_C, na.rm = TRUE)
 
+
+#run QAQC for DO 
 dosonde_qaqc3 <- dosonde_qaqc2 %>% 
   mutate(DO1m = lag(DO1m_Dissolved_Oxygen_ppm, 0),
          DO1m_lag1 = lag(DO1m_Dissolved_Oxygen_ppm, 1),
@@ -126,15 +138,42 @@ dosonde_qaqc3 <- dosonde_qaqc2 %>%
     ( abs(DO8m_lag1 - DO8m) > (2*sd_8m)   )  & ( abs(DO8m_lead1 - DO8m) > (2*sd_8m)   ), 2, NA
   )) %>% 
   select(-DO1m, -DO1m_lag1, -DO1m_lead1, -DO8m, -DO8m_lag1, -DO8m_lead1 ) 
+
+#run QAQC for TEMP
+dosonde_qaqc4 <- dosonde_qaqc3 %>% 
+  mutate(DO1m = lag(DO1m_Temperature2_C, 0),
+         DO1m_lag1 = lag(DO1m_Temperature2_C, 1),
+         DO1m_lead1 = lead(DO1m_Temperature2_C, 1),
+         DO8m = lag(DO8m_Temperature2_C, 0),
+         DO8m_lag1 = lag(DO8m_Temperature2_C, 1),
+         DO8m_lead1 = lead(DO8m_Temperature2_C, 1) ) %>% 
+  mutate(DO1m_Temp_QAQC = ifelse(
+    ( abs(DO1m_lag1 - DO1m) > (2*sd_1m_temp)   )  & ( abs(DO1m_lead1 - DO1m) > (2*sd_1m_temp)   ), NA, DO1m_Temperature2_C
+  )) %>%  #QAQC to remove outliers for 1m DO data 
+  mutate(Flag_1m_Temp_2SD = ifelse(
+    ( abs(DO1m_lag1 - DO1m) > (2*sd_1m_temp)   )  & ( abs(DO1m_lead1 - DO1m) > (2*sd_1m_temp)   ), 2, NA
+  )) %>% 
+  mutate(DO8m_Temp_QAQC = ifelse(
+    ( abs(DO8m_lag1 - DO8m) > (2*sd_8m_temp)   )  & ( abs(DO8m_lead1 - DO8m) > (2*sd_8m_temp)   ), NA, DO8m_Temperature2_C
+  )) %>%  #QAQC to remove outliers for 8m DO data 
+  mutate(Flag_8m_Temp_2SD = ifelse(
+    ( abs(DO8m_lag1 - DO8m) > (2*sd_8m_temp)   )  & ( abs(DO8m_lead1 - DO8m) > (2*sd_8m_temp)   ), 2, NA
+  )) %>% 
+  select(-DO1m, -DO1m_lag1, -DO1m_lead1, -DO8m, -DO8m_lag1, -DO8m_lead1 ) 
   
   
 #check QAQC3
-ggplot(data = dosonde_qaqc3, aes(x = Date, y = DO1m_QAQC))+
-  geom_line()
+ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO1m_QAQC))+
+  geom_point()
 
-ggplot(data = dosonde_qaqc3, aes(x = Date, y = DO8m_QAQC))+
-  geom_line()
+ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO8m_QAQC))+
+  geom_point()
 
+ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO1m_Temp_QAQC))+
+  geom_point()
+
+ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO8m_Temp_QAQC))+
+  geom_point()
 
 #Clean up qaqc 3 and make final csv 
 head(dosonde_qaqc3)

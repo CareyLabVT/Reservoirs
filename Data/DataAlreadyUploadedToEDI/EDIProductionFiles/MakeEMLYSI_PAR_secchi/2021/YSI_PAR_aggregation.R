@@ -21,6 +21,9 @@ sp_cond <- sp_cond[,-3]
 sp_cond$Sp_cond_uScm <- round(sp_cond$Sp_cond_uScm,1)
 sp_cond <- sp_cond[!is.na(sp_cond$Sp_cond_uScm),]
 
+#order sp cond df
+sp_cond <- sp_cond[order(sp_cond$Reservoir,sp_cond$Site,sp_cond$Depth_m,sp_cond$date),]
+
 #find and delete dups
 dups <- duplicated(sp_cond[,c(1:3,5)])
 table(dups)["TRUE"]
@@ -32,10 +35,10 @@ ysi_old <- ysi_old  %>% group_by(Reservoir, Site, DateTime, Depth_m) %>%
 ysi_old$date <- as.Date(ysi_old$DateTime)
 
 #replace all nans with na
-is.nan.data.frame <- function(x)
-  do.call(cbind, lapply(x, is.nan))
+is.nan.data.frame <- function(x){
+  do.call(cbind, lapply(x, is.nan)) }
 
-ysi_old[is.nan(ysi_old)] <- NA
+ysi_old[is.nan.data.frame(ysi_old)] <- NA
 
 # prep sp cond to merge with ysi_old
 sp_cond$DateTime <- as.POSIXct(sp_cond$date) + 60*60*12# set DateTime to noon
@@ -62,53 +65,51 @@ ysi_old$DO_mgL[as.Date(ysi_old$DateTime)=="2020-09-30" & ysi_old$Depth_m==9 & ys
 ysi_old$DOSat[as.Date(ysi_old$DateTime)=="2020-09-30" & ysi_old$Depth_m==9 & ysi_old$Reservoir=="FCR"] <- 17.5
 
 #now also change the weird 250 site to 200, add the sp cond value to this row, and delete the row w/ only sp cond
-ysi_old$Site[as.Date(ysi_old$DateTime)=="2019-07-18" & ysi_old$Site==250] <- 200
+#ysi_old$Site[as.Date(ysi_old$DateTime)=="2019-07-18" & ysi_old$Site==250] <- 200
 
 #Something happened to one datetime during 2020 EDI push - manually fixing the date for BVR 200 based on files on jacob's computer
-ysi_old$DateTime[is.na(ysi_old$DateTime)] <- "2019-05-30 09:11:00" #13:11 EST
+#ysi_old$DateTime[is.na(ysi_old$DateTime)] <- "2019-05-30 09:11:00" #13:11 EST
 
 #add in flags
 ysi_old_final <-  ysi_old %>%
   select(-date) %>% 
             mutate(Flag_pH = ifelse(is.na(pH), 1,
                                     ifelse(pH > 14, 2, # Flag 2 = inst. malfunction
-                                    ifelse(pH < 0, 3, 0))), #Flag 3 = below 0
+                                    ifelse(pH < 0, 4, 0))), #Flag 4 = negative set to 0
                     Flag_ORP = ifelse(is.na(ORP_mV), 1, 
-                         ifelse(ORP_mV > 750, 2,  # Flag 2 = inst. malfunction
-                         ifelse(ORP_mV < 0, 3, 0))), #Flag 3 = below 0
+                         ifelse(ORP_mV > 750, 2, 0)),  # Flag 2 = inst. malfunction
                     Flag_PAR = ifelse(is.na(PAR_umolm2s), 1,
-                                      ifelse(PAR_umolm2s < 0, 3, 0)), #Flag 3 = below 0
+                                      ifelse(PAR_umolm2s < 0, 4, 0)), #Flag 4 = below 0
                     Flag_Temp = ifelse(is.na(Temp_C), 1, 
                                        ifelse(Temp_C > 35, 2, 0)), # Flag 2 = inst. malfunction
                     Flag_DO = ifelse(is.na(DO_mgL), 1,
                                      ifelse(DO_mgL > 70, 2, # Flag 2 = inst. malfunction
-                                     ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                     ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
                     Flag_DOSat = ifelse(is.na(DOSat), 1,
                                         ifelse(DOSat > 200, 2, # Flag 2 = inst. malfunction
-                                        ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                        ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
                     Flag_Cond = ifelse(is.na(Cond_uScm), 1,
                           ifelse((Cond_uScm < 10 | Cond_uScm > 250), 2, # Flag 2 = inst. malfunction
-                          ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                          ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
                    Flag_Sp_Cond = ifelse(is.na(Sp_cond_uScm), 1,
                                   ifelse(DO_mgL > 250, 2,  # Flag 2 = inst. malfunction
-                                  ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                  ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
                    Flag_DateTime = ifelse(hour(DateTime)==12 & minute(DateTime)==0, 1,0)) %>%
 
-   #set data for any 2 flags to NA and any 3 flags to 0
+   #set data for any 2 flags to NA and any 4 flags to 0
             mutate(pH = ifelse(Flag_pH == 2, NA, 
-                        ifelse(Flag_pH == 3, 0, paste0(pH))),
-                   ORP_mV = ifelse(Flag_ORP == 2, NA,
-                            ifelse(Flag_ORP == 3, 0, ORP_mV)),
+                        ifelse(Flag_pH == 4, 0, paste0(pH))),
+                   ORP_mV = ifelse(Flag_ORP == 2, NA, ORP_mV),
                    Temp_C = ifelse(Flag_Temp == 2, NA, paste0(Temp_C)),
-                   PAR_umolm2s = ifelse(Flag_PAR == 3, 0, paste0(PAR_umolm2s)),
+                   PAR_umolm2s = ifelse(Flag_PAR == 4, 0, paste0(PAR_umolm2s)),
                    DO_mgL = ifelse(Flag_DO == 2, NA, 
-                            ifelse(Flag_DO == 3, 0, paste0(DO_mgL))),
+                            ifelse(Flag_DO == 4, 0, paste0(DO_mgL))),
                    DOSat = ifelse(Flag_DOSat == 2, NA,
-                           ifelse(Flag_DOSat == 3, 0, paste0(DOSat))),
+                           ifelse(Flag_DOSat == 4, 0, paste0(DOSat))),
                    Cond_uScm = ifelse(Flag_Cond == 2, NA, 
-                               ifelse(Flag_Cond == 3, 0, paste0(Cond_uScm))),
-                   #Sp_cond_uScm = ifelse(Flag_Sp_Cond == 2, NA, 
-                  #                ifelse(Flag_Sp_Cond == 3, 0, paste0(Sp_cond_uScm)))
+                               ifelse(Flag_Cond == 4, 0, paste0(Cond_uScm))),
+                   Sp_cond_uScm = ifelse(Flag_Sp_Cond == 2, NA, 
+                                  ifelse(Flag_Sp_Cond == 4, 0, paste0(Sp_cond_uScm)))
                    ) %>%
 
   
@@ -142,50 +143,46 @@ profiles <- raw_profiles %>%
   select(Reservoir:Flag_pH) %>%
   group_by(Reservoir, DateTime) %>% # columns not to parse to numeric
   mutate_if(is.character,funs(round(as.double(.), 2))) %>%  # parse all other columns to numeric
-  
-  # Fix conductivity values >700 to be NA; instrument error that recorded pressure as cond
-   mutate(Cond_uScm = ifelse(Cond_uScm > 700, NA, Cond_uScm)) %>%
+
   
   # Add 'flag' columns for each variable; 1 = flag for NA value
    mutate(Flag_pH = ifelse(is.na(pH), 1,
                           ifelse(pH > 14, 2, # Flag 2 = inst. malfunction
-                                 ifelse(pH < 0, 3, 0))), #Flag 3 = below 0
+                                 ifelse(pH < 0, 4, 0))), #Flag 4 = negative set to 0
          Flag_ORP = ifelse(is.na(ORP_mV), 1, 
-                           ifelse(ORP_mV > 750, 2,  # Flag 2 = inst. malfunction
-                                  ifelse(ORP_mV < 0, 3, 0))), #Flag 3 = below 0
+                           ifelse(ORP_mV > 750, 2, 0)),  # Flag 2 = inst. malfunction
          Flag_PAR = ifelse(is.na(PAR_umolm2s), 1,
-                           ifelse(PAR_umolm2s < 0, 3, 0)), #Flag 3 = below 0
+                           ifelse(PAR_umolm2s < 0, 4, 0)), #Flag 4 = negative set to 0
          Flag_Temp = ifelse(is.na(Temp_C), 1, 
                             ifelse(Temp_C > 35, 2, 0)), # Flag 2 = inst. malfunction
          Flag_DO = ifelse(is.na(DO_mgL), 1,
                           ifelse(DO_mgL > 70, 2, # Flag 2 = inst. malfunction
-                                 ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                 ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
          Flag_DOSat = ifelse(is.na(DOSat), 1,
                              ifelse(DOSat > 200, 2, # Flag 2 = inst. malfunction
-                                    ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                    ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
          Flag_Cond = ifelse(is.na(Cond_uScm), 1,
                             ifelse((Cond_uScm < 10 | Cond_uScm > 250), 2, # Flag 2 = inst. malfunction
-                                   ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                   ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
          Flag_Sp_Cond = ifelse(is.na(Sp_cond_uScm), 1,
                                ifelse(DO_mgL > 250, 2,  # Flag 2 = inst. malfunction
-                                      ifelse(DO_mgL < 0, 3, 0))),  #Flag 3 = below 0
+                                      ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
          Flag_DateTime = ifelse(hour(DateTime)==12 & minute(DateTime)==0, 1,0)) %>%
   
   #set data for any 2 flags to NA and any 3 flags to 0
   mutate(pH = ifelse(Flag_pH == 2, NA, 
-              ifelse(Flag_pH == 3, 0, paste0(pH))),
-         ORP_mV = ifelse(Flag_ORP == 2, NA,
-                  ifelse(Flag_ORP == 3, 0, ORP_mV)),
+              ifelse(Flag_pH == 4, 0, paste0(pH))),
+         ORP_mV = ifelse(Flag_ORP == 2, NA, ORP_mV),
          Temp_C = ifelse(Flag_Temp == 2, NA, paste0(Temp_C)),
-         PAR_umolm2s = ifelse(Flag_PAR == 3, 0, paste0(PAR_umolm2s)),
+         PAR_umolm2s = ifelse(Flag_PAR == 4, 0, paste0(PAR_umolm2s)),
          DO_mgL = ifelse(Flag_DO == 2, NA, 
-                  ifelse(Flag_DO == 3, 0, DO_mgL)),
+                  ifelse(Flag_DO == 4, 0, DO_mgL)),
          DOSat = ifelse(Flag_DOSat == 2, NA,
-                 ifelse(Flag_DOSat == 3, 0, DOSat)),
+                 ifelse(Flag_DOSat == 4, 0, DOSat)),
          Cond_uScm = ifelse(Flag_Cond == 2, NA, 
-                     ifelse(Flag_Cond == 3, 0, paste0(Cond_uScm))),
+                     ifelse(Flag_Cond == 4, 0, paste0(Cond_uScm))),
          Sp_cond_uScm = ifelse(Flag_Sp_Cond == 2, NA, 
-                        ifelse(Flag_Sp_Cond == 3, 0, paste0(Sp_cond_uScm)))) %>%
+                        ifelse(Flag_Sp_Cond == 4, 0, paste0(Sp_cond_uScm)))) %>%
   
   # Arrange order of columns for final data table
   select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOSat, 

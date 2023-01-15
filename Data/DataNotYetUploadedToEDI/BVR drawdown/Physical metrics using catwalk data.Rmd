@@ -74,7 +74,7 @@ schmidt_df%>%
   mutate(Year = as.factor(Year))%>%
   ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
   geom_point()+
-  geom_smooth()+
+  #geom_smooth()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
@@ -154,13 +154,16 @@ schmidt_df%>%
   filter(Year %in% c(2021,2022),
          !is.na(Schmidt))%>%
   mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
-  geom_point()+
+  ggplot(aes(x = Date_22, y = Schmidt, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
   theme_bw()+
-  xlab("Date")
+  xlab("Date")+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")
 dev.off()
 
 meta_depths_raw = catwalk_format%>%
@@ -283,6 +286,8 @@ thermo_raw = catwalk_format%>%
 thermo_raw$Date_22 = thermo_raw$Date
 year(thermo_raw$Date_22)=2022
 
+write.csv(thermo_raw%>%select(-Date_22),"./Data/thermocline_depth.csv", row.names = F)
+
 jpeg("./Figs/thermocline_depth.jpg",res = 300, units = "in",width = 6, height = 4)
 thermo_raw%>%
   mutate(Year = as.factor(year(Date)))%>%
@@ -357,17 +362,17 @@ year(buoy_max$Date_22)=2022
 jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
 buoy_max%>%
   mutate(Year = as.factor(year(Date)))%>%
-  filter(Year %in% c(2021,2022),
-         month(Date)>4,
-         month(Date)<9)%>%
-  ggplot(aes(x = Date_22, y= max, color = Year))+
-  geom_point()+
-  geom_smooth()+
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y= max, color = Year, fill = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
   ylab("Maximum buoyancy frequency")+
-  xlab("")
+  xlab("")+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")
 dev.off()
 ```
 
@@ -599,9 +604,9 @@ p = interp%>%
   ggplot()+
   geom_raster(aes(x=x, y=y,fill = z))+
   geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.2)+
-  #geom_line(data = thermo_raw%>%
-  #            mutate(Year=year(Date))%>%
-  #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
+  geom_line(data = thermo_raw%>%
+              mutate(Year=year(Date))%>%
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
   #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
   labs(y = "Height above sediments (m)")+

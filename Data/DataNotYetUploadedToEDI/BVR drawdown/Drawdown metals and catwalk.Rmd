@@ -780,7 +780,7 @@ metals%>%
   mutate(Year = as.factor(Year))%>%
   filter(Year %in% c(2021,2022))%>%
   filter(Site==50,Reservoir=="FCR",Depth_m==0.1)%>%
-  ggplot(aes(x = Date_22, y = SFe_ppb,color = Year))+
+  ggplot(aes(x = Date_22, y = TFe_ppb,color = Year))+
   geom_point()
 ```
 

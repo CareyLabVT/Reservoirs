@@ -298,7 +298,7 @@ thermo_raw%>%
   geom_point()+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  scale_y_reverse()+
+  #scale_y_reverse()+
   theme_bw()+
   ylab("Thermocline depth (m)")+
   xlab("")

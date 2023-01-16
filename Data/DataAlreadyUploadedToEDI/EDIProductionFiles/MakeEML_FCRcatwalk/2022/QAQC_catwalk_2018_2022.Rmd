@@ -86,6 +86,7 @@ Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 
 # read in qaqc function output
 
 catdata <- read_csv(output_file)
+#catdata <- read_csv(paste0(getwd(), '/misc_data_files/Catwalk_first_QAQC_2018_2022.csv'))
 
 # subset file to only unpublished data
 catdata <- catdata[catdata$DateTime<ymd_hms(current_time_end),]
@@ -595,10 +596,9 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
    geom_point()
  RDO9sat_21
  
- # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00, this was following a field day so maybe something strange happened, flag as 5
- 
- catdata$Flag_RDO_mgL_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
- catdata$Flag_RDOsat_percent_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
+ # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00
+ # the crash was due to the SSS coming to the surface, the increase in DO follows turning the SSS back on, so this data should be left in
+
 
  #Only use plotly to find DateTime of questionable values
  #ggplotly(RDO9sat_21)

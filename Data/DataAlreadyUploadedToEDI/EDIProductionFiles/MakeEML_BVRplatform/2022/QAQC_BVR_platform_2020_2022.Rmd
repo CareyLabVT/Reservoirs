@@ -1,0 +1,953 @@
+---
+title: "FCR BVR Plots for EDI"
+output: html_document
+date: "2023-01-10"
+---
+ Master QAQC script in prep for publishing catwalk sensor string data to EDI
+ this script using the qaqc_bvr function which automatically QAQCs the data. 
+ This script produces figures to look over the data to visually 
+ inspect it and make sure there are no  major outlines. 
+ The final step is to write the final csv.
+ 
+ Use this file path in Carey Lab Reservoir GitHub Repo:
+"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/"
+ 
+
+This step gets the right packages and sources the sources the QAQC script. 
+Make sure you have the correct year for the script file
+## Set Up
+```{r Set Up}
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr")
+source("BVR_platform_function_2020_2022.R")
+
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2022-01-01 00:00:00, tz=UTC"
+current_time_end="2022-12-31 23:59:00, tz=UTC"
+```
+
+##Create misc_data_files folder 
+This chunk makes the folder where the raw data will be stored
+```{r Create Data folder}
+### Create a misc_data_files folder if one doesn't already exist
+misc_folder <- "misc_data_files"
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+
+```
+
+## Download the Raw Data
+All the Raw data and the maintenance file is on github. Use this section to download the files so you are working with the most recent ones. 
+```{r Download data} 
+# Set the timeout option to 100 seconds instead of 60
+options(timeout=1000)
+
+# download most up to date catwalk data, manual downloads and maintenance log
+# goal in 2023 is to have the missing files on the data logger-no time now and need to talk to CCC
+download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv', "misc_data_files/bvre-waterquality.csv") 
+download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2022.csv', "misc_data_files/BVRmanualplatform.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt", "misc_data_files/BVR_maintenance_log_2020_2022.txt")
+
+```
+
+## QAQC Function
+This section sets up and runs the QAQC function. 
+The first define where the data entered into the function are. 
+
+The output tells you the missing observations.If you can't find them in the manual downloads then make sure to put these times in the methods. 
+
+There are also some warnings which are checks to make sure the maintenance log is using the correct columns for indexing. 
+section under missing.
+```{r Run the QAQC function}
+# run standard qaqc function from BVR_catwalk_QAQC_function_2020_2022.R
+
+# run standard qaqc these are where the data entered in the function are defined
+data_file <- 'misc_data_files/bvre-waterquality.csv'#this is from github and pushed every 4 hours
+data2_file <-  'misc_data_files/BVRmanualplatform.csv'# this is data downloaded directly from the data logger and gets up dated periodically to account for missing data gaps
+maintenance_file <-  "misc_data_files/BVR_maintenance_log_2020_2022.txt" #this is the maintenance log for QAQC purposes
+output_file <-  "misc_data_files/BVRplatform_clean.csv"
+
+
+# Run the QAQC function
+qaqc_bvr(data_file,data2_file,maintenance_file, output_file)
+
+```
+
+## Read in the QAQC File and Check it out
+This section reads in the QAQC file and then you can look at the head, tail and structure. 
+Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 85 columns unless a new one has been added. 
+```{r Read in QAQC file and look at it}
+# read in qaqc function output
+
+bvrdata <- read_csv(output_file)
+
+# subset file to only unpublished data
+bvrdata <- bvrdata[bvrdata$DateTime<ymd_hms(current_time_end),]
+
+# what does the beginning look like
+head(bvrdata)
+# Make sure it goes to Dec 31st 23:50 of the previous year or your ending period
+tail(bvrdata)
+# check out the structure
+str(bvrdata)
+```
+
+
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+ Flag values
+ 0: no flag
+ 1: value removed due to maintenance and set to NA
+ 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+ 3: negative values set to 0
+ 4: value removed due to fouling and set to NA
+ 5: questionable value but left in the dataset
+ 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+ 7: missing data
+ 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+ 9: Value 
+
+
+
+It gives an error but all the columns are there. 
+```{r Check out the flags}
+
+#make sure no NAS in the Flag columns
+Flags=bvrdata%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=bvrdata%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 2:(nrow(Flags))){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+##Lets graph all the Data
+
+There is a lot data and lots of plots. It will most likely crash (I haven't tried to) if you try to run it all so just run a chunk at a time. 
+
+## Temperature 
+Thermistor 1
+```{r Thermistor 1}
+ m_1 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_1)) +
+  geom_line()
+ m_1
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_1)
+
+# #Just the current year
+ m_1_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_1)) +
+   geom_point()
+ m_1_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(m_1_21)
+```
+
+```{r Thermistor 2}
+# check 2 temp data
+#Plot 2018-current
+ m_2 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_2)) +
+  geom_line()
+ m_2
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_2)
+
+ #Just the current year
+ m_2_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_2)) +
+   geom_point()
+ m_2_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(m_2_21)
+```
+
+```{r EXO at 1.5m }
+# check EXO 1.5m temp data
+ # Plot 2018-current
+ EXOtemp_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOTemp_C_1.5)) +
+    geom_line()
+ EXOtemp_1_5
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_1_5)
+ 
+ # Just the current year
+ EXOtemp_1_5_21=bvrdata%>%
+    filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+    ggplot(.,aes(x = DateTime, y = EXOTemp_C_1.5)) +
+    geom_point()
+ EXOtemp_1_5_21
+ #Only use plotly to find DateTime of questionable values
+ # ggplotly(EXOtemp_1_5)
+```
+
+```{r Thermistor 3}
+# check 3 temp data
+#Plot From 2018-current
+ m_3 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_3)) +
+  geom_line()
+ m_3
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_3)
+
+#Just the current year
+ m_3_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_3)) +
+   geom_point()
+ m_3_21
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_3_21)
+```
+
+```{r Thermistor 4}
+# check 4 temp data
+#Plot from 2018-current
+ m_4 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_4)) +
+  geom_line()
+ m_4
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_4)
+
+# Just from current year
+ m_4_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_4)) +
+   geom_point()
+ m_4_21
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_4_21)
+```
+
+```{r Thermistor 5}
+# check 5 temp data
+# Plot from 2018-current
+ m_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_5)) +
+   geom_line()
+ m_5
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_5)
+
+# Just current year
+ m_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_5)) +
+   geom_point()
+ m_5_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(m_5_21)
+```
+
+```{r Thermistor 6}
+# check 6 temp data
+# Plot from 2018-current
+   m_6 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_6)) +
+  geom_line()
+ m_6
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_6)
+
+# Just the current year
+ m_6_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_6)) +
+   geom_point()
+m_6_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(m_6_21)
+
+# Compare the Thermistor_6 with the temperature on the Do sensor at 5m
+   
+   # All the years
+   
+    comp_m_6 <- ggplot(data = bvrdata, aes(x = DateTime)) +
+    geom_line(aes(y=ThermistorTemp_C_6, color="Therm"))+ 
+      geom_line(aes(y=RDOTemp_C_6, color="RDO"))+
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                       breaks = c("Therm", "RDO"),
+                       values = c("Therm"="firebrick1","RDO"="blue"))
+   comp_m_6
+   
+    #Just the current year
+   comp_6_21=bvrdata%>%
+    filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+     ggplot(.,aes(x = DateTime))+
+     geom_point(aes(y=ThermistorTemp_C_6, color="Therm"))+ 
+     geom_point(aes(y=RDOTemp_C_6, color="RDO"))+
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                       breaks = c("Therm", "RDO"),
+                       values = c("Therm"="firebrick1", "RDO"="blue"))
+ 
+   comp_6_21
+```
+
+```{r Thermistor 7}
+# check 7 temp data
+# all the temp 2018-current
+ m_7 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_7)) +
+  geom_line()
+ m_7
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_7)
+
+#filter for the current year
+ m_7_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_7)) +
+   geom_point()
+m_7_21
+# plotly so you can pick out the questionable values
+ ggplotly(m_7_21)
+```
+
+```{r Thermistor 8}
+# check 8 temp data
+# Plot 2018-current
+ m_8 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_8)) +
+  geom_line()
+ m_8
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_8)
+
+# # Plot just the current year
+ m_8_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_8)) +
+   geom_point()
+ m_8_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(m_8_21)
+```
+
+```{r Thermistor 9}
+# check 9 temp data
+  # Plot 2018-current
+ m_9 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_9)) +
+  geom_line()
+ m_9
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_9)
+
+# Just the current year
+ m_9_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_9)) +
+   geom_point()
+ m_9_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(m_9_21)
+```
+
+```{r Thermistor 10}
+# check 10 temp data
+  # Plot 2018-current
+ m_10 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_10)) +
+  geom_line()
+ m_10
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_10)
+
+# Just the current year
+ m_10_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_10)) +
+   geom_point()
+ m_10_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(m_10_21)
+```
+
+```{r Thermistor 11}
+# check 9 temp data
+  # Plot 2018-current
+ m_11 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_11)) +
+  geom_line()
+ m_11
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_11)
+
+# Just the current year
+ m_11_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_11)) +
+   geom_point()
+ m_11_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(m_11_21)
+```
+
+```{r Thermistor 12}
+# check 12 temp data
+  # Plot 2018-current
+ m_12 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_12)) +
+  geom_line()
+ m_12
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_12)
+
+# Just the current year
+ m_12_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_12)) +
+   geom_point()
+ m_12_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(m_12_21)
+```
+
+```{r Thermistor 13}
+# check 9 temp data
+  # Plot 2018-current
+ m_13 <- ggplot(data = bvrdata, aes(x = DateTime, y = ThermistorTemp_C_13)) +
+  geom_line()
+ m_13
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_1_50)
+
+# Just the current year
+ m_13_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = ThermistorTemp_C_13)) +
+   geom_point()
+ m_13_21
+#Only use plotly to find DateTime of questionable values
+# ggplotly(m_13_21)
+ 
+ p_13_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = LvlTemp_C_13)) +
+   geom_point()
+ p_13_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(p_13_21)
+ 
+ # Compare Thermistor with the temperature on the Pressure sensor and temp on the DO sensor
+   
+   # All the years
+   
+    comp_m_13 <- ggplot(data = bvrdata, aes(x = DateTime)) +
+    geom_line(aes(y=ThermistorTemp_C_13, color="Therm"))+ 
+      geom_line(aes(y=LvlTemp_C_13, color="Pressure"))+
+      geom_line(aes(y=RDOTemp_C_13, color="RDO"))+
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                       breaks = c("Therm", "Pressure", "RDO"),
+                       values = c("Therm"="firebrick1", "Pressure"="black", "RDO"="blue"))
+   comp_m_13
+   
+    #Just the current year
+   comp_13_21=bvrdata%>%
+    filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+     ggplot(.,aes(x = DateTime))+
+     geom_point(aes(y=ThermistorTemp_C_13, color="Therm"))+ 
+      geom_point(aes(y=LvlTemp_C_13, color="Pressure"))+
+     geom_point(aes(y=RDOTemp_C_13, color="RDO"))+
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                      breaks = c("Therm", "Pressure", "RDO"),
+                      values = c("Therm"="firebrick1", "Pressure"="black","RDO"="blue"))
+ 
+   comp_13_21
+```
+
+
+```{r All Temperature}
+
+ All_temp_fcr=bvrdata%>%
+    ggplot(.,aes(x = DateTime))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="2"))+
+    geom_line(aes(y=EXOTemp_C_1.5, color="EXO_1_5.5m")) +
+    geom_line(aes(y=ThermistorTemp_C_3, color="3"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9"))+
+    geom_line(aes(y=ThermistorTemp_C_10, color="10"))+
+    geom_line(aes(y=ThermistorTemp_C_11, color="11"))+
+    geom_line(aes(y=ThermistorTemp_C_12, color="12"))+
+    geom_line(aes(y=ThermistorTemp_C_13, color="13"))+
+    labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Depth",
+                       breaks = c("1", "2","EXO_1_5.6m", "3", "4", "5", "6", "7", "8",                                         "9","10", "11","12","13"),
+                       values = c("1"="firebrick1", "2"="DarkOrange1", "EXO_1_5.6m"="yellow","2"="gold", 
+                                  "3"="greenyellow", "4"="medium sea green", "5"="sea green",
+                                  "6"="DeepSkyBlue4", "7"="blue2", "8"="cornsilk", "9"="blue4",    "10"="darkslateblue","11"="magenta2", "12"="darkmagenta", "13"="black"))
+
+All_temp_fcr
+  
+# This is all the temps and just the current year
+
+Cur_temp_fcr=bvrdata%>%
+   filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+    ggplot(.,aes(x = DateTime))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="2"))+
+    geom_line(aes(y=EXOTemp_C_1.5, color="EXO_1_5.5m")) +
+    geom_line(aes(y=ThermistorTemp_C_3, color="3"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9"))+
+    geom_line(aes(y=ThermistorTemp_C_10, color="10"))+
+    geom_line(aes(y=ThermistorTemp_C_11, color="11"))+
+    geom_line(aes(y=ThermistorTemp_C_12, color="12"))+
+    geom_line(aes(y=ThermistorTemp_C_13, color="13"))+
+    labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Depth",
+                       breaks = c("1", "2","EXO_1_5.6m", "3", "4", "5", "6", "7", "8",                                         "9","10", "11","12","13"),
+                       values = c("1"="firebrick1", "2"="DarkOrange1", "EXO_1_5.6m"="yellow","2"="gold", 
+                                  "3"="greenyellow", "4"="medium sea green", "5"="sea green",
+                                  "6"="DeepSkyBlue4", "7"="blue2", "8"="cornsilk", "9"="blue4",    "10"="darkslateblue","11"="magenta2", "12"="darkmagenta", "13"="black"))
+
+Cur_temp_fcr
+  
+```
+
+## Check out the Depth sensor and EXO
+
+```{r Pressure Sensor}  
+### Plotting depth from pressure sensor 
+   
+   Depth_press_sensor <- ggplot(data = bvrdata, aes(x = DateTime, y = Depth_m_13)) +
+      geom_line()
+   Depth_press_sensor
+   #Only use plotly to find DateTime of questionable values
+      #ggplotly(Depth_press_sensor)
+
+Depth_press_sensor_current <- bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  ggplot(., aes(x = DateTime, y = Depth_m_13)) +
+      geom_point()
+   Depth_press_sensor_current
+   #Only use plotly to find DateTime of questionable values
+    #ggplotly(Depth_press_sensor_current)
+
+```
+
+```{r EXO 1.5m depth}
+#Depth
+#Making sure I didn't miss any times when the EXO was out of place according to the depth sensor
+
+#Depth from the 1m EXO
+ Depth_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXODepth_m)) +
+   geom_line()
+ Depth_1_5
+#Only use plotly to find DateTime of questionable values
+# ggplotly(Depth_1_5)
+ 
+#Just the current year
+ Depth_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  ggplot(.,aes(x = DateTime, y = EXODepth_m)) +
+   geom_point()
+ Depth_1_5_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(Depth_1_5_21)
+``` 
+ 
+
+## Let's look at the DO sensors both RDOs and  EXO
+```{r DO from the EXO at 1.5m }
+#Check 1.5m EXO DO data
+#Plot 2021-current DO obs
+ EXODO_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXODO_mgL_1.5)) +
+   geom_line()
+ EXODO_1_5
+ #Only use plotly to find DateTime of questionable values
+ #ggplotly(EXODO_1_5)
+ 
+ EXODOsat_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXODOsat_percent_1.5)) +
+   geom_line()
+ EXODOsat_1_5
+ #Only use plotly to find DateTime of questionable values
+ #ggplotly(EXODOsat_1_5)
+ 
+#Plot Just the current year
+ EXODO_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXODO_mgL_1.5)) +
+   geom_point()
+ EXODO_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(EXODO_21)
+ 
+ EXODOsat_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXODOsat_percent_1_5)) +
+   geom_point()
+ EXODOsat_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(EXODOsat_21)
+``` 
+
+```{r DO from the meta RDO} 
+# Plot the Do from the RDO at position of 6
+# From 2020-current 
+ RDO6=ggplot(bvrdata, aes(x = DateTime, y = RDO_mgL_6)) +
+   geom_line()
+ RDO6
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO6)
+ 
+ # From 2020-current 
+RDO6_sat=ggplot(bvrdata, aes(x = DateTime, y = RDOsat_percent_6)) +
+   geom_line()
+ RDO6_sat
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO6_sat)
+ 
+ #Just the current year
+ RDO6_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = RDO_mgL_6)) +
+   geom_point()
+ RDO6_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(RDO6_21)
+ 
+ RDO6sat_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = RDOsat_percent_6)) +
+   geom_point()
+ RDO6sat_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO6sat_21)
+```
+
+```{r DO from the 9m RDO} 
+# Plot the DO from the RDO DO sensor at the bottom
+# From 2018-current 
+ RDO13=ggplot(bvrdata, aes(x = DateTime, y = RDO_mgL_13)) +
+   geom_line()
+ RDO13
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO13)
+ 
+ # From 2020-current 
+RDO13_sat=ggplot(bvrdata, aes(x = DateTime, y = RDOsat_percent_13)) +
+   geom_line()
+ RDO13_sat
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO13_sat)
+ 
+ #Just the current year
+ RDO13_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = RDO_mgL_13)) +
+   geom_point()
+ RDO13_21
+#Only use plotly to find DateTime of questionable values
+ ggplotly(RDO13_21)
+ 
+ RDO13sat_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = RDOsat_percent_13)) +
+   geom_point()
+ RDO13sat_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(RDO13sat_21)
+```
+
+##Check out the Algae Senor on the EXO
+```{r Check the EXO Chla}
+
+# chl and phyco visual qaqc-plot to see if everything looks right
+
+# Chla 1m EXO
+# Plot for 2021-current
+ chl_ugl_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOChla_ugL_1.5)) +
+   geom_line() 
+ chl_mean_1_5 <- bvrdata %>%
+  select(DateTime, EXOChla_ugL_1.5) %>%
+ chl_ugl_1_5
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(chl_ugl_1_5)
+ 
+# Plot just the current year
+ chl_ugl_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOChla_ugL_1.5)) +
+   geom_point()
+ chl_ugl_1_5_21
+ #Only use plotly to find DateTime of questionable values
+ #ggplotly(chl_ugl_1_5_21)
+ 
+# plot the daily mean
+# calculate the daily mean
+  mutate(day = date(DateTime)) %>%
+  group_by(day) %>%
+  mutate(daily_mean = mean(EXOChla_ugL_1.5, na.rm = TRUE)) %>%
+  distinct(day, .keep_all = TRUE)
+# 
+# plot the daily mean
+ chl_mean_plot <- ggplot(data = chl_mean_1.5, aes(x = day, y = daily_mean)) +
+  geom_point()
+ chl_mean_plot
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(chl_mean)
+
+# Plot the chla and the daily mean on the same graph
+ plot(bvrdata$DateTime, bvrdata$EXOChla_ugL_1_5)
+ points(chl_mean_1_5$DateTime, chl_mean_1_5$daily_mean, type="l", col="green")
+
+ 
+# Chla-RFU
+# Plot 2021-current
+ chl_rfu <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOChla_RFU_1.5)) +
+   geom_line()
+ chl_rfu
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(chl_rfu)
+
+# Just the current year
+ chl_rfu_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOChla_RFU_1.5)) +
+   geom_point()
+ chl_rfu_21
+ # Only use plotly to find DateTime of questionable values
+ #ggplotly(chl_rfu_21)
+```
+
+
+```{r Check out the Phyco in EXO}
+# Phyco-RFU
+# Plot 2018-current
+ phyco_rfu <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOBGAPC_RFU_1.5)) +
+   geom_line() 
+ phyco_rfu
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(phyco_rfu)
+ 
+# Just the current year
+ phyco_rfu_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOBGAPC_RFU_1_5)) +
+   geom_point()
+ phyco_rfu_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(phyco_rfu_21)
+
+ # Phyco-ugL
+# Plot 2021-current
+ phyco_ugl <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOBGAPC_ugL_1.5)) +
+   geom_line() 
+ phyco_ugl
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(phyco_ugl)
+ 
+# Just the current year
+ phyco_ugl_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOBGAPC_ugL_1.5)) +
+   geom_point()
+ phyco_ugl_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(phyco_ugl_21)
+```
+
+# Check out the fDOM sensor
+```{r fdom EXO sensor}
+#fDOM-RFU 1m EXO
+# Plot 2021-current
+ fDOM_rfu_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOfDOM_RFU_1.5)) +
+   geom_line() 
+ fDOM_rfu_1_5
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(fDOM_rfu_1_5)
+ 
+# Just the current year
+ fDOM_rfu_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOfDOM_RFU_1.5)) +
+   geom_point()
+ fDOM_rfu_1_5_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(fDOM_rfu_1_5_21)
+ 
+  # fDOM-QSU 1m EXO
+# Plot 2021-current
+ fDOM_qsu_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOfDOM_QSU_1.5)) +
+   geom_line() 
+ fDOM_qsu_1_5
+ #Only use plotly to find DateTime of questionable values
+ #ggplotly(fDOM_qsu_1_5)
+ 
+# Just the current year
+ fDOM_qsu_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOfDOM_QSU_1.5)) +
+   geom_point()
+ fDOM_qsu_1_5_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(fDOM_qsu_1_5_21)
+```
+
+
+## EXO Conductivity Sensor
+```{r EXO Condctivity Sensor at 1.5m }
+
+Cond_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOCond_uScm_1.5)) +
+   geom_line()
+ Cond_1_5
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(Cond_1_5)
+
+#Just the current year
+ 
+ Cond_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOCond_uScm_1.5)) +
+   geom_point()
+ Cond_1_5_21
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(Cond_1_5_21)
+ 
+ 
+ #Plot from 2018-current
+ SpCond_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOSpCond_uScm_1.5)) +
+   geom_line()
+ SpCond_1_5
+#Only use plotly to find DateTime of questionable values
+ #ggplotly(SpCond_1_5)
+ 
+#Just the current year
+ SpCond_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOSpCond_uScm_1.5)) +
+   geom_point()
+ SpCond_1_5_21
+#Only use plotly to find DateTime of questionable values
+# ggplotly(SpCond_1_5_21)
+```
+
+TDS is derived from conductivity so you don't necessarily have to plot this because if 
+conductivity is fine then TDS should be too
+```{r TDS at 1.5m and 9m}
+# #Total Dissolved Solids
+#TDS for 1m EXO
+ TDS_1_5 <- ggplot(data = bvrdata, aes(x = DateTime, y = EXOTDS_mgL_1.5)) +
+   geom_line()
+ TDS_1_5
+#Only use plotly to find DateTime of questionable values
+# ggplotly(TDS_1_5)
+ 
+#Just the current year
+ TDS_1_5_21=bvrdata%>%
+  filter(DateTime>ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+   ggplot(.,aes(x = DateTime, y = EXOTDS_mgL_1.5)) +
+   geom_point()
+ TDS_1_5_21
+ #Only use plotly to find DateTime of questionable values
+# ggplotly(TDS_1_5_21)
+```
+
+# How to update the Maintenance Log
+If there were any rouge observations that were missed then add them to the maintenance log.
+I like to edit the maintenance file right on Github by clicking the "edit this file" pencil in the right hand corner.  
+
+Here is the link https://github.com/FLARE-forecast/BVRE-data/blob/bvre-platform-data/BVR_maintenance_log.txt
+ 
+How TO:
+1)Add the beginning time and the end time. All times are in EST
+
+2)Next add the *parameter*: 
+For all rows use All_cat, for just the EXO use EXO*,just the temp string use wtr*,
+for RDO sensors use do*, for pressure sensor use Lvl*. For just one senor use the first few letters. This is not used to subset in the maintenance log but helps know what is happening. 
+
+3)Next add the columns that match the parameters know as *colnumber*. The column order is from the FCR_catwalk_QAQC_function.R script before the Reservoir and Site column have been added so it includes all the flags and the EXODate and EXOTime columns which are removed at the end of the script. See column order below.  You can use a single number or c(1:x)
+
+All_cat is c(1:42), EXO* is c(21:40), wtr* is c(1:14), do* is c(15:20), Lvl*, c(41:42)
+
+The flag column let's you know what is wrong with the data and is put in the flag column. 
+See below: 
+ Flag values
+  0: no flag
+  1: value removed due to maintenance and set to NA
+  2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+  3: negative values set to 0
+  4: value removed due to fouling and set to NA
+  5: questionable value due to potential fouling
+  6: very questionable value due to potential fouling. Values adjusted using a linear or square root function     to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+  7: missing data
+  8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+  9: Value corrected using a linear function to match the CTD profiles or from a known relationship 
+
+4)The *flagcol* is the columns where the flag will go. See the column order to make sure you have the correct column. This functions same as the *colnumber*.
+
+5) Last is the *notes* column where you give a brief description of what is wrong. DO NOT USE ANY PUNCTUATION ESPECIALLY COMMAS
+
+
+This is the column order to figure out the column numer for *colnumber* and *flagcol*:
+
+
+   
+
+If you make any changes to the maintenance log you have to run the qaqc_fcr function again so the changes are incorporated. Make sure to re download the Maintenance log.  
+
+## Final steps before final csv
+
+These are the final steps before publishing the final csv.I like to put DateTime as.character when I save the file because we have had issues with timezones in the past and this ensures they stay consistent when we write to a csv. 
+
+```{r Final Steps}
+
+# mean and median water depth to put in methods. Add 0.5m to these because the senors are above the sediment
+mean(bvrdata$Depth_m_13, na.rm =T)
+median(bvrdata$Depth_m_13, na.rm =T)
+
+#Order by date and time this is a triple check to make sure it is in chrological order
+
+bvrdata <- bvrdata[order(bvrdata$DateTime),]
+
+#rearrange the cols. They should already be in order but just making sure. 
+ bvrdata <- bvrdata %>%
+  select(Reservoir, Site, DateTime, ThermistorTemp_C_1:ThermistorTemp_C_13,
+                                RDO_mgL_6, RDOsat_percent_6,
+                                RDOTemp_C_6, RDO_mgL_13, RDOsat_percent_13, RDOTemp_C_13,
+                                EXOTemp_C_1.5, EXOCond_uScm_1.5, EXOSpCond_uScm_1.5, EXOTDS_mgL_1.5, EXODOsat_percent_1.5,
+                                EXODO_mgL_1.5, EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5,
+                                EXOfDOM_RFU_1.5, EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5,  EXOPressure_psi, EXODepth_m, EXOBattery_V, EXOCablepower_V,
+                                EXOWiper_V, LvlPressure_psi_13,Depth_m_13, LvlTemp_C_13, RECORD, CR6Battery_V, CR6Panel_Temp_C,
+                                Flag_ThermistorTemp_C_1:Flag_ThermistorTemp_C_13,Flag_RDO_mgL_6, Flag_RDOsat_percent_6, Flag_RDOTemp_C_6,
+                                Flag_RDO_mgL_13, Flag_RDOsat_percent_13, Flag_RDOTemp_C_13,Flag_EXOTemp_C_1.5, Flag_EXOCond_uScm_1.5, Flag_EXOSpCond_uScm_1.5,Flag_EXOTDS_mgL_1.5,
+                                Flag_EXODOsat_percent_1.5, Flag_EXODO_mgL_1.5, Flag_EXOChla_RFU_1.5,Flag_EXOChla_ugL_1.5, Flag_EXOBGAPC_RFU_1.5,Flag_EXOBGAPC_ugL_1.5,
+                                Flag_EXOfDOM_RFU_1.5,Flag_EXOfDOM_QSU_1.5, Flag_EXOTurbidity_FNU_1.5,
+                                Flag_EXOPressure_psi, Flag_EXODepth_m, Flag_EXOBattery_V, Flag_EXOCablepower_V,Flag_EXOWiper_V,Flag_LvlPressure_psi_13,Flag_LvlTemp_C_13)
+
+# convert datetimes to characters so that they are properly formatted in the output file
+  bvrdata$DateTime <- as.character(bvrdata$DateTime)
+  
+  write.csv(bvrdata, 'BVR_platform_data_2020_2022.csv', row.names = FALSE, quote=F)
+```
+
+```{r Make Maintenance Log for pub}
+# Make the Maintenance Log into a csv and add Reservoir and Site column 
+  Log <- read.csv(maintenance_file)
+ names(Log) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber","Flag", "FlagColumn", "Notes") #finalized column names
+Log$Reservoir= "BVR"#add reservoir name for EDI archiving
+Log$Site=50 #add site column for EDI archiving
+
+Log=Log[,c(9:10,1:8)]
+ 
+write.csv(Log, "BVR_MaintenanceLog_2020_2022.csv", row.names=F, quote=F)
+```

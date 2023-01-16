@@ -1,7 +1,84 @@
 attributeName	code	definition
+colnumber	15	
+colnumber	16	
+colnumber	18	
+colnumber	19	
+colnumber	21	
+colnumber	22	
+colnumber	35	
+colnumber	37	
+colnumber	41	
+colnumber	42	
+colnumber	5	
+colnumber	6	
+colnumber	7	
+colnumber	9	
+colnumber	c(1:14)	
+colnumber	c(1:42)	
+colnumber	c(10:14)	
+colnumber	c(15:16)	
+colnumber	c(15:20)	
+colnumber	c(18:19)	
+colnumber	c(18:20)	
+colnumber	c(21:40)	
+colnumber	c(24:26)	
+colnumber	c(33:34)	
+colnumber	c(41:42)	
+colnumber	c(9:14)	
 flag	1	value removed due to maintenance and set to NA
 flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 flag	5	questionable value due to potential fouling
 flag	6	very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
 flag	7	missing data
 flag	8	Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+flagcol	0	Maintenance event does not correspond to a flag column
+flagcol	43	
+flagcol	44	
+flagcol	45	
+flagcol	47	
+flagcol	53	
+flagcol	54	
+flagcol	56	
+flagcol	57	
+flagcol	58	
+flagcol	71	
+flagcol	73	
+flagcol	77	
+flagcol	78	
+flagcol	c(43:52)	
+flagcol	c(43:78)	
+flagcol	c(48:52)	
+flagcol	c(53:54)	
+flagcol	c(53:58)	
+flagcol	c(55:54)	
+flagcol	c(56:57)	
+flagcol	c(56:58)	
+flagcol	c(59:75)	
+flagcol	c(59:76)	
+flagcol	c(60:62)	
+flagcol	c(69:70)	
+flagcol	c(76:78)	
+flagcol	c(77:78)	
+parameter	All_Cat	"All of the sensors in the data frame that corresponds with ColumnNumber c(1:46) and FlagColumn c(47:86) (ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8,ThermistorTemp_C_9,ThermistorTemp_C_10,ThermistorTemp_C_11,ThermistorTemp_C_12,ThermistorTemp_C_13,RDO_mgL_6,RDOsat_percent_6,RDOTemp_C_6,RDO_mgL_13,RDOsat_percent_13,RDOTemp_C_13,EXOTemp_C_1.5,EXOCond_uScm_1.5,EXOSpCond_uScm_1.5,EXOTDS_mgL_1.5,EXODOsat_percent_1.5,EXODO_mgL_1.5,EXOChla_RFU_1.5,EXOChla_ugL_1.5,EXOBGAPC_RFU_1.5,EXOBGAPC_ugL_1.5,EXOfDOM_RFU_1.5,EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOCablepower_V,EXOWiper_V,LvlPressure_psi_13, LvlTemp_C_13)"
+parameter	do*	
+parameter	do_5	
+parameter	do_9	
+parameter	do_9*	
+parameter	doobs_5	
+parameter	doobs_9	
+parameter	dosat_5	
+parameter	dosat_9	
+parameter	EXO*	
+parameter	EXO_*	
+parameter	EXO_Cond*	
+parameter	EXO_Date	
+parameter	EXO_Time	
+parameter	fdom	
+parameter	Lvl*	
+parameter	Turb*	
+parameter	wtr*	
+parameter	wtr_1	Thermistor at 1.0m
+parameter	wtr_2	Thermistor at 2.0m
+parameter	wtr_4	Thermistor at 4.0m
+parameter	wtr_5:9	Thermistors at 5.0m - 9.0m
+parameter	wtr_surface	Thermistor at the surface (0.1m)

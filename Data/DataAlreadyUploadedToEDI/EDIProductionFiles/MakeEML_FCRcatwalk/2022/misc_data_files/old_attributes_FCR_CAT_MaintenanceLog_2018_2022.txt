@@ -1,0 +1,9 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+DataStream	Three-leter code corresponding to the catwalk dataset	character			NA	value is missing
+TIMESTAMP_start	Starting date and time of the maintenance event	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+TIMESTAMP_end	Ending date and time of the maintenance event	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+parameter	Description of the instruments affected by maintenance	character			NA	value is missing
+colnumber	Column number corresponding to the instruments affected by maintenance	character			NA	value is missing
+flag	The flag to be assigned	categorical			NA	value is missing
+flagcol	The column number of the flag column corresponding to the instrument affected by maintenance	character			NA	value is missing
+notes	Notes to describe the maintenance event	character			NA	value is missing

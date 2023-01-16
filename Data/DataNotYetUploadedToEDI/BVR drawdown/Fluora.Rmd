@@ -719,6 +719,30 @@ ggplot(data = pw2, aes(x = spectral_group, y = peak.width, fill = as.factor(Year
   labs(fill = "Year")
 dev.off()
 ```
+Alternative method for peak width calculation
+```{r}
+#peak width calculation
+  max_depth <- unlist(profile[which.max(profile$TotalConc_ugL),"Depth_m"])
+  conc_med <- mean(profile$TotalConc_ugL, na.rm = TRUE)
+  
+  peak.top.temp <- subset(profile, Depth_m <= max_depth & TotalConc_ugL <= conc_med)
+  if(nrow(peak.top.temp) == 0){
+    peak.top = min(profile$Depth_m, na.rm = TRUE)
+  } else {
+    peak.top <- unlist(peak.top.temp[which.min(abs(peak.top.temp$Depth_m - max_depth)),"Depth_m"])
+  }
+
+  peak.bottom.temp <- subset(profile, Depth_m >= max_depth & TotalConc_ugL <= conc_med)
+  if(nrow(peak.bottom.temp) == 0){
+    peak.bottom = max(profile$Depth_m, na.rm = TRUE)
+  } else {
+    peak.bottom <- unlist(peak.bottom.temp[which.min(abs(peak.bottom.temp$Depth_m - max_depth)),"Depth_m"])
+    }
+  
+
+  peak.width = abs(peak.top - peak.bottom)
+  final[i,5] <- peak.width
+```
 
 ASL figures
 ```{r}

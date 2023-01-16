@@ -69,42 +69,15 @@ for(var in vars){
 
 Combined with historical data
 ```{r}
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/551/6/38d72673295864956cccd6bbba99a1a3" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
-                   
- dt1 <-read.csv(infile1,header=F 
-          ,skip=1
-            ,sep=","  
-        , col.names=c(
-                    "Reservoir",     
-                    "Site",     
-                    "DateTime",     
-                    "Depth_m",     
-                    "Rep",     
-                    "ch4_umolL",     
-                    "co2_umolL",     
-                    "flag_DateTime",     
-                    "flag_ch4",     
-                    "flag_co2"    ), check.names=TRUE)
-               
-unlink(infile1)
+#Update to pull from EDI when ready
 
 
-
-ghg = read_xlsx("GHG_MEGA_GC_SHEET_EXCEL_2022.xlsx", sheet =2, skip = 9, col_types = c("date",rep("guess",51)))
-ghg = ghg[c(1,2,3,4,14,15)]
-colnames(ghg)= c("DateTime","Site","Depth_m","Reservoir","ch4_umolL","co2_umolL")
+ghg = read.csv("Dissolved_GHG_2015_2022.csv")
 ghg = ghg%>%
   mutate(Site = as.numeric(Site),
-         ch4_umolL = as.numeric(ch4_umolL),
-         co2_umolL = as.numeric(co2_umolL))%>%
-  full_join(dt1%>%
-              mutate(DateTime=as_datetime(DateTime)))%>%
-  mutate(Site = ifelse(Site == 1,40,Site),
-         DateTime=as.Date(DateTime),
+         ch4_umolL = as.numeric(CH4_umolL),
+         co2_umolL = as.numeric(CO2_umolL))%>%
+  mutate(DateTime=as.Date(DateTime),
          Date_22 = DateTime,
          Year = year(DateTime))
 year(ghg$Date_22)=2022
@@ -129,12 +102,12 @@ ghg%>%
   filter(Site==50,
          Depth_m ==0.1,
          Reservoir=="BVR",
-         year(DateTime)%in%c(2021,2022))%>%
+         year(DateTime)%in%c(2021,2022),
+         !is.na(co2_umolL))%>%
   ggplot(aes(x = Date_22, y = co2_umolL, color = as.factor(Year)))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   geom_point()+
-  geom_line()+
   ylab("CO2 (umolL)")+
   theme(axis.title.x = element_blank())
 dev.off()
@@ -157,15 +130,27 @@ ghg%>%
   filter(Site==50,
          Depth_m ==0.1,
          Reservoir=="BVR",
-         year(DateTime)%in%c(2021,2022))%>%
+         year(DateTime)%in%c(2021,2022),
+         !is.na(ch4_umolL))%>%
   ggplot(aes(x = Date_22, y = ch4_umolL, color = as.factor(Year)))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   geom_point()+
-  geom_line()+
   ylab("CH4 (umolL)")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+export = ghg%>%
+  filter(Site==50,
+         Depth_m ==0.1,
+         Reservoir=="BVR",
+         year(DateTime)%in%c(2021,2022),
+         CH4_umolL<5)%>%#Removing one erroneous 2021 point
+  group_by(DateTime)%>%
+  summarize(ch4_umolL=mean(ch4_umolL, na.rm = T),
+            co2_umolL=mean(co2_umolL, na.rm = T))
+
+write.csv(export,"../../BVR drawdown/Data/GHG at 0.1m.csv")
 
 vars = c("co2_umolL","ch4_umolL")
 Years = c(2021,2022)

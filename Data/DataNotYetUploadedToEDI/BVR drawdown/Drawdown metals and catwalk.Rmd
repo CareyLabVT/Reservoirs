@@ -107,7 +107,48 @@ metals%>%
   ylab("Surface iron SFe/TFe ratio")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+jpeg("./Figs/Surface Mn (ppb).jpeg", res = 300, width = 6, height = 4, units = "in")
+metals%>%
+  filter(Reservoir == "BVR",
+         Depth_m == 0.1,
+         !is.na(TMn_mgL),
+         Site==50)%>%
+  ggplot(aes(x = Date_22))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point(aes(color = Year,y = TMn_mgL))+
+  theme_bw()+
+  ylab("Surface Mn (mg/L)")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg("./Figs/Surface Mn ST ratio.jpeg", res = 300, width = 6, height = 4, units = "in")
+metals%>%
+  filter(Reservoir == "BVR",
+         Depth_m == 0.1,
+         !is.na(TMn_mgL),
+         !SMn_mgL<0,
+         !TMn_mgL<0,
+         Site==50,
+         !SMn_mgL/TMn_mgL>1)%>%
+  ggplot(aes(x = Date_22))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_point(aes(color = Year,y = SMn_mgL/TMn_mgL))+
+  theme_bw()+
+  ylab("Surface SMn/TMn ratio")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+export = metals%>%
+  filter(Reservoir == "BVR",
+         Depth_m == 0.1,
+         Site==50)
+
+write.csv(export,"./Data/Metals at 0.1m.csv",row.names=F)
 ```
+
 
 
 BVR heatmaps with sensor data (elevation rather than depth)

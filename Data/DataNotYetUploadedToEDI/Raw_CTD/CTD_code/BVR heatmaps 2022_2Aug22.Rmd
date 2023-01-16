@@ -121,8 +121,9 @@ df.final = df.final.raw%>%
   mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
          DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
          DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent))%>%
-  mutate(Depth_m = max -Depth_m)%>%
-  mutate(Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
+  mutate(Depth_m_orig = Depth_m,
+         Depth_m = max-Depth_m,
+         Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
 
 max(df.final$Date[year(df.final$Date)==2021])
 df.final%>%
@@ -142,7 +143,11 @@ ctd_depths = df.final%>%
   group_by(Site)%>%
   mutate(max = max(WaterLevel))
 
-write.csv(df.final%>%filter(Depth_m == 0.1),"../../BVR drawdown/Data/CTD at 0.1m.csv",row.names = F)
+export = df.final%>%
+  filter(Reservoir=="BVR",
+         Depth_m_orig==0.1)
+
+write.csv(export,"../../BVR drawdown/Data/CTD at 0.1m.csv",row.names = F)
 
 #library(RCurl)
 #sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
@@ -255,11 +260,6 @@ for(i in 1:length(vars)){
   print(p)
   dev.off()
 }
-
-df.final%>%
-  filter(Depth_m==0.1)
-
-sort(unique(df.final$Depth_m))
 ```
 
 Stratification statisitcs

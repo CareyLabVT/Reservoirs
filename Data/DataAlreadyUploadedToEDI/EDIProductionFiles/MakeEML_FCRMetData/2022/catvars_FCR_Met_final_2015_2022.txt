@@ -1,29 +1,45 @@
 attributeName	code	definition
-Note_AirTemp_Average_C	Substituted_value_calculated_from_Panel_Temp_and_linear_model	Substituted_value_calculated_from_Panel_Temp_and_linear_model
-Note_Albedo_Average_W_m2	Infinite_value_set_to_NA	Infinite_value_set_to_NA
-Note_Albedo_Average_W_m2	Negative_value_set_to_0	Negative_value_set_to_0
-Note_Albedo_Average_W_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_Albedo_Average_W_m2	Sample not collected	Sample not collected
-Note_Albedo_Average_W_m2	Set_to_NA_because_Shortwave_equals_NA	Set_to_NA_because_Shortwave_equals_NA
-Note_BP_Average_kPa	Outlier_set_to_NA	Outlier_set_to_NA
-Note_InfraredRadiationDown_Average_W_m2	Greater_than_2SD_Value_corrected_with_InfRadDn_equation_as_described_in_metadata	Greater_than_2SD_Value_corrected_with_InfRadDn_equation_as_described_in_metadata
-Note_InfraredRadiationDown_Average_W_m2	outlier_set_to_NA_due_to_probable_sensor_failure	outlier_set_to_NA_due_to_probable_sensor_failure
-Note_InfraredRadiationDown_Average_W_m2	Value_corrected_with_InfRadDn_equation_as_described_in_metadata	Value_corrected_with_InfRadDn_equation_as_described_in_metadata
-Note_InfraredRadiationUp_Average_W_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_InfraredRadiationUp_Average_W_m2	Value_corrected_with_InfRadUp_equation_as_described_in_metadata	Value_corrected_with_InfRadUp_equation_as_described_in_metadata
-Note_PAR_Average_umol_s_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_PAR_Average_umol_s_m2	Sample not collected	Sample not collected
-Note_PAR_Average_umol_s_m2	No_data_recorded	No_data_recorded
-Note_PAR_Total_mmol_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_PAR_Total_mmol_m2	Sample not collected	Sample not collected
-Note_PAR_Total_mmol_m2	No_data_recorded	No_data_recorded
-Note_Rain_Total_mm	Change_to_mm_per_min	Change_to_mm_per_min
-Note_RH_percent	Sample not collected	Sample not collected
-Note_RH_percent	Value_set_to_100	Value_set_to_100
-Note_ShortwaveRadiationDown_Average_W_m2	Negative_value_set_to_0	Negative_value_set_to_0
-Note_ShortwaveRadiationDown_Average_W_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_ShortwaveRadiationUp_Average_W_m2	Negative_value_set_to_0	Negative_value_set_to_0
-Note_ShortwaveRadiationUp_Average_W_m2	Outlier_set_to_NA	Outlier_set_to_NA
-Note_ShortwaveRadiationUp_Average_W_m2	Questionable_value	Questionable_value
-Note_ShortwaveRadiationUp_Average_W_m2	Sample not collected	Sample not collected
-Reservoir	FCR	FCR
+Flag_AirTemp_C_Average	0	no flag applied
+Flag_AirTemp_C_Average	1	value removed due to maintenance and set to NA
+Flag_AirTemp_C_Average	4	 potentially questionable value and changed or set to NA, see note
+Flag_Albedo_Average_W_m2	0	no flag applied
+Flag_Albedo_Average_W_m2	2	sample not collected
+Flag_Albedo_Average_W_m2	3	negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+Flag_Albedo_Average_W_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_BP_Average_kPa	0	no flag applied
+Flag_BP_Average_kPa	4	 potentially questionable value and changed or set to NA, see note
+Flag_InfraredRadiationDown_Average_W_m2	0	no flag applied
+Flag_InfraredRadiationDown_Average_W_m2	1	value removed due to maintenance and set to NA
+Flag_InfraredRadiationDown_Average_W_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_InfraredRadiationUp_Average_W_m2	0	no flag applied
+Flag_InfraredRadiationUp_Average_W_m2	1	value removed due to maintenance and set to NA
+Flag_InfraredRadiationUp_Average_W_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_PAR_Total_mmol_m2	0	no flag applied
+Flag_PAR_Total_mmol_m2	1	value removed due to maintenance and set to NA
+Flag_PAR_Total_mmol_m2	2	sample not collected
+Flag_PAR_Total_mmol_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_PAR_umolm2s_Average	0	no flag applied
+Flag_PAR_umolm2s_Average	1	value removed due to maintenance and set to NA
+Flag_PAR_umolm2s_Average	2	sample not collected
+Flag_PAR_umolm2s_Average	4	 potentially questionable value and changed or set to NA, see note
+Flag_Rain_Total_mm	0	no flag applied
+Flag_Rain_Total_mm	4	 potentially questionable value and changed or set to NA, see note
+Flag_RH_percent	0	no flag applied
+Flag_RH_percent	1	value removed due to maintenance and set to NA
+Flag_RH_percent	2	sample not collected
+Flag_RH_percent	3	negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+Flag_RH_percent	5	questionable value but left in dataset
+Flag_ShortwaveRadiationDown_Average_W_m2	0	no flag applied
+Flag_ShortwaveRadiationDown_Average_W_m2	1	value removed due to maintenance and set to NA
+Flag_ShortwaveRadiationDown_Average_W_m2	3	negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+Flag_ShortwaveRadiationDown_Average_W_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_ShortwaveRadiationUp_Average_W_m2	0	no flag applied
+Flag_ShortwaveRadiationUp_Average_W_m2	1	value removed due to maintenance and set to NA
+Flag_ShortwaveRadiationUp_Average_W_m2	2	sample not collected
+Flag_ShortwaveRadiationUp_Average_W_m2	3	negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA
+Flag_ShortwaveRadiationUp_Average_W_m2	4	 potentially questionable value and changed or set to NA, see note
+Flag_ShortwaveRadiationUp_Average_W_m2	5	questionable value but left in dataset
+Flag_WindDir_degrees	0	no flag applied
+Flag_WindSpeed_Average_m_s	0	no flag applied
+Flag_WindSpeed_Average_m_s	4	 potentially questionable value and changed or set to NA, see note
+Reservoir	FCR	Falling Creek Reservoir

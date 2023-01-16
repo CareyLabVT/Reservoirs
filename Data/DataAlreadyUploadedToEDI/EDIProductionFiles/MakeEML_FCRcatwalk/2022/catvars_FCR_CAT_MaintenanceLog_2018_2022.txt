@@ -1,84 +1,75 @@
 attributeName	code	definition
-colnumber	15	
-colnumber	16	
-colnumber	18	
-colnumber	19	
-colnumber	21	
-colnumber	22	
-colnumber	35	
-colnumber	37	
-colnumber	41	
-colnumber	42	
-colnumber	5	
-colnumber	6	
-colnumber	7	
-colnumber	9	
-colnumber	c(1:14)	
-colnumber	c(1:42)	
-colnumber	c(10:14)	
-colnumber	c(15:16)	
-colnumber	c(15:20)	
-colnumber	c(18:19)	
-colnumber	c(18:20)	
-colnumber	c(21:40)	
-colnumber	c(24:26)	
-colnumber	c(33:34)	
-colnumber	c(41:42)	
-colnumber	c(9:14)	
-flag	1	value removed due to maintenance and set to NA
-flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
-flag	5	questionable value due to potential fouling
-flag	6	very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
-flag	7	missing data
-flag	8	Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
-flagcol	0	Maintenance event does not correspond to a flag column
-flagcol	43	
-flagcol	44	
-flagcol	45	
-flagcol	47	
-flagcol	53	
-flagcol	54	
-flagcol	56	
-flagcol	57	
-flagcol	58	
-flagcol	71	
-flagcol	73	
-flagcol	77	
-flagcol	78	
-flagcol	c(43:52)	
-flagcol	c(43:78)	
-flagcol	c(48:52)	
-flagcol	c(53:54)	
-flagcol	c(53:58)	
-flagcol	c(55:54)	
-flagcol	c(56:57)	
-flagcol	c(56:58)	
-flagcol	c(59:75)	
-flagcol	c(59:76)	
-flagcol	c(60:62)	
-flagcol	c(69:70)	
-flagcol	c(76:78)	
-flagcol	c(77:78)	
-parameter	All_Cat	"All of the sensors in the data frame that corresponds with ColumnNumber c(1:46) and FlagColumn c(47:86) (ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8,ThermistorTemp_C_9,ThermistorTemp_C_10,ThermistorTemp_C_11,ThermistorTemp_C_12,ThermistorTemp_C_13,RDO_mgL_6,RDOsat_percent_6,RDOTemp_C_6,RDO_mgL_13,RDOsat_percent_13,RDOTemp_C_13,EXOTemp_C_1.5,EXOCond_uScm_1.5,EXOSpCond_uScm_1.5,EXOTDS_mgL_1.5,EXODOsat_percent_1.5,EXODO_mgL_1.5,EXOChla_RFU_1.5,EXOChla_ugL_1.5,EXOBGAPC_RFU_1.5,EXOBGAPC_ugL_1.5,EXOfDOM_RFU_1.5,EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOCablepower_V,EXOWiper_V,LvlPressure_psi_13, LvlTemp_C_13)"
-parameter	do*	
-parameter	do_5	
-parameter	do_9	
-parameter	do_9*	
-parameter	doobs_5	
-parameter	doobs_9	
-parameter	dosat_5	
-parameter	dosat_9	
-parameter	EXO*	
-parameter	EXO_*	
-parameter	EXO_Cond*	
-parameter	EXO_Date	
-parameter	EXO_Time	
-parameter	fdom	
-parameter	Lvl*	
-parameter	Turb*	
-parameter	wtr*	
-parameter	wtr_1	Thermistor at 1.0m
-parameter	wtr_2	Thermistor at 2.0m
-parameter	wtr_4	Thermistor at 4.0m
-parameter	wtr_5:9	Thermistors at 5.0m - 9.0m
-parameter	wtr_surface	Thermistor at the surface (0.1m)
+ColumnNumber	15	Column number for dissolved oxygen oxygen observation on the  sensor at 5m that corresponds with FlagColumn 53 (RDO_mgL_5)
+ColumnNumber	16	Column number for dissolved oxygen saturation observation on the  sensor at 5m that corresponds with  FlagColumn 54 (RDOsat_percent_5)
+ColumnNumber	18	Column number for dissolved oxygen oxygen observation on the  sensor at 9m that corresponds with FlagColumn 56 (RDO_mgL_9)
+ColumnNumber	19	Column number for dissolved oxygen saturation observation on the  sensor at 9m that corresponds with  FlagColumn 57 (RDOsat_percent_9)
+ColumnNumber	21	Column number for date recoded from the EXO which is not included in the final data set
+ColumnNumber	22	Column number for time recoded from the EXO which is not included in the final data set
+ColumnNumber	35	Column number for turbidity measurment from the EXO that corresponds with  FlagColumn 71 (EXOTurbidity_FNU_1)
+ColumnNumber	5	Column number for Thermistor at 0.1 m that corresponds with  FlagColumn 43 (ThermistorTemp_C_surface)
+ColumnNumber	6	Column number for Thermistor at 1 m that corresponds with  FlagColumn 44 (ThermistorTemp_C_1)
+ColumnNumber	7	Column number for Thermistor at 2 m that corresponds with FlagColumn 45 (ThermistorTemp_C_2)
+ColumnNumber	9	Column number for Thermistor at 4 m that corresponds with  FlagColumn 47 (ThermistorTemp_C_4)
+ColumnNumber	c(1:14)	Column numbers for all Thermistor measurements that corresponds with FlagColumn c(43:52) (ThermistorTemp_C_surface,ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8, ThermistorTemp_C_9)
+ColumnNumber	c(1:42)	Column number for all of the sensors in the data frame that corresponds with   FlagColumn c(47:86) (ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8,ThermistorTemp_C_9,ThermistorTemp_C_10,ThermistorTemp_C_11,ThermistorTemp_C_12,ThermistorTemp_C_13,RDO_mgL_6,RDOsat_percent_6,RDOTemp_C_6,RDO_mgL_13,RDOsat_percent_13,RDOTemp_C_13,EXOTemp_C_1,EXOCond_uScm_1,EXOSpCond_uScm_1,EXOTDS_mgL_1,EXODOsat_percent_1,EXODO_mgL_1,EXOChla_RFU_1,EXOChla_ugL_1,EXOBGAPC_RFU_1,EXOBGAPC_ugL_1,EXOfDOM_RFU_1.5,EXOfDOM_QSU_1,EXOTurbidity_FNU_1,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOcablepower_V,EXOwiper_V,LvlPressure_psi_13, LvlTemp_C_13)
+ColumnNumber	c(10:14)	Column number for all Thermistor measurements that corresponds with FlagColumn c(43:52) (ThermistorTemp_C_surface,ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8, ThermistorTemp_C_9)
+ColumnNumber	c(15:16)	Column numbers for dissolved oxygen sensor at 5m including the other variables it measure except temperature that corresponds with FlagColumn c(53:54) (RDO_mgL_5,RDOsat_percent_5)
+ColumnNumber	c(15:20)	Column number for dissolved oxygen sensor at both 5m and 9m including all the variables it measure that corresponds with  FlagColumn c(53:58) (RDO_mgL_5,RDOsat_percent_5, RDOTemp_C_5, RDO_mgL_9,RDOsat_percent_9, RDOTemp_C_9)
+ColumnNumber	c(18:19)	Column numbers for dissolved oxygen sensor at 9m and the other variables it measure except temperature that corresponds with FlagColumn c(56:57) (RDO_mgL_9,RDOsat_percent_9)
+ColumnNumber	c(18:20)	Column numbers for dissolved oxygen sensor at 9m and the other variables it measure that corresponds with FlagColumn c(56:58) (RDO_mgL_9,RDOsat_percent_9, RDOTemp_C_9)
+ColumnNumber	c(21:40)	Column numbers for all senor measurements on the EXO that corresponds with ColumnNumber c(21:40) and FlagColumn c(59:76) (EXOTemp_C_1,EXOCond_uScm_1,EXOSpCond_uScm_1,EXOTDS_mgL_1,EXODOsat_percent_1,EXODO_mgL_1,EXOChla_RFU_1,EXOChla_ugL_1,EXOBGAPC_RFU_1,EXOBGAPC_ugL_1,EXOfDOM_RFU_1,EXOfDOM_QSU_1,EXOTurbidity_FNU_1,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOcablepower_V,EXOwiper_V)
+ColumnNumber	c(24:26)	Column numbers for conducitvity, specific conductance, and total dissolved solids  measurements from the EXO that corresponds and FlagColumn c(60:62)(EXOCond_uScm_1, EXOSpCond_uScm_1, EXO_TDS_mg_1)
+ColumnNumber	c(33:34)	Column numbers for dissolved organic matter measurment from the EXO that corresponds with FlagColumn c(69:70) (EXOfDOM_RFU_1, EXOfDOM_ugL_1)
+ColumnNumber	c(41:42)	Column numbers for all meaurements from the Campbell pressure transducer that corresponds with FlagColumn c(77:78) (LvlPressure_psi_9, LvlTemp_C_9)
+ColumnNumber	c(9:14)	Column numbers for Thermistors at 5 m through 9 m that corresponds with  FlagColumn c(48:52) (ThermistorTemp_C_5,ThermistorTemp_C_6, ThermistorTemp_C_7,ThermistorTemp_C_8, ThermistorTemp_C_9)
+Flag	1	value removed due to maintenance and set to NA
+Flag	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag	5	questionable value due to potential fouling
+Flag	6	very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+Flag	7	missing data
+Flag	8	Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+FlagColumn	0	No column associated with the Maintenance because EXODate and EXOTime column are removed from the data set 
+FlagColumn	43	Flag column number for Thermistor at 0.1 m that corresponds with ColumnNumber 5  (Flag_ThermistorTemp_C_surface)
+FlagColumn	44	Flag column number for Thermistor at 1 m that corresponds with ColumnNumber 6   Flag_ThermistorTemp_C_1)
+FlagColumn	45	Flag column number for Thermistor at 2 m that corresponds with ColumnNumber 7 ( Flag_ThermistorTemp_C_2)
+FlagColumn	47	Flag column number for Thermistor at 4 m that corresponds with ColumnNumber 9 ( Flag_ThermistorTemp_C_4)
+FlagColumn	53	Flag column number for dissolved oxygen oxygen observation on the  sensor at 5m that corresponds with Column Number 15 ( Flag_RDO_mgL_5)
+FlagColumn	54	Flag column number for dissolved oxygen saturation observation on the  sensor at 5m that corresponds with Column Number 16 (RDOsat_percent_5)
+FlagColumn	56	Flag column number for Dissolved oxygen oxygen observation on the  sensor at 9m that corresponds with Column Number 18 (Flag_RDO_mgL_9)
+FlagColumn	57	Flag column number for dissolved oxygen saturation observation on the  sensor at 9m that corresponds with Column Number 19 (Flag_RDOsat_percent_9)
+FlagColumn	71	Flag column number for turbidity measurment from the EXO that corresponds with ColumnNumber 35 (Flag_EXOTurbidity_FNU_1)
+FlagColumn	c(43:52)	Flag column numbers for all Thermistor measurements that corresponds with ColumnNumber c(1:14) ( Flag_ThermistorTemp_C_surface,Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_ThermistorTemp_C_3,Flag_ThermistorTemp_C_4,Flag_ThermistorTemp_C_5,Flag_ThermistorTemp_C_6,Flag_ThermistorTemp_C_7,Flag_ThermistorTemp_C_8, Flag_ThermistorTemp_C_9)
+FlagColumn	c(43:78)	Flag column number for all of the sensors in the data frame that corresponds with ColumnNumber c(1:46) (Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_ThermistorTemp_C_3,Flag_ThermistorTemp_C_4,Flag_ThermistorTemp_C_5,Flag_ThermistorTemp_C_6,Flag_ThermistorTemp_C_7, Flag_ThermistorTemp_C_8, Flag_ThermistorTemp_C_9, Flag_EXOTemp_C_1,Flag_EXOCond_uScm_1,Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,Flag_EXODOsat_percent_1,Flag_EXODO_mgL_1,Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1,Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1,Flag_EXOPressure_psi,Flag_EXODepth_m,Flag_EXOBattery_V,Flag_EXOcablepower_V,Flag_EXOwiper_V) )
+FlagColumn	c(48:52)	Flag column number for Thermistors at 5 m through 9 m that corresponds with ColumnNumber c(10:14) (Flag_ThermistorTemp_C_5,ThermistorTemp_C_6, Flag_ThermistorTemp_C_6,ThermistorTemp_C_7, Flag_ThermistorTemp_C_7,ThermistorTemp_C_8, Flag_ThermistorTemp_C_8,ThermistorTemp_C_9, Flag_ThermistorTemp_C_9)
+FlagColumn	c(53:54)	Flag column numbers for dissolved oxygen sensor at 5m including the other variables it measure except temperature that corresponds with Column Number c(15:16) and FlagColumn c(53:54) (RDO_mgL_5,RDOsat_percent_5, Flag_RDO_mgL_5,Flag_RDOsat_percent_5)
+FlagColumn	c(53:58)	Flag column numbers for dissolved oxygen sensor at both 5m and 9m including all the variables it measure that corresponds with Column Number c(15:20) (Flag_RDO_mgL_5,Flag_RDOsat_percent_5, Flag_RDOTemp_C_5, Flag_RDO_mgL_9,Flag_RDOsat_percent_9, Flag_RDOTemp_C_9)
+FlagColumn	c(56:57)	Flag column numbers for dissolved oxygen sensor at 9m and the other variables it measure except temperature that corresponds with Column Number c(18:19)  (Flag_RDO_mgL_9,Flag_RDOsat_percent_9)
+FlagColumn	c(56:58)	Flag column numbers for dissolved oxygen sensor at 9m and the other variables it measure that corresponds with Column Number c(18:20) (Flag_RDO_mgL_9,Flag_RDOsat_percent_9, Flag_RDOTemp_C_9)
+FlagColumn	c(59:76)	Flag column numbers for all senor measurements on the EXO that corresponds with ColumnNumber c(21:40) (Flag_EXOTemp_C_1,Flag_EXOCond_uScm_1,Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,Flag_EXODOsat_percent_1,Flag_EXODO_mgL_1,Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1,Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1,Flag_EXOPressure_psi,Flag_EXODepth_m,Flag_EXOBattery_V,Flag_EXOcablepower_V,Flag_EXOwiper_V)
+FlagColumn	c(60:62)	Flag column numbers for conducitvity, specific conductance, and total dissolved solids  measurements from the EXO that corresponds with ColumnNumber c(24:26) (Flag_EXOCond_uScm_1, Flag_EXOSpCond_uScm_1, Flag_EXO_TDS_mg_1)
+FlagColumn	c(69:70)	Flag column numbers for dissolved organic matter measurment from the EXO that corresponds with ColumnNumber c(33:34) (Flag_EXOfDOM_RFU_1, Flag_EXOfDOM_ugL_1)
+FlagColumn	c(77:78)	Flag columns for all meaurements from the Campbell pressure transducer that corresponds with ColumnNumber c( 41:42) (Flag_LvlPressure_psi_9, Flag_LvlTemp_C_9)
+Parameter	All_Cat	All of the sensors in the data frame that corresponds with ColumnNumber c(1:46) and FlagColumn c(47:86) (ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8,ThermistorTemp_C_9,ThermistorTemp_C_10,ThermistorTemp_C_11,ThermistorTemp_C_12,ThermistorTemp_C_13,RDO_mgL_6,RDOsat_percent_6,RDOTemp_C_6,RDO_mgL_13,RDOsat_percent_13,RDOTemp_C_13,EXOTemp_C_1,EXOCond_uScm_1,EXOSpCond_uScm_1,EXOTDS_mgL_1,EXODOsat_percent_1,EXODO_mgL_1,EXOChla_RFU_1,EXOChla_ugL_1,EXOBGAPC_RFU_1,EXOBGAPC_ugL_1,EXOfDOM_RFU_1,EXOfDOM_QSU_1,EXOTurbidity_FNU_1,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOcablepower_V,EXOwiper_V,LvlPressure_psi_13, LvlTemp_C_13, Flag_ThermistorTemp_C_surface,Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_ThermistorTemp_C_3,Flag_ThermistorTemp_C_4,Flag_ThermistorTemp_C_5,Flag_ThermistorTemp_C_6,Flag_ThermistorTemp_C_7, Flag_ThermistorTemp_C_8, Flag_ThermistorTemp_C_9, Flag_EXOTemp_C_1,Flag_EXOCond_uScm_1,Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,Flag_EXODOsat_percent_1,Flag_EXODO_mgL_1,Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1,Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1,Flag_EXOPressure_psi,Flag_EXODepth_m,Flag_EXOBattery_V,Flag_EXOcablepower_V,Flag_EXOwiper_V) 
+Parameter	c(do_9:dotemp_9)	Dissolved oxygen sensor at 9m and the other variables it measure that corresponds with Column Number c(18:20) and FlagColumn c(56:58) (RDO_mgL_9,RDOsat_percent_9, RDOTemp_C_9, Flag_RDO_mgL_9,Flag_RDOsat_percent_9, Flag_RDOTemp_C_9)
+Parameter	do*	Dissolved oxygen sensor at both 5m and 9m including all the variables it measure that corresponds with Column Number c(15:20) and FlagColumn c(53:58) (RDO_mgL_5,RDOsat_percent_5, RDOTemp_C_5, RDO_mgL_9,RDOsat_percent_9, RDOTemp_C_9, Flag_RDO_mgL_5,Flag_RDOsat_percent_5, Flag_RDOTemp_C_5, Flag_RDO_mgL_9,Flag_RDOsat_percent_9, Flag_RDOTemp_C_9)
+Parameter	do_5	Dissolved oxygen sensor at 5m including the other variables it measure except temperature that corresponds with Column Number c(15:16) and FlagColumn c(53:54) (RDO_mgL_5,RDOsat_percent_5, Flag_RDO_mgL_5,Flag_RDOsat_percent_5)
+Parameter	do_9	Dissolved oxygen sensor at 9m and the other variables it measure except temperature that corresponds with Column Number c(18:19) and FlagColumn c(56:57) (RDO_mgL_9,RDOsat_percent_9, Flag_RDO_mgL_9,Flag_RDOsat_percent_9)
+Parameter	doobs_5	Dissolved oxygen oxygen observation on the  sensor at 5m that corresponds with Column Number 15 and FlagColumn 53 (RDO_mgL_5, Flag_RDO_mgL_5)
+Parameter	doobs_9	Dissolved oxygen oxygen observation on the  sensor at 9m that corresponds with Column Number 18 and FlagColumn 56 (RDO_mgL_9,  Flag_RDO_mgL_9)
+Parameter	dosat_5	Dissolved oxygen saturation observation on the  sensor at 5m that corresponds with Column Number 16 and FlagColumn 54 (RDOsat_percent_5, Flag_RDOsat_percent_5)
+Parameter	dosat_9	Dissolved oxygen saturation observation on the  sensor at 9m that corresponds with Column Number 19 and FlagColumn 57 (RDOsat_percent_9, Flag_RDOsat_percent_9)
+Parameter	EXO*	All senor measurements on the EXO that corresponds with ColumnNumber c(21:40) and FlagColumn c(59:76) (EXOTemp_C_1,EXOCond_uScm_1,EXOSpCond_uScm_1,EXOTDS_mgL_1,EXODOsat_percent_1,EXODO_mgL_1,EXOChla_RFU_1,EXOChla_ugL_1,EXOBGAPC_RFU_1,EXOBGAPC_ugL_1,EXOfDOM_RFU_1,EXOfDOM_QSU_1,EXOTurbidity_FNU_1,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOcablepower_V,EXOwiper_V , Flag_EXOTemp_C_1,Flag_EXOCond_uScm_1,Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,Flag_EXODOsat_percent_1,Flag_EXODO_mgL_1,Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1,Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1,Flag_EXOPressure_psi,Flag_EXODepth_m,Flag_EXOBattery_V,Flag_EXOcablepower_V,Flag_EXOwiper_V)
+Parameter	EXO_Date	Date recoded from the EXO which is not included in the final data set
+Parameter	EXO_Time	Time recoded from the EXO which is not included in the final data set
+Parameter	EXOCond	Conducitvity, specific conductance, and total dissolved solids  measurements from the EXO that corresponds with ColumnNumber c(24:26) and FlagColumn c(60:62)(EXOCond_uScm_1, EXOSpCond_uScm_1, EXO_TDS_mg_1, Flag_EXOCond_uScm_1, Flag_EXOSpCond_uScm_1, Flag_EXO_TDS_mg_1)
+Parameter	EXOfdom	Dissolved organic matter measurment from the EXO that corresponds with ColumnNumber c(33:34) and FlagColumn c(69:70) (EXOfDOM_RFU_1, EXOfDOM_ugL_1, Flag_EXOfDOM_RFU_1, Flag_EXOfDOM_ugL_1)
+Parameter	EXOTurbidity	Turbidity measurment from the EXO that corresponds with ColumnNumber 35 and FlagColumn 71 (EXOTurbidity_FNU_1, Flag_EXOTurbidity_FNU_1)
+Parameter	Lvl*	All meaurements from the Campbell pressure transducer that corresponds with ColumnNumber c( 41:42) and FlagColumn c(77:78) (LvlPressure_psi_9, LvlTemp_C_9, Flag_LvlPressure_psi_9, Flag_LvlTemp_C_9)
+Parameter	wtr*	All Thermistor measurements that corresponds with ColumnNumber c(1:14) and FlagColumn c(43:52) (ThermistorTemp_C_surface,ThermistorTemp_C_1,ThermistorTemp_C_2,ThermistorTemp_C_3,ThermistorTemp_C_4,ThermistorTemp_C_5,ThermistorTemp_C_6,ThermistorTemp_C_7,ThermistorTemp_C_8, ThermistorTemp_C_9, Flag_ThermistorTemp_C_surface,Flag_ThermistorTemp_C_1,Flag_ThermistorTemp_C_2,Flag_ThermistorTemp_C_3,Flag_ThermistorTemp_C_4,Flag_ThermistorTemp_C_5,Flag_ThermistorTemp_C_6,Flag_ThermistorTemp_C_7,Flag_ThermistorTemp_C_8, Flag_ThermistorTemp_C_9)
+Parameter	wtr_1	Thermistor at 1 m that corresponds with ColumnNumber 6 and FlagColumn 44 (ThermistorTemp_C_1, Flag_ThermistorTemp_C_1)
+Parameter	wtr_2	Thermistor at 2 m that corresponds with ColumnNumber 7 and FlagColumn 45 (ThermistorTemp_C_2, Flag_ThermistorTemp_C_2)
+Parameter	wtr_4	Thermistor at 4 m that corresponds with ColumnNumber 9 and FlagColumn 47 (ThermistorTemp_C_4, Flag_ThermistorTemp_C_4)
+Parameter	wtr_5:9	Thermistors at 5 m through 9 m that corresponds with ColumnNumber c(9:14) and FlagColumn c(48:52) (ThermistorTemp_C_5, Flag_ThermistorTemp_C_5,ThermistorTemp_C_6, Flag_ThermistorTemp_C_6,ThermistorTemp_C_7, Flag_ThermistorTemp_C_7,ThermistorTemp_C_8, Flag_ThermistorTemp_C_8,ThermistorTemp_C_9, Flag_ThermistorTemp_C_9)
+Parameter	wtr_surface	Thermistor at 0.1 m that corresponds with ColumnNumber 5 and FlagColumn 43 (ThermistorTemp_C_surface, Flag_ThermistorTemp_C_surface)
+Reservoir	FCR	FCR recoded from the FCR which is not included in the final data set
+Station	CAT	CAT recoded from the CAT which is not included in the final data set

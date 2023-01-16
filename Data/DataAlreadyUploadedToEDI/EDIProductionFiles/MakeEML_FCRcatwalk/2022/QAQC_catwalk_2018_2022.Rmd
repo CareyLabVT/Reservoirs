@@ -892,3 +892,14 @@ catdata <- catdata[order(catdata$DateTime),]
   
 write.csv(catdata, 'FCR_Catwalk_EDI_2018_2022.csv', row.names = FALSE)
 ```
+```{r Make Maintenance Log for pub}
+# Make the Maintenance Log into a csv and add Reservoir and Site column 
+  Log <- read.csv(maintenance_file)
+ names(Log) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber","Flag", "FlagColumn", "Notes") #finalized column names
+Log$Reservoir= "BVR"#add reservoir name for EDI archiving
+Log$Site=50 #add site column for EDI archiving
+
+Log=Log[,c(9:10,1:8)]
+ 
+write.csv(Log, "FCR_CAT_MaintenanceLog_2020_2022.csv", row.names=F, quote=F)
+```

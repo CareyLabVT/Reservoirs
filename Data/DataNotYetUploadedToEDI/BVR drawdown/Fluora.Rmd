@@ -18,6 +18,7 @@ library(RCurl)
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+lines <- tibble(lines)
 
 ```
 
@@ -834,6 +835,61 @@ final[i,1] <- profile$key[1]
                     print(pp0)
                     dev.off()
         }
+  
+  final <- data.frame(final)
+  colnames(final) <- c("key","peak.width")
+
+  #plot
+pw2 <- final %>%
+  mutate(spectral_group = sapply(strsplit(final$key, split='_', fixed=TRUE),"[[",1),
+         Date = sapply(strsplit(final$key, split='_', fixed=TRUE),"[[",2)) %>%
+  mutate(Year = year(Date)) %>%
+  select(Year, Date, spectral_group, peak.width) %>%
+  mutate(peak.width = as.numeric(peak.width))
+pw2 <- tibble(pw2) %>%
+  mutate(Date = as.Date(Date)) %>%
+  pivot_wider(names_from = spectral_group, values_from = peak.width) %>%
+  rename(PeakWidth_GreenAlgae_m = green,
+         PeakWidth_Bluegreens_m = cyano,
+         PeakWidth_BrownAlgae_m = brown,
+         PeakWidth_MixedAlgae_m = crypto,
+         PeakWidth_TotalConc_m = total)
+write.csv(pw2, file = "./Data/FP_PeakWidth.csv",row.names = FALSE)
+
+jpeg("./Figs/Peak_width.jpeg", res = 300, width = 6, height = 4, units = "in")
+ggplot(data = pw2, aes(x = spectral_group, y = peak.width, fill = as.factor(Year)))+
+  geom_boxplot()+
+  theme_classic()+
+  xlab("Spectral group")+
+  ylab("Peak width (m)")+
+  labs(fill = "Year")
+dev.off()
+
+maxes = pw2 %>%
+  group_by(spectral_group, Year)%>%
+  summarize(max_date = as.Date(Date[which.min(peak.width)]))%>%
+  filter(Year=="2022")
+
+jpeg("./Figs/Peak_width_timeseries.jpeg", res = 300, width = 6, height = 4, units = "in")
+
+  ggplot(data = pw2, aes(x = Date, y = peak.width, color = spectral_group))+
+  geom_point()+
+  geom_line()+
+  geom_vline(aes(xintercept = max_date, color = spectral_group), data = maxes, lwd = 2)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(values = c("#8E4416","pink","#00BED0","#2DB138","#202C39"))+
+  facet_grid(rows = vars(spectral_group), cols = vars(Year), scales = "free", switch = "y")+
+  theme_bw()+
+  theme(strip.placement = "outside", legend.position = "none",
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(
+     ))+
+  ylab("")
+  dev.off()
 
 ```
 

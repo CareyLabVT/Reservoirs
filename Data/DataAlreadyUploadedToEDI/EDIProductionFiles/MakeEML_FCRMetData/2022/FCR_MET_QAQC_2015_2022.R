@@ -11,25 +11,41 @@ pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr", "suncalc",
 
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/"
 
-###2) Download the "raw" meteorological FCR datasets from GitHub and aggregate into 1 file: 
-#a. Past Met data, manual downloads
-#download current met data from GitHub
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", paste0(folder, "misc_data_files/FCRmet.csv"))
 
-#download maintenance file
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/MET_MaintenanceLog.txt", paste0(folder, "FCR_Met_Maintenance_2015_2022.txt"))
+# Create a misc_data_files folder if one doesn't already exist
 
-#original raw files from 2015-2020
-download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',paste0(folder, "misc_data_files/RawMetData_2015_2016.csv")) #2015-2016 data
-download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',paste0(folder, "misc_data_files/RawMetData_2017.csv")) #2017 data
-download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv',paste0(folder, "misc_data_files/RawMetData_2018.csv")) #2018 data
-download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv',paste0(folder, "misc_data_files/RawMetData_2019.csv")) #2019 data
-download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2020.csv',paste0(folder, "misc_data_files/RawMetData_2020.csv")) #2019 data
+misc_folder <-paste0(folder, "misc_data_files")
 
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
 
-#merge previous metdata
+###2) Download the "raw" meteorological FCR datasets from GitHub and aggregate into 1 file:
 
-mydir = "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2021/misc_data_files"
+# # Set the timeout option to 100 seconds instead of 60
+# options(timeout=10000)
+# 
+# #a. Past Met data, manual downloads
+# #download current met data from GitHub
+# download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", paste0(folder, "misc_data_files/FCRmet.csv"))
+# 
+# #download maintenance file
+# download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/MET_MaintenanceLog.txt", paste0(folder, "FCR_Met_Maintenance_2015_2022.txt"))
+# 
+# #original raw files from 2015-2020
+# download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',paste0(folder, "misc_data_files/RawMetData_2015_2016.csv")) #2015-2016 data
+# download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',paste0(folder, "misc_data_files/RawMetData_2017.csv")) #2017 data
+# download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv',paste0(folder, "misc_data_files/RawMetData_2018.csv")) #2018 data
+# download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv',paste0(folder, "misc_data_files/RawMetData_2019.csv")) #2019 data
+# download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2020.csv',paste0(folder, "misc_data_files/RawMetData_2020.csv")) #2019 data
+# # file on FLARE for 2020 raw data is missing files so have to fix that 
+# download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2021.csv',paste0(folder, "misc_data_files/RawMetData_2021.csv"))
+# download.file('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2022.csv',paste0(folder, "misc_data_files/RawMetData_2022.csv"))
+# #merge previous metdata
+
+mydir = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/misc_data_files"
 myfiles = list.files(path=mydir, pattern="Raw*", full.names=TRUE)#list the files from BVR platform
 
 
@@ -38,24 +54,32 @@ out.file<-""
 
 #combine all of the files into one data sheet, have to come back and fix this loop
 for(k in 1:length(myfiles)){
-  files<-read.csv(myfiles[k],skip= 0, header=T) #get header minus wonky Campbell rows
+  files<-read.csv(myfiles[k],skip= 1, header=F) #get header minus wonky Campbell rows
   if(length(names(files))==17){
-  names(files) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-                   "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-                  "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                  "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                   "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
-  }
-  if(length(names(files))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
-    files$NR01TK_Avg<-NULL #remove column
     names(files) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-                        "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-                        "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                        "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                        "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
+                     "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+                     "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                     "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                     "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
+  }else if(length(names(files))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
+    files$V17<-NULL #remove column
+    names(files) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
+                     "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+                     "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                     "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                     "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
+  }else if (length(names(files))==8){
+    files<-read.csv(myfiles[k], skip = 3, show_col_types = FALSE)
+    files[,17]<-NULL #remove column
+    names(files) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
+                     "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+                     "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                     "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                     "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
   }
   out.file=rbind(out.file, files)
 }
+
 
 out.file=out.file%>%filter(Record!="")
 
@@ -64,51 +88,49 @@ out.file=out.file%>%filter(Record!="")
 
 
 ####Add current file from Github ####
-Met_now=read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/misc_data_files/FCRmet.csv", skip = 4, header = F) 
-#loads in data from SCC_data repository for latest push
-if(length(names(Met_now))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
-  Met_now$V17<-NULL #remove extra column
-}
+#Met_now=read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/misc_data_files/FCRmet.csv", skip = 4, header = F) 
+##loads in data from SCC_data repository for latest push
+#if(length(names(Met_now))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
+#  Met_now$V17<-NULL #remove extra column
+#}
 
 #Because using the finalized version of past data must QAQC the current the metdata to add flags and then add the past file
 #renames and reformats dataset for easy bind
-names(Met_now) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-                   "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-                   "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                   "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                   "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+#names(Met_now) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
+#                   "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+#                   "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+#                   "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+#                   "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
 
 ####Add current file from Github ####
-Met_now_2=read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/misc_data_files/CR3000_FCRmetstation_FCRmet_20220705.dat", skip = 4, header = F) 
-#loads in data from SCC_data repository for latest push
-if(length(names(Met_now_2))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
-  Met_now_2$V17<-NULL #remove extra column
-}
+# Met_now_2=read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/misc_data_files/CR3000_FCRmetstation_FCRmet_20220705.dat", skip = 4, header = F) 
+# #loads in data from SCC_data repository for latest push
+# if(length(names(Met_now_2))>17){ #removes NR01TK_Avg column, which was downloaded on some but not all days
+#   Met_now_2$V17<-NULL #remove extra column
+# }
+# 
+# #Because using the finalized version of past data must QAQC the current the metdata to add flags and then add the past file
+# #renames and reformats dataset for easy bind
+# names(Met_now_2) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
+#                      "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+#                      "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+#                      "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+#                      "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+# 
+# 
+# ####3) Aggregate data set for QA/QC ####
+# #add the past and now together
+# Met_now_3=rbind(Met_now,Met_now_2)
+# 
+# Met_now=Met_now_3%>%
+#   distinct(DateTime, .keep_all= TRUE) #taking out the duplicate values 
 
-#Because using the finalized version of past data must QAQC the current the metdata to add flags and then add the past file
-#renames and reformats dataset for easy bind
-names(Met_now_2) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-                   "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
-                   "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                   "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                   "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
-
-
-####3) Aggregate data set for QA/QC ####
-#add the past and now together
-Met_now_3=rbind(Met_now,Met_now_2)
-
-Met_now=Met_now_3%>%
-  distinct(DateTime, .keep_all= TRUE) #taking out the duplicate values 
-
-Met=rbind(out.file,Met_now)
+#Met=rbind(out.file,Met_now)
+Met=out.file
 
 #change the columns from as.character to as.numeric after the merge
 Met[, c(2:17)] <- sapply(Met[, c(2:17)], as.numeric)
 
-
-
-#met_na=Met%>%filter(is.na(DateTime))
 
 #Change DateTime when it was changed from EDT to EST
 Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "Etc/GMT+5")
@@ -117,7 +139,7 @@ met_timechange=max(which(Met$DateTime=="2019-04-15 10:19:00")) #shows time point
 Met$DateTime[c(1:met_timechange-1)]<-with_tz(force_tz(Met$DateTime[c(1:met_timechange-1)],"Etc/GMT+4"), "Etc/GMT+5") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
 
 #Set end date to years working with 
-Met=Met%>%filter(DateTime<"2022-06-01 01:00:00")
+Met=Met%>%filter(DateTime<ymd("2023-01-01"))
 
 ######################################################################
 #Check for record gaps and day gpas
@@ -129,22 +151,22 @@ Met$DOY=yday(Met$DateTime)
 
 #check record for gaps
 #daily record gaps by day of year
- for(i in 2:nrow(Met)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-   if(Met$DOY[i]-Met$DOY[i-1]>1){
-     print(c(Met$DateTime[i-1],Met$DateTime[i]))
-   }
- }
+for(i in 2:nrow(Met)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(Met$DOY[i]-Met$DOY[i-1]>1){
+    print(c(Met$DateTime[i-1],Met$DateTime[i]))
+  }
+}
 # #sub-daily record gaps by record number
- for(i in 2:length(Met$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-   if(abs(Met$Record[i]-Met$Record[i-1])>1){
-     print(c(Met$DateTime[i-1],Met$DateTime[i]))
-   }
- }
+for(i in 2:length(Met$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(Met$Record[i]-Met$Record[i-1])>1){
+    print(c(Met$DateTime[i-1],Met$DateTime[i]))
+  }
+}
 
 
 #EDI Column names
-names(Met) = c("DateTime","Record", "CR3000_Batt_V", "CR3000Panel_temp_C", 
-               "PAR_Average_umol_s_m2", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_Average_C", 
+names(Met) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
                "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
                "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
                "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2", "DOY") #finalized column names
@@ -155,8 +177,6 @@ Met$Site=50 #add site column for EDI archiving
 
 
 Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
-
-Met=Met_raw
 
 
 
@@ -195,7 +215,7 @@ for(j in 1:nrow(RemoveMet)){
   #if flag == 1, set parameter to NA, overwrites any other flag
   
   if(RemoveMet$flag[j]==1){
-    print(j)
+    #print(j)
     Met[c(which((Met[,1]>=RemoveMet[j,2]) & (Met[,1]<=RemoveMet[j,3]))),paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))] = RemoveMet$flag[j] #when met timestamp is between remove timestamp
     #and met column derived from remove column
     #matching time frame, inserting flag
@@ -223,13 +243,22 @@ for(j in 1:nrow(RemoveMet)){
 # }
 
 
-#change the rain totals to per a minute for the time that was recorded in 5 minute intervals
+####change the rain totals ######
+#Change rain totals to per a minute for the time that was recorded in 5 minute intervals
 Met=Met%>%
   mutate(
     Rain_Total_mm=as.numeric(Rain_Total_mm),
-  Flag_Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"& DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0,4,Flag_Rain_Total_mm),
-  Note_Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"& DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0,"Change_to_mm_per_min",Note_Rain_Total_mm),
-  Rain_Total_mm=ifelse(DateTime>"2015-07-01 00:00:00"& DateTime<"2015-07-13 12:20:00"&Rain_Total_mm>0, (Rain_Total_mm/5) ,Rain_Total_mm))
+    Flag_Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0,4,Flag_Rain_Total_mm),
+    Note_Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0,"Change_to_mm_per_min",Note_Rain_Total_mm),
+    Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0, (Rain_Total_mm/5) ,Rain_Total_mm))
+
+# Take out Rain Totals above 5mm in 1 minute
+Met=Met%>%
+  mutate(
+    Note_Rain_Total_mm=ifelse(Rain_Total_mm>5,"Rain total over 5 mm in one minute so removed as outlier", Note_Rain_Total_mm),
+    Flag_Rain_Total_mm=ifelse(Rain_Total_mm>5, 4, Flag_Rain_Total_mm),
+    Rain_Total_mm=ifelse(Rain_Total_mm>5,NA, Rain_Total_mm))
+
 
 #make columns
 
@@ -241,51 +270,50 @@ Met=Met%>%
 # (lm_Panel2015) and then apply correction to air temperature dataset
 
 #Check the air filter to the panel figure to see what it looks like
-#plot(Met$DateTime, Met$AirTemp_Average_C, type='l')
-#points(Met$DateTime, Met$CR3000Panel_temp_C, col="red", type='l')
+#plot(Met$DateTime, Met$AirTemp_C_Average, type='l')
+#points(Met$DateTime, Met$CR3000Panel_Temp_C, col="red", type='l')
 #legend("topright", c("Air Temp", "Panel Temp"), text.col=c("black", "red"), cex=0.75)
 
 #No pre and post filter but run all through the QAQC 
 MetAir_2015=Met[Met$DateTime<"2016-01-01 00:00:00",c(1,4,8)]
-lm_Panel2015=lm(MetAir_2015$AirTemp_Average_C ~ MetAir_2015$CR3000Panel_temp_C)
+lm_Panel2015=lm(MetAir_2015$AirTemp_C_Average ~ MetAir_2015$CR3000Panel_Temp_C)
 summary(lm_Panel2015)#gives data on linear model parameters
 
 #make the panelTemp from character into numeric 
-#Met$CR3000Panel_temp_C=as.numeric(Met$CR3000Panel_temp_C)
+#Met$CR3000Panel_Temp_C=as.numeric(Met$CR3000Panel_Temp_C)
 
 #if Air - Panel > 3 sd(lm_Panel2015) then replace with PanelTemp predicted by lm equation rather than raw value
 #Replace missing values with PanelTamp predicted by lm equation
 
+Met=Met%>%
+  mutate(
+    AirTemp_C_Average=ifelse(Flag_AirTemp_C_Average==2,(1.6278+(0.9008*CR3000Panel_Temp_C)), AirTemp_C_Average),
+    Note_AirTemp_C_Average=ifelse(Flag_AirTemp_C_Average==2,"Substituted_value_calculated_from_Panel_Temp_and_linear_model", Note_AirTemp_C_Average),
+    Flag_AirTemp_C_Average=ifelse(Flag_AirTemp_C_Average==2, 4, Flag_AirTemp_C_Average))
+
 
 Met=Met%>%
   mutate(
-    AirTemp_Average_C=ifelse(Flag_AirTemp_Average_C==2,(1.6278+(0.9008*CR3000Panel_temp_C)), AirTemp_Average_C),
-    Note_AirTemp_Average_C=ifelse(Flag_AirTemp_Average_C==2,"Substituted_value_calculated_from_Panel_Temp_and_linear_model", Note_AirTemp_Average_C),
-    Flag_AirTemp_Average_C=ifelse(Flag_AirTemp_Average_C==2, 4, Flag_AirTemp_Average_C))
+    Note_AirTemp_C_Average=ifelse((AirTemp_C_Average - (1.6278+(0.9008*CR3000Panel_Temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_C_Average),"Substituted_value_calculated_from_Panel_Temp_and_linear_model", Note_AirTemp_C_Average),
+    Flag_AirTemp_C_Average=ifelse((AirTemp_C_Average - (1.6278+(0.9008*CR3000Panel_Temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_C_Average), 4, Flag_AirTemp_C_Average),
+    AirTemp_C_Average=ifelse((AirTemp_C_Average - (1.6278+(0.9008*CR3000Panel_Temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_C_Average),(1.6278+(0.9008*CR3000Panel_Temp_C)), AirTemp_C_Average))
 
 
-Met=Met%>%
-  mutate(
-    Note_AirTemp_Average_C=ifelse((AirTemp_Average_C - (1.6278+(0.9008*CR3000Panel_temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_Average_C),"Substituted_value_calculated_from_Panel_Temp_and_linear_model", Note_AirTemp_Average_C),
-    Flag_AirTemp_Average_C=ifelse((AirTemp_Average_C - (1.6278+(0.9008*CR3000Panel_temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_Average_C), 4, Flag_AirTemp_Average_C),
-  AirTemp_Average_C=ifelse((AirTemp_Average_C - (1.6278+(0.9008*CR3000Panel_temp_C)))>(3*sd(lm_Panel2015$residuals)) & !is.na(AirTemp_Average_C),(1.6278+(0.9008*CR3000Panel_temp_C)), AirTemp_Average_C))
-  
-  
-  
+
 
 #merge back air temp correction data
 #Met<-rbind(Met_prefilter,Met_postfilter)
 
 #put all airtemp through the panel QAQC check
-#plot(Met_raw$DateTime, Met_raw$AirTemp_Average_C, type= 'l')
-#points(Met$DateTime, Met$AirTemp_Average_C, type = "l", col="red")
+#plot(Met_raw$DateTime, Met_raw$AirTemp_C_Average, type= 'l')
+#points(Met$DateTime, Met$AirTemp_C_Average, type = "l", col="red")
 
 #Air temp maximum set
 Met=Met%>%
   mutate(
-  Flag_AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6 & !is.na(AirTemp_Average_C),4,Flag_AirTemp_Average_C),
-  Note_AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6 & is.na(AirTemp_Average_C),"Outlier_set_to_NA",Note_AirTemp_Average_C),
-  AirTemp_Average_C=ifelse(AirTemp_Average_C>40.6 & is.na(AirTemp_Average_C),NA,AirTemp_Average_C))
+    Flag_AirTemp_C_Average=ifelse(AirTemp_C_Average>40.6 & !is.na(AirTemp_C_Average),4,Flag_AirTemp_C_Average),
+    Note_AirTemp_C_Average=ifelse(AirTemp_C_Average>40.6 & is.na(AirTemp_C_Average),"Outlier_set_to_NA",Note_AirTemp_C_Average),
+    AirTemp_C_Average=ifelse(AirTemp_C_Average>40.6 & is.na(AirTemp_C_Average),NA,AirTemp_C_Average))
 
 #check the infared radiation-if there are any low values
 #plot(Met_raw$DateTime, Met_raw$InfraredRadiationDown_Average_W_m2,main = "Raw Infared Radiation 2020", ylab = "Average_W_m2", type = "l")
@@ -296,18 +324,18 @@ Met=Met%>%
 
 Met=Met%>%
   mutate(  
-    Note_InfraredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
-                                                ,"Value_corrected_with_InfRadDn_equation_as_described_in_metadata",Note_InfraredRadiationDown_Average_W_m2),
-  Flag_InfraredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
-                                                ,4,Flag_InfraredRadiationDown_Average_W_m2),
-    InfraredRadiationDown_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
-                                             ,5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfraredRadiationDown_Average_W_m2),
-  Note_InfraredRadiationUp_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationUp_Average_W_m2<100 & !is.na(InfraredRadiationUp_Average_W_m2)
-                                              ,"Value_corrected_with_InfRadUp_equation_as_described_in_metadata",Note_InfraredRadiationUp_Average_W_m2),
- Flag_InfraredRadiationUp_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationUp_Average_W_m2<100 & is.na(InfraredRadiationUp_Average_W_m2)
-                                                ,4,Flag_InfraredRadiationUp_Average_W_m2),
- InfraredRadiationUp_Average_W_m2=ifelse(DateTime<"2016-07-25 10:12:00" & InfraredRadiationUp_Average_W_m2<100 & !is.na(InfraredRadiationUp_Average_W_m2)
-                                         ,InfraredRadiationUp_Average_W_m2+5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfraredRadiationUp_Average_W_m2))
+    Note_InfraredRadiationDown_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
+                                                   ,"Value_corrected_with_InfRadDn_equation_as_described_in_metadata",Note_InfraredRadiationDown_Average_W_m2),
+    Flag_InfraredRadiationDown_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
+                                                   ,4,Flag_InfraredRadiationDown_Average_W_m2),
+    InfraredRadiationDown_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationDown_Average_W_m2<250 & !is.na(InfraredRadiationDown_Average_W_m2)
+                                              ,5.67*10^-8*(AirTemp_C_Average+273.15)^4,InfraredRadiationDown_Average_W_m2),
+    Note_InfraredRadiationUp_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationUp_Average_W_m2<100 & !is.na(InfraredRadiationUp_Average_W_m2)
+                                                 ,"Value_corrected_with_InfRadUp_equation_as_described_in_metadata",Note_InfraredRadiationUp_Average_W_m2),
+    Flag_InfraredRadiationUp_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationUp_Average_W_m2<100 & is.na(InfraredRadiationUp_Average_W_m2)
+                                                 ,4,Flag_InfraredRadiationUp_Average_W_m2),
+    InfraredRadiationUp_Average_W_m2=ifelse(DateTime<ymd_hms("2016-07-25 10:12:00") & InfraredRadiationUp_Average_W_m2<100 & !is.na(InfraredRadiationUp_Average_W_m2)
+                                            ,InfraredRadiationUp_Average_W_m2+5.67*10^-8*(AirTemp_C_Average+273.15)^4,InfraredRadiationUp_Average_W_m2))
 
 #Mean correction for InfRadDown (needs to be after voltage correction)
 #Using 2018 data, taking the mean and sd of values on DOY to correct to
@@ -325,13 +353,13 @@ Met=Met[order(Met$DateTime),] #ordering table after merging and removing unneces
 
 
 
-#If the IR Down is greater than 3SD by DOY and replace with the equation from the manual(5.67*10-8(AirTemp_Average_C+273.15)^4)
+#If the IR Down is greater than 3SD by DOY and replace with the equation from the manual(5.67*10-8(AirTemp_C_Average+273.15)^4)
 Met=Met%>%
   mutate(
-  Flag_InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),4,Flag_InfraredRadiationDown_Average_W_m2),
-  Note_InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),"Greater_than_2SD_Value_corrected_with_InfRadDn_equation_as_described_in_metadata",Note_InfraredRadiationDown_Average_W_m2),
-  InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfraredRadiationDown_Average_W_m2))
-  
+    Flag_InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),4,Flag_InfraredRadiationDown_Average_W_m2),
+    Note_InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),"Greater_than_2SD_Value_corrected_with_InfRadDn_equation_as_described_in_metadata",Note_InfraredRadiationDown_Average_W_m2),
+    InfraredRadiationDown_Average_W_m2=ifelse((abs(InfraredRadiationDown_Average_W_m2-infradavg)>(2*infradsd)) & !is.na(InfraredRadiationDown_Average_W_m2),5.67*10^-8*(AirTemp_C_Average+273.15)^4,InfraredRadiationDown_Average_W_m2))
+
 Met=Met[,-c(1,47,48)]
 
 
@@ -352,11 +380,11 @@ Met=Met%>%
 #Replace missing values with estimations from the equation
 Met=Met%>%
   mutate( 
-    InfraredRadiationDown_Average_W_m2=ifelse(Flag_InfraredRadiationDown_Average_W_m2==2,5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfraredRadiationDown_Average_W_m2),
+    InfraredRadiationDown_Average_W_m2=ifelse(Flag_InfraredRadiationDown_Average_W_m2==2,5.67*10^-8*(AirTemp_C_Average+273.15)^4,InfraredRadiationDown_Average_W_m2),
     Note_InfraredRadiationDown_Average_W_m2=ifelse(Flag_InfraredRadiationDown_Average_W_m2==2,"Value_corrected_with_InfRadDn_equation_as_described_in_metadata",Note_InfraredRadiationDown_Average_W_m2),
     Flag_InfraredRadiationDown_Average_W_m2=ifelse(Flag_InfraredRadiationDown_Average_W_m2==2,4,Flag_InfraredRadiationDown_Average_W_m2),
     Note_InfraredRadiationUp_Average_W_m2=ifelse(Flag_InfraredRadiationUp_Average_W_m2==2,"Value_corrected_with_InfRadUp_equation_as_described_in_metadata",Note_InfraredRadiationUp_Average_W_m2),
-    InfraredRadiationUp_Average_W_m2=ifelse(Flag_InfraredRadiationUp_Average_W_m2==2,InfraredRadiationUp_Average_W_m2+5.67*10^-8*(AirTemp_Average_C+273.15)^4,InfraredRadiationUp_Average_W_m2),
+    InfraredRadiationUp_Average_W_m2=ifelse(Flag_InfraredRadiationUp_Average_W_m2==2,InfraredRadiationUp_Average_W_m2+5.67*10^-8*(AirTemp_C_Average+273.15)^4,InfraredRadiationUp_Average_W_m2),
     Flag_InfraredRadiationUp_Average_W_m2=ifelse(Flag_InfraredRadiationUp_Average_W_m2==2,4,Flag_InfraredRadiationUp_Average_W_m2))
 
 #take out impossible outliers and Infinite values before the other outliers are removed
@@ -378,7 +406,23 @@ for(i in 5:17) { #for loop to create new columns in data frame
   }
 }
 
+###Wind Outliers####
+# Take out if wind direction is not between 0 and 360 and if wind speed is above 50 m/s
+
+Met=Met%>%
+  mutate(
+    Note_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),"Wind direction is below 0 or above 360 degrees", Note_WindDir_degrees),
+    Flag_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees), 4, Flag_WindDir_degrees),
+    WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),NA, WindDir_degrees))
+
+Met=Met%>%
+  mutate(
+    Note_WindSpeed_Average_m_s=ifelse(WindSpeed_Average_m_s>50 & !is.na(WindSpeed_Average_m_s),"Wind Speed is above 50 m/s", Note_WindSpeed_Average_m_s),
+    Flag_WindSpeed_Average_m_s=ifelse(WindSpeed_Average_m_s>50 & !is.na(WindSpeed_Average_m_s), 4, Flag_WindSpeed_Average_m_s),
+    WindSpeed_Average_m_s=ifelse(WindSpeed_Average_m_s>50 & !is.na(WindSpeed_Average_m_s),NA, WindSpeed_Average_m_s))
+
 # Need to add something for when PAR is NA aka missing value
+
 
 #full data set QAQC
 
@@ -386,14 +430,14 @@ for(i in 5:17) { #for loop to create new columns in data frame
 #Remove barometric pressure outliers
 Met=Met%>%
   mutate(
-  Flag_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa), 4,Flag_BP_Average_kPa),
-  Note_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),"Outlier_set_to_NA",Note_BP_Average_kPa),
-  BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),NA,BP_Average_kPa))
+    Flag_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa), 4,Flag_BP_Average_kPa),
+    Note_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),"Outlier_set_to_NA",Note_BP_Average_kPa),
+    BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),NA,BP_Average_kPa))
 
 
 #remove high PAR values at night
 #get sunrise and sunset times
-suntimes=getSunlightTimes(date = seq.Date(Sys.Date()-2500, Sys.Date(), by = 1),
+suntimes=getSunlightTimes(date = seq.Date(as.Date("2015-07-02"), Sys.Date(), by = 1),
                           keep = c("sunrise",  "sunset"),
                           lat = 37.30, lon = -79.83, tz = "Etc/GMT+5")
 
@@ -417,55 +461,55 @@ Met=Met%>%
 
 Met=Met%>%
   mutate(
-    Flag_PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2> 5 & !is.na(PAR_Average_umol_s_m2), 4, Flag_PAR_Average_umol_s_m2),
-    Note_PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2>5 & !is.na(PAR_Average_umol_s_m2), "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
-    PAR_Average_umol_s_m2=ifelse(during_day==FALSE & PAR_Average_umol_s_m2>5 & !is.na(PAR_Average_umol_s_m2), NA, PAR_Average_umol_s_m2))
+    Flag_PAR_umolm2s_Average=ifelse(during_day==FALSE & PAR_umolm2s_Average> 5 & !is.na(PAR_umolm2s_Average), 4, Flag_PAR_umolm2s_Average),
+    Note_PAR_umolm2s_Average=ifelse(during_day==FALSE & PAR_umolm2s_Average>5 & !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
+    PAR_umolm2s_Average=ifelse(during_day==FALSE & PAR_umolm2s_Average>5 & !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average))
 
 #Remove total PAR (PAR_Tot) outliers
 Met=Met%>%
   mutate(
-  Flag_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200& !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
-  Flag_PAR_Average_umol_s_m2=ifelse(PAR_Average_umol_s_m2>3000 & !is.na(PAR_Average_umol_s_m2), 4, Flag_PAR_Average_umol_s_m2),
-  Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
-  Note_PAR_Average_umol_s_m2=ifelse(PAR_Average_umol_s_m2>3000 & !is.na(PAR_Average_umol_s_m2), "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
-  PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2),
-  PAR_Average_umol_s_m2=ifelse(PAR_Average_umol_s_m2>3000 & !is.na(PAR_Average_umol_s_m2), NA, PAR_Average_umol_s_m2))
+    Flag_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275& !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
+    Flag_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), 4, Flag_PAR_umolm2s_Average),
+    Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
+    Note_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
+    PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2),
+    PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average))
 
 
-Met=Met%>%
-  mutate(
-    Flag_PAR_Total_mmol_m2=ifelse(is.na(PAR_Total_mmol_m2), 3, Flag_PAR_Total_mmol_m2),
-    Flag_PAR_Average_umol_s_m2=ifelse(is.na(PAR_Average_umol_s_m2), 3, Flag_PAR_Average_umol_s_m2),
-    Note_PAR_Total_mmol_m2=ifelse(is.na(PAR_Total_mmol_m2), "No_data_recorded", Note_PAR_Total_mmol_m2),
-    Note_PAR_Average_umol_s_m2=ifelse(is.na(PAR_Average_umol_s_m2), "No_data_recorded", Note_PAR_Average_umol_s_m2))
-    
+# Met=Met%>%
+#   mutate(
+#     Flag_PAR_Total_mmol_m2=ifelse(is.na(Flag_PAR_Total_mmol_m2) & is.na(PAR_Total_mmol_m2), 3, Flag_PAR_Total_mmol_m2),
+#     Flag_PAR_umolm2s_Average=ifelse(is.na(Flag_PAR_umolm2s_Average) & is.na(PAR_umolm2s_Average), 3, Flag_PAR_umolm2s_Average),
+#     Note_PAR_Total_mmol_m2=ifelse(is.na(Flag_PAR_Total_mmol_m2) & is.na(PAR_Total_mmol_m2), "No_data_recorded", Note_PAR_Total_mmol_m2),
+#     Note_PAR_umolm2s_Average=ifelse(is.na(Flag_PAR_umolm2s_Average) & is.na(PAR_umolm2s_Average), "No_data_recorded", Note_PAR_umolm2s_Average))
+
 
 #Flag high total values for PAR Avg as over 3000
 Met=Met%>%
   mutate(
-    Flag_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Average_umol_s_m2>2500& !is.na(PAR_Average_umol_s_m2), 4, Flag_PAR_Average_umol_s_m2),
-    Note_PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Average_umol_s_m2>2500& !is.na(PAR_Average_umol_s_m2), "Outlier_set_to_NA", Note_PAR_Average_umol_s_m2),
-    PAR_Average_umol_s_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Average_umol_s_m2>2500& !is.na(PAR_Average_umol_s_m2), NA, PAR_Average_umol_s_m2),
+    Flag_PAR_umolm2s_Average=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_umolm2s_Average>2500& !is.na(PAR_umolm2s_Average), 4, Flag_PAR_umolm2s_Average),
+    Note_PAR_umolm2s_Average=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_umolm2s_Average>2500& !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
+    PAR_umolm2s_Average=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_umolm2s_Average>2500& !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average),
     Flag_PAR_Total_mmol_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Total_mmol_m2>150 & !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
     Note_PAR_Total_mmol_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Total_mmol_m2>150 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
     PAR_Total_mmol_m2=ifelse(DateTime>"2021-05-01 00:00:00"&DateTime<"2021-07-01 23:59:00"& PAR_Total_mmol_m2>150 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2)
-    )
+  )
 
 #Remove shortwave radiation outliers
 #first shortwave upwelling
 Met=Met%>%
   mutate(
-  Flag_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), 4, Flag_ShortwaveRadiationUp_Average_W_m2),
-  Note_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationUp_Average_W_m2),
-  ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), NA, ShortwaveRadiationUp_Average_W_m2))
+    Flag_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), 4, Flag_ShortwaveRadiationUp_Average_W_m2),
+    Note_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationUp_Average_W_m2),
+    ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1500 & !is.na(ShortwaveRadiationUp_Average_W_m2), NA, ShortwaveRadiationUp_Average_W_m2))
 
 
 #add a flag for suspect values from 1499 to 1300
 #above 1500 already set to NA
 Met=Met%>%
   mutate(
-  Flag_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1300 & !is.na(ShortwaveRadiationUp_Average_W_m2), 5, Flag_ShortwaveRadiationUp_Average_W_m2),
-  Note_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1300 & !is.na(ShortwaveRadiationUp_Average_W_m2), "Questionable_value", Note_ShortwaveRadiationUp_Average_W_m2))
+    Flag_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1300 & !is.na(ShortwaveRadiationUp_Average_W_m2), 5, Flag_ShortwaveRadiationUp_Average_W_m2),
+    Note_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1300 & !is.na(ShortwaveRadiationUp_Average_W_m2), "Questionable_value", Note_ShortwaveRadiationUp_Average_W_m2))
 
 
 #Eliminate the High Shortwave Radiation Up in 2018 before cleaning-put in maintenance log
@@ -474,9 +518,9 @@ Met=Met%>%
 #and then shortwave downwelling (what goes up must come down)
 Met=Met%>%
   mutate(
-  Flag_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), 4, Flag_ShortwaveRadiationDown_Average_W_m2),
-  Note_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationDown_Average_W_m2),
-  ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), NA, ShortwaveRadiationDown_Average_W_m2))
+    Flag_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), 4, Flag_ShortwaveRadiationDown_Average_W_m2),
+    Note_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationDown_Average_W_m2),
+    ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), NA, ShortwaveRadiationDown_Average_W_m2))
 
 #Eliminate the High Shortwave Radiation Up in 2018 before cleaning-put in maintenance log
 
@@ -490,28 +534,28 @@ Met=Met%>%
 #over 1000
 Met=Met%>%
   mutate(
-  Flag_Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), 4, Flag_Albedo_Average_W_m2),
-  Note_Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), "Outlier_set_to_NA", Note_Albedo_Average_W_m2),
-  Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), NA, Albedo_Average_W_m2))
+    Flag_Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), 4, Flag_Albedo_Average_W_m2),
+    Note_Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), "Outlier_set_to_NA", Note_Albedo_Average_W_m2),
+    Albedo_Average_W_m2=ifelse(Albedo_Average_W_m2>1000 & !is.na(Albedo_Average_W_m2), NA, Albedo_Average_W_m2))
 
 #set to NA when shortwave radiation up is equal to NA
 Met=Met%>%
   mutate(
-  Flag_Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), 4, Flag_Albedo_Average_W_m2),
-  Note_Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), "Set_to_NA_because_Shortwave_equals_NA", Note_Albedo_Average_W_m2),
-  Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), NA, Albedo_Average_W_m2))
+    Flag_Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), 4, Flag_Albedo_Average_W_m2),
+    Note_Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), "Set_to_NA_because_Shortwave_equals_NA", Note_Albedo_Average_W_m2),
+    Albedo_Average_W_m2=ifelse(is.na(ShortwaveRadiationUp_Average_W_m2)|is.na(ShortwaveRadiationDown_Average_W_m2), NA, Albedo_Average_W_m2))
 
 
 #Reorder so the flags are all next to each other
 Met=Met%>%
   select(-c(date, lat, lon, sunrise, sunset,daylight_intvl,during_day))%>%
-  select(c("Reservoir","Site","DateTime","Record","CR3000_Batt_V","CR3000Panel_temp_C","PAR_Average_umol_s_m2","PAR_Total_mmol_m2","BP_Average_kPa",                          
-           "AirTemp_Average_C","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
+  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",                          
+           "AirTemp_C_Average","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
            "ShortwaveRadiationDown_Average_W_m2","InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
-           "Flag_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_Average_C","Flag_Rain_Total_mm","Flag_RH_percent",
+           "Flag_PAR_umolm2s_Average","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_C_Average","Flag_Rain_Total_mm","Flag_RH_percent",
            "Flag_WindSpeed_Average_m_s","Flag_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Flag_ShortwaveRadiationDown_Average_W_m2",
-           "Flag_InfraredRadiationUp_Average_W_m2","Flag_InfraredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_PAR_Average_umol_s_m2",              
-           "Note_PAR_Total_mmol_m2","Note_BP_Average_kPa","Note_AirTemp_Average_C","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
+           "Flag_InfraredRadiationUp_Average_W_m2","Flag_InfraredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_PAR_umolm2s_Average",              
+           "Note_PAR_Total_mmol_m2","Note_BP_Average_kPa","Note_AirTemp_C_Average","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
            "Note_WindDir_degrees","Note_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2","Note_InfraredRadiationUp_Average_W_m2",       
            "Note_InfraredRadiationDown_Average_W_m2","Note_Albedo_Average_W_m2"))
 
@@ -526,19 +570,19 @@ for(b in 20:32){
 ####6) Make plots to view data #####
 #plots to check for any wonkiness
 x11(); par(mfrow=c(2,2))
-plot(Met$DateTime, Met$CR3000_Batt_V, type = 'l')
-plot(Met$DateTime, Met$CR3000Panel_temp_C, type = 'l')
+plot(Met$DateTime, Met$CR3000Battery_V, type = 'l')
+plot(Met$DateTime, Met$CR3000Panel_Temp_C, type = 'l')
 #PAR
-plot(Met_raw$DateTime, Met_raw$PAR_Average_umol_s_m2, col="red", type='l')
-plot(Met$DateTime, Met$PAR_Average_umol_s_m2, type = 'l')
+plot(Met_raw$DateTime, Met_raw$PAR_umolm2s_Average, col="red", type='l')
+plot(Met$DateTime, Met$PAR_umolm2s_Average, type = 'l')
 plot(Met_raw$DateTime, Met_raw$PAR_Total_mmol_m2, col="red", type='l')
 plot(Met$DateTime, Met$PAR_Total_mmol_m2, type = 'l')
 #BP
 plot(Met_raw$DateTime, Met_raw$BP_Average_kPa, col="red", type='l')
 plot(Met$DateTime, Met$BP_Average_kPa, type = 'l')
 #Air Temp
-plot(Met_raw$DateTime, Met_raw$AirTemp_Average_C, col="red", type='l')
-points(Met$DateTime, Met$AirTemp_Average_C, type = 'l')
+plot(Met_raw$DateTime, Met_raw$AirTemp_C_Average, col="red", type='l')
+points(Met$DateTime, Met$AirTemp_C_Average, type = 'l')
 #RH
 plot(Met_raw$DateTime, Met_raw$RH_percent, col="red", type='l')
 points(Met$DateTime, Met$RH_percent, type = 'l')
@@ -567,25 +611,25 @@ plot(Met$DateTime, Met$InfraredRadiationDown_Average_W_m2, type = 'l')
 
 #Just for the current year
 Twenty_raw=Met_raw%>%
-  filter(DateTime>"2021-01-01 00:00"& DateTime<"2022-01-01 00:00")
+  filter(DateTime>ymd_hms("2022-01-01 00:00:00")& DateTime<ymd_hms("2023-01-01 00:00:00"))
 
 Twenty=Met%>%
-  filter(DateTime>"2021-01-01 00:00"& DateTime<"2021-01-01 00:00")
+  filter(DateTime>ymd_hms("2022-01-01 00:00:00")& DateTime<ymd_hms("2023-01-01 00:00:00"))
 
 x11(); par(mfrow=c(2,2))
-plot(Twenty$DateTime, Twenty$CR3000_Batt_V, type = 'l')
-plot(Twenty$DateTime, Twenty$CR3000Panel_temp_C, type = 'l')
+plot(Twenty$DateTime, Twenty$CR3000Battery_V, type = 'l')
+plot(Twenty$DateTime, Twenty$CR3000Panel_Temp_C, type = 'l')
 #PAR
-plot(Twenty_raw$DateTime, Twenty_raw$PAR_Average_umol_s_m2, col="red", type='l')
-plot(Twenty$DateTime, Twenty$PAR_Average_umol_s_m2, type = 'l')
+plot(Twenty_raw$DateTime, Twenty_raw$PAR_umolm2s_Average, col="red", type='l')
+plot(Twenty$DateTime, Twenty$PAR_umolm2s_Average, type = 'l')
 plot(Twenty_raw$DateTime, Twenty_raw$PAR_Total_mmol_m2, col="red", type='l')
 plot(Twenty$DateTime, Twenty$PAR_Total_mmol_m2, type = 'l')
 #BP
 plot(Twenty_raw$DateTime, Twenty_raw$BP_Average_kPa, col="red", type='l')
 plot(Twenty$DateTime, Twenty$BP_Average_kPa, type = 'l')
 #Air Temp
-plot(Twenty_raw$DateTime, Twenty_raw$AirTemp_Average_C, col="red", type='l')
-plot(Twenty$DateTime, Twenty$AirTemp_Average_C, type = 'l')
+plot(Twenty_raw$DateTime, Twenty_raw$AirTemp_C_Average, col="red", type='l')
+plot(Twenty$DateTime, Twenty$AirTemp_C_Average, type = 'l')
 #RH
 plot(Twenty_raw$DateTime, Twenty_raw$RH_percent, col="red", type='l')
 points(Twenty$DateTime, Twenty$RH_percent, type = 'l')
@@ -625,18 +669,19 @@ RemoveMet=RemoveMet[,c(8:9,1:7)]
 
 ###7) Write file with final cleaned dataset! ###
 Met_final=Met%>%
-  select(c("Reservoir","Site","DateTime","Record","CR3000_Batt_V","CR3000Panel_temp_C","PAR_Average_umol_s_m2","PAR_Total_mmol_m2","BP_Average_kPa",                          
-           "AirTemp_Average_C","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
+  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",                          
+           "AirTemp_C_Average","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
            "ShortwaveRadiationDown_Average_W_m2","InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
-           "Flag_PAR_Average_umol_s_m2","Note_PAR_Average_umol_s_m2","Flag_PAR_Total_mmol_m2","Note_PAR_Total_mmol_m2","Flag_BP_Average_kPa",
-           "Note_BP_Average_kPa","Flag_AirTemp_Average_C","Note_AirTemp_Average_C","Flag_RH_percent","Note_RH_percent","Flag_Rain_Total_mm",
+           "Flag_PAR_umolm2s_Average","Note_PAR_umolm2s_Average","Flag_PAR_Total_mmol_m2","Note_PAR_Total_mmol_m2","Flag_BP_Average_kPa",
+           "Note_BP_Average_kPa","Flag_AirTemp_C_Average","Note_AirTemp_C_Average","Flag_RH_percent","Note_RH_percent","Flag_Rain_Total_mm",
            "Note_Rain_Total_mm","Flag_WindSpeed_Average_m_s","Note_WindSpeed_Average_m_s",
            "Flag_WindDir_degrees","Note_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationUp_Average_W_m2",
            "Flag_ShortwaveRadiationDown_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2",
            "Flag_InfraredRadiationUp_Average_W_m2","Note_InfraredRadiationUp_Average_W_m2",
            "Flag_InfraredRadiationDown_Average_W_m2","Note_InfraredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_Albedo_Average_W_m2"))
-setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022')
-write.csv(Met_final, "FCR_Met_final_2015_2022.csv", row.names=F, quote=F)
+
+write.csv(Met_final, paste0(folder,"FCR_Met_final_2015_2022.csv"), row.names=F, quote=F)
+write.csv(RemoveMet, paste0(folder, "FCR_Met_MaintenanceLog_2015_2022.csv"), row.names=F, quote=F)
 
 
 

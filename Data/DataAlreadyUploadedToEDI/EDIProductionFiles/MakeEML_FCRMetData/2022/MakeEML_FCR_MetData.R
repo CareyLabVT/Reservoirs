@@ -30,7 +30,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = 'FCR_Met_final_2015_2022.csv')
+ data.table = c('FCR_Met_final_2015_2022.csv', "FCR_Met_MaintenanceLog_2015_2022.csv"))
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -142,19 +142,20 @@ make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2022",
-         data.table = 'FCR_Met_final_2015_2022.csv',
-         data.table.name = 'FCR_Met_final_2015_2022',
-         data.table.description = 'All meteorological parameters measured at Falling Creek Reservoir during 2015-2022',
-         other.entity = c('FCR_MET_QAQC_2015_2022.R','FCR_Met_Maintenance_2015_2022.txt'),
-         other.entity.name = c('FCR_MET_QAQC_2015_2022',"FCR_Met_Maintenance_2015_2022"),
-         other.entity.description = c('Data aggregation and QA/QC R script','The log of all maintenance applied to the meteorological station'),
-         temporal.coverage = c("2015-07-07", "2022-05-31"),
+         data.table = c('FCR_Met_final_2015_2022.csv','FCR_Met_MaintenanceLog_2015_2022.csv'),
+         data.table.name = c('FCR_Met_final_2015_2022','FCR_Met_MaintenanceLog_2015_2022'),
+         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2022',
+                            'The log for all maintenance and outliers for the Met station that go into the QAQC script for 2015-2022'),
+         other.entity = 'FCR_MET_QAQC_2015_2022.R',
+         other.entity.name = 'FCR_MET_QAQC_2015_2022',
+         other.entity.description = 'Data aggregation and QA/QC R script',
+         temporal.coverage = c("2015-07-07", "2022-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.17") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
+         package.id = "edi.143.19") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

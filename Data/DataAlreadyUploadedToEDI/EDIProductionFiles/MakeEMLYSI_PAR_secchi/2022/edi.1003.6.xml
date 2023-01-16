@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1003.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1003.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Secchi depth data and discrete depth profiles of photosynthetically active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022</title>
+    <title>Secchi depth data and discrete depth profiles of photosynthetic active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -57,36 +57,36 @@
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>georgeh0919@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2023-01-12</pubDate>
+    <pubDate>2023-01-16</pubDate>
     <abstract>
-      <para>Discrete depth profiles of temperature, dissolved oxygen, oxidation-reduction potential, conductivity, and pH were collected with YSI water quality probes and discrete depth profiles of photosynthetically active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50) and other in-reservoir transects (Sites 10, 20, 30, 40, 45). YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows at Falling Creek (Sites 01, 99, 101, 102, 200) inflows and outflows at Beaverdam (Sites 40, 100, 200), and inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400). In 2021, YSI profiles were also collected from a littoral site in Beaverdam (Site 51). The samples were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February). </para>
+      <para>Discrete depth profiles of temperature, dissolved oxygen, oxidation-reduction potential, conductivity, and pH were collected with various handheld YSI water quality probes and discrete depth profiles of photosynthetically active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam and other in-reservoir transects. YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek, inflows and outflows at Falling Creek, inflows and outflows at Beaverdam, and inflows at Carvins Cove. In 2021, YSI profiles were also collected from a littoral site in Beaverdam. Data were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February). </para>
     </abstract>
     <keywordSet>
       <keyword>Carey Lab</keyword>
       <keyword>Virginia Tech</keyword>
       <keyword>Western Virginia Water Authority</keyword>
       <keyword>Falling Creek Reservoir</keyword>
-      <keyword>Oxidation-reduction potential</keyword>
+      <keyword>oxidation-reduction potential</keyword>
       <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
-      <keyword>Reservoir</keyword>
-      <keyword>Lake</keyword>
+      <keyword>reservoir</keyword>
+      <keyword>lake</keyword>
       <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
-      <keyword>Lakes</keyword>
+      <keyword>lakes</keyword>
       <keyword>water temperature</keyword>
       <keyword>dissolved oxygen</keyword>
       <keyword>pH</keyword>
       <keyword>conductivity</keyword>
       <keyword>photosynthetically active radiation</keyword>
-      <keyword>secchi depth</keyword>
+      <keyword>Secchi depth</keyword>
       <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <additionalInfo>
       <para>Authorship Contribution Statement: </para>
-      <para>CCC developed and led the reservoir monitoring program. ABP is point person for this data package. HLW led data publication and QAQC. ABP led the field crew and contributed substantially to sampling. BG and GH digitized all field data and led field prep.</para>
+      <para>CCC developed and led the reservoir monitoring program. ABP was point person for this data package in 2022. HLW led data publication and QAQC in 2022. ABP led the field crew and contributed substantially to sampling; BG and GH digitized all field data and led field prep in 2022.</para>
       <para>Acknowledgments and historical contributions:</para>
       <para>This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.</para>
     </additionalInfo>
@@ -167,12 +167,13 @@
     <methods>
       <methodStep>
         <description>
-          <para>Field sample collection</para>
-          <para>At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the deepest portion of the reservoir using a YSI ProPlus with Quatro cable (pH, ORP, conductivity) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature). Specific conductivity was measured in 2021+2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution.</para>
-          <para>Photosynthetically active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m.</para>
+          <para>FIELD SAMPLE COLLECTION</para>
+          <para>At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the sediments using a YSI ProPlus with Quatro cable (pH, ORP, conductivity) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature). Specific conductance was measured in 2021-2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021 and 2022, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The dissolved oxygen probe cap was replaced on June 30th, 2021, at which point a two-point calibration was performed. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution.</para>
+          <para>Photosynthetic active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m.</para>
+          <para>ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2022 are from the handheld pH meter described above.</para>
           <para>Secchi disk depth was measured using a standard 20 cm diameter circular Secchi disk attached to a calibrated rope. Secchi depth measurements were made without the aid of a plexiglass viewer. The disk was lowered from the shaded side of the boat or dock, and the water depths at which the disk disappeared while being lowered and reappeared while being raised were averaged to determine Secchi depth.</para>
-          <para>YSI and PAR profiles, and Secchi depths, were collected approximately fortnightly in the spring months (Mar. - May), weekly in the summer and early autumn (Jun. - Sept.), and monthly in the late autumn and winter (Oct. - Feb.). Most sampling occurred between the hours of 9:00 and 15:00, and are denoted in the DateTime as 12:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et. al. 2018.</para>
-          <para>The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) with coordinates 37.312684, -79.816503 located near site 50 was also sampled at Beaverdam Reservoir in 2021. </para>
+          <para>YSI and PAR profiles, and Secchi depths, were collected approximately fortnightly in the spring months (Mar. - May), weekly in the summer and early autumn (Jun. - Sept.), and monthly in the late autumn and winter (Oct. - Feb.). Starting in 2018, times were included in this data product. Prior to 2018 or if the Flag_DateTime column is 1, the time recorded in the DateTime column is 12:00, as most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et al. 2018.</para>
+          <para>The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) with coordinates 37.312684, -79.816503 located near site 50 was also sampled at Beaverdam Reservoir in 2021. See site_descriptions.csv for coordinates and site descriptions of all sampling sites.</para>
           <para>Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.</para>
         </description>
       </methodStep>
@@ -191,21 +192,6 @@
         <role>Principal Investigator</role>
       </personnel>
       <funding>Western Virginia Water Authority</funding>
-      <relatedProject>
-        <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Institute of Critical Technology and Applied Science</funding>
-      </relatedProject>
       <relatedProject>
         <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
         <personnel>
@@ -250,36 +236,6 @@
           <role>Principal Investigator</role>
         </personnel>
         <funding>National Science Foundation 1933102</funding>
-      </relatedProject>
-      <relatedProject>
-        <title>No project title to report</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Virginia Tech Global Change Center</funding>
-      </relatedProject>
-      <relatedProject>
-        <title>No project title to report</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C.</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>Fralin Life Sciences Institute</funding>
       </relatedProject>
     </project>
     <dataTable>
@@ -340,7 +296,7 @@
         </attribute>
         <attribute>
           <attributeName>Site</attributeName>
-          <attributeDefinition>Sampling site within each reservoir; 50 = Deep hole or site nearest to dam in each reservoir; 45 = Upstream pelagic site nearest to the deep hole in each reservoir; 40 = Most upstream site that has a distinct hypolimnetic zone during summer thermal stratification in Falling Creek Reservoir; 30 = Upstream pelagic site in transitional zone of the reservoir; 20 = Different upstream pelagic site in transitional zone of the reservoir; 10 = Farthest upstream pelagic site in reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir</attributeDefinition>
+          <attributeDefinition>Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -442,11 +398,11 @@
     </dataTable>
     <dataTable>
       <entityName>YSI_PAR_profiles_2013-2022.csv</entityName>
-      <entityDescription>Discrete depths of water temperature, dissolved oxygen, conductivity, photosynthetically active radiation, redox potential, and pH in five southwestern Virginia reservoirs</entityDescription>
+      <entityDescription>Discrete depths of water temperature, dissolved oxygen, conductivity, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs</entityDescription>
       <physical>
         <objectName>YSI_PAR_profiles_2013-2022.csv</objectName>
-        <size unit="bytes">634244</size>
-        <authentication method="MD5">dae714bf39b544cc5f0ed6eb3ec39339</authentication>
+        <size unit="bytes">627203</size>
+        <authentication method="MD5">d8879cb387dd9843929f8cbeb10ac7cc</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -498,7 +454,7 @@
         </attribute>
         <attribute>
           <attributeName>Site</attributeName>
-          <attributeDefinition>Sampling site within each reservoir; 51 = Littoral site in Beaverdam Reservoir; 50 = Deep hole or site nearest to dam in each reservoir; 45 = Upstream pelagic site nearest to the deep hole in each reservoir; 40 = Most upstream site in Falling Creek Reservoir that has a distinct hypolimnetic zone during summer thermal stratification; 30 = Upstream pelagic site in transitional zone of the reservoir; 20 = Different upstream pelagic site in transitional zone of the reservoir; 10 = Farthest upstream pelagic site in reservoir; 99 = Farthest downstream site on inflow stream to Falling Creek Reservoir; 100 = Inflow stream to Falling Creek Reservoir or Beaverdam Reservoir or Horse Pen Branch inflow to Carvins Cove Reservoir; 101 = upstream site along inflow to Falling Creek Reservoir or Horse Pen Branch standing water inflow to Carvins Cove Reservoir; 102 = Furthest upstream site on inflow stream to Falling Creek Reservoir; 200 = Secondary inflow (wetland) stream to Falling Creek Reservoir, right arm inflow to Beaverdam Reservoir, or Carvin Creek inflow to Carvins Cove Reservoir; 300 = Sawmill Branch inflow site closest to reservoir at Carvins Cove Reservoir; 301 = Sawmill Branch inflow upstream of reservoir at Carvins Cove Reservoir; 400 = Tinker Creek Tunnel Inflow to Carvins Cove Reservoir; 500 = Catawaba Creek Tunnel inflow downstream of tunnel emergence at Carvins Cove Reservoir; 01 = Outflow site at spillway of Falling Creek Reservoir or Beaverdam Reservoir</attributeDefinition>
+          <attributeDefinition>Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -509,7 +465,7 @@
                 <numberType>natural</numberType>
                 <bounds>
                   <minimum exclusive="false">1</minimum>
-                  <maximum exclusive="false">501</maximum>
+                  <maximum exclusive="false">500</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -593,7 +549,7 @@
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">65.7</maximum>
+                  <maximum exclusive="false">58.2</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -651,7 +607,7 @@
         </attribute>
         <attribute>
           <attributeName>SpCond_uScm</attributeName>
-          <attributeDefinition>Specific conductivity</attributeDefinition>
+          <attributeDefinition>Specific conductance</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -674,7 +630,7 @@
         </attribute>
         <attribute>
           <attributeName>PAR_umolm2s</attributeName>
-          <attributeDefinition>Photosynthetically active radiation</attributeDefinition>
+          <attributeDefinition>Photosynthetic active radiation</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -707,7 +663,7 @@
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0</minimum>
+                  <minimum exclusive="false">-155.4</minimum>
                   <maximum exclusive="false">661.8</maximum>
                 </bounds>
               </numericDomain>
@@ -766,7 +722,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_Temp_C</attributeName>
-          <attributeDefinition>Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection</attributeDefinition>
+          <attributeDefinition>Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -789,7 +745,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DO_mgL</attributeName>
-          <attributeDefinition>Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -800,7 +756,7 @@
                 <numberType>whole</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">3</maximum>
+                  <maximum exclusive="false">4</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -812,7 +768,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DOsat_percent</attributeName>
-          <attributeDefinition>Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -823,7 +779,7 @@
                 <numberType>whole</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">3</maximum>
+                  <maximum exclusive="false">4</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -835,7 +791,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_Cond_uScm</attributeName>
-          <attributeDefinition>Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -858,7 +814,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_SpCond_uScm</attributeName>
-          <attributeDefinition>Data flag for specific conductivity; 0=Not suspect, 1=Sample not taken, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for specific conductance; 0=Not suspect, 1=Sample not taken, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -881,7 +837,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_PAR_umolm2s</attributeName>
-          <attributeDefinition>Data flag for photosynthetically active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for photosynthetic active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -904,7 +860,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_ORP_mV</attributeName>
-          <attributeDefinition>Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -915,7 +871,7 @@
                 <numberType>whole</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">3</maximum>
+                  <maximum exclusive="false">2</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -927,7 +883,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_pH</attributeName>
-          <attributeDefinition>Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0</attributeDefinition>
+          <attributeDefinition>Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -938,7 +894,7 @@
                 <numberType>whole</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">1</maximum>
+                  <maximum exclusive="false">5</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -949,15 +905,15 @@
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>7945</numberOfRecords>
+      <numberOfRecords>7857</numberOfRecords>
     </dataTable>
     <dataTable>
       <entityName>site_descriptions.csv</entityName>
       <entityDescription>site_descriptions.csv</entityDescription>
       <physical>
         <objectName>site_descriptions.csv</objectName>
-        <size unit="bytes">2185</size>
-        <authentication method="MD5">d9c9e1b2677203bd490271207a73bef8</authentication>
+        <size unit="bytes">4613</size>
+        <authentication method="MD5">3d31647ccd72658796efae264a5a41ce</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1001,7 +957,7 @@
                 <numberType>natural</numberType>
                 <bounds>
                   <minimum exclusive="false">1</minimum>
-                  <maximum exclusive="false">501</maximum>
+                  <maximum exclusive="false">500</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1065,7 +1021,7 @@
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">-80.8632991493157</minimum>
-                  <maximum exclusive="false">79.8360878</maximum>
+                  <maximum exclusive="false">-79.8159</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1076,8 +1032,38 @@
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>28</numberOfRecords>
+      <numberOfRecords>30</numberOfRecords>
     </dataTable>
+    <otherEntity>
+      <entityName>QAQC_YSI_PAR_2013_2022.R</entityName>
+      <entityDescription>YSI and PAR QAQC script for most recent data publication</entityDescription>
+      <physical>
+        <objectName>QAQC_YSI_PAR_2013_2022.R</objectName>
+        <size unit="bytes">9857</size>
+        <authentication method="MD5">5210f41d23f9dd199e9eda4cbeeecf42</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>QAQC_Secchi_2013_2022.R</entityName>
+      <entityDescription>Secchi QAQC script for most recent data publication</entityDescription>
+      <physical>
+        <objectName>QAQC_Secchi_2013_2022.R</objectName>
+        <size unit="bytes">4388</size>
+        <authentication method="MD5">90616c2d67752a49f27a7ae78e6135bd</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
   </dataset>
   <additionalMetadata>
     <metadata>

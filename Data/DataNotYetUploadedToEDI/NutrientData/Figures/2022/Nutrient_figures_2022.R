@@ -13,8 +13,6 @@ raw_chem$DateTime <- as.Date(raw_chem$DateTime, "%Y-%m-%d %H:%M:%S")
 raw_chem <- raw_chem [,(names(raw_chem) %in% c("Reservoir","Site","DateTime",
   "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL"))]
 
-                             
-  
   #### Chemistry diagnostic plots ####
 chemistry_long <- raw_chem %>% 
   gather(metric, value, TP_ugL:DOC_mgL) %>% #DOC_mgL

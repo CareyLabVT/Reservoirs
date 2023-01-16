@@ -50,7 +50,7 @@ options(timeout=200)
 
 # download most up to date catwalk data, manual downloads and maintenance log
 # goal in 2023 is to have the missing files on the data logger-no time now and need to talk to CCC
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "FCR_CAT_MaintenanceLog_2018_2022.txt")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", "misc_data_files/fcre-waterquality.csv")
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2022.csv', "misc_data_files/CAT_2.csv")
 
@@ -69,7 +69,7 @@ data_file <-file.path(getwd(), 'misc_data_files/fcre-waterquality.csv')
 #manual downloads to add missing data 
 data2_file <-file.path(getwd(), 'misc_data_files/CAT_2.csv')
 #maintenance file
-maintenance_file <-file.path(getwd(),  "FCR_CAT_MaintenanceLog_2018_2022.txt")
+maintenance_file <-file.path(getwd(),  "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 #name of the output file
 output_file <- file.path(getwd(), "misc_data_files/Catwalk_first_QAQC_2018_2022.csv")
 
@@ -892,14 +892,15 @@ catdata <- catdata[order(catdata$DateTime),]
   
 write.csv(catdata, 'FCR_Catwalk_EDI_2018_2022.csv', row.names = FALSE)
 ```
+
 ```{r Make Maintenance Log for pub}
 # Make the Maintenance Log into a csv and add Reservoir and Site column 
   Log <- read.csv(maintenance_file)
  names(Log) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber","Flag", "FlagColumn", "Notes") #finalized column names
-Log$Reservoir= "BVR"#add reservoir name for EDI archiving
+Log$Reservoir= "FCR"#add reservoir name for EDI archiving
 Log$Site=50 #add site column for EDI archiving
 
 Log=Log[,c(9:10,1:8)]
  
-write.csv(Log, "FCR_CAT_MaintenanceLog_2020_2022.csv", row.names=F, quote=F)
+write.csv(Log, "FCR_CAT_MaintenanceLog_2018_2022.csv", row.names=F, quote=F)
 ```

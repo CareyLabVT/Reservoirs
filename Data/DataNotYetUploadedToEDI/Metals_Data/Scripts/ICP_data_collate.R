@@ -48,7 +48,7 @@ COL_NAMES=c('#','ID', '7Li','23Na',	'24Mg',	'27Al', '29Si',	'31P',	'34S', '35Cl'
 mydircsv = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2022"
 
 # List all of the files in the directory above
- myfilescsv = list.files(path=mydircsv, pattern="", full.names=TRUE)
+ myfilescsv = list.files(path=mydircsv, pattern="ICPMS", full.names=TRUE)
 
  #combine the files into one large data frame
  #create an out.file for the combined data

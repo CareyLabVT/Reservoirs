@@ -50,7 +50,7 @@ options(timeout=200)
 
 # download most up to date catwalk data, manual downloads and maintenance log
 # goal in 2023 is to have the missing files on the data logger-no time now and need to talk to CCC
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "FCR_CAT_MaintenanceLog_2018_2022.txt")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", "misc_data_files/fcre-waterquality.csv")
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2022.csv', "misc_data_files/CAT_2.csv")
 
@@ -69,7 +69,7 @@ data_file <-file.path(getwd(), 'misc_data_files/fcre-waterquality.csv')
 #manual downloads to add missing data 
 data2_file <-file.path(getwd(), 'misc_data_files/CAT_2.csv')
 #maintenance file
-maintenance_file <-file.path(getwd(),  "FCR_CAT_MaintenanceLog_2018_2022.txt")
+maintenance_file <-file.path(getwd(),  "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 #name of the output file
 output_file <- file.path(getwd(), "misc_data_files/Catwalk_first_QAQC_2018_2022.csv")
 
@@ -86,6 +86,7 @@ Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 
 # read in qaqc function output
 
 catdata <- read_csv(output_file)
+#catdata <- read_csv(paste0(getwd(), '/misc_data_files/Catwalk_first_QAQC_2018_2022.csv'))
 
 # subset file to only unpublished data
 catdata <- catdata[catdata$DateTime<ymd_hms(current_time_end),]
@@ -595,10 +596,9 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
    geom_point()
  RDO9sat_21
  
- # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00, this was following a field day so maybe something strange happened, flag as 5
- 
- catdata$Flag_RDO_mgL_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
- catdata$Flag_RDOsat_percent_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
+ # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00
+ # the crash was due to the SSS coming to the surface, the increase in DO follows turning the SSS back on, so this data should be left in
+
 
  #Only use plotly to find DateTime of questionable values
  #ggplotly(RDO9sat_21)
@@ -891,4 +891,16 @@ catdata <- catdata[order(catdata$DateTime),]
   catdata$DateTime <- as.character(catdata$DateTime)
   
 write.csv(catdata, 'FCR_Catwalk_EDI_2018_2022.csv', row.names = FALSE)
+```
+
+```{r Make Maintenance Log for pub}
+# Make the Maintenance Log into a csv and add Reservoir and Site column 
+  Log <- read.csv(maintenance_file)
+ names(Log) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber","Flag", "FlagColumn", "Notes") #finalized column names
+Log$Reservoir= "FCR"#add reservoir name for EDI archiving
+Log$Site=50 #add site column for EDI archiving
+
+Log=Log[,c(9:10,1:8)]
+ 
+write.csv(Log, "FCR_CAT_MaintenanceLog_2018_2022.csv", row.names=F, quote=F)
 ```

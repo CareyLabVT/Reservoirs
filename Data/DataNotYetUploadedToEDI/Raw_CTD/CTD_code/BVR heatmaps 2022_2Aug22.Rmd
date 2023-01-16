@@ -121,8 +121,9 @@ df.final = df.final.raw%>%
   mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
          DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
          DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent))%>%
-  mutate(Depth_m = max -Depth_m)%>%
-  mutate(Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
+  mutate(Depth_m_orig = Depth_m,
+         Depth_m = max-Depth_m,
+         Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
 
 max(df.final$Date[year(df.final$Date)==2021])
 df.final%>%
@@ -141,6 +142,12 @@ ctd_depths = df.final%>%
   dplyr::summarize(WaterLevel = max(Depth_m))%>%
   group_by(Site)%>%
   mutate(max = max(WaterLevel))
+
+export = df.final%>%
+  filter(Reservoir=="BVR",
+         Depth_m_orig==0.1)
+
+write.csv(export,"../../BVR drawdown/Data/CTD at 0.1m.csv",row.names = F)
 
 #library(RCurl)
 #sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
@@ -257,27 +264,10 @@ for(i in 1:length(vars)){
 
 Stratification statisitcs
 ```{r}
-ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
-  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
-         Date = as.Date(Date))%>%
-    mutate(Site = ifelse(Site==1,40,Site))
-
-#ctd_01 = ctd%>%
-#  full_join(ctd_hist%>%mutate(Date=as.Date(Date)))%>%
-#  group_by(Date, Site, Reservoir)%>%
-#  filter(Depth_m == Depth_m[which.min(abs(Depth_m-0.1))])
-#
-#write.csv(ctd_01,"CTD_surface.csv", row.names = F)
-
-ctd_bvr_hist = ctd_hist%>%
-  mutate(Date = as.Date(Date))%>%
-  filter(Reservoir == "BVR",
-         Site == 50,
-         year(Date)==2021)
-
-ctd = ctd%>%
-  full_join(ctd_bvr_hist)%>%
-  filter(month(Date)>=5)
+ctd <- read.csv("../CTD_EDI/CTD_2013_2022.csv")%>% #load saved data
+  filter(Reservoir=="BVR")%>%
+  filter(Site == 50)%>%
+  mutate(Date = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
 
 #Decrease dataset size by trimming to 0.1m depth intervals
 depths <- seq(0,11, by = .01)
@@ -528,81 +518,15 @@ inflow_depth = data.frame(Date = as.Date(dates, origin = "1970-01-01"), Depth_m 
 
 ```
 
-
-```{r}
-###
-#LOAD DATA
-###
-
-ctd <- read.csv("../CTD_season_csvs/CTD_FCR_2022.csv")%>% #load CTD data
-  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
-         Date = as.Date(Date))
-
-#Load bathymetry
-bathy = read.csv("../2022_BVR_drawdown_figs/Bathymetry_comb.csv")%>%
-  filter(Reservoir == "FCR")
-
-
-
-###
-# FORMAT DATA
-###
-
-#For some reason schmidt doesn't run unless we filter to 1m intervals. The whole mess of code below is just to do this
-depths <- seq(0,10, by = 1) #Set up the depths that we want
-newDepths <- depths
-df.final.1m<- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
-df.final.1m$Depth_m <- newDepths[1]
-for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
-  ctd_atThisDepth <- ctd %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
-  ctd_atThisDepth = ctd_atThisDepth%>%
-    filter(abs(Depth_m-newDepths[i])<0.1) #only include if the measured depth is within 0.1 of the depth we are labeling it
-  ctd_atThisDepth$Depth_m <- newDepths[i]
-  df.final.1m <- rbind(df.final.1m,ctd_atThisDepth)
-}
-
-
-
-###
-# CALCULATE SCHMIDT
-###
-
-#Once you have a filtered CTD dataset and bathymetry loaded, calculating Schmidt Stability is easy!
-schmidt = df.final.1m%>%
-  filter(Site == 50)%>% #Make sure we are only looking at Site 50 data
-  group_by(Date)%>%
-  summarize(schmidt = schmidt.stability(wtr = Temp_C, 
-                                        depths = Depth_m,
-                                        bthA = bathy$SA_m2, 
-                                        bthD = bathy$Depth_m,
-                                        sal = rep(0,length(Temp_C))#Salinity is approximately 0 (freshwater)
-                                        )
-            )
-
-
-###
-# PLOT RESULTS
-###
-schmidt%>%
-  ggplot(aes(x = Date, y = schmidt))+
-  geom_point()
-
-```
-
 Light attenuation/light extinction
 ```{r}
 #Using the equation here
 #https://www.esf.edu/efb/schulz/Limnology/Light.html
 
-ctd <- read.csv("../CTD_season_csvs/CTD_BVR_2022.csv")%>% #load saved data
-  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"))%>%
-    mutate(Site = ifelse(Site==1,40,Site))%>%
-  full_join(ctd_hist%>%
-              mutate(Date=as.Date(Date))%>%
-              filter(Reservoir=="BVR"))%>%
-  filter(month(Date)>=5,
-         month(Date)<10,
-         Site == 50)
+ctd <- read.csv("../CTD_EDI/CTD_2013_2022.csv")%>% #load saved data
+  filter(Reservoir=="BVR")%>%
+  filter(Site == 50)%>%
+  mutate(Date = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
 
 atten_k = ctd%>%
   filter(!is.na(PAR_umolm2s))%>%
@@ -617,7 +541,7 @@ atten_k = ctd%>%
             Zeu_0.1 = min(Depth_m[PAR_umolm2s<I0/1000]))%>%
   filter(r2>0.9)
 
-write.csv(atten_k,"attenuation_calc.csv",row.names = F)
+write.csv(atten_k,"../../BVR drawdown/Data/attenuation_calc.csv",row.names = F)
 
 atten_k$Date_22<-atten_k$Date
 year(atten_k$Date_22)=2022
@@ -638,8 +562,19 @@ atten_k%>%
   xlab("")
 dev.off()
 
-ctd%>%
-  filter(Date=="2022-05-09 08:06:53	")
+jpeg("../2022_BVR_drawdown_figs/Euphotic_zone.jpg", width = 6, height = 4, res = 300, units = "in")
+atten_k%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year%in%c(2022,2021))%>%
+  ggplot(aes(x = Date_22, y = Zeu, color = Year))+
+  geom_line()+
+  geom_point()+
+  geom_vline(data=lines,aes(xintercept = as.POSIXct(Dates), lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Euphotic zone depth (m)")+
+  theme_bw()+
+  xlab("")
+dev.off()
 
 summary(ctd$PAR_umolm2s)
 
@@ -660,5 +595,34 @@ strat%>%
   geom_hline(yintercept = 1)+
   theme_bw()
 dev.off()
+
+
+strat%>%
+  filter(Site==50)%>%
+  select(-Date_22)%>%
+  mutate(Date = as.Date(Date),
+         Year = as.factor(year(Date)))
+
+ctd%>%
+  filter(!is.na(PAR_umolm2s))%>%
+  group_by(Date)%>%
+  filter(sum(Depth_m<0)>0)%>%
+  mutate(I0 = mean(PAR_umolm2s[Depth_m<0], na.rm = T),
+         Date=as.Date(Date))%>%
+  filter(Depth_m>0)%>%
+  left_join(strat%>%
+              filter(Site==50)%>%
+              select(-Date_22)%>%
+              mutate(Date = as.Date(Date),
+                     Year = as.factor(year(Date))))%>%
+  filter(!is.na(thermo),
+         Depth_m<thermo)%>%
+  arrange(Date,Depth_m)%>%
+  summarize(I0 = unique(I0),
+            thermo_light = last(PAR_umolm2s),
+            pct = thermo_light/I0*100)%>%
+  filter(year(Date)%in%c(2021,2022))%>%
+  ggplot(aes(x = Date, y = pct))+
+  geom_point()
 ```
 

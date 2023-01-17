@@ -1,9 +1,11 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-DataStream	Three-leter code corresponding to the catwalk dataset	character			NA	value is missing
-TIMESTAMP_start	"Starting date and time of the maintenance event. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-TIMESTAMP_end	"Ending date and time of the maintenance event. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-parameter	Description of the instruments affected by maintenance	categorical	dimensionless		NA	value is missing
-colnumber	Column number corresponding to the instruments affected by maintenance	categorical	dimensionless		NA	value is missing
-flag	The flag to be assigned	categorical	dimensionless		NA	value is missing
-flagcol	The column number of the flag column corresponding to the instrument affected by maintenance	categorical	dimensionless		NA	value is missing
-notes	Notes to describe the maintenance event	character			NA	value is missing
+Reservoir	"Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir"	categorical	dimensionless		NA	value is missing
+Site	"Sampling site within each reservoir, 50=Deepest part of the reservoir "	numeric	dimensionless		NA	value is missing
+Station	Code corresponding to data set nickname;CAT=sensors deployed off the Catwalk 	categorical	dimensionless		NA	value is missing
+DateTime_start	"Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+DateTime_end	"Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Parameter	Name of variable corresponding to meteorological data table names	categorical			NA	value is missing
+ColumnNumber	Column number associated with parameters in the raw file during QAQC	categorical	dimensionless		NA	value is missing
+Flag	Data flag applied to associated variable	categorical	dimensionless		NA	value is missing
+FlagColumn	Column number associated with  the Flag column for the parameter in raw file during QAQC	categorical	dimensionless		NA	value is missing
+Notes	Additional information describing Flag for associated variable	character			NA	No note recorded

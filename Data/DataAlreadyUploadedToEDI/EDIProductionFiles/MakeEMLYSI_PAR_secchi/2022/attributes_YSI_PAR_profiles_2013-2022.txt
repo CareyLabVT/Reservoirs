@@ -12,11 +12,11 @@ PAR_umolm2s	Photosynthetic active radiation	numeric	micromolePerMeterSquaredPerS
 ORP_mV	Oxidation-reduction potential	numeric	millivolt		NA	value is missing
 pH	Water pH	numeric	dimensionless		NA	value is missing
 Flag_DateTime	"Data flag for datetime; 0=Time recorded, 1= No time recorded, generalized to noon"	numeric	dimensionless		NA	value is missing
-Flag_Temp_C	"Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_DO_mgL	"Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_DOsat_percent	"Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_Cond_uScm	"Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_SpCond_uScm	"Data flag for specific conductance; 0=Not suspect, 1=Sample not taken, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_PAR_umolm2s	"Data flag for photosynthetic active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_ORP_mV	"Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
-Flag_pH	"Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect Sample"	numeric	dimensionless		NA	value is missing
+Flag_Temp_C	"Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_DO_mgL	"Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_DOsat_percent	"Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_Cond_uScm	"Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_SpCond_uScm	"Data flag for specific conductance; 0=Not suspect, 1=Sample not taken, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_PAR_umolm2s	"Data flag for photosynthetic active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_ORP_mV	"Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing
+Flag_pH	"Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample"	numeric	dimensionless		NA	value is missing

@@ -7,7 +7,7 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022"
 
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform
@@ -26,7 +26,8 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = 'BVR_platform_data_2020_2021.csv',
+ data.table = c('BVR_platform_data_2020_2022.csv','BVR_MaintenanceLog_2020_2022.csv',
+                'BVR_sensor_string_2016_2020.csv') ,
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -137,22 +138,29 @@ template_categorical_variables(path = folder,
 # package.id: enter the ID you obtained in Step 6
 
 make_eml(path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2020-2021",
-         data.table = 'BVR_platform_data_2020_2021.csv',
-         data.table.description = 'All water quality parameters measured at Beaverdam Reservoir during 2020-2021',
-         other.entity = c('BVR_platform_QAQC_function_2020_2021.R', 'BVR_platform_QAQC_Plot_2020_2021.R',
-                          'BVR_maintenance_log_2020_2021.txt', 'BVR_Depth_offsets_2020_2021.csv', 'BVR_sort_by_depth_2020_2021.R'),
-         other.entity.description = c('Automated QAQC script', 'Script to run the QAQC function and includes plots to check QAQC',
-                                      'Maintenance log for BVR platform sensors', 'Table of depth of sensors below the water used in BVR_sort_by_depth_2020_2021.R script',
-                                      'Script in R to give a depth reading to each sensor reading and sort the readings by depth instead of postion'),
-         temporal.coverage = c("2020-06-18", "2021-12-31"),
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2016-2022",
+         data.table = c('BVR_platform_data_2020_2022.csv', 'BVR_sensor_string_2016_2020.csv', 'BVR_MaintenanceLog_2020_2022.csv'),
+         data.table.name = c('BVR_platform_data_2020_2022', 'BVR_sensor_string_2016_2020', 'BVR_MaintenanceLog_2020_2022'), 
+         data.table.description = c('Water quality parameters measured at Beaverdam Reservoir during 2020-2022',
+                                    'Water quality parameters measured at Beaverdam Reservoir during 2016-2020',
+                                    'Maintenance Log for BVR_platform_data_2020_2022 to record maintenance or outliers in the data set. Used in QAQC_BVR_platform_2020_2022.Rmd'),
+         other.entity = c('BVR_platform_function_2020_2022.R', 'QAQC_BVR_platform_2020_2022.Rmd', 'BVR_Depth_offsets_2020_2022.csv',
+                           'BVR_sort_by_depth_2020_2022.R', 'BVR_sensorstring_Collate_QAQC_2016_2020.R'),
+         other.entity.name = c('BVR_platform_function_2020_2022', 'QAQC_BVR_platform_2020_2022', 'BVR_Depth_offsets_2020_2022',
+                               'BVR_sort_by_depth_2020_2022', 'BVR_sensorstring_Collate_QAQC_2016_2020'),
+         other.entity.description = c('QAQC funcion used in QAQC_BVR_platform_2020_2022.Rmd to collate the data and take out observations from the maintenance log and other outliers.',
+                                      'Script that uses the function in BVR_platform_function_2020_2022.R and creates QAQC plots and final csv for data publication',
+                                      'The offsets for sensors in BVR_platform_data_2020_2022 to determine the depth of the observations as the water level changes. Use with BVR_sort_by_depth_2020_2022.R', 
+                                      'Script that gives a depth to each observation which uses the offsets from BVR_Depth_offsets_2020_2022.csv',
+                                      'Script that collates and QAQCs the files for BVR_sensor_string_2016_2020.R'),
+         temporal.coverage = c("2016-07-21", "2022-12-31"),
          #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         #package.id = "edi.157.16" # Put your package.id here, followed by .1 (for 1st version). This is for staging
-         package.id = "edi.725.2") # This is for the final version
+         package.id = "edi.157.22") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         #package.id = "edi.725.2") # This is for the final version
 
 
 

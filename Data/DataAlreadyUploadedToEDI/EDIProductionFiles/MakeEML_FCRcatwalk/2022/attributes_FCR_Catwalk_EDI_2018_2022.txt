@@ -75,10 +75,10 @@ Flag_EXOBGAPC_ugL_1	Data flag for EXO2 phycocyanin data measured in micrograms p
 Flag_EXOfDOM_RFU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Relative Fluorescence Units (EXOfDOM_RFU_1)	categorical			NA	value is missing
 Flag_EXOfDOM_QSU_1	Data flag for EXO2 fluorescent dissolved organic matter data in Relative Fluorescence Units (EXOfDOM_QSU_1)	categorical			NA	value is missing
 Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU (EXOTurbidity_FNU_1)	categorical			NA	value is missing
-Flag_EXOPressure_psi	Data flag for EXO2 pressure sensor in psi (EXO_pressure_psi)	categorical			NA	value is missing
-Flag_EXODepth_m	Data flag for EXO2 depth sensor in meters (EXO_depth_m)	categorical			NA	value is missing
-Flag_EXOBattery_V	Data flag for EXO2 battery in volts (EXO_battery_V)	categorical			NA	value is missing
-Flag_EXOCablepower_V	Data flag for EXO2 cable power in volts (EXO_cablepower_V)	categorical			NA	value is missing
-Flag_EXOWiper_V	Data flag for EXO2 wiper in volts (EXO_wiper_V)	categorical			NA	value is missing
-Flag_LvlPressure_psi_9	Data flag for pressure transducer at 9m (Lvl_psi_9)	categorical			NA	value is missing
+Flag_EXOPressure_psi	Data flag for EXO2 pressure sensor in psi (EXOPressure_psi)	categorical			NA	value is missing
+Flag_EXODepth_m	Data flag for EXO2 depth sensor in meters (EXODepth_m)	categorical			NA	value is missing
+Flag_EXOBattery_V	Data flag for EXO2 battery in volts (EXOBattery_V)	categorical			NA	value is missing
+Flag_EXOCablepower_V	Data flag for EXO2 cable power in volts (EXOCablepower_V)	categorical			NA	value is missing
+Flag_EXOWiper_V	Data flag for EXO2 wiper in volts (EXOWiper_V)	categorical			NA	value is missing
+Flag_LvlPressure_psi_9	Data flag for pressure transducer at 9m (LvlPressure_psi_9)	categorical			NA	value is missing
 Flag_LvlTemp_C_9	Data flag for pressure transducer temperature at 9m (LvlTemp_C_9)	categorical			NA	value is missing

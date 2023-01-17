@@ -151,7 +151,7 @@ write.csv(export,"./Data/Metals at 0.1m.csv",row.names=F)
 
 
 
-BVR heatmaps with sensor data (elevation rather than depth)
+BVR metals heatmaps with sensor data (elevation rather than depth)
 ```{r}
 #metals = read_csv("./Data/Drawdown Metals_updated.csv")%>%
 #  filter(Reservoir == "BVR")%>%

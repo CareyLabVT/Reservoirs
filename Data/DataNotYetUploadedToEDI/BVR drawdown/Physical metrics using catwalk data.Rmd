@@ -23,13 +23,13 @@ cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/E
 bathy = read.csv("./Data/Bathymetry_comb.csv")%>%
   filter(Reservoir == "BVR")
 
-ctd_depths = cat_long%>%
+cat_depths = cat_long%>%
   mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
   filter(!is.na(Reading))%>%
   group_by(Date)%>%
   dplyr::summarize(WaterLevel = mean(Reservoir_depth))
 
-flexible_bathy = ctd_depths%>%
+flexible_bathy = cat_depths%>%
   mutate(Reservoir = "BVR")%>%
   full_join(bathy)%>%
   group_by(Date)%>%
@@ -38,10 +38,14 @@ flexible_bathy = ctd_depths%>%
 
 catwalk_format = cat_long%>%
   filter(!is.na(Reading))%>%
-  mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
+  mutate(Date = as.Date(as.POSIXct(DateTime)),
+         Sensor_depth = round(Sensor_depth,1)
+         )%>%
+  group_by(Date)%>%
+  mutate(Reservoir_depth = mean(Reservoir_depth))%>%
   group_by(Date, Sensor_depth)%>%
   dplyr::summarize(Reading=mean(Reading,na.rm = T),
-            Reservoir_depth = mean(Reservoir_depth))
+                   Reservoir_depth = unique(Reservoir_depth))
 
 schmidts = c()
 for(date in unique(catwalk_format$Date)){
@@ -76,10 +80,89 @@ schmidt_df%>%
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
   theme_bw()+
-  xlab("Date")+
-  scale_x_date(date_breaks = "2 month", date_labels =  "%b")
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
 dev.off()
 
+buoyancy_raw = catwalk_format%>%
+  filter(!is.na(Reading))%>%
+  mutate(Depth_simple = floor(Sensor_depth))%>%
+  group_by(Date,Depth_simple)%>%
+  dplyr::summarize(Temp_C = mean(Reading),
+            Depth_m = mean(Sensor_depth))%>%
+  arrange(Date,Depth_m)%>%
+  group_by(Date)%>%
+  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
+  dplyr::summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
+            Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
+
+buoy_max = buoyancy_raw%>%
+  group_by(Date)%>%
+  dplyr::summarize(max = max(buoy_freq))
+  
+buoy_max$Date_22 = buoy_max$Date
+year(buoy_max$Date_22)=2022
+
+jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
+buoy_max%>%
+  mutate(Year = as.factor(year(Date)))%>%
+  filter(Year %in% c(2021,2022))%>%
+  ggplot(aes(x = Date_22, y= max, color = Year, fill = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme_bw()+
+  ylab("Maximum buoyancy frequency")+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+surf = catwalk_format%>%
+  group_by(Date)%>%
+  dplyr::summarize(Reading = Reading[which.min(Sensor_depth)],
+            Sensor_depth = 0,
+            Reservoir_depth = unique(Reservoir_depth))
+  
+catwalk_format_with_zero = catwalk_format%>%
+  full_join(surf)%>%
+  arrange(Date,Sensor_depth)
+
+vw_temp = c()
+for(date in unique(catwalk_format_with_zero$Date)){
+  temps = catwalk_format_with_zero%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  vw_temp = c(vw_temp, layer.temperature(top = min(baths$Depth_m), bottom = max(baths$Depth_m), wtr = temps$Reading, depths = temps$Sensor_depth, bthA = baths$SA_m2, bthD = baths$Depth_m))
+}
+
+vw_temp_df = data.frame(Date = unique(catwalk_format$Date), vw_temp = vw_temp)%>%
+  mutate(Year = year(Date))
+vw_temp_df$Date_22 = vw_temp_df$Date
+year(vw_temp_df$Date_22)=2022
+
+jpeg("./Figs/VW_temp_exo.jpg",res = 300, units = "in",width = 6, height = 4)
+vw_temp_df%>%
+  filter(Year %in% c(2021,2022),
+         !is.na(vw_temp))%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = vw_temp, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Volume-weighted temperature")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+dev.off()
+```
+
+Lots of extraneous metalimnion code I'm no longer using
+```{r}
 meta_depths_raw = catwalk_format%>%
   mutate(Depth_simple = round(Sensor_depth))%>%
   group_by(Date,Depth_simple)%>%
@@ -250,43 +333,6 @@ meta_ratio%>%
   theme_bw()+
   ylab("Ratio of epilimnetic volume:hypolimnetic volume")+
   xlab("")
-dev.off()
-
-
-
-buoyancy_raw = catwalk_format%>%
-  filter(!is.na(Reading))%>%
-  mutate(Depth_simple = floor(Sensor_depth))%>%
-  group_by(Date,Depth_simple)%>%
-  dplyr::summarize(Temp_C = mean(Reading),
-            Depth_m = mean(Sensor_depth))%>%
-  arrange(Date,Depth_m)%>%
-  group_by(Date)%>%
-  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  dplyr::summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
-            Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
-
-buoy_max = buoyancy_raw%>%
-  group_by(Date)%>%
-  dplyr::summarize(max = max(buoy_freq))
-  
-buoy_max$Date_22 = buoy_max$Date
-year(buoy_max$Date_22)=2022
-
-jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
-buoy_max%>%
-  mutate(Year = as.factor(year(Date)))%>%
-  filter(Year %in% c(2021,2022))%>%
-  ggplot(aes(x = Date_22, y= max, color = Year, fill = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
-  scale_fill_manual(values = c("black","#00F7FF"))+
-  scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  theme_bw()+
-  ylab("Maximum buoyancy frequency")+
-  xlab("")+
-  scale_x_date(date_breaks = "2 month", date_labels =  "%b")
 dev.off()
 ```
 

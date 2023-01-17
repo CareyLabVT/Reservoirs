@@ -16,92 +16,6 @@ library(colorRamps)
 ```
 
 ```{r}
-
-adrienne = read.csv("./Data/BVR_thermistor_bin_whole.txt", sep = "\t")
-
-cat_long = adrienne%>%
-  pivot_longer(!datetime,names_prefix = "wtr_")%>%
-  rename(Temp_C = value,
-         Depth_m = name)%>%
-  mutate(Depth_m = as.numeric(Depth_m))
-
-#Load bathymetry
-bathy = read.csv("./Data/Bathymetry_comb.csv")%>%
-  filter(Reservoir == "BVR")
-
-ctd_depths = cat_long%>%
-  mutate(Date = as.Date(as.POSIXct(datetime)))%>%
-  filter(!is.na(Temp_C))%>%
-  group_by(Date)%>%
-  dplyr::summarize(WaterLevel = max(Depth_m))
-
-flexible_bathy = ctd_depths%>%
-  mutate(Reservoir = "BVR")%>%
-  full_join(bathy)%>%
-  group_by(Date)%>%
-  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(WaterLevel)) + 1)%>%
-  filter(Depth_m>=0)
-
-catwalk_format = cat_long%>%
-  filter(!is.na(Temp_C))%>%
-  mutate(Date = as.Date(as.POSIXct(datetime)))
-
-schmidts = c()
-for(date in unique(catwalk_format$Date)){
-  temps = catwalk_format%>%
-    filter(Date == date)
-  baths = flexible_bathy%>%
-    filter(Date==date)
-  schmidts = c(schmidts, schmidt.stability(wtr = temps$Temp_C, depths = temps$Depth_m, bthA = baths$SA_m2, bthD = baths$Depth_m, sal = rep(0,length(temps$Temp_C))))
-}
-
-schmidt_df = data.frame(Date = unique(catwalk_format$Date), Schmidt = schmidts)%>%
-  mutate(Year = year(Date))
-schmidt_df$Date_22 = schmidt_df$Date
-year(schmidt_df$Date_22)=2022
-
-schmidt_df%>%
-  arrange(Date)
-
-###
-# PLOT RESULTS
-###
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
-
-jpeg("./Figs/Schmidt_exo.jpg",res = 300, units = "in",width = 6, height = 4)
-schmidt_df%>%
-  filter(Year %in% c(2021,2022))%>%
-  mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = Schmidt, color = Year))+
-  geom_point()+
-  #geom_smooth()+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Schmidt stability (J/m^2)")+
-  theme_bw()+
-  xlab("Date")
-dev.off()
-
-meta_depths = catwalk_format%>%
-  group_by(Date,Depth_m)%>%
-  dplyr::summarize(Temp_C = mean(Temp_C))%>%
-  group_by(Date)%>%
-  dplyr::summarize(epi_depth = meta.depths(Temp_C, Depth_m)[1],
-            hypo_depth = meta.depths(Temp_C, Depth_m)[2])%>%
-  pivot_longer(c(epi_depth,hypo_depth))
-
-meta_depths$Date_22 = meta_depths$Date
-year(meta_depths$Date_22)=2022
-
-meta_depths%>%
-  mutate(Year = as.factor(year(Date)))%>%
-  filter(Year %in% c(2021,2022))%>%
-  ggplot(aes(x = Date_22, y = value, color = Year))+
-  geom_line()+
-  facet_wrap(~name)
-```
-
-```{r}
 cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
   filter(Sensor=="ThermistorTemp")
 
@@ -578,6 +492,10 @@ depth_sum = cat_long%>%
   filter(!Year == 2020)%>%
   mutate(max = max(Reservoir_depth))
 
+light = read.csv("./Data/attenuation_calc.csv")%>%
+  mutate(Date = as.Date(Date))%>%
+  left_join(depth_sum)
+
 Years = c(2021,2022)
 interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
 for(year in Years){
@@ -604,13 +522,16 @@ p = interp%>%
   ggplot()+
   geom_raster(aes(x=x, y=y,fill = z))+
   geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.2)+
-  geom_line(data = thermo_raw%>%
+  #geom_line(data = thermo_raw%>%
+  #            mutate(Year=year(Date))%>%
+  #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
+  geom_line(data = light%>%
               mutate(Year=year(Date))%>%
-              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth-Zeu, color = "Euphotic zone"))+
+  scale_color_manual(values = "black")+
   #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
   labs(y = "Height above sediments (m)")+
-  #scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(blue2green2red(100))}else{blue2green2red(100)}, na.value="gray", name = "Temperature (ºC)")+
   scale_x_date(expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA),
@@ -619,6 +540,7 @@ p = interp%>%
              scales = "free",
              space = "free"
              )+
+  labs(color = "")+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_fill_gradientn(name = "Water temperature\n(°C)",

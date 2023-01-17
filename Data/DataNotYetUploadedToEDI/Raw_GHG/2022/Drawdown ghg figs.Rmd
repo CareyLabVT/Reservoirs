@@ -144,7 +144,7 @@ export = ghg%>%
   filter(Site==50,
          Depth_m ==0.1,
          Reservoir=="BVR",
-         year(DateTime)%in%c(2021,2022),
+         year(DateTime)%in%c(2020,2021,2022),
          CH4_umolL<5)%>%#Removing one erroneous 2021 point
   group_by(DateTime)%>%
   summarize(ch4_umolL=mean(ch4_umolL, na.rm = T),

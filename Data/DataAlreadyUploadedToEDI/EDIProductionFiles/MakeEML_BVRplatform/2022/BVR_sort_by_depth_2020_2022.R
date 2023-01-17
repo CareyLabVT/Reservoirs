@@ -1,6 +1,6 @@
 ##sorting the BVR data by depth as opposed to position
 #by A. Breef-Pilz 10 FEB 21
-#Edited 21 FEB 22 by ABP
+#Edited 16 Jan 23 by ABP
 
 # Since the water level varies in BVR this script will at first apply a depth to each reading.
 # You can stop there or then put the be sorted into columns by depth. 
@@ -14,12 +14,12 @@ pacman::p_load(RCurl,tidyverse,lubridate, plotly,plyr)
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/"
 
 # The QAQC function for the BVR platform data 
-source(paste0(folder, "BVR_platform_QAQC_function_2020_2022.R"))
+source(paste0(folder, "BVR_platform_function_2020_2022.R"))
 
 # download most up to date bvr data streaming from the sensors
 #manually downloaded from the datalogger that fills in missing data from the streamed data 
 #maintenance log so we can flag when the sensors were being worked on or other problems
-download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',paste0(folder, "/bvre-waterquality.csv"),cacheOK=F) 
+download.file('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',paste0(folder, "/bvre-waterquality.csv")) 
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2022.csv',paste0(folder, "/BVRmanualplatform.csv"))
 download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",paste0(folder, "/BVR_maintenance_log_2020_2022.txt"))
 
@@ -39,10 +39,10 @@ qaqc(data_file, data2_file, maintenance_file, output_file)
 #Files on GitHub
 #Files needed to add a depth column to your data:
 #This the file from EDI. This is the same out put as if you ran the BVR QAQC scripts
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/BVR_platform_data_2020_2021.csv", paste0(folder, "BVR_platform_data_2020_2022.csv"))
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_platform_data_2020_2022.csv", paste0(folder, "BVR_platform_data_2020_2022.csv"))
 
 #This is the file of the offset depths of each sensor and needed to calculate the depth of each sensor at each reading.
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021/BVR_Depth_offsets_2020_2021.csv", paste0(folder, "BVR_Depth_offsets_2020_2021.csv"))
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_Depth_offsets_2020_2022.csv", paste0(folder, "BVR_Depth_offsets_2020_2021.csv"))
 
 #Files can also be downloaded from EDI.
 
@@ -123,9 +123,9 @@ df<-data.frame(Sensor, Variable)
 # method which is the name of the sensor and one for the deth. Then merge with df to get the variable names, take out 
 # the NA readings and then select only the columns you need. 
 EXO_long=EXO%>%
-  select(Reservoir, Site, DateTime, EXOTemp_C_1_5, EXOCond_uScm_1_5, EXOSpCond_uScm_1_5, EXOTDS_mgL_1_5, EXODOsat_percent_1_5,
-         EXODO_mgL_1_5, EXOChla_RFU_1_5, EXOChla_ugL_1_5, EXOBGAPC_RFU_1_5, EXOBGAPC_ugL_1_5,
-         EXOfDOM_RFU_1_5, EXOfDOM_QSU_1_5,EXOTurbidity_FNU_1_5)%>%
+  select(Reservoir, Site, DateTime, EXOTemp_C_1.5, EXOCond_uScm_1.5, EXOSpCond_uScm_1.5, EXOTDS_mgL_1.5, EXODOsat_percent_1.5,
+         EXODO_mgL_1.5, EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5,
+         EXOfDOM_RFU_1.5, EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5)%>%
   pivot_longer(-c(Reservoir,Site,DateTime), names_to="Sensor", values_to="Reading", values_drop_na=FALSE)%>%
   separate(Sensor,c("Sensor","Units","Meter","Half"),"_")%>%
   mutate(Method="exo_sensor")%>%
@@ -208,5 +208,5 @@ write.csv(HLW_FLARE_output, 'BVR_longoutput_FLARE_2020_2021.csv', row.names = FA
   #   merge(.,EXO, by="DateTime")
   
 # write the csv  
-#setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2021")
-#  write.csv(bvr_wide, 'BVR_bydepth_2020_2021.csv', row.names = FALSE)
+#setwd("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022")
+#  write.csv(bvr_wide, 'BVR_bydepth_2020_2022.csv', row.names = FALSE)

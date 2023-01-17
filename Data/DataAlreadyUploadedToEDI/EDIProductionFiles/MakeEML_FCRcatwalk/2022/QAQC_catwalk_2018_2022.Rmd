@@ -50,7 +50,7 @@ options(timeout=200)
 
 # download most up to date catwalk data, manual downloads and maintenance log
 # goal in 2023 is to have the missing files on the data logger-no time now and need to talk to CCC
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "FCR_CAT_MaintenanceLog_2018_2022.txt")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/CAT_MaintenanceLog.txt", "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", "misc_data_files/fcre-waterquality.csv")
 download.file('https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2022.csv', "misc_data_files/CAT_2.csv")
 
@@ -69,7 +69,7 @@ data_file <-file.path(getwd(), 'misc_data_files/fcre-waterquality.csv')
 #manual downloads to add missing data 
 data2_file <-file.path(getwd(), 'misc_data_files/CAT_2.csv')
 #maintenance file
-maintenance_file <-file.path(getwd(),  "FCR_CAT_MaintenanceLog_2018_2022.txt")
+maintenance_file <-file.path(getwd(),  "misc_data_files/FCR_CAT_MaintenanceLog_2018_2022.txt")
 #name of the output file
 output_file <- file.path(getwd(), "misc_data_files/Catwalk_first_QAQC_2018_2022.csv")
 
@@ -86,6 +86,7 @@ Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 
 # read in qaqc function output
 
 catdata <- read_csv(output_file)
+#catdata <- read_csv(paste0(getwd(), '/misc_data_files/Catwalk_first_QAQC_2018_2022.csv'))
 
 # subset file to only unpublished data
 catdata <- catdata[catdata$DateTime<ymd_hms(current_time_end),]
@@ -595,10 +596,9 @@ RDO9_sat=ggplot(catdata, aes(x = DateTime, y = RDOsat_percent_9)) +
    geom_point()
  RDO9sat_21
  
- # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00, this was following a field day so maybe something strange happened, flag as 5
- 
- catdata$Flag_RDO_mgL_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
- catdata$Flag_RDOsat_percent_9[catdata$DateTime > as.POSIXct('2022-11-07 14:40:00') & catdata$DateTime < as.POSIXct('2022-11-08 14:40:00')] <- 5
+ # questionable values on 2022-11-07 14:40:00 until 2022-11-08 14:40:00
+ # the crash was due to the SSS coming to the surface, the increase in DO follows turning the SSS back on, so this data should be left in
+
 
  #Only use plotly to find DateTime of questionable values
  #ggplotly(RDO9sat_21)
@@ -845,9 +845,9 @@ This is the column order to figure out the column numer for *colnumber* and *fla
 [25] "EXOSpCond_uScm_1"              "EXOTDS_mgL_1"                 "EXODOsat_percent_1"           
 [28] "EXODO_mgL_1"                   "EXOChla_RFU_1"                 "EXOChla_ugL_1"                
 [31] "EXOBGAPC_RFU_1"                "EXOBGAPC_ugL_1"                "EXOfDOM_RFU_1"                
-[34] "EXOfDOM_QSU_1"                 "EXOTurbidity_FNU_1"            "EXOpressure_psi"             
-[37] "EXODepth_m"                   "EXOBattery_V"                 "EXOcablepower_V"             
-[40] "EXOwiper_V"                   "Lvlpsi_9"                     "LvlTemp_C_9"                  
+[34] "EXOfDOM_QSU_1"                 "EXOTurbidity_FNU_1"            "EXOPressure_psi"             
+[37] "EXODepth_m"                   "EXOBattery_V"                 "EXOCablepower_V"             
+[40] "EXOWiper_V"                   "LvlPressure_psi_9"                     "LvlTemp_C_9"                  
 [43] "Flag_ThermistorTemp_C_surface" "Flag_ThermistorTemp_C_1"  "Flag_ThermistorTemp_C_2"      
 [46] "Flag_ThermistorTemp_C_3"       "Flag_ThermistorTemp_C_4"       "Flag_ThermistorTemp_C_5"      
 [49] "Flag_ThermistorTemp_C_6"       "Flag_ThermistorTemp_C_7"       "Flag_ThermistorTemp_C_8"      
@@ -857,9 +857,9 @@ This is the column order to figure out the column numer for *colnumber* and *fla
 [61] "Flag_EXOSpCond_uScm_1"         "Flag_EXOTDS_mgL_1"             "Flag_EXODOsat_percent_1"      
 [64] "Flag_EXODO_mgL_1"              "Flag_EXOChla_RFU_1"            "Flag_EXOChla_ugL_1"           
 [67] "Flag_EXOBGAPC_RFU_1"           "Flag_EXOBGAPC_ugL_1"           "Flag_EXOfDOM_RFU_1"           
-[70] "Flag_EXOfDOM_QSU_1"            "Flag_EXOTurbidity_FNU_1"       "Flag_EXOpressure_psi"        
-[73] "Flag_EXODepth_m"              "Flag_EXOBattery_V"            "Flag_EXOcablepower_V"        
-[76] "Flag_EXOwiper_V"              "Flag_Lvlpsi_9"                "Flag_LvlTemp_C_9"             
+[70] "Flag_EXOfDOM_QSU_1"            "Flag_EXOTurbidity_FNU_1"       "Flag_EXOPressure_psi"        
+[73] "Flag_EXODepth_m"              "Flag_EXOBattery_V"            "Flag_EXOCablepower_V"        
+[76] "Flag_EXOWiper_V"              "Flag_LvlPressure_psi_9"                "Flag_LvlTemp_C_9"             
    
 
 If you make any changes to the maintenance log you have to run the qaqc_fcr function again so the changes are incorporated. Make sure to re download the Maintenance log.  
@@ -881,14 +881,26 @@ catdata <- catdata[order(catdata$DateTime),]
          RDOTemp_C_5, RDO_mgL_9, RDOsat_percent_9, RDO_mgL_9_adjusted, RDOsat_percent_9_adjusted,
          RDOTemp_C_9,EXOTemp_C_1, EXOCond_uScm_1, EXOSpCond_uScm_1, EXOTDS_mgL_1, EXODOsat_percent_1,
          EXODO_mgL_1, EXOChla_RFU_1, EXOChla_ugL_1, EXOBGAPC_RFU_1, EXOBGAPC_ugL_1,
-         EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXOpressure_psi, EXODepth_m, EXOBattery_V,          EXOcablepower_V,EXOwiper_V, Lvlpsi_9, LvlTemp_C_9, LvlDepth_m_9, RECORD, CR6Battery_V,          CR6Panel_Temp_C,Flag_ThermistorTemp_C_surface:Flag_ThermistorTemp_C_9,Flag_RDO_mgL_5, Flag_RDOsat_percent_5, Flag_RDOTemp_C_5,
+         EXOfDOM_RFU_1, EXOfDOM_QSU_1,EXOTurbidity_FNU_1, EXOPressure_psi, EXODepth_m, EXOBattery_V,          EXOCablepower_V,EXOWiper_V, LvlPressure_psi_9, LvlTemp_C_9, LvlDepth_m_9, RECORD, CR6Battery_V,          CR6Panel_Temp_C,Flag_ThermistorTemp_C_surface:Flag_ThermistorTemp_C_9,Flag_RDO_mgL_5, Flag_RDOsat_percent_5, Flag_RDOTemp_C_5,
          Flag_RDO_mgL_9, Flag_RDOsat_percent_9, Flag_RDOTemp_C_9,Flag_EXOTemp_C_1, Flag_EXOCond_uScm_1, Flag_EXOSpCond_uScm_1,Flag_EXOTDS_mgL_1,
          Flag_EXODOsat_percent_1, Flag_EXODO_mgL_1, Flag_EXOChla_RFU_1,Flag_EXOChla_ugL_1, Flag_EXOBGAPC_RFU_1,Flag_EXOBGAPC_ugL_1,
-         Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXOpressure_psi, Flag_EXODepth_m, Flag_EXOBattery_V, Flag_EXOcablepower_V,
-         Flag_EXOwiper_V, Flag_Lvlpsi_9, Flag_LvlTemp_C_9)
+         Flag_EXOfDOM_RFU_1,Flag_EXOfDOM_QSU_1,Flag_EXOTurbidity_FNU_1, Flag_EXOPressure_psi, Flag_EXODepth_m, Flag_EXOBattery_V, Flag_EXOCablepower_V,
+         Flag_EXOWiper_V, Flag_LvlPressure_psi_9, Flag_LvlTemp_C_9)
 
 # convert datetimes to characters so that they are properly formatted in the output file
   catdata$DateTime <- as.character(catdata$DateTime)
   
 write.csv(catdata, 'FCR_Catwalk_EDI_2018_2022.csv', row.names = FALSE)
+```
+
+```{r Make Maintenance Log for pub}
+# Make the Maintenance Log into a csv and add Reservoir and Site column 
+  Log <- read.csv(maintenance_file)
+ names(Log) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber","Flag", "FlagColumn", "Notes") #finalized column names
+Log$Reservoir= "FCR"#add reservoir name for EDI archiving
+Log$Site=50 #add site column for EDI archiving
+
+Log=Log[,c(9:10,1:8)]
+ 
+write.csv(Log, "FCR_CAT_MaintenanceLog_2018_2022.csv", row.names=F, quote=F)
 ```

@@ -48,8 +48,9 @@ profiles <- raw_profiles %>%
   
   # Add 'flag' columns for each variable; 1 = flag for NA value
    mutate(Flag_pH = ifelse(is.na(pH), 1,
-                          ifelse(pH > 14, 2, # Flag 2 = inst. malfunction
-                                 ifelse(pH < 0, 4, 0))), #Flag 4 = negative set to 0
+                          ifelse((pH > 14 | pH < 4), 2, # Flag 2 = inst. malfunction
+                                 ifelse(pH < 0, 4, #Flag 4 = negative set to 0
+                                        ifelse(pH < 5, paste0(Flag_pH,5), Flag_pH)))), 
          Flag_ORP = ifelse(is.na(ORP_mV), 1, 
                            ifelse(ORP_mV > 750, 2, 0)),  # Flag 2 = inst. malfunction
          Flag_PAR = ifelse(is.na(PAR_umolm2s), 1,
@@ -128,7 +129,7 @@ ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
 
 # Deep hole time series for each reservoir
-ggplot(subset(profiles_long, Site=="50"), aes(x = DateTime, y = value, col=Depth_m)) +
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
   facet_grid(metric ~ Reservoir, scales='free') +
   scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
@@ -166,6 +167,12 @@ names(ysi) <- c(names(ysi)[1:6],"DOsat_percent","Cond_uScm","SpCond_uScm",names(
 
 #change all ccr site 100 to 101
 ysi$Site[ysi$Reservoir=="CCR" & ysi$Site==100] <- 101
+
+#add a 5 flag for all pH values between 4 and 5 from past years
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 5] <- 5 
+
+#manually switch the one pH value < 4 to have a 2 flag for instrument malfunction
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
 
 write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
 

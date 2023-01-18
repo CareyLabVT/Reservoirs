@@ -1,7 +1,7 @@
 DataStream, TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, flagcol, notes
 CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Date, 21, 1, 0, internally logged data; different format than when logging with CR6
 CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Time, 22, 1, 0, internally logged data; different format than when logging with CR6
-CAT, 2018-07-05 00:00:00 EST, 2018-08-20 14:40:00 EST, doobs_9, 18, 2, 58, incorrectly calibrated; needs correcting to match factory value
+CAT, 2018-07-05 00:00:00 EST, 2018-08-20 14:40:00 EST, doobs_9, 18, 2, 56, incorrectly calibrated; needs correcting to match factory value
 CAT, 2018-09-25 10:40:00 EST, 2018-09-25 10:55:00 EST, do_5, c(15:16), 2, c(53:54), removing questionable DO values
 CAT, 2018-11-19 12:00:00 EST, 2018-11-19 13:50:00 EST, All_Cat, c(1:42), 1, c(43:78),  sensor string up for cleaning
 CAT, 2018-11-19 15:00:00 EST, 2018-11-20 12:20:00 EST, do_9, c(18:19), 2, c(56:57), removing questionable DO values
@@ -31,16 +31,15 @@ CAT, 2020-04-10 12:01:00 EST, 2020-04-10 12:02:00 EST, All_Cat, c(1:42), 5, c(43
 CAT, 2020-04-20 12:01:00 EST, 2020-04-20 12:02:00 EST, All_Cat, c(1:42), 1, c(43:78), scans cleaned temp string not recorded as cleaned
 CAT, 2020-04-24 11:50:00 EST, 2020-04-24 12:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-05-11 10:20:00 EST, 2020-05-11 11:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
-CAT, 2020-05-15 15:11:00 EST, 2020-05-15 15:12:00 EST, All_Cat, 41, 5, 77, added in pressure transducer at 9m
-CAT, 2020-05-15 15:11:00 EST, 2020-05-15 15:12:00 EST, All_Cat, 42, 5, 78, added in pressure transducer at 9m
+CAT, 2020-05-15 15:11:00 EST, 2020-05-15 15:12:00 EST, Lvl*, c(41:42), 5, c(77:78), added in pressure transducer at 9m
 CAT, 2020-05-15 12:00:00 EST, 2020-05-15 12:05:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for installing pressure transducer and cleaning
 CAT, 2020-05-15 14:55:00 EST, 2020-05-15 15:05:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for installing pressure transducer and cleaning
 CAT, 2020-05-18 09:50:00 EST, 2020-05-18 10:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-05-25 10:05:00 EST, 2020-05-25 11:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
-CAT, 2020-05-28 04:50:00 EST, 2020-06-09 00:00:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-05-28 04:50:00 EST, 2020-06-09 00:00:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-06-08 12:30:00 EST, 2020-06-08 13:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-06-12 10:25:00 EST, 2020-06-12 10:45:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
-CAT, 2020-06-13 22:50:00 EST, 2020-06-14 19:50:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-06-13 22:50:00 EST, 2020-06-14 19:50:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-06-22 09:00:00 EST, 2020-06-22 09:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-06-29 11:20:00 EST, 2020-06-29 11:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-07-06 11:25:00 EST, 2020-07-06 12:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
@@ -49,25 +48,25 @@ CAT, 2020-07-13 10:30:00 EST, 2020-07-13 11:10:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2020-07-13 13:00:00 EST, 2020-07-13 14:50:00 EST, do_5, c(15:16), 2, c(53:54), removing questionable DO values
 CAT, 2020-07-20 10:49:00 EST, 2020-07-20 11:20:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-07-27 11:35:00 EST, 2020-07-27 12:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
-CAT, 2020-07-27 06:40:00 EST, 2020-07-28 16:10:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-07-27 06:40:00 EST, 2020-07-28 16:10:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-08-03 11:50:00 EST, 2020-08-03 12:30:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-08-03 11:50:00 EST, 2020-08-05 00:00:00 EST, doobs_9, 18, 1, 56, sensor data very high and not agreeing with handheld DO probe
 CAT, 2020-08-03 11:50:00 EST, 2020-08-05 00:00:00 EST, dosat_9, 19, 1, 57, sensor data very high and not agreeing with handheld DO probe
 CAT, 2020-08-07 10:00:00 EST, 2020-08-07 12:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and changed DO caps on EXO and RDO
-CAT, 2020-08-07 07:40:00 EST, 2020-08-12 00:00:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-08-07 07:40:00 EST, 2020-08-12 00:00:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-08-10 12:20:00 EST, 2020-08-10 12:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-08-11 07:00:00 EST, 2020-08-17 12:50:00 EST, doobs_9, 18, 6, 56, apparent fouling on DO sensor and corrected with linear adjustment
-CAT, 2020-08-11 07:00:00 EST, 2020-08-17 12:50:00 EST, doobs_9, 19, 6, 57, apparent fouling on DO sensor and corrected with linear adjustment
-CAT, 2020-08-13 09:20:00 EST, 2020-08-13 12:40:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-08-11 07:00:00 EST, 2020-08-17 12:50:00 EST, dosat_9, 19, 6, 57, apparent fouling on DO sensor and corrected with linear adjustment
+CAT, 2020-08-13 09:20:00 EST, 2020-08-13 12:40:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-08-17 12:42:00 EST, 2020-08-17 15:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and calibrated DO caps on EXO and RDO
-CAT, 2020-08-18 09:50:00 EST, 2020-08-22 12:40:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-08-18 09:50:00 EST, 2020-08-22 12:40:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-08-19 20:00:00 EST, 2020-08-24 10:40:00 EST, doobs_9, 18, 6, 56, apparent fouling on DO sensor and corrected with linear adjustment
 CAT, 2020-08-19 20:00:00 EST, 2020-08-24 10:40:00 EST, doobs_9, 19, 6, 57, apparent fouling on DO sensor and corrected with linear adjustment
-CAT, 2020-08-24 08:51:00 EST, 2020-08-24 08:52:00 EST, All_Cat, 37, 5, 73, added a depth correction factor of -0.2m to the EXO 
+CAT, 2020-08-24 08:51:00 EST, 2020-08-24 08:52:00 EST, EXO*, c(21:40), 5, c(59:76), added a depth correction factor of -0.2m to the EXO 
 CAT, 2020-08-24 10:47:00 EST, 2020-08-24 11:20:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-08-26 12:00:00 EST, 2020-09-02 10:50:00 EST, doobs_9, 18, 6, 56, apparent fouling on DO sensor and corrected with linear adjustment
 CAT, 2020-08-26 12:00:00 EST, 2020-09-02 10:50:00 EST, doobs_9, 19, 6, 57, apparent fouling on DO sensor and corrected with linear adjustment
-CAT, 2020-08-28 19:20:00 EST, 2020-08-29 05:40:00 EST, EXO_Cond*, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
+CAT, 2020-08-28 19:20:00 EST, 2020-08-29 05:40:00 EST, EXOCond, c(24:26), 2, c(60:62), high conductivity event not represenative of whole reservoir
 CAT, 2020-09-02 08:51:00 EST, 2020-09-02 08:52:00 EST, All_Cat, c(24:26), 5, c(60:62), conductivity check 34.8 microsiemens 
 CAT, 2020-09-02 10:55:00 EST, 2020-09-02 12:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-09-05 06:00:00 EST, 2020-09-09 17:50:00 EST, doobs_9, 18, 6, 56, apparent fouling on DO sensor and corrected with linear adjustment
@@ -80,7 +79,7 @@ CAT, 2020-09-30 09:57:00 EST, 2020-09-30 10:30:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2020-10-05 13:41:00 EST, 2020-10-05 13:44:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-10-09 09:47:00 EST, 2020-10-09 10:00:00 EST, All_Cat, c(1:42), 1, c(43:78), out of the water to measure placement of co2 sensors
 CAT, 2020-10-09 09:47:00 EST, 2020-10-11 09:50:00 EST, wtr_5:9, c(10:14), 1, c(48:52), string was out of poistion and all data that was effected was changed to NAs
-CAT, 2020-10-09 09:47:00 EST, 2020-10-11 09:50:00 EST, do_9*, c(18:20), 1, c(56:58), string was out of poistion and all data that was effected was changed to NAs
+CAT, 2020-10-09 09:47:00 EST, 2020-10-11 09:50:00 EST, c(do_9:dotemp_9), c(18:20), 1, c(56:58), string was out of poistion and all data that was effected was changed to NAs
 CAT, 2020-10-09 09:47:00 EST, 2020-10-11 09:50:00 EST, Lvl*, c(41:42), 1, c(77:78), string was out of poistion and all data that was effected was changed to NAs
 CAT, 2020-10-11 09:09:00 EST, 2020-10-11 09:50:00 EST, All_Cat, c(1:42), 1, c(43:78), string out of the water and repositioned because it was caught 
 CAT, 2020-10-14 11:50:00 EST, 2020-10-14 12:20:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
@@ -97,7 +96,7 @@ CAT, 2020-11-09 11:30:00 EST, 2020-11-09 11:50:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2020-11-24 11:30:00 EST, 2020-11-24 11:55:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-12-02 12:25:00 EST, 2020-12-02 12:57:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2020-12-02 15:00:00 EST, 2020-12-02 18:00:00 EST, do_9, c(18:19), 2, c(56:57), removing questionable DO values
-CAT, 2020-12-02 12:50:00 EST, 2020-12-27 12:40:00 EST, EXO_*, c(21:40), 1, c(59:76), EXO sent for cleaning and calibration
+CAT, 2020-12-02 12:50:00 EST, 2020-12-27 12:40:00 EST, EXO*, c(21:40), 1, c(59:76), EXO sent for cleaning and calibration
 CAT, 2021-01-07 09:40:00 EST, 2021-01-07 09:55:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2021-01-07 10:00:00 EST, 2021-01-07 11:40:00 EST, All_Cat, c(1:42), 1, c(43:78), troubleshooting broken thermistors
 CAT, 2021-02-08 14:25:00 EST, 2021-02-08 14:45:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
@@ -107,7 +106,7 @@ CAT, 2021-02-08 14:30:00 EST, 2021-02-26 12:00:00 EST, wtr_4, 9, 1, 47, thermist
 CAT, 2021-02-26 10:40:00 EST, 2021-02-26 14:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and testing Sunappee Temp String
 CAT, 2021-03-22 10:50:00 EST, 2021-03-22 11:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and calibrate DO and depth
 CAT, 2021-04-16 11:50:00 EST, 2021-04-16 12:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and calibration
-CAT, 2021-04-16 11:50:00 EST, 2021-04-26 13:10:00 EST, fdom, c(33:34), 1, c(69:70), bad fdom calibration
+CAT, 2021-04-16 11:50:00 EST, 2021-04-26 13:10:00 EST, EXOfdom, c(33:34), 1, c(69:70), bad fdom calibration
 CAT, 2021-04-26 10:55:00 EST, 2021-04-26 11:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2021-05-06 12:20:00 EST, 2021-05-06 13:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2021-05-14 13:45:00 EST, 2021-05-14 14:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
@@ -121,14 +120,14 @@ CAT, 2021-06-15 09:00:00 EST, 2021-06-15 13:10:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2021-06-16 08:10:00 EST, 2021-06-16 08:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, wtr*, c(1:14), 1, c(43:52), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, do*, c(15:20), 1, c(53:58), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, Lvl*, c(41:42), 1, c(76:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-CAT, 2021-06-18 10:00:00 EST, 2021-06-18 10:40:00 EST, EXO*, c(21:40), 1, c(59:75), sensor string up for cleaning and then it was tangled but EXO was fine
-CAT, 2021-06-21 09:40:00 EST, 2021-06-21 10:00:00 EST, EXO*, c(21:40), 1, c(59:75), sensor string up for cleaning
+CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, Lvl*, c(41:42), 1, c(77:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
+CAT, 2021-06-18 10:00:00 EST, 2021-06-18 10:40:00 EST, EXO*, c(21:40), 1, c(59:76), sensor string up for cleaning and then it was tangled but EXO was fine
+CAT, 2021-06-21 09:40:00 EST, 2021-06-21 10:00:00 EST, EXO*, c(21:40), 1, c(59:76), sensor string up for cleaning
 CAT, 2021-06-28 14:10:00 EST, 2021-06-28 14:30:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and SSS not working
 CAT, 2021-07-12 16:00:00 EST, 2021-07-12 16:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and SSS off
 CAT, 2021-07-21 13:20:00 EST, 2021-07-26 12:00:00 EST, wtr*, c(1:14), 1, c(43:52), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2021-07-21 13:20:00 EST, 2021-07-26 12:00:00 EST, do*, c(15:20), 1, c(53:58), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-CAT, 2021-07-21 13:20:00 EST, 2021-07-26 12:00:00 EST, Lvl*, c(41:42), 1, c(76:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
+CAT, 2021-07-21 13:20:00 EST, 2021-07-26 12:00:00 EST, Lvl*, c(41:42), 1, c(77:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2021-07-21 13:20:00 EST, 2021-07-21 13:40:00 EST, EXO*, c(21:40), 1, c(59:76), sensor string up for cleaning and then it was tangled but EXO was fine
 CAT, 2021-07-26 11:50:00 EST, 2021-07-26 12:00:00 EST, EXO*, c(21:40), 1, c(59:76), sensor string up for cleaning and turned on SSS with Alicat from CCR
 CAT, 2021-08-02 10:30:00 EST, 2021-08-02 10:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning no sure O2 is being added to the system
@@ -160,7 +159,7 @@ CAT, 2022-05-09 12:30:00 EST, 2022-05-09 13:00:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2022-05-23 13:10:00 EST, 2022-05-23 13:30:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning 
 CAT, 2022-05-23 13:40:00 EST, 2022-05-25 11:50:00 EST, wtr*, c(9:14), 1, c(48:52), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2022-05-23 13:40:00 EST, 2022-05-25 11:50:00 EST, do*, c(15:20), 1, c(53:58), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-CAT, 2022-05-23 13:40:00 EST, 2022-05-25 11:50:00 EST, Lvl*, c(41:42), 1, c(76:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
+CAT, 2022-05-23 13:40:00 EST, 2022-05-25 11:50:00 EST, Lvl*, c(41:42), 1, c(77:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2022-06-07 13:00:00 EST, 2022-06-07 13:40:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-06-20 14:20:00 EST, 2022-06-20 14:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-06-27 10:00:00 EST, 2022-06-27 10:30:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
@@ -171,17 +170,17 @@ CAT, 2022-08-01 11:00:00 EST, 2022-08-01 11:30:00 EST, All_Cat, c(1:42), 1, c(43
 CAT, 2022-08-08 11:30:00 EST, 2022-08-08 11:50:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-08-08 12:00:00 EST, 2022-08-09 13:10:00 EST, wtr*, c(9:14), 1, c(48:52), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2022-08-08 12:00:00 EST, 2022-08-09 13:10:00 EST, do*, c(15:20), 1, c(53:58), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-CAT, 2022-08-08 12:00:00 EST, 2022-08-09 13:10:00 EST, Lvl*, c(41:42), 1, c(76:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
+CAT, 2022-08-08 12:00:00 EST, 2022-08-09 13:10:00 EST, Lvl*, c(41:42), 1, c(77:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 CAT, 2022-08-18 10:50:00 EST, 2022-08-18 11:20:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-09-05 12:40:00 EST, 2022-09-05 13:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-09-12 14:40:00 EST, 2022-09-12 16:10:00 EST, EXO*, c(21:40), 1, c(59:76), sensor string up for troubleshooting turbidity sensor bad port
-CAT, 2022-09-05 08:00:00 EST, 2022-09-12 16:00:00 EST, Turb*, 35, 2, 71, bad turbidity data with lots of spikes turned out to be sensor was in a bad port
+CAT, 2022-09-05 08:00:00 EST, 2022-09-12 16:00:00 EST, EXOTurbidity, 35, 2, 71, bad turbidity data with lots of spikes turned out to be sensor was in a bad port
 CAT, 2022-09-19 12:30:00 EST, 2022-09-19 13:20:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-09-26 11:00:00 EST, 2022-09-26 12:10:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning and maintenance checks
 CAT, 2022-10-03 10:50:00 EST, 2022-10-03 11:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-10-11 13:30:00 EST, 2022-10-11 14:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-11-28 12:40:00 EST, 2022-11-28 13:00:00 EST, All_Cat, c(1:42), 1, c(43:78), sensor string up for cleaning
 CAT, 2022-12-12 10:30:00 EST, 2022-12-17 15:50:00 EST, EXO*, c(21:40), 1, c(59:76), EXO up for cleaning and calibration and replaced with BVR EXO while getting serviced
-CAT, 2022-12-17 15:50:00 EST, 2023_12-31 23:50:00 EST, Turb*, 35, 7, 71, BVR EXO doesn't have a turbidity sensor so it is not measured CHANGE WHEN NEW FCR EXO BACK
+CAT, 2022-12-17 15:50:00 EST, 2023_12-31 23:50:00 EST, EXOTurbidity, 35, 7, 71, BVR EXO doesn't have a turbidity sensor so it is not measured CHANGE WHEN NEW FCR EXO BACK
 CAT, 2022-12-29 03:10:00 EST, 2023-01-02 16:20:00 EST, EXO*, c(21:40), 7, c(59:76), EXO had a connection issue was not connected to the data logger therefore no data was collected
 CAT, 2023-01-02 16:25:00 EST, 2023-01-02 16:35:00 EST, EXO*, c(21:40), 1, c(59:76), EXO up for toubleshooting connection issues

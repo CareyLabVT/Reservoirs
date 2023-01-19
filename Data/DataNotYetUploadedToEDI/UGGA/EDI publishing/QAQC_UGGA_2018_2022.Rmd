@@ -134,7 +134,9 @@ ugga_flagged = ugga_comb%>%
          Flag_CO2Flux_umolCm2s = Flag_co2_flux_umolCm2s,
          Flag_CH4Flux_umolCm2s = Flag_ch4_flux_umolCm2s)%>%
   mutate(Start_time = ifelse(year(Date)==2022,NA,Start_time),
-         End_time = ifelse(year(Date)==2022,NA,End_time))
+         End_time = ifelse(year(Date)==2022,NA,End_time),
+         Flag_Start_time = ifelse(is.na(Start_time),1,0),
+         Flag_End_time = ifelse(is.na(End_time),1,0))
 
 write.csv(ugga_flagged, "UGGA_2018_2022.csv", row.names = F)
 
@@ -218,6 +220,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1002.6")
+         package.id = "edi.1002.7")
 ```
 

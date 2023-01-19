@@ -479,7 +479,7 @@ maxes = sum_plot3%>%
 fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
 names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
 
-jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
+jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 4, units = "in")
 sum_plot3%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
@@ -541,7 +541,7 @@ sum_plot4%>%
   geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  scale_color_manual(values = c("grey50","#3DB158","turquoise","blue","#8E4412","skyblue","pink","magenta4"))+
+  scale_color_manual(values = c("grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+

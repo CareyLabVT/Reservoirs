@@ -17,7 +17,7 @@
 #    and output file for EDI is Catwalk_EDI_2018_2021.csv
 
 library(devtools)
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2022")
@@ -177,7 +177,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.15", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.518.16", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####

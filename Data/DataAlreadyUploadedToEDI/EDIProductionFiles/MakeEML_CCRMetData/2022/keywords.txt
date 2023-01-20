@@ -1,7 +1,7 @@
 keyword	keywordThesaurus
 Lake	cuahsi controlled vocabulary
 reservoir	cuahsi controlled vocabulary
-lake	cuahsi controlled vocabulary
+lakes	cuahsi controlled vocabulary
 reservoirs	cuahsi controlled vocabulary
 meteorology	cuahsi controlled vocabulary
 high-frequency	cuahsi controlled vocabulary
@@ -9,7 +9,6 @@ air temperature	cuahsi controlled vocabulary
 relative humidity	cuahsi controlled vocabulary
 PAR	cuahsi controlled vocabulary
 photosynthetically active radiation	cuahsi controlled vocabulary
-photosynthetic active radiation cuashi controlled vocabulary
 infrared radiation	cuahsi controlled vocabulary
 shortwave radiation	cuahsi controlled vocabulary
 meteorological data	cuahsi controlled vocabulary
@@ -20,7 +19,7 @@ wind speed	cuahsi controlled vocabulary
 wind velocity	cuahsi controlled vocabulary
 barometric pressure	cuahsi controlled vocabulary
 Carey Lab	carey lab controlled vocabulary
-Virginia Teach	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
 Smart Reservoir	carey lab controlled vocabulary
 Carvins Cove Reservoir	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary

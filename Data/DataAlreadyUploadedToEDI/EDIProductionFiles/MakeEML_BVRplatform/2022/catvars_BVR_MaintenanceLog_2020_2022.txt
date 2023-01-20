@@ -16,12 +16,12 @@ ColumnNumber	c(21:22)	Column numbers of dissolved oxygen sensor at the bottom of
 ColumnNumber	c(24:44)	Column numbers of all of the senor measurements on the EXO that corresponds with FlagColumn c(66:84) (EXOTemp_C_1.5,EXOCond_uScm_1.5,EXOSpCond_uScm_1.5,EXOTDS_mgL_1.5,EXODOsat_percent_1.5,EXODO_mgL_1.5,EXOChla_RFU_1.5,EXOChla_ugL_1.5,EXOBGAPC_RFU_1.5,EXOBGAPC_ugL_1.5,EXOfDOM_RFU_1.5,EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5,EXOPressure_psi,EXODepth_m,EXOBattery_V,EXOCablepower_V,EXOWiper_V )
 ColumnNumber	c(27:29)	Column numbers of conducitvity, specific conductance, and total dissolved solids  measurements from the EXO that corresponds with FlagColumn c(67:69)(EXOCond_uScm_1.5, EXOSpCond_uScm_1.5, EXO_TDS_mg_1.5)
 ColumnNumber	c(32:35)	Column numbers for cholorophyll and phycocyanin measurments from the EXO that corresponds with  FlagColumn c(72:75) (EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5)
-Flag	1	value removed due to maintenance and set to NA
-Flag	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Flag	4	value removed due to fouling or bad calibration and set to NA or changed. See methods
-Flag	5	questionable value that was flagged and left in the data set
+Flag	1	Value removed due to maintenance and set to NA
+Flag	2	Negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag	4	Value removed due to fouling or bad calibration and set to NA or changed. See methods
+Flag	5	Questionable value that was flagged and left in the data set
 Flag	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor. See methods
-Flag	7	Missing observation
+Flag	7	Data not recorded
 FlagColumn	47	Flag column number of Thermistor in postion 1 that corresponds with ColumnNumber 5 (Flag_ThermistorTemp_C_1)
 FlagColumn	51	Flag column number of Thermistor in position 5 with ColumnNumber 9 ( Flag_ThermistorTemp_C_5)
 FlagColumn	57	Flag column number of Thermistor in postion 11 that corresponds with ColumnNumber 15 (Flag_ThermistorTemp_C_11)

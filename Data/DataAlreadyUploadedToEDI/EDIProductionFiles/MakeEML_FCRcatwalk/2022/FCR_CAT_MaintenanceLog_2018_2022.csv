@@ -1,7 +1,7 @@
 Reservoir,Site,Station,DateTime_start,DateTime_end,Parameter,ColumnNumber,Flag,FlagColumn,Notes
 FCR,50,CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Date, 21,1, 0, internally logged data; different format than when logging with CR6
 FCR,50,CAT, 2018-07-05 00:00:00 EST, 2018-08-28 14:30:00 EST, EXO_Time, 22,1, 0, internally logged data; different format than when logging with CR6
-FCR,50,CAT, 2018-07-05 00:00:00 EST, 2018-08-20 14:40:00 EST, doobs_9, 18,2, 57, incorrectly calibrated; needs correcting to match factory value
+FCR,50,CAT, 2018-07-05 00:00:00 EST, 2018-08-20 14:40:00 EST, doobs_9, 18,2, 56, incorrectly calibrated; needs correcting to match factory value
 FCR,50,CAT, 2018-09-25 10:40:00 EST, 2018-09-25 10:55:00 EST, do_5, c(15:16),2, c(53:54), removing questionable DO values
 FCR,50,CAT, 2018-11-19 12:00:00 EST, 2018-11-19 13:50:00 EST, All_Cat, c(1:42),1, c(43:78),  sensor string up for cleaning
 FCR,50,CAT, 2018-11-19 15:00:00 EST, 2018-11-20 12:20:00 EST, do_9, c(18:19),2, c(56:57), removing questionable DO values
@@ -10,7 +10,7 @@ FCR,50,CAT, 2019-01-15 12:50:00 EST, 2019-01-15 13:10:00 EST, All_Cat, c(1:42),1
 FCR,50,CAT, 2019-02-08 12:50:00 EST, 2019-02-08 13:10:00 EST, All_Cat, c(1:42),1, c(43:78), sensor_string_up
 FCR,50,CAT, 2019-04-15 09:51:00 EST, 2019-04-15 09:51:00 EST, All_Cat, c(1:42),5, c(43:78), switched_time_GMT-4_to_GMT-5
 FCR,50,CAT, 2019-06-17 11:10:00 EST, 2019-06-17 11:50:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning
-FCR,50,CAT, 2019-06-17 13:50:00 EST, 2019-06-17 15:40:00 EST, do_5, c(15:16),2, c(53:54), removing questionable DO values
+FCR,50,CAT, 2019-06-17 13:50:00 EST, 2019-06-17 15:40:00 EST, do_5, c(15:16),2, c(55:54), removing questionable DO values
 FCR,50,CAT, 2019-07-13 00:00:00 EST, 2019-07-17 11:40:00 EST, do_5, c(15:16),5, c(53:54), questionable DO values but leaving in 
 FCR,50,CAT, 2019-07-17 11:50:00 EST, 2019-07-17 11:50:00 EST, All_Cat, c(1:42),5, c(43:78), sensor string disturbed during field work
 FCR,50,CAT, 2019-07-17 12:35:00 EST, 2019-07-17 12:55:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning
@@ -25,7 +25,7 @@ FCR,50,CAT, 2019-11-15 11:50:00 EST, 2019-11-15 11:50:00 EST, All_Cat, c(1:42),1
 FCR,50,CAT, 2019-12-06 13:35:00 EST, 2019-12-06 13:50:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning
 FCR,50,CAT, 2020-01-31 12:00:00 EST, 2020-01-31 12:40:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning
 FCR,50,CAT, 2020-03-06 10:20:00 EST, 2020-03-06 11:00:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for installing CO2 sensors
-FCR,50,CAT, 2020-03-16 11:50:00 EST, 2020-03-16 12:10:00 EST, EXO*, c(21:40),1, c(59:76), EXO up for cleaning NEED TIME if applicable
+FCR,50,CAT, 2020-03-16 11:50:00 EST, 2020-03-16 12:10:00 EST, All_Cat, c(21:40),1, c(59:76), EXO up for cleaning NEED TIME if applicable
 FCR,50,CAT, 2020-04-10 12:01:00 EST, 2020-04-10 12:02:00 EST, All_Cat, c(1:42),5, c(43:78), CO2 surface sensors moved onto temp string
 FCR,50,CAT, 2020-04-10 12:01:00 EST, 2020-04-10 12:02:00 EST, All_Cat, c(1:42),5, c(43:78), scan deployed at 4.5m
 FCR,50,CAT, 2020-04-20 12:01:00 EST, 2020-04-20 12:02:00 EST, All_Cat, c(1:42),1, c(43:78), scans cleaned temp string not recorded as cleaned
@@ -120,7 +120,7 @@ FCR,50,CAT, 2021-06-15 09:00:00 EST, 2021-06-15 13:10:00 EST, All_Cat, c(1:42),1
 FCR,50,CAT, 2021-06-16 08:10:00 EST, 2021-06-16 08:10:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning
 FCR,50,CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, wtr*, c(1:14),1, c(43:52), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 FCR,50,CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, do*, c(15:20),1, c(53:58), sensor string up for cleaning and then it was tangled so not measuring the correct depth
-FCR,50,CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, Lvl*, c(41:42),1, c(76:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
+FCR,50,CAT, 2021-06-18 10:00:00 EST, 2021-06-21 10:00:00 EST, Lvl*, c(41:42),1, c(77:78), sensor string up for cleaning and then it was tangled so not measuring the correct depth
 FCR,50,CAT, 2021-06-18 10:00:00 EST, 2021-06-18 10:40:00 EST, EXO*, c(21:40),1, c(59:76), sensor string up for cleaning and then it was tangled but EXO was fine
 FCR,50,CAT, 2021-06-21 09:40:00 EST, 2021-06-21 10:00:00 EST, EXO*, c(21:40),1, c(59:76), sensor string up for cleaning
 FCR,50,CAT, 2021-06-28 14:10:00 EST, 2021-06-28 14:30:00 EST, All_Cat, c(1:42),1, c(43:78), sensor string up for cleaning and SSS not working

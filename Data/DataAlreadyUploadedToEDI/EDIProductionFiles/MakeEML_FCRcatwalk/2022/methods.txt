@@ -7,7 +7,7 @@ The reservoir has an oxygenation system that has been manipulated for whole ecos
 
 ###########################################################
 DETAILED DESCRIPTION OF MAINTENANCE AND ISSUES FOR EACH SENSOR GROUP
-All maintenance, calibration times and sensor issues are recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt. The text below explains specific issues and how they were dealt with in the data. 
+All maintenance, calibration times and sensor issues are recorded in the FCR_CAT_MaintenanceLog_2018_2022.csv. The text below explains specific issues and how they were dealt with in the data. 
 
 Maintenance data gaps:
 The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt file. To account for this, we used an automated QAQC script (FCR_catwalk_QAQC_function_2018_2022.R) which indexes the dates and times recorded in the maintenance log and set the data to NA and the corresponding Flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA, with corresponding Flags set to 1.   
@@ -126,7 +126,7 @@ The YSI EXO sonde was removed from the reservoir on December 2, 2020 for manufac
 
 #################################################################
 CALIBRATION INFORMATION
-YSI EXO2 Sonde Serial No. 18D103367, Pass
+YSI EXO2 Sonde December 2021, Serial No. 18D103367, Pass
 Replaced power-communication circuit board due to issues at final testing, depth sensor passed
 Wiped Conductivity/Temperature Sensor Serial No. 18C102992, Pass
 Temperature reads 20.78 °C in a 20.70 °C bath with a cell constant of 0.47 

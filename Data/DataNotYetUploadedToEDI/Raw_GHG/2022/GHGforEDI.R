@@ -202,7 +202,7 @@ ghgs%>%
 
 # Calculate % difference between replicates for current year
 # Flag 1 = Sample not collected
-# Flag 2 = Sample below MDL (for partial 2022: 0.0123 umol/L CH4; 4.81 umol/L CO2)
+# Flag 2 = Sample below MDL 
 # Flag 3 = Difference between samples >LOQ and percent difference >30% but <50%
 # Flag 4 = Difference between samples >LOQ and percent difference >50%
 # NOTE: All flagged reps were retained in the dataset
@@ -259,20 +259,20 @@ ghg_all <-  ghg_all %>%
 ## Will need to be updated for 2022!!
 
 # Flag 1 = Sample not collected
-# Flag 2 = Sample below MDL (for partial 2022: 0.0123 umol/L CH4; 4.81 umol/L CO2)
+# Flag 2 = Sample below MDL (for 2022: 0.021 umol/L CH4; 3.848 umol/L CO2)
 # Flag 3 = Difference between samples >LOQ and percent difference >30% but <50%
 # Flag 4 = Difference between samples >LOQ and percent difference >50%
 ghg_all <- ghg_all %>% 
-  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.0123*3,4,
-                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.0123*3,3,
+  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.021*3,4,
+                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.021*3,3,
                                          NA)),
-         flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=4.81*3,4,
-                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=4.81*3,3,
+         flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>=3.848*3,4,
+                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>=3.848*3,3,
                                          NA)))
 
 ghg_all <- ghg_all %>% 
-  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.0123,2,flag_ch4),
-         flag_co2 = ifelse(co2_umolL <= 4.81,2,flag_co2))
+  mutate(flag_ch4 = ifelse(ch4_umolL <= 0.021,2,flag_ch4),
+         flag_co2 = ifelse(co2_umolL <= 3.848,2,flag_co2))
 
 ghg_all <- ghg_all %>% 
   mutate(flag_ch4 = ifelse(is.na(ch4_umolL), 1, flag_ch4),
@@ -316,10 +316,13 @@ final_wide <- final_wide %>%
          co2_pdiff = round((abs(co2_umolL_1-co2_umolL_2)/(abs(co2_umolL_1+co2_umolL_2)/2))*100))
 
 # Define flagging for each year
-# Flag 1 = Sample not collected
-# Flag 2 = Sample below MDL (for 2022: 0.0107 umol/L CH4; 3.848 umol/L CO2)
-# Flag 3 = Difference between samples >LOQ and percent difference >30% but <50%
-# Flag 4 = Difference between samples >LOQ and percent difference >50%
+#0 = the samples and replicates are good
+#1 = Sample was either not collected or was not retained due to issues with the GC
+#2 = Sample was below the method detection limit
+#3 = Sample value was negative and changed to zero
+#4 = The difference between the reps are above the limit of quantification and >30% and <50% different from each other. Both replicates were retained but flagged
+#5 = The difference between the reps are above the limit of quantification and >50% different from each other. Both replicates were retained but flagged
+#6 = No peak detected on GC. Concentration set to 0
 
 ## Start with 2015
 final_wide_2015 <- final_wide %>% 
@@ -594,45 +597,6 @@ final_2021 <- final_2021 %>%
   mutate(flag_ch4 = ifelse(is.na(flag_ch4), 0, flag_ch4),
          flag_co2 = ifelse(is.na(flag_co2), 0, flag_co2))
 
-## 2022
-final_wide_2022 <- final_wide %>% 
-  filter(year==2022) %>% 
-  distinct_at(vars(Reservoir,Site,DateTime,Depth_m,flag_DateTime),.keep_all=TRUE) %>% 
-  mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>0.0107*3,4,
-                           ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>0.0107*3,3,
-                                  NA)),
-         flag_co2 = ifelse(co2_pdiff>=50 & co2_diff>3.848*3,4,
-                           ifelse(co2_pdiff<=50 & co2_pdiff>=30 & co2_diff>3.848*3,3,
-                                  NA)))
-
-final_2021_co2 <- final_wide_2021 %>% 
-  select(Reservoir,Site,DateTime,Depth_m,flag_DateTime,flag_co2,co2_umolL_1,co2_umolL_2,co2_umolL_3,co2_umolL_4) %>% 
-  pivot_longer(!Reservoir:flag_co2,names_to="Rep",values_to="co2_umolL")  %>% 
-  mutate(Rep = ifelse(Rep == "co2_umolL_1", 1, 
-                      ifelse(Rep == "co2_umolL_2",2,
-                             ifelse(Rep == "co2_umolL_3", 3,
-                                    ifelse(Rep == "co2_umolL_4", 4, NA)))))
-
-final_2021_ch4 <- final_wide_2021 %>% 
-  select(Reservoir,Site,DateTime,Depth_m,flag_DateTime,flag_ch4,ch4_umolL_1,ch4_umolL_2,ch4_umolL_3,ch4_umolL_4) %>% 
-  pivot_longer(!Reservoir:flag_ch4,names_to="Rep",values_to="ch4_umolL")  %>% 
-  mutate(Rep = ifelse(Rep == "ch4_umolL_1", 1, 
-                      ifelse(Rep == "ch4_umolL_2",2,
-                             ifelse(Rep == "ch4_umolL_3", 3,
-                                    ifelse(Rep == "ch4_umolL_4", 4, NA)))))
-
-final_2021 <- left_join(final_2021_co2,final_2021_ch4,by=c("Reservoir","Site","DateTime","Depth_m","flag_DateTime","Rep")) %>% 
-  mutate(Rep = ifelse(Rep == 3 & is.na(co2_umolL) & is.na(ch4_umolL) | Rep == 4 & is.na(co2_umolL) & is.na(ch4_umolL), NA, Rep)) %>% 
-  drop_na(Rep)
-
-final_2021 <- final_2021 %>% 
-  mutate(flag_ch4 = ifelse(ch4_umolL < 0.0107, 2, flag_ch4),
-         flag_co2 = ifelse(co2_umolL < 3.848, 2, flag_co2)) %>% 
-  mutate(flag_ch4 = ifelse(is.na(ch4_umolL), 1, flag_ch4),
-         flag_co2 = ifelse(is.na(co2_umolL), 1, flag_co2)) %>% 
-  mutate(flag_ch4 = ifelse(is.na(flag_ch4), 0, flag_ch4),
-         flag_co2 = ifelse(is.na(flag_co2), 0, flag_co2))
-
 ## Combine all historical data - now with updated MDLs!
 historical <- rbind(final_2015,final_2016,final_2017,final_2018,final_2019,final_2020,final_2021)
 
@@ -645,7 +609,9 @@ historical <- historical[,(col_order)]
 final <- rbind(historical,ghg_all)
 
 final <- final %>% 
-  arrange(DateTime,Reservoir,Site,Depth_m)
+  arrange(DateTime,Reservoir,Site,Depth_m)%>%
+  mutate(flag_co2 = ifelse(co2_umolL==0&!is.na(co2_umolL),6,flag_co2),
+         flag_ch4 = ifelse(ch4_umolL==0&!is.na(ch4_umolL),6,flag_ch4))
 
 ## For 2022 data publication ONLY
 # Change BVR 1 -> BVR 40
@@ -664,47 +630,47 @@ write.csv(final,"./Data/DataNotYetUploadedToEDI/Raw_GHG/2022/Dissolved_GHG_2015_
 # FCR Site 50 - CH4
 final %>% 
   filter(Reservoir == "FCR", Site == 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=CH4_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # FCR NOT Site 50 - CH4
 final %>% 
   filter(Reservoir == "FCR", Site != 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=CH4_umolL,color=as.factor(Site)))+
   geom_point()
 
 # FCR Site 50 - CO2
 final %>% 
   filter(Reservoir == "FCR", Site == 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=CO2_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # FCR NOT Site 50 - CO2
 final %>% 
   filter(Reservoir == "FCR", Site != 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=CO2_umolL,color=as.factor(Site)))+
   geom_point()
 
 # BVR Site 50 - CH4
 final %>% 
   filter(Reservoir == "BVR", Site == 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=CH4_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # BVR NOT Site 50 - CH4
 final %>% 
   filter(Reservoir == "BVR", Site != 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=ch4_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=CH4_umolL,color=as.factor(Site)))+
   geom_point()
 
 # BVR Site 50 - CO2
 final %>% 
   filter(Reservoir == "BVR", Site == 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Depth_m)))+
+  ggplot(mapping=aes(x=DateTime,y=CO2_umolL,color=as.factor(Depth_m)))+
   geom_point()
 
 # BVR NOT Site 50 - CO2
 final %>% 
   filter(Reservoir == "BVR", Site != 50) %>% 
-  ggplot(mapping=aes(x=DateTime,y=co2_umolL,color=as.factor(Site)))+
+  ggplot(mapping=aes(x=DateTime,y=CO2_umolL,color=as.factor(Site)))+
   geom_point()

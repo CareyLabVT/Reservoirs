@@ -1,2 +1,2 @@
 attributeName	code	definition
-Flag	0	
+Flag	0	no flag

@@ -241,7 +241,7 @@ ctd_flagged = ctd %>% #Add flags
          Flag_ORP = 0,
          Flag_PAR = 0,
          Flag_DescRate = 0,
-         Flag_datetime = 0) %>%
+         Flag_DateTime = 0) %>%
   mutate(
     #TEMP
     Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp), #Flag NA temperatures
@@ -347,7 +347,7 @@ final = dt1 %>% #Join new data with published dataset
   filter(!Date %in% ctd_flagged$Date)%>%
   full_join(ctd_flagged)%>%
   mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
-  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Cond_uScm, Spec_Cond_uScm, Chla_ugL, Turb_NTU, pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp, Flag_DO, Flag_Cond, Flag_SpecCond, Flag_Chla, Flag_Turb, Flag_pH, Flag_ORP, Flag_PAR, Flag_DescRate)
+  select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Cond_uScm, Spec_Cond_uScm, Chla_ugL, Turb_NTU, pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp, Flag_DO, Flag_Cond, Flag_SpecCond, Flag_Chla, Flag_Turb, Flag_pH, Flag_ORP, Flag_PAR, Flag_DescRate, Flag_DateTime)
 
 #Fix for CTD when conductivity and specific conductivity columns were switched
 #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is
@@ -393,10 +393,15 @@ CTD_fix=final%>%
     #And Turbidity
     Flag_Turb = ifelse(!is.na(Turb_NTU)&Turb_NTU < 0,4,Flag_Turb),
     Turb_NTU = ifelse(!is.na(Turb_NTU)&Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
+    Flag_Turb = ifelse(!is.na(Turb_NTU)&Turb_NTU > 100,2,Flag_Turb),
+    Turb_NTU = ifelse(!is.na(Turb_NTU)&Turb_NTU > 100, NA, Turb_NTU), #Flag turbidity malfunctions
     
     #And PAR
     Flag_PAR = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR),
     PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s), #Flag turbidity <0
+    
+    #DateTime needs to be flagged
+    Flag_DateTime = ifelse(hour(Date)==12&minute(Date)==0,7,0)
   )
 
 CTD_fix_renamed = CTD_fix%>% #Renaming flag columns in 2022
@@ -415,18 +420,10 @@ CTD_fix_renamed = CTD_fix%>% #Renaming flag columns in 2022
          Flag_PAR_umolm2s = Flag_PAR,
          Flag_DescRate_ms = Flag_DescRate)%>%
   mutate(Flag_DOsat_percent = Flag_DO_mgL)%>% #Adding this column, and it is currently the same as DO_mgL flags
-  select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s, DescRate_ms, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_DescRate_ms)
+  select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s, DescRate_ms, Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_DescRate_ms)
 
 CTD_fix_renamed%>%
-  select(Reservoir,Site,DateTime)%>%
-  filter(Site==40)%>%
-  unique()%>%
-  arrange(Reservoir,Site)
-
-CTD_fix_renamed%>%
-  select(Reservoir,Site)%>%
-  unique()%>%
-  arrange(Reservoir,Site)
+  filter(Flag_DateTime==7)
 
 write.csv(CTD_fix_renamed,"CTD_2013_2022.csv", row.names = FALSE)
 
@@ -440,17 +437,17 @@ qaqc = ctd_flagged
 qaqc = read.csv("CTD_2013_2022.csv")%>%
   mutate(Date = as_datetime(DateTime))
 qaqc_plotly = qaqc%>%
-  filter(Reservoir == "BVR", Site == 50, year(Date)%in%c(2020,2021,2022),Depth_m<9)%>%
+  filter(Reservoir=="BVR",Site==50,year(Date)==2015,
+         )%>%
   sample_frac(.1)%>%
-  ggplot(aes(x = Date, y = Depth_m, color = Temp_C, shape = as.factor(Flag_Temp_C)))+
+  ggplot(aes(x = Date, y = Depth_m, color = Turbidity_NTU, shape = as.factor(Flag_Turbidity_NTU)))+
   scale_color_gradientn(colours = blue2green2red(100), na.value="gray")+
   scale_y_reverse()+
   geom_point()
 ggplotly(qaqc_plotly)
 
-summary(qaqc)
-
-unique(p$Site)
+unique(qaqc$Date[qaqc$Turbidity_NTU>100&!is.na(qaqc$Turbidity_NTU)])
+qaqc[qaqc$Turbidity_NTU>100&!is.na(qaqc$Turbidity_NTU)&year(qaqc$Date)==2022,]
 
 depths <- seq(0.5,9, by = .5) #These are the depths we are using as of 02 Aug 19. 
 newDepths <- depths
@@ -489,7 +486,5 @@ p = df.final%>%
   ggplot(aes(y = DO_mgL, x = Date))+
   geom_point()
 ggplotly(p)
-
-qaqc[!is.na(qaqc$PAR_umolm2s)&qaqc$PAR_umolm2s<0,]
 ```
 

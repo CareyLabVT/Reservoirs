@@ -32,7 +32,7 @@ ctd = ctd_edi%>% #load saved data
 ```
 
 
-Elevation instead of depth
+Heatmap
 ```{r}
 #Decrease dataset size by trimming to 0.1m depth intervals
 depths <- seq(0,11, by = .1)
@@ -84,7 +84,8 @@ unlink(infile2)
 #Format YSI data
 ysi_formatted = ysi%>%
   filter(!is.na(DO_mgL),
-         Site == 50)%>% #Only the deepest site
+         Site == 50,
+         Reservoir=="BVR")%>% #Only the deepest site
   mutate(Date = as.Date(DateTime))%>%
   select("Reservoir",
          "Site",
@@ -95,10 +96,10 @@ ysi_formatted = ysi%>%
          "Temp_C",
          "pH")%>%
   #We are only using YSI to fill in gaps in CTD data. Select data for those gaps here
-  filter((Date>=as.Date("2021-07-01")&Date<as.Date("2021-12-01")),
-         )%>%
-  mutate(DO_mgL = ifelse(Date<=as.Date("2021-07-01"),NA,DO_mgL),
-         DO_pSat = ifelse(Date<=as.Date("2021-07-01"),NA,DOSat))%>%
+  filter(year(Date)==2021)%>%
+  mutate(DO_mgL = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,DO_mgL),
+         DO_pSat = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,DOSat),
+         Temp_C = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,Temp_C))%>%
   mutate(method = "ysi")%>%
   select(-DOSat)%>%
   filter(Date!="2021-05-31"|Depth_m<=10)
@@ -107,67 +108,82 @@ Years = c(2021,2022)
 Sites = c(50)
 
 # Combine CTD and YSI data
-df.final = df.final.raw%>%
+df.final_export = df.final.raw%>%
   mutate(Date = as.Date(Date),
          Year = year(Date))%>%
   filter(Year %in% Years,
          Site %in% Sites,
          Reservoir == "BVR"
          )%>%
-  mutate(DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL))%>%
-  full_join(ysi_formatted%>%dplyr::rename(pH_ysi = pH, DO_mgL_ysi = DO_mgL, DO_pSat_ysi = DO_pSat))%>%
+  mutate(DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL),
+         DOsat_percent = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DOsat_percent))%>%
+  full_join(ysi_formatted%>%dplyr::rename(pH_ysi = pH, DO_mgL_ysi = DO_mgL, DO_pSat_ysi = DO_pSat,Temp_C_ysi = Temp_C))%>%
   group_by(Date, Site)%>%
-  mutate(max = max(Depth_m))%>%
-  mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
+  mutate(max = max(Depth_m),
+         pH=ifelse(is.na(pH),pH_ysi,pH),
          DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
-         DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent))%>%
-  mutate(Depth_m_orig = Depth_m,
+         DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent),
+         Depth_m_orig = Depth_m,
          Depth_m = max-Depth_m,
-         Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU)) #Sediment got mixed up in early 2022
+         Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU),
+         Year = year(Date)) #Sediment got mixed up in early 2022
 
-max(df.final$Date[year(df.final$Date)==2021])
-df.final%>%
-  filter(month(Date)>9,
-         year(Date)==2021)%>%
-  arrange(Date)
+df.final = df.final_export%>%
+  filter(max>5)
 
-ctd_depths = df.final%>%
-  mutate(Date = as.Date(Date),
-         Year = year(Date))%>%
-  filter(Year %in% Years,
-         Site %in% Sites,
-         Reservoir == "BVR"
-         )%>%
-  group_by(Date,Site,Year)%>%
-  dplyr::summarize(WaterLevel = max(Depth_m))%>%
-  group_by(Site)%>%
-  mutate(max = max(WaterLevel))
+#ctd_depths = df.final%>%
+#  mutate(Date = as.Date(Date),
+#        Year = year(Date))%>%
+#  filter(Year %in% Years,
+#         Site %in% Sites,
+#         Reservoir == "BVR"
+#         )%>%
+#  group_by(Date,Site,Year)%>%
+#  dplyr::summarize(WaterLevel = max(Depth_m))%>%
+#  group_by(Site)%>%
+#  mutate(max = max(WaterLevel))
 
-export = df.final%>%
+export = df.final_export%>%
   filter(Reservoir=="BVR",
          Depth_m_orig==0.1)
 
 write.csv(export,"../../BVR drawdown/Data/CTD at 0.1m.csv",row.names = F)
 
-#library(RCurl)
-#sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
+  filter(Sensor=="ThermistorTemp")
 
-#sensor_depth = sensor%>%
-#  mutate(DateTime = as.POSIXct(TIMESTAMP),
-#         WaterLevel = Lvl_psi*0.70455)%>%
-#  filter(year(DateTime)==2022,
-#         WaterLevel>7.5)%>%
-#  arrange(DateTime)%>%
-#  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
-#  mutate(Date = as.Date(DateTime))%>%
-#  group_by(Date)%>%
-#  summarize(WaterLevel = mean(WaterLevel))%>%
-#  mutate(Year = year(Date),
-#         Site = 50)
+sensor_depth = cat_long%>%
+  mutate(Year=year(DateTime))%>%
+  filter(Reservoir_depth>5,
+         Year %in% c(2021,2022))%>%
+  mutate(Date = as.Date(DateTime),
+         max = max(Reservoir_depth))%>%
+  group_by(Date,Year)%>%
+  summarize(Reservoir_depth = max(Reservoir_depth),
+            max = unique(max))%>%
+  select(Date,Reservoir_depth,max,Year)
 
-#sensor_depth = sensor_depth%>%
-#  full_join(sensor_depth%>%mutate(Site=40,
-#                                  WaterLevel = WaterLevel-5.5))
+ctd_sensor = df.final%>%
+  select(-DateTime)%>%
+  left_join(sensor_depth%>%select(-max))%>%
+  group_by(Date)%>%
+  mutate(max_ctd = max(Depth_m),
+         dif = Reservoir_depth-max_ctd)%>%
+  mutate(Depth_m = Depth_m + dif)%>%
+  filter(!is.na(Depth_m))
+
+bottom = df.final%>%
+  select(-DateTime)%>%
+  left_join(sensor_depth%>%select(-max))%>%
+  filter(!is.na(Reservoir_depth))%>%
+  group_by(Date)%>%
+  filter(Depth_m == min(Depth_m))%>%
+  mutate(Depth_m = 0)
+  
+ctd_adj_depth = ctd_sensor%>%
+  full_join(bottom)
+
+
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 
@@ -204,7 +220,7 @@ for(i in 1:length(vars)){
   interp = data.frame(x = NA, y = NA, z = NA, Site = NA)
   for(site in Sites){
     for(year in Years){
-      bvr<- df.final%>%
+      bvr<- ctd_adj_depth%>%
         mutate(Year = year(Date),
                Date = as.Date(Date))%>%
         filter(Reservoir == "BVR",
@@ -244,15 +260,18 @@ for(i in 1:length(vars)){
            Year = year(x))%>%
     ggplot(aes(x=x))+
     geom_raster(aes(fill = z, y=y))+
-    geom_ribbon(data = ctd_depths, aes(x = Date, ymin= WaterLevel, ymax = max), fill = "white",color = "black",lwd=.2)+
-    scale_y_continuous(expand = c(0,0))+
+    scale_y_continuous(expand = c(0,0),limits = c(0, NA))+
     labs(x = "", y = "Height above sediments (m)")+
     scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(color_freya)}else{color_freya}, na.value="white", name = names[i])+
+    geom_ribbon(data = sensor_depth, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white",color = "black",lwd=.2)+
     geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
     scale_x_date(expand = c(0,0))+
-    theme(panel.border = element_rect(fill = NA))+
+    theme(panel.border = element_rect(fill = NA),
+          panel.background = element_rect(fill = "white"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank())+
     facet_grid(#rows= vars(Site),
                cols = vars(Year),
                scales = "free",

@@ -396,6 +396,9 @@ ghg = read.csv("./Data/GHG at 0.1m.csv")%>%
 
 metals = read.csv("./Data/Metals at 0.1m.csv")
 
+cmax_depth = read.csv("./Data/FP_CmaxDepth.csv")
+peak_width = read.csv("./Data/FP_PeakWidth.csv")
+
 sum_plot2 = chem_full%>%
   filter(Depth_m ==0.1)%>%
   select(DateTime, PO4_ugL,DOC_mgL,NO3NO2_ugL,NH4_ugL)%>%
@@ -425,7 +428,7 @@ maxes = sum_plot2%>%
 fac.labs <- c("SRP (ug/L)","Total phyto. (ug/L)","Cyanobacteria (ug/L)","pH","DOC (mg/L)","CO2","CH4","Thermocline depth (m)","Euphotic zone (m)","Turbidity (NTU)","SpCond_uScm","DO_mgL","NO3NO2_ugL","NH4_ugL","TFe_mgL")
 names(fac.labs) <- c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","co2_umolL","ch4_umolL","thermo", "Zeu","Turbidity_NTU","SpCond_uScm","DO_mgL","NO3NO2_ugL","NH4_ugL","TFe_mgL")
 
-jpeg("./Figs/Abby_money_plot_with_thermo.jpeg", res = 300, width = 6.5, height = 10, units = "in")
+jpeg("./Figs/Abby_money_plot_all.jpeg", res = 300, width = 6.5, height = 10, units = "in")
 sum_plot2%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
@@ -457,30 +460,32 @@ sum_plot3 = chem_full%>%
   full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Year,-Depth_m))%>%
   full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
-  select(DateTime, Turbidity_NTU,Zeu,DO_mgL,TFe_mgL,TMn_mgL)%>%
-  pivot_longer(cols = c(Turbidity_NTU,Zeu,DO_mgL,TFe_mgL,TMn_mgL))%>%
+  select(DateTime, TFe_mgL,TMn_mgL,DOsat_percent,thermo)%>%
+  pivot_longer(cols = c(TFe_mgL,TMn_mgL,DOsat_percent,thermo))%>%
   filter(!is.na(value),
          month(DateTime)>4,
          month(DateTime)<9)%>%
   mutate(Year = year(DateTime))%>%
-  mutate(name = factor(name, levels=c("Turbidity_NTU","Zeu","DO_mgL","TFe_mgL","TMn_mgL")))
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
 
 maxes = sum_plot3%>%
   group_by(name, Year)%>%
   summarize(max_date = DateTime[which.max(value)],
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
-  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
 
 # New facet label names for sum_plot
-fac.labs <- c("Euphotic\nzone (m)","Surface DO\n(mgL)","Turbidity (NTU)","Total Fe\n(mg/L)","Total Mn\n(mg/L)")
-names(fac.labs) <- c( "Zeu","DO_mgL","Turbidity_NTU","TFe_mgL","TMn_mgL")
+fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
+names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
 
-jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
+jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 4, units = "in")
 sum_plot3%>%
+  mutate(show_points = ifelse(name == "thermo","n","y"))%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
-  geom_point()+
+  geom_point(aes(alpha = show_points))+
   geom_line()+
+  scale_alpha_manual(values = c(0,1))+
   geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
@@ -499,41 +504,100 @@ dev.off()
 
 sum_plot4 = chem_full%>%
   filter(Depth_m ==0.1)%>%
-  select(DateTime, PO4_ugL,DOC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  select(DateTime, PO4_ugL,DOC_mgL,DIC_mgL,NO3NO2_ugL,NH4_ugL)%>%
   full_join(fluora_surface%>%
               filter(year(DateTime)%in% c(2021,2022)))%>%
   full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Reservoir))%>%
   full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
-  select(DateTime, PO4_ugL,DOC_mgL,TotalConc_ugL,pH,NH4_ugL,co2_umolL)%>%
-  pivot_longer(cols = c(PO4_ugL,DOC_mgL,TotalConc_ugL,pH,co2_umolL,NH4_ugL))%>%
+  select(DateTime, PO4_ugL,DOC_mgL,TotalConc_ugL,pH,NH4_ugL,co2_umolL,ch4_umolL,Bluegreens_ugL)%>%
+  pivot_longer(cols = c(PO4_ugL,DOC_mgL,TotalConc_ugL,pH,co2_umolL,ch4_umolL,NH4_ugL,Bluegreens_ugL))%>%
   filter(!is.na(value),
          month(DateTime)>4,
          month(DateTime)<9)%>%
-  mutate(Year = year(DateTime))%>%
-  mutate(name = factor(name, levels=c("PO4_ugL","TotalConc_ugL","pH","DOC_mgL","co2_umolL","NH4_ugL")))
+  mutate(Year = year(DateTime),
+         color = name,
+         name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name))%>%
+  mutate(name = factor(name, levels=c("PO4_ugL","Phyto","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")),
+         color = factor(color, levels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")))
 
 maxes = sum_plot4%>%
-  group_by(name, Year)%>%
+  group_by(name,color, Year)%>%
   summarize(max_date = DateTime[which.max(value)],
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
 
 # New facet label names for sum_plot
-fac.labs <- c("SRP (ug/L)","Total phyto.\n(ug/L)","pH","DOC (mg/L)","CO2 (µmol/L)","NH4 (µg/L)")
-names(fac.labs) <- c("PO4_ugL","TotalConc_ugL","pH","DOC_mgL", "co2_umolL","NH4_ugL")
+fac.labs <- c("SRP (ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("PO4_ugL", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
 
-jpeg("./Figs/Abby_money_plot_extend.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
+jpeg("./Figs/Abby_money_plot_doc.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
 sum_plot4%>%
-  ggplot(aes(x = DateTime, y = value, color = name))+
+  ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  scale_color_manual(values = c("grey50","#3DB158","blue","#8E4412","skyblue","magenta4"))+
+  scale_color_manual(values = c("grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4"))+
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside", legend.position = "none",
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(
+     ))+
+  ylab("")
+dev.off()
+
+sum_plot5 = chem_full%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, PO4_ugL,DOC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  full_join(fluora_surface%>%
+              filter(year(DateTime)%in% c(2021,2022)))%>%
+  full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Year,-Depth_m))%>%
+  full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
+  full_join(cmax_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(peak_width%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  select(DateTime, Turbidity_NTU, Zeu, CmaxDepth_TotalConc_ugL, CmaxDepth_Bluegreens_ugL, PeakWidth_TotalConc_m, PeakWidth_Bluegreens_m)%>%
+  pivot_longer(cols = c(Turbidity_NTU, Zeu, CmaxDepth_TotalConc_ugL, CmaxDepth_Bluegreens_ugL, PeakWidth_TotalConc_m, PeakWidth_Bluegreens_m))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime),
+         color = name,
+         name = ifelse(name%in%c("CmaxDepth_TotalConc_ugL", "CmaxDepth_Bluegreens_ugL"),"Cmax_depth",name),
+         name = ifelse(name%in%c("PeakWidth_TotalConc_m", "PeakWidth_Bluegreens_m"),"PeakWidth",name))%>%
+  mutate(name = factor(name, levels=c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")),
+         color = factor(color, levels=c("Turbidity_NTU", "Zeu","CmaxDepth_TotalConc_ugL", "CmaxDepth_Bluegreens_ugL", "PeakWidth_TotalConc_m", "PeakWidth_Bluegreens_m")))
+
+maxes = sum_plot5%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  filter(Year=="2022")%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date))
+
+# New facet label names for sum_plot
+fac.labs <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
+names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
+
+jpeg("./Figs/Abby_money_plot_phytos.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
+sum_plot5%>%
+  ggplot(aes(x = DateTime, y = value, color = color))+
+  geom_point()+
+  geom_line()+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(values = c("grey20","goldenrod","darkgreen","turquoise","darkgreen","turquoise"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+

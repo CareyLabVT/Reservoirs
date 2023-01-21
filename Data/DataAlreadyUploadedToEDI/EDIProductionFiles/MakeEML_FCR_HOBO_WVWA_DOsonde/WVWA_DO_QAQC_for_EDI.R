@@ -4,8 +4,9 @@
 ### updated again by DWH in September 2022 
 
 
-pacman::p_load(tidyverse, lubridate, xts, cowplot, plotly, scales, patchwork)
-library(zoo) #for na.approx
+library(tidyverse)
+library(lubridate)
+
 
 #### Check out HOBOs ####
 hobos <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/misc_data_files/FCR_HOBO_15_16_17_18_DWH_7jan23_forEDI.csv")
@@ -15,6 +16,10 @@ hobosplot <- hobos_long %>%
   ggplot(aes(x= DateTime, y = value, col = name))+
   geom_line()
 hobosplot
+
+#write hobos csv
+write.csv(hobos, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/FCR_hobos_2015_2018.csv", row.names = F)
+
 
 #### Looking at raw WVWA DO sonde on catwalk ####
 
@@ -162,7 +167,7 @@ dosonde_qaqc4 <- dosonde_qaqc3 %>%
   select(-DO1m, -DO1m_lag1, -DO1m_lead1, -DO8m, -DO8m_lag1, -DO8m_lead1 ) 
   
   
-#check QAQC3
+#check QAQC4
 ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO1m_QAQC))+
   geom_point()
 
@@ -175,32 +180,67 @@ ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO1m_Temp_QAQC))+
 ggplot(data = dosonde_qaqc4, aes(x = Date, y = DO8m_Temp_QAQC))+
   geom_point()
 
-#Clean up qaqc 3 and make final csv 
-head(dosonde_qaqc3)
 
-dosonde_qaqc3 <- dosonde_qaqc3[order(dosonde_qaqc3$Date),]
+#Identify maintenance dates found from 8m temp data 
+mainteance_dates <-  c(ymd_hms("2013-06-06 11:30:00"), ymd_hms("2013-06-06 11:45:00"), ymd_hms("2013-06-06 12:00:00"),
+               ymd_hms("2013-06-11 17:00:00"), ymd_hms("2013-06-20 12:15:00"), ymd_hms("2013-06-20 12:30:00"),
+               ymd_hms("2013-06-18 14:00:00"), ymd_hms("2013-06-18 14:15:00"), 
+               ymd_hms("2013-07-03 15:00:00"), ymd_hms("2013-07-03 15:15:00"),
+               ymd_hms("2013-08-12 17:00:00"), ymd_hms("2013-08-12 17:15:00"), ymd_hms("2013-08-12 17:30:00"), ymd_hms("2013-08-12 17:45:00"), 
+               ymd_hms("2013-10-18 10:51:50"),
+               ymd_hms("2014-06-24 14:45:00"), ymd_hms("2014-06-24 15:00:00"), ymd_hms("2014-06-24 15:15:00"),
+               ymd_hms("2014-08-09 16:15:00"),
+               ymd_hms("2014-08-19 07:30:00"), ymd_hms("2014-08-19 07:45:00"),
+               ymd_hms("2016-12-16 12:00:00")
+               )
+
+head(dosonde_qaqc4)
+
+dosonde_qaqc5 <- dosonde_qaqc4 %>% 
+  mutate(DO8m_QAQC = ifelse(Date %in% mainteance_dates, NA, DO8m_QAQC),
+         Flag_8m = ifelse(Date %in% mainteance_dates, 2, Flag_8m),
+         DO8m_Temp_QAQC = ifelse(Date %in% mainteance_dates, NA, DO8m_Temp_QAQC)
+         )
 
 
-dosonde_edi <- dosonde_qaqc3 %>% 
+
+#### make final csv ----
+head(dosonde_qaqc5)
+
+#order by date 
+dosonde_qaqc5 <- dosonde_qaqc5[order(dosonde_qaqc5$Date),]
+
+#join flag columns, and add site info columns
+dosonde_edi <- dosonde_qaqc5 %>% 
   mutate(Flag1m_Fin = ifelse(!is.na(Flag_1m_2SD), Flag_1m_2SD, Flag_1m),
          Flag8m_Fin = ifelse(!is.na(Flag_8m_2SD), Flag_8m_2SD, Flag_8m)
          ) %>% 
   mutate(Reservoir = "FCR",
          Site = 50,
          Date = as.character(Date)) %>% 
-  select(Reservoir, Site, Date, DO1m_Temperature2_C, DO1m_QAQC, DO8m_Temperature2_C, DO8m_QAQC, Flag1m_Fin, Flag8m_Fin)
+  select(Reservoir, Site, Date, DO1m_Temp_QAQC, DO1m_QAQC, DO8m_Temp_QAQC, DO8m_QAQC, Flag1m_Fin, Flag8m_Fin)
 
+#rename columns for final publication 
 dosonde_edi <- dosonde_edi %>% 
   rename(DateTime = Date,
-         Temp_C_1m = DO1m_Temperature2_C,
+         Temp_C_1m = DO1m_Temp_QAQC,
          DO_mgL_1m = DO1m_QAQC,
-         Temp_C_8m = DO8m_Temperature2_C,
+         Temp_C_8m = DO8m_Temp_QAQC,
          DO_mgL_8m = DO8m_QAQC,
          Flag_1m = Flag1m_Fin,
          Flag_8m = Flag8m_Fin
-  )
+         )
 
+#final check on data 
+dosonde_edi %>% 
+  select(c(1:7)) %>% 
+  pivot_longer(c(4:7)) %>% 
+  ggplot(aes(x = ymd_hms(DateTime), y = value))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")
 
+#write csv for publication 
+write.csv(dosonde_edi, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/FCR_DOsondes_2012_2018.csv", row.names = F)
 
 
 

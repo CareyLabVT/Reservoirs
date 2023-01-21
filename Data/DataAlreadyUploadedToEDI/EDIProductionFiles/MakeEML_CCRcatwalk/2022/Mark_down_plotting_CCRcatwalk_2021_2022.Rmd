@@ -943,7 +943,7 @@ ccrwater <- ccrwater[order(ccrwater$DateTime),]
                         EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
                         EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXOPressure_psi_9, EXODepth_m_9,EXOBattery_V_9,
                         EXOCablepower_V_9, EXOWiper_V_9,LvlPressure_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
-                        RECORD, CR3000_Batt_V, CR3000Panel_Temp_C,everything())
+                        RECORD, CR3000Battery_V, CR3000Panel_Temp_C,everything())
 
   
 write.csv(ccrwater, 'CCR_Catwalk_EDI_2021_2022.csv', row.names = FALSE)

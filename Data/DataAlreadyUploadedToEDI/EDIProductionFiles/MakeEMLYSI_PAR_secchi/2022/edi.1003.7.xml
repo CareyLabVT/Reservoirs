@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1003.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1003.7" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Secchi depth data and discrete depth profiles of photosynthetic active radiation, temperature, dissolved oxygen, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022</title>
+    <title>Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -57,9 +57,9 @@
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>georgeh0919@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2023-01-16</pubDate>
+    <pubDate>2023-01-21</pubDate>
     <abstract>
-      <para>Discrete depth profiles of temperature, dissolved oxygen, oxidation-reduction potential, conductivity, and pH were collected with various handheld YSI water quality probes and discrete depth profiles of photosynthetically active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam and other in-reservoir transects. YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek, inflows and outflows at Falling Creek, inflows and outflows at Beaverdam, and inflows at Carvins Cove. In 2021, YSI profiles were also collected from a littoral site in Beaverdam. Data were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February). </para>
+      <para>Discrete depth profiles of temperature, dissolved oxygen, oxidation-reduction potential, conductivity, specific conductance, and pH were collected with various handheld YSI water quality probes and discrete depth profiles of photosynthetic active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam and other in-reservoir transects. YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek, other inflows and outflows at Falling Creek, inflows and outflows at Beaverdam, and inflows at Carvins Cove. In 2021, YSI profiles were also collected from a littoral site in Beaverdam. Data were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February) in Falling Creek and Beaverdam Reservoirs; data coverage in the other three reservoirs varies among years. </para>
     </abstract>
     <keywordSet>
       <keyword>Carey Lab</keyword>
@@ -172,8 +172,8 @@
           <para>Photosynthetic active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m.</para>
           <para>ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2022 are from the handheld pH meter described above.</para>
           <para>Secchi disk depth was measured using a standard 20 cm diameter circular Secchi disk attached to a calibrated rope. Secchi depth measurements were made without the aid of a plexiglass viewer. The disk was lowered from the shaded side of the boat or dock, and the water depths at which the disk disappeared while being lowered and reappeared while being raised were averaged to determine Secchi depth.</para>
-          <para>YSI and PAR profiles, and Secchi depths, were collected approximately fortnightly in the spring months (Mar. - May), weekly in the summer and early autumn (Jun. - Sept.), and monthly in the late autumn and winter (Oct. - Feb.). Starting in 2018, times were included in this data product. Prior to 2018 or if the Flag_DateTime column is 1, the time recorded in the DateTime column is 12:00, as most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et al. 2018.</para>
-          <para>The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) with coordinates 37.312684, -79.816503 located near site 50 was also sampled at Beaverdam Reservoir in 2021. See site_descriptions.csv for coordinates and site descriptions of all sampling sites.</para>
+          <para>YSI and PAR profiles and Secchi depths were collected approximately fortnightly in the spring months (Mar. - May), weekly in the summer and early autumn (Jun. - Sept.), and monthly in the late autumn and winter (Oct. - Feb.) in Falling Creek and Beaverdam Reservoirs; data coverage in the other three reservoirs varies among years. Starting in 2018, times were included in this data product. Prior to 2018 or if the Flag_DateTime column is 1, the time recorded in the DateTime column is 12:00, as most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et al. 2018.</para>
+          <para>The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) located near site 50 was also sampled at Beaverdam Reservoir in 2021. See site_descriptions.csv for coordinates and site descriptions of all sampling sites.</para>
           <para>Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.</para>
         </description>
       </methodStep>
@@ -398,11 +398,11 @@
     </dataTable>
     <dataTable>
       <entityName>YSI_PAR_profiles_2013-2022.csv</entityName>
-      <entityDescription>Discrete depths of water temperature, dissolved oxygen, conductivity, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs</entityDescription>
+      <entityDescription>Discrete depths of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs</entityDescription>
       <physical>
         <objectName>YSI_PAR_profiles_2013-2022.csv</objectName>
-        <size unit="bytes">627203</size>
-        <authentication method="MD5">d8879cb387dd9843929f8cbeb10ac7cc</authentication>
+        <size unit="bytes">627202</size>
+        <authentication method="MD5">a0f6bfcb17308e7ddb15b979f31caf8e</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -549,7 +549,7 @@
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">58.2</maximum>
+                  <maximum exclusive="false">17.39</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -686,7 +686,7 @@
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">3.8</minimum>
+                  <minimum exclusive="false">4</minimum>
                   <maximum exclusive="false">9.88</maximum>
                 </bounds>
               </numericDomain>
@@ -1039,8 +1039,8 @@
       <entityDescription>YSI and PAR QAQC script for most recent data publication</entityDescription>
       <physical>
         <objectName>QAQC_YSI_PAR_2013_2022.R</objectName>
-        <size unit="bytes">9857</size>
-        <authentication method="MD5">5210f41d23f9dd199e9eda4cbeeecf42</authentication>
+        <size unit="bytes">10279</size>
+        <authentication method="MD5">4b1a30ed5c07e686638d515445b0f5c2</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

@@ -174,6 +174,15 @@ ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 5] <- 5
 #manually switch the one pH value < 4 to have a 2 flag for instrument malfunction
 ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
 
+#then set that value to NA
+ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
+
+#manually change a few digitizing errors in 2020
+ysi$DO_mgL[as.Date(ysi$DateTime)=="2020-08-17" & ysi$Reservoir=="FCR" & ysi$Depth_m==2.4] <- 5.82
+
+ysi$DO_mgL[as.Date(ysi$DateTime)=="2020-05-25" & ysi$Reservoir=="FCR" & ysi$Depth_m==4.0] <- 5.05
+ysi$DOsat_percent[as.Date(ysi$DateTime)=="2020-05-25" & ysi$Reservoir=="FCR" & ysi$Depth_m==4.0] <- 46.6
+
 write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
 
 #### YSI diagnostic plots ####

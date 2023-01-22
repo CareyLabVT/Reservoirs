@@ -85,7 +85,7 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
 # Run this function when ready for REAL EDI environment
 make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
          dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
+         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data",
          eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
          data.table = c("Secchi_depth_2013-2022.csv",
                         "YSI_PAR_profiles_2013-2022.csv",
@@ -99,7 +99,8 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.198.10") 
+         package.id = "edi.198.11")  #need a new one each year         
         #2022 is 198.9 or 198.10 (republished)
         #2023 is 198.11
+        #2024 is 198.12
 

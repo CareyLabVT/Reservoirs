@@ -1,5 +1,5 @@
 Author Contribution Statement-
-CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. DWH was the point person for this data set for 2021-2022. He installed the sensors, helped with sensor maintenance, and led field sampling at CCR. ABP is a co-point person for 2021-2022 as lead of sensor maintenance and data management, and helped with field sampling. FEO helped with writing of metadata and data publication to EDI. 
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. DWH was the point person for this data set for 2021-2022. He installed the sensors, helped with sensor maintenance, and led field sampling at CCR. ABP is a co-point person for 2021-2022 as lead of sensor maintenance and data management, and helped with field sampling. 
 
 Acknowledgments and historical contributions:
 This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and to Connor Gnasso for assistance with compiling HOBO thermistor data.

@@ -180,7 +180,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.15", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.16", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

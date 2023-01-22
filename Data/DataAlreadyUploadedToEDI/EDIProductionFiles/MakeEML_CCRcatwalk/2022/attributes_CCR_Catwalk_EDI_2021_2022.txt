@@ -4,17 +4,17 @@ Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the res
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_4	water temperature measured by thermistor at position 4 (3 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_5	water temperature measured by thermistor at position 5 (4 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_6	water temperature measured by thermistor at position 6 (5 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_7	water temperature measured by thermistor at position 7 (6 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_8	water temperature measured by thermistor at position 8 (7 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meter below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meter below thermistor 1; located at 0.5 m above sediments)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_4	water temperature measured by thermistor at position 4 (3 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_5	water temperature measured by thermistor at position 5 (4 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_6	water temperature measured by thermistor at position 6 (5 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_7	water temperature measured by thermistor at position 7 (6 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_8	water temperature measured by thermistor at position 8 (7 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meters below thermistor 1; located at 0.5 m above sediments)	numeric	celsius		NA	value is missing
 EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
 EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
 EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
@@ -72,8 +72,8 @@ Flag_EXODOsat_percent_1	Data flag for EXO2 dissolved oxygen saturation data at 1
 Flag_EXODO_mgL_1	Data flag for EXO2 dissolved oxygen observed data at 1.5 m ( EXODO_mgL_1)	categorical 			NA	value is missing
 Flag_EXOChla_RFU_1	Data flag for chlorophyll data measured in RFU at 1.5 m (EXOChla_RFU_1)	categorical 			NA	value is missing
 Flag_EXOChla_ugL_1	Data flag for chlorophyll data measured in micrograms per a liter at 1.5 m (EXOChla_ugL_1)	categorical 			NA	value is missing
-Flag_EXOBGAPC_RFU_1	Data flag for phycocyanin data measured in RFU at 1.5 m ( EXOBGAPC_RFU_1) 	categorical 			NA	value is missing
-Flag_EXOBGAPC_ugL_1	Data flag for phycocyanin data measured in micrograms per a liter at 1.5 m (EXOBGAPC _ugL_1) 	categorical 			NA	value is missing
+Flag_EXOBGAPC_RFU_1	Data flag for phycocyanin data measured in RFU at 1.5 m ( EXOBGAPC_RFU_1)	categorical 			NA	value is missing
+Flag_EXOBGAPC_ugL_1	Data flag for phycocyanin data measured in micrograms per a liter at 1.5 m (EXOBGAPC _ugL_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_RFU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_RFU_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_QSU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_QSU_1)	categorical 			NA	value is missing
 Flag_EXOPressure_psi_1	Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)	categorical 			NA	value is missing

@@ -7,6 +7,17 @@
 library(tidyverse)
 library(lubridate)
 
+# Flag values
+# 0: no flag
+# 1: value removed due to maintenance and set to NA
+# 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+# 3: negative values set to 0
+# 4: value removed due to fouling and set to NA
+# 5: questionable value due to potential fouling
+# 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function     to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+# 7: missing data
+# 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+
 
 #### Check out HOBOs ####
 hobos <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/misc_data_files/FCR_HOBO_15_16_17_18_DWH_7jan23_forEDI.csv")
@@ -17,8 +28,20 @@ hobosplot <- hobos_long %>%
   geom_line()
 hobosplot
 
+hobos_flags <- hobos %>% 
+  mutate(Flag_wtr_1 = ifelse(is.na(wtr_1), 7, 0),
+         Flag_wtr_2 = ifelse(is.na(wtr_2), 7, 0),
+         Flag_wtr_3 = ifelse(is.na(wtr_3), 7, 0),
+         Flag_wtr_4 = ifelse(is.na(wtr_4), 7, 0),
+         Flag_wtr_5 = ifelse(is.na(wtr_5), 7, 0),
+         Flag_wtr_6 = ifelse(is.na(wtr_6), 7, 0),
+         Flag_wtr_7 = ifelse(is.na(wtr_7), 7, 0),
+         Flag_wtr_8 = ifelse(is.na(wtr_8), 7, 0),
+         Flag_wtr_9.3 = ifelse(is.na(wtr_9.3), 7, 0)
+         )
+
 #write hobos csv
-write.csv(hobos, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/FCR_hobos_2015_2018.csv", row.names = F)
+write.csv(hobos_flags, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCR_HOBO_WVWA_DOsonde/FCR_hobos_2015_2018.csv", row.names = F)
 
 
 #### Looking at raw WVWA DO sonde on catwalk ####
@@ -64,17 +87,6 @@ summary(dosonde$Date)
 
 
 #### QAQC DO and Temp data ####
-
-# Flag values
-# 0: no flag
-# 1: value removed due to maintenance and set to NA
-# 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
-# 3: negative values set to 0
-# 4: value removed due to fouling and set to NA
-# 5: questionable value due to potential fouling
-# 6: very questionable value due to potential fouling. Values adjusted using a linear or square root function     to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
-# 7: missing data
-# 8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
 
 #remove extreme outliers
 dosonde_qaqc1 <- dosonde %>% 
@@ -191,7 +203,11 @@ mainteance_dates <-  c(ymd_hms("2013-06-06 11:30:00"), ymd_hms("2013-06-06 11:45
                ymd_hms("2014-06-24 14:45:00"), ymd_hms("2014-06-24 15:00:00"), ymd_hms("2014-06-24 15:15:00"),
                ymd_hms("2014-08-09 16:15:00"),
                ymd_hms("2014-08-19 07:30:00"), ymd_hms("2014-08-19 07:45:00"),
-               ymd_hms("2016-12-16 12:00:00")
+               ymd_hms("2016-12-16 12:00:00"),
+               ymd_hms("2013-10-09 11:27:05"),
+               ymd_hms("2014-08-19 08:00:00"),
+               ymd_hms("2015-11-09 16:00:00"),
+               ymd_hms("2017-03-13 12:45:00")
                )
 
 head(dosonde_qaqc4)

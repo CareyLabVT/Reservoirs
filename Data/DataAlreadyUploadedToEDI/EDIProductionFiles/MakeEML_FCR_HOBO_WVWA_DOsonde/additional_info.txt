@@ -1,0 +1,1 @@
+Authorship Contribution Statement: CCC developed and led the reservoir monitoring program with the WVWA. DWH led data collation, QAQC, and publishing of these data. PAG and CCC led the deployment of the oxygen and temperature Insite sensors. RPM led the deployment of the HOBO temperature loggers. ABG, MEL, RPM, and ABP led field sensor maintenance and data management.

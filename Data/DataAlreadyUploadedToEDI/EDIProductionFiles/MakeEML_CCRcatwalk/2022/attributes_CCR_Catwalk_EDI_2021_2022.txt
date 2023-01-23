@@ -1,98 +1,98 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character				
-Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform "	numeric	dimensionless			
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss		
-ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius			
-ThermistorTemp_C_2	water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_4	water temperature measured by thermistor at position 4 (3 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_5	water temperature measured by thermistor at position 5 (4 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_6	water temperature measured by thermistor at position 6 (5 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_7	water temperature measured by thermistor at position 7 (6 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_8	water temperature measured by thermistor at position 8 (7 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meter below thermistor 1)	numeric	celsius			
-ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meter below thermistor 1; located at 0.5 m above sediments)	numeric	celsius			
-EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO Sonde	numeric	celsius			
-EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter			
-EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter			
-EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.5 m as measured by the EXO Sonde as measured by the EXO2 Sonde	numeric	milligramsPerLiter			
-EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.5 m as measured by the EXO2 Sonde	numeric	dimensionless			
-EXODO_mgL_1	Dissolved Oxygen at 1.5 m as measured by the EXO2 Sonde	numeric	milligramsPerLiter			
-EXOChla_RFU_1	Total Chlorophyll a at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOChla_ugL_1	Total Chlorophyll a in at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
-EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter			
-EXOfDOM_RFU_1	Fluorescent  Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits			
-EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits			
-EXOPressure_psi_1	Gauge pressure of EXO2 sonde at 1.5 m 	numeric	psig			
-EXODepth_m_1	Depth of the EXO sonde at 1.5 m measured by the EXO2 sonde.	numeric	meter			
-EXOBattery_V_1	Voltage of the EXO2 sonde at 1.5 m internal batteries.	numeric	volt			
-EXOCablepower_V_1	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO2 sonde at 1.5 m.	numeric	volt			
-EXOWiper_V_1	Wiper brush cleaning system activation signal as measured by the EXO sonde at 1.5 m	numeric	volt			
-EXOTemp_C_9	water temperature at 9 m as measured by the EXO3 Sonde	numeric	celsius			
-EXOCond_uScm_9	Conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter			
-EXOSpCond_uScm_9	Specific conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter			
-EXOTDS_mgL_9	Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter			
-EXODOsat_percent_9	Dissolved Oxygen percent saturation at 9 m as measured by the EXO3 Sonde	numeric	dimensionless			
-EXODO_mgL_9	Dissolved Oxygen at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter			
-EXOfDOM_RFU_9	Fluorescent  Dissolved Organic Matter in RFU at 9 m as measured by the EXO3 Sonde	numeric	RelativeFluorescenceUnits			
-EXOfDOM_QSU_9	Fluorescent Dissolved Organic Matter in QSU at 9 m as measured by the EXO3 Sonde	numeric	QuinineSulfateUnits			
-EXOPressure_psi_9	Gauge pressure of EXO3 sonde at 9 m 	numeric	psig			
-EXODepth_m_9	Depth of the EXO sonde at 9 m measured by the EXO3 sonde	numeric	meter			
-EXOBattery_V_9	Voltage of the EXO3 sonde at 9 m internal batteries	numeric	volt			
-EXOCablepower_V_9	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO3 sonde at 9 m.	numeric	volt			
-EXOWiper_V_9	Wiper brush cleaning system activation signal as measured by the EXO sonde at 9 m	numeric	volt			
-LvlPressure_psi_13	"Gauge pressure of EXO sonde at  position 13, measured relative to ambient atmospheric pressure"	numeric	psig			
-LvlDepth_m_13	Depth of the pressure sensor at position 13 in meters calculated by LvlPressure_psi_0m_13 * 0.70455	numeric	meter			
-LvlTemp_C_13	water temperature at position 13 as measured by the water level logger	numeric	celsius			
-RECORD	Number of observations that changes when the program is restarted	numeric	number			
-CR3000_Batt_V	The volts in the rechargeable battery for the CR3000 datalogger	numeric	volt			
-CR3000Panel_Temp_C	Temperature measured from the sensor inside the CR3000 datalogger	numeric	celsius			
-Flag_ThermistorTemp_C_1	Data flag for temperature data at position 1 (ThermistorTemp_C_1)	categorical 				
-Flag_ThermistorTemp_C_2	Data flag for temperature data at position 2 (ThermistorTemp_C_2)	categorical 				
-Flag_ThermistorTemp_C_3	Data flag for temperature data at position 3 (ThermistorTemp_C_3)	categorical 				
-Flag_ThermistorTemp_C_4	Data flag for temperature data at position 4 (ThermistorTemp_C_4)	categorical 				
-Flag_ThermistorTemp_C_5	Data flag for temperature data at position 5 (ThermistorTemp_C_5)	categorical 				
-Flag_ThermistorTemp_C_6	Data flag for temperature data at position 6 (ThermistorTemp_C_6)	categorical 				
-Flag_ThermistorTemp_C_7	Data flag for temperature data at position 7 (ThermistorTemp_C_7)	categorical 				
-Flag_ThermistorTemp_C_8	Data flag for temperature data at position 8 (ThermistorTemp_C_8)	categorical 				
-Flag_ThermistorTemp_C_9	Data flag for temperature data at position 9 (ThermistorTemp_C_9)	categorical 				
-Flag_ThermistorTemp_C_10	Data flag for temperature data at position 10 (ThermistorTemp_C_10)	categorical 				
-Flag_ThermistorTemp_C_11	Data flag for temperature data at position 11 (ThermistorTemp_C_11)	categorical 				
-Flag_ThermistorTemp_C_12	Data flag for temperature data at position 12 (ThermistorTemp_C_12)	categorical 				
-Flag_ThermistorTemp_C_13	Data flag for temperature data at position 13 (ThermistorTemp_C_13)	categorical 				
-Flag_EXOTemp_C_1	Data flag for EXO2 Temp data at 1.5 m (EXOTemp_C_1)	categorical 				
-Flag_EXOCond_uScm_1	Data flag for conductivity data at 1.5 m (EXOCond_uScm_1)	categorical 				
-Flag_EXOSpCond_uScm_1	Data flag for conductivity and specific conductivity data (EXOSpCond_uScm_1)	categorical 				
-Flag_EXOTDS_mgL_1	Data flag for total dissolved solids data at 1.5 m (EXOTDS_mgL_1)	categorical 				
-Flag_EXODOsat_percent_1	Data flag for EXO2 dissolved oxygen saturation data at 1.5 m (EXODOsat_percent_1)	categorical 				
-Flag_EXODO_mgL_1	Data flag for EXO2 dissolved oxygen observed data at 1.5 m ( EXODO_mgL_1)	categorical 				
-Flag_EXOChla_RFU_1	Data flag for chlorophyll data measured in RFU at 1.5 m (EXOChla_RFU_1)	categorical 				
-Flag_EXOChla_ugL_1	Data flag for chlorophyll data measured in micrograms per a liter at 1.5 m (EXOChla_ugL_1)	categorical 				
-Flag_EXOBGAPC_RFU_1	Data flag for phycocyanin data measured in RFU at 1.5 m ( EXOBGAPC_RFU_1) 	categorical 				
-Flag_EXOBGAPC_ugL_1	Data flag for phycocyanin data measured in micrograms per a liter at 1.5 m (EXOBGAPC _ugL_1) 	categorical 				
-Flag_EXOfDOM_RFU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_RFU_1)	categorical 				
-Flag_EXOfDOM_QSU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_QSU_1)	categorical 				
-Flag_EXOPressure_psi_1	Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)	categorical 				
-Flag_EXODepth_m_1	Data flag for EXO2 depth sensor at 1.5 m (EXODepth_m_1)	categorical 				
-Flag_EXOBattery_V_1	Data flag for EXO2 internal battery at 1.5 m (EXOBattery_V_1)	categorical 				
-Flag_EXOCablepower_V_1	Data flag for EXO2 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_1)	categorical 				
-Flag_EXOWiper_V_1	Data flag for the EXO2 wiper at 1.5 m (EXOWiper_V_1)	categorical 				
-Flag_EXOTemp_C_9	Data flag for EXO3 Temp data at 9 m (EXOTemp_C_9)	categorical 				
-Flag_EXOCond_uScm_9	Data flag for conductivity data at 9 m (EXOCond_uScm_9)	categorical 				
-Flag_EXOSpCond_uScm_9	Data flag for conductivity and specific conductivity data (EXOSpCond_uScm_9)	categorical 				
-Flag_EXOTDS_mgL_9	Data flag for total dissolved solids data at 9 m (EXOTDS_mgL_9)	categorical 				
-Flag_EXODOsat_percent_9	Data flag for EXO3 dissolved oxygen saturation data at 9 m (EXODOsat_percent_9)	categorical 				
-Flag_EXODO_mgL_9	Data flag for EXO3 dissolved oxygen observed data at 9 m (EXODO_mgL_9)	categorical 				
-Flag_EXOfDOM_RFU_9	Data flag for fluorescent dissolved organic matter data at 9 m (EXOfDOM_RFU_9)	categorical 				
-Flag_EXOfDOM_QSU_9	Data flag for fluorescent dissolved organic matter data at 9 m (EXOfDOM_QSU_9)	categorical 				
-Flag_EXOPressure_psi_9	Data flag for EXO3 pressure sensor at 9 m (EXOPressure_psi_9)	categorical 				
-Flag_EXODepth_m_9	Data flag for EXO3 depth sensor at 9 m (EXODepth_m_9)	categorical 				
-Flag_EXOBattery_V_9	Data flag for EXO3 internal battery at 9 m (EXOBattery_V_9)	categorical 				
-Flag_EXOCablepower_V_9	Data flag for EXO3 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_9)	categorical 				
-Flag_EXOWiper_V_9	Data flag for the EXO3 wiper at 9 m (EXOWiper_V_9)	categorical 				
-Flag_LvlPressure_psi_13	Data flag for pressure sensors at position 13 (LvlPressure_psi_13)	categorical 				
-Flag_LvlTemp_C_13	Data flag for water temperature collected by water level logger at position 13 (LvlTemp_C_13) 	categorical 				
+Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
+Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform "	numeric	dimensionless		NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_2	water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_4	water temperature measured by thermistor at position 4 (3 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_5	water temperature measured by thermistor at position 5 (4 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_6	water temperature measured by thermistor at position 6 (5 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_7	water temperature measured by thermistor at position 7 (6 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_8	water temperature measured by thermistor at position 8 (7 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meters below thermistor 1)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meters below thermistor 1; located at 0.5 m above sediments)	numeric	celsius		NA	value is missing
+EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
+EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.5 m as measured by the EXO Sonde as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.5 m as measured by the EXO2 Sonde	numeric	dimensionless		NA	value is missing
+EXODO_mgL_1	Dissolved Oxygen at 1.5 m as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOChla_RFU_1	Total Chlorophyll a at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOChla_ugL_1	Total Chlorophyll a in at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
+EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
+EXOfDOM_RFU_1	Fluorescent Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
+EXOPressure_psi_1	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
+EXODepth_m_1	Depth of the EXO sonde at 1.5 m measured by the EXO2 sonde.	numeric	meter		NA	value is missing
+EXOBattery_V_1	Voltage of the EXO2 sonde at 1.5 m internal batteries.	numeric	volt		NA	value is missing
+EXOCablepower_V_1	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO2 sonde at 1.5 m.	numeric	volt		NA	value is missing
+EXOWiper_V_1	Wiper brush cleaning system activation signal as measured by the EXO sonde at 1.5 m	numeric	volt		NA	value is missing
+EXOTemp_C_9	water temperature at 9 m as measured by the EXO3 Sonde	numeric	celsius		NA	value is missing
+EXOCond_uScm_9	Conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_9	Specific conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOTDS_mgL_9	Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXODOsat_percent_9	Dissolved Oxygen percent saturation at 9 m as measured by the EXO3 Sonde	numeric	dimensionless		NA	value is missing
+EXODO_mgL_9	Dissolved Oxygen at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOfDOM_RFU_9	Fluorescent Dissolved Organic Matter in RFU at 9 m as measured by the EXO3 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_9	Fluorescent Dissolved Organic Matter in QSU at 9 m as measured by the EXO3 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
+EXOPressure_psi_9	Gauge pressure of EXO3 sonde at 9 m	numeric	psig		NA	value is missing
+EXODepth_m_9	Depth of the EXO sonde at 9 m measured by the EXO3 sonde	numeric	meter		NA	value is missing
+EXOBattery_V_9	Voltage of the EXO3 sonde at 9 m internal batteries	numeric	volt		NA	value is missing
+EXOCablepower_V_9	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO3 sonde at 9 m.	numeric	volt		NA	value is missing
+EXOWiper_V_9	Wiper brush cleaning system activation signal as measured by the EXO sonde at 9 m	numeric	volt		NA	value is missing
+LvlPressure_psi_13	"Gauge pressure of EXO sonde at position 13, measured relative to ambient atmospheric pressure"	numeric	psig		NA	value is missing
+LvlDepth_m_13	Depth of the pressure sensor at position 13 in meters calculated by LvlPressure_psi_0m_13 * 0.70455	numeric	meter		NA	value is missing
+LvlTemp_C_13	water temperature at position 13 as measured by the water level logger	numeric	celsius		NA	value is missing
+RECORD	Number of observations that changes when the program is restarted	numeric	number		NA	value is missing
+CR3000Battery_V	The volts in the rechargeable battery for the CR3000 datalogger	numeric	volt		NA	value is missing
+CR3000Panel_Temp_C	Temperature measured from the sensor inside the CR3000 datalogger	numeric	celsius		NA	value is missing
+Flag_ThermistorTemp_C_1	Data flag for temperature data at position 1 (ThermistorTemp_C_1)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_2	Data flag for temperature data at position 2 (ThermistorTemp_C_2)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_3	Data flag for temperature data at position 3 (ThermistorTemp_C_3)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_4	Data flag for temperature data at position 4 (ThermistorTemp_C_4)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_5	Data flag for temperature data at position 5 (ThermistorTemp_C_5)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_6	Data flag for temperature data at position 6 (ThermistorTemp_C_6)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_7	Data flag for temperature data at position 7 (ThermistorTemp_C_7)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_8	Data flag for temperature data at position 8 (ThermistorTemp_C_8)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_9	Data flag for temperature data at position 9 (ThermistorTemp_C_9)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_10	Data flag for temperature data at position 10 (ThermistorTemp_C_10)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_11	Data flag for temperature data at position 11 (ThermistorTemp_C_11)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_12	Data flag for temperature data at position 12 (ThermistorTemp_C_12)	categorical 			NA	value is missing
+Flag_ThermistorTemp_C_13	Data flag for temperature data at position 13 (ThermistorTemp_C_13)	categorical 			NA	value is missing
+Flag_EXOTemp_C_1	Data flag for EXO2 Temp data at 1.5 m (EXOTemp_C_1)	categorical 			NA	value is missing
+Flag_EXOCond_uScm_1	Data flag for conductivity data at 1.5 m (EXOCond_uScm_1)	categorical 			NA	value is missing
+Flag_EXOSpCond_uScm_1	Data flag for conductivity and specific conductivity data (EXOSpCond_uScm_1)	categorical 			NA	value is missing
+Flag_EXOTDS_mgL_1	Data flag for total dissolved solids data at 1.5 m (EXOTDS_mgL_1)	categorical 			NA	value is missing
+Flag_EXODOsat_percent_1	Data flag for EXO2 dissolved oxygen saturation data at 1.5 m (EXODOsat_percent_1)	categorical 			NA	value is missing
+Flag_EXODO_mgL_1	Data flag for EXO2 dissolved oxygen observed data at 1.5 m ( EXODO_mgL_1)	categorical 			NA	value is missing
+Flag_EXOChla_RFU_1	Data flag for chlorophyll data measured in RFU at 1.5 m (EXOChla_RFU_1)	categorical 			NA	value is missing
+Flag_EXOChla_ugL_1	Data flag for chlorophyll data measured in micrograms per a liter at 1.5 m (EXOChla_ugL_1)	categorical 			NA	value is missing
+Flag_EXOBGAPC_RFU_1	Data flag for phycocyanin data measured in RFU at 1.5 m ( EXOBGAPC_RFU_1)	categorical 			NA	value is missing
+Flag_EXOBGAPC_ugL_1	Data flag for phycocyanin data measured in micrograms per a liter at 1.5 m (EXOBGAPC _ugL_1)	categorical 			NA	value is missing
+Flag_EXOfDOM_RFU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_RFU_1)	categorical 			NA	value is missing
+Flag_EXOfDOM_QSU_1	Data flag for fluorescent dissolved organic matter data at 1.5 m (EXOfDOM_QSU_1)	categorical 			NA	value is missing
+Flag_EXOPressure_psi_1	Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)	categorical 			NA	value is missing
+Flag_EXODepth_m_1	Data flag for EXO2 depth sensor at 1.5 m (EXODepth_m_1)	categorical 			NA	value is missing
+Flag_EXOBattery_V_1	Data flag for EXO2 internal battery at 1.5 m (EXOBattery_V_1)	categorical 			NA	value is missing
+Flag_EXOCablepower_V_1	Data flag for EXO2 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_1)	categorical 			NA	value is missing
+Flag_EXOWiper_V_1	Data flag for the EXO2 wiper at 1.5 m (EXOWiper_V_1)	categorical 			NA	value is missing
+Flag_EXOTemp_C_9	Data flag for EXO3 Temp data at 9 m (EXOTemp_C_9)	categorical 			NA	value is missing
+Flag_EXOCond_uScm_9	Data flag for conductivity data at 9 m (EXOCond_uScm_9)	categorical 			NA	value is missing
+Flag_EXOSpCond_uScm_9	Data flag for conductivity and specific conductivity data (EXOSpCond_uScm_9)	categorical 			NA	value is missing
+Flag_EXOTDS_mgL_9	Data flag for total dissolved solids data at 9 m (EXOTDS_mgL_9)	categorical 			NA	value is missing
+Flag_EXODOsat_percent_9	Data flag for EXO3 dissolved oxygen saturation data at 9 m (EXODOsat_percent_9)	categorical 			NA	value is missing
+Flag_EXODO_mgL_9	Data flag for EXO3 dissolved oxygen observed data at 9 m (EXODO_mgL_9)	categorical 			NA	value is missing
+Flag_EXOfDOM_RFU_9	Data flag for fluorescent dissolved organic matter data at 9 m (EXOfDOM_RFU_9)	categorical 			NA	value is missing
+Flag_EXOfDOM_QSU_9	Data flag for fluorescent dissolved organic matter data at 9 m (EXOfDOM_QSU_9)	categorical 			NA	value is missing
+Flag_EXOPressure_psi_9	Data flag for EXO3 pressure sensor at 9 m (EXOPressure_psi_9)	categorical 			NA	value is missing
+Flag_EXODepth_m_9	Data flag for EXO3 depth sensor at 9 m (EXODepth_m_9)	categorical 			NA	value is missing
+Flag_EXOBattery_V_9	Data flag for EXO3 internal battery at 9 m (EXOBattery_V_9)	categorical 			NA	value is missing
+Flag_EXOCablepower_V_9	Data flag for EXO3 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_9)	categorical 			NA	value is missing
+Flag_EXOWiper_V_9	Data flag for the EXO3 wiper at 9 m (EXOWiper_V_9)	categorical 			NA	value is missing
+Flag_LvlPressure_psi_13	Data flag for pressure sensors at position 13 (LvlPressure_psi_13)	categorical 			NA	value is missing
+Flag_LvlTemp_C_13	Data flag for water temperature collected by water level logger at position 13 (LvlTemp_C_13) 	categorical 			NA	value is missing

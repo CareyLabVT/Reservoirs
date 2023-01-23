@@ -11,3 +11,12 @@ wtr_6	Water temperature at 6 meter depth as measured by the thermistor	numeric	c
 wtr_7	Water temperature at 7 meter depth as measured by the thermistor	numeric	celsius		NA	value is missing
 wtr_8	Water temperature at 8 meter depth as measured by the thermistor	numeric	celsius		NA	value is missing
 wtr_9.3	Water temperature at 9.3 meter depth as measured by the thermistor	numeric	celsius		NA	value is missing
+Flag_wtr_1	Data flag for wtr_1	categorical			NA	value is missing
+Flag_wtr_2	Data flag for wtr_2	categorical			NA	value is missing
+Flag_wtr_3	Data flag for wtr_3	categorical			NA	value is missing
+Flag_wtr_4	Data flag for wtr_4	categorical			NA	value is missing
+Flag_wtr_5	Data flag for wtr_5	categorical			NA	value is missing
+Flag_wtr_6	Data flag for wtr_6	categorical			NA	value is missing
+Flag_wtr_7	Data flag for wtr_7	categorical			NA	value is missing
+Flag_wtr_8	Data flag for wtr_8	categorical			NA	value is missing
+Flag_wtr_9.3	Data flag for wtr_9.3	categorical			NA	value is missing

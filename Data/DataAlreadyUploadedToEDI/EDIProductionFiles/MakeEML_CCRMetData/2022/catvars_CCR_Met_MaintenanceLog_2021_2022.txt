@@ -23,6 +23,6 @@ Parameter	RH	Relative humidity which is in column 9
 Parameter	SR01Dn_Avg	Shortwave down sensor which is in column 14
 Parameter	SR01Up_Avg	Shortwave up sensor which is in column 13
 Parameter	WindDir	Wind direction which is in column 12
-Parameter	WindSpeed	Average wind speed which is in column 
+Parameter	WindSpeed	Average wind speed which is in column 11
 Reservoir	CCR	Carvins Cove Reservoir
 Station	CCRM	Meteorological Station at Carvins Cove Reservoir

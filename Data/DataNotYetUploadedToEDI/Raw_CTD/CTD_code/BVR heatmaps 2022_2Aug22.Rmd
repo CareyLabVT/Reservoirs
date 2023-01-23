@@ -96,10 +96,10 @@ ysi_formatted = ysi%>%
          "Temp_C",
          "pH")%>%
   #We are only using YSI to fill in gaps in CTD data. Select data for those gaps here
-  filter((Date>=as.Date("2021-07-01")&Date<as.Date("2021-12-01")),
-         )%>%
-  mutate(DO_mgL = ifelse(Date<=as.Date("2021-07-01"),NA,DO_mgL),
-         DO_pSat = ifelse(Date<=as.Date("2021-07-01"),NA,DOSat))%>%
+  filter(year(Date)==2021)%>%
+  mutate(DO_mgL = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,DO_mgL),
+         DO_pSat = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,DOSat),
+         Temp_C = ifelse(Date<=as.Date("2021-07-01")|Date>=as.Date("2021-12-01"),NA,Temp_C))%>%
   mutate(method = "ysi")%>%
   select(-DOSat)%>%
   filter(Date!="2021-05-31"|Depth_m<=10)
@@ -108,25 +108,28 @@ Years = c(2021,2022)
 Sites = c(50)
 
 # Combine CTD and YSI data
-df.final = df.final.raw%>%
+df.final_export = df.final.raw%>%
   mutate(Date = as.Date(Date),
          Year = year(Date))%>%
   filter(Year %in% Years,
          Site %in% Sites,
          Reservoir == "BVR"
          )%>%
-  mutate(DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL))%>%
-  full_join(ysi_formatted%>%dplyr::rename(pH_ysi = pH, DO_mgL_ysi = DO_mgL, DO_pSat_ysi = DO_pSat))%>%
+  mutate(DO_mgL = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DO_mgL),
+         DOsat_percent = ifelse(Date>as.Date("2021-07-01")&Date<as.Date("2021-12-01"),NA,DOsat_percent))%>%
+  full_join(ysi_formatted%>%dplyr::rename(pH_ysi = pH, DO_mgL_ysi = DO_mgL, DO_pSat_ysi = DO_pSat,Temp_C_ysi = Temp_C))%>%
   group_by(Date, Site)%>%
-  mutate(max = max(Depth_m))%>%
-  filter(max>5)%>%
-  mutate(pH=ifelse(is.na(pH),pH_ysi,pH),
+  mutate(max = max(Depth_m),
+         pH=ifelse(is.na(pH),pH_ysi,pH),
          DO_mgL=ifelse(is.na(DO_mgL),DO_mgL_ysi,DO_mgL),
-         DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent))%>%
-  mutate(Depth_m_orig = Depth_m,
+         DOsat_percent=ifelse(is.na(DOsat_percent),DO_pSat_ysi,DOsat_percent),
+         Depth_m_orig = Depth_m,
          Depth_m = max-Depth_m,
          Turbidity_NTU=ifelse(Turbidity_NTU>10&Depth_m<0.3,NA,Turbidity_NTU),
          Year = year(Date)) #Sediment got mixed up in early 2022
+
+df.final = df.final_export%>%
+  filter(max>5)
 
 #ctd_depths = df.final%>%
 #  mutate(Date = as.Date(Date),
@@ -140,7 +143,7 @@ df.final = df.final.raw%>%
 #  group_by(Site)%>%
 #  mutate(max = max(WaterLevel))
 
-export = df.final%>%
+export = df.final_export%>%
   filter(Reservoir=="BVR",
          Depth_m_orig==0.1)
 

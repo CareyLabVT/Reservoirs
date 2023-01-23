@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir, CCR=Carvins Cove Reservoir	categorical			NA	value is missing
-Site	Sampling site within each reservoir, 51=Site off of the dam at Carvins Cove Reservoir	numeric	dimensionless		NA	value is missing
+Site	Sampling site within each reservoir, 51=Site nearest to the dam in the reservoir, attached to the platform	numeric	dimensionless		NA	value is missing
 Station	Code corresponding to data set nickname; CCRM=meteorological station at Carvins CoveReservoir	categorical			NA	value is missing
 DateTime_start	Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 DateTime_end	Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing

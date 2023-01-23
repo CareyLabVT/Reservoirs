@@ -14,3 +14,5 @@ CH4_R2	R2 for the calculated slope for CH4 concentration	numeric	dimensionless
 CH4Flux_umolCm2s	Diffusive CH4 flux	numeric	micromolePerMeterSquaredPerSecond			
 Flag_CO2Flux_umolCm2s	Flag for diffusive CO2 flux. 0 = No issues; 1 = R2 of slope is under 0.9 	numeric	dimensionless			
 Flag_CH4Flux_umolCm2s	Flag for diffusive CH4 flux. 0 = No issues; 1 = R2 of slope is under 0.9	numeric	dimensionless			
+Flag_Start_time	"Flag for start time. 0 = no issues, 1 = issue with internal clock, time set to NA"	numeric	dimensionless			
+Flag_End_time	"Flag for start time. 0 = no issues, 1 = issue with internal clock, time set to NA"	numeric	dimensionless			

@@ -1,0 +1,20 @@
+attributeName	code	definition
+Reservoir	FCR	FCR = Falling Creek Reservoir
+Flag_wtr_1	0	no flag
+Flag_wtr_1	7	missing data
+Flag_wtr_2	0	no flag
+Flag_wtr_2	7	missing data
+Flag_wtr_3	0	no flag
+Flag_wtr_3	7	missing data
+Flag_wtr_4	0	no flag
+Flag_wtr_4	7	missing data
+Flag_wtr_5	0	no flag
+Flag_wtr_5	7	missing data
+Flag_wtr_6	0	no flag
+Flag_wtr_6	7	missing data
+Flag_wtr_7	0	no flag
+Flag_wtr_7	7	missing data
+Flag_wtr_8	0	no flag
+Flag_wtr_8	7	missing data
+Flag_wtr_9.3	0	no flag
+Flag_wtr_9.3	7	missing data

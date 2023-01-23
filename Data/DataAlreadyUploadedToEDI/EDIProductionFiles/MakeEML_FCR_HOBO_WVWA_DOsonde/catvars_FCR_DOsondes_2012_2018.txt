@@ -1,4 +1,5 @@
 attributeName	code	definition
+Reservoir	FCR	FCR = Falling Creek Reservoir
 Flag_1m	0	no flag
 Flag_1m	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_1m	7	missing data

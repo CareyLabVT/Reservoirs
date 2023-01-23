@@ -1,9 +1,9 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	"Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir
-"	character				
+"	character			NA	value is missing
 Site	"Sampling site within each reservoir; 50=Deep hole or site nearest to the dam in the reservoir, attached to the platform. 300 = Sawmill Branch Inflow to CCR
-"	numeric	dimensionless			
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss		
-Depth_m	Depth thermistor is deployed at 	numeric	meter			
-Temp_C	water temperature measured by HOBO thermistor 	numeric	celsius			
-Flag	Data flag for (Temp_C)	categorical				
+"	numeric	dimensionless		NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Depth_m	Depth thermistor is deployed at	numeric	meter		NA	value is missing
+Temp_C	water temperature measured by HOBO thermistor	numeric	celsius		NA	value is missing
+Flag	Data flag for (Temp_C)	categorical			NA	value is missing

@@ -211,18 +211,18 @@ make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
-         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
-         in Falling Creek Reservoir, Virginia, USA in 2018-2021",
-         data.table = "FCR_Catwalk_2018_2021.csv",
-         data.table.description = "FCR Catwalk Sensor String",
-         other.entity = c('FCR_catwalk_QAQC_function_2018_2021.R', 'FCR_catwalk_QAQC_Plots_2018_2021.R','FCR_CAT_MaintenanceLog_2018_2021.txt' ),
-         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors'),
-         temporal.coverage = c("2018-07-05", "2021-12-31"),
+         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths 
+         in Falling Creek Reservoir, Virginia, USA in 2018-2022",
+         data.table = c("FCR_Catwalk_EDI_2018_2022.csv", 'FCR_CAT_MaintenanceLog_2018_2022.csv'),
+         data.table.description = c("FCR Catwalk Sensor String", "Maintenance log for catwalk sensors"),
+         other.entity = c('FCR_catwalk_QAQC_function_2018_2022.R', 'QAQC_catwalk_2018_2022.Rmd' ),
+         other.entity.description = c('automated function to do QAQC which is sourced in final QAQC script', 'Final script to run QAQC'),
+         temporal.coverage = c("2018-07-05", "2022-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.271.6", #### make sure this matches the original catwalk file, which you are just updating, DO NOT RESERVE NEW PACKAGE ID
+         package.id = "edi.271.7", #### make sure this matches the original catwalk file, which you are just updating, DO NOT RESERVE NEW PACKAGE ID
          user.domain = 'EDI')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

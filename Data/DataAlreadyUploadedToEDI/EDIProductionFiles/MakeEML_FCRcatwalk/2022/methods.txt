@@ -10,24 +10,23 @@ DETAILED DESCRIPTION OF MAINTENANCE AND ISSUES FOR EACH SENSOR GROUP
 All maintenance, calibration times and sensor issues are recorded in the FCR_CAT_MaintenanceLog_2018_2022.csv. The text below explains specific issues and how they were dealt with in the data. 
 
 Maintenance data gaps:
-The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt file. To account for this, we used an automated QAQC script (FCR_catwalk_QAQC_function_2018_2022.R) which indexes the dates and times recorded in the maintenance log and set the data to NA and the corresponding Flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA, with corresponding Flags set to 1.   
+The sensor string was regularly brought up to the surface for routine maintenance, dates and times of which were recorded in the FCR_CAT_MaintenanceLog_2018_2022.txt file. To account for this, we used an automated QAQC script (FCR_catwalk_QAQC_function_2018_2022.R) which indexes the dates and times recorded in the maintenance log and sets the data to NA and the corresponding Flag columns to 1. Any data points outside of the immediate time frame that the sensor string was up that do not reflect ambient conditions due to sensor re-equilibration were also set to NA, with corresponding Flags set to 1.   
 
 Missing Data Gaps:
 EXO: 
 2018-08-20 14:30-2018-08-27 17:50; 2018-09-25 10:40-2018-10-01 11:00; 2020-12-02 12:50-2020-12-27 11:50-Removed for maintenance; 
 2021-04-26 11:00-13:00-Removed for calibration; 
 2021-12-13 10:25:00- 2021-12-14 12:25:00-Removed for cleaning and sensor checks in lab; 
-2021-06-15 11:40-2021-06-18 10:20-Connection issue so no data was streaming; 
+2021-06-15 11:40-2021-06-18 10:20-Connection issue so no data were streaming; 
 2021-12-13 10:25:00- 2021-12-14 12:25:00 -Removed for cleaning;
 2022-05-05 08:30:00-08:50:00;2022-12-12 10:30:00-2022-12-17 15:50:00-Removed for cleaning/calibration/servicing;
 2022-12-29 03:10:00-2023-01-02 16:20:00-Issue with connection to the datalogger and no data was recorded
 
 Dissolved Oxygen sondes at 5 and 9 m:
 Maintenance performed on the sensors-
-When the oxygenation system is first activated, we have observed a rapid fouling of the 9m DO probe, which we typically flag with a 5 (questionable value due to potential fouling) or 6 (very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5), based on comparison with other sensors.
+When the oxygenation system is first activated, we have observed a rapid fouling of the 9m DO probe, which we typically flag with a 5 (questionable value due to potential fouling) or 6 (very questionable value due to potential fouling). Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5_adjusted and RDO_sat_percent_5_adjusted (2019) and RDO_mgL_9_adjusted and RDOsat_percent_9_adjusted (2019 and 2020), based on comparison with other sensors. Adjusted values were flagged and values not adjusted were set to sensor readings (see below for more info).
 
-At 9m there were some high oxygen readings on 2021-06-07-2021-06-08 about 3 hours after the temperature string had been pulled up. There was no oxygen at 9m, as the oxygenation system had not been turned on yet,  so these readings were changed to NA and flagged. 
-The oxygenation was first turned on 11 June at 9:40EST but we were having issues with the oxygen regulator so we were unsure how well the system was working until the regulator was fixed and deployed on 14 September 2021 at 13:30 EST. During this time we have flagged the data with a flag of 5 because of the fluctuations from the system. 
+At 9m there were some high oxygen readings on 2021-06-07-2021-06-08 about 3 hours after the temperature string had been pulled up. Handheld sensors show that oxygen was at ~0 mg/L at 9m at this time, so these readings were changed to NA and flagged. The oxygenation system in 2021 was first turned on 11 June at 9:40EST but experienced malfunctions until repairs were finished on 14 September 2021 at 13:30 EST. During this intervening time, we have flagged the data with a flag of 5 because of the fluctuations in oxygen due to intermittent functioning, malfunctioning, and repairs of the system. 
 The temperature string was tangled after some maintenance on June 18th, 2021 at 10:00 and was fixed on June 21, 2021 at 10:00. It was tangled again on July 21st, 2021 13:20 and fixed on July 26th, 2021 at 12:00. Consequently, there was a data gap for both DO sensors with a data flag of 1 for the flag columns of the sensors affected. The 9m RDO-PRO_X sensor was calibrated on August 18th, 2021 with a two point calibration using 100 percent air saturation and a 0 percent saturation with a sodium sulfite solution. On August 24, 2021, the anti-fouling caps on the RDO-PRO-X sensors were removed as they were causing fouling especially in anoxic hypolimnion. The RDO-PRO-X sensor cap at 5m was replaced on August 31st, 2021 and checked with a 100 percent air saturation and 0 percent saturation.
 
 2020-On August 7, 2020, the RDO-PRO-X Sensor caps at 5 m and 9 m were replaced. Both dissolved oxygen sensors were calibrated on August 17, 2020 using a one point 100 percent air saturation calibration. 

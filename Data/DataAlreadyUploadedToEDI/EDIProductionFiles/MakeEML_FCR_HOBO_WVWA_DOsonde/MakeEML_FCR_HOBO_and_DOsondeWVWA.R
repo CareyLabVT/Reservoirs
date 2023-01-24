@@ -175,7 +175,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "completed",
          user.id =  "ccarey",
-         package.id = "edi.1005.3", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.1005.4", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####

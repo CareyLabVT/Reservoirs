@@ -127,7 +127,11 @@ dt1 = dt1 %>%
          Site = ifelse(Depth_m==100,100,Site),
          Depth_m = ifelse(Depth_m==100,0.1,Depth_m),
          Site = ifelse(Depth_m==200,200,Site),
-         Depth_m = ifelse(Depth_m==200,0.1,Depth_m))#Some issues with 2021 data
+         Depth_m = ifelse(Depth_m==200,0.1,Depth_m),#Some issues with 2021 data
+         Depth_m = ifelse(Depth_m==0,0.1,Depth_m),#Some 0.1 miscoded as 0
+         Reservoir = as.character(Reservoir),
+         Reservoir = ifelse(as.Date(DateTime)=="2015-07-23","BVR",Reservoir)#One 2015 BVR profile got labeled as FCR
+         )
 
 #############################################################################
 
@@ -253,15 +257,17 @@ ghg_all <- rbind(ghg_rep1,ghg_rep2)
 
 ghg_all <-  ghg_all %>% 
   arrange(DateTime,Reservoir,Station,Depth_m)
+  
 
 ## Flag replicates: 
 
-## Will need to be updated for 2022!!
-
-# Flag 1 = Sample not collected
-# Flag 2 = Sample below MDL (for 2022: 0.021 umol/L CH4; 3.848 umol/L CO2)
-# Flag 3 = Difference between samples >LOQ and percent difference >30% but <50%
-# Flag 4 = Difference between samples >LOQ and percent difference >50%
+#0 = the samples and replicates are good
+#1 = Sample was either not collected or was not retained due to issues with the GC
+#2 = Sample was below the method detection limit
+#3 = Sample value was negative and changed to zero
+#4 = The difference between the reps are above the limit of quantification and >30% and <50% different from each other. Both replicates were retained but flagged
+#5 = The difference between the reps are above the limit of quantification and >50% different from each other. Both replicates were retained but flagged
+#6 = No peak detected on GC. Concentration set to 0
 ghg_all <- ghg_all %>% 
   mutate(flag_ch4 = ifelse(ch4_pdiff>=50 & ch4_diff>=0.021*3,4,
                            ifelse(ch4_pdiff<=50 & ch4_pdiff>=30 & ch4_diff>=0.021*3,3,
@@ -292,7 +298,12 @@ ghg_all <- ghg_all %>%
 ### Re-order to join with historical data
 ghg_all <- ghg_all %>% 
   select(DateTime,Station,Depth_m,Reservoir,ch4_umolL,co2_umolL,flag_DateTime,flag_ch4,flag_co2,Rep) %>% 
-  rename(Site = Station)
+  rename(Site = Station)%>%
+  mutate(Site = ifelse(Depth_m==100,100,Site),
+         Depth_m = ifelse(Depth_m==100,0.1,Depth_m),
+         Site = ifelse(Depth_m==200,200,Site),
+         Depth_m = ifelse(Depth_m==200,0.1,Depth_m),
+         Depth_m = ifelse(Depth_m==0.11,0.1,Depth_m))#Some issues with depths this year
 
 col_order <- c("Reservoir","Site","DateTime","Depth_m","Rep","ch4_umolL","co2_umolL","flag_DateTime","flag_ch4","flag_co2")
 
@@ -322,7 +333,6 @@ final_wide <- final_wide %>%
 #3 = Sample value was negative and changed to zero
 #4 = The difference between the reps are above the limit of quantification and >30% and <50% different from each other. Both replicates were retained but flagged
 #5 = The difference between the reps are above the limit of quantification and >50% different from each other. Both replicates were retained but flagged
-#6 = No peak detected on GC. Concentration set to 0
 
 ## Start with 2015
 final_wide_2015 <- final_wide %>% 
@@ -609,9 +619,7 @@ historical <- historical[,(col_order)]
 final <- rbind(historical,ghg_all)
 
 final <- final %>% 
-  arrange(DateTime,Reservoir,Site,Depth_m)%>%
-  mutate(flag_co2 = ifelse(co2_umolL==0&!is.na(co2_umolL),6,flag_co2),
-         flag_ch4 = ifelse(ch4_umolL==0&!is.na(ch4_umolL),6,flag_ch4))
+  arrange(DateTime,Reservoir,Site,Depth_m)
 
 ## For 2022 data publication ONLY
 # Change BVR 1 -> BVR 40

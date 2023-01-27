@@ -2,9 +2,9 @@ Diffusive fluxes for methane and carbon dioxide were collected using the floatin
 
 Diffusive fluxes for methane (CH4) and carbon dioxide (CO2) were calculated from the collected UGGA concentrations using the FluxCalR package (Zhao, 2019). Briefly, peaks for methane concentration were visually identified for each day and each replicate and served as the end time point for slope calculation (CO2 and CH4, respectively). The slope of carbon dioxide/methane concentration was then calculated for 4 minutes prior to the identified end time point. The slope was converted to diffusive flux assuming 1 atmosphere of pressure and averaging the ambient temperature over the entire measurement period.
 
-There was an issue with the UGGA internal clock in 2022, and times have been removed for these measurements. Sampling occurred during the daytime, between 10 AM and 2 PM.
+There was an issue with the UGGA internal clock in 2022. Start times for these measurements have been set to 12:00, as sampling occurred between 10 AM and 2 PM. End times have been set to 12:00 plus the duration of the sampling interval (usually 4 min). Therefore, the difference between end time and start time correctly indicates the sampling duration. These measurements have been flagged with a "1" in the Flag_Start_time and Flag_End_time columns of the dataset.
 
-See site_descriptions.csv provided in this data package for further information regarding sampling sites
+See site_descriptions.csv provided in this data package for further information regarding sampling sites.
 
 
 References:

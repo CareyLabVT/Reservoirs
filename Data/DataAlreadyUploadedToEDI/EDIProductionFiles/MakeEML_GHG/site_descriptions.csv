@@ -10,14 +10,14 @@
 "BVR",50,"Pelagic deep hole site nearest to dam; at BVR platform closest to dam",37.31288,-79.8159
 "BVR",100,"Inflow stream site to BVR on western reservoir arm",37.31957,-79.82437
 "BVR",200,"Inflow stream site to BVR on eastern reservoir arm that drains upstream impoundment",37.322851,-79.81721
-"FCR",1,"Outflow site at spillway",37.3024826356053,-79.8373672020725
-"FCR",1.1,"FCR toe drain",37.3021056538632,-79.8368220365875
-"FCR",20,"Upstream pelagic site at deepest point of transect across the reservoir",37.30769,-79.8371
-"FCR",30,"Upstream pelagic site at deepest point of transect across the reservoir",37.30534,-79.8383
-"FCR",45,"Upstream pelagic site at deepest point of transect across the reservoir",37.30418,-79.8383
-"FCR",50,"Deep hole or site nearest to dam",37.30325,-79.8373
-"FCR",99,"Farthest downstream site on inflow stream",37.307613,79.8360878
-"FCR",100,"Inflow stream",37.30858,-79.83494
-"FCR",101,"Upstream site along inflow",37.309653,-79.830467
-"FCR",102,"Furthest upstream site on inflow stream",37.311678,-79.827357
-"FCR",200,"Secondary inflow (wetland) stream",37.30943,-79.83619
+"FCR",1,"Outflow stream site at Falling Creek Reservoir spillway",37.3024826356053,-79.8373672020725
+"FCR",1.1,"Toe drain site at bottom of Falling Creek Reservoir dam",37.3021056538632,-79.8368220365875
+"FCR",20,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; adjacent to where Tunnel Branch inflow enters into the reservoir",37.30769,-79.8371
+"FCR",30,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; approximately halfway between dam and Falling Creek inflow",37.30534,-79.8383
+"FCR",45,"Pelagic upstream site at central depth transect of Falling Creek Reservoir; where reservoir flow enters into the deep hole basin of the reservoir",37.30418,-79.8383
+"FCR",50,"Pelagic deep hole site nearest to Falling Creek Reservoir dam; at end of FCR catwalk",37.30325,-79.8373
+"FCR",99,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir just above where the stream enters into the reservoir",37.307613,-79.8360878
+"FCR",100,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located",37.30858,-79.83494
+"FCR",101,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; upstream of weir and downstream of confluence of BVR inflow pipe and overland flow stream",37.309653,-79.830467
+"FCR",102,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; upstream of weir and just below where the BVR pipe emerges",37.311678,-79.827357
+"FCR",200,"Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream",37.30943,-79.83619

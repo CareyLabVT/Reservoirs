@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.997.2" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.997.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -74,9 +74,9 @@
       </individualName>
       <organizationName>Virginia Tech</organizationName>
     </creator>
-    <pubDate>2023-01-13</pubDate>
+    <pubDate>2023-01-27</pubDate>
     <abstract>
-      <para>Surface samples and depth profiles of carbon dioxide and methane concentrations were sampled from 2015 to 2022 in two drinking water reservoirs in southwestern Virginia, USA: Beaverdam Reservoir (Vinton, Virginia) and Falling Creek Reservoir (Vinton, Virginia). Both reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia. The dataset consists of depth profiles of dissolved greenhouse gas (carbon dioxide, methane) samples measured at the deepest site of each reservoir adjacent to the dam. Additional surface samples were collected at a gauged weir on Falling Creek Reservoir's primary inflow tributary, from a wetland adjacent to Falling Creek Reservoir, and from the reservoir outflow. At Beaverdam Reservoir, additional samples were collected at three outflow points below the dam and at the mid-reservoir outflow. Samples were collected approximately fortnightly from March-April, weekly from May-October, and monthly in November-February at Falling Creek Reservoir and Beaverdam Reservoir. In 2019, surface samples along the stream and reservoir continuum from both Falling Creek Reservoir and Beaverdam Reservoir were collected monthly during the summer stratified period.</para>
+      <para>Surface samples and depth profiles of carbon dioxide and methane concentrations were sampled from 2015 to 2022 in two drinking water reservoirs in southwestern Virginia, USA: Beaverdam Reservoir (Vinton, Virginia) and Falling Creek Reservoir (Vinton, Virginia). Both reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia. The dataset consists of depth profiles of dissolved greenhouse gas (carbon dioxide, methane) samples measured at the deepest site of each reservoir adjacent to the dam. Additional surface samples were collected at a gauged weir on Falling Creek Reservoir's primary inflow tributary, from a wetland adjacent to Falling Creek Reservoir, and from the reservoir outflow. At Beaverdam Reservoir, additional samples were collected at three outflow points below the dam and at the mid-reservoir outflow. Samples were collected approximately fortnightly from March-April, weekly from May-October, and monthly in November-February at Falling Creek Reservoir and Beaverdam Reservoir. In 2019, surface samples along the stream and reservoir continuum from both Falling Creek Reservoir and Beaverdam Reservoir were collected monthly during the summer stratified period (see site descriptions file for geographic coordinates of sampling sites).</para>
     </abstract>
     <keywordSet>
       <keyword>greenhouse gas</keyword>
@@ -165,16 +165,15 @@
           <para>SAMPLE ANALYSIS AND EQUIPMENT</para>
           <para>Dissolved methane and carbon dioxide concentrations were measured in each water sample on a Gas Chromatograph (GC) with a Flame Ionization Detector (FID) and Thermal Conductivity Detector (TCD) following McClure et al. (2018). Briefly, immediately prior to analysis, a 2-mL headspace was created with Helium (He) by displacing 2-mL of sample water. The headspace was equilibrated by shaking each 20-mL vial at 300 rpm for 15 minutes. The 2-mL headspace was then injected into the GC. The oven temperature was set to 35 degrees C with a carrier gas (He) flow rate of 15 mL/min. CH4 had a retention time of 1.3 min on the FID and CO2 had a retention time of 2.8 min on the TCD. Dissolved concentrations of CH4 and CO2 in water were calculated using the observed head-space concentrations and Henry's Law (McClure et al. 2018). From 2015-2018, samples were analyzed on a GC SRI, Model 8010. From 2019-onwards, samples were analyzed on a Shimadzu Nexis GC-2030.</para>
           <para>DATA FLAGS</para>
-          <para>Replicate samples (Rep 1 and 2) were often collected for each Date, Site, and Depth. If a second rep was not collected, the data was flagged as '1' (sample was not collected). If the analyzed sample had a value below the minimum detection limit (MDL) the sample was flagged as '2' (sample below MDL). A running MDL was calculated for each GC separately (2015-2018, GC SRI, Model 8010; 2019-onwards, Shimadzu Nexis GC-2030) from routinely measured air concentrations throughout the year and calculated using a consistent temperature (2015-2018 20 deg C; 2019-2022 40 deg C) and pressure (30 psi). MDL for each year is presented; 2015 CH4 = 0.001 umol/L, CO2 = 2.13 umol/L; 2016 CH4 = 0.006 umol/L, CO2 = 4.45 umol/L; 2017 CH4 = 0.005 umol/L, CO2 = 12.70 umol/L; 2018 CH4 = 0.005 umol/L, CO2 = 21.84 umol/L; 2019 CH4 = 0.011 umol/L, CO2 = 5.08 umol/L; 2020 CH4 = 0.013 umol/L, CO2 = 6.17 umol/L; 2021 CH4 = 0.021 umol/L, CO2 = 5.74 umol/L; 2022 CH4 = 0.0107 umol/L, CO2 = 3.848 umol/L. If the sample had a negative value, the sample value was set to 0 and flagged as '3'. Replicates of each sample were assessed after sample analysis using calculated percent difference between replicate samples as well as the limit of quantification (LOQ = 3*MDL). If the difference between replicate samples was &lt; LOQ, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicates samples was &lt;30%, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicates was &gt;30% but &lt;50%, then the samples were flagged as '4' (difference between reps is above LOQ and above 30% difference and below 50% difference). If the difference between samples was &gt;LOQ and the percent difference between replicates was &gt;50%, then the samples were flagged '5' (difference between reps is above the LOQ and above 50% different). For all flags, replicates were retained in the dataset.</para>
+          <para>Replicate samples (Rep 1 and 2) were often collected for each Date, Site, and Depth. If a second rep was not collected, the data was flagged as '1' (sample was not collected). If the analyzed sample had a value below the minimum detection limit (MDL) the sample was flagged as '2' (sample below MDL). A running MDL was calculated for each GC separately (2015-2018, GC SRI, Model 8010; 2019-onwards, Shimadzu Nexis GC-2030) from routinely measured air concentrations throughout the year (2015-2021) or a reference gas tank (2022) and calculated using a consistent temperature (2015-2018 20 deg C; 2019-2022 40 deg C) and pressure (30 psi). MDL for each year is presented; 2015 CH4 = 0.001 umol/L, CO2 = 2.13 umol/L; 2016 CH4 = 0.006 umol/L, CO2 = 4.45 umol/L; 2017 CH4 = 0.005 umol/L, CO2 = 12.70 umol/L; 2018 CH4 = 0.005 umol/L, CO2 = 21.84 umol/L; 2019 CH4 = 0.011 umol/L, CO2 = 5.08 umol/L; 2020 CH4 = 0.013 umol/L, CO2 = 6.17 umol/L; 2021 CH4 = 0.021 umol/L, CO2 = 5.74 umol/L; 2022 CH4 = 0.0107 umol/L, CO2 = 3.848 umol/L. If no peak was detected, the sample value was set to 0 and flagged as '2' (below detection). If the sample had a negative value, the sample value was set to 0 and flagged as '3'. Replicates of each sample were assessed after sample analysis using calculated percent difference between replicate samples as well as the limit of quantification (LOQ = 3*MDL). If the difference between replicate samples was &lt; LOQ, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicate samples was &lt;30%, then the samples were not flagged ('0', samples are good). If the difference between samples was &gt;LOQ and the percent difference between replicates was &gt;30% but &lt;50%, then the samples were flagged as '4' (difference between reps is above LOQ and above 30% difference and below 50% difference). If the difference between samples was &gt;LOQ and the percent difference between replicates was &gt;50%, then the samples were flagged '5' (difference between reps is above the LOQ and above 50% different). For all flags, replicates were retained in the dataset. </para>
           <para>DATA PACKAGE UPDATES</para>
-          <para>We note several updates to the current data package following multiple revisions of earlier versions of this dataset. First, we now set any negative greenhouse gas values (methane or carbon dioxide) to zero, following best practices. Any samples that had a negative value have been flagged "3". In addition, we standardized the calculation of MDLs for both methane and carbon dioxide to include a running MDL for all air samples analyzed during each respective year. Importantly, all MDLs are now calculated using a standard temperature (2015-2018 = 20 deg C; 2019-2022 = 40 deg C) and pressure (30 PSI).</para>
+          <para>We note several updates to the current data package following multiple revisions of earlier versions of this dataset. First, we now set any negative greenhouse gas values (methane or carbon dioxide) to zero, following best practices. Any samples that had a negative value have been flagged '3'. In addition, we standardized the calculation of MDLs for both methane and carbon dioxide to include a running MDL for all air samples analyzed during each respective year. Importantly, all MDLs are now calculated using a standard temperature (2015-2018 = 20 deg C; 2019-2022 = 40 deg C) and pressure (30 PSI).</para>
           <para>
 WHOLE-ECOSYSTEM EXPERIMENTS</para>
           <para>Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.</para>
           <para>
 REFERENCES</para>
           <para>Doubek J.P., Campbell K.L., Doubek K.M., Hamre K.D., Lofton M.E., McClure R.P., Ward N.K., Carey C.C. (2018). The effects of hypolimnetic anoxia on the diel vertical migration of freshwater crustacean zooplankton. Ecosphere, 9(7):02332. https://doi.org/10.1002/ecs2.2332</para>
-          <para>Hounshell A.G., McClure R.P., Lofton M.E., Carey C.C. (2020). Whole-ecosystem oxygenation experiments reveal substantially greater hypolimnetic methane concentrations in reservoirs during anoxia. Limnology and Oceaography - Letters, 6: 33-42. https://doi.org/10.1002/lol2.10173</para>
           <para>McClure R.P., Hamre K.D., Niederlehner B.R., Munger Z.W., Chen S., Lofton M.E., Schreiber M.E., Carey C.C. (2018). Metalimnetic oxygen minima alter the vertical profiles of carbon dioxide and methane in a managed freshwater reservoir. Science of the Total Environment, 636. pp. 610-620. https://doi.org/10.1016/j.scitotenv.2018.04.255</para>
         </description>
       </methodStep>
@@ -240,12 +239,251 @@ REFERENCES</para>
       </relatedProject>
     </project>
     <dataTable>
+      <entityName>GHG Dataset</entityName>
+      <entityDescription>GHG Dataset</entityDescription>
+      <physical>
+        <objectName>Dissolved_GHG_2015_2022.csv</objectName>
+        <size unit="bytes">407094</size>
+        <authentication method="MD5">3df893447b87f182b6a8a1fdff19815f</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir; BVR = Beaverdam Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir; BVR = Beaverdam Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site (see site_descriptions.csv for more information)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">200</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Water depth where the sample was collected</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">11</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Field replicates collected at the same site, date, and depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CH4_umolL</attributeName>
+          <attributeDefinition>Dissolved methane concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">790.2280281</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CO2_umolL</attributeName>
+          <attributeDefinition>Dissolved carbon dioxide concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1258.93220898998</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_DateTime</attributeName>
+          <attributeDefinition>Flag value for DateTime; 0 = Time recorded; 1 = Time not recorded and set to 12:00</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_CH4_umolL</attributeName>
+          <attributeDefinition>Flag value for methane concentration; 0 = the samples and replicates are good; 1 = Sample was either not collected or was not retained due to issues with the GC; 2 = Sample was below the method detection limit; 3 = Sample value was negative and changed to zero; 4 = The difference between the reps are above the limit of quantification and &gt;30% and &lt;50% different from each other. Both replicates were retained but flagged; 5 = The difference between the reps are above the limit of quantification and &gt;50% different from each other. Both replicates were retained but flagged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">6</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_CO2_umolL</attributeName>
+          <attributeDefinition>Flag value for carbon dioxide concentration; 0 = the samples and replicates are good; 1 = Sample was either not collected or was not retained due to issues with the GC; 2 = Sample was below the method detection limit; 3 = Sample value was negative and changed to zero; 4 = The difference between the reps are above the limit of quantification and &gt;30% and &lt;50% different from each other. Both replicates were retained but flagged; 5 = The difference between the reps are above the limit of quantification and &gt;50% different from each other. Both replicates were retained but flagged</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">6</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>6047</numberOfRecords>
+    </dataTable>
+    <dataTable>
       <entityName>Site Descriptions</entityName>
       <entityDescription>Descriptions of sites in this dataset with lat/long coordinates</entityDescription>
       <physical>
         <objectName>site_descriptions.csv</objectName>
-        <size unit="bytes">2499</size>
-        <authentication method="MD5">8e37a0144b7dfe6ac7b418893892162d</authentication>
+        <size unit="bytes">3364</size>
+        <authentication method="MD5">2e1f7ac6180e8818ab1f534fe9da39ca</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -349,7 +587,7 @@ REFERENCES</para>
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">-79.8383</minimum>
-                  <maximum exclusive="false">79.8360878</maximum>
+                  <maximum exclusive="false">-79.814467</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -367,8 +605,8 @@ REFERENCES</para>
       <entityDescription>R script for GHG QA/QC</entityDescription>
       <physical>
         <objectName>QAQC_GHG_2022.R</objectName>
-        <size unit="bytes">34628</size>
-        <authentication method="MD5">e6d7a9ea8b4811dc3309aa89d47a348c</authentication>
+        <size unit="bytes">33719</size>
+        <authentication method="MD5">93130f91999fb9bd5b1539bbc0f2801d</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

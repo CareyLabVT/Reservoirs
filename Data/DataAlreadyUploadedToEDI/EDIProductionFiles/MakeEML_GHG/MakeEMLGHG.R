@@ -22,7 +22,7 @@ library(tidyverse)
 # Add site descriptions
 
 #Install the required googlesheets4 package
-install.packages('googlesheets4')
+#install.packages('googlesheets4')
 #Load the library 
 library(googlesheets4)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
@@ -177,7 +177,7 @@ make_eml(
   other.entity.description = "R script for GHG QA/QC",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.4')
+  package.id = 'edi.551.7')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -1,0 +1,43 @@
+attributeName	code	definition
+ColumnNumber	2	Column number for the the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10
+ColumnNumber	5	Column number for the  the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13
+ColumnNumber	7	Column number for the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15
+ColumnNumber	8	Column number for the flow measurement (VT_Flow_cms) with the VT pressure sensor; corresponds to ColumnNumber 8 and FlagColumn 16
+ColumnNumber	c(2:6)	Column number for the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)
+ColumnNumber	c(2:9)	Column number for all observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)
+ColumnNumber	c(3:5)	Column number for the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)
+ColumnNumber	c(4:6)	Column number for the WVWA pressure readings (WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds with ColumnNumber c(4:6) and FlagColumn c(12:14)
+ColumnNumber	c(7:9)	Column number for all observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)
+Flag	1	value corrected to account for artificial increase in pressure after sensor maintenance
+Flag	100	ID for rating curve from 2013-05-15 16:00:00 EST- 2019-06-07 00:00:00 EST
+Flag	101	ID for rating curve from 2019-06-07 00:15:00 EST-2020-08-24 13:00:00 EST
+Flag	102	ID for rating curve from 2020-08-24 15:00:00 EST-2020-09-02 13:15:00 EST
+Flag	103	ID for rating curve from 2020-09-02 13:45:00 EST-2021-11-08 13:45:00 EST
+Flag	104	ID for rating curve from 2021-11-08 14:00:00 EST-2022-05-09 13:15:00 EST
+Flag	105	ID for rating curve from 2022-05-09 13:20:00 EST-2022-11-16 16:38:00 EST
+Flag	106	ID for rating curve from 2022-05-09 14:15:00 EST-2023-12-31 23:59:00 EST
+Flag	2	sensor malfunction
+Flag	24	weir damaged due to weather
+Flag	4	demonic intrusion
+Flag	5	value of NA due to leaking at weir
+Flag	7	missing observation/not recorded
+Flag	8	values removed because of maintenance
+FlagColumn	10	Flag column for the observations with the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10
+FlagColumn	13	Flag column for the observations with the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13
+FlagColumn	15	Flag column for the observations with the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15
+FlagColumn	c(10:14)	Flag column for all observations with the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)
+FlagColumn	c(10:17)	Flag column for all observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)
+FlagColumn	c(11:13)	Flag column for observations with the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)
+FlagColumn	c(12:14)	Flag column for the WVWA pressure readings (WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds with ColumnNumber c(4:6) and FlagColumn c(12:14)
+FlagColumn	c(15:17)	Flag column for all observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)
+Parameter	All_Weir	All observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)
+Parameter	VT	All observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)
+Parameter	VT_Flow	Observations with the flow measurement (VT_Flow_cms) with the VT pressure sensor; corresponds to ColumnNumber 8 and FlagColumn 16
+Parameter	VT_Press	Observations with the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15
+Parameter	WVWA	All observations with the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)
+Parameter	WVWA_Baro	Observations with the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)
+Parameter	WVWA_Flow	Observations with the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13
+Parameter	WVWA_Pres	Observations with the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10
+Reservoir	FCR	Falling Creek Reservoir
+Station	RATING	Time period for a specifc rating curve
+Station	WEIR	Maintenance or issues with the weir

@@ -20,9 +20,12 @@
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
+library(devtools)
+install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-check <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan/Inflow_2013_2021.csv')
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2023_Jan/"
+
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021
 
@@ -49,24 +52,24 @@ check <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_In
 
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                       license = "CCBY",
-                       file.type = ".txt",
-                       write.file = TRUE)
+#template_core_metadata(path = folder,
+#                       license = "CCBY",
+#                       file.type = ".txt",
+#                       write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                          data.table = c("Inflow_2013_2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
+template_table_attributes(path = folder,
+                          data.path = folder,
+                          data.table = c("Inflow_2013_2022.csv", "Inflow_Maintenance_RatingCurveLog_2013_2022.csv"),
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                             data.table = c("Inflow_2013_2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
-                             empty = TRUE,
-                             write.file = TRUE)
+#template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+#                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+#                             data.table = c("Inflow_2013_2021.csv", "2020_WeirWaterLevel.csv", "2021_WeirWaterLevel.csv"),
+#                             empty = TRUE,
+#                             write.file = TRUE)
 
 #Step 6: Script your workflow
 #that's what this is, silly!
@@ -108,8 +111,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jan",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
 # NO CATVARS!
 
@@ -136,19 +139,24 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jun",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jun",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2022_Jun",
+  path = folder,
+  data.path = folder,
+  eml.path = folder,
   dataset.title = "Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2022",
-  temporal.coverage = c("2013-05-15", "2022-05-14"),
+  data.table = c("Inflow_2013_2022.csv", "Inflow_Maintenance_RatingCurveLog_2013_2022.csv"),
+  data.table.name = c("Inflow_2013_2022", "Inflow_Maintenance_RatingCurveLog_2013_2022"), 
+  data.table.description = c("FCR inflow dataset from 2013 to 2022","Maintenance for the weir along with time periods for the rating curves"),
+  other.entity = c("Inflow_QAQC_2013_2022.r","Inflow_GaugeHeight_2013_2022.csv"),
+  other.entity.name = c("Inflow_QAQC_2013_2022","Inflow_GaugeHeight_2013_2022"),
+  other.entity.description =c("Script for compiling and QAQC of data", "Observed water level from the staff gauge used for the rating curve" ),
+  temporal.coverage = c("2013-05-15", "2022-12-31"),
   maintenance.description = 'ongoing',
-  data.table = c("inflow_for_EDI_2013_15May2022.csv","2020_WeirWaterLevel.csv","2021_WeirWaterLevel.csv"),
-  data.table.description = c("FCR inflow dataset","2020 Weir Water Level","2021 Weir Water Level"),
-  other.entity= 'Inflow_Aggregation_EDI_2021.R',
-  other.entity.description = "Script for compiling and QAQC of data",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.923.1')
+  package.id = 'edi.923.3')
+
+
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

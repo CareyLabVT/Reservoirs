@@ -29,6 +29,15 @@ cn_raw%>%
          cut = substring(Name,2),
          Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
          cut = sub("[0-9]+[a-z]+[0-9]+","",cut),
-         Rep = sub("_","",sub("m.+","",cut)))
+         Rep = sub("_","",sub("m.+","",cut)),
+         cut = sub("_[0-9]+m_","",cut),
+         cut = ifelse(cut=="r1f2","r1f2_r1f2",cut),
+         filter1_ID = ifelse(grepl("_",cut),
+                             sub("_.+","",cut),
+                             paste0("r1",cut)),
+         filter2_ID = ifelse(grepl("_",cut),
+                             sub(".+_","",cut),
+                             paste0("r2",cut)))%>%
+  select(-cut)
 ```
 

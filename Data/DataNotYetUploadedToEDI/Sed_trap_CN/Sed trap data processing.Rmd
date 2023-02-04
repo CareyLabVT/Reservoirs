@@ -16,11 +16,19 @@ cn2 = read.csv("./2023 sed trap runs/ASL 24jan23.csv")
 cn3 = read.csv("./2023 sed trap runs/ASL 26jan23.csv")
 cn4 = read.csv("./2023 sed trap runs/ASL 27jan23.csv")
 
-cn = cn1%>%
+cn_raw = cn1%>%
   full_join(cn2)%>%
   full_join(cn3)%>%
   full_join(cn4)
 
-cn
+cn_raw%>%
+  filter(!Name%in%c("aa as unknown","aspartic acid","RunIn","ref zzyzx","crucible blank","internal reference zzyzx"),
+         Method == "very low")%>%
+  mutate(Reservoir = ifelse(substring(Name,1,1)=="f","FCR",NA),
+         Reservoir = ifelse(substring(Name,1,1)=="b","BVR",Reservoir),
+         cut = substring(Name,2),
+         Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
+         cut = sub("[0-9]+[a-z]+[0-9]+","",cut),
+         Rep = sub("_","",sub("m.+","",cut)))
 ```
 

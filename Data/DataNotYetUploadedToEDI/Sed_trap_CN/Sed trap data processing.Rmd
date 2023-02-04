@@ -8,7 +8,13 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(lubridate)
 ```
+TO DO: 
+- pull in the CN runs I did with my sediment samples
+- pull in sediment weights
+- figure out how to deal with 2017/2018 (no filters)
+
 
 ```{r}
 cn1 = read.csv("./2023 sed trap runs/ASL 23jan23.csv")
@@ -21,7 +27,7 @@ cn_raw = cn1%>%
   full_join(cn3)%>%
   full_join(cn4)
 
-cn_raw%>%
+cn_processed = cn_raw%>%
   filter(!Name%in%c("aa as unknown","aspartic acid","RunIn","ref zzyzx","crucible blank","internal reference zzyzx"),
          Method == "very low")%>%
   mutate(Reservoir = ifelse(substring(Name,1,1)=="f","FCR",NA),
@@ -29,7 +35,7 @@ cn_raw%>%
          cut = substring(Name,2),
          Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
          cut = sub("[0-9]+[a-z]+[0-9]+","",cut),
-         Rep = sub("_","",sub("m.+","",cut)),
+         Depth_m = as.numeric(sub("_","",sub("m.+","",cut))),
          cut = sub("_[0-9]+m_","",cut),
          cut = ifelse(cut=="r1f2","r1f2_r1f2",cut),
          filter1_ID = ifelse(grepl("_",cut),
@@ -38,6 +44,115 @@ cn_raw%>%
          filter2_ID = ifelse(grepl("_",cut),
                              sub(".+_","",cut),
                              paste0("r2",cut)))%>%
-  select(-cut)
+  select(-cut,-No.,-Hole..Pos.,-Method,-Info,-C..Blank,-N..Blank)%>%
+  rename(Time_run = Time,
+         Weight_mg = Weight...mg.,
+         N_area = N..Area,
+         C_area = C..Area,
+         N_pct = N.....,
+         C_pct = C.....,
+         CN_ratio = C.N..ratio,
+         N_factor = N..Factor,
+         C_factor = C..Factor,
+         Date_run = Date)
+
+cn_processed%>%
+  ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+```
+
+```{r}
+cn1 <- read.csv("./2019 files/MAG03Apr19.csv")
+cn2 <- read.csv("./2019 files/MAG10Apr19.csv")
+cn3 <- read.csv("./2019 files/MAG28mar19.csv")
+
+cn_temp <- cn1 %>%
+  full_join(cn2)%>%
+  full_join(cn3)%>%
+  filter(Method == "soil")%>%
+  mutate(Name = tolower(Name),
+         Date_run = Date,
+         Reservoir = str_extract(str_extract(Name, "(f_|fcr|b_|bvr)"),"[a-z]"),
+         Reservoir = ifelse(grepl("f",Reservoir),
+                           "FCR",
+                           ifelse(grepl("b",Reservoir),
+                                  "BVR",
+                                  NA)
+                           ),
+         Depth_m = as.numeric(str_extract(str_extract(Name, "[0-9]+m"),"[0-9]+")),
+         Rep = as.numeric(str_extract(str_extract(Name, "r[0-9]+"),"[0-9]+")),
+         is.dup = str_extract(Name, "dup"),
+         Date_num = as.character(as.Date(str_extract(Name, "\\d\\d\\d\\d+"), format = "%m%d%y")),
+         Date_let = as.character(as.Date(str_extract(Name, "\\d+\\D\\D\\D\\d\\d"), format = "%d%b%y")),
+         Date_slash = as.character(as.Date(str_extract(Name, "\\d+/\\d+/\\d+"), format = "%m/%d/%y")))%>%
+  rename(Time_run = Time,
+         Weight_mg = Weight...mg.,
+         N_area = N..Area,
+         C_area = C..Area,
+         N_pct = N.....,
+         C_pct = C.....,
+         CN_ratio = C.N..ratio)%>%
+  select(-No.,-Hole..Pos.,-N..Factor,-C..Factor,-N..Blank,-C..Blank)
+cn_17_18 <- unite(cn_temp, "Date_temp", c(Date_num,Date_let,Date_slash), sep = "")%>%
+  mutate(Date_sampled = as.Date(gsub("NA","",Date_temp)))%>%
+  select(-Date_temp,-Date)
+cn_17_18$Layer[cn_17_18$Depth_m %in% c(4,5)] <- "epi"
+cn_17_18$Layer[cn_17_18$Depth_m %in% c(8,10)] <- "hypo"
+
+cn_17_18%>%
+  ggplot(aes(x = Date_sampled, y = CN_ratio, color = Reservoir, shape = Layer))+
+  geom_point()
+
+cn_sd <- cn_17_18 %>%
+  group_by(Reservoir, Layer, Date_sampled)%>%
+  add_tally()%>%
+  summarize(CN_ratio_mean = mean(CN_ratio, na.rm = T),
+            CN_ratio_sd = sd(CN_ratio, na.rm = T),
+            N_pct_mean = mean(N_pct),
+            N_pct_sd = sd(N_pct),
+            C_pct_mean = mean(C_pct),
+            C_pct_sd = sd(C_pct),
+            n = unique(n))%>%
+  mutate(Year = year(Date_sampled))
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = CN_ratio_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (CN_ratio_mean-CN_ratio_sd), ymax = (CN_ratio_mean+CN_ratio_sd)))+
+  ylab("CN ratio")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = C_pct_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (C_pct_mean-C_pct_sd), ymax = (C_pct_mean+C_pct_sd)))+
+  ylab("C pct")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = N_pct_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (N_pct_mean-N_pct_sd), ymax = (N_pct_mean+N_pct_sd)))+
+  ylab("N pct")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+```
+```{r}
+names(cn_processed)
+names(cn_17_18)
+
+cn_comb = cn_processed%>%
+  full_join(cn_17_18)
+
+cn_comb%>%
+  ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~Reservoir)
 ```
 

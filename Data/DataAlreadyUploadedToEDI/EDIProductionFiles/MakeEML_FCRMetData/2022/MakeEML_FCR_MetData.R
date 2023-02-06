@@ -148,14 +148,14 @@ make_eml(path = folder,
                             'The log for all maintenance and outliers for the Met station that go into the QAQC script for 2015-2022'),
          other.entity = 'FCR_MET_QAQC_2015_2022.R',
          other.entity.name = 'FCR_MET_QAQC_2015_2022',
-         other.entity.description = 'Data aggregation and QA/QC R script',
+         other.entity.description = 'Data aggregation and QA/QC R script for 2015_2022',
          temporal.coverage = c("2015-07-07", "2022-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.19") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
+         package.id = "edi.143.22") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

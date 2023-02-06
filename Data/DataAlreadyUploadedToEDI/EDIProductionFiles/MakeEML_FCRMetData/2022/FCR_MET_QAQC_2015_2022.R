@@ -32,7 +32,7 @@ if (file.exists(misc_folder)) {
 # download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", paste0(folder, "misc_data_files/FCRmet.csv"))
 # 
 # #download maintenance file
-# download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/MET_MaintenanceLog.txt", paste0(folder, "FCR_Met_Maintenance_2015_2022.txt"))
+ download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/MET_MaintenanceLog.txt", paste0(folder, "FCR_Met_Maintenance_2015_2022.txt"))
 # 
 # #original raw files from 2015-2020
 # download.file('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',paste0(folder, "misc_data_files/RawMetData_2015_2016.csv")) #2015-2016 data
@@ -177,7 +177,7 @@ Met$Site=50 #add site column for EDI archiving
 
 
 Met_raw=Met #Met=Met_raw; reset your data, compare QAQC
-
+Met=Met_raw
 
 
 ####4) Load in maintenance txt file #### 
@@ -203,18 +203,10 @@ for(i in 5:17) { #for loop to create new columns in data frame
 #create loop putting in maintenance flags 1 + 4 (these are flags for values removed due
 # to maintenance and also flags potentially questionable values)
 for(j in 1:nrow(RemoveMet)){
-  #print(j) # #if statement to only write in flag 4 if there are no other flags
-  if(RemoveMet$flag[j]==4){
-    print(j) # #if statement to only write in flag 4 if there are no other flags
-    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
-    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$flag[j]#when met timestamp is between remove timestamp
-    #print(j)#and met column derived from remove column
-    #matching time frame, inserting flag
+  if(RemoveMet$flag[j]==1 && RemoveMet$colnumber[j]%in%c(1:4)){
+    #takes out values and replaces them with NA
     Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]] = NA
-  }
-  #if flag == 1, set parameter to NA, overwrites any other flag
-  
-  if(RemoveMet$flag[j]==1){
+  }else if (RemoveMet$flag[j]==1 && RemoveMet$colnumber[j]%in%c(5:17)){
     #print(j)
     Met[c(which((Met[,1]>=RemoveMet[j,2]) & (Met[,1]<=RemoveMet[j,3]))),paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))] = RemoveMet$flag[j] #when met timestamp is between remove timestamp
     #and met column derived from remove column
@@ -222,10 +214,29 @@ for(j in 1:nrow(RemoveMet)){
     Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
     
     Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]] = NA
-  } #replaces value of var with NA
-  
-  if(RemoveMet$flag[j]==5){
+  }
+  #print(j) # #if statement to only write in flag 4 if there are no other flags
+  if(as.character(RemoveMet$TIMESTAMP_start[j])=="2022-07-15 13:29:00" && RemoveMet$flag[j]==4 && RemoveMet$colnumber[j]==6){
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$flag[j]#when met timestamp is between remove timestamp
+    # Fixes the PAR_Total values that were too high
+    Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]] = (Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]]/2.551047)*1.275523
     print(j)
+  }else if (as.character(RemoveMet$TIMESTAMP_start[j])=="2015-07-07 15:45:00" && RemoveMet$flag[j]==4){
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$flag[j]#when met timestamp is between remove timestamp
+    # Fixes rain gauge when met station was recording in 5 min intervals instead of 1 minute
+    Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & Met[,"Rain_Total_mm"]>0, RemoveMet$colnumber[j]] = Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3]& Met[,"Rain_Total_mm"]>0, RemoveMet$colnumber[j]]/5
+  } else if(RemoveMet$flag[j]==4 && as.character(RemoveMet$TIMESTAMP_start[j])!="2022-07-15 13:29:00" && as.character(RemoveMet$TIMESTAMP_start[j])!="2015-07-07 15:45:00"){
+    #print(j) # #if statement to only write in flag 4 if there are no other flags
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Note_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$notes[j]#same as above, but for notes
+    Met[c(which(Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3] & (Met[,paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]==0))), paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))]=RemoveMet$flag[j]#when met timestamp is between remove timestamp
+    #print(j)#and met column derived from remove column
+    #matching time frame, inserting flag
+    Met[Met[,1]>=RemoveMet[j,2] & Met[,1]<=RemoveMet[j,3], RemoveMet$colnumber[j]] = NA
+  }
+  if (RemoveMet$flag[j]==5){
+    #print(j)
     Met[c(which((Met[,1]>=RemoveMet[j,2]) & (Met[,1]<=RemoveMet[j,3]))),paste0("Flag_",colnames(Met[RemoveMet$colnumber[j]]))] = RemoveMet$flag[j] #when met timestamp is between remove timestamp
     #and met column derived from remove column
     #matching time frame, inserting flag
@@ -233,6 +244,15 @@ for(j in 1:nrow(RemoveMet)){
   }
 }
 
+
+#### Rain totals QAQC######
+
+# Take out Rain Totals above 5mm in 1 minute
+Met=Met%>%
+  mutate(
+    Note_Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm),"Rain total over 5 mm in one minute so removed as outlier", Note_Rain_Total_mm),
+    Flag_Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm), 4, Flag_Rain_Total_mm),
+    Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm), NA, Rain_Total_mm))
 
 # # #Filter for just flags
 # Flags=Met%>%
@@ -243,26 +263,9 @@ for(j in 1:nrow(RemoveMet)){
 # }
 
 
-####change the rain totals ######
-#Change rain totals to per a minute for the time that was recorded in 5 minute intervals
-Met=Met%>%
-  mutate(
-    Rain_Total_mm=as.numeric(Rain_Total_mm),
-    Flag_Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0,4,Flag_Rain_Total_mm),
-    Note_Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0,"Change_to_mm_per_min",Note_Rain_Total_mm),
-    Rain_Total_mm=ifelse(DateTime>ymd_hms("2015-07-01 00:00:00")& DateTime<ymd_hms("2015-07-13 12:20:00")&Rain_Total_mm>0, (Rain_Total_mm/5) ,Rain_Total_mm))
-
-# Take out Rain Totals above 5mm in 1 minute
-Met=Met%>%
-  mutate(
-    Note_Rain_Total_mm=ifelse(Rain_Total_mm>5,"Rain total over 5 mm in one minute so removed as outlier", Note_Rain_Total_mm),
-    Flag_Rain_Total_mm=ifelse(Rain_Total_mm>5, 4, Flag_Rain_Total_mm),
-    Rain_Total_mm=ifelse(Rain_Total_mm>5,NA, Rain_Total_mm))
-
-
 #make columns
 
-#Air temperature data cleaning
+####Air temperature data cleaning ####
 #separate data by date; before and after air temp filter installed 2019-02-21 11:50:00
 #Met_prefilter=Met[Met$DateTime<"2019-02-21 11:50:00",]
 #Met_postfilter=Met[Met$DateTime>="2019-02-21 11:50:00",]
@@ -411,9 +414,9 @@ for(i in 5:17) { #for loop to create new columns in data frame
 
 Met=Met%>%
   mutate(
-    Note_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),"Wind direction is below 0 or above 360 degrees", Note_WindDir_degrees),
-    Flag_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees), 4, Flag_WindDir_degrees),
-    WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),NA, WindDir_degrees))
+    Note_WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees) | WindDir_degrees>=360 & !is.na(WindDir_degrees),"Wind direction is below 0 or above 360 degrees", Note_WindDir_degrees),
+    Flag_WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees) | WindDir_degrees>=360 & !is.na(WindDir_degrees), 4, Flag_WindDir_degrees),
+    WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees) | WindDir_degrees>=360 & !is.na(WindDir_degrees),NA, WindDir_degrees))
 
 Met=Met%>%
   mutate(
@@ -427,15 +430,22 @@ Met=Met%>%
 #full data set QAQC
 
 
-#Remove barometric pressure outliers
+####Remove barometric pressure outliers####
 Met=Met%>%
   mutate(
     Flag_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa), 4,Flag_BP_Average_kPa),
     Note_BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),"Outlier_set_to_NA",Note_BP_Average_kPa),
     BP_Average_kPa=ifelse(BP_Average_kPa<98.5 & !is.na(BP_Average_kPa),NA,BP_Average_kPa))
 
+#### PAR QAQC ####
 
-#remove high PAR values at night
+#### Fix when PAR_Tot was programmed incorrectly #######
+
+Met=Met%>%
+  mutate()
+
+
+#####remove high PAR values at night ######
 #get sunrise and sunset times
 suntimes=getSunlightTimes(date = seq.Date(as.Date("2015-07-02"), Sys.Date(), by = 1),
                           keep = c("sunrise",  "sunset"),
@@ -465,23 +475,15 @@ Met=Met%>%
     Note_PAR_umolm2s_Average=ifelse(during_day==FALSE & PAR_umolm2s_Average>5 & !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
     PAR_umolm2s_Average=ifelse(during_day==FALSE & PAR_umolm2s_Average>5 & !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average))
 
-#Remove total PAR (PAR_Tot) outliers
+####Remove total PAR (PAR_Tot) outliers
 Met=Met%>%
   mutate(
-    Flag_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275& !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
+    Flag_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200& !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
     Flag_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), 4, Flag_PAR_umolm2s_Average),
-    Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
+    Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
     Note_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
-    PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>275 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2),
+    PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2),
     PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average))
-
-
-# Met=Met%>%
-#   mutate(
-#     Flag_PAR_Total_mmol_m2=ifelse(is.na(Flag_PAR_Total_mmol_m2) & is.na(PAR_Total_mmol_m2), 3, Flag_PAR_Total_mmol_m2),
-#     Flag_PAR_umolm2s_Average=ifelse(is.na(Flag_PAR_umolm2s_Average) & is.na(PAR_umolm2s_Average), 3, Flag_PAR_umolm2s_Average),
-#     Note_PAR_Total_mmol_m2=ifelse(is.na(Flag_PAR_Total_mmol_m2) & is.na(PAR_Total_mmol_m2), "No_data_recorded", Note_PAR_Total_mmol_m2),
-#     Note_PAR_umolm2s_Average=ifelse(is.na(Flag_PAR_umolm2s_Average) & is.na(PAR_umolm2s_Average), "No_data_recorded", Note_PAR_umolm2s_Average))
 
 
 #Flag high total values for PAR Avg as over 3000
@@ -512,18 +514,12 @@ Met=Met%>%
     Note_ShortwaveRadiationUp_Average_W_m2=ifelse(ShortwaveRadiationUp_Average_W_m2>1300 & !is.na(ShortwaveRadiationUp_Average_W_m2), "Questionable_value", Note_ShortwaveRadiationUp_Average_W_m2))
 
 
-#Eliminate the High Shortwave Radiation Up in 2018 before cleaning-put in maintenance log
-
-
 #and then shortwave downwelling (what goes up must come down)
 Met=Met%>%
   mutate(
     Flag_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), 4, Flag_ShortwaveRadiationDown_Average_W_m2),
     Note_ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), "Outlier_set_to_NA", Note_ShortwaveRadiationDown_Average_W_m2),
     ShortwaveRadiationDown_Average_W_m2=ifelse(ShortwaveRadiationDown_Average_W_m2>300 & !is.na(ShortwaveRadiationDown_Average_W_m2), NA, ShortwaveRadiationDown_Average_W_m2))
-
-#Eliminate the High Shortwave Radiation Up in 2018 before cleaning-put in maintenance log
-
 
 
 #shortwave downwelling random point in 2016-put in maintenance log
@@ -611,7 +607,7 @@ plot(Met$DateTime, Met$InfraredRadiationDown_Average_W_m2, type = 'l')
 
 #Just for the current year
 Twenty_raw=Met_raw%>%
-  filter(DateTime>ymd_hms("2022-01-01 00:00:00")& DateTime<ymd_hms("2023-01-01 00:00:00"))
+  filter(DateTime>ymd_hms("2022-12-13 00:00:00")& DateTime<ymd_hms("2023-01-01 00:00:00"))
 
 Twenty=Met%>%
   filter(DateTime>ymd_hms("2022-01-01 00:00:00")& DateTime<ymd_hms("2023-01-01 00:00:00"))

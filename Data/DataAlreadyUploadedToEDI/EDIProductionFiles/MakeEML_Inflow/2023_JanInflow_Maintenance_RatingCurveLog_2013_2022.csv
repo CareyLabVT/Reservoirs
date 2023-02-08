@@ -1,0 +1,35 @@
+Reservoir,Site,Station,DateTime_start,DateTime_end,Parameter,ColumnNumber,Flag,FlagColumn,Notes
+FCR,100,WEIR,2014-03-20 09:00:00,2014-04-28 05:45:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,WEIR,2016-04-18 15:15:00,2019-06-07 00:00:00,WVWA_pres,2,1,10,WVWA Pressure down corrected after sensor maintenance by 0.14
+FCR,100,RATING,2013-05-15 16:00:00,2019-06-07 00:00:00,WVWA_Flow*,5,100,NA,rectangular weir
+FCR,100,RATING,2019-04-22 11:30:00,2019-06-07 00:00:00,VT_Flow*,8,100,NA,rectangle weir
+FCR,100,WEIR,2017-10-15 05:00:00,2017-11-13 10:45:00,WVWA_Pres*,2,5,10,leaking weir and remove values
+FCR,100,WEIR,2017-10-15 05:00:00,2017-11-13 10:45:00,WVWA*,c(4:6),5,c(12:14),leaking weir and remove values
+FCR,100,WEIR,2019-04-22 00:00:00,2019-06-07 00:00:00,WVWA_Flow,5,4,13,weir un-plugged demonic intrusion
+FCR,100,WEIR,2020-05-14 17:00:00,2020-08-24 15:00:00,WVWA*,c(2:6),7,c(10:14),missing WVAW data due to user error
+FCR,100,WEIR,2020-07-20 10:00:00,2020-08-24 14:49:00,All_Weir,c(2:9),24,c(10:17),Weir blown out and flow diverted around the weir
+FCR,100,RATING,2019-06-07 00:15:00,2020-08-24 13:00:00,WVWA_Flow*,5,101,NA,original installation of the V-Notch weir until weir blown out and fixed
+FCR,100,RATING,2019-06-07 00:15:00,2020-08-24 13:00:00,VT_Flow*,8,101,NA,original installation of the V-Notch weir until weir blown out and fixed
+FCR,100,WEIR,2020-08-13 09:00:00,2020-08-24 14:49:00,All_Weir,c(2:9),8,c(10:17),the ISCO and all the sensors were removed so the weir could be fixed
+FCR,100,RATING,2020-08-24 15:00:00,2020-09-02 13:15:00,WVWA_Flow*,5,102,NA,V-notch weir post blow-out but before final pressure transducer location
+FCR,100,RATING,2020-08-24 15:00:00,2020-09-02 13:15:00,VT_Flow*,8,102,NA,V-notch weir post blow-out but before final pressure transducer location
+FCR,100,WEIR,2020-09-02 13:15:00,2020-09-02 13:45:00,All_Weir,c(2:9),8,c(10:17),moved the sensors from vertical to horizontal
+FCR,100,RATING,2020-09-02 13:45:00,2021-11-08 13:45:00,WVWA_Flow*,5,103,NA,Moved when had to replace the battery in the WVWA sensor
+FCR,100,RATING,2020-09-02 13:45:00,2021-11-08 13:45:00,VT_Flow*,8,103,NA,Moved when had to replace the battery in the WVWA sensor
+FCR,100,WEIR,2021-11-08 13:30:00,2021-11-08 13:45:00,All_Weir,c(2:9),8,c(10:17),removed to replace batteries in WVWA sensor
+FCR,100,WEIR,2021-11-08 13:45:00,2022-11-16 16:38:00,VT_Press*,7,1,15,VT pressure up corrected after sensor maintenance by 0.033 so inline with WVWA sensor
+FCR,100,WEIR,2022-03-12 10:15:00,2022-03-12 10:45:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,WEIR,2022-03-13 08:15:00,2022-03-13 11:15:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,RATING,2021-11-08 14:00:00,2022-05-09 13:15:00,WVWA_Flow*,5,104,NA,Moved when the weir was cleaned out
+FCR,100,RATING,2021-11-08 14:00:00,2022-05-09 13:15:00,VT_Flow*,8,104,NA,Moved when the weir was cleaned out
+FCR,100,WEIR,2022-05-09 09:15:00,2022-05-09 13:15:00,All_Weir,c(2:9),8,c(10:17),removed to clean out the weir
+FCR,100,WEIR,2022-07-21 18:45:00,2022-07-21 21:30:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,WEIR,2022-07-22 15:00:00,2022-07-22 15:15:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,WEIR,2022-07-27 01:45:00,2022-08-16 13:15:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure readings
+FCR,100,RATING,2022-05-09 13:20:00,2022-11-16 16:38:00,VT_Flow*,8,105,NA,Moved the VT sensor so it is in line with the WVWA sensor
+FCR,100,WEIR,2022-11-16 15:45:00,2022-11-16 16:45:00,All_Weir,c(2:9),8,c(10:17),removed to check on bad VT sensor readings and moved VT sensor
+FCR,100,WEIR,2022-11-06 09:15:00,2022-11-19 06:00:00,VT*,c(7:9),2,c(15:17),removed because sensor malfunctioning and reading very low values
+FCR,100,WEIR,2022-12-08 05:15:00,2022-12-08 05:15:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure reading
+FCR,100,WEIR,2022-12-09 21:15:00,2022-12-09 21:15:00,WVWA_Baro*,c(3:5),2,c(11:13),bad WVWA barometric pressure reading
+FCR,100,RATING,2022-05-09 14:15:00,2023-12-31 23:59:00,WVWA_Flow*,5,106,NA,CURRENT POSITION OF WVWA SENSOR
+FCR,100,RATING,2022-11-16 17:15:00,2023-12-31 23:59:00,VT_Flow*,8,106,NA,CURRENT POSITION OF VT SENSOR

@@ -60,6 +60,28 @@ cn_processed%>%
   ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
   geom_point()+
   facet_wrap(~Reservoir)
+
+weights2019 <- read.csv("./2019 files/2019_SedTraps_edited.csv")%>%
+  mutate(Day_Filtered=as.POSIXct(Day_Filtered, format = "%d-%b-%y"),
+         Sed_mass_g= Filter_mass_post_filtering_g-sed$Filter_mass_pre_filtering_g,
+         Sed_conc_mg_L= Sed_mass_g / Volume_filtered_mL*1000000,
+         Sample_ID= tolower(Sample_ID),
+         Depth = str_extract(str_extract(Sample_ID, "[0-9]+m"),"[0-9]+"),
+         Rep =str_extract(str_extract(Sample_ID, "r[0-9]+"),"[0-9]+"),
+         Filter =str_extract(str_extract(Sample_ID, "f[0-9]+"),"[0-9]+"),
+         Res= str_extract(Sample_ID, "(fcr|bvr|\\sb\\s|\\sf\\s)"),
+         Date = str_extract(Sample_ID, "\\d+ \\D\\D\\D \\d\\d"),
+         Date= as.POSIXct(Date, format = "%d %b %y"),
+         Type = str_extract(Sample_ID, "(sed\\strap\\sleftover|st\\sleftover|ses\\snet|sed)"))
+         
+weights2019$Date[is.na(weights2019$Date)]=weights2019$Day_Filtered[is.na(weights2019$Date)]
+weights2019$Res[is.na(weights2019$Res) & weights2019$Depth %in% c(4,8)]= "fcr"
+weights2019$Res[is.na(weights2019$Res) & weights2019$Depth %in% c(5,10)]= "bvr"
+weights2019$Type[is.na(weights2019$Type)] = "sed"
+
+weights2019_processed = weights2019%>%
+  filter(Type=="sed")%>%
+  select(-Type)
 ```
 
 ```{r}

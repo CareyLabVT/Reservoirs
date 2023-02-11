@@ -1,7 +1,7 @@
 ##MakeEMLMetals
 ##Author: Mary Lofton
 ##Date: 07SEP19
-##Edited for Metals by: Cissy Ming on 01/31/2022
+##Edited for Metals by: Cissy Ming on 01/25/2023
 
 
 #good site for step-by-step instructions
@@ -17,17 +17,10 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-
-
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-
-# Named the file pathway as folder so I don't need to rewrite the whole file pathway name each time
-# For the future don't have files for EDI on personal folders
-#folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals"
-
 
 
 #Step 1: Create a directory for your dataset
@@ -55,22 +48,27 @@ library(EMLassemblyline)
 ??template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/Users/Cissy/Documents/EDI Publishing",
+template_core_metadata(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing",
-                          data.path = "C:/Users/Cissy/Documents/EDI Publishing",
-                          data.table = "Metals_2014_2021.csv",
+template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                          data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                          data.table = "Metals_2014_2022.csv",
+                          write.file = TRUE)
+
+template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                          data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                          data.table = "site_descriptions.csv",
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/Users/Cissy/Documents/EDI Publishing",
-                             data.path = "C:/Users/Cissy/Documents/EDI Publishing",
-                             data.table = "Metals_2014_2021.csv",
+template_geographic_coverage(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                             data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                             data.table = "Metals_2014_2022.csv",
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -117,8 +115,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/Cissy/Documents/EDI Publishing",
-                               data.path = "C:/Users/Cissy/Documents/EDI Publishing",
+template_categorical_variables(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+                               data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -143,19 +141,19 @@ template_categorical_variables(path = "C:/Users/Cissy/Documents/EDI Publishing",
 
 # Run this function
 make_eml(
-  path = "C:/Users/Cissy/Documents/EDI Publishing",
-  data.path = "C:/Users/Cissy/Documents/EDI Publishing",
-  eml.path = "C:/Users/Cissy/Documents/EDI Publishing",
-  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2021",
-  temporal.coverage = c("2014-04-01", "2021-12-06"),
+  path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  eml.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2022",
+  temporal.coverage = c("2014-04-01", "2022-12-16"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_2014_2021.csv",
-  data.table.description = "Reservoir iron and manganese chemistry dataset",
-  other.entity = "Metals_QAQC_2014_2021.R",
+  data.table = c("Metals_2014_2022.csv","site_descriptions.csv"),
+  data.table.description = c("Reservoir iron and manganese chemistry dataset","Sampling site description"),
+  other.entity = "Metals_QAQC_2014_2022.R",
   other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.4')
+  package.id = 'edi.1004.6') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -192,19 +190,19 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/Users/Cissy/Documents/EDI Publishing",
-  data.path = "C:/Users/Cissy/Documents/EDI Publishing",
-  eml.path = "C:/Users/Cissy/Documents/EDI Publishing",
-  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA from 2014 through 2021",
-  temporal.coverage = c("2014-04-01", "2021-12-06"),
+  path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  eml.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2022",
+  temporal.coverage = c("2014-04-01", "2022-12-16"),
   maintenance.description = 'ongoing',
-  data.table = "Metals_2014_2021.csv",
-  data.table.description = "Reservoir iron and manganese chemistry dataset",
-  other.entity = "Metals_QAQC.R",
+  data.table = c("Metals_2014_2022.csv","site_descriptions.csv"),
+  data.table.description = c("Reservoir iron and manganese chemistry dataset","Sampling site description"),
+  other.entity = "Metals_QAQC_2014_2022.R",
   other.entity.description = "QAQC script",
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.455.6')
+  package.id = 'edi.455.7') # This is the package identifer for the production environment
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

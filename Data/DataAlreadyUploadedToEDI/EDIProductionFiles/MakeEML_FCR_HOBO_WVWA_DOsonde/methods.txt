@@ -1,28 +1,25 @@
-Multiple sensors were deployed at Falling Creek Reservoir during the monitoring period.
+Multiple sensors were deployed at Falling Creek Reservoir during the monitoring period, resulting in the two data files in this data package: FCR_DOsondes_2012_2018.csv, and FCR_hobos_2015_2018.csv.
 
 
 Dissolved Oxygen Sensors in data file FCR_DOsondes_2012_2018.csv
 
-First, dissolved oxygen and water temperature was measured every 15 minutes to 1 hour at 1 m and 8 m depths at Falling Creek Reservoir’s (FCR) deepest site (site 50; latitude: 37.303, longitude -79.837) near the dam using Insite Instrumentation Group Model 20 dissolved oxygen sensors (InsiteIG, Slidell, LA, USA; Manufacturer's specification sheet: https://www.insiteig.com/20/20pdfs/Model-20-Data-Sheet.pdf). The 8 m sensor was deployed on 28 September 2012 and the 1 m sensor was deployed on 9 November 2015. Both sensors were used to collect data through 31 December 2018.  
+First, dissolved oxygen and water temperature were measured every 15 minutes to 1 hour at 1 m and 8 m depths at Falling Creek Reservoir’s (FCR) deepest site (site 50; latitude: 37.303, longitude -79.837) near the dam using Insite Instrumentation Group Model 20 dissolved oxygen sensors (InsiteIG, Slidell, LA, USA; Manufacturer's specification sheet: https://www.insiteig.com/20/20pdfs/Model-20-Data-Sheet.pdf). The 8 m sensor was deployed on 28 September 2012 and the 1 m sensor was deployed on 9 November 2015. Both sensors were used to collect data through 31 December 2018.  
 
 
 QAQC and Maintenance for Dissolved Oxygen Sensors in data file FCR_DOsondes_2012_2018.csv
 
-QAQC was applied to these two DO sonde data for values when sensors were out of the water column for cleaning and for extreme outliers. The first QAQC step was identifying missing observations in the data set which are NAs and assigned a Flag of 7 (missing observations, set to NA).
+QAQC was applied to these two DO sonde data for values when sensors were out of the water column for cleaning and for extreme outliers. The first QAQC step was identifying missing observations in the data set which were set to NAs and assigned a Flag of 7 (missing observations, set to NA).
 Extreme outliers were identified via three separate steps: the first was identifying times when sensor malfunctions had clearly occurred and were identified by DO mg/L values over 1000. Both DO and temperature measurements for these intervals were set to NA and assigned a flag of 2 (i.e., a negative or outlier value). After this first step, a second step of QAQC was applied in which outliers were identified as values that were >=2 standard deviations above or below the previous observation and the subsequent observation. These values were also flagged with a 2. The third QAQC step was identifying times where sensors were out of the water column for cleaning or maintenance. These data points were set to NA and assigned a flag of 2. 
 
 
 HOBO Temperature Pendant profiles in data file FCR_hobos_2015_2018.csv
 
-Water temperature measurements were collected every 10 to 15 minutes at approximately one-meter intervals from 1 m to 9.3 m depth using HOBO temperature pendants (HOBO Pendant Temperature/Light Data Logger, Onset, Bourne, MA, USA) at Falling Creek Reservoir’s deepest site (site 50; latitude: 37.303, longitude -79.837). HOBO temperature pendant manual from manufacturer can be found here: https://www.onsetcomp.com/sites/default/files/resources-documents/9556-M%20UA-002%20Manual.pdf. The depth of the temperature loggers varied slightly year to year for different research project needs but included these depths: 1, 2, 3, 4, 5, 6, 7, 8, and 9.3 m. Temperature loggers were initially deployed on 28 September 2015 and removed on 15 January 2018. The dataset contains flag columns to denote when sensors were not deployed, a flag of 0 equals no flag, and a flag of 7 means there is data missing from that time point due to sensors not being deployed at that depth.
+Water temperature measurements were collected every 10 to 15 minutes at approximately one-meter intervals from 1 m to 9.3 m depth using HOBO temperature pendants (HOBO Pendant Temperature/Light Data Logger, Onset, Bourne, MA, USA) at Falling Creek Reservoir’s deepest site (site 50; latitude: 37.303, longitude -79.837). The HOBO temperature pendant manual from the manufacturer can be found here: https://www.onsetcomp.com/sites/default/files/resources-documents/9556-M%20UA-002%20Manual.pdf. The depth of the temperature loggers varied slightly year to year for different research project needs but included these depths: 1, 2, 3, 4, 5, 6, 7, 8, and 9.3 m. Temperature loggers were initially deployed on 28 September 2015 and removed on 15 January 2018. The dataset contains flag columns to denote when sensors were not deployed, a flag of 0 equals no flag, and a flag of 7 means there is data missing from that time point due to sensors not being deployed at that depth.
 
 
 Falling Creek Reservoir Whole Ecosystem Experiments 
 
-Throughout the monitoring period in this data set numerous whole ecosystem experiments were conducted in FCR. Experiments were conducted using a hypolimnetic oxygenation system (HOx) and a pulsed epilimnetic mixing system (Carey et al. 2022). Details on the HOx system can be found in Gerling et al. 2014 and on the epilimnetic mixing system in Lofton et al. 2019. Information on HOx operation schedule can be found in additional information section of Carey et al. 2022. Information on epilimnetic mixing system operation schedule can be found in Lofton et al. 2022.
+Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
 
-References: 
-Carey, C.C., R.Q. Thomas, and P.C. Hanson. 2022. General Lake Model-Aquatic EcoDynamics model parameter set for Falling Creek Reservoir, Vinton, Virginia, USA 2013-2019 ver 1. Environmental Data Initiative. https://doi.org/10.6073/pasta/9f7d037d9a133076a0a0d123941c6396 
-Gerling, A.B., Z.W. Munger, J.P. Doubek, K.D. Hamre, P.A. Gantzer, J.C. Little, and C.C. Carey. 2016. Whole-catchment manipulations of internal and external loading reveal the sensitivity of a century-old reservoir to hypoxia. Ecosystems. 19:555-571. DOI: 10.1007/s10021-015-9951-0
-Lofton M.E., McClure R.P., Chen S., Little J.C., Carey C.C. 2019. Whole-ecosystem experiments reveal varying responses of phytoplankton functional groups to epilimnetic mixing in a eutrophic reservoir. Water 11:222. DOI: 10.3390/w11020222
-Lofton M.E., Howard D.W., McClure R.P., Wander H.L., Woelmer W.M., Hounshell A.G., Lewis A.S.L., Carey C.C. 2022. Experimental thermocline deepening alters vertical distribution and community structure of phytoplankton in a 4‐year whole‐reservoir manipulation. Freshwater Biology 67:1903–24. DOI: 10.1111/fwb.13983
+
+

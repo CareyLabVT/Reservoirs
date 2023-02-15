@@ -13,10 +13,10 @@ RH_percent	Relative Humidity at time of measurement	numeric	percent		NA	value is
 Rain_Total_mm	Total rainfall over measurement interval	numeric	millimeter		NA	value is missing or outlier (see metatdata)
 WindSpeed_Average_m_s	Wind speed averaged over measurement interval	numeric	metersPerSecond		NA	value is missing or outlier (see metatdata)
 WindDir_degrees	Direction of wind at time of measurement	numeric	degree		NA	value is missing or outlier (see metatdata)
-ShortwaveRadiationUp_Average_W_m2	Short wave radiation facing the sky averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-ShortwaveRadiationDown_Average_W_m2	Short wave radiation facing the reservoir averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-InfraredRadiationUp_Average_W_m2	Infrared wave radiation facing the sky averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-InfraredRadiationDown_Average_W_m2	Infrared wave radiation facing the reservoir averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationUp_Average_W_m2	Shortwave radiation facing the sky averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationDown_Average_W_m2	Shortwave radiation facing the reservoir averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfraredRadiationUp_Average_W_m2	Infrared radiation facing the sky averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfraredRadiationDown_Average_W_m2	Infrared radiation facing the reservoir averaged over measurement interval	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
 Albedo_Average_W_m2	Calculated from ShortwaveRadiationDown_Average_W_m2 divided by ShortwaveRadiationUp_Average_W_m2	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
 Flag_PAR_umolm2s_Average	Data flag applying to associated variable. 0 = no flag applied; 1 = value removed due to maintenance and set to NA; 2 = sample not collected; 3 = negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA; 4 = potentially questionable value and changed or set to NA, see note; 5 = questionable value but left in dataset	categorical	dimensionless		NA	missing flag
 Note_PAR_umolm2s_Average	Additional information describing Flag for associated variable	character			NA	no note for value

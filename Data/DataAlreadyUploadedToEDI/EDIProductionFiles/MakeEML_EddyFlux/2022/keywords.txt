@@ -15,3 +15,4 @@ heat flux	lter controlled vocabulary
 eddy covariance	lter controlled vocabulary
 fluxes	lter controlled vocabulary
 meteorology	lter controlled vocabulary
+eddy flux	carey lab controlled vocabulary

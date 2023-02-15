@@ -71,10 +71,12 @@ data_file <- 'misc_data_files/bvre-waterquality.csv'#this is from github and pus
 data2_file <-  'misc_data_files/BVRmanualplatform.csv'# this is data downloaded directly from the data logger and gets up dated periodically to account for missing data gaps
 maintenance_file <-  "misc_data_files/BVR_maintenance_log_2020_2022.txt" #this is the maintenance log for QAQC purposes
 output_file <-  "misc_data_files/BVRplatform_clean.csv"
+start_date <-NULL
+end_date <- NULL
 
 
 # Run the QAQC function
-qaqc_bvr(data_file,data2_file,maintenance_file, output_file)
+qaqc_bvr(data_file,data2_file,maintenance_file, output_file, start_date, end_date)
 
 ```
 

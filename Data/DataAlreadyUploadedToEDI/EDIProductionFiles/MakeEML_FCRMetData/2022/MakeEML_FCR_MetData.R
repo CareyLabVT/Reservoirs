@@ -145,18 +145,19 @@ make_eml(path = folder,
          data.table = c('FCR_Met_final_2015_2022.csv','FCR_Met_MaintenanceLog_2015_2022.csv'),
          data.table.name = c('FCR_Met_final_2015_2022','FCR_Met_MaintenanceLog_2015_2022'),
          data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2022',
-                            'The log for all maintenance and outliers for the Met station that go into the QAQC script for 2015-2022'),
-         other.entity = 'FCR_MET_QAQC_2015_2022.R',
-         other.entity.name = 'FCR_MET_QAQC_2015_2022',
-         other.entity.description = 'Data aggregation and QA/QC R script for 2015_2022',
+                            'The log for all maintenance and outliers for the Met station that go into the QAQC function for 2015-2022'),
+         other.entity = c('FCR_Met_QAQC_function_2015_2022.R','FCR_MET_QAQC_Plots_2015_2022.Rmd'),
+         other.entity.name = c('FCR_Met_QAQC_function_2015_2022','FCR_MET_QAQC_Plots_2015_2022'),
+         other.entity.description = c('QAQC function used in FCR_MET_QAQC_Plots_2015_2022.Rmd to take out observations from the dataset based on the maintenance log and other outliers.',
+                                      'Script that uses the function in FCR_Met_QAQC_function_2015_2022.R collates files and creates QAQC plots.'),
          temporal.coverage = c("2015-07-07", "2022-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.22") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
-
+         #package.id = "edi.143.23") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
+        package.id = "edi.389.7") # THIS IS FOR THE FINAL VERSION
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK

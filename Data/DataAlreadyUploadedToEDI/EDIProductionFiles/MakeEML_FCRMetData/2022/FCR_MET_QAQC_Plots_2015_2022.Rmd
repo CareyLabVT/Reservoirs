@@ -1,0 +1,524 @@
+---
+title: "FCR Met Data collation and Plots for EDI"
+output: html_document
+date: "2023-02-12"
+---
+
+Master QAQC script in prep for publishing FCR Met station data to EDI this script using the qaqc_fcrmet function which automatically QAQCs the data. This script produces figures to look over the data to visually inspect it and make sure there are no major outlines. Knit this together to create an HTML output which includes missing values and QAQC plots. Use the plots to look for any funky spots. 
+
+Use this file path in Carey Lab Reservoir GitHub Repo: "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2022/"
+
+This step gets the right packages and sources the sources the QAQC script. Make sure you have the correct year for the script file
+
+
+```{r Set Up, include=FALSE}
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr", "suncalc", "dplyr","scattermore", "knitr", "openair")
+source("FCR_Met_QAQC_function_2015_2022.R")
+
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2022-01-01 00:00:00, tz=UTC"
+current_time_end="2023-01-01 00:00:00, tz=UTC"
+```
+
+
+```{r Create Data folder, include=FALSE}
+### Create a misc_data_files folder if one doesn't already exist
+misc_folder <- "misc_data_files"
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+
+```
+
+
+```{r Download data, include=FALSE, eval=FALSE}
+# READ BEFORE PROCEEDING
+#All the Raw data and the maintenance file is on github. Use this section to download the files so you are working with #the most recent ones.
+
+#If you want to download then set eval=TRUE before knitting HTML if not set to FALSE will not run the chunk and use previously downloaded files. 
+# Set the timeout option to 100 seconds instead of 60
+options(timeout=1000)
+
+# This function to speeds up the download time of the data downloads. 
+# If your wifi is slow then it will still take a while. 
+
+bdown=function(url, file){
+  library('RCurl')
+  f = CFILE(file, mode="wb")
+  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
+  close(f)
+  return(a)
+}
+
+
+# #download current met data from GitHub
+ bdown("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", "misc_data_files/FCRmet.csv")
+
+# #download maintenance file
+ bdown("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/MET_MaintenanceLog.txt","misc_data_files/FCR_Met_Maintenance_2015_2022.txt")
+ 
+ # # download DOY Average and SD of Infrared data from 2018 used for QAQC
+ bdown('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCR_Met_Infrad_DOY_Avg_2018.csv',"misc_data_files/FCR_Met_Infrad_DOY_Avg_2018.csv")
+ 
+# #original raw files from 2015-2020
+bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',"misc_data_files/RawMetData_2015_2016.csv") #2015-2016 data
+ bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',"misc_data_files/RawMetData_2017.csv") #2017 data
+ bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2018.csv', "misc_data_files/RawMetData_2018.csv") #2018 data
+ bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2019.csv', "misc_data_files/RawMetData_2019.csv") #2019 data
+ bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2020.csv', "misc_data_files/RawMetData_2020.csv") #2019 data
+ bdown('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2021.csv', "misc_data_files/RawMetData_2021.csv")
+ bdown('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet_legacy_2022.csv', "misc_data_files/RawMetData_2022.csv")
+
+```
+
+```{r Get all the data and combine into one df, include=FALSE}
+myfiles = list.files(path='misc_data_files/', pattern="Raw*", full.names=TRUE)#list the files from FCR met
+
+# Function to get the right columns and the correct names
+header <- function(Data){
+  
+    files<-read_csv(Data,skip= 0) #get header minus wonky Campbell rows
+    if(length(names(files))==17){
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
+      return(files)
+    }else if (length(names(files))==8){
+      files<-read_csv(Data, skip = 3, show_col_types = FALSE)
+      files[,17]<-NULL #remove column
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      return(files)
+    }else if(length(names(files))==18){
+      files[,17]<-NULL #remove column
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      return(files)
+  }
+}
+
+# Use the function above to get the right header and rows
+renamed <- lapply(myfiles, header)
+
+# Now bind all the files together.  
+Met <- bind_rows(renamed)
+
+```
+
+```{r change DateTime when it was changed from EDT to EST, include=FALSE}
+# This happened on 2019-04-15 10:19:00
+
+Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "Etc/GMT+5")
+met_timechange=max(which(Met$DateTime=="2019-04-15 10:19:00")) #shows time point when met station was switched 
+
+#pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+Met$DateTime[c(1:met_timechange-1)]<-with_tz(force_tz(Met$DateTime[c(1:met_timechange-1)],"Etc/GMT+4"), "Etc/GMT+5") 
+
+# order data by DateTime Stamp
+Met=Met[order(Met$DateTime),]
+```
+
+```{r Check for daily gaps and record gaps, include=FALSE}
+
+#order data by DateTime
+Met2=Met
+Met2$DOY=yday(Met2$DateTime)
+```
+
+##Check for gaps in the data frame
+This identifies if there are any daily data gaps in the long-term record
+
+```{r Check for daily gaps, echo=FALSE}
+for(i in 2:nrow(Met2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(Met2$DOY[i]-Met2$DOY[i-1]>1){
+    print(c(Met2$DateTime[i-1],Met2$DateTime[i]))
+  }
+}
+```
+This identifies if there are any sub-daily gaps in the long-term record. 
+Most of these gaps happen when we change the program on the data logger. 
+```{r Check for sub daily gaps, echo=FALSE}
+for(i in 2:length(Met2$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(Met2$Record[i]-Met2$Record[i-1])>1){
+    print(c(Met2$DateTime[i-1],Met2$DateTime[i]))
+  }
+}
+```
+
+```{r Name the Raw data set to compare with QAQCd file, include=FALSE}
+#Met=Met_raw; reset your data, compare QAQC
+Met_raw=Met 
+
+#setting time zone
+Met_raw$DateTime=ymd_hms(Met_raw$DateTime, tz="UTC")
+```
+
+
+```{r Run the QAQC function, include=FALSE}
+
+# QAQC Function
+
+# This section sets up and runs the QAQC function. The first define where the data entered into the function are.
+
+#The output tells you the missing observations.If you can't find them in the manual downloads then make sure to put # #these times in the methods.
+
+#There are also some warnings which are checks to make sure the maintenance log is using the correct columns for #indexing. section under missing.
+
+
+# run standard qaqc these are where the data entered in the function are defined
+#data_file <- "misc_data_files/FCRmet.csv"
+data_file <- Met #this is the raw met file from above
+maintenance_file <-  "misc_data_files/FCR_Met_Maintenance_2015_2022.txt" #this is the maintenance log for QAQC purposes
+met_infrad <-  "misc_data_files/FCR_Met_Infrad_DOY_Avg_2018.csv"
+output_file <-  "FCR_Met_final_2015_2022.csv"
+start_time <- NULL
+end_time <- NULL
+
+
+# Run the QAQC function
+qaqc_fcrmet(data_file, maintenance_file, met_infrad, output_file,start_time, end_time)
+
+```
+
+## Read in the QAQC File and Check it out
+
+This section reads in the QAQC file and then you can look at the head, tail and structure. Make sure the last row is Dec. 31 23:59 of the publishing year. There should be 45 columns unless a new one has been added.
+
+```{r Read in QAQC file and look at it}
+# read in qaqc function output
+
+
+fcrmetdata <- read_csv(output_file, col_types = cols(Note_BP_Average_kPa = col_character(), DateTime = col_datetime()))
+#fcrmetdata <- read_csv("FCR_Met_final_2015_2022.csv")
+
+# subset file to only unpublished data
+fcrmetdata <- fcrmetdata[fcrmetdata$DateTime<ymd_hms(current_time_end),]
+
+# what does the beginning look like
+head(fcrmetdata)
+# Make sure it goes to Dec 31st 23:59 of the previous year or your ending period
+tail(fcrmetdata)
+# check out the structure
+str(fcrmetdata)
+```
+
+```{r Make the Maintenance Log file for EDI, include=FALSE}
+RemoveMet=read.csv(maintenance_file)
+names(RemoveMet) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber", "Flag", "Notes") #finalized column names
+RemoveMet$Reservoir= "FCR"#add reservoir name for EDI archiving
+RemoveMet$Site=50 #add site column for EDI archiving
+
+# Rearrange for publishing
+RemoveMet=RemoveMet[,c(8:9,1:7)]
+
+# write it as a csv for EDI
+write.csv(RemoveMet, "FCR_Met_MaintenanceLog_2015_2022.csv", row.names=F, quote=F)
+
+```
+## Check out the Flag requency
+
+Let's look at the flag Frequency for each variable. 
+
+As a reminder here are the flag codes Flag values 
+
+0: no flag; 
+
+1: value removed due to maintenance and set to NA; 
+
+2: sample not collected; 
+
+3: negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA; 
+
+4: potentially questionable value and changed or set to NA, see note; 
+
+5: questionable value but left in the dataset.
+
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags=fcrmetdata%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+
+# Make a table with the number of times a flag was used
+for(f in 2:(ncol(Flags))){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+
+```{r Filter for the current year and set up legend, include=FALSE}
+
+current_raw <- Met_raw%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+current <- fcrmetdata%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+colors <- c("raw" = "red", "QAQCd" = "black")
+
+```
+## QAQC Plots
+These are QAQC plots to see if there are any questionable values we missed. 
+
+## Temperature
+```{r Graph Air Temp amd Panel Temp, echo=FALSE}
+# Let's try using scattermore for faster plotting
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=AirTemp_C_Average, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=AirTemp_C_Average, color="QAQCd"))+
+  ggtitle("All Met Air Temp") +
+    labs(y = "degrees C",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=AirTemp_C_Average, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=AirTemp_C_Average, color="QAQCd")) +
+  ggtitle("Current Year Met Air Temp")+
+  labs(y = "degrees C",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=CR3000Panel_Temp_C), color="black")+
+  ggtitle("All CR Panel Air Temp") 
+
+ggplot() +
+  geom_scattermore(data=current, aes(x=DateTime, y=CR3000Panel_Temp_C), color="black") +
+  ggtitle("Current CR Panel Air Temp")
+
+```
+
+## PAR 
+```{r PAR Graph, echo=FALSE}
+# Let's try using scattermore for faster plotting
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=PAR_umolm2s_Average, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=PAR_umolm2s_Average, color="QAQCd"))+
+  ggtitle("All PAR Average") +
+  labs(y = "umolm2s",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=PAR_umolm2s_Average, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=PAR_umolm2s_Average, color="QAQCd")) +
+  ggtitle("Current PAR Average") +
+  labs(y = "umolm2s",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=PAR_Total_mmol_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=PAR_Total_mmol_m2, color="QAQCd"))+
+  ggtitle("All PAR Total") +
+  labs(y = "mmol/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=PAR_Total_mmol_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=PAR_Total_mmol_m2, color="QAQCd")) +
+  ggtitle("Current PAR Total") +
+  labs(y = "mmol/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+```
+
+## Barometric Pressure 
+```{r BP Graph, echo=FALSE}
+# Let's try using scattermore for faster plotting
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=BP_Average_kPa, color="raw"), pointsize = 3)+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=BP_Average_kPa, color="QAQCd"), pointsize=3)+
+  ggtitle("All Barometric Pressure") +
+  labs(y = "kPa",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=BP_Average_kPa, color="raw"), pointsize = 3)+
+  geom_scattermore(data=current, aes(x=DateTime, y=BP_Average_kPa, color="QAQCd"), pointsize=3) +
+  ggtitle("Current Barometric Pressure") +
+  labs(y = "kPa",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+```
+
+##Relative Humidity
+```{r RH Graph, echo=FALSE}
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=RH_percent, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=RH_percent, color="QAQCd"))+
+  ggtitle("All Relative Humidity") +
+  labs(y = "percent",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=RH_percent, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=RH_percent, color="QAQCd")) +
+  ggtitle("Current Relative Humidity") +
+  labs(y = "percent",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+```
+
+## Rain Total
+```{r Rain Total Graph, echo=FALSE}
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=Rain_Total_mm, color="raw"), pointsize = 3)+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=Rain_Total_mm, color="QAQCd"), pointsize = 3)+
+  ggtitle("All Rain Totals") +
+  labs(y = "mm",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=Rain_Total_mm, color="raw"), pointsize = 3)+
+  geom_scattermore(data=current, aes(x=DateTime, y=Rain_Total_mm, color="QAQCd"), pointsize = 3) +
+  ggtitle("Current Rain Totals") +
+  labs(y = "mm",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+```
+
+## Wind Speed and Direction 
+```{r Wind Graph, echo=FALSE}
+
+ # Visualize wind directions that 
+  chicago_wind=fcrmetdata%>%
+    select(DateTime,WindSpeed_Average_m_s,WindDir_degrees)%>%
+  dplyr::rename(date = DateTime, ws = WindSpeed_Average_m_s, wd = WindDir_degrees)
+  pollutionRose(chicago_wind, pollutant="ws")
+  
+  ggplot() +
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=WindSpeed_Average_m_s), color="black")+
+  ggtitle("All Average Wind Speed") +
+  labs(y = "m/s") 
+  
+  # Visualize wind directions that 
+  chicago_wind2=current%>%
+    select(DateTime,WindSpeed_Average_m_s,WindDir_degrees)%>%
+  rename(date = DateTime, ws = WindSpeed_Average_m_s, wd = WindDir_degrees)
+  pollutionRose(chicago_wind2, pollutant="ws")
+  
+  ggplot() +
+  geom_scattermore(data=current, aes(x=DateTime, y=WindSpeed_Average_m_s), color="black")+
+  ggtitle("Current Average Wind Speed") +
+  labs(y = "m/s") 
+    
+```  
+
+## Short Wave Radiation  
+```{r SW Radiation Graph, echo=FALSE}  
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=ShortwaveRadiationUp_Average_W_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=ShortwaveRadiationUp_Average_W_m2, color="QAQCd"))+
+  ggtitle("All Shortwave Radiation Up") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=ShortwaveRadiationUp_Average_W_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=ShortwaveRadiationUp_Average_W_m2, color="QAQCd")) +
+  ggtitle("Current Shortwave Radiation Up") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=ShortwaveRadiationDown_Average_W_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=ShortwaveRadiationDown_Average_W_m2, color="QAQCd"))+
+  ggtitle("All Shortwave Radiation Down") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=ShortwaveRadiationDown_Average_W_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=ShortwaveRadiationDown_Average_W_m2, color="QAQCd")) +
+  ggtitle("Current Shortwave Radiation Down") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+```
+
+## Infrared Radiation
+```{r Infrared Radiaion Graph, echo=FALSE}
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=InfraredRadiationUp_Average_W_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=InfraredRadiationUp_Average_W_m2, color="QAQCd"))+
+  ggtitle("All Infrared Radiation Up") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=InfraredRadiationUp_Average_W_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=InfraredRadiationUp_Average_W_m2, color="QAQCd")) +
+  ggtitle("Current Infrared Radiation Up") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=InfraredRadiationDown_Average_W_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=InfraredRadiationDown_Average_W_m2, color="QAQCd"))+
+  ggtitle("All Infrared Radiation Down") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=InfraredRadiationDown_Average_W_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=InfraredRadiationDown_Average_W_m2, color="QAQCd")) +
+  ggtitle("Current Infrared Radiation Down") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+```
+
+## Albedo
+```{r Albedo Graph, echo=FALSE}
+ggplot() +
+  geom_scattermore(data=Met_raw, aes(x=DateTime, y=Albedo_Average_W_m2, color="raw"))+
+  geom_scattermore(data=fcrmetdata, aes(x=DateTime, y=Albedo_Average_W_m2, color="QAQCd"))+
+  ggtitle("All Albedo") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y=Albedo_Average_W_m2, color="raw"))+
+  geom_scattermore(data=current, aes(x=DateTime, y=Albedo_Average_W_m2, color="QAQCd")) +
+  ggtitle("Current Albedo") +
+  labs(y = "W/m2",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+```

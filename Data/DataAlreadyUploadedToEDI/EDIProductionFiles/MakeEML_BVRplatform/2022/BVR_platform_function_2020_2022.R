@@ -1,5 +1,5 @@
 qaqc_bvr <- function(data_file, data2_file, 
-                     maintenance_file,  output_file)
+                     maintenance_file,  output_file, start_date, end_date)
 {
   
   #bvrdata=data_file
@@ -31,6 +31,39 @@ qaqc_bvr <- function(data_file, data2_file,
   bvrdata1 <- read.csv(data_file, skip=1, col.names = BVRDATA_COL_NAMES)
   
   bvrdata2<-read_csv(data2_file, skip=1, col_names = BVRDATA_COL_NAMES)
+  
+  ## read in maintenance file 
+  log_read <- read_csv(maintenance_file, col_types = cols(
+    .default = col_character(),
+    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+    flag = col_integer()
+  ))
+  
+  log <- log_read
+  
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    bvrdata1 <- bvrdata1 %>% 
+      filter(DateTime >= start_date)
+    bvrdata2 <- bvrdata2 %>% 
+      filter(DateTime >= start_date)
+    log <- log %>% 
+      filter(TIMESTAMP_start >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    bvrdata1 <- bvrdata1 %>% 
+      filter(DateTime <= end_date)
+    bvrdata2 <- bvrdata2 %>% 
+      filter(DateTime <= end_date)
+    log <- log %>% 
+      filter(TIMESTAMP_end <= end_date)
+  }
+  
+  if (nrow(log) == 0){
+    log <- log_read
+  }
   
   #bad headers so remove them
   
@@ -90,12 +123,12 @@ qaqc_bvr <- function(data_file, data2_file,
   
   #Read in the maintneance log 
   
-  log <- read_csv(maintenance_file, col_types = cols(
-    .default = col_character(),
-    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-    flag = col_integer()
-  )) 
+  # log <- read_csv(maintenance_file, col_types = cols(
+  #   .default = col_character(),
+  #   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  #   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  #   flag = col_integer()
+  # )) 
   
   # modify catdata based on the information in the log  
   
@@ -334,7 +367,7 @@ qaqc_bvr <- function(data_file, data2_file,
       d="ThermistorTemp_C_1"
     } else if (colnames(bvrdata[b])=="depth_2"){
       d="ThermistorTemp_C_2"
-   }else if (colnames(bvrdata[b])=="depth_3"){
+    }else if (colnames(bvrdata[b])=="depth_3"){
       d="ThermistorTemp_C_3"
     }else if (colnames(bvrdata[b])=="depth_4"){
       d="ThermistorTemp_C_4"
@@ -347,7 +380,7 @@ qaqc_bvr <- function(data_file, data2_file,
     
   }
   
-################################################################################################################################  
+  ################################################################################################################################  
   # delete EXO_Date and EXO_Time columns
   bvrdata <- bvrdata %>% select(-EXO_Date, -EXO_Time, -depth_1, -depth_2, -depth_3, -depth_4, -depth_5)
   
@@ -392,4 +425,3 @@ qaqc_bvr <- function(data_file, data2_file,
 #      "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/BVR_maintenance_log.txt",
 #       "BVRplatform_clean.csv", 
 #     "BVR_Maintenance_2020.csv")
-

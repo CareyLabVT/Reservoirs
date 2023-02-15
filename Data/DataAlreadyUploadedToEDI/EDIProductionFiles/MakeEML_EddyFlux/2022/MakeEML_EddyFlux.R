@@ -146,14 +146,15 @@ make_eml(
   temporal.coverage = c("2020-04-04", "2022-12-31"),
   maintenance.description = 'ongoing',
   data.table = c("EddyPro_Cleaned_2020_2022.csv"),
-  data.table.description = c("EC Data cleaned but not further processed with FCR_Process_BD.R"),
+  data.table.description = c("EC Data cleaned but not further post-processed with processing script"),
   data.table.name = "EC Data for 2020 to 2022",
   other.entity= c("EddyPro_CleanUp_2020_2022.R","FCR_Process_BD.R","despike.R"),
   other.entity.description = c("R script to clean-up Eddy Pro output","R script for post-processing of EC data","Depsike function for post-processing"),
   other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.692.6')
+  #package.id = 'edi.692.8') # FOR STAGING
+  package.id = 'edi.1061.2') # FOR FINAL PRODUCTION
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

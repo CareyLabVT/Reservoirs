@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 date	Date sample was collected in GMT	Date		YYYY-MM-DD	NA	Value is missing
-time	Time sample was collected in GMT	Date		HH:MM:SS	NA	Value is missing
+time	Time sample was collected in GMT	Date		hh:mm:ss	NA	Value is missing
 DOY	Day of Julian year	Date		D	NA	Value is missing
 Tau_kgms2	Corrected momentum flux	numeric	kilogramPerMeterPerSecondSquared		NA	Value is missing
 qc_Tau	Quality Flag for momentum flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing

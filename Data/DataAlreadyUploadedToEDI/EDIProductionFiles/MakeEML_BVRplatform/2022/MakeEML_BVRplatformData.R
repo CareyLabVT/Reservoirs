@@ -148,7 +148,7 @@ make_eml(path = folder,
                            'BVR_sort_by_depth_2020_2022.R', 'BVR_sensorstring_Collate_QAQC_2016_2020.R'),
          other.entity.name = c('BVR_platform_function_2020_2022', 'QAQC_BVR_platform_2020_2022', 'BVR_Depth_offsets_2020_2022',
                                'BVR_sort_by_depth_2020_2022', 'BVR_sensorstring_Collate_QAQC_2016_2020'),
-         other.entity.description = c('QAQC funcion used in QAQC_BVR_platform_2020_2022.Rmd to collate the data and take out observations from the maintenance log and other outliers.',
+         other.entity.description = c('QAQC function used in QAQC_BVR_platform_2020_2022.Rmd to collate the data and take out observations from the maintenance log and other outliers.',
                                       'Script that uses the function in BVR_platform_function_2020_2022.R and creates QAQC plots and final csv for data publication',
                                       'The offsets for sensors in BVR_platform_data_2020_2022 to determine the depth of the observations as the water level changes. Use with BVR_sort_by_depth_2020_2022.R', 
                                       'Script that gives a depth to each observation which uses the offsets from BVR_Depth_offsets_2020_2022.csv',
@@ -159,11 +159,8 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.24") # Put your package.id here, followed by .1 (for 1st version). This is for staging
-         #package.id = "edi.725.2") # This is for the final version
-
-
-
+         package.id = "edi.157.26") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         #package.id = "edi.725.3") # This is for the final version
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

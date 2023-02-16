@@ -1,1 +1,5 @@
-CCC developed and led the reservoir monitoring program, and oversaw the collection and analysis of this dataset throughout the monitoring period. ABP was the point person for manual discharge data collection at Falling Creek in 2021 and DWH was the point person for manual discharge data collection at Carvins Cove Reservoir in 2021. WMW led QAQC and publishing in the 2021 field season. WMW was the point person for discharge data collection from 2019–2020 at both Falling Creek and Beaverdam Reservoirs. AGH was the co-point person for discharge data collection in 2019. 
+Contributions to the 2022 revision:
+CCC developed and led the reservoir monitoring program 2013-present. ABP led the field crew and conducted substantial fieldwork at Falling Creek Reservoir in 2022. DWH led the field crew at Carvins Cove Reservoir in 2022, including data collection, collation, and calculation of float method estimates. WMW led QAQC, data collation, and publishing of the data in 2022. BG and GH digitized all field data and led field prep in 2022.
+
+Acknowledgments and historical contributions:
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork. 

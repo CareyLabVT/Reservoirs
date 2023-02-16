@@ -8,5 +8,6 @@ Renato	J.	Figueiredo	University of Florida	renato@acis.ufl.edu	0000-0001-9841-60
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Dexter	W	Howard	Virginia Tech	dwh1998@vt.edu	0000-0002-6118-2149	creator			
 Whitney	M	Woelmer	Virginia Tech	wwoelmer@vt.edu	0000-0001-5147-3877	creator			
+Becket		Geisler	Virginia Tech	beccadg@vt.edu		creator			
+George		Haynie	Virginia Tech	georgeh0919@vt.edu		creator			
 Cayelan	C	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	contact			
-Alexandria	G	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			

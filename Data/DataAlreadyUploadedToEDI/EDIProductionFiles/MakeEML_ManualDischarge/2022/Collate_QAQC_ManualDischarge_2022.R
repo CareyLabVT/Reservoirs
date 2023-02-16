@@ -6,9 +6,6 @@ library(ggplot2)
 #Load the library 
 library(googlesheets4)
 
-# read in data from previous year's publication
-olddata <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021/ManualDischarge_2019_2021.csv')
-olddata$Date <- as.Date(olddata$Date)
 
 #####################################################################################
 # calculate discharge
@@ -46,7 +43,7 @@ newdata$Method <- 'F'
 newdata$Flag_Flow <- 0
 
 for(i in 1:nrow(newdata)){
-  if(newdata$Site[i]=='F200'){
+  if(newdata$Site[i]=='200'){
     newdata$Reservoir[i] <- 'FCR'
     newdata$Site[i] <- 200
   }else{
@@ -59,28 +56,48 @@ colnames(newdata) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_
 
 ggplot(data = newdata, aes(x = Date, y = Flow_cms)) + 
   geom_line() +
-  facet_wrap(~Reservoir)
+  facet_grid(cols = vars(Reservoir), rows = vars(Site), scale = 'free')
 
-# read in bucket and float velocity data
-bucket <- read.csv('./Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/CCR_bucket_data_2021.csv')
-bucket <- bucket %>% select(Reservoir, Site, DateTime, Discharge_cms, Method)
-bucket$Flag_Flow <- 0
-colnames(bucket) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_Flow')
-bucket$Date <- as.Date(bucket$Date)
+ggplot(data = newdata[newdata$Reservoir=='CCR',], aes(x = Date, y = Flow_cms, color = as.factor(Site))) + 
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site, scales = 'free_y')
 
+# read in CCR volumetric flow calculations
+ccrvol <- read.csv('./Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/2022/CCR_VolumetricFlow_2020_2022_forexport.csv')
+ccrvol$Date <- as.Date(ccrvol$Date)
+   # Dexter already formatted these--fantastic!
+
+# combine the files together
+all_new <- full_join(newdata, ccrvol)
+
+ggplot(data = all_new, aes(x = Date, y = Flow_cms)) + 
+  geom_line() +
+  facet_grid(cols = vars(Reservoir), rows = vars(Site), scale = 'free')
+
+ggplot(data = all_new[all_new$Reservoir=='CCR' & all_new$Date > as.Date('2022-01-01'),], aes(x = Date, y = Flow_cms, color = as.factor(Site))) + 
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site, scales = 'free_y')
+########################################################################################
 # combine with previous published data
+########################################################################################
+# read in data from previous year's publication
+olddata <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021/ManualDischarge_2019_2021.csv')
+olddata$Date <- as.Date(olddata$Date)
+
 edi <- rbind(olddata, newdata)
-edi <- rbind(edi, bucket)
+edi <- rbind(edi, all_new)
 edi$Date <- as.Date(edi$Date)
 
 # sort by date
 edi <- edi[order(as.Date(edi$Date)),]
 
 # plot data
-ggplot(data = edi, aes(x = Date, y = Flow_cms)) + 
+ggplot(data = edi, aes(x = Date, y = Flow_cms, color = as.factor(Site))) + 
   geom_point(aes(color = Site)) +
-  facet_wrap(~Reservoir, scales = 'free_y')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 edi$Flag_Flow <- as.character(edi$Flag_Flow)
 
-write.csv(edi, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021/ManualDischarge_2019_2021.csv', row.names = FALSE)
+write.csv(edi, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2022/ManualDischarge_2019_2022.csv', row.names = FALSE)

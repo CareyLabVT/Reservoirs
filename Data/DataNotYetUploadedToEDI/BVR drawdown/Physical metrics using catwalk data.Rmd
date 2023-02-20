@@ -625,6 +625,15 @@ for(year in Years){
     
 }
 
+sensor_depth_plot = filt_no_surf%>%
+  filter(Year%in% c(2021,2022))%>%
+  group_by(Date)%>%
+  filter(length(unique(Sensor_depth))<=11)%>%
+  ungroup()%>%
+  select(Year,Sensor_depth)%>%
+  unique()%>%
+  mutate(Date=as.Date(paste0(Year,"-01-01")))
+
 #Heatmap
 jpeg(paste0("./Figs/BVR_catwalk_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
 p = interp%>%
@@ -653,6 +662,7 @@ p = interp%>%
              space = "free"
              )+
   labs(color = "")+
+  geom_point(data = sensor_depth_plot, aes(x = Date, y = Sensor_depth), shape = 23, fill = "black", color = "white", size  =2.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_fill_gradientn(name = "Water temperature\n(°C)",

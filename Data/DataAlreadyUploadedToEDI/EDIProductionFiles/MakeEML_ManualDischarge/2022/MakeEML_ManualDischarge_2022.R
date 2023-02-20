@@ -135,7 +135,7 @@ write.csv(sites_trimmed, file.path(folder, "site_descriptions.csv"), row.names=F
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2022",
          data.table = "ManualDischarge_2019_2022.csv",
-         data.table.description = "Reservoir Continuum Manual Discharge Data",
+         data.table.description = "Manual Discharge Data",
          temporal.coverage = c("2019-02-08", "2022-12-12"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
@@ -145,9 +145,9 @@ make_eml(path = folder,
                           "site_descriptions.csv"),
          other.entity.description = c('Script used to collate and QAQC data for publication', 
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
-                                      'Example spreadsheet which demonstrates the bucket volumetric calculation',
+                                      'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations',
                                       'Descriptions of sampling sites') ,
-         package.id = "edi.1017.1", #### this is the one that I need to change!!!
+         package.id = "edi.1017.2", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####

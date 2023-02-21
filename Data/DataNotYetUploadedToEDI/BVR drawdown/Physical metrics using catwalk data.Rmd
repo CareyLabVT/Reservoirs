@@ -224,6 +224,64 @@ dev.off()
 jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
 ggarrange(air,water,temp_dif,buoy_fig,schmidt_fig, common.legend=T, labels = "auto",legend = "bottom")
 dev.off()
+
+surf_plot = surf%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))
+year(surf_plot$Date_22) = 2022
+
+temp_dif_surf = air_temp_plot%>%
+  left_join(surf_plot%>%mutate(Year=as.factor(Year)))%>%
+  mutate(dif_temp = Reading-Air_Temp)%>%
+  ggplot(aes(x = Date_22, y = dif_temp, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Water temperature minus\nrolling mean air temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+temp_dif_surf
+
+surf_plot%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Surface water temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
+
+bot = catwalk_format%>%
+  group_by(Date)%>%
+  dplyr::summarize(Reading = Reading[which.max(Sensor_depth)])%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))%>%
+  mutate(Year = as.factor(Year))
+year(bot$Date_22) = 2022
+
+jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+bot%>%
+  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Bottom water temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+dev.off()
 ```
 
 

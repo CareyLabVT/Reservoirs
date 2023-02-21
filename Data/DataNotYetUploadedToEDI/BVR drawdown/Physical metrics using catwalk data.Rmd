@@ -246,6 +246,7 @@ temp_dif_surf = air_temp_plot%>%
   theme(axis.title.x = element_blank())
 temp_dif_surf
 
+jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 surf_plot%>%
   mutate(Year = as.factor(Year))%>%
   ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
@@ -258,6 +259,7 @@ surf_plot%>%
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
+dev.off()
 
 
 bot = catwalk_format%>%
@@ -269,7 +271,7 @@ bot = catwalk_format%>%
   mutate(Year = as.factor(Year))
 year(bot$Date_22) = 2022
 
-jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+jpeg("./Figs/hypo_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 bot%>%
   ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
   geom_point(shape = 21, stroke = .5, size = 1.5)+
@@ -282,6 +284,13 @@ bot%>%
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+flexible_bathy%>%
+  filter(Date %in% as.Date(c("2022-05-19","2022-07-01")))%>%
+  ggplot(aes(x = SA_m2,y=Depth_m))+
+  geom_line()+
+  scale_y_reverse()+
+  facet_wrap(~Date)
 ```
 
 

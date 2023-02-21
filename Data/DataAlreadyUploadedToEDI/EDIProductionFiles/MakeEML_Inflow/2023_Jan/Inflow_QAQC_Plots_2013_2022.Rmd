@@ -4,11 +4,11 @@ output: html_document
 date: "2023-02-15"
 ---
 
-Master QAQC script in prep for publishing FCR Met station data to EDI this script using the qaqc_weir function which automatically QAQCs the data. This script produces figures to look over the data and visually inspect for major outlines. 
+Master QAQC script in prep for publishing FCR inflow data to EDI. This script uses the qaqcfcr_weir function, which automatically QAQCs the data, and produces figures to look over the data and visually inspect for major outliers. 
 
 Use this file path in Carey Lab Reservoir GitHub Repo: "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2023_Jan/"
 
-This step gets the right packages and sources the sources the QAQC script. Make sure you have the correct year for the script file
+This step gets the right packages and sources the QAQC script. Make sure you have the correct year for the script file (e.g., don't use 2023_Jan if it's no longer 2023).
 
 
 ```{r Set Up, include=FALSE}
@@ -97,7 +97,7 @@ WVWA$DOY=yday(WVWA$DateTime)
 
 
 # Check for gaps in the data frame
-This identifies if there are any daily data gaps in the long-term record
+This identifies if there are any daily data gaps in the long-term record.
 
 ### Daily Gaps for VT Sensors
 ```{r Check for daily gaps in VT sensor, echo=FALSE}
@@ -196,11 +196,11 @@ Height <- read.csv(Staff_gauge_readings)
 write.csv(Height, "Inflow_GaugeHeight_2013_2022.csv", row.names=F, quote=F)
 
 ```
-## Check out the Flag requency
+## Check out the Flag frequency
 
-Let's look at the flag Frequency for each variable. 
+Let's look at the Flag frequency for each variable. 
 
-As a reminder here are the flag codes Flag values 
+As a reminder here are the Flag codes: 
 
 0: no flag; 
 
@@ -220,7 +220,7 @@ As a reminder here are the flag codes Flag values
 
 8: values removed because of maintenance; 
 
-13: value down corrected due to low flows on the rectangular weir;
+13: value downcorrected due to low flows on the rectangular weir;
 
 16: value downcorrected due to flow overtopping the rectangular weir;
 
@@ -367,7 +367,7 @@ ggplot(data = weirdata, aes(x = DateTime, y = WVWA_Baro_pressure_psi))+
   scattermore::geom_scattermore()+
   ylab("Daily avg. inflow pressure (psi)")+
   theme_bw() +
-  ggtitle("All Bp pressure (psi") 
+  ggtitle("All barometric pressure (psi)") 
  
 
 # Let's look at the current surface pressure 
@@ -375,7 +375,7 @@ ggplot(data = weirdata, aes(x = DateTime, y = WVWA_Baro_pressure_psi))+
   geom_point()+
   ylab("Bp pressure (psi)")+
   theme_bw() +
-  ggtitle("Current BP pressure") +
+  ggtitle("This year's barometric pressure") +
   xlim(c(ymd_hms(current_time_start),ymd_hms(current_time_end)))
 
 
@@ -400,7 +400,7 @@ ggplot(data = weirdata)+
   geom_point(aes(x = DateTime, y = VT_Pressure_psia))+
   ylab("Daily avg. VT pressure (psi)")+
   theme_bw()+
-  ggtitle("All VT senor pressure (psi)") 
+  ggtitle("All VT sensor pressure (psi)") 
 
 
 # Let's look at current surface pressure 
@@ -408,7 +408,7 @@ ggplot(data = weirdata, aes(x = DateTime, y = VT_Pressure_psia))+
   geom_point()+
   ylab("Daily avg. VT pressure (psi)")+
   theme_bw() +
-  ggtitle("Current VT senor pressure (psi)") +
+  ggtitle("This year's VT sensor pressure (psi)") +
   xlim(c(ymd_hms(current_time_start),ymd_hms(current_time_end)))
 
 
@@ -446,7 +446,7 @@ weirdata%>%
   ggplot(., aes(x=DateTime))+
   geom_point(aes(y=WVWA_Temp_C, color="WVWA"))+
   geom_point(aes(y=VT_Temp_C, color="VT")) +
-  ggtitle("Current Temperatures") +
+  ggtitle("This year's temperatures") +
     labs(y = "degrees C",
          color = "Legend") +
     scale_color_manual(values = colors)

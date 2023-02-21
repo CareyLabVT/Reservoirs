@@ -1,0 +1,485 @@
+---
+title: "Weir Inflow Data collation and Plots for EDI"
+output: html_document
+date: "2023-02-15"
+---
+
+Master QAQC script in prep for publishing FCR Met station data to EDI this script using the qaqc_weir function which automatically QAQCs the data. This script produces figures to look over the data and visually inspect for major outlines. 
+
+Use this file path in Carey Lab Reservoir GitHub Repo: "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2023_Jan/"
+
+This step gets the right packages and sources the sources the QAQC script. Make sure you have the correct year for the script file
+
+
+```{r Set Up, include=FALSE}
+pacman::p_load("RCurl","tidyverse","lubridate", "knitr", "scattermore")
+source("Inflow_QAQC_function_2013_2022.R")
+
+folder<- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Inflow/2023_Jan/"
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2022-01-01 00:00:00, tz=UTC"
+current_time_end="2023-01-01 00:00:00, tz=UTC"
+```
+
+
+```{r Create Data folder, include=FALSE}
+### Create a misc_data_files folder if one doesn't already exist
+misc_folder <- "misc_data_files"
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+
+```
+
+
+```{r Download data, include=FALSE, eval=FALSE}
+
+#All the Raw data and the maintenance file is on github. Use this section to download the files so you are working with the most recent ones.
+
+#If you want to download then set eval=TRUE before knitting HTML if not set to FALSE will not run the chunk and use previously downloaded files. 
+# Set the timeout option to 100 seconds instead of 60
+options(timeout=1000)
+
+# This function to speeds up the download time of the data downloads. 
+# If your wifi is slow then it will still take a while. 
+
+bdown=function(url, file){
+  library('RCurl')
+  f = CFILE(file, mode="wb")
+  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
+  close(f)
+  return(a)
+}
+
+
+# #download current VT sensor data from GitHub
+ bdown("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/FCRweir.csv", "misc_data_files/FCRweir.csv")
+
+# #download maintenance file
+ bdown("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/Weir_MaintenanceLog.txt","misc_data_files/Weir_MaintenanceLog_2013_2022.txt")
+ 
+ # # download readings from staff gugage on Github
+ bdown('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/Inflow_Gauge_Height_at_Weir.csv',"misc_data_files/Inflow_Gauge_Height_at_Weir.csv")
+ 
+# #download the WVWA sensors
+bdown('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_pressure_readings_2013_current.csv',"misc_data_files/WVWA_pressure_readings_2013_current.csv") 
+
+```
+
+```{r Read in VT file and clean it up, include=FALSE}
+
+ VTsens<-read_csv("misc_data_files/FCRweir.csv",
+                  skip=4,col_names=c("DateTime","Record","BattV","PTemp_C","AirTemp_C","Lvl_psi","wtr_weir"))
+   
+    # Select the columns you want
+    VTdat <- VTsens[,c("DateTime","Lvl_psi","wtr_weir")]
+    # Rename the columns
+    colnames(VTdat) <- c('DateTime', 'VT_Pressure_psia', 'VT_Temp_C')
+    
+  #order data by DateTime
+VTsens$DOY=yday(VTsens$DateTime)  
+    
+```
+
+```{r Read in WVWA file, include=FALSE}
+
+WVWA<-read_csv("misc_data_files/WVWA_pressure_readings_2013_current.csv")
+
+  #order data by DateTime
+WVWA$DOY=yday(WVWA$DateTime)  
+
+```
+
+
+# Check for gaps in the data frame
+This identifies if there are any daily data gaps in the long-term record
+
+### Daily Gaps for VT Sensors
+```{r Check for daily gaps in VT sensor, echo=FALSE}
+for(i in 2:nrow(VTsens)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(VTsens$DOY[i]-VTsens$DOY[i-1]>1){
+    print(c(VTsens$DateTime[i-1],VTsens$DateTime[i]))
+  }
+}
+```
+This identifies if there are any sub-daily gaps in the long-term record. 
+Most of these gaps happen when we change the program on the data logger. 
+
+### Sub-daily Gaps in VT Sensors
+```{r Check for sub daily gaps, echo=FALSE}
+for(i in 2:length(VTsens$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(VTsens$Record[i]-VTsens$Record[i-1])>1){
+    print(c(VTsens$DateTime[i-1],VTsens$DateTime[i]))
+  }
+}
+```
+
+### Daily Gaps in WVWA sensors
+```{r Check for daily gaps in WVWA sensor, echo=FALSE}
+for(i in 2:nrow(WVWA)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(WVWA$DOY[i]-WVWA$DOY[i-1]>1){
+    print(c(WVWA$DateTime[i-1],WVWA$DateTime[i]))
+  }
+}
+```
+
+```{r Run the QAQC function, echo=FALSE}
+
+# QAQC Function
+
+# This section sets up and runs the QAQC function. The first define where the data entered into the function are.
+
+#The output tells you the missing observations.If you can't find them in the manual downloads then make sure to put # #these times in the methods.
+
+#There are also some warnings which are checks to make sure the maintenance log is using the correct columns for #indexing. section under missing.
+
+
+# run standard qaqc these are where the data entered in the function are defined
+VT_data_file <- VTdat # use the cleaned version
+WVWA_data_file <- "misc_data_files/WVWA_pressure_readings_2013_current.csv"
+maintenance_file <- "misc_data_files/Weir_MaintenanceLog_2013_2022.txt"
+Staff_gauge_readings <- "misc_data_files/Inflow_Gauge_Height_at_Weir.csv"
+output_file <- "Inflow_2013_2022.csv"
+start_date<-NULL
+end_date<-NULL
+
+# Run the QAQC function
+qaqc_fcrweir(VT_data_file, WVWA_data_file, maintenance_file, Staff_gauge_readings, output_file ,start_date, end_date)
+
+```
+
+## Read in the QAQC File and Check it out
+
+This section reads in the QAQC file and then you can look at the head, tail and structure. Make sure the last row is Dec. 31 23:59 of the publishing year. There should be 45 columns unless a new one has been added.
+
+```{r Read in QAQC file and look at it}
+# read in qaqc function output
+
+weirdata <- read_csv(output_file)
+#fcrmetdata <- read_csv("FCR_Met_final_2015_2022.csv")
+
+#read_csv(rating_curve)
+
+# subset file to only unpublished data
+weirdata <- weirdata[weirdata$DateTime<ymd_hms(current_time_end),]
+
+# what does the beginning look like
+head(weirdata)
+# Make sure it goes to Dec 31st 23:59 of the previous year or your ending period
+tail(weirdata)
+# check out the structure
+str(weirdata)
+```
+
+```{r Make the Maintenance Log file for EDI, include=FALSE}
+RemoveWeir=read.csv(maintenance_file)
+# Maintenance Log
+names(RemoveWeir) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber", "Flag", "FlagColumn","Notes") #finalized column names
+
+RemoveWeir$Reservoir= "FCR"#add reservoir name for EDI archiving
+RemoveWeir$Site=100 #add site column for EDI archiving
+
+Final_log=RemoveWeir[,c(9:10,1:8)]
+
+# write it as a csv for EDI
+write.csv(Final_log, "Inflow_Maintenance_RatingCurveLog_2013_2022.csv", row.names=F, quote = F)
+
+# Let's do it for the staff guage observations
+
+Height <- read.csv(Staff_gauge_readings)
+
+write.csv(Height, "Inflow_GaugeHeight_2013_2022.csv", row.names=F, quote=F)
+
+```
+## Check out the Flag requency
+
+Let's look at the flag Frequency for each variable. 
+
+As a reminder here are the flag codes Flag values 
+
+0: no flag; 
+
+1: value corrected to account for artificial increase in pressure after sensor maintenance; 
+
+2: sensor malfunction; 
+
+3: value of NA due to extremely low flows that are not well captured by rectangular or v-notch weir; 
+
+4: demonic intrusion; 
+
+5: value of NA due to leaking at weir;
+
+6: flow topping the v-notch weir;
+
+7: missing observation/not recorded;
+
+8: values removed because of maintenance; 
+
+13: value down corrected due to low flows on the rectangular weir;
+
+16: value downcorrected due to flow overtopping the rectangular weir;
+
+24: weir damaged due to weather.
+
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags=weirdata%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+# Make a table with the number of times a flag was used
+for(f in 2:(ncol(Flags))){
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+## QAQC Plots
+These are QAQC plots to see if there are any questionable values we missed. 
+
+## Temperature
+```{r Graph Air Temp amd Panel Temp, echo=FALSE}
+
+daily <- weirdata%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise(across(c(WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia,WVWA_Flow_cms,WVWA_Temp_C,
+                     VT_Pressure_psia,VT_Flow_cms,VT_Temp_C), mean))%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date))
+
+weirdata<-weirdata%>%
+  mutate(Year=year(DateTime))
+
+colors <- c("WVWA" = "blue", "VT" = "red")
+
+
+weirdata%>%
+  ggplot(., aes(x=DateTime))+
+  geom_scattermore(aes(y=WVWA_Flow_cms, color="WVWA"), pointsize = 2)+
+  geom_scattermore(aes(y=VT_Flow_cms, color="VT"), pointsize = 2) +
+  ggtitle("All Flow Rates") +
+    labs(y = "cms",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+# Just the current year
+
+weirdata%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  ggplot(., aes(x=DateTime))+
+  geom_point(aes(y=WVWA_Flow_cms, color="WVWA"))+
+  geom_point(aes(y=VT_Flow_cms, color="VT")) +
+  ggtitle("All Flow Rates") +
+    labs(y = "cms",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+
+
+ggplot(data = daily, aes(x = WVWA_Flow_cms, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. inflow WVWA (cms)")+
+  xlim(0,0.5)+
+  ggtitle("All WVWA Flow Density Plot") +
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = WVWA_Flow_cms, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab("Daily avg. inflow WVWA (cms)")+
+  ylim(0,0.3)+
+  ggtitle("All WVWA Flow Boxplot") +
+  theme_bw()
+  
+
+ggplot(data = daily, aes(x = VT_Flow_cms, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. inflow VT (cms)")+
+  xlim(0,0.5)+
+  ggtitle("All VT Flow Density Plot")+
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = VT_Flow_cms, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab("Daily avg. inflow VT (cms)")+
+  ylim(0,0.3)+
+  ggtitle("All VT Flow Boxplot")+
+  theme_bw()
+
+# Plot one to one of flow 
+weirdata%>%
+  drop_na(VT_Flow_cms)%>%
+  ggplot(.,aes(x=WVWA_Flow_cms, y=VT_Flow_cms, color=as.factor(Year)))+
+  geom_point()+
+  ggtitle("Compare WVWA flow and VT flow") 
+  
+```
+
+### Plots for WVWA_Pressure_psi
+```{r Raw WVWA pressure not corrected, echo=FALSE}
+## Preliminary visualization of raw pressure data from inflow transducer
+ ggplot(data =weirdata, aes(x = DateTime, y = WVWA_Pressure_psi))+
+  geom_scattermore()+
+  ylab("Daily avg. inflow pressure (psi)")+
+  geom_vline(xintercept = as.Date('2016-04-18'))+ # Date when downcorrection started
+  theme_bw()+
+  ggtitle("All WVWA Pressure (psi)")
+
+
+# Look at daily average WVWA pressure sensor. Change the data to look at days that are funky
+ggplot(data = weirdata, aes(x = DateTime, y = WVWA_Pressure_psi))+
+  geom_point()+
+  ylab("Daily avg. inflow pressure (psi)")+
+  theme_bw() +
+  ggtitle("Current WVWA Pressure (psi)")+
+  xlim(c(ymd_hms(current_time_start),ymd_hms(current_time_end)))
+
+
+# Look at the histogram of observations
+ggplot(data = daily, aes(x = WVWA_Pressure_psi, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. inflow pressure (psi)")+
+  theme_bw()+
+  ggtitle("All WVWA Density Plot")
+
+
+# Boxplot of weir observations
+ ggplot(data = daily, aes(x = Year, y = WVWA_Pressure_psi, group = Year, fill = Year))+
+  geom_boxplot()+
+  ylab("Daily avg. inflow pressure (psi)")+
+   ggtitle("All WVWA Boxplot") +
+  theme_bw()
+```
+
+### Plots of raw pressure data from catwalk transducer
+```{r Raw pressure from catwalk, echo=FALSE}
+ggplot(data = weirdata, aes(x = DateTime, y = WVWA_Baro_pressure_psi))+
+  scattermore::geom_scattermore()+
+  ylab("Daily avg. inflow pressure (psi)")+
+  theme_bw() +
+  ggtitle("All Bp pressure (psi") 
+ 
+
+# Let's look at the current surface pressure 
+ggplot(data = weirdata, aes(x = DateTime, y = WVWA_Baro_pressure_psi))+
+  geom_point()+
+  ylab("Bp pressure (psi)")+
+  theme_bw() +
+  ggtitle("Current BP pressure") +
+  xlim(c(ymd_hms(current_time_start),ymd_hms(current_time_end)))
+
+
+ ggplot(data = daily, aes(x = WVWA_Baro_pressure_psi, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. catwalk pressure (psi)")+
+   ggtitle("BP Density Plot")+
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = WVWA_Baro_pressure_psi, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab("Daily avg. catwalk pressure (psi)")+
+  ggtitle("BP Density Boxplot")+
+  theme_bw()
+```
+
+### Plots for VT pressure sensor readings ####
+```{r VT Pressure Sensor, echo=FALSE}
+ggplot(data = weirdata)+
+  geom_point(aes(x = DateTime, y = VT_Pressure_psia))+
+  ylab("Daily avg. VT pressure (psi)")+
+  theme_bw()+
+  ggtitle("All VT senor pressure (psi)") 
+
+
+# Let's look at current surface pressure 
+ggplot(data = weirdata, aes(x = DateTime, y = VT_Pressure_psia))+
+  geom_point()+
+  ylab("Daily avg. VT pressure (psi)")+
+  theme_bw() +
+  ggtitle("Current VT senor pressure (psi)") +
+  xlim(c(ymd_hms(current_time_start),ymd_hms(current_time_end)))
+
+
+ggplot(data = daily, aes(x = VT_Pressure_psia, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. VT pressure (psi)")+
+  ggtitle("VT Sensor Pressure Density Plot")+
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = VT_Pressure_psia, group = Year, fill = Year))+
+  geom_boxplot()+
+  ylab("Daily avg. VT pressure (psi)")+
+  ggtitle("VT Sensor Pressure Boxplot")+
+  theme_bw()
+```
+
+
+##visualization of temp
+```{r Temperature plots, echo=FALSE}
+
+weirdata%>%
+  ggplot(., aes(x=DateTime))+
+  geom_scattermore(aes(y=WVWA_Temp_C, color="WVWA"), pointsize = 2)+
+  geom_scattermore(aes(y=VT_Temp_C, color="VT"), pointsize = 2) +
+  ggtitle("All Temperatures") +
+    labs(y = "degrees C",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+# Just the current year
+
+weirdata%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  ggplot(., aes(x=DateTime))+
+  geom_point(aes(y=WVWA_Temp_C, color="WVWA"))+
+  geom_point(aes(y=VT_Temp_C, color="VT")) +
+  ggtitle("Current Temperatures") +
+    labs(y = "degrees C",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+
+ggplot(data = daily, aes(x = WVWA_Temp_C, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. WVWA temp (C)")+
+  ggtitle("WVWA Temperature Density Plot")+
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = WVWA_Temp_C, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab("Daily avg. WVWA temp (C)")+
+  ggtitle("WVWA Temperature Boxplot")+
+  theme_bw()
+
+
+# VT Temp sensor check
+ggplot(data = daily, aes(x = VT_Temp_C, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg. VT temp (C)")+
+  ggtitle("VT Temperature Density Plot")+
+  theme_bw()
+
+
+ggplot(data = daily, aes(x = Year, y = VT_Temp_C, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab("Daily avg. VT temp (C)")+
+  ggtitle("VT Temperature Density Boxplot")+
+  theme_bw()
+
+```

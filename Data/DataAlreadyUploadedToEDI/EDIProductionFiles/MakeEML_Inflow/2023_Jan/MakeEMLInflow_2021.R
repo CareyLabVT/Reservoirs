@@ -146,14 +146,16 @@ make_eml(
   data.table = c("Inflow_2013_2022.csv", "Inflow_Maintenance_RatingCurveLog_2013_2022.csv"),
   data.table.name = c("Inflow_2013_2022", "Inflow_Maintenance_RatingCurveLog_2013_2022"), 
   data.table.description = c("FCR inflow dataset from 2013 to 2022","Maintenance for the weir along with time periods for the rating curves"),
-  other.entity = c("Inflow_QAQC_2013_2022.r","Inflow_GaugeHeight_2013_2022.csv"),
-  other.entity.name = c("Inflow_QAQC_2013_2022","Inflow_GaugeHeight_2013_2022"),
-  other.entity.description =c("Script for compiling and QAQC of data", "Observed water level from the staff gauge used for the rating curve" ),
+  other.entity = c("Inflow_QAQC_function_2013_2022.R","Inflow_QAQC_Plots_2013_2022.Rmd","Inflow_GaugeHeight_2013_2022.csv"),
+  other.entity.name = c("Inflow_QAQC_function_2013_2022","Inflow_QAQC_Plots_2013_2022","Inflow_GaugeHeight_2013_2022"),
+  other.entity.description =c("QAQC function used in Inflow_QAQC_Plots_2013_2022.Rmd to take out observations from the dataset based on the maintenance log and calculate flow based on calculated water level",
+                                      'Script that uses the function in Inflow_QAQC_function_2013_2022.R and creates QAQC plots',
+                                      "Observed water level from the staff gauge used for the rating curve"),
   temporal.coverage = c("2013-05-15", "2022-12-31"),
   maintenance.description = 'ongoing',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.923.5')
+  package.id = 'edi.923.7')
 
 
 

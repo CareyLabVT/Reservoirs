@@ -211,7 +211,7 @@ temp_dif = air_temp_plot%>%
   scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Water temperature minus\nrolling mean air temperature (ºC)")+
+  ylab("VW water temperature minus\nrolling mean air temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
@@ -219,10 +219,6 @@ temp_dif
 
 jpeg("./Figs/temp_dif.jpg",res = 300, units = "in",width = 6, height = 4)
 temp_dif
-dev.off()
-
-jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
-ggarrange(air,water,temp_dif,buoy_fig,schmidt_fig, common.legend=T, labels = "auto",legend = "bottom")
 dev.off()
 
 surf_plot = surf%>%
@@ -247,7 +243,7 @@ temp_dif_surf = air_temp_plot%>%
 temp_dif_surf
 
 jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
-surf_plot%>%
+surf_plot_save = surf_plot%>%
   mutate(Year = as.factor(Year))%>%
   ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
   geom_point(shape = 21, stroke = .5, size = 1.5)+
@@ -259,6 +255,10 @@ surf_plot%>%
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
+dev.off()
+
+jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
+ggarrange(air,water,buoy_fig,surf_plot_save,temp_dif,schmidt_fig, common.legend=T, labels = "auto",legend = "bottom",nrow=2,ncol=3)
 dev.off()
 
 

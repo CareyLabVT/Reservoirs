@@ -146,7 +146,7 @@ make_eml(path = folder,
          other.entity.description = c('Script used to collate and QAQC data for publication', 
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.2", #### this is the one that I need to change!!!
+         package.id = "edi.1017.3", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####

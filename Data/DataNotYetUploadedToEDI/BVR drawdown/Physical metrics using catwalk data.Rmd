@@ -68,7 +68,7 @@ year(schmidt_df$Date_22)=2022
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 
 jpeg("./Figs/Schmidt_exo.jpg",res = 300, units = "in",width = 6, height = 4)
-schmidt_df%>%
+schmidt_fig = schmidt_df%>%
   filter(Year %in% c(2021,2022),
          !is.na(Schmidt))%>%
   mutate(Year = as.factor(Year))%>%
@@ -82,6 +82,7 @@ schmidt_df%>%
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
+schmidt_fig
 dev.off()
 
 buoyancy_raw = catwalk_format%>%
@@ -104,7 +105,7 @@ buoy_max$Date_22 = buoy_max$Date
 year(buoy_max$Date_22)=2022
 
 jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
-buoy_max%>%
+buoy_fig = buoy_max%>%
   mutate(Year = as.factor(year(Date)))%>%
   filter(Year %in% c(2021,2022))%>%
   ggplot(aes(x = Date_22, y= max, color = Year, fill = Year))+
@@ -114,9 +115,10 @@ buoy_max%>%
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
-  ylab("Maximum buoyancy frequency")+
+  ylab("Buoyancy frequency")+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
+buoy_fig
 dev.off()
 
 surf = catwalk_format%>%
@@ -144,7 +146,7 @@ vw_temp_df$Date_22 = vw_temp_df$Date
 year(vw_temp_df$Date_22)=2022
 
 jpeg("./Figs/VW_temp_exo.jpg",res = 300, units = "in",width = 6, height = 4)
-vw_temp_df%>%
+water = vw_temp_df%>%
   filter(Year %in% c(2021,2022),
          !is.na(vw_temp))%>%
   mutate(Year = as.factor(Year))%>%
@@ -154,12 +156,143 @@ vw_temp_df%>%
   scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Volume-weighted temperature")+
+  ylab("Volume-weighted\nwater temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+water
+dev.off()
+
+air_temp = read.csv("./Data/BVR_Air_Temp_2021_2022.csv")
+air_temp_plot = air_temp%>%
+  mutate(Year = year(DateTime),
+         Air_Temp = Air_Temp_C_1,
+         Date_22 = as.Date(DateTime))%>%
+  filter(Year %in% c(2021,2022),
+         !is.na(Air_Temp))%>%
+  mutate(Year = as.factor(Year))%>%
+  group_by(Date_22,Year)%>%
+  summarize(Air_Temp = mean(Air_Temp))%>%
+  arrange(Year,Date_22)
+year(air_temp_plot$Date_22)=2022
+library(zoo)
+jpeg("./Figs/air_temp_exo.jpg",res = 300, units = "in",width = 6, height = 4)
+air = air_temp_plot%>%
+  ggplot(aes(x = Date_22, y = Air_Temp, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Air temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())+
+  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), linewidth = 1)+
+  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), data = .%>%filter(Year==2022|Date_22>"2022-12-27"), linewidth = 0.3, color = "#00F7FF")+
+  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), data = .%>%filter(Year==2021|Date_22<"2022-1-03"), linewidth = 0.3, color = "grey50")+
+  theme(legend.position = "none")
+air
+dev.off()
+
+library(ggpubr)
+jpeg("./Figs/air_and_water_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+ggarrange(air,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
+dev.off()
+
+  
+air_temp_plot$rol_mean = rollmean(air_temp_plot$Air_Temp,10,fill=NA,align = "right")
+temp_dif = air_temp_plot%>%
+  left_join(vw_temp_df%>%mutate(Year=as.factor(Year)))%>%
+  mutate(dif_temp = vw_temp-rol_mean)%>%
+  ggplot(aes(x = Date_22, y = dif_temp, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("VW water temperature minus\nrolling mean air temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+temp_dif
+
+jpeg("./Figs/temp_dif.jpg",res = 300, units = "in",width = 6, height = 4)
+temp_dif
+dev.off()
+
+surf_plot = surf%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))
+year(surf_plot$Date_22) = 2022
+
+temp_dif_surf = air_temp_plot%>%
+  left_join(surf_plot%>%mutate(Year=as.factor(Year)))%>%
+  mutate(dif_temp = Reading-Air_Temp)%>%
+  ggplot(aes(x = Date_22, y = dif_temp, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Water temperature minus\nrolling mean air temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+temp_dif_surf
+
+jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+surf_plot_save = surf_plot%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Surface water temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
+ggarrange(air,water,buoy_fig,surf_plot_save,temp_dif,schmidt_fig, common.legend=T, labels = "auto",legend = "bottom",nrow=2,ncol=3)
+dev.off()
+
+
+bot = catwalk_format%>%
+  group_by(Date)%>%
+  dplyr::summarize(Reading = Reading[which.max(Sensor_depth)])%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))%>%
+  mutate(Year = as.factor(Year))
+year(bot$Date_22) = 2022
+
+jpeg("./Figs/hypo_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+bot%>%
+  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Bottom water temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+dev.off()
+
+flexible_bathy%>%
+  filter(Date %in% as.Date(c("2022-05-19","2022-07-01")))%>%
+  ggplot(aes(x = SA_m2,y=Depth_m))+
+  geom_line()+
+  scale_y_reverse()+
+  facet_wrap(~Date)
 ```
+
 
 Lots of extraneous metalimnion code I'm no longer using
 ```{r}
@@ -559,6 +692,15 @@ for(year in Years){
     
 }
 
+sensor_depth_plot = filt_no_surf%>%
+  filter(Year%in% c(2021,2022))%>%
+  group_by(Date)%>%
+  filter(length(unique(Sensor_depth))<=11)%>%
+  ungroup()%>%
+  select(Year,Sensor_depth)%>%
+  unique()%>%
+  mutate(Date=as.Date(paste0(Year,"-01-01")))
+
 #Heatmap
 jpeg(paste0("./Figs/BVR_catwalk_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
 p = interp%>%
@@ -587,6 +729,7 @@ p = interp%>%
              space = "free"
              )+
   labs(color = "")+
+  geom_point(data = sensor_depth_plot, aes(x = Date, y = Sensor_depth), shape = 23, fill = "black", color = "white", size  =2.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_fill_gradientn(name = "Water temperature\n(°C)",

@@ -6,6 +6,24 @@ library(devtools)
 library(tidyverse)
 library(lubridate)
 
+# add site descriptions file
+#Install the required googlesheets4 package
+#install.packages('googlesheets4')
+#Load the library 
+library(googlesheets4)
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+data <- edi
+trim_sites = function(data,sites){
+  data_res_site=data%>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites%>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+    filter(res_site%in%data_res_site$res_site)%>%
+    select(-res_site)
+}
+sites_trimmed = trim_sites(data,sites) 
+write.csv(sites_trimmed, file.path(folder, "site_descriptions.csv"), row.names=F)# Write to file
+
 
 # Install and load EMLassemblyline
 #package_url <- 'https://cran.r-project.org/bin/windows/contrib/3.5/EML_1.0.3.zip'
@@ -47,7 +65,7 @@ template_core_metadata(path = folder,
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = c("ManualDischarge_2019_2022.csv"),
+                          data.table = c("ManualDischarge_2019_2022.csv", "site_descriptions.csv"),
                           write.file = TRUE)
 
 # categorical variables
@@ -104,23 +122,6 @@ template_categorical_variables(path = folder,
                                data.path = folder,
                                write.file = TRUE)
 
-# add site descriptions file
-#Install the required googlesheets4 package
-#install.packages('googlesheets4')
-#Load the library 
-library(googlesheets4)
-sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
-data <- edi
-trim_sites = function(data,sites){
-  data_res_site=data%>% #Create a Reservoir/Site combo column
-    mutate(res_site = trimws(paste0(Reservoir,Site)))
-  sites_merged = sites%>% #Filter to Sites that are in the dataframe
-    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-    filter(res_site%in%data_res_site$res_site)%>%
-    select(-res_site)
-}
-sites_trimmed = trim_sites(data,sites) 
-write.csv(sites_trimmed, file.path(folder, "site_descriptions.csv"), row.names=F)# Write to file
 
 
 ## Step 17: Obtain a package.id FROM STAGING ENVIRONMENT. ####
@@ -134,19 +135,17 @@ write.csv(sites_trimmed, file.path(folder, "site_descriptions.csv"), row.names=F
 # Make note of this value, as it will be your package.id below
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2022",
-         data.table = "ManualDischarge_2019_2022.csv",
-         data.table.description = "Manual Discharge Data",
+         data.table = c("ManualDischarge_2019_2022.csv", "site_descriptions.csv"),
+         data.table.description = c("Manual Discharge Data",  'Descriptions of sampling sites'),
          temporal.coverage = c("2019-02-08", "2022-12-12"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
          other.entity = c('Collate_QAQC_ManualDischarge_2022.R', 
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
-                          'CCR_VolumetricFlow_2020_2022_calculations.xlsx',
-                          "site_descriptions.csv"),
+                          'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
          other.entity.description = c('Script used to collate and QAQC data for publication', 
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
-                                      'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations',
-                                      'Descriptions of sampling sites') ,
+                                      'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
          package.id = "edi.1017.2", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 

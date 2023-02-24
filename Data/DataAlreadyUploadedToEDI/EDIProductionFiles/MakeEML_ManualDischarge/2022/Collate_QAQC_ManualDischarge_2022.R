@@ -99,5 +99,7 @@ ggplot(data = edi, aes(x = Date, y = Flow_cms, color = as.factor(Site))) +
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 edi$Flag_Flow <- as.character(edi$Flag_Flow)
+edi <- edi %>% 
+  distinct(Reservoir, Site, Date, Method, .keep_all = TRUE)
 
 write.csv(edi, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2022/ManualDischarge_2019_2022.csv', row.names = FALSE)

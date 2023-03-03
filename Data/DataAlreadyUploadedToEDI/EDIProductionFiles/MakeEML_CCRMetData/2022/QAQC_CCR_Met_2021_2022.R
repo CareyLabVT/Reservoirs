@@ -370,9 +370,9 @@ sum(a$Rain_Total_mm)
 # Take out Rain Totals above 5mm in 1 minute
 Met=Met%>%
   mutate(
-    Note_Rain_Total_mm=ifelse(Rain_Total_mm>5,"Rain total over 5 mm in one minute so removed as outlier", Note_Rain_Total_mm),
-    Flag_Rain_Total_mm=ifelse(Rain_Total_mm>5, 4, Flag_Rain_Total_mm),
-    Rain_Total_mm=ifelse(Rain_Total_mm>5,NA, Rain_Total_mm))
+    Note_Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm),"Rain total over 5 mm in one minute so removed as outlier", Note_Rain_Total_mm),
+    Flag_Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm), 4, Flag_Rain_Total_mm),
+    Rain_Total_mm=ifelse(Rain_Total_mm>5 & !is.na(Rain_Total_mm),NA, Rain_Total_mm))
 
 
 
@@ -401,9 +401,9 @@ for(i in 5:17) { #for loop to create new columns in data frame
 
 Met=Met%>%
   mutate(
-    Note_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),"Wind direction is below 0 or above 360 degrees", Note_WindDir_degrees),
-    Flag_WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees), 4, Flag_WindDir_degrees),
-    WindDir_degrees=ifelse(WindDir_degrees<0 | WindDir_degrees>360 & !is.na(WindDir_degrees),NA, WindDir_degrees))
+    Note_WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees) | WindDir_degrees>=360 & !is.na(WindDir_degrees),"Wind direction is below 0 or above 360 degrees", Note_WindDir_degrees),
+    Flag_WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees) | WindDir_degrees>=360 & !is.na(WindDir_degrees), 4, Flag_WindDir_degrees),
+    WindDir_degrees=ifelse(WindDir_degrees<=0 & !is.na(WindDir_degrees)| WindDir_degrees>=360 & !is.na(WindDir_degrees),NA, WindDir_degrees))
 
 Met=Met%>%
   mutate(
@@ -460,9 +460,9 @@ PAR=Met%>%
 #Remove PAR Tot
 Met=Met%>%
   mutate(
-    Flag_PAR_mmol_m2_Average=ifelse(during_day==FALSE & PAR_mmol_m2_Average>1 & !is.na(PAR_mmol_m2_Average) , 4, Flag_PAR_mmol_m2_Average),
-    Note_PAR_mmol_m2_Average=ifelse(during_day==FALSE & PAR_mmol_m2_Average>1 & !is.na(PAR_mmol_m2_Average), "Outlier_set_to_NA", Note_PAR_mmol_m2_Average),
-    PAR_mmol_m2_Average=ifelse(during_day==FALSE & PAR_mmol_m2_Average>1 & !is.na(PAR_mmol_m2_Average), NA, PAR_mmol_m2_Average))
+    Flag_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>1 & !is.na(PAR_Total_mmol_m2) , 4, Flag_PAR_Total_mmol_m2),
+    Note_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>1 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
+    PAR_PAR_Total_mmol_m2=ifelse(during_day==FALSE & PAR_Total_mmol_m2>1 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2))
 
 Met=Met%>%
   mutate(
@@ -473,11 +473,11 @@ Met=Met%>%
 #Remove total PAR (PAR_Tot) outliers
 Met=Met%>%
   mutate(
-    Flag_PAR_mmol_m2_Average=ifelse(PAR_mmol_m2_Average>200& !is.na(PAR_mmol_m2_Average), 4, Flag_PAR_mmol_m2_Average),
+    Flag_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200& !is.na(PAR_Total_mmol_m2), 4, Flag_PAR_Total_mmol_m2),
     Flag_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), 4, Flag_PAR_umolm2s_Average),
-    Note_PAR_mmol_m2_Average=ifelse(PAR_mmol_m2_Average>200 & !is.na(PAR_mmol_m2_Average), "Outlier_set_to_NA", Note_PAR_mmol_m2_Average),
+    Note_PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), "Outlier_set_to_NA", Note_PAR_Total_mmol_m2),
     Note_PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), "Outlier_set_to_NA", Note_PAR_umolm2s_Average),
-    PAR_mmol_m2_Average=ifelse(PAR_mmol_m2_Average>200 & !is.na(PAR_mmol_m2_Average), NA, PAR_mmol_m2_Average),
+    PAR_Total_mmol_m2=ifelse(PAR_Total_mmol_m2>200 & !is.na(PAR_Total_mmol_m2), NA, PAR_Total_mmol_m2),
     PAR_umolm2s_Average=ifelse(PAR_umolm2s_Average>3000 & !is.na(PAR_umolm2s_Average), NA, PAR_umolm2s_Average))
 
 
@@ -525,13 +525,13 @@ Met=Met%>%
 #Reorder so the flags are all next to each other
 Met=Met%>%
   select(-c(date, lat, lon, sunrise, sunset,daylight_intvl,during_day))%>%
-  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_mmol_m2_Average","BP_Average_kPa",                          
+  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",                          
            "AirTemp_C_Average","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
            "ShortwaveRadiationDown_Average_W_m2","InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
-           "Flag_PAR_umolm2s_Average","Flag_PAR_mmol_m2_Average","Flag_BP_Average_kPa","Flag_AirTemp_C_Average","Flag_Rain_Total_mm","Flag_RH_percent",
+           "Flag_PAR_umolm2s_Average","Flag_PAR_Total_mmol_m2","Flag_BP_Average_kPa","Flag_AirTemp_C_Average","Flag_Rain_Total_mm","Flag_RH_percent",
            "Flag_WindSpeed_Average_m_s","Flag_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Flag_ShortwaveRadiationDown_Average_W_m2",
            "Flag_InfraredRadiationUp_Average_W_m2","Flag_InfraredRadiationDown_Average_W_m2","Flag_Albedo_Average_W_m2","Note_PAR_umolm2s_Average",              
-           "Note_PAR_mmol_m2_Average","Note_BP_Average_kPa","Note_AirTemp_C_Average","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
+           "Note_PAR_Total_mmol_m2","Note_BP_Average_kPa","Note_AirTemp_C_Average","Note_RH_percent","Note_Rain_Total_mm","Note_WindSpeed_Average_m_s",              
            "Note_WindDir_degrees","Note_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationDown_Average_W_m2","Note_InfraredRadiationUp_Average_W_m2",       
            "Note_InfraredRadiationDown_Average_W_m2","Note_Albedo_Average_W_m2"))
 
@@ -642,10 +642,10 @@ for (u in 33:45) {
 
 ###7) Write file with final cleaned dataset! ###
 Met_final=Met%>%
-  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_mmol_m2_Average","BP_Average_kPa",                          
+  select(c("Reservoir","Site","DateTime","Record","CR3000Battery_V","CR3000Panel_Temp_C","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",                          
            "AirTemp_C_Average","RH_percent","Rain_Total_mm","WindSpeed_Average_m_s","WindDir_degrees","ShortwaveRadiationUp_Average_W_m2",       
            "ShortwaveRadiationDown_Average_W_m2","InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2","Albedo_Average_W_m2",
-           "Flag_PAR_umolm2s_Average","Note_PAR_umolm2s_Average","Flag_PAR_mmol_m2_Average","Note_PAR_mmol_m2_Average","Flag_BP_Average_kPa",
+           "Flag_PAR_umolm2s_Average","Note_PAR_umolm2s_Average","Flag_PAR_Total_mmol_m2","Note_PAR_Total_mmol_m2","Flag_BP_Average_kPa",
            "Note_BP_Average_kPa","Flag_AirTemp_C_Average","Note_AirTemp_C_Average","Flag_RH_percent","Note_RH_percent","Flag_Rain_Total_mm",
            "Note_Rain_Total_mm","Flag_WindSpeed_Average_m_s","Note_WindSpeed_Average_m_s",
            "Flag_WindDir_degrees","Note_WindDir_degrees","Flag_ShortwaveRadiationUp_Average_W_m2","Note_ShortwaveRadiationUp_Average_W_m2",
@@ -664,8 +664,8 @@ RemoveMet_Final$Site=51 #add site column for EDI archiving
 RemoveMet_Final=RemoveMet_Final[,c(8:9,1:7)]
 
 # reorder columns 
-RemoveMet_Final<-RemoveMet%>%
-  select(Reservoir, Site,DataStream,TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, notes)
+RemoveMet_Final<-RemoveMet_Final%>%
+  select(Reservoir, Site, Station,DateTime_start, DateTime_end, Parameter, ColumnNumber, Flag, Notes)
 
 #setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRMetData/2021')
 write.csv(Met_final, paste0(folder,"CCR_Met_final_2021_2022.csv"), row.names=F, quote=F)

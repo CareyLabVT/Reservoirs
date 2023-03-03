@@ -29,7 +29,13 @@ AirTemp_Average_C > 40.6; InfaredRadiationUp_Average_W_m2 < 150; InfraredRadiati
 
 The outlier thresholds were developed by comparison with the NOAA Roanoke Airport dataset. The Roanoke Airport is located ~6 km away from Carvins Cove Reservoir.
 
-All QA/QC code used for the dataset is archived with this dataset. See QAQC_CCR_Met_2021_2022.R.
+QAQC scripts:
+
+We use a QAQC function to remove maintenance times and outliers from the data before publishing. The function is included in the data package as an R script, CCR_Met_QAQC_function_2021_2022.R. In this function, we flag and remove observations that took place during sensor maintenance or when a  sensor malfunctioned and when there were outliers. 
+For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (CCRM_MaintenanceLog_2021_2022.csv). This file is used in the QAQC function to identify dates and times during recorded events, change the observations affected and add a flag to indicate the issues. See CCRW_MaintenanceLog_2021_2022.csv section below for more information on the maintenance log. 
+In addition to recorded maintenance issues, we identify and remove issues and outliers as described above. 
+This function is used in CCR_Met_QAQC_Plots_2021_2022.Rmd. In the R markdown the user downloads data, identifies gaps in the data, uses the QAQC function to clean the data, saves the maintenance file for EDI publishing, and produces QAQC plots for visual inspection. 
+
 
 Instruments, manual, and serial numbers used between 2021-current:
 

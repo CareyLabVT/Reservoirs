@@ -1,6 +1,6 @@
 
 
-qaqc_ccr <- function(data_file, maintenance_file, output_file)
+qaqc_ccrwq <- function(data_file, maintenance_file, output_file, start_date, end_date)
 {
   
   CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp_C", 
@@ -19,76 +19,61 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
   #Adjustment period of time to stabilization after cleaning in seconds
   ADJ_PERIOD = 2*60*60 
   
-  # read catwalk data and maintenance log
-  # NOTE: date-times throughout this script are processed as UTC
-  ccrwater <- read_csv(data_file, skip = 1, col_names = CATPRES_COL_NAMES,
-                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
+  # This section either uses the compiled data from FCR_MET_QAQC_Plots_2015_2022.Rmd which is already labeled Met
+  # or it reads in and formats the current file off the data logger
   
-  # Drop NAs 
-  ccrwater<-ccrwater%>%drop_na(DateTime)
+  ccrwater=data_file
   
-  # Change NaN into NA
-  ccrwater[sapply(ccrwater, is.nan)] <- NA
-  
-  
-  #############Missing Data Check ###################################################################################################
-  #check for gaps and missing data and see if you can fill them with manual downloads. If not make a note
-  # of the missing dates and times in the methods. 
-  #order data by timestamp
-  ccr2=ccrwater
-  ccr2=ccr2[order(ccr2$DateTime),]
-  ccr2$DOY=yday(ccr2$DateTime)
-  
-  
-  #check record for gaps
-  #daily record gaps by day of year
-  for(i in 2:nrow(ccr2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if(ccr2$DOY[i]-ccr2$DOY[i-1]>1){
-      print(c(ccr2$DateTime[i-1],ccr2$DateTime[i]))
-    }
-  }
-  # #sub-daily record gaps by record number
-  for(i in 2:length(ccr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if(abs(ccr2$RECORD[i]-ccr2$RECORD[i-1])>1){
-      print(c(ccr2$DateTime[i-1],ccr2$DateTime[i]))
-    }
-  }
-  
-  ##########QAQC ############################################ 
-  
-  # Begin QAQC steps 
-  
-  # remove NaN data at beginning when data when no sensors were connected to the data logger
-  ccrwater <- ccrwater %>% filter(DateTime >= ymd_hms("2021-04-09 15:20:00"))
-  
-  # for loop to create flag columns
-  for(j in c(5:17,20:36,39:53)) { #for loop to create new columns in data frame
-    ccrwater[,paste0("Flag_",colnames(ccrwater[j]))] <- 0 #creates flag column + name of variable
-    ccrwater[c(which(is.na(ccrwater[,j]))),paste0("Flag_",colnames(ccrwater[j]))] <-7 #puts in flag 7 if value not collected
-  }
-  
-  # When values besides the water temp, and pressure are negative replace with 0 and flag
-  # These are for values on the EXO
-  for(k in c(21:31,40:46)) { #for loop to create new columns in data frame
-    ccrwater[c(which((ccrwater[,k]<0))),paste0("Flag_",colnames(ccrwater[k]))] <- 3
-    ccrwater[c(which((ccrwater[,k]<0))),k] <- 0 #replaces value with 0
+  if (is.character(ccrwater)==T) {
+    ccrwater <- read_csv(data_file, skip = 1, col_names = CATPRES_COL_NAMES,
+                         col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  }else {
+    ccrwater=data_file
   }
   
   
-  # Take out duplicates if there are any duplicated DateTime stamp
-  ccrwater=ccrwater[!duplicated(ccrwater$DateTime), ]
-  
-  
-  ####### Take out values in Maintenance Log #########  
-  #Read in the maintenance log 
-  
-  log <- read_csv(maintenance_file, col_types = cols(
+ # Read in the Maintenance Log
+  log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
+  
+  log <- log_read
+  
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    ccrwater <- ccrwater %>% 
+      filter(DateTime >= start_date)
+    log <- log %>% 
+      filter(TIMESTAMP_start >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    ccrwater <- ccrwater %>% 
+      filter(DateTime <= end_date)
+    log <- log %>% 
+      filter(TIMESTAMP_end <= end_date)
+  }
+  
+  if (nrow(log) == 0){
+    log <- log_read
+  }
+  ##########QAQC ############################################ 
+  
+  # Take out duplicates if there are any duplicated DateTime stamp
+  ccrwater=ccrwater[!duplicated(ccrwater$DateTime), ]
+  
+  # for loop to create flag columns
+  for(j in c(5:17,20:36,39:53)) { #for loop to create new columns in data frame
+    ccrwater[,paste0("Flag_",colnames(ccrwater[j]))] <- 0 #creates flag column + name of variable
+  }
+  
+ 
+  
+  ####### Take out values in Maintenance Log #########  
   
   # modify ccrwater based on the information in the log
   for(i in 1:nrow(log))
@@ -195,11 +180,41 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
       ccrwater[ccrwater$DateTime>start&ccrwater$DateTime<end+ADJ_PERIOD,DO_flag_col] <-flag
     }
     else{
+      
+      if(is.null(start_date)){ 
       warning(paste("No DO time to adjust in row",i,"."))
     }
   }
-  
+  }
   ############## Remove and Flag when sensor is out of position ####################
+  
+  # Linear Relationship for chla from 2021 and 2022 data when ugL not calculated
+  # slope = 4.00 , int= -0.63
+  
+  ccrwater[c(which(is.na(ccrwater$EXOChla_ugL_1) & !is.na(ccrwater$EXOChla_RFU_1))), "Flag_EXOChla_ugL_1"]<- 6
+  ccrwater[c(which(is.na(ccrwater$EXOChla_ugL_1) & !is.na(ccrwater$EXOChla_RFU_1))), "EXOChla_ugL_1"]<- (ccrwater[c(which(is.na(ccrwater$EXOChla_ugL_1) & !is.na(ccrwater$EXOChla_RFU_1))), "EXOChla_RFU_1"]*4.00)-0.63
+  
+  
+  # Linear Relationship for phyco from 2021 and 2022 when ugL not calculated
+  # slope = 1.00 , int = -0.59
+  
+  ccrwater[c(which(is.na(ccrwater$EXOBGAPC_ugL_1) & !is.na(ccrwater$EXOBGAPC_RFU_1))), "Flag_EXOBGAPC_ugL_1"]<- 6
+  ccrwater[c(which(is.na(ccrwater$EXOBGAPC_ugL_1) & !is.na(ccrwater$EXOBGAPC_RFU_1))), "EXOBGAPC_ugL_1"]<- (ccrwater[c(which(is.na(ccrwater$EXOBGAPC_ugL_1) & !is.na(ccrwater$EXOBGAPC_RFU_1))), "EXOBGAPC_RFU_1"]*1.00)-0.59
+  
+  
+  
+  # for loop to create flag columns
+  for(d in c(5:17,20:36,39:53)) { #for loop to create new columns in data frame
+    ccrwater[c(which(is.na(ccrwater[,d]))),paste0("Flag_",colnames(ccrwater[d]))] <-7 #puts in flag 7 if value not collected
+  }
+  
+  # When values besides the water temp, and pressure are negative replace with 0 and flag
+  # These are for values on the EXO
+  for(k in c(21:31,40:46)) { #for loop to create new columns in data frame
+    ccrwater[c(which((ccrwater[,k]<0))),paste0("Flag_",colnames(ccrwater[k]))] <- 3
+    ccrwater[c(which((ccrwater[,k]<0))),k] <- 0 #replaces value with 0
+  }
+  
   
   #change EXO_1 at 1.5m values to NA if EXO depth is less than 0.3m and Flag as 2
   
@@ -219,12 +234,6 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
   
   exo_flag9 <-grep("^Flag_EXO.*_9$",colnames(ccrwater))
   
-  #create list of the Flag columns that need to be changed to 2
-  #exo_flag9 <- c("Flag_EXOTemp_9", "Flag_EXOCond_9","Flag_EXOSpCond_9","Flag_EXOTDS_9",'Flag_EXODO_obs_9',
-  #               "Flag_EXODO_sat_9",'Flag_EXOfDOM_9',"Flag_EXOPres_9",
-  #               "Flag_EXObat_9","Flag_EXOcab_9","Flag_EXOwip_9")
-  
-  
   #Change the EXO data to NAs when the EXO is above 6m and not due to maintenance
   ccrwater[which(ccrwater$EXODepth_m_9 < 7), exo_idx9] <- NA
   #Flag the data that was removed with 2 for outliers
@@ -240,7 +249,7 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
   
   ccrwater=data.frame(ccrwater)
   
-  for (a in c(5:17,20:36,39:53)){
+  for (a in c(5:17,20:33,39:48,52:53)){
     Var_mean <- mean(ccrwater[,a], na.rm = TRUE)
     
     # For Algae sensors we use 4 sd as a threshold but for the others we use 2
@@ -286,7 +295,7 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
       d="ThermistorTemp_C_1"
     } else if (colnames(ccrwater[b])=="depth_2"){
       d="ThermistorTemp_C_2"
-    }else if (colnames(ccrwater[b])=="depth_3"){
+    } else if (colnames(ccrwater[b])=="depth_3"){
       d="ThermistorTemp_C_3"
     }
     
@@ -302,7 +311,7 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
   
   # add Reservoir and Site columns
   ccrwater$Reservoir <- "CCR"
-  ccrwater$Site <- "51"
+  ccrwater$Site <- 51
   
   # reorder columns
   ccrwater <- ccrwater %>% select(Reservoir, Site, DateTime,  
@@ -324,7 +333,13 @@ qaqc_ccr <- function(data_file, maintenance_file, output_file)
   ccrwater$DateTime <- as.character(ccrwater$DateTime)
   
   # write to output file
-  write_csv(ccrwater, output_file)
+  # subset to only the current year when using for EDI publishing
+  # current_time_end is set in Chunk 1 Set Up in Inflow_QAQC_Plots_2013_2022.Rmd
+  if(is.null(start_date)){
+    ccrwater <- ccrwater[ccrwater$DateTime<ymd_hms(current_time_end),]
+  }
+  
+  write.csv(ccrwater, output_file, row.names = F, quote = F)
 }
 
 # example usage

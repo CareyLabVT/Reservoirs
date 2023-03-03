@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
-Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform "	numeric	dimensionless		NA	value is missing
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Site	Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform 	numeric	dimensionless		NA	value is missing
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 ThermistorTemp_C_1	water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_3	water temperature measured by thermistor at position 3 (2 meters below thermistor 1)	numeric	celsius		NA	value is missing
@@ -14,7 +14,7 @@ ThermistorTemp_C_9	water temperature measured by thermistor at position 9 (8 met
 ThermistorTemp_C_10	water temperature measured by thermistor at position 10 (10 meters below thermistor 1)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_11	water temperature measured by thermistor at position 11 (11 meters below thermistor 1)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 meters below thermistor 1)	numeric	celsius		NA	value is missing
-ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meters below thermistor 1; located at 0.5 m above sediments)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meters below thermistor 1)	numeric	celsius		NA	value is missing
 EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
 EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
 EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
@@ -45,7 +45,7 @@ EXODepth_m_9	Depth of the EXO sonde at 9 m measured by the EXO3 sonde	numeric	me
 EXOBattery_V_9	Voltage of the EXO3 sonde at 9 m internal batteries	numeric	volt		NA	value is missing
 EXOCablepower_V_9	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO3 sonde at 9 m.	numeric	volt		NA	value is missing
 EXOWiper_V_9	Wiper brush cleaning system activation signal as measured by the EXO sonde at 9 m	numeric	volt		NA	value is missing
-LvlPressure_psi_13	"Gauge pressure of EXO sonde at position 13, measured relative to ambient atmospheric pressure"	numeric	psig		NA	value is missing
+LvlPressure_psi_13	Gauge pressure of EXO sonde at position 13, measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
 LvlDepth_m_13	Depth of the pressure sensor at position 13 in meters calculated by LvlPressure_psi_0m_13 * 0.70455	numeric	meter		NA	value is missing
 LvlTemp_C_13	water temperature at position 13 as measured by the water level logger	numeric	celsius		NA	value is missing
 RECORD	Number of observations that changes when the program is restarted	numeric	number		NA	value is missing

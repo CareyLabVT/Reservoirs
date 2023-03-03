@@ -1,0 +1,602 @@
+---
+title: "CCR Catwalk Plots for EDI"
+output: html_document
+date: "2023-02-28"
+---
+ This script takes the raw outputs from the water quality sensors at Carvins Cove combines them into one file, identifies gaps in the data, runs the data through the QAQC function (qaqc_ccrwq), and produces QAQC plots for visual inspection. 
+ 
+ 1. Open the script and check you have the correct function in line 19
+ 2. Change the current start and end times to match the year you are publishing for
+ 3. If there are more than one csv make sure they are all in the Download data chunk. Currently there is only one csv with all of the observations. 
+ 4. Once you have made sure everything is up to date press the knit button and it will produce an html file with all of the outputs and plots. 
+ 
+ 
+```{r Set Up, include=FALSE}
+# This step gets the right packages, sets the correct folder and then 
+# sources the QAQC script. Make sure you have the correct year.
+
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr", "scattermore", "knitr")
+source("CCR_Catwalk_QAQC_function_2021_2022.R")
+
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2022-01-01 00:00:00"
+current_time_end="2022-12-31 23:59:00"
+```
+
+ 
+```{r Create Data folder, include=FALSE}
+#This chunk makes the folder where the raw data will be stored
+### Create a misc_data_files folder if one doesn't already exist
+misc_folder <- "misc_data_files"
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+```
+
+
+```{r Download data, include=FALSE}
+# This section downloads the data from Github and the maintenance file. 
+# If there are changes to the data on Github then you have to redownload the files
+
+# Set the timeout option to 100 seconds instead of 60
+options(timeout=200)
+
+# This function to speeds up the download time of the data downloads. 
+# If your wifi is slow then it will still take a while. 
+
+bdown=function(url, file){
+  library('RCurl')
+  f = CFILE(file, mode="wb")
+  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
+  close(f)
+  return(a)
+}
+
+# download most up to date catwalk data and maintenance log for input into the function
+bdown("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/CCRW_maintenance_log.txt", "./misc_data_files/CCRW_maintenance_log_2021_2022.txt")
+bdown("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality.csv", "./misc_data_files/ccre-waterquality.csv")
+
+```
+
+```{r Read in file, include=FALSE}
+
+CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+                        "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
+                        "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
+                        "ThermistorTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11", "ThermistorTemp_C_12",
+                        "ThermistorTemp_C_13","EXO_Date_1", "EXO_Time_1", "EXOTemp_C_1", "EXOCond_uScm_1",
+                        "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
+                        "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1",
+                        "EXOPressure_psi_1", "EXODepth_m_1", "EXOBattery_V_1", "EXOCablepower_V_1", "EXOWiper_V_1",
+                        "EXO_Date_9", "EXO_Time_9", "EXOTemp_C_9", "EXOCond_uScm_9",
+                        "EXOSpCond_uScm_9", "EXOTDS_mgL_9", "EXODOsat_percent_9", "EXODO_mgL_9", 
+                        "EXOfDOM_RFU_9", "EXOfDOM_QSU_9","EXOPressure_psi_9", "EXODepth_m_9", "EXOBattery_V_9",
+                        "EXOCablepower_V_9", "EXOWiper_V_9","LvlPressure_psi_13", "LvlTemp_C_13")
+  
+
+  # read catwalk data and maintenance log
+  # NOTE: date-times throughout this script are processed as UTC
+  ccrwater <- read_csv("./misc_data_files/ccre-waterquality.csv", skip = 1, col_names = CATPRES_COL_NAMES,
+                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+
+  # Drop NAs 
+  ccrwater<-ccrwater%>%drop_na(DateTime)
+  
+  # Change NaN into NA
+  ccrwater[sapply(ccrwater, is.nan)] <- NA
+  
+  # remove NaN data at beginning when data when no sensors were connected to the data logger
+  ccrwater <- ccrwater %>% filter(DateTime >= ymd_hms("2021-04-09 15:20:00"))
+  
+  # Add depth 
+   ccrwater=ccrwater%>%mutate(LvlDepth_m_13=(LvlPressure_psi_13*0.70455) )
+  
+```
+
+```{r Check for daily gaps and record gaps, include=FALSE}
+
+#order data by DateTime
+CCR2=ccrwater
+CCR2$DOY=yday(CCR2$DateTime)
+```
+
+## Check for gaps in the data frame
+This identifies if there are any daily data gaps in the long-term record
+```{r Check for daily gaps, echo=FALSE}
+for(i in 2:nrow(CCR2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(CCR2$DOY[i]-CCR2$DOY[i-1]>1){
+    print(c(CCR2$DateTime[i-1],CCR2$DateTime[i]))
+  }
+}
+```
+This identifies if there are any sub-daily gaps in the long-term record. 
+Most of these gaps happen when we change the program on the data logger. 
+```{r Check for sub daily gaps, echo=FALSE}
+for(i in 2:length(CCR2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(CCR2$RECORD[i]-CCR2$RECORD[i-1])>1){
+    print(c(CCR2$DateTime[i-1],CCR2$DateTime[i]))
+  }
+}
+```
+
+
+```{r Run the QAQC function, include=FALSE}
+# This section sets up and runs the QAQC function. The out put tells you the missing observations.
+# If you can't find them in the manual downloads then make sure to put these times in the methods
+# section under missing.
+
+# run standard qaqc function from FCR_catwalk_QAQC_function_2021.R
+data_file <-  ccrwater #current file from the data logger
+maintenance_file <-  "./misc_data_files/CCRW_maintenance_log_2021_2022.txt"#maintenance file
+output_file <-  "./CCR_Catwalk_EDI_2021_2022.csv"#name of the output file
+start_date <-NULL # This is for the QAQC check from Github and we don't use these for EDI. Leave as NULL
+end_date <-NULL # This is for the QAQC check from Github and we don't use these for EDI. Leave as NULL
+
+# Run the QAQC function
+qaqc_ccrwq(data_file, maintenance_file, output_file, start_date, end_date)#function to do the qaqc
+
+```
+
+### Read in the QAQC File and Check it out
+
+ This section reads in the QAQC file and then you can look at the head, tail and structure. 
+ Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 97 columns unless a new column has been added. 
+
+```{r Read in QAQC file and look at it, echo=FALSE}
+
+
+# read in qaqc function output
+
+ccrwater <- read_csv(output_file)
+
+head(ccrwater)
+tail(ccrwater)
+str(ccrwater)
+```
+
+```{r Make the Maintenance Log file for EDI, include=FALSE}
+RemoveCCR=read.csv(maintenance_file)
+# Maintenance Log
+names(RemoveCCR) = c("DataStream_Code", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber", "Flag", "FlagColumn","Notes") #finalized column names
+
+RemoveCCR$Reservoir= "CCR"#add reservoir name for EDI archiving
+RemoveCCR$Site=51 #add site column for EDI archiving
+
+Final_log=RemoveCCR[,c(9:10,1:8)]
+
+# write it as a csv for EDI
+write.csv(Final_log, "CCRW_MaintenanceLog_2021_2022.csv", row.names=F, quote = F)
+```
+
+### Flag Frequency
+
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+ Flag values:
+ 
+  0: no flag
+  
+  1: value removed due to maintenance and set to NA
+  
+  2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+  
+  3: negative values set to 0
+  
+  4: value removed due to fouling and set to NA
+  
+  5: questionable value due to potential fouling
+  
+  6: Values adjusted using a linear or square root function
+  
+  7: missing data
+  
+  8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags=ccrwater%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=ccrwater%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+```{r Filter for current year and daily average, include=FALSE}
+
+# Raw files
+current_raw <- CCR2%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+current <- ccrwater%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+daily <- ccrwater%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+
+  
+ccrwater<-ccrwater%>%
+  mutate(Year=year(DateTime))
+
+colors <- c("raw" = "red", "QAQCd" = "black")
+```
+
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for CCR was `r min(ccrwater$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(ccrwater$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(ccrwater$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(ccrwater$LvlDepth_m_13, na.rm=T)`.
+
+
+```{r Plot functions, echo=FALSE}
+# plotting function for each plot
+
+all_plot<-function(Var, Var_daily, Title, y_lab){
+ all<- ggplot() +
+  geom_scattermore(data=CCR2, aes(x=DateTime, y={{Var}}, color="raw"))+
+  geom_scattermore(data=ccrwater, aes(x=DateTime, y={{Var}}, color="QAQCd"))+
+  ggtitle("All",Title) +
+  labs(y = y_lab,
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_bw()
+  
+ cur<- ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y={{Var}}, color="raw"), pointsize = 3)+
+  geom_scattermore(data=current, aes(x=DateTime, y={{Var}}, color="QAQCd"), pointsize = 3) +
+  ggtitle("Current",Title) +
+  labs(y = y_lab,
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_bw()
+ 
+ # density plot
+ den <-ggplot(data = daily, aes(x = {{Var}}, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg.")+
+  #xlim(0,0.5)+
+  ggtitle("All",Title) +
+  theme_bw()
+
+# box plot
+box <-ggplot(data = daily, aes(x = Year, y = {{Var}}, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab(y_lab)+
+  #ylim(0,0.3)+
+  ggtitle("Boxplot",Title) +
+  theme_bw()
+  
+ 
+ newlist <- list(all,cur,den,box) # have to list all outputs under one name
+
+  return(newlist)
+}
+```
+## QAQC Plots
+
+### Temperature 
+Thermistor 1 There will be large gaps where the thermistor is out of the water
+```{r Thermistor 1, echo=FALSE, results='hide', warning = FALSE}
+ all_plot(Var=ThermistorTemp_C_1, Title="Water Temp from Thermistor 1", y_lab=expression(''*~degree*C*''))  
+```
+
+```{r Thermistor 2, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_2, Title="Water Temp from Thermistor 2", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r EXO at 1.5m, echo=FALSE, warning = FALSE, results='hide'}
+
+  all_plot(Var=EXOTemp_C_1, Title="Water Temp from EXO at 1.5m", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 3, echo=FALSE, warning = FALSE, results='hide'}
+ 
+  all_plot(Var=ThermistorTemp_C_3, Title="Water Temp from Thermistor 3", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 4, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_4, Title="Water Temp from Thermistor 4", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 5, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_5, Title="Water Temp from Thermistor 5", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 6, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_6, Title="Water Temp from Thermistor 6", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 7, echo=FALSE, warning = FALSE, results='hide'}
+ all_plot(Var=ThermistorTemp_C_7, Title="Water Temp from Thermistor 7", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 8, echo=FALSE, warning = FALSE, results='hide'}
+ all_plot(Var=ThermistorTemp_C_8, Title="Water Temp from Thermistor 8", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r Thermistor 9, echo=FALSE, warning = FALSE, results='hide'}
+ all_plot(Var=ThermistorTemp_C_9, Title="Water Temp from Thermistor 9", y_lab=expression(''*~degree*C*'')) 
+```
+
+```{r EXO at 9m, echo=FALSE, warning = FALSE, results='hide'}
+  all_plot(Var=EXOTemp_C_9, Title="Water Temp from EXO at 9m", y_lab=expression(''*~degree*C*'')) 
+```
+ 
+```{r Thermistor 10, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_10, Title="Water Temp from Thermistor 10", y_lab=expression(''*~degree*C*''))
+```
+
+```{r Thermistor 11, echo=FALSE, warning = FALSE, results='hide'}
+ all_plot(Var=ThermistorTemp_C_11, Title="Water Temp from Thermistor 11", y_lab=expression(''*~degree*C*''))
+```
+
+```{r Thermistor 12, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_12, Title="Water Temp from Thermistor 12", y_lab=expression(''*~degree*C*''))
+```
+
+```{r Thermistor 13, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=ThermistorTemp_C_13, Title="Water Temp from Thermistor 13", y_lab=expression(''*~degree*C*''))
+   
+   # Compare the bottom Thermistor with the temperature on the Pressure sensor
+   
+   # All the years
+   
+    ggplot(data = ccrwater, aes(x = DateTime, y = ThermistorTemp_C_13)) +
+    geom_scattermore(aes(y=ThermistorTemp_C_13, color="Therm"))+ 
+      geom_scattermore(aes(y=LvlTemp_C_13, color="Pressure"))+
+      ggtitle("Water Temp from Thermistor 13 and the Pressure sensor") +
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                       breaks = c("Therm", "Pressure"),
+                       values = c("Therm"="magenta", "Pressure"="black"))+
+      theme_bw()
+  
+   
+    #Just the current year
+   
+     ggplot(current, aes(x = DateTime, y = ThermistorTemp_C_13))+
+     geom_point(aes(y=ThermistorTemp_C_13, color="Therm"))+ 
+      geom_point(aes(y=LvlTemp_C_13, color="Pressure"))+
+       ggtitle("Current Water Temp from Thermistor 13 and the Pressure sensor") +
+      labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Sensor",
+                       breaks = c("Therm", "Pressure"),
+                       values = c("Therm"="magenta", "Pressure"="black"))+
+       theme_bw()
+   
+```
+  
+```{r All Temperature, echo=FALSE, warning = FALSE, results='hide'}
+
+# Take out Temperature values 
+
+  All_temp<-ccrwater%>%
+    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"))%>%
+    pivot_longer(-c(DateTime), names_to="Sensor", values_to="Reading", values_drop_na=TRUE)%>%
+    mutate(DateTime=ymd_hms(DateTime))
+  
+  
+  ggplot(All_temp)+
+    geom_scattermore(aes(x=DateTime, y=Reading))+
+    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_1", "ThermistorTemp_C_2", "EXOTemp_C_1", "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9","EXOTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13")))+
+    theme_bw()
+  
+# All on one plot
+    ggplot(ccrwater,aes(x = DateTime))+
+    geom_scattermore(aes(y=ThermistorTemp_C_1, color="0.1m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_2, color="1m"))+
+    geom_scattermore(aes(y=EXOTemp_C_1, color="EXO_1m")) +
+    geom_scattermore(aes(y=ThermistorTemp_C_3, color="2m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_4, color="3m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_5, color="4m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_6, color="5m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_7, color="6m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_8, color="7m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_9, color="8m"))+
+    geom_scattermore(aes(y=EXOTemp_C_9, color="EXO_9m")) +
+    geom_scattermore(aes(y=ThermistorTemp_C_10, color="10m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_11, color="11m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_12, color="15m"))+
+    geom_scattermore(aes(y=ThermistorTemp_C_13, color="19m"))+
+    labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Depth",
+                       breaks = c("0.1m", "1m","EXO_1m", "2m", "3m", "4m", "5m", "6m", "7m", "8m",
+                                  "EXO_9m","10m","11m","15m","19m"),
+                       values = c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1m"="yellow","2m"="gold", 
+                                  "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
+                                  "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="cornflowerblue", "EXO_9m"="blue4",    "10m"="darkslateblue","11m"="magenta2", "15m"="darkmagenta", "19m"="black"))+
+      theme_bw()
+
+
+  
+# This is all the temps and just the current year
+    ggplot(current,aes(x = DateTime))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="0.1m"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="1m"))+
+    geom_line(aes(y=EXOTemp_C_1, color="EXO_1m")) +
+    geom_line(aes(y=ThermistorTemp_C_3, color="2m"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="3m"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="4m"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="5m"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="6m"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="7m"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="8m"))+
+    geom_line(aes(y=EXOTemp_C_9, color="EXO_9m")) +
+    geom_line(aes(y=ThermistorTemp_C_10, color="10m"))+
+    geom_line(aes(y=ThermistorTemp_C_11, color="11m"))+
+    geom_line(aes(y=ThermistorTemp_C_12, color="15m"))+
+    geom_line(aes(y=ThermistorTemp_C_13, color="19m"))+
+    labs(y=expression(''*~degree*C*'')) +
+    scale_color_manual(name = "Depth",
+                       breaks = c("0.1m", "1m","EXO_1m", "2m", "3m", "4m", "5m", "6m", "7m", "8m",
+                                  "EXO_9m","10m","11m","15m","19m"),
+                       values = c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1m"="yellow","2m"="gold", 
+                                  "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
+                                  "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="cornflowerblue", "EXO_9m"="blue4",    "10m"="darkslateblue","11m"="magenta2", "15m"="darkmagenta", "19m"="black")) +
+      theme_bw()
+```
+
+## Check out the Depth sensor and EXO
+```{r Pressure Sensor, echo=FALSE, warning = FALSE, results='hide'}
+### Plotting depth from pressure sensor 
+all_plot(Var=LvlDepth_m_13, Title="Depth Sensor", y_lab="meter")
+   
+ 
+# Check that the top three depths look good and all temps that should be removed are.
+# This looks at the air temp, thermistors 1 through 3 and the depth of the reservoir. 
+# Right now the depth of the reservoir is commented out. 
+   current_raw%>%
+    #filter(DateTime>"2021-05-17 00:00" & DateTime<"2021-05-20 00:00")%>%
+    ggplot(aes(x=DateTime))+
+    #geom_line(aes(y=CR3000Panel_Temp_C, color="black"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="0.1m"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="1m"))+
+    geom_line(aes(y=ThermistorTemp_C_3, color="2m"))+
+    geom_line(aes(y=LvlDepth_m_13, color="Depth"))+
+     ggtitle("Ensuring Temp obs are removed when Temp is out of water")+ 
+     scale_color_manual(name = "Depth",
+                       breaks = c( "0.1m","1m", "2m", "Depth"),
+                       values = c("0.1m"="black", "1m"="blue","2m"="green", 
+                                  "Depth"="purple", "4m"="medium sea green", "5m"="sea green",
+                                  "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="cornsilk", "EXO_9m"="blue4",    "10m"="darkslateblue","11m"="magenta2", "15m"="darkmagenta", "19m"="black"))
+```
+
+### EXO Depth at 1.5m
+```{r EXO 1.5m depth, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXODepth_m_1, Title="EXO 1.5m Sensor Depth", y_lab="meter")
+
+``` 
+ 
+### EXO Depth at 9m
+```{r EXO depth 9m, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXODepth_m_9, Title="EXO 9m Sensor Depth", y_lab="meter")
+
+```
+
+### EXO DO at 1.5m
+```{r DO from the EXO at 1.5m, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXODO_mgL_1, Title="EXO DO mgL at 1.5m", y_lab="mg/L")
+ 
+ all_plot(Var=EXODOsat_percent_1, Title="EXO DO percent sat at 1.5m", y_lab="percent sat")
+ 
+``` 
+
+### EXO DO at 9m
+```{r DO from the 9m EXO, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXODO_mgL_9, Title="EXO DO mgL at 9m", y_lab="mg/L")
+ 
+ all_plot(Var=EXODOsat_percent_9, Title="EXO DO percent sat at 9m", y_lab="percent sat")
+ 
+```
+
+### EXO Chla ugL at 1.5m
+```{r Check the EXO Chla, echo=FALSE, warning = FALSE, results='hide'}
+ all_plot(Var=EXOChla_ugL_1, Title="EXO Chla ugL at 1.5m", y_lab="ug/L")
+
+ #take out the NAs
+ data_comp <- daily[!is.na(daily$EXOChla_ugL_1), ]  
+ 
+ ggplot()+
+   geom_point(data=ccrwater, aes(x=DateTime, y=EXOChla_ugL_1))+
+   geom_line(data=data_comp, aes(x=DateTime, y=EXOChla_ugL_1), col="green")+
+   ggtitle("Compare 10 minute observations to Daily mean")
+
+```
+ 
+### EXO Chla RFU at 1.5m
+```{r Chla RFU, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXOChla_RFU_1, Title="EXO Chla RFU at 1.5m", y_lab="RFU")
+
+ #take out the NAs
+ data_comp <- daily[!is.na(daily$EXOChla_RFU_1), ]  
+ 
+ ggplot()+
+   geom_point(data=ccrwater, aes(x=DateTime, y=EXOChla_RFU_1))+
+   geom_line(data=data_comp, aes(x=DateTime, y=EXOChla_RFU_1), col="green")+
+   ggtitle("Compare 10 minute observations to Daily mean")
+```
+
+### EXO Phyco RFU
+```{r Check out the Phyco in EXO, echo=FALSE, warning = FALSE, results='hide'}
+
+ all_plot(Var=EXOBGAPC_RFU_1, Title="EXO Phyco RFU at 1.5m", y_lab="RFU")
+
+ #take out the NAs
+ data_comp <- daily[!is.na(daily$EXOBGAPC_RFU_1), ]  
+ 
+ ggplot()+
+   geom_point(data=ccrwater, aes(x=DateTime, y=EXOBGAPC_RFU_1))+
+   geom_line(data=data_comp, aes(x=DateTime, y=EXOBGAPC_RFU_1), col="blue")+
+   ggtitle("Compare 10 minute observations to Daily mean")
+```
+
+### EXO Phyco ugL
+```{r EXO Phyco ugL, echo=FALSE, warning = FALSE, results='hide'}
+
+ all_plot(Var=EXOBGAPC_ugL_1, Title="EXO Phyco ugL at 1.5m", y_lab="ug/L")
+
+ #take out the NAs
+ data_comp <- daily[!is.na(daily$EXOBGAPC_ugL_1), ]  
+ 
+ ggplot()+
+   geom_point(data=ccrwater, aes(x=DateTime, y=EXOBGAPC_ugL_1))+
+   geom_line(data=data_comp, aes(x=DateTime, y=EXOBGAPC_ugL_1), col="blue")+
+   ggtitle("Compare 10 minute observations to Daily mean")
+```
+
+### EXO fDOM at 1.5m
+```{r fdom EXO sensor, echo=FALSE, warning = FALSE, results='hide'}
+
+all_plot(Var=EXOfDOM_RFU_1, Title="EXO fDOM RFU at 1.5m", y_lab="RFU")
+
+all_plot(Var=EXOfDOM_QSU_1, Title="EXO fDOM QSU at 1.5m", y_lab="QSU")
+```
+
+### EXO fDOM at 9m
+```{r fDOM at 9m, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXOfDOM_RFU_9, Title="EXO fDOM RFU at 9m", y_lab="RFU")
+
+all_plot(Var=EXOfDOM_QSU_9, Title="EXO fDOM QSU at 9m", y_lab="QSU")
+
+```
+
+### EXO Conductivity Sensor at 1.5m
+```{r EXO Condctivity Sensor at 1.5m, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXOCond_uScm_1, Title="EXO Cond uScm at 1.5m", y_lab=expression(mu~S/cm))
+
+all_plot(Var=EXOSpCond_uScm_1, Title="EXO SpCond uScm at 1.5m", y_lab=expression(mu~S/cm))
+
+all_plot(Var=EXOTDS_mgL_1, Title="EXO TDS at 1.5m", y_lab="mg/L")
+```
+
+### EXO Conductivity Sensor at 9m
+```{r EXO Cond 9m, echo=FALSE, warning = FALSE, results='hide'}
+all_plot(Var=EXOCond_uScm_9, Title="EXO Cond uScm at 9m", y_lab=expression(mu~S/cm))
+
+all_plot(Var=EXOSpCond_uScm_9, Title="EXO SpCond uScm at 9m", y_lab=expression(mu~S/cm))
+
+all_plot(Var=EXOTDS_mgL_9, Title="EXO TDS at 9m", y_lab="mg/L")
+```
+

@@ -57,7 +57,9 @@ cn_processed = cn_raw%>%
          Date_run = Date)
 
 cn_processed%>%
-  ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
+  mutate(layer=ifelse(Depth_m%in%c(4,5),"EPI","HYPO"))%>%
+  ggplot(aes(x=Date_sampled,y=C_pct,color=layer))+
+  #ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
   geom_point()+
   facet_wrap(~Reservoir)
 

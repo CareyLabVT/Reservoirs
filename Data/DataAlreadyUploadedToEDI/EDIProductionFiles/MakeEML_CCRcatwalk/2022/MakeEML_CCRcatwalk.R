@@ -112,20 +112,10 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "CCR_Catwalk_EDI_2021_2022.csv",
-                          write.file = TRUE)
-# edit this file in excel
-
-# function below to create a template for offsets csv
-template_table_attributes(path = folder,
-                          data.path = folder,
-                          data.table = "CCR_Depth_offsets_2021_2022.csv",
+                          data.table = c("CCR_Catwalk_EDI_2021_2022.csv", "CCR_Depth_offsets_2021_2022.csv","reservoir_site_description.csv",
+                                         "CCR_hobos_2020_2021.csv", "CCRW_MaintenanceLog_2021_2022.csv"),
                           write.file = TRUE)
 
-template_table_attributes(path = folder,
-                          data.path = folder,
-                          data.table = "CCR_hobos_20_21.csv",
-                          write.file = TRUE)
 # edit this file in excel
 
 #if you need to make custom units that aren't in the unit dictionary,
@@ -171,16 +161,29 @@ make_eml(path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
          total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2022",
-         data.table = c("CCR_Catwalk_EDI_2021_2022.csv","CCR_Depth_offsets_2021_2022.csv", "CCR_hobos_20_21.csv", "CCR_MaintenanceLog_2021_2022.csv", "reservoir_site_descriptions.csv"),
-         data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths", "CCR HOBO Temperature String 2020-2021", "CCR sensor maintenace log", "Sampling site descriptions"),
-         other.entity = c('CCR_catwalk_QAQC_function_2021_2022.R', 'Mark_down_plotting_CCRcatwalk_2021_2022.Rmd', 'CCR_sort_by_depth_2021_2022.R' ),
-         other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Applying the depth offset and sorting by sensor depth' ),          
+         data.table = c("CCR_Catwalk_EDI_2021_2022.csv","CCR_Depth_offsets_2021_2022.csv", "CCR_hobos_2020_2021.csv", 
+                        "CCRW_MaintenanceLog_2021_2022.csv", "reservoir_site_descriptions.csv"),
+         data.table.name = c("CCR_Catwalk_EDI_2021_2022","CCR_Depth_offsets_2021_2022", "CCR_hobos_2020_2021", 
+                             "CCRW_MaintenanceLog_2021_2022", "reservoir_site_descriptions"),
+         data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths", 
+                                    "CCR HOBO Temperature String 2020-2021", "CCR sensor maintenace log for waterquality sensors", 
+                                    "Sampling site descriptions"),
+         other.entity = c('CCR_Catwalk_QAQC_function_2021_2022.R', 
+                          'CCR_Catwalk_QAQC_plots_2021_2022.Rmd', 
+                          'CCR_sort_by_depth_2021_2022.R'),
+         other.entity.name = c('CCR_Catwalk_QAQC_function_2021_2022', 
+                               'CCR_Catwalk_QAQC_plots_2021_2022', '
+                          CCR_sort_by_depth_2021_2022'),
+         other.entity.description = c('QAQC function used in CCR_Catwalk_QAQC_plots_2021_2022.Rmd to take out observations from the dataset based on the maintenance log and other outliers.',
+                                      'Script that uses the function in CCR_catwalk_QAQC_function_2021_2022.R collates files and creates QAQC plots.', 
+                                      'Applying the depth offset and sorting by sensor depth'),          
          temporal.coverage = c("2020-07-29", "2022-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.16", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.19", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         #package.id = "edi.1069.1", #### THIS IS USED FOR PUBLISHING
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

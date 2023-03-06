@@ -1,0 +1,393 @@
+---
+title: "CCR Met Data collation and Plots for EDI"
+output: html_document
+date: "2023-02-12"
+---
+
+ This script takes the raw outputs from the water quality sensors at Carvins Cove combines them into one file, identifies gaps in the data, runs the data through the QAQC function (qaqc_ccrmet), and produces QAQC plots for visual inspection. 
+ 
+ Use this file path in Carey Lab Reservoir GitHub Repo: "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRMetData/2022/"
+ 
+ 1. Open the script and check you have the correct function in line 18
+ 2. Change the current start and end times to match the year you are publishing for
+ 3. If there are more than one csv make sure they are all in the Download data chunk. Currently there is only one csv with all of the observations. 
+ 4. Once you have made sure everything is up to date press the knit button and it will produce an html file with all of the outputs and plots. 
+
+```{r Set Up, include=FALSE}
+pacman::p_load("RCurl","tidyverse","lubridate", "plotly", "magrittr", "suncalc", "dplyr","scattermore", "knitr", "openair")
+source("CCR_Met_QAQC_function_2021_2022.R")
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2022-01-01 00:00:00, tz=UTC"
+current_time_end="2023-01-01 00:00:00, tz=UTC"
+```
+
+```{r Create Data folder, include=FALSE}
+### Create a misc_data_files folder if one doesn't already exist
+misc_folder <- "misc_data_files"
+if (file.exists(misc_folder)) {
+  cat("The folder already exists")
+} else {
+  dir.create(misc_folder)
+}
+```
+
+```{r Download data, include=FALSE, eval=TRUE}
+# READ BEFORE PROCEEDING
+#All the Raw data and the maintenance file is on github. Use this section to download the files so you are working with #the most recent ones.
+
+#If you want to download then set eval=TRUE before knitting HTML if not set to FALSE will not run the chunk and use previously downloaded files. 
+# Set the timeout option to 100 seconds instead of 60
+options(timeout=1000)
+
+# This function to speeds up the download time of the data downloads. 
+# If your wifi is slow then it will still take a while. 
+
+bdown=function(url, file){
+  library('RCurl')
+  f = CFILE(file, mode="wb")
+  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
+  close(f)
+  return(a)
+}
+
+# download current met data from GitHub
+bdown("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-met.csv", "misc_data_files/raw_ccre-met.csv")
+
+# download maintenance file. 
+bdown("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/CCRM_Maintenancelog.txt", "misc_data_files/CCRM_Met_Maintenance_2021_2022.txt")
+
+
+# download legacy files
+bdown("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-met_legacy_2021.csv", "misc_data_files/rawccre-met_2021.csv")
+
+```
+
+```{r Get all the data and combine into one df, include=FALSE}
+myfiles = list.files(path='misc_data_files/', pattern="raw*", full.names=TRUE)#list the files from FCR met
+
+# Function to get the right columns and the correct names
+header <- function(Data){
+  
+    files<-read_csv(Data,skip= 3) #get header minus wonky Campbell rows
+    if(length(names(files))==17){
+       files[,17]<-NULL #remove column
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")#rename headers
+      return(files)
+    }else if (length(names(files))==8){
+      files<-read_csv(Data, skip = 3, show_col_types = FALSE)
+      files[,17]<-NULL #remove column
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      return(files)
+    }else if(length(names(files))==18){
+      files[,17]<-NULL #remove column
+      names(files) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+               "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+               "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+               "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+               "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      return(files)
+  }
+}
+
+# Use the function above to get the right header and rows
+renamed <- lapply(myfiles, header)
+
+# Now bind all the files together.  
+Met <- bind_rows(renamed)
+
+# order data by DateTime Stamp
+Met=Met[order(Met$DateTime),]
+
+```
+
+```{r Check for daily gaps and record gaps, include=FALSE}
+
+#order data by DateTime
+Met2=Met
+Met2$DOY=yday(Met2$DateTime)
+```
+
+##Check for gaps in the data frame
+This identifies if there are any daily data gaps in the long-term record
+
+```{r Check for daily gaps, echo=FALSE}
+for(i in 2:nrow(Met2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(Met2$DOY[i]-Met2$DOY[i-1]>1){
+    print(c(Met2$DateTime[i-1],Met2$DateTime[i]))
+  }
+}
+```
+This identifies if there are any sub-daily gaps in the long-term record. 
+Most of these gaps happen when we change the program on the data logger. 
+```{r Check for sub daily gaps, echo=FALSE}
+for(i in 2:length(Met2$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+  if(abs(Met2$Record[i]-Met2$Record[i-1])>1){
+    print(c(Met2$DateTime[i-1],Met2$DateTime[i]))
+  }
+}
+```
+
+```{r Name the Raw data set to compare with QAQCd file, include=FALSE}
+#Met=Met_raw; reset your data, compare QAQC
+Met_raw=Met 
+
+#setting time zone
+Met_raw$DateTime=ymd_hms(Met_raw$DateTime, tz="UTC")
+```
+
+```{r Run the QAQC function, include=FALSE}
+
+# QAQC Function
+
+# This section sets up and runs the QAQC function. The first define where the data entered into the function are.
+
+#The output tells you the missing observations.If you can't find them in the manual downloads then make sure to put # #these times in the methods.
+
+#There are also some warnings which are checks to make sure the maintenance log is using the correct columns for #indexing. section under missing.
+
+
+# run standard qaqc these are where the data entered in the function are defined
+data_file <- Met #this is the raw met file from above
+maintenance_file <-  "misc_data_files/CCRM_Met_Maintenance_2021_2022.txt" #this is the maintenance log for QAQC purposes
+output_file <-  "CCR_Met_final_2021_2022.csv"
+start_time <- NULL
+end_time <- NULL
+
+
+# Run the QAQC function
+qaqc_ccrmet(data_file, maintenance_file, output_file,start_time, end_time)
+
+```
+
+## Read in the QAQC File and Check it out
+
+This section reads in the QAQC file and then you can look at the head, tail and structure. Make sure the last row is Dec. 31 23:59 of the publishing year. There should be 45 columns unless a new one has been added.
+
+```{r Read in QAQC file and look at it}
+# read in qaqc function output
+
+
+ccrmetdata <- read_csv(output_file, col_types = cols(Note_BP_Average_kPa = col_character(), DateTime = col_datetime()))
+#fcrmetdata <- read_csv("FCR_Met_final_2015_2022.csv")
+
+# subset file to only unpublished data
+ccrmetdata <- ccrmetdata[ccrmetdata$DateTime<ymd_hms(current_time_end),]
+
+# what does the beginning look like
+head(ccrmetdata)
+# Make sure it goes to Dec 31st 23:59 of the previous year or your ending period
+tail(ccrmetdata)
+# check out the structure
+str(ccrmetdata)
+```
+
+```{r Make the Maintenance Log file for EDI, include=FALSE}
+RemoveMet=read.csv(maintenance_file)
+names(RemoveMet) = c("Station", "DateTime_start","DateTime_end", "Parameter", "ColumnNumber", "Flag", "Notes") #finalized column names
+RemoveMet$Reservoir= "CCR"#add reservoir name for EDI archiving
+RemoveMet$Site=51 #add site column for EDI archiving
+
+# Rearrange for publishing
+RemoveMet=RemoveMet[,c(8:9,1:7)]
+
+# subset for only the 
+RemoveMet <- RemoveMet[RemoveMet$DateTime_start<ymd_hms(current_time_end),]
+
+# write it as a csv for EDI
+write.csv(RemoveMet, "CCRM_Met_MaintenanceLog_2021_2022.csv", row.names=F, quote=F)
+
+```
+## Check out the Flag requency
+
+Let's look at the flag Frequency for each variable. 
+
+As a reminder here are the flag codes Flag values 
+
+0: no flag; 
+
+1: value removed due to maintenance and set to NA; 
+
+2: sample not collected; 
+
+3: negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA; 
+
+4: potentially questionable value and changed or set to NA, see note; 
+
+5: questionable value but left in the dataset.
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags=ccrmetdata%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+
+# Make a table with the number of times a flag was used
+for(f in 2:(ncol(Flags))){
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+```{r Filter for the current year and set up legend, include=FALSE}
+
+current_raw <- Met_raw%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+current <- ccrmetdata%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))
+
+daily <- ccrmetdata%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+```
+
+```{r Plot functions, echo=FALSE}
+# plotting function for each plot
+
+colors <- c("raw" = "red", "QAQCd" = "black")
+
+all_plot<-function(Var, Var_daily, Title, y_lab){
+ all<- ggplot() +
+  geom_scattermore(data=Met2, aes(x=DateTime, y={{Var}}, color="raw"))+
+  geom_scattermore(data=ccrmetdata, aes(x=DateTime, y={{Var}}, color="QAQCd"))+
+  ggtitle("All",Title) +
+  labs(y = y_lab,
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_bw()
+  
+ cur<- ggplot() +
+  geom_scattermore(data=current_raw, aes(x=DateTime, y={{Var}}, color="raw"), pointsize = 3)+
+  geom_scattermore(data=current, aes(x=DateTime, y={{Var}}, color="QAQCd"), pointsize = 3) +
+  ggtitle("Current",Title) +
+  labs(y = y_lab,
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_bw()
+ 
+ # density plot
+ den <-ggplot(data = daily, aes(x = {{Var}}, group = Year, fill = Year))+
+  geom_density(alpha=0.5)+
+  xlab("Daily avg.")+
+  #xlim(0,0.5)+
+  ggtitle("All",Title) +
+  theme_bw()
+
+# box plot
+box <-ggplot(data = daily, aes(x = Year, y = {{Var}}, group = Year, fill = Year))+
+  geom_boxplot()+
+  #geom_jitter(alpha = 0.1)+
+  ylab(y_lab)+
+  #ylim(0,0.3)+
+  ggtitle("Boxplot",Title) +
+  theme_bw()
+  
+ 
+ newlist <- list(all,cur,den,box) # have to list all outputs under one name
+
+  return(newlist)
+}
+```
+## QAQC Plots
+These are QAQC plots to see if there are any questionable values we missed. 
+
+### Temperature
+```{r Graph Air Temp amd Panel Temp, echo=FALSE, results='hide', warning = FALSE}
+# Let's try using scattermore for faster plotting
+
+ all_plot(Var=AirTemp_C_Average, Title="Met Air Temp", y_lab=expression(''*~degree*C*'')) 
+
+ all_plot(Var=CR3000Panel_Temp_C, Title="CR Panel Air Temp", y_lab=expression(''*~degree*C*'')) 
+
+
+```
+
+### PAR 
+```{r PAR Graph, echo=FALSE, results='hide', warning = FALSE}
+# Let's try using scattermore for faster plotting
+
+ all_plot(Var=PAR_umolm2s_Average, Title="PAR Average", y_lab="umolm2s")
+
+all_plot(Var=PAR_Total_mmol_m2, Title="PAR Total", y_lab="mmol/m2")
+
+```
+
+### Barometric Pressure 
+```{r BP Graph, echo=FALSE, results='hide', warning = FALSE}
+# Let's try using scattermore for faster plotting
+
+all_plot(Var=BP_Average_kPa, Title="Barometric Pressure", y_lab="kPa")
+
+```
+
+### Relative Humidity
+```{r RH Graph, echo=FALSE, results='hide', warning = FALSE}
+
+all_plot(Var=RH_percent, Title="Relative Humidity", y_lab="percent")
+
+```
+
+### Rain Total
+```{r Rain Total Graph, echo=FALSE, results='hide', warning = FALSE}
+
+all_plot(Var=Rain_Total_mm, Title="Rain Totals", y_lab="mm")
+
+```
+
+### Wind Speed and Direction 
+```{r Wind Graph, echo=FALSE, results='hide', warning = FALSE}
+
+
+
+ # Visualize wind directions that 
+  chicago_wind=ccrmetdata%>%
+    select(DateTime,WindSpeed_Average_m_s,WindDir_degrees)%>%
+  dplyr::rename(date = DateTime, ws = WindSpeed_Average_m_s, wd = WindDir_degrees)
+  pollutionRose(chicago_wind, pollutant="ws")
+  
+  all_plot(Var=WindSpeed_Average_m_s, Title="Average Wind Speed", y_lab="m/s")
+
+```  
+
+### Short Wave Radiation  
+```{r SW Radiation Graph, echo=FALSE, results='hide', warning = FALSE}  
+
+all_plot(Var=ShortwaveRadiationUp_Average_W_m2, Title="Shortwave Radiation Up", y_lab="W/m2")
+
+all_plot(Var=ShortwaveRadiationDown_Average_W_m2, Title="Shortwave Radiation Down", y_lab="W/m2")
+
+```
+
+### Infrared Radiation
+```{r Infrared Radiaion Graph, echo=FALSE, results='hide', warning = FALSE}
+
+all_plot(Var=InfraredRadiationUp_Average_W_m2, Title="Infrared Radiation Up", y_lab="W/m2")
+
+all_plot(Var=InfraredRadiationDown_Average_W_m2, Title="Infrared Radiation Down", y_lab="W/m2")
+
+```
+
+### Albedo
+```{r Albedo Graph, echo=FALSE, results='hide', warning = FALSE}
+
+all_plot(Var=Albedo_Average_W_m2, Title="Albedo", y_lab="W/m2")
+
+```

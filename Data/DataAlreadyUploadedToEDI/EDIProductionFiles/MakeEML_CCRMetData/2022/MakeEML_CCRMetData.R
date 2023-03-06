@@ -140,20 +140,23 @@ template_categorical_variables(path = folder,
 # package.id: enter the ID you obtained in Step 6
 make_eml(path = folder,
          dataset.title = "Time series of high-frequency meteorological data at Carvins Cove Reservoir, Virginia, USA 2021-2022",
-         data.table = c('CCR_Met_final_2021_2022.csv','CCR_Met_MaintenanceLog_2021_2022.csv'),
-         data.table.name = c('CCR_Met_final_2021_2022', 'CCR_Met_MaintenanceLog_2021_2022'),
+         data.table = c('CCR_Met_final_2021_2022.csv','CCRM_Met_MaintenanceLog_2021_2022.csv'),
+         data.table.name = c('CCR_Met_final_2021_2022', 'CCRM_Met_MaintenanceLog_2021_2022'),
          data.table.description = c('All meteorological parameters measured at Carvins Cove Reservoir during 2021-2022',
                                     'Log for maintenance and outliers for the Met station at Carvins Cove from 2021-2022'),
-         other.entity = 'QAQC_CCR_Met_2021_2022.R',
-         other.entity.name = 'QAQC_CCR_Met_2021_2022',
-         other.entity.description = 'Data aggregation and QA/QC R script for Carvins Cove 2021-2022',
+         other.entity = c('CCR_Met_QAQC_function_2021_2022.R', 
+                          'CCR_Met_QAQC_Plots_2021_2022.Rmd'),
+         other.entity.name = c('CCR_Met_QAQC_function_2021_2022', 
+                               'CCR_Met_QAQC_Plots_2021_2022'),
+         other.entity.description = c('QAQC function used in CCR_Met_QAQC_Plots_2021_2022.Rmd to take out observations from the dataset based on the maintenance log and other outliers.',
+                                      'Script that uses the function in CCR_Met_QAQC_function_2021_2022.R collates files and creates QAQC plots.'),   
          temporal.coverage = c("2021-03-29", "2022-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.779.17") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
+         package.id = "edi.779.19") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
          #package.id = "edi.1105.1") # edi.1105.1 for final product
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

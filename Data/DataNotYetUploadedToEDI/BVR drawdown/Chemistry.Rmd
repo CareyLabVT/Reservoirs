@@ -276,9 +276,7 @@ for(var in vars){
 Compare P, DOC, and fluora
 ```{r}
 #Load data
-fluora_22 = read.csv("./Data/FluoroProbe_2022_working.csv")
-
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/6/6b3151c0fdd913e02641363c2b00ae57" 
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/7/001cb516ad3e8cbabe1fdcf6826a0a45"
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -323,8 +321,7 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 unlink(infile1)
 
 #Combine current and historical data
-fluora = fluora_22%>%
-  full_join(dt1)
+fluora = dt1
 
 fluora_surface=fluora%>%
   filter(Reservoir=="BVR",
@@ -599,7 +596,7 @@ maxes = sum_plot5%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date))
 
 # New facet label names for sum_plot
-fac.labs <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
+fac.labs <- c("Turbidity\n(NTU)", "Euphotic zone\ndepth (m)", "C[max]\ndepth(m)", "Peak width\n(m)")
 names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
 
 sum_plot5%>%
@@ -611,7 +608,7 @@ sum_plot5%>%
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_color_manual(values = c("grey20","goldenrod","darkgreen","turquoise","darkgreen","turquoise"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
-             labeller = labeller(name = fac.labs))+
+             labeller = labeller(.rows = fac.labs))+
   theme_bw()+
   theme(strip.placement = "outside", legend.position = "none",
         strip.text.x = element_text(
@@ -623,6 +620,7 @@ sum_plot5%>%
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
+
 ggsave("./Figs/Abby_money_plot_phytos.jpeg", dpi = 300, width = 6.5, height = 4)
 ```
 

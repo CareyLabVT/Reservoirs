@@ -198,6 +198,12 @@ air = air_temp_plot%>%
 air
 dev.off()
 
+air_temp_plot%>%
+  filter(Date_22>="2022-05-19"&Date_22<="2022-07-01")%>%
+  group_by(Year)%>%
+  summarize(mean = mean(Air_Temp),
+            sd = sd(Air_Temp))
+
 library(ggpubr)
 jpeg("./Figs/air_and_water_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 ggarrange(air,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
@@ -298,6 +304,18 @@ flexible_bathy%>%
   geom_line()+
   scale_y_reverse()+
   facet_wrap(~Date)
+
+surf%>%
+  rename(surf_temp = Reading)%>%
+  select(-Sensor_depth,-Reservoir_depth)%>%
+  left_join(bot%>%rename(bot_temp=Reading))%>%
+  mutate(Year=year(Date))%>%
+  filter(month(Date)>7)%>%
+  group_by(Year)%>%
+  arrange(Date)%>%
+  summarize(turnover=first(Date[surf_temp-bot_temp<1]))
+
+yday("2022-11-6")-yday("2021-10-19")
 ```
 
 
@@ -447,9 +465,11 @@ meta_ratio = flexible_bathy%>%
   filter(!is.na(thermo))%>%
   group_by(Date)%>%
   dplyr::summarize(depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
-            thermo_and_just_below = sum(Volume_L[Depth_m<=depth_above_thermo]),
-            correction = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
-            epi_volume = thermo_and_just_below-correction,
+            thermo_and_just_below = sum(Volume_L[Depth_m<=depth_above_thermo]), #1m layers
+            correction_thermo = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
+            depth_above_water = Depth_m[Depth_m<0],
+            correction_surf = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
+            epi_volume = thermo_and_just_below-correction_thermo-correction_surf,
             hypo_and_above = sum(Volume_L[Depth_m>=depth_above_thermo]),
             correction_hypo = unique(thermo-depth_above_thermo)*Volume_L[Depth_m==depth_above_thermo],
             hypo_volume = hypo_and_above-correction_hypo,
@@ -473,6 +493,61 @@ meta_ratio%>%
   theme_bw()+
   ylab("Ratio of epilimnetic volume:hypolimnetic volume")+
   xlab("")
+dev.off()
+
+meta_ratio%>%
+  dplyr::select(Date,epi_volume,hypo_volume,Date_22)%>%
+  mutate(Year=year(Date))%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  mutate(Volume_m3 = value/1000)%>%
+  filter(month(Date)==7&day(Date)==1|
+           month(Date)==5&day(Date)==19)%>%
+  group_by(Year,name)%>%
+  summarize(vol_pre = Volume_m3[month(Date)==5],
+            vol_post = Volume_m3[month(Date)==7],
+            change_m3 = vol_pre-vol_post,
+            pct = change_m3/vol_pre*100)
+
+jpeg("./Figs/Vol_split_2022vs2021.jpeg",width = 6, height = 4, units = "in", res = 300)
+meta_ratio%>%
+  mutate(Year=as.factor(year(Date)))%>%
+  filter(!Year==2020,
+         month(Date)>4,
+         month(Date)<11)%>%
+  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  ggplot(aes(x = Date_22,y=value, color = Year))+
+  geom_line()+
+  facet_wrap(~name)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  theme(axis.title.x = element_blank())+
+  ylab("Volume")
+dev.off()
+
+jpeg("./Figs/Vol_filled_2022vs2021.jpeg",width = 4.5, height = 4.5, units = "in", res = 300)
+meta_ratio%>%
+  mutate(Year=as.factor(year(Date)))%>%
+  filter(!Year==2020,
+         month(Date)>=5,
+         month(Date)<10)%>%
+  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
+  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
+  mutate(name = ifelse(name=="epi_volume","Epilimnetic volume","Hypolimnetic volume"),
+         name = factor(name,levels = c("Epilimnetic volume","Hypolimnetic volume")))%>%
+  ggplot(aes(x = Date_22, y = value/1000, fill = name))+
+  scale_fill_manual(values = c("#77c7fc","#104466"))+
+  geom_area()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
+  theme_bw()+
+  ylab("Volume (m3)")+
+  theme(axis.title.x = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
 dev.off()
 ```
 
@@ -845,8 +920,8 @@ vol_sum = flexible_bathy%>%
   group_by(Date)%>%
   dplyr::summarize(depth_above_water = Depth_m[Depth_m<0],
             total_plus = sum(Volume_L[Depth_m>0]),
-            correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
-            total = total_plus-correction)%>%
+            correction = (1-abs(unique(depth_above_water)))*Volume_L[Depth_m==depth_above_water],
+            total = total_plus+correction)%>%
   mutate(Year = as.factor(year(Date)))%>%
   filter(Year %in% c(2021,2022))
 
@@ -854,6 +929,17 @@ to_export_vol = vol_sum%>%
   dplyr::select(Date, total)%>%
   rename(Volume_L = total)%>%
   mutate(Reservoir = "BVR")
+
+to_export_vol%>%
+  filter(month(Date)==7&day(Date)==1|
+           month(Date)==5&day(Date)==19)%>%
+  mutate(Year = year(Date),
+         Volume_m3 = Volume_L/1000)%>%
+  group_by(Year)%>%
+  summarize(vol_pre = Volume_m3[month(Date)==5],
+            vol_post = Volume_m3[month(Date)==7],
+            change_m3 = vol_pre-vol_post,
+            pct = change_m3/vol_pre*100)
 
 write.csv(to_export_vol, "./Data/BVR_volume_exported.csv", row.names = F)
 
@@ -870,118 +956,6 @@ vol_sum%>%
   scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
   theme(axis.title.x = element_blank())
-dev.off()
-
-jpeg("./Figs/Volume_for_Adrienne.jpg",width = 6, height = 4, units = "in", res = 300)
-to_export_vol%>%
-  filter(Date>="2022-04-01")%>%
-  ggplot(aes(x = Date, y = Volume_L))+
-  geom_area(fill = "grey50", color = "grey50")+
-  geom_vline(data=lines_new,aes(xintercept = Dates, lty = status), show.legend = F)+
-  geom_line()+
-  ylab("Volume (L)")+
-  theme(axis.title.x = element_blank())
-dev.off()
-```
-
-
-
-```{r}
-depths = cat_long%>%
-  mutate(Date = as.Date(DateTime))%>%
-  group_by(Date)%>%
-  dplyr::summarize(Reservoir_depth = mean(Reservoir_depth))%>%
-  mutate(Year = year(Date))
-
-flexible_bathy = depths%>%
-  mutate(Reservoir = "BVR")%>%
-  full_join(bathy)%>%
-  group_by(Date)%>%
-  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(Reservoir_depth)) + 1)%>%
-  filter(Depth_m>=-1)
-
-meta_ratio = flexible_bathy%>%
-  left_join(thermo_raw%>%dplyr::select(-Reservoir_depth))%>%
-  filter(!is.na(thermo))%>%
-  group_by(Date)%>%
-  dplyr::summarize(depth_above_water = Depth_m[Depth_m<0],
-            depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
-            surf_correction = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
-            epi_plus = sum(Volume_L[Depth_m<=depth_above_thermo]),
-            correction = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
-            epi_volume = epi_plus-correction-surf_correction,
-            hypo_and_above = sum(Volume_L[Depth_m>=depth_above_thermo]),
-            correction_hypo = unique(thermo-depth_above_thermo)*Volume_L[Depth_m==depth_above_thermo],
-            hypo_volume = hypo_and_above-correction_hypo,
-            epi_hypo_ratio = epi_volume/hypo_volume
-  )
-
-meta_ratio$Date_22 = meta_ratio$Date
-year(meta_ratio$Date_22) = 2022
-
-jpeg("./Figs/Vol_split_2022vs2021.jpeg",width = 6, height = 4, units = "in", res = 300)
-meta_ratio%>%
-  mutate(Year=as.factor(year(Date)))%>%
-  filter(!Year==2020,
-         month(Date)>4,
-         month(Date)<11)%>%
-  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
-  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
-  ggplot(aes(x = Date_22,y=value, color = Year))+
-  geom_line()+
-  facet_wrap(~name)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  theme(axis.title.x = element_blank())+
-  ylab("Volume")
-dev.off()
-
-jpeg("./Figs/Vol_filled_2022vs2021.jpeg",width = 4.5, height = 4.5, units = "in", res = 300)
-meta_ratio%>%
-  mutate(Year=as.factor(year(Date)))%>%
-  filter(!Year==2020,
-         month(Date)>=5,
-         month(Date)<10)%>%
-  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
-  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
-  mutate(name = ifelse(name=="epi_volume","Epilimnetic volume","Hypolimnetic volume"),
-         name = factor(name,levels = c("Epilimnetic volume","Hypolimnetic volume")))%>%
-  ggplot(aes(x = Date_22, y = value/1000, fill = name))+
-  scale_fill_manual(values = c("#77c7fc","#104466"))+
-  geom_area()+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
-  theme_bw()+
-  ylab("Volume (m3)")+
-  theme(axis.title.x = element_blank(),
-        legend.title = element_blank(),
-        legend.position = "bottom",
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
-dev.off()
-
-lines_new = data.frame(Dates = as.Date(c(NA, "2022-05-19",NA, "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","open"), status = c("init","init","final","init"), Year = 2022)
-
-jpeg("./Figs/Volume_for_Adrienne.jpg",width = 6, height = 4, units = "in", res = 300)
-meta_ratio%>%
-  mutate(Year=as.factor(year(Date)))%>%
-  filter(Year==2022,
-         month(Date)>=4,
-         month(Date)<11)%>%
-  dplyr::select(Date_22, Year, epi_volume,hypo_volume)%>%
-  pivot_longer(cols = c(epi_volume,hypo_volume))%>%
-  ggplot(aes(x = Date_22, y = value, fill = name))+
-  scale_fill_manual(values = c("grey50","grey50"))+
-  geom_area(color = "grey50")+
-  geom_vline(data=lines_new,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  scale_x_date(expand = c(0,0))+
-  facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
-  theme_bw()+
-  theme(legend.position = "none",
-        axis.title.x = element_blank())+
-  ylab("Volume (L)")
 dev.off()
 ```
 

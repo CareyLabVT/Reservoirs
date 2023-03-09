@@ -11,6 +11,9 @@ pacman::p_load(tidyverse, lubridate, magrittr, ggplot2, dplyr, readxl)
 
 folder<- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll"
 
+### Set to current date ###
+end_date <- "2023-01-01 00:00:00, tz=UTC"
+
 #### Read in data files ###
 
 # Read in compiled files from 2014-2021. This is the most raw files I can find
@@ -36,6 +39,7 @@ for(k in 1:length(myfileschla)){
   # select the rows you want 
   fil<- files%>%
     select(`Sample ID`, 
+           `absorbance before acidification...10`,
            `Chlorophyll a in extract (ug/L from Arar)`,
             `Pheopigment in extract (ug/L from Arar)`,
            `Chlorophyll a Conc of original water sample in ug/L (or mg/m3-same thing- APHA)`,
@@ -44,11 +48,11 @@ for(k in 1:length(myfileschla)){
            Flag_Pheo_ugL=0)
   
   # rename the columns
-  names(fil)<-c("Sample_ID", "Check_chla", "Check_pheo", "Chla_ugL", "Pheo_ugL", "Flag_Chla_ugL", "Flag_Pheo_ugL")
+  names(fil)<-c("Sample_ID","Check_Absorb", "Check_chla", "Check_pheo", "Chla_ugL", "Pheo_ugL", "Flag_Chla_ugL", "Flag_Pheo_ugL")
   
   # only include the rows with complete observations
-  # Select F for FCR, B for BVR and C for CCR
-  fil<-fil%>%filter(grepl("^F|^B|^C", Sample_ID)) #keep only the right TIMESTAMP rows
+  # Select F for FCR, B for BVR, and C for CCR, S for SUNP
+  fil<-fil%>%filter(grepl("^F|^B|^C|^S", Sample_ID)) #keep only the right TIMESTAMP rows
   
   # Now bind the rows together after they are all in EST
   out.file=rbind(out.file, fil)
@@ -64,8 +68,12 @@ chla_new<-out.file%>%
   separate(., col = Sample_ID, into = c("Reservoir", "Date", "Depth_m", "Dup"), sep = "_")%>%
   separate(.,col = Reservoir, into = c("Reservoir", "Site"), sep = 1)%>%
   mutate(Reservoir=ifelse(Reservoir=="B","BVR", Reservoir),
-         Reservoir=ifelse(Reservoir=="F","FCR", Reservoir))%>%
-  mutate(Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL),
+         Reservoir=ifelse(Reservoir=="F","FCR", Reservoir),
+         Reservoir=ifelse(Reservoir=="S","SNP", Reservoir))%>%
+  # Add flags for low absorbance and pigment below detection
+  mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL),
+         Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
+         Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL),
          Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL))%>%
   # Average the dups
   group_by(Reservoir, Site, Date, Depth_m)%>%
@@ -106,6 +114,8 @@ chla_new<-out.file%>%
   
   # put in order
   all_chla=all_chla[order(all_chla$DateTime),]
+  
+  all_chla <- all_chla[all_chla$DateTime<ymd_hms(end_date),]
   
 ### Save csv ####
 

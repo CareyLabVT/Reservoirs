@@ -48,7 +48,7 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
+template_core_metadata(path = folder,
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
@@ -63,7 +63,7 @@ template_table_attributes(path = folder,
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = folder,
                           data.path = folder,
-                          data.table = "manual_chlorophyll_2014_2021.csv",
+                          data.table = "manual_chlorophyll_2014_2022.csv",
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -151,7 +151,7 @@ make_eml(
   other.entity.description = 'Script used to collate and flag data for publication',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.15') #THIS IS FOR STAGING
+  package.id = 'edi.52.16') #THIS IS FOR STAGING
   #package.id = 'edi.555.1') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",

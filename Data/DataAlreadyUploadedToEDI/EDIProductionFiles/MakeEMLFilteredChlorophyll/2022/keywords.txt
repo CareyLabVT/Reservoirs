@@ -11,5 +11,12 @@ chlorophyll a	lter controlled vocabulary
 plankton 	lter controlled vocabulary
 phytoplankton	lter controlled vocabulary
 algae	lter controlled vocabulary
-filtered chlorophyll	
-manual chlorophyll 	
+filtered chlorophyll	carey lab controlled vocabulary
+manual chlorophyll 	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
+Spring Hollow Reservoir	carey lab controlled vocabulary
+Gatewood Reservoir	carey lab controlled vocabulary
+Smith Mountain Lake 	carey lab controlled vocabulary
+Claytor Lake	carey lab controlled vocabulary
+Lake Sunapee	carey lab controlled vocabulary

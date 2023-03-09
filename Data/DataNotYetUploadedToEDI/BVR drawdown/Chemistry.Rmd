@@ -478,17 +478,27 @@ maxes = sum_plot3%>%
 # New facet label names for sum_plot
 fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
 names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
-
+library(ggh4x)
+scales <- list(
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_continuous(),
+  scale_y_continuous(),
+  scale_y_continuous()
+)
+horiz_line = data.frame(name=rep("DOsat_percent",2),y = rep(100,2),Year=c(2021,2022))%>%
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
 jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 4, units = "in")
 sum_plot3%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
+  geom_hline(aes(yintercept = y),data=horiz_line, color = "cyan4",alpha=0.3,size=1)+
   geom_point(aes(alpha = show_points))+
   geom_line()+
   scale_alpha_manual(values = c(0,1))+
   geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(values = c("darkblue","cyan4","lightsalmon","coral4"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+
@@ -499,6 +509,7 @@ sum_plot3%>%
         axis.title.x = element_blank(),
         strip.background = element_blank(
      ))+
+  facetted_pos_scales(y = scales)+
   ylab("")
 dev.off()
 

@@ -487,7 +487,6 @@ scales <- list(
 )
 horiz_line = data.frame(name=rep("DOsat_percent",2),y = rep(100,2),Year=c(2021,2022))%>%
   mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
-jpeg("./Figs/Abby_money_plot_biogeo.jpeg", res = 300, width = 6.5, height = 4, units = "in")
 sum_plot3%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
   ggplot(aes(x = DateTime, y = value, color = name))+
@@ -510,8 +509,10 @@ sum_plot3%>%
         strip.background = element_blank(
      ))+
   facetted_pos_scales(y = scales)+
-  ylab("")
-dev.off()
+  ylab("")+
+  force_panelsizes(rows = unit(1, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_biogeo.jpeg", dpi = 300, width = 6.5, height = 5)
 
 sum_plot4 = chem_full%>%
   filter(Depth_m ==0.1)%>%
@@ -544,7 +545,6 @@ maxes = sum_plot4%>%
 fac.labs <- c("SRP (ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
 names(fac.labs) <- c("PO4_ugL", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
 
-jpeg("./Figs/Abby_money_plot_doc.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
 sum_plot4%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
@@ -563,8 +563,10 @@ sum_plot4%>%
         axis.title.x = element_blank(),
         strip.background = element_blank(
      ))+
-  ylab("")
-dev.off()
+  ylab("")+
+  force_panelsizes(rows = unit(1, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_doc.jpeg", dpi = 300, width = 6.5, height = 8.5)
 
 sum_plot5 = chem_full%>%
   filter(Depth_m ==0.1)%>%
@@ -600,7 +602,6 @@ maxes = sum_plot5%>%
 fac.labs <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
 names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
 
-jpeg("./Figs/Abby_money_plot_phytos.jpeg", res = 300, width = 6.5, height = 5.6, units = "in")
 sum_plot5%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
@@ -619,7 +620,9 @@ sum_plot5%>%
         axis.title.x = element_blank(),
         strip.background = element_blank(
      ))+
-  ylab("")
-dev.off()
+  ylab("")+
+  force_panelsizes(rows = unit(1, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_phytos.jpeg", dpi = 300, width = 6.5, height = 5)
 ```
 

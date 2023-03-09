@@ -81,7 +81,8 @@ schmidt_fig = schmidt_df%>%
   ylab("Schmidt stability (J/m^2)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        legend.position = "none")
 schmidt_fig
 dev.off()
 
@@ -117,7 +118,8 @@ buoy_fig = buoy_max%>%
   theme_bw()+
   ylab("Buoyancy frequency")+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        legend.position = "none")
 buoy_fig
 dev.off()
 
@@ -159,7 +161,8 @@ water = vw_temp_df%>%
   ylab("Volume-weighted\nwater temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        legend.position = "none")
 water
 dev.off()
 
@@ -214,7 +217,8 @@ temp_dif = air_temp_plot%>%
   ylab("VW water temperature minus\nrolling mean air temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank())+
+  theme(legend.position = "none")
 temp_dif
 
 jpeg("./Figs/temp_dif.jpg",res = 300, units = "in",width = 6, height = 4)
@@ -239,7 +243,8 @@ temp_dif_surf = air_temp_plot%>%
   ylab("Water temperature minus\nrolling mean air temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank())+
+  theme(legend.position = "none")
 temp_dif_surf
 
 jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
@@ -254,13 +259,15 @@ surf_plot_save = surf_plot%>%
   ylab("Surface water temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank())+
+  theme(legend.position = "none")
 dev.off()
 
+legend = get_legend(surf_plot_save)
+library(cowplot)
 jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
-ggarrange(air,water,buoy_fig,surf_plot_save,temp_dif,schmidt_fig, common.legend=T, labels = "auto",legend = "bottom",nrow=2,ncol=3)
+plot_grid(air,surf_plot_save,water,buoy_fig,schmidt_fig,legend, align = "hv",labels = list("a","b","c","d","e",""),nrow=2,ncol=3,axis = "rltb")
 dev.off()
-
 
 bot = catwalk_format%>%
   group_by(Date)%>%

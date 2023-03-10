@@ -1,0 +1,77 @@
+6/17/2019 1:51:12 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 147,Means Of Entry : PULL,Initial :	
+6/17/2019 1:51:12 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 15788,Means Of Entry : PULL,Initial :	
+6/24/2019 1:33:58 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 72,Means Of Entry : PULL,Initial :	
+6/24/2019 1:33:58 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 22470,Means Of Entry : PULL,Initial :	
+6/24/2019 1:35:37 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 40,Means Of Entry : PULL,Initial :	
+6/24/2019 1:35:37 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 15795,Means Of Entry : PULL,Initial :	
+8/5/2019 2:30:01 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 124,Means Of Entry : PULL,Initial :	
+8/5/2019 2:30:01 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 66199,Means Of Entry : PULL,Initial :	
+8/12/2019 1:45:40 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 86,Means Of Entry : PULL,Initial :	
+8/12/2019 1:45:40 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 60441,Means Of Entry : PULL,Initial :	
+8/19/2019 1:30:05 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 320,Means Of Entry : PULL,Initial :	
+8/19/2019 1:30:05 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 96364,Means Of Entry : PULL,Initial :	
+8/28/2019 4:49:47 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 57,Means Of Entry : PULL,Initial :	
+8/28/2019 4:49:47 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 31980,Means Of Entry : PULL,Initial :	
+8/28/2019 4:50:47 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 57,Means Of Entry : PULL,Initial :	
+8/28/2019 4:50:47 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 31983,Means Of Entry : PULL,Initial :	
+9/2/2019 1:06:32 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 62,Means Of Entry : PULL,Initial :	
+9/2/2019 1:06:32 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 38958,Means Of Entry : PULL,Initial :	
+9/11/2019 1:17:26 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 69,Means Of Entry : PULL,Initial :	
+9/11/2019 1:17:26 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 51928,Means Of Entry : PULL,Initial :	
+9/20/2019 4:24:33 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 83,Means Of Entry : PULL,Initial :	
+9/20/2019 4:24:33 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 65057,Means Of Entry : PULL,Initial :	
+10/4/2019 3:17:49 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 64,Means Of Entry : PULL,Initial :	
+10/4/2019 3:17:49 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 64888,Means Of Entry : PULL,Initial :	
+10/4/2019 3:20:55 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 64,Means Of Entry : PULL,Initial :	
+10/4/2019 3:20:55 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 64899,Means Of Entry : PULL,Initial :	
+10/11/2019 2:12:17 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 71,Means Of Entry : PULL,Initial :	
+10/11/2019 2:12:17 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 74906,Means Of Entry : PULL,Initial :	
+10/16/2019 1:36:05 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 76,Means Of Entry : PULL,Initial :	
+10/16/2019 1:36:05 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 82070,Means Of Entry : PULL,Initial :	
+10/23/2019 1:37:39 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 88,Means Of Entry : PULL,Initial :	
+10/23/2019 1:37:39 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 92152,Means Of Entry : PULL,Initial :	
+10/30/2019 1:00:01 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 67,Means Of Entry : PULL,Initial :	
+10/30/2019 1:00:01 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 62144,Means Of Entry : PULL,Initial :	
+11/8/2019 4:42:35 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 86,Means Of Entry : PULL,Initial :	
+11/8/2019 4:42:35 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 75385,Means Of Entry : PULL,Initial :	
+11/20/2019 3:48:59 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 70,Means Of Entry : PULL,Initial :	
+11/20/2019 3:48:59 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 47207,Means Of Entry : PULL,Initial :	
+3/24/2020 4:46:00 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 103,Means Of Entry : PULL,Initial :	
+3/24/2020 4:46:00 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 82049,Means Of Entry : PULL,Initial :	
+3/30/2020 6:02:20 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 71,Means Of Entry : PULL,Initial :	
+3/30/2020 6:02:20 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 67954,Means Of Entry : PULL,Initial :	
+4/20/2020 2:34:19 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 65,Means Of Entry : PULL,Initial :	
+4/20/2020 2:34:19 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 16839,Means Of Entry : PULL,Initial :	
+5/11/2020 4:15:51 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 151,Means Of Entry : PULL,Initial :	
+5/11/2020 4:15:51 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 45609,Means Of Entry : PULL,Initial :	
+5/25/2020 1:57:59 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 162,Means Of Entry : PULL,Initial :	
+5/25/2020 1:57:59 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 36468,Means Of Entry : PULL,Initial :	
+6/8/2020 4:54:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 202,Means Of Entry : PULL,Initial :	
+6/8/2020 4:54:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 26522,Means Of Entry : PULL,Initial :	
+7/6/2020 3:39:52 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 296,Means Of Entry : PULL,Initial :	
+7/6/2020 3:39:52 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 49919,Means Of Entry : PULL,Initial :	
+7/20/2020 1:48:06 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 165,Means Of Entry : PULL,Initial :	
+7/20/2020 1:48:06 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 31874,Means Of Entry : PULL,Initial :	
+8/10/2020 3:04:00 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 87,Means Of Entry : PULL,Initial :	
+8/10/2020 3:04:00 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 42563,Means Of Entry : PULL,Initial :	
+8/24/2020 3:17:32 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 55,Means Of Entry : PULL,Initial :	
+8/24/2020 3:17:32 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 39802,Means Of Entry : PULL,Initial :	
+9/2/2020 2:21:12 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 63,Means Of Entry : PULL,Initial :	
+9/2/2020 2:21:12 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 52640,Means Of Entry : PULL,Initial :	
+9/15/2020 3:29:07 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 83,Means Of Entry : PULL,Initial :	
+9/15/2020 3:29:07 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 71424,Means Of Entry : PULL,Initial :	
+9/15/2020 3:32:10 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 51,Means Of Entry : PULL,Initial :	
+9/15/2020 3:32:10 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 63114,Means Of Entry : PULL,Initial :	
+9/16/2020 3:30:48 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 52,Means Of Entry : PULL,Initial :	
+9/16/2020 3:30:48 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 64552,Means Of Entry : PULL,Initial :	
+9/30/2020 2:28:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 77,Means Of Entry : PULL,Initial :	
+9/30/2020 2:28:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 84640,Means Of Entry : PULL,Initial :	
+10/5/2020 3:58:18 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 51,Means Of Entry : PULL,Initial :	
+10/5/2020 3:58:18 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 35594,Means Of Entry : PULL,Initial :	
+11/2/2020 1:44:26 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 88,Means Of Entry : PULL,Initial :	
+11/2/2020 1:44:26 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 75812,Means Of Entry : PULL,Initial :	
+11/9/2020 1:23:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 69,Means Of Entry : PULL,Initial :	
+11/9/2020 1:23:03 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 57897,Means Of Entry : PULL,Initial :	
+2/12/2021 2:52:57 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Sample Event,Total Points : 838,Means Of Entry : PULL,Initial :	
+2/12/2021 2:52:57 PM	DATABASE	[CAREY-2GBYYZ1] Site : FCR IN FLO,Unit : 6712,Data Type :Level,Total Points : 291479,Means Of Entry : PULL,Initial :	
+			

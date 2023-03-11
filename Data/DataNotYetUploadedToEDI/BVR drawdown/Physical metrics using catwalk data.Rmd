@@ -508,6 +508,8 @@ meta_ratio%>%
             change_m3 = vol_pre-vol_post,
             pct = change_m3/vol_pre*100)
 
+214569.9/310975.5562 #loss of epi volume / total volume loss
+
 jpeg("./Figs/Vol_split_2022vs2021.jpeg",width = 6, height = 4, units = "in", res = 300)
 meta_ratio%>%
   mutate(Year=as.factor(year(Date)))%>%

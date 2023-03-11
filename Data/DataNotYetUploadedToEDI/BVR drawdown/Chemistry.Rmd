@@ -472,6 +472,14 @@ maxes = sum_plot3%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
 
+sum_plot3%>%
+  group_by(name, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            max = max(value),
+            min_date = DateTime[which.min(value)],
+            min = min(value))%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
+
 # New facet label names for sum_plot
 fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
 names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
@@ -537,6 +545,10 @@ maxes = sum_plot4%>%
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
+maxes%>%
+  mutate(max_date=as.Date(max_date, origin="1970-01-01"))
+as.Date("2022-07-05")-as.Date("2022-06-27")
+as.Date("2022-07-18")-as.Date("2022-06-27")
 
 # New facet label names for sum_plot
 fac.labs <- c("SRP (ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
@@ -595,10 +607,26 @@ maxes = sum_plot5%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date))
 
+sum_plot5%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            max = max(value),
+            min_date = DateTime[which.min(value)],
+            min = min(value))%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date),
+         max = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min,max))%>%
+  group_by(name,color)%>%
+  mutate(pct = (max[Year==2022]-max[Year==2021])/max[Year==2021]*100)
+
 # New facet label names for sum_plot
 fac.labs <- c("Turbidity\n(NTU)", "Euphotic zone\ndepth (m)", "C[max]\ndepth(m)", "Peak width\n(m)")
 names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
-
+scales <- list(
+  scale_y_continuous(),
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_continuous()
+)
 sum_plot5%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
@@ -618,6 +646,7 @@ sum_plot5%>%
         strip.background = element_blank(
      ))+
   ylab("")+
+  facetted_pos_scales(y = scales)+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
 

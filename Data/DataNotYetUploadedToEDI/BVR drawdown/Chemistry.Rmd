@@ -537,7 +537,8 @@ sum_plot4 = chem_full%>%
          color = name,
          name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name))%>%
   mutate(name = factor(name, levels=c("PO4_ugL","Phyto","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")),
-         color = factor(color, levels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")))
+         color = factor(color, levels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
+                        labels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")))
 
 maxes = sum_plot4%>%
   group_by(name,color, Year)%>%
@@ -554,24 +555,38 @@ as.Date("2022-07-18")-as.Date("2022-06-27")
 fac.labs <- c("SRP (ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
 names(fac.labs) <- c("PO4_ugL", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
 
+my_colors = c("grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4")
+names(my_colors)=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")
+
 sum_plot4%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  scale_color_manual(values = c("grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4"))+
+  #geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
+                     labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
+                     #limits = c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
+                     values = my_colors
+                     )+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+
-  theme(strip.placement = "outside", legend.position = "none",
+  theme(strip.placement = "outside", 
         strip.text.x = element_text(
         size = 12, face = "bold"
         ),
         axis.title.x = element_blank(),
-        strip.background = element_blank(
-     ))+
+        strip.background = element_blank(),
+        legend.position = c(0.2,0.82),
+        legend.title=element_blank(),
+        legend.background = element_blank(),
+        legend.key= element_blank(),
+        legend.spacing.y = unit(0, 'cm'),
+        legend.text=element_text(size=7)
+        )+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))

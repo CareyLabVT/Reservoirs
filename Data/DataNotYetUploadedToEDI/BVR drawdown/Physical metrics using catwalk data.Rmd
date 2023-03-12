@@ -318,6 +318,108 @@ surf%>%
 yday("2022-11-6")-yday("2021-10-19")
 ```
 
+```{r}
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Record",     
+                    "CR3000Battery_V",     
+                    "CR3000Panel_Temp_C",     
+                    "PAR_umolm2s_Average",     
+                    "PAR_Total_mmol_m2",     
+                    "BP_Average_kPa",     
+                    "AirTemp_C_Average",     
+                    "RH_percent",     
+                    "Rain_Total_mm",     
+                    "WindSpeed_Average_m_s",     
+                    "WindDir_degrees",     
+                    "ShortwaveRadiationUp_Average_W_m2",     
+                    "ShortwaveRadiationDown_Average_W_m2",     
+                    "InfraredRadiationUp_Average_W_m2",     
+                    "InfraredRadiationDown_Average_W_m2",     
+                    "Albedo_Average_W_m2",     
+                    "Flag_PAR_umolm2s_Average",     
+                    "Note_PAR_umolm2s_Average",     
+                    "Flag_PAR_Total_mmol_m2",     
+                    "Note_PAR_Total_mmol_m2",     
+                    "Flag_BP_Average_kPa",     
+                    "Note_BP_Average_kPa",     
+                    "Flag_AirTemp_C_Average",     
+                    "Note_AirTemp_C_Average",     
+                    "Flag_RH_percent",     
+                    "Note_RH_percent",     
+                    "Flag_Rain_Total_mm",     
+                    "Note_Rain_Total_mm",     
+                    "Flag_WindSpeed_Average_m_s",     
+                    "Note_WindSpeed_Average_m_s",     
+                    "Flag_WindDir_degrees",     
+                    "Note_WindDir_degrees",     
+                    "Flag_ShortwaveRadiationUp_Average_W_m2",     
+                    "Note_ShortwaveRadiationUp_Average_W_m2",     
+                    "Flag_ShortwaveRadiationDown_Average_W_m2",     
+                    "Note_ShortwaveRadiationDown_Average_W_m2",     
+                    "Flag_InfraredRadiationUp_Average_W_m2",     
+                    "Note_InfraredRadiationUp_Average_W_m2",     
+                    "Flag_InfraredRadiationDown_Average_W_m2",     
+                    "Note_InfraredRadiationDown_Average_W_m2",     
+                    "Flag_Albedo_Average_W_m2",     
+                    "Note_Albedo_Average_W_m2"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+weather_sum = dt1%>%
+  mutate(DateTime=as_datetime(DateTime),
+         Date = as.Date(DateTime),
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))%>%
+  mutate(Year = as.factor(Year))%>%
+  group_by(Date,Year)%>%
+  summarize(Rain_Total_mm = mean(Rain_Total_mm, na.rm = T),
+            WindSpeed_Average_m_s = mean(WindSpeed_Average_m_s,na.rm=T))
+
+weather_sum$Date_22 = weather_sum$Date
+year(weather_sum$Date_22) = 2022
+
+wind = weather_sum%>%
+  ggplot(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Wind speed (m/s)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
+rain = weather_sum%>%
+  ggplot(aes(x = Date_22, y = Rain_Total_mm, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Rain (mm)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
+jpeg("./Figs/physics_climate.jpg",res = 300, units = "in",width = 8, height = 6)
+plot_grid(air,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = list("a","b","c","d","e","f"),nrow=2,ncol=3,axis = "rltb",common.legend = T, legend.position = "bottom")
+dev.off()
+```
+
+
 
 Lots of extraneous metalimnion code I'm no longer using
 ```{r}

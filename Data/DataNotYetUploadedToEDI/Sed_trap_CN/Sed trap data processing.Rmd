@@ -13,14 +13,15 @@ library(lubridate)
 TO DO: 
 - pull in the CN runs I did with my sediment samples
 - pull in sediment weights
-- figure out how to deal with 2017/2018 (no filters)
 
 
+Load data for samples run in 2022/2023
 ```{r}
 cn1 = read.csv("./2023 sed trap runs/ASL 23jan23.csv")
 cn2 = read.csv("./2023 sed trap runs/ASL 24jan23.csv")
 cn3 = read.csv("./2023 sed trap runs/ASL 26jan23.csv")
 cn4 = read.csv("./2023 sed trap runs/ASL 27jan23.csv")
+# Correct format should be F_sed_8m_R2_F2_02May22
 
 cn_raw = cn1%>%
   full_join(cn2)%>%
@@ -38,12 +39,18 @@ cn_processed = cn_raw%>%
          Depth_m = as.numeric(sub("_","",sub("m.+","",cut))),
          cut = sub("_[0-9]+m_","",cut),
          cut = ifelse(cut=="r1f2","r1f2_r1f2",cut),
-         filter1_ID = ifelse(grepl("_",cut),
+         filter1_ID = ifelse(grepl("_",cut), #First, standardize filter columns
                              sub("_.+","",cut),
                              paste0("r1",cut)),
          filter2_ID = ifelse(grepl("_",cut),
                              sub(".+_","",cut),
-                             paste0("r2",cut)))%>%
+                             paste0("r2",cut)),
+         filter1_ID = paste0(substr(Reservoir,1,1),"_sed_",
+                             Depth_m,"m_R",substr(filter1_ID,2,2),"_F",substr(filter1_ID,4,4),"_",
+                             format(Date_sampled,"%d%b%y")),
+         filter2_ID = paste0(substr(Reservoir,1,1),"_sed_",
+                             Depth_m,"m_R",substr(filter2_ID,2,2),"_F",substr(filter2_ID,4,4),"_",
+                             format(Date_sampled,"%d%b%y")))%>%
   select(-cut,-No.,-Hole..Pos.,-Method,-Info,-C..Blank,-N..Blank)%>%
   rename(Time_run = Time,
          Weight_mg = Weight...mg.,
@@ -62,10 +69,13 @@ cn_processed%>%
   #ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
   geom_point()+
   facet_wrap(~Reservoir)
+```
 
+Load 2019 filtering log
+```{r}
 weights2019 <- read.csv("./2019 files/2019_SedTraps_edited.csv")%>%
   mutate(Day_Filtered=as.POSIXct(Day_Filtered, format = "%d-%b-%y"),
-         Sed_mass_g= Filter_mass_post_filtering_g-sed$Filter_mass_pre_filtering_g,
+         Sed_mass_g= Filter_mass_post_filtering_g-Filter_mass_pre_filtering_g,
          Sed_conc_mg_L= Sed_mass_g / Volume_filtered_mL*1000000,
          Sample_ID= tolower(Sample_ID),
          Depth = str_extract(str_extract(Sample_ID, "[0-9]+m"),"[0-9]+"),
@@ -86,10 +96,18 @@ weights2019_processed = weights2019%>%
   select(-Type)
 ```
 
+
+####
+Currently NOT pulling in runs from 2019, because these were dried sed trap samples (not filters) and are not being included for metals. BUT I have a lot of the infrastructure set up to include these if we decide we want to. That code is below.
+###
+
+
+Load 2019 CN runs
 ```{r}
 cn1 <- read.csv("./2019 files/MAG03Apr19.csv")
 cn2 <- read.csv("./2019 files/MAG10Apr19.csv")
 cn3 <- read.csv("./2019 files/MAG28mar19.csv")
+# Correct format should be F_sed_8m_R2_F2_02May22
 
 cn_temp <- cn1 %>%
   full_join(cn2)%>%
@@ -107,9 +125,12 @@ cn_temp <- cn1 %>%
          Depth_m = as.numeric(str_extract(str_extract(Name, "[0-9]+m"),"[0-9]+")),
          Rep = as.numeric(str_extract(str_extract(Name, "r[0-9]+"),"[0-9]+")),
          is.dup = str_extract(Name, "dup"),
-         Date_num = as.character(as.Date(str_extract(Name, "\\d\\d\\d\\d+"), format = "%m%d%y")),
+         Date_num = str_extract(Name, "\\d\\d\\d\\d+"), #Dates are stored in four different ways...
+         Date_num = ifelse(nchar(Date_num)==5,paste0("0",Date_num),Date_num),
+         Date_num = ifelse(Date_num == "9318","090318",Date_num), #ugh
+         Date_num = as.character(as.Date(Date_num, format = "%m%d%y")),
          Date_let = as.character(as.Date(str_extract(Name, "\\d+\\D\\D\\D\\d\\d"), format = "%d%b%y")),
-         Date_slash = as.character(as.Date(str_extract(Name, "\\d+/\\d+/\\d+"), format = "%m/%d/%y")))%>%
+         Date_slash = as.character(as.Date(str_extract(Name, "\\d+[-/]\\d+[-/]\\d+"), format = c("%m/%d/%y","%m-%d-%y"))))%>%
   rename(Time_run = Time,
          Weight_mg = Weight...mg.,
          N_area = N..Area,
@@ -123,10 +144,6 @@ cn_17_18 <- unite(cn_temp, "Date_temp", c(Date_num,Date_let,Date_slash), sep = "
   select(-Date_temp,-Date)
 cn_17_18$Layer[cn_17_18$Depth_m %in% c(4,5)] <- "epi"
 cn_17_18$Layer[cn_17_18$Depth_m %in% c(8,10)] <- "hypo"
-
-cn_17_18%>%
-  ggplot(aes(x = Date_sampled, y = CN_ratio, color = Reservoir, shape = Layer))+
-  geom_point()
 
 cn_sd <- cn_17_18 %>%
   group_by(Reservoir, Layer, Date_sampled)%>%
@@ -167,6 +184,7 @@ cn_sd%>%
   xlab("")+
   facet_wrap("Year", scales = "free_x")
 ```
+
 ```{r}
 names(cn_processed)
 names(cn_17_18)

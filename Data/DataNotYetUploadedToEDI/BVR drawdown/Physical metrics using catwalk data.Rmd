@@ -390,6 +390,10 @@ weather_sum = dt1%>%
 weather_sum$Date_22 = weather_sum$Date
 year(weather_sum$Date_22) = 2022
 
+cum_rain = weather_sum%>%
+  group_by(Year)%>%
+  mutate(cum_rain_mm = cumsum(Rain_Total_mm))
+
 wind = weather_sum%>%
   ggplot(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year))+
   geom_point(shape = 21, stroke = .5, size = 1.5)+
@@ -414,8 +418,20 @@ rain = weather_sum%>%
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 
+rain_cum = cum_rain%>%
+  ggplot(aes(x = Date_22, y = cum_rain_mm, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Cumulative rain (mm)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
 jpeg("./Figs/physics_climate.jpg",res = 300, units = "in",width = 8, height = 6)
-plot_grid(air,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = list("a","b","c","d","e","f"),nrow=2,ncol=3,axis = "rltb",common.legend = T, legend.position = "bottom")
+ggarrange(air,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = "auto",nrow=2,ncol=3,common.legend = T, legend = "bottom")
 dev.off()
 ```
 

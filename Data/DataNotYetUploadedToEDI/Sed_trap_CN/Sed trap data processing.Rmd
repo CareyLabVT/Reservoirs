@@ -21,18 +21,22 @@ cn1 = read.csv("./2023 sed trap runs/ASL 23jan23.csv")
 cn2 = read.csv("./2023 sed trap runs/ASL 24jan23.csv")
 cn3 = read.csv("./2023 sed trap runs/ASL 26jan23.csv")
 cn4 = read.csv("./2023 sed trap runs/ASL 27jan23.csv")
+cn5 = read.csv("./2023 sed trap runs/ASL 23mar22.csv")
+cn6 = read.csv("./2023 sed trap runs/ASL 10feb22.csv")
 # Correct format should be F_sed_8m_R2_F2_02May22
 
 cn_raw = cn1%>%
   full_join(cn2)%>%
   full_join(cn3)%>%
-  full_join(cn4)
+  full_join(cn4)%>%
+  full_join(cn5)%>%
+  full_join(cn6)
 
 cn_processed = cn_raw%>%
   filter(!Name%in%c("aa as unknown","aspartic acid","RunIn","ref zzyzx","crucible blank","internal reference zzyzx"),
          Method == "very low")%>%
-  mutate(Reservoir = ifelse(substring(Name,1,1)=="f","FCR",NA),
-         Reservoir = ifelse(substring(Name,1,1)=="b","BVR",Reservoir),
+  mutate(Reservoir = ifelse(substring(Name,1,1)%in%c("f","F"),"FCR",NA),
+         Reservoir = ifelse(substring(Name,1,1)%in%c("b","B"),"BVR",Reservoir),
          cut = substring(Name,2),
          Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
          cut = sub("[0-9]+[a-z]+[0-9]+","",cut),

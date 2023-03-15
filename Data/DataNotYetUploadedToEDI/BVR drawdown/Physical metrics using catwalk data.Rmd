@@ -430,6 +430,10 @@ rain_cum = cum_rain%>%
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 
+jpeg("./Figs/rain_cum.jpg",res = 300, units = "in",width = 4, height = 3)
+rain_cum
+dev.off()
+
 jpeg("./Figs/physics_climate.jpg",res = 300, units = "in",width = 8, height = 6)
 ggarrange(air,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = "auto",nrow=2,ncol=3,common.legend = T, legend = "bottom")
 dev.off()

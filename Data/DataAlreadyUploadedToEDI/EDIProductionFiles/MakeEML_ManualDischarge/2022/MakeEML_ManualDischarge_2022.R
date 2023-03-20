@@ -11,6 +11,8 @@ library(lubridate)
 #install.packages('googlesheets4')
 #Load the library 
 library(googlesheets4)
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2022"
+
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
 data <- edi
 trim_sites = function(data,sites){
@@ -34,7 +36,6 @@ library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2022"
 #Step 2: Move your dataset to the directory
 
 #Step 3: Identify an intellectual rights license
@@ -134,7 +135,7 @@ template_categorical_variables(path = folder,
 # table (e.g., edi.123)
 # Make note of this value, as it will be your package.id below
 make_eml(path = folder,
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2022",
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2022",
          data.table = c("ManualDischarge_2019_2022.csv", "site_descriptions.csv"),
          data.table.description = c("Manual Discharge Data",  'Descriptions of sampling sites'),
          temporal.coverage = c("2019-02-08", "2022-12-12"),
@@ -146,7 +147,7 @@ make_eml(path = folder,
          other.entity.description = c('Script used to collate and QAQC data for publication', 
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.3", #### this is the one that I need to change!!!
+         package.id = "edi.1017.4", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####
@@ -170,23 +171,6 @@ make_eml(path = folder,
 # this is a revision to an existing data package: already have an identifier: 202.X (x = revision number)
 ## NOTE: Will need to check geographic coordinates!!!
 
-make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
-         data.table = "ManualDischarge_2019_2021.csv",
-         data.table.description = "Reservoir Continuum Manual Discharge Data",
-         temporal.coverage = c("2019-02-08", "2021-11-19"),
-         maintenance.description = "ongoing",
-         user.id =  "ccarey",
-         other.entity = c('Collate_QAQC_ManualDischarge_2021.R', 
-                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
-                          'calculate_discharge_flowmate_data_Jan2022.R',
-                          'CCR_VolumetricFlow_discharge_calc_example.xlsx'),
-         other.entity.description = c('Script used to collate and QAQC data for publication', 
-                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
-                                      'Script used to calculate discharge using flowmate velocity data',
-                                      'Example spreadsheet which demonstrates the bucket volumetric calculation') ,
-         package.id = "edi.454.5", #### this is the one that I need to change!!!
-         user.domain = 'EDI')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID
@@ -198,4 +182,19 @@ make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Manu
 # Select text files and R file associated with the upload
 # Then click 'Upload': if everything works, there will be no errors and the dataset will be uploaded!
 # Check to make sure everything looks okay on EDI Website
+make_eml(path = folder,
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2022",
+         data.table = c("ManualDischarge_2019_2022.csv", "site_descriptions.csv"),
+         data.table.description = c("Manual Discharge Data",  'Descriptions of sampling sites'),
+         temporal.coverage = c("2019-02-08", "2022-12-12"),
+         maintenance.description = "ongoing",
+         user.id =  "ccarey",
+         other.entity = c('Collate_QAQC_ManualDischarge_2022.R', 
+                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+                          'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
+         other.entity.description = c('Script used to collate and QAQC data for publication', 
+                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+                                      'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
+         package.id = "edi.454.6", #### this is the one that I need to change!!!
+         user.domain = 'EDI')
 

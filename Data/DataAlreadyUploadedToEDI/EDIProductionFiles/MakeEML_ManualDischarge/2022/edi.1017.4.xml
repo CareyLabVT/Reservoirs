@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.716.4" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1017.4" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021</title>
+    <title>Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2022</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -53,20 +53,24 @@
     </creator>
     <creator>
       <individualName>
-        <givenName>Alexandria</givenName>
-        <givenName>G</givenName>
-        <surName>Hounshell</surName>
+        <givenName>Beckett</givenName>
+        <surName>Geisler</surName>
       </individualName>
       <organizationName>Virginia Tech</organizationName>
-      <electronicMailAddress>alexgh@vt.edu</electronicMailAddress>
-      <userId directory="https://orcid.org">https://orcid.org/0000-0003-1616-9399</userId>
+      <electronicMailAddress>beccadg@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2022-01-18</pubDate>
+    <creator>
+      <individualName>
+        <givenName>George</givenName>
+        <surName>Haynie</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>georgeh0919@vt.edu</electronicMailAddress>
+    </creator>
+    <pubDate>2023-03-20</pubDate>
     <abstract>
-      <para>Discharge rates at multiple inflow streams into Falling Creek Reservoir (Vinton, Virginia, USA), Beaverdam Reservoir (Vinton, Virginia, USA), and Carvin's Cove Reservoir (Roanoke, Virginia) were measured manually using multiple methods from 2019-2021. Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir are owned and operated by the Western Virginia Water Authority as drinking water sources for Roanoke, Virginia. The dataset consists of discharge rates calculated using one of four methods: propeller flowmate, salt injection, velocity float or bucket method. Data were collected weekly to monthly from February through October 2019 at Falling Creek and Beaverdam Reservoir, and approximately monthly at Falling Creek in 2020-2021, and approximately monthly at Carvin's Cove in 2021. &#13;
-References:&#13;
-Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Introduction for Ecologists, 2nd edition. John Wiley &amp; Sons, Inc., New York.&#13;
-</para>
+      <para>Discharge rates at multiple inflow streams into Falling Creek Reservoir (Vinton, Virginia, USA), Beaverdam Reservoir (Vinton, Virginia, USA), and Carvins Cove Reservoir (Roanoke, Virginia, USA) were measured manually using multiple methods from 2019-2022. Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir are owned and operated by the Western Virginia Water Authority as drinking water sources for Roanoke, Virginia. The dataset consists of discharge rates calculated using one of four methods: handheld flowmate, salt injection, velocity float or bucket method. Data were collected weekly to monthly from February through October 2019 at Falling Creek and Beaverdam Reservoir, and approximately monthly at Falling Creek in 2020-2021, and approximately monthly at Carvins Cove in 2021-2022. </para>
+      <para/>
     </abstract>
     <keywordSet>
       <keyword>Virginia Tech</keyword>
@@ -75,16 +79,19 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
       <keyword>Falling Creek Reservoir</keyword>
       <keyword>Beaverdam Reservoir</keyword>
       <keyword>Carvins Cove Reservoir</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
-      <keyword>stream discharge</keyword>
+      <keyword>discharge</keyword>
       <keyword>streamflow</keyword>
       <keyword>water balance</keyword>
-      <keyword>stream</keyword>
-      <keywordThesaurus>LTER Controlled Vocabulary</keywordThesaurus>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <additionalInfo>
-      <para>CCC developed and led the reservoir monitoring program, and oversaw the collection and analysis of this dataset throughout the monitoring period. ABP was the point person for manual discharge data collection at Falling Creek in 2021 and DWH was the point person for manual discharge data collection at Carvin’s Code Reservoir in 2021. WMW led QAQC and publishing in the 2021 field season. WMW was the point person for discharge data collection from 2019–2020 at both Falling Creek and Beaverdam Reservoirs. AGH was the co-point person for discharge data collection in 2019. </para>
+      <para>Contributions to the 2022 revision:&#13;
+CCC developed and led the reservoir monitoring program 2013-present. ABP led the field crew and conducted substantial fieldwork at Falling Creek Reservoir in 2022. DWH led the field crew at Carvins Cove Reservoir in 2022, including data collection, collation, and calculation of float method estimates. WMW led QAQC, data collation, and publishing of the data in 2022. BG and GH digitized all field data and led field prep in 2022.</para>
+      <para>Acknowledgments and historical contributions:&#13;
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork. </para>
     </additionalInfo>
     <intellectualRights>
       <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
@@ -124,7 +131,7 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
             <calendarDate>2019-02-08</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2021-11-19</calendarDate>
+            <calendarDate>2022-12-12</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>
@@ -145,8 +152,10 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
     <methods>
       <methodStep>
         <description>
-          <para>We calculated the discharge rate of water in cubic meters per second at multiple tributaries flowing into Falling Creek Reservoir,  Beaverdam Reservoir, and Carvin's Cove Reservoir using four different methods: a handheld flowmeter probe, salt injection, velocity float, or bucket volumetric with cross-sectional discharge calculations. For the flowmeter method, discharge was estimated by measuring the velocity (in meters per second) using a propeller flowmeter (Forestry Supplies, Inc. Model FP 111) or an instantaneous velocity meter (Marsh-Mcbirney Flo-Mate Model 2000656) and depth (in m) at 0.1m width intervals along a cross-section of the stream. The velocity was multiplied by the width and depth, to calculate discharge at each transect, which were then summed to calculate total discharge along the stream width, following the methods in Gordon et al. (2004) and detailed further within the standard operating protocol (SOP) included in this data package. For the salt injection method, discharge was calculated by injecting a known mass (in g) determined as a relative proportion of stream width (see SOP included in this data package for more information) of NaCl into the stream and measuring the change in conductivity over time downstream using an EcoSense (EC 300A, serial number JC01635) conductivity meter, following Gordon et al. (2004). Conductivity measurements were taken at 3-second intervals until the conductivity returned to baseline readings (see SOP for more information). When streamflow was not conducive to using flowmeter or salt injection methods, discharge was estimated using a velocity float or bucket volumetric method, following methods outlined in Gordon et al. (2004) and within the SOP included in this data package. &#13;
-</para>
+          <para>We calculated the discharge rate of water in cubic meters per second at multiple tributaries flowing into Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir using four different methods: a handheld flowmeter probe, salt injection, velocity float, or bucket volumetric with cross-sectional discharge calculations. For the flowmeter method, discharge was estimated by measuring the velocity (in meters per second) using a propeller flowmeter (Forestry Supplies, Inc. Model FP 111) or an instantaneous velocity meter (Marsh-Mcbirney Flo-Mate Model 2000656) and depth (in m) at 0.1-0.5 m width intervals, usually 0.1 m, along a cross-section of the stream. The velocity was multiplied by the width and depth to calculate discharge at each transect, which were then summed to calculate total discharge along the stream width, following the methods in Gordon et al. (2004) and detailed further within the standard operating protocol (SOP) included in this data package. For the salt injection method, discharge was calculated by injecting a known mass (in g) determined as a relative proportion of stream width (see SOP included in this data package for more information) of NaCl into the stream and measuring the change in conductivity over time downstream using an EcoSense (EC 300A, serial number JC01635) conductivity meter, following Gordon et al. (2004). Conductivity measurements were taken at 3-second intervals until the conductivity returned to baseline readings (see SOP for more information). When streamflow was not conducive to using flowmeter or salt injection methods, discharge was estimated using a velocity float or bucket volumetric method, following methods outlined in Gordon et al. (2004) and within the SOP included in this data package. For an example illustrating the bucket volumetric method, please see the .xlsx file attached to this data product titled 'CCR_VolumetricFlow_2020_2022_calculations.xlsx'. </para>
+          <para>See the 'site_descriptions.csv' file for a full description and GPS coordinates of the sites included in this data package.</para>
+          <para>References:&#13;
+Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Introduction for Ecologists, 2nd edition. John Wiley &amp; Sons, Inc., New York.</para>
         </description>
       </methodStep>
     </methods>
@@ -164,21 +173,6 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
         <role>Principal Investigator</role>
       </personnel>
       <funding>Western Virginia Water Authority</funding>
-      <relatedProject>
-        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
-        <personnel>
-          <individualName>
-            <givenName>Cayelan</givenName>
-            <givenName>C</givenName>
-            <surName>Carey</surName>
-          </individualName>
-          <organizationName>Virginia Tech</organizationName>
-          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
-          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
-          <role>Principal Investigator</role>
-        </personnel>
-        <funding>National Science Foundation 1737424</funding>
-      </relatedProject>
       <relatedProject>
         <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
         <personnel>
@@ -226,12 +220,12 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
       </relatedProject>
     </project>
     <dataTable>
-      <entityName>ManualDischarge_2019_2021.csv</entityName>
-      <entityDescription>Reservoir Continuum Manual Discharge Data</entityDescription>
+      <entityName>ManualDischarge_2019_2022.csv</entityName>
+      <entityDescription>Manual Discharge Data</entityDescription>
       <physical>
-        <objectName>ManualDischarge_2019_2021.csv</objectName>
-        <size unit="bytes">5070</size>
-        <authentication method="MD5">c8630618338ad989e0897a08da7a2116</authentication>
+        <objectName>ManualDischarge_2019_2022.csv</objectName>
+        <size unit="bytes">6480</size>
+        <authentication method="MD5">c6738d1cd7866666effa99eaadcb6f55</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -300,6 +294,10 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
                   <codeDefinition>
                     <code>200</code>
                     <definition>Secondary inflow (wetland) stream to Falling Creek Reservoir (37.30943,-79.83619) or right arm inflow to Beaverdam Reservoir (37.322851,-79.81721)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>201</code>
+                    <definition>Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns (37.3958, -79.9937)</definition>
                   </codeDefinition>
                   <codeDefinition>
                     <code>300</code>
@@ -406,7 +404,7 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
           </missingValueCode>
         </attribute>
         <attribute>
-          <attributeName>Flag_Flow</attributeName>
+          <attributeName>Flag_Flow_cms</attributeName>
           <attributeDefinition>Flag for flow</attributeDefinition>
           <storageType>string</storageType>
           <measurementScale>
@@ -435,15 +433,149 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>121</numberOfRecords>
+      <numberOfRecords>164</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>site_descriptions.csv</entityName>
+      <entityDescription>Descriptions of sampling sites</entityDescription>
+      <physical>
+        <objectName>site_descriptions.csv</objectName>
+        <size unit="bytes">2285</size>
+        <authentication method="MD5">58af31a377a4a4eb5c89dfaa4a329702</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">501</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site_description</attributeName>
+          <attributeDefinition>Description of sampling site</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Description of sampling site</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Site latitude</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">37.3024826356053</minimum>
+                  <maximum exclusive="false">37.4169</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Site longitude</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-79.9937</minimum>
+                  <maximum exclusive="false">-79.81721</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>16</numberOfRecords>
     </dataTable>
     <otherEntity>
-      <entityName>Collate_QAQC_ManualDischarge_2021.R</entityName>
+      <entityName>Collate_QAQC_ManualDischarge_2022.R</entityName>
       <entityDescription>Script used to collate and QAQC data for publication</entityDescription>
       <physical>
-        <objectName>Collate_QAQC_ManualDischarge_2021.R</objectName>
-        <size unit="bytes">1936</size>
-        <authentication method="MD5">8207979c5d27e8bc4966141d13501128</authentication>
+        <objectName>Collate_QAQC_ManualDischarge_2022.R</objectName>
+        <size unit="bytes">4637</size>
+        <authentication method="MD5">a326c85b61820dad46eccd2aaf92342e</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
@@ -468,27 +600,12 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
       <entityType>unknown</entityType>
     </otherEntity>
     <otherEntity>
-      <entityName>calculate_discharge_flowmate_data_Jan2022.R</entityName>
-      <entityDescription>Script used to calculate discharge using flowmate velocity data</entityDescription>
+      <entityName>CCR_VolumetricFlow_2020_2022_calculations.xlsx</entityName>
+      <entityDescription>Example spreadsheet which demonstrates the float method and bucket volumetric method calculations</entityDescription>
       <physical>
-        <objectName>calculate_discharge_flowmate_data_Jan2022.R</objectName>
-        <size unit="bytes">1640</size>
-        <authentication method="MD5">8d1bc6461ba0899f97544f44f2e3086d</authentication>
-        <dataFormat>
-          <externallyDefinedFormat>
-            <formatName>text/plain</formatName>
-          </externallyDefinedFormat>
-        </dataFormat>
-      </physical>
-      <entityType>unknown</entityType>
-    </otherEntity>
-    <otherEntity>
-      <entityName>CCR_VolumetricFlow_discharge_calc_example.xlsx</entityName>
-      <entityDescription>Example spreadsheet which demonstrates the bucket volumetric calculation</entityDescription>
-      <physical>
-        <objectName>CCR_VolumetricFlow_discharge_calc_example.xlsx</objectName>
-        <size unit="bytes">14016</size>
-        <authentication method="MD5">210f9310e57a823b861df42af0f715ea</authentication>
+        <objectName>CCR_VolumetricFlow_2020_2022_calculations.xlsx</objectName>
+        <size unit="bytes">14922</size>
+        <authentication method="MD5">d4426a079a1f988dca559c9cb1825959</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</formatName>
@@ -498,4 +615,12 @@ Gordon, N.D., T.A. McMahon, and B.L. Finlayson. 2004. Stream Hydrology: an Intro
       <entityType>unknown</entityType>
     </otherEntity>
   </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
 </eml:eml>

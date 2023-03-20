@@ -1,7 +1,7 @@
 attributeName	code	definition
-Flag_Flow	0	data not suspect
-Flag_Flow	3	"Value suspect, conditions not well captured by flowmeter method"
-Flag_Flow	5	"Value suspect, conditions not well captured by velocity float method"
+Flag_Flow_cms	0	data not suspect
+Flag_Flow_cms	3	"Value suspect, conditions not well captured by flowmeter method"
+Flag_Flow_cms	5	"Value suspect, conditions not well captured by velocity float method"
 Method	B	Bucket volumetric
 Method	F	Flowmeter
 Method	S	Salt injection

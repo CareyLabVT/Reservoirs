@@ -1,4 +1,4 @@
-"Reservoir","Site","Date","Flow_cms","Method","Flag_Flow"
+"Reservoir","Site","Date","Flow_cms","Method","Flag_Flow_cms"
 "FCR",200,2019-02-08,0.03084576,"F","0"
 "FCR",200,2019-03-18,0.03343656,"F","0"
 "FCR",200,2019-04-01,0.02426208,"F","0"

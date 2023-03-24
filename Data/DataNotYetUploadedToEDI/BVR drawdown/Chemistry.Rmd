@@ -499,7 +499,7 @@ sum_plot3%>%
   geom_point(aes(alpha = show_points))+
   geom_line()+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2)+
+  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2, alpha = 0.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_color_manual(values = c("darkblue","cyan4","lightsalmon","coral4"))+
@@ -562,7 +562,7 @@ sum_plot4%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
@@ -649,7 +649,7 @@ sum_plot5%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2)+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),

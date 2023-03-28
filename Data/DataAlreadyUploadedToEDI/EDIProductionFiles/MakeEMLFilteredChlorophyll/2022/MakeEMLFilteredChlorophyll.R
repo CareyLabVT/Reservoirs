@@ -151,8 +151,8 @@ make_eml(
   other.entity.description = 'Script used to collate and flag data for publication',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.17') #THIS IS FOR STAGING
-  #package.id = 'edi.555.1') # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  #package.id = 'edi.52.18') #THIS IS FOR STAGING
+  package.id = 'edi.555.3') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
 #          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",

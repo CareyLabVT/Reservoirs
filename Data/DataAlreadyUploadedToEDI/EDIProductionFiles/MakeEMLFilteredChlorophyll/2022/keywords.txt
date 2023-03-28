@@ -20,3 +20,4 @@ Gatewood Reservoir	carey lab controlled vocabulary
 Smith Mountain Lake 	carey lab controlled vocabulary
 Claytor Lake	carey lab controlled vocabulary
 Lake Sunapee	carey lab controlled vocabulary
+phaeophytin	lter controlled vocabulary

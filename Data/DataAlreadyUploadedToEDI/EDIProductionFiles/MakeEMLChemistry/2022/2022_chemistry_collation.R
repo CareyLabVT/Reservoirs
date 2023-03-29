@@ -537,12 +537,12 @@ chem <- full_join(TNTP, solubles_and_DOC, by = c('Reservoir', 'Site', 'DateTime'
 #get rid of notes and run date
 chem <- chem %>% select(-c(RunDate_DOC,RunDate.x,RunDate.y, Notes_lachat.x, Notes_lachat.y,SampleID_DOC, SampleID_lachat,Flag_DateTime.y, Date.NOTES))
 
-chem <- chem %>%
+chem <- np %>%
   rename(Flag_DateTime = Flag_DateTime.x) %>% 
   mutate(TP_ugL = as.numeric(TP_ugL),
                         TN_ugL = as.numeric(TN_ugL),
                         NH4_ugL = as.numeric(NH4_ugL),
-                        SRP_ugL = as.numeric(SRP_ugL),
+                        SRP_ugL = as.numeric(PO4_ugL),
                         NO3NO2_ugL = as.numeric(NO3NO2_ugL),
                         DOC_mgL = as.numeric(DOC_mgL),
                         DIC_mgL = as.numeric(DIC_mgL),
@@ -563,7 +563,7 @@ chem_final <-chem %>% mutate(SRP_ugL = round(SRP_ugL, 0),
 chem_final <- chem_final %>% mutate(Flag_TP= as.numeric(Flag_TP),
                         Flag_TN= as.numeric(Flag_TN),
                         Flag_NH4 = as.numeric(Flag_NH4),
-                        Flag_SRP = as.numeric(Flag_SRP),
+                        Flag_SRP = as.numeric(Flag_PO4),
                         Flag_NO3NO2 = as.numeric(Flag_NO3NO2),
                         Flag_DOC = as.numeric(Flag_DOC),
                         Flag_DIC = as.numeric(Flag_DIC),
@@ -590,5 +590,5 @@ chem_final<- chem_final %>% arrange(Reservoir, DateTime, Site, Depth_m)
 #drop sun samples
 chem_final <- chem_final[chem_final$Reservoir!="SUN",]
 
-write.csv(chem_final, "./FinalData/2021_chemistry_collation_final_nocommas.csv")
+write.csv(chem_final, "./Data/DataNotYetUploadedToEDI/NutrientData/FinalData/2022_chemistry_collation_final_nocommas.csv")
 

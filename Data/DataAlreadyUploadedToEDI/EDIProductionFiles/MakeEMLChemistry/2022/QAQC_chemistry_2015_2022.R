@@ -303,10 +303,10 @@ doc <- doc %>% select(-c(DOC_mgLAVG, DIC_mgLAVG, DC_mgLAVG, DN_mgLAVG))
 doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
 
 #################################################################
-#      rolling spiked blank for most recent field season 
-#       (TIC TC TNb rolling 06oct22.xlsx) -   
+#      rolling spiked blank for most recent field season        #
+#                (TIC TC TNb rolling 06oct22.xlsx)              #
 #                 if below detection, flag = 3                  #
-#            2022 MDLS (in mg/L) from 'MDL 2022 tab':           #  
+#     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      #  
 #                    DIC     DOC     DC    DN                   #
 #                    0.70   0.84   0.85   0.05                  #
 #################################################################

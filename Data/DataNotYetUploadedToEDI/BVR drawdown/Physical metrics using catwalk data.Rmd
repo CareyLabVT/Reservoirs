@@ -15,27 +15,51 @@ library(akima)
 library(colorRamps)
 ```
 
+This file uses sensor data to create lake physics plots
+
+
+
+
+Figure PHYSICS- water column measures (schmidt, buoyancy freq)
 ```{r}
+#Load thermistor data
 cat_long = read.csv("~/Desktop/github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2022/BVR_longoutput_FLARE_2020_2021.csv")%>%
   filter(Sensor=="ThermistorTemp")
 
 #Load bathymetry
-bathy = read.csv("./Data/Bathymetry_comb.csv")%>%
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+ bathy_raw <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Depth_m",     
+                    "SA_m2",     
+                    "Volume_layer_L",     
+                    "Volume_below_L"    ), check.names=TRUE)
+unlink(infile1)
+
+bathy = bathy_raw%>%
   filter(Reservoir == "BVR")
 
+#Need to create changing bathymetry for each date, which I will do in several steps
+#First, get the water levels at each date
 cat_depths = cat_long%>%
   mutate(Date = as.Date(as.POSIXct(DateTime)))%>%
   filter(!is.na(Reading))%>%
   group_by(Date)%>%
   dplyr::summarize(WaterLevel = mean(Reservoir_depth))
-
+#Then create a dataframe with bathymetry at each date
 flexible_bathy = cat_depths%>%
   mutate(Reservoir = "BVR")%>%
   full_join(bathy)%>%
   group_by(Date)%>%
   mutate(Depth_m = Depth_m - (max(Depth_m)-unique(WaterLevel)) + 1)%>%
   filter(Depth_m>=0)
-
+#Format temperature data for lake analyzer
 catwalk_format = cat_long%>%
   filter(!is.na(Reading))%>%
   mutate(Date = as.Date(as.POSIXct(DateTime)),
@@ -47,6 +71,7 @@ catwalk_format = cat_long%>%
   dplyr::summarize(Reading=mean(Reading,na.rm = T),
                    Reservoir_depth = unique(Reservoir_depth))
 
+#Calculate schmidt stability each day
 schmidts = c()
 for(date in unique(catwalk_format$Date)){
   temps = catwalk_format%>%
@@ -55,17 +80,75 @@ for(date in unique(catwalk_format$Date)){
     filter(Date==date)
   schmidts = c(schmidts, schmidt.stability(wtr = temps$Reading, depths = temps$Sensor_depth, bthA = baths$SA_m2, bthD = baths$Depth_m, sal = rep(0,length(temps$Reading))))
 }
-
 schmidt_df = data.frame(Date = unique(catwalk_format$Date), Schmidt = schmidts)%>%
   mutate(Year = year(Date))
 schmidt_df$Date_22 = schmidt_df$Date
 year(schmidt_df$Date_22)=2022
 
+#Calculate buoyancy frequency each day
+buoyancy_raw = catwalk_format%>%
+  filter(!is.na(Reading))%>%
+  mutate(Depth_simple = floor(Sensor_depth))%>%
+  group_by(Date,Depth_simple)%>%
+  dplyr::summarize(Temp_C = mean(Reading),
+            Depth_m = mean(Sensor_depth))%>%
+  arrange(Date,Depth_m)%>%
+  group_by(Date)%>%
+  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
+  dplyr::summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
+            Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
+buoy_max = buoyancy_raw%>%
+  group_by(Date)%>%
+  dplyr::summarize(max = max(buoy_freq))
+buoy_max$Date_22 = buoy_max$Date
+year(buoy_max$Date_22)=2022
+
+#Calculate volume-weighted water temperature each day
+#First, need to add surface measurements where they are missing
+surf = catwalk_format%>%
+  group_by(Date)%>%
+  dplyr::summarize(Reading = Reading[which.min(Sensor_depth)],
+            Sensor_depth = 0,
+            Reservoir_depth = unique(Reservoir_depth))
+catwalk_format_with_zero = catwalk_format%>%
+  full_join(surf)%>%
+  arrange(Date,Sensor_depth)
+#Then, run the calculations
+vw_temp = c()
+for(date in unique(catwalk_format_with_zero$Date)){
+  temps = catwalk_format_with_zero%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  vw_temp = c(vw_temp, layer.temperature(top = min(baths$Depth_m), bottom = max(baths$Depth_m), wtr = temps$Reading, depths = temps$Sensor_depth, bthA = baths$SA_m2, bthD = baths$Depth_m))
+}
+vw_temp_df = data.frame(Date = unique(catwalk_format$Date), vw_temp = vw_temp)%>%
+  mutate(Year = year(Date))
+vw_temp_df$Date_22 = vw_temp_df$Date
+year(vw_temp_df$Date_22)=2022
+
+#Also save just the surface temperatures to plot
+surf_plot = surf%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))
+year(surf_plot$Date_22) = 2022
+
+#And just the hypo temperatures to plot
+bot = catwalk_format%>%
+  group_by(Date)%>%
+  dplyr::summarize(Reading = Reading[which.max(Sensor_depth)])%>%
+  mutate(Date_22 = Date,
+         Year = year(Date))%>%
+  filter(Year %in% c(2021,2022))%>%
+  mutate(Year = as.factor(Year))
+year(bot$Date_22) = 2022
 
 ###
 # PLOT RESULTS
 ###
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022) #Drawdown dates
 
 jpeg("./Figs/Schmidt_exo.jpg",res = 300, units = "in",width = 6, height = 4)
 schmidt_fig = schmidt_df%>%
@@ -86,25 +169,6 @@ schmidt_fig = schmidt_df%>%
 schmidt_fig
 dev.off()
 
-buoyancy_raw = catwalk_format%>%
-  filter(!is.na(Reading))%>%
-  mutate(Depth_simple = floor(Sensor_depth))%>%
-  group_by(Date,Depth_simple)%>%
-  dplyr::summarize(Temp_C = mean(Reading),
-            Depth_m = mean(Sensor_depth))%>%
-  arrange(Date,Depth_m)%>%
-  group_by(Date)%>%
-  filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  dplyr::summarize(buoy_freq = buoyancy.freq(Temp_C, Depth_m),
-            Depth_m = attr(buoyancy.freq(Temp_C, Depth_m), 'depths'))
-
-buoy_max = buoyancy_raw%>%
-  group_by(Date)%>%
-  dplyr::summarize(max = max(buoy_freq))
-  
-buoy_max$Date_22 = buoy_max$Date
-year(buoy_max$Date_22)=2022
-
 jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
 buoy_fig = buoy_max%>%
   mutate(Year = as.factor(year(Date)))%>%
@@ -122,30 +186,6 @@ buoy_fig = buoy_max%>%
         legend.position = "none")
 buoy_fig
 dev.off()
-
-surf = catwalk_format%>%
-  group_by(Date)%>%
-  dplyr::summarize(Reading = Reading[which.min(Sensor_depth)],
-            Sensor_depth = 0,
-            Reservoir_depth = unique(Reservoir_depth))
-  
-catwalk_format_with_zero = catwalk_format%>%
-  full_join(surf)%>%
-  arrange(Date,Sensor_depth)
-
-vw_temp = c()
-for(date in unique(catwalk_format_with_zero$Date)){
-  temps = catwalk_format_with_zero%>%
-    filter(Date == date)
-  baths = flexible_bathy%>%
-    filter(Date==date)
-  vw_temp = c(vw_temp, layer.temperature(top = min(baths$Depth_m), bottom = max(baths$Depth_m), wtr = temps$Reading, depths = temps$Sensor_depth, bthA = baths$SA_m2, bthD = baths$Depth_m))
-}
-
-vw_temp_df = data.frame(Date = unique(catwalk_format$Date), vw_temp = vw_temp)%>%
-  mutate(Year = year(Date))
-vw_temp_df$Date_22 = vw_temp_df$Date
-year(vw_temp_df$Date_22)=2022
 
 jpeg("./Figs/VW_temp_exo.jpg",res = 300, units = "in",width = 6, height = 4)
 water = vw_temp_df%>%
@@ -166,93 +206,6 @@ water = vw_temp_df%>%
 water
 dev.off()
 
-air_temp = read.csv("./Data/BVR_Air_Temp_2021_2022.csv")
-air_temp_plot = air_temp%>%
-  mutate(Year = year(DateTime),
-         Air_Temp = Air_Temp_C_1,
-         Date_22 = as.Date(DateTime))%>%
-  filter(Year %in% c(2021,2022),
-         !is.na(Air_Temp))%>%
-  mutate(Year = as.factor(Year))%>%
-  group_by(Date_22,Year)%>%
-  summarize(Air_Temp = mean(Air_Temp))%>%
-  arrange(Year,Date_22)
-year(air_temp_plot$Date_22)=2022
-library(zoo)
-jpeg("./Figs/air_temp_exo.jpg",res = 300, units = "in",width = 6, height = 4)
-air = air_temp_plot%>%
-  ggplot(aes(x = Date_22, y = Air_Temp, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
-  scale_fill_manual(values = c("black","#00F7FF"))+
-  scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Air temperature (ºC)")+
-  theme_bw()+
-  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())+
-  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), linewidth = 1)+
-  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), data = .%>%filter(Year==2022|Date_22>"2022-12-27"), linewidth = 0.3, color = "#00F7FF")+
-  #geom_line(aes(y=rollmean(Air_Temp, 10, fill = NA)), data = .%>%filter(Year==2021|Date_22<"2022-1-03"), linewidth = 0.3, color = "grey50")+
-  theme(legend.position = "none")
-air
-dev.off()
-
-air_temp_plot%>%
-  filter(Date_22>="2022-05-19"&Date_22<="2022-07-01")%>%
-  group_by(Year)%>%
-  summarize(mean = mean(Air_Temp),
-            sd = sd(Air_Temp))
-
-library(ggpubr)
-jpeg("./Figs/air_and_water_temp.jpg",res = 300, units = "in",width = 6, height = 4)
-ggarrange(air,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
-dev.off()
-
-  
-air_temp_plot$rol_mean = rollmean(air_temp_plot$Air_Temp,10,fill=NA,align = "right")
-temp_dif = air_temp_plot%>%
-  left_join(vw_temp_df%>%mutate(Year=as.factor(Year)))%>%
-  mutate(dif_temp = vw_temp-rol_mean)%>%
-  ggplot(aes(x = Date_22, y = dif_temp, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
-  scale_fill_manual(values = c("black","#00F7FF"))+
-  scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("VW water temperature minus\nrolling mean air temperature (ºC)")+
-  theme_bw()+
-  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())+
-  theme(legend.position = "none")
-temp_dif
-
-jpeg("./Figs/temp_dif.jpg",res = 300, units = "in",width = 6, height = 4)
-temp_dif
-dev.off()
-
-surf_plot = surf%>%
-  mutate(Date_22 = Date,
-         Year = year(Date))%>%
-  filter(Year %in% c(2021,2022))
-year(surf_plot$Date_22) = 2022
-
-temp_dif_surf = air_temp_plot%>%
-  left_join(surf_plot%>%mutate(Year=as.factor(Year)))%>%
-  mutate(dif_temp = Reading-Air_Temp)%>%
-  ggplot(aes(x = Date_22, y = dif_temp, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
-  scale_fill_manual(values = c("black","#00F7FF"))+
-  scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  ylab("Water temperature minus\nrolling mean air temperature (ºC)")+
-  theme_bw()+
-  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
-  theme(axis.title.x = element_blank())+
-  theme(legend.position = "none")
-temp_dif_surf
-
 jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 surf_plot_save = surf_plot%>%
   mutate(Year = as.factor(Year))%>%
@@ -269,21 +222,6 @@ surf_plot_save = surf_plot%>%
   theme(legend.position = "none")
 dev.off()
 
-legend = get_legend(surf_plot_save)
-library(cowplot)
-jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
-plot_grid(air,surf_plot_save,water,buoy_fig,schmidt_fig,legend, align = "hv",labels = list("a","b","c","d","e",""),nrow=2,ncol=3,axis = "rltb")
-dev.off()
-
-bot = catwalk_format%>%
-  group_by(Date)%>%
-  dplyr::summarize(Reading = Reading[which.max(Sensor_depth)])%>%
-  mutate(Date_22 = Date,
-         Year = year(Date))%>%
-  filter(Year %in% c(2021,2022))%>%
-  mutate(Year = as.factor(Year))
-year(bot$Date_22) = 2022
-
 jpeg("./Figs/hypo_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 bot%>%
   ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
@@ -297,14 +235,26 @@ bot%>%
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 dev.off()
+```
 
+Stats for paper/ misc
+```{r}
+#Plot of bathy curve before and after
+jpeg("./Figs/mean_depth.jpg",res = 300, units = "in",width = 4, height = 4)
 flexible_bathy%>%
   filter(Date %in% as.Date(c("2022-05-19","2022-07-01")))%>%
+  group_by(Date)%>%
+  mutate(total_volume = max(Volume_below_L),
+         total_sa = max(SA_m2),
+         mean_depth = unique(total_volume)*0.001/unique(total_sa))%>%
   ggplot(aes(x = SA_m2,y=Depth_m))+
+  geom_hline(aes(yintercept = mean_depth))+
   geom_line()+
   scale_y_reverse()+
   facet_wrap(~Date)
+dev.off()
 
+#Turnover dates
 surf%>%
   rename(surf_temp = Reading)%>%
   select(-Sensor_depth,-Reservoir_depth)%>%
@@ -315,10 +265,14 @@ surf%>%
   arrange(Date)%>%
   summarize(turnover=first(Date[surf_temp-bot_temp<1]))
 
+#How much earlier was turnover?
 yday("2022-11-6")-yday("2021-10-19")
 ```
 
+Figure PHYSICS - air temp/wind/etc
 ```{r}
+library(zoo)
+library(ggpubr)
 inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
@@ -385,6 +339,7 @@ weather_sum = dt1%>%
   mutate(Year = as.factor(Year))%>%
   group_by(Date,Year)%>%
   summarize(Rain_Total_mm = mean(Rain_Total_mm, na.rm = T),
+            AirTemp_C_Average = mean(AirTemp_C_Average,na.rm=T),
             WindSpeed_Average_m_s = mean(WindSpeed_Average_m_s,na.rm=T))
 
 weather_sum$Date_22 = weather_sum$Date
@@ -393,6 +348,18 @@ year(weather_sum$Date_22) = 2022
 cum_rain = weather_sum%>%
   group_by(Year)%>%
   mutate(cum_rain_mm = cumsum(Rain_Total_mm))
+
+temp = weather_sum%>%
+  ggplot(aes(x = Date_22, y = AirTemp_C_Average, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Air temperature (ºC)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
 
 wind = weather_sum%>%
   ggplot(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year))+
@@ -435,10 +402,164 @@ rain_cum
 dev.off()
 
 jpeg("./Figs/physics_climate.jpg",res = 300, units = "in",width = 8, height = 6)
-ggarrange(air,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = "auto",nrow=2,ncol=3,common.legend = T, legend = "bottom")
+ggarrange(temp,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = "auto",nrow=2,ncol=3,common.legend = T, legend = "bottom")
+dev.off()
+
+legend = get_legend(surf_plot_save)
+library(cowplot)
+jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
+plot_grid(air,surf_plot_save,water,buoy_fig,schmidt_fig,legend, align = "hv",labels = list("a","b","c","d","e",""),nrow=2,ncol=3,axis = "rltb")
+dev.off()
+
+air_temp_plot = weather_sum%>%
+  mutate(Year = year(Date),
+         Air_Temp = AirTemp_C_Average,
+         Date_22 = as.Date(Date_22))%>%
+  filter(Year %in% c(2021,2022),
+         !is.na(AirTemp_C_Average))%>%
+  mutate(Year = as.factor(Year))%>%
+  group_by(Date_22,Year)%>%
+  summarize(Air_Temp = mean(Air_Temp))%>%
+  arrange(Year,Date_22)
+
+air_temp_plot%>%
+  filter(Date_22>="2022-05-19"&Date_22<="2022-07-01")%>%
+  group_by(Year)%>%
+  summarize(mean = mean(Air_Temp),
+            sd = sd(Air_Temp))
+
+library(ggpubr)
+jpeg("./Figs/air_and_water_temp.jpg",res = 300, units = "in",width = 6, height = 4)
+ggarrange(air,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
 dev.off()
 ```
 
+
+
+Lake number
+```{r}
+layer_dens = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  temps = catwalk_format%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  thermo = thermo_raw%>%
+    filter(Date == date)
+  if(!is.na(thermo$thermo)){
+    layer_dens = c(layer_dens, 
+                   layer.density(top = 0, 
+                                 bottom = thermo$thermo, 
+                                 wtr = temps$Reading, 
+                                 depths = temps$Sensor_depth, 
+                                 bthA = baths$SA_m2, 
+                                 bthD = c(0,baths$Depth_m[2:length(baths$Depth_m)])))
+    dates = c(dates, date)
+  }
+}
+
+dens_df = data.frame(Date = dates, Density = layer_dens)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+
+
+
+met = read.csv("./Data/FCRmet.csv", skip = 1)
+
+met1 = met%>%
+  filter(nchar(TIMESTAMP)>3)%>%
+  mutate(Date = as.Date(as.POSIXct(TIMESTAMP)))%>%
+  group_by(Date)%>%
+  dplyr::summarize(wind = mean(as.numeric(WS_ms_Avg)))
+
+met_dens_comb = met1%>%
+  left_join(dens_df)%>%
+  filter(!is.na(Density))
+
+met_dens_comb$uStar = uStar(wndSpeed = met_dens_comb$wind, 
+                            wndHeight = 2.4,#Adrienne's approximation
+                            averageEpiDense = met_dens_comb$Density)
+
+
+
+hypo_dens = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  temps = catwalk_format%>%
+    filter(Date == date)
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  thermo = thermo_raw%>%
+    filter(Date == date)
+  if(!is.na(thermo$thermo)){
+    hypo_dens = c(hypo_dens, 
+                  layer.density(top = thermo$thermo, 
+                                bottom = max(baths$Depth_m), 
+                                wtr = temps$Reading, 
+                                depths = temps$Sensor_depth, 
+                                bthA = baths$SA_m2, 
+                                bthD = c(baths$Depth_m)))
+    dates = c(dates, date)
+  }
+}
+
+hypo_dens_df = data.frame(Date = dates, Density = hypo_dens)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+
+
+
+lake_num = c()
+dates = c()
+for(date in unique(catwalk_format$Date)){
+  baths = flexible_bathy%>%
+    filter(Date==date)
+  uStar_calc = met_dens_comb%>%
+    filter(Date == date)
+  meta = meta_depths%>%
+    pivot_wider()%>%
+    filter(Date == date)
+  St_calc = schmidt_df%>%
+    filter(Date==date)
+  hypo = hypo_dens_df%>%
+    filter(Date==date)
+
+  num = lake.number(bthA = baths$SA_m2, 
+                    bthD = baths$Depth_m,
+                    uStar = uStar_calc$uStar,
+                    St = St_calc$Schmidt,
+                    metaT = meta$epi_depth,
+                    metaB = meta$hypo_depth,
+                    averageHypoDense = hypo$Density
+                    )
+  if(!is_empty(num)){
+    dates = c(dates, date)
+    lake_num = c(lake_num, num)
+  }
+  
+}
+
+lake_number_df = data.frame(Date = dates, lake_num = lake_num)%>%
+  mutate(Date = as.Date(Date, origin = "1970-01-01"),
+         Year = year(Date))
+
+lake_number_df$Date_22 = lake_number_df$Date
+year(lake_number_df$Date_22)=2022
+
+jpeg("./Figs/Lake number.jpg",res = 300, units = "in",width = 6, height = 4)
+lake_number_df%>%
+  mutate(Year = as.factor(Year))%>%
+  ggplot(aes(x = Date_22, y = lake_num, color = Year))+
+  geom_point()+
+  geom_smooth()+
+  ylab("Lake number")+
+  theme_bw()+
+  theme(axis.title.x = element_blank())
+dev.off()
+```
 
 
 Lots of extraneous metalimnion code I'm no longer using
@@ -700,131 +821,6 @@ dev.off()
 ```
 
 
-
-Lake number
-```{r}
-layer_dens = c()
-dates = c()
-for(date in unique(catwalk_format$Date)){
-  temps = catwalk_format%>%
-    filter(Date == date)
-  baths = flexible_bathy%>%
-    filter(Date==date)
-  thermo = thermo_raw%>%
-    filter(Date == date)
-  if(!is.na(thermo$thermo)){
-    layer_dens = c(layer_dens, 
-                   layer.density(top = 0, 
-                                 bottom = thermo$thermo, 
-                                 wtr = temps$Reading, 
-                                 depths = temps$Sensor_depth, 
-                                 bthA = baths$SA_m2, 
-                                 bthD = c(0,baths$Depth_m[2:length(baths$Depth_m)])))
-    dates = c(dates, date)
-  }
-}
-
-dens_df = data.frame(Date = dates, Density = layer_dens)%>%
-  mutate(Date = as.Date(Date, origin = "1970-01-01"),
-         Year = year(Date))
-
-
-
-
-met = read.csv("./Data/FCRmet.csv", skip = 1)
-
-met1 = met%>%
-  filter(nchar(TIMESTAMP)>3)%>%
-  mutate(Date = as.Date(as.POSIXct(TIMESTAMP)))%>%
-  group_by(Date)%>%
-  dplyr::summarize(wind = mean(as.numeric(WS_ms_Avg)))
-
-met_dens_comb = met1%>%
-  left_join(dens_df)%>%
-  filter(!is.na(Density))
-
-met_dens_comb$uStar = uStar(wndSpeed = met_dens_comb$wind, 
-                            wndHeight = 2.4,#Adrienne's approximation
-                            averageEpiDense = met_dens_comb$Density)
-
-
-
-hypo_dens = c()
-dates = c()
-for(date in unique(catwalk_format$Date)){
-  temps = catwalk_format%>%
-    filter(Date == date)
-  baths = flexible_bathy%>%
-    filter(Date==date)
-  thermo = thermo_raw%>%
-    filter(Date == date)
-  if(!is.na(thermo$thermo)){
-    hypo_dens = c(hypo_dens, 
-                  layer.density(top = thermo$thermo, 
-                                bottom = max(baths$Depth_m), 
-                                wtr = temps$Reading, 
-                                depths = temps$Sensor_depth, 
-                                bthA = baths$SA_m2, 
-                                bthD = c(baths$Depth_m)))
-    dates = c(dates, date)
-  }
-}
-
-hypo_dens_df = data.frame(Date = dates, Density = hypo_dens)%>%
-  mutate(Date = as.Date(Date, origin = "1970-01-01"),
-         Year = year(Date))
-
-
-
-
-lake_num = c()
-dates = c()
-for(date in unique(catwalk_format$Date)){
-  baths = flexible_bathy%>%
-    filter(Date==date)
-  uStar_calc = met_dens_comb%>%
-    filter(Date == date)
-  meta = meta_depths%>%
-    pivot_wider()%>%
-    filter(Date == date)
-  St_calc = schmidt_df%>%
-    filter(Date==date)
-  hypo = hypo_dens_df%>%
-    filter(Date==date)
-
-  num = lake.number(bthA = baths$SA_m2, 
-                    bthD = baths$Depth_m,
-                    uStar = uStar_calc$uStar,
-                    St = St_calc$Schmidt,
-                    metaT = meta$epi_depth,
-                    metaB = meta$hypo_depth,
-                    averageHypoDense = hypo$Density
-                    )
-  if(!is_empty(num)){
-    dates = c(dates, date)
-    lake_num = c(lake_num, num)
-  }
-  
-}
-
-lake_number_df = data.frame(Date = dates, lake_num = lake_num)%>%
-  mutate(Date = as.Date(Date, origin = "1970-01-01"),
-         Year = year(Date))
-
-lake_number_df$Date_22 = lake_number_df$Date
-year(lake_number_df$Date_22)=2022
-
-jpeg("./Figs/Lake number.jpg",res = 300, units = "in",width = 6, height = 4)
-lake_number_df%>%
-  mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = lake_num, color = Year))+
-  geom_point()+
-  geom_smooth()+
-  ylab("Lake number")+
-  theme_bw()+
-  theme(axis.title.x = element_blank())
-dev.off()
-```
 
 
 Heatmap

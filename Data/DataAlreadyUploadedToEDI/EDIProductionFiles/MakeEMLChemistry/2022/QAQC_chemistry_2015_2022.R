@@ -25,19 +25,16 @@ TNTP <- TNTP [,!(names(TNTP) %in% c("Notes_defrost.tag"))]
 TNTP <- TNTP[!is.na(TNTP$TP_ugL) | !is.na(TNTP$TN_ugL) ,]
 
 #add DateTime flag
-class(TNTP$DateTime)
-TNTP$DateTime <- ymd_hms(TNTP$DateTime)
+TNTP$DateTime <- as.POSIXct(TNTP$DateTime, format="%m/%d/%y %H:%M")
+#TNTP$DateTime <- mdy_hm(TNTP$DateTime)
 TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="Flag_DateTime", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
-
-#also add datetime flag for ISCO because time is from weir sampling
-TNTP$Flag_DateTime <- ifelse(TNTP$Site=="100.1",1,TNTP$Flag_DateTime)
 
 #back to character date
 TNTP$DateTime <- as.character(TNTP$DateTime)
 
 # set flags for TN & TP
 ###################################################
-# add 7 for rows that will be averaged
+# add 7 for rows that will be averaged                #NOTE - should be 0?
 ###################################################
 # create flag columns
 # no flag value = 0
@@ -93,15 +90,16 @@ TNTP$Rep <- ifelse(TNTP$Rep=="R2",2,1)
 ############################################################
 #            if below detection, flag as 3                 #
 #          independent digestion for each run              # 
-#   averaged across all runs for most recent field season   #
+#   averaged across all runs for most recent field season  #
 #                "rolling spiked blank 250"                #
 #                      TP      TN                          #  
-#                     3.5      56                         #
+#                     3.5      56                          #
 ############################################################  
 ## MDL's come from TNTP MDL 2016 +... 24mar23 excel sheet.
 ##Using rolling spike blanks for runs in 2023: 22 Feb - 22 March were the runs that went into this years data 
 
-#    Historical MDL's:           #
+##################################
+#        Historical MDL's:       #
 #    2020: TP = 6.8; TN = 72.2   #
 #    2021: TP = 10; TN = 76.4    #
 #    2022: TP = 3.5; TN = 56     #
@@ -170,7 +168,7 @@ doc$Flag_DOC <- 0
 doc$Flag_DN <- 0
 
 ## Flag rows where we used NPOC for CCR tunnel sites (400, 500, 501)
-#using Flag #8 for NPOC denotation 
+#using Flag 8 for NPOC denotation 
 doc <- doc %>% 
   mutate(Flag_DOC = ifelse(Notes_DOC == "run_NPOC", 8, Flag_DOC ) )
 
@@ -179,6 +177,8 @@ doc <- doc %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
 #deleting CCR 14Oct22 site 400 bc is being rerun at a later date (hopefully!)
 doc <- doc[!(doc$Notes_DOC=="rerun so delete"),]
+
+doc$DateTime <- as.POSIXct(doc$DateTime, format="%m/%d/%y %H:%M")
 
 #add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
 doc$Flag_DateTime <- 0
@@ -200,6 +200,9 @@ doc$DOC_mgL <- as.numeric(doc$DOC_mgL)
 doc$DIC_mgL <- as.numeric(doc$DIC_mgL)
 doc$DC_mgL <- as.numeric(doc$DC_mgL)
 doc$DN_mgL <- as.numeric(doc$DN_mgL)
+
+#set datetime back to character
+doc$DateTime <- as.character(doc$DateTime)
 
 ##################################
 ### if negative, correct to zero #
@@ -230,7 +233,7 @@ for (i in 1:nrow(doc)) {
 
 
 for (i in 1:nrow(doc)) {
-  if(doc$DC_mgL[i] < 0 & !is.na(doc$DIC_mgL[i])){   #added is.na part because on NAs introduced in NPOC data 
+  if(doc$DC_mgL[i] < 0 & !is.na(doc$DIC_mgL[i])){   #added is.na part because of NAs introduced in NPOC data 
     doc$DC_mgL[i] <- 0
     if(doc$Flag_DC[i]>0){
       doc$Flag_DC[i] <- paste0(doc$Flag_DC[i], 4)
@@ -316,14 +319,14 @@ doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
 #      rolling spiked blank for most recent field season        #
 #                (TIC TC TNb rolling 06oct22.xlsx)              #
 #                 if below detection, flag = 3                  #
-#     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      #  # NOTE: NEED TO UPDATE WITH LAST 2023 RUN!!!
+#     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      # 
 #                    DIC     DOC     DC    DN                   #
-#                    0.70   0.84   0.85   0.05                  #
+#                    0.70   0.85   0.84   0.05                  #
 #################################################################
 #    Historical MDL's:                                     #
 #    2020: DIC = 0.97; DOC = 0.76 ; DC = 0.63; DN = 0.05   #
 #    2021: DIC = 0.47; DOC = 0.45; DC = 0.69; DN = 0.11    #
-#    2022: DIC = 0.70; DOC = 0.84; DC = 0.85; DN = 0.05    #
+#    2022: DIC = 0.70; DOC = 0.85; DC = 0.84; DN = 0.05    #
 ############################################################
 
 # DIC
@@ -338,7 +341,7 @@ for (i in 1:nrow(doc)) {
 
 # DOC
 for (i in 1:nrow(doc)) {
-  if(doc$DOC_mgL[i] <0.84){
+  if(doc$DOC_mgL[i] <0.85){
     if(doc$Flag_DOC[i]>0){
       doc$Flag_DOC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -349,7 +352,7 @@ for (i in 1:nrow(doc)) {
 
 # DC
 for (i in 1:nrow(doc)) {
-  if(doc$DC_mgL[i] < 0.85 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DC_mgL[i] < 0.84 & !is.na(doc$DIC_mgL[i])){
     if(doc$Flag_DC[i]>0){
       doc$Flag_DC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -382,15 +385,17 @@ np <- np %>% arrange(Reservoir, DateTime, Site, Depth_m)
 #drop rows with NA values
 np <- np[!is.na(np$NH4_ugL) | !is.na(np$PO4_ugL) | !is.na(np$NO3NO2_ugL),]
 
+np$DateTime <- as.POSIXct(np$DateTime, format="%m/%d/%y %H:%M")
+
 #add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
 np$Flag_DateTime <- 0
 np$Flag_DateTime[grep("Flag_DateTime", np$Notes_lachat)] <- 1
 
-#drop the weird ccr sample w/o a site
-np <- np[!is.na(np$Site),]
-
 #remove one ISCO sample that accidentally got run as a soluble
 np <- np[np$Site!=100.1,]
+
+#set datetime back to character
+np$DateTime <- as.character(np$DateTime)
 
 ##############################################
 #           set flags for N & P              #

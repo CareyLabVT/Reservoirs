@@ -3,8 +3,10 @@
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate, scales, viridis)
 
-#load in collated 2019 data 
+#load in collated 2022 data 
 raw_chem <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
+#raw_chem <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/FinalData/2022_chemistry_collation_final_nocommas.csv") %>% select(-X)
+
 
 #date format
 raw_chem$DateTime <- as.Date(raw_chem$DateTime, "%Y-%m-%d %H:%M:%S")
@@ -15,7 +17,7 @@ raw_chem <- raw_chem [,(names(raw_chem) %in% c("Reservoir","Site","DateTime",
 
   #### Chemistry diagnostic plots ####
 chemistry_long <- raw_chem %>% 
-  gather(metric, value, TP_ugL:DOC_mgL) %>% #DOC_mgL
+  gather(metric, value, TP_ugL:DOC_mgL) %>% 
   mutate(month = strftime(DateTime, "%b"))
 
 chemistry_long$value <- as.numeric(chemistry_long$value)

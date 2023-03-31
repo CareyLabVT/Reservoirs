@@ -4,4 +4,4 @@ Site	Stream sampling site at each reservoir	categorical			NA	value is missing
 Date	"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD	NA	value is missing
 Flow_cms	"Discharge flow rate derived using flowmeter, salt injection, float velocity, or volumetric bucket methods, see metadata for more information"	numeric	cubicMetersPerSecond		NA	value is missing
 Method	Code for method used to calculate discharge	categorical			NA	value is missing
-Flag_Flow	Flag for flow	categorical			NA	value is missing
+Flag_Flow_cms	Flag for flow	categorical			NA	value is missing

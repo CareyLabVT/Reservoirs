@@ -140,7 +140,7 @@ make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir, and Lake Sunapee in southwestern Virginia and Sunapee, New Hampshire, USA during 2014-2022",
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2022",
   temporal.coverage = c("2014-04-18", "2022-12-16"),
   maintenance.description = 'ongoing',
   data.table = c("manual_chlorophyll_2014_2022.csv", 'site_descriptions.csv'),
@@ -151,8 +151,8 @@ make_eml(
   other.entity.description = 'Script used to collate and flag data for publication',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.16') #THIS IS FOR STAGING
-  #package.id = 'edi.555.1') # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  #package.id = 'edi.52.18') #THIS IS FOR STAGING
+  package.id = 'edi.555.3') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
 #          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",

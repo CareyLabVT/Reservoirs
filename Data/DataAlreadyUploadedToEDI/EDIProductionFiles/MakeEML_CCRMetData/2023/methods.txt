@@ -1,0 +1,54 @@
+Meteorological data were collected using a research-grade meteorological station from Campbell Scientific (Logan, UT, USA) at 1 minute intervals from 2021-03-29 19:00 to 2021-12-31 23:59. All observations are recorded in the GMT -5 time zone (Eastern Standard time) without any time zone changes in the data record.
+
+Site Description and Power:
+
+The Meteorological station was deployed on the concrete walkway on top of the dam at Carvins Cove (37.36944, -79.95778), as such, some of the sensors may be influenced by the dam and structures on the dam itself. Most notably the 4-Component Net Radiometer sensor made up of Shortwave Radiation Up, Shortwave Radiation Down, Infrared Radiation Up and Infrared Radiation Down are hanging over the dam to measure the water below but may be obstructed by the dam.
+The meteorological station (CR3000 data logger and sensors) is powered with AC power from the electrical grid.
+
+
+Data Quality Assurance/Quality Control (QA/QC) procedures: 
+
+Missing data: 
+There were no major gaps lasting longer than 1 day in the record. Sub-daily gaps occurred on April 9, 2021 13:00-13:56, July 2, 2021 14:00-14:41, April 5, 2022 12:00:00-13:56, April 20, 2022 13:00-13:38 and 14:00:00-14:53, May 12, 2022 10:00-10:27, and September 29, 2022 14:00-14:57:00 and 15:00-15:18. Most of these gaps are because of new programs being uploaded to the data logger. 
+
+Maintenance Log:
+We automated QA/QC with an R script (archived with this dataset) that set flags and removed outliers. We set erroneous values due to maintenance as NA (flag 1) in the dataset. For all flag descriptions, see the data table "CCR_Met_MaintenanceLog_2021_2022.csv". There is only one flag per variable in the dataset with all unique flag values; flag 1 for maintenance in some cases overwrote other existing flags. All previously existing NAs due to missing observations other than maintenance were flagged as 2. Negative values were set to 0 for all meteorological variable columns, except AirTemp_Average_C and variables internally measured on the CR300 (Record, CCR3000Panel_Temp_C, CCR3000Battery_V), and flagged as 3. Values over 100% were set to 100 for Relative Humidity. Infinite values were set to NA for all variables and flagged as 3. Outliers that were changed or set to NA were flagged as 4 while possible outliers that were not changed and left in the data set were flagged with 5.  
+
+Air Temperature:
+The AirTemp_Average_C variable received intensive QA/QC based on the same QA/QC done for Falling Creek Reservoir Met station (EDI package edi.389.6). We used the data from the initial year of deployment (2021) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor. The 2021 relationship can be described by the following equation: AirTemp_Average_C = -3.5595812(0.0044426, 1 SE) + 0.9288955(0.0001895)_CR3000Panel_temp_C This relationship's adjusted R-squared value was 0.98. The residuals from this equation were minimum: -6.6734, 1st quartile: -0.6145, median: 0.0319, 3rd quartile: 0.6333, and maximum: 6.6100. If any air temperature values were above or below 4 standard deviations of the residuals from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. This occurred for 1150 observations during 2022.
+
+PAR Sensor:
+PAR data during the night that was greater than 12 umol_s_m2 for the average and 1 mmol_m2 were changed to NA and flagged as 4. We used getSunlightTimes function in the Suncalc package in R (Thieurmel, B., Elmarhraoui, A. (2019).suncalc: Compute Sun Position, Sunlight Phases, Moon Position and Lunar Phase. R package version 0.5.0.) to get sunrise and sunset that was used to determine whether the observation was during the day or at night.
+
+Rain Gauge:
+The rain gauge was clogged from July 19, 2022 to September 12, 2022 at 11:07 when all the water was released into the rain gauge. During this time, we corrected the observations using the rain gauge observations from Falling Creek Reservoir. Using data from from the rain gauges at FCR and CCR from, March 29, 2021 19:00-July 18, 2022 00:00, we deveolped a linear model (y=0.110725x+0.001494). We compared total rain from the raw data which includes when the rain gauge was unclogged and the corrected rain totals. The total for that time was 38.1mm and the corrected total was 34.7mm. 
+
+Outliers:
+After previously described adjustments, outliers were set to NA and received 'flag 4' in the dataset, following these outlier thresholds:
+AirTemp_Average_C > 40.6; InfaredRadiationUp_Average_W_m2 < 150; InfraredRadiationDown_Average_W_m2 > 540; BP_Average_kPa < 95.5; PAR_Total_mmol_m2 > 200; ShortwaveRadiationUp_Average_W_m2 > 1500; ShortwaveRadiationDown_Average_W_m2 > 300; Albedo_Average_W_m2 > 1000; PAR_Average_umol_s_m2 > 3000; PAR_Total_mmol_m2 > 200; WindSpeed_Average_m_s>50; Rain_Total_mm>5.
+
+The outlier thresholds were developed by comparison with the NOAA Roanoke Airport dataset. The Roanoke Airport is located ~6 km away from Carvins Cove Reservoir.
+
+QAQC scripts:
+
+We use a QAQC function to remove maintenance times and outliers from the data before publishing. The function is included in the data package as an R script, CCR_Met_QAQC_function_2021_2022.R. In this function, we flag and remove observations that took place during sensor maintenance or when a  sensor malfunctioned and when there were outliers. 
+For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (CCRM_MaintenanceLog_2021_2022.csv). This file is used in the QAQC function to identify dates and times during recorded events, change the observations affected and add a flag to indicate the issues. See CCRW_MaintenanceLog_2021_2022.csv section below for more information on the maintenance log. 
+In addition to recorded maintenance issues, we identify and remove issues and outliers as described above. 
+This function is used in CCR_Met_QAQC_Plots_2021_2022.Rmd. In the R markdown the user downloads data, identifies gaps in the data, uses the QAQC function to clean the data, saves the maintenance file for EDI publishing, and produces QAQC plots for visual inspection. 
+
+
+Instruments, manual, and serial numbers used between 2021-current:
+
+Campbell Scientific CR3000 Micrologger SERIAL NO. 13423 https://s.campbellsci.com/documents/us/manuals/cr3000.pdf
+
+RM Young 05103-L Wind Monitor SERIAL NO. WM179353 https://s.campbellsci.com/documents/us/manuals/05103.pdf
+
+Texas Electronics TE525WS-L Rain Gauge 0.01 in (0.254 mm) SERIAL NO. 84302-0920 https://s.campbellsci.com/documents/us/manuals/te525.pdf
+
+Rotronic Hydroclip2 HC2A-S3 Temperature and Relative Humidity Probe with RM Young 10 plate Solar Radiation Shield SERIAL NO. 20429524 https://s.campbellsci.com/documents/us/manuals/hc2s3.pdf
+
+CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. S3450174 https://s.campbellsci.com/documents/us/manuals/cs106.pdf
+
+LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q112618 https://s.campbellsci.com/documents/us/manuals/li190sb.pdf
+
+Hukseflux NR01 4-Component Net Radiometer SERIAL NO. 3528 https://s.campbellsci.com/documents/us/manuals/nr01.pdf

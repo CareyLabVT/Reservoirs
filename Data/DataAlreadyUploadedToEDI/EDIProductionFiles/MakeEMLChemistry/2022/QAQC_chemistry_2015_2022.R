@@ -18,12 +18,16 @@ TNTP <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/collation/2022/202
 #drop samplID col 
 TNTP <- TNTP [,!(names(TNTP) %in% c("SampleID_lachat"))]
 
+#drop defrost tag column
+TNTP <- TNTP [,!(names(TNTP) %in% c("Notes_defrost.tag"))]
+
 #drop rows with NA values
 TNTP <- TNTP[!is.na(TNTP$TP_ugL) | !is.na(TNTP$TN_ugL) ,]
 
 #add DateTime flag
-TNTP$DateTime <- mdy_hm(TNTP$DateTime)
-TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="datetime_flag!", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
+class(TNTP$DateTime)
+TNTP$DateTime <- ymd_hms(TNTP$DateTime)
+TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="Flag_DateTime", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
 
 #also add datetime flag for ISCO because time is from weir sampling
 TNTP$Flag_DateTime <- ifelse(TNTP$Site=="100.1",1,TNTP$Flag_DateTime)
@@ -69,7 +73,7 @@ for (i in 1:length(TNTP_dups)) {
   }  
 }
 
-# remove dups (7 in 2021)
+# remove dups (3 in 2022)
 TNTP <- TNTP[!TNTP_dups,]
 
 # move the averaged data over to the original columns
@@ -92,26 +96,30 @@ TNTP$Rep <- ifelse(TNTP$Rep=="R2",2,1)
 #   averaged across all runs for most recent field season   #
 #                "rolling spiked blank 250"                #
 #                      TP      TN                          #  
-#                     10      76.4                         #
+#                     3.5      56                         #
 ############################################################  
+## MDL's come from TNTP MDL 2016 +... 24mar23 excel sheet.
+##Using rolling spike blanks for runs in 2023: 22 Feb - 22 March were the runs that went into this years data 
+
 #    Historical MDL's:           #
 #    2020: TP = 6.8; TN = 72.2   #
 #    2021: TP = 10; TN = 76.4    #
+#    2022: TP = 3.5; TN = 56     #
 ##################################
 
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TP_ugL[i] < 10 & TNTP$Flag_TP[i]==7,
+  ifelse(TNTP$TP_ugL[i] < 3.5 & TNTP$Flag_TP[i]==7,
     TNTP$Flag_TP[i] <- "73",
-  ifelse(TNTP$TP_ugL[i] < 10,
+  ifelse(TNTP$TP_ugL[i] < 3.5,
     TNTP$Flag_TP[i] <- 3, TNTP$Flag_TP[i]))
   }
 
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TN_ugL[i] < 76.4 & TNTP$Flag_TN[i]==7,
+  ifelse(TNTP$TN_ugL[i] < 56 & TNTP$Flag_TN[i]==7,
     TNTP$Flag_TN[i] <- "73",
-  ifelse(TNTP$TN_ugL[i] < 76.4,
+  ifelse(TNTP$TN_ugL[i] < 56,
     TNTP$Flag_TN[i] <- 3, TNTP$Flag_TN[i]))
 }
 
@@ -166,7 +174,6 @@ doc$Flag_DN <- 0
 doc <- doc %>% 
   mutate(Flag_DOC = ifelse(Notes_DOC == "run_NPOC", 8, Flag_DOC ) )
 
-
 #order doc df
 doc <- doc %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
@@ -179,6 +186,9 @@ doc$Flag_DateTime[grep("Flag_DateTime", doc$Notes_DOC)] <- 1
 
 #get rid of notes col
 doc<- doc %>% select(-Notes_DOC, Date.NOTES)
+
+#remove one ISCO sample that accidentally got run as a soluble
+doc <- doc %>% filter(doc$Site!=100.1) 
 
 #function to select rows based on characters from the end
 substrRight <- function(x, n){
@@ -303,10 +313,10 @@ doc <- doc %>% select(-c(DOC_mgLAVG, DIC_mgLAVG, DC_mgLAVG, DN_mgLAVG))
 doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
 
 #################################################################
-#      rolling spiked blank for most recent field season 
-#       (TIC TC TNb rolling 06oct22.xlsx) -   
+#      rolling spiked blank for most recent field season        #
+#                (TIC TC TNb rolling 06oct22.xlsx)              #
 #                 if below detection, flag = 3                  #
-#            2022 MDLS (in mg/L) from 'MDL 2022 tab':           #  
+#     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      #  # NOTE: NEED TO UPDATE WITH LAST 2023 RUN!!!
 #                    DIC     DOC     DC    DN                   #
 #                    0.70   0.84   0.85   0.05                  #
 #################################################################
@@ -376,6 +386,11 @@ np <- np[!is.na(np$NH4_ugL) | !is.na(np$PO4_ugL) | !is.na(np$NO3NO2_ugL),]
 np$Flag_DateTime <- 0
 np$Flag_DateTime[grep("Flag_DateTime", np$Notes_lachat)] <- 1
 
+#drop the weird ccr sample w/o a site
+np <- np[!is.na(np$Site),]
+
+#remove one ISCO sample that accidentally got run as a soluble
+np <- np[np$Site!=100.1,]
 
 ##############################################
 #           set flags for N & P              #
@@ -472,11 +487,6 @@ np_nodups <- np_nodups %>% select(-c(NH4_ugLAVG, PO4_ugLAVG, NO3NO2_ugLAVG))
 # call it np again for coding ease
 np <- np_nodups
 
-#Now manually add 7 flag for samples that were averaged in excel (just the jul21 run)
-np$Flag_NH4 <- ifelse(np$Notes_lachat=="AVERAGED so needs 7 flag", paste0(7,np$Flag_NH4), np$Flag_NH4)
-np$Flag_PO4 <- ifelse(np$Notes_lachat=="AVERAGED so needs 7 flag", paste0(7,np$Flag_PO4), np$Flag_PO4)
-np$Flag_NO3NO2 <- ifelse(np$Notes_lachat=="AVERAGED so needs 7 flag", paste0(7,np$Flag_NO3NO2), np$Flag_NO3NO2)
-
 #change 70 flags to 7
 np$Flag_NH4[np$Flag_NH4=="70"] <- "7"
 np$Flag_PO4[np$Flag_PO4=="70"] <- "7"
@@ -488,18 +498,18 @@ np$Rep <- ifelse(np$Rep=="R2" & !is.na(np$Rep),2,1)
 ##################################################################
 #    2022 field season average: if below detection, flag as 3    #
 #    using the following New Style MDL's from last batch csv.    #          
-#   (Template solubles batch 5 09nov22) - n=15 for 2022 samples  #
+#   (Summary solubles batch 6 24mar23) - n=18 for 2022 samples   #
 #                      NH4   PO4   NO3                           # 
-#                      4.5   3.1   3.4                           #                        
+#                      4.3   3.0   3.8                           #                        
 ##################################################################
 #    Historical MDL's:                        #
 #    2020: NH4 = 9.6; PO4 = 3.0; NO3 =  4.5   #
 #    2021: NH4 = 7.3; PO4 = 3.1; NO3 =  3.7   # 
-#.   2022: NH4 = 4.5; PO4 = 3.1; NO3 =  3.4   #
+#.   2022: NH4 = 4.3; PO4 = 3.0; NO3 =  3.8   #
 ###############################################
 
 for (i in 1:nrow(np)) {
-  if(np$NH4_ugL[i] <4.5){
+  if(np$NH4_ugL[i] <4.3){
     if(np$Flag_NH4[i]>0){
       np$Flag_NH4[i] <- paste0(np$Flag_NH4[i], 3)
       
@@ -508,7 +518,7 @@ for (i in 1:nrow(np)) {
 }
 
 for (i in 1:nrow(np)) {
-  if(np$PO4_ugL[i] <3.1){
+  if(np$PO4_ugL[i] <3.0){
     if(np$Flag_PO4[i]>0){
       np$Flag_PO4[i] <- paste0(np$Flag_PO4[i], 3)
       
@@ -517,7 +527,7 @@ for (i in 1:nrow(np)) {
 }
 
 for (i in 1:nrow(np)) {
-  if(np$NO3NO2_ugL[i] < 3.4){
+  if(np$NO3NO2_ugL[i] < 3.8){
     if(np$Flag_NO3NO2[i]>0){
       np$Flag_NO3NO2[i] <- paste0(np$Flag_NO3NO2[i], 3)
       
@@ -548,20 +558,20 @@ TNTP <- TNTP %>%
   mutate(DateTime = ymd_hms(DateTime))
 
 doc <- doc %>% 
-  mutate(DateTime = mdy_hm(DateTime))
+  mutate(DateTime = ymd_hms(DateTime))
 
 np <- np %>% 
-  mutate(DateTime = mdy_hm(DateTime))
+  mutate(DateTime = ymd_hms(DateTime))
 
 #new df with solubles, totals, and DOC
 solubles_and_DOC <- full_join(np, doc, by = c('Reservoir', 'Site', 'DateTime',  'Depth_m','Rep'))
 chem <- full_join(TNTP, solubles_and_DOC, by = c('Reservoir', 'Site', 'DateTime',  'Depth_m', 'Rep'))
 
 #get rid of notes and run date
-chem <- chem %>% select(-c(RunDate_DOC,RunDate.x,RunDate.y, Notes_lachat.x, Notes_lachat.y,SampleID_DOC, SampleID_lachat,Flag_DateTime.y, Date.NOTES))
+chem <- chem %>% select(-c(RunDate_DOC,SampleID_DOC, RunDate.x, RunDate.y, Notes_lachat.x, Notes_lachat.y, SampleID_lachat, Flag_DateTime.x, Flag_DateTime.y, Date.NOTES))
 
 chem <- chem %>%
-  rename(Flag_DateTime = Flag_DateTime.x) %>% 
+  # rename(Flag_DateTime = Flag_DateTime.x) %>% 
   mutate(TP_ugL = as.numeric(TP_ugL),
                         TN_ugL = as.numeric(TN_ugL),
                         NH4_ugL = as.numeric(NH4_ugL),
@@ -583,7 +593,10 @@ chem_final <-chem %>% mutate(SRP_ugL = round(SRP_ugL, 0),
                 DC_mgL = round(DC_mgL, 1),
                 DN_mgL = round(DN_mgL, 3))
 
-chem_final <- chem_final %>% mutate(Flag_TP_ugL= as.numeric(Flag_TP_ugL),
+chem_final <- chem_final %>% 
+  rename(Flag_TP_ugL = Flag_TP,
+         Flag_TN_ugL = Flag_TN) %>% 
+  mutate(Flag_TP_ugL= as.numeric(Flag_TP_ugL),
                         Flag_TN_ugL= as.numeric(Flag_TN_ugL),
                         Flag_NH4_ugL = as.numeric(Flag_NH4_ugL),
                         Flag_SRP_ugL = as.numeric(Flag_SRP_ugL),

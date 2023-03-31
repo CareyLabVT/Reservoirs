@@ -40,7 +40,7 @@ newdata <- read.csv('./Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/
 newdata$Date <- as.Date(newdata$Date)
 newdata$Reservoir <- NA
 newdata$Method <- 'F'
-newdata$Flag_Flow <- 0
+newdata$Flag_Flow_cms <- 0
 
 for(i in 1:nrow(newdata)){
   if(newdata$Site[i]=='200'){
@@ -51,8 +51,8 @@ for(i in 1:nrow(newdata)){
   }
 }
 
-newdata <- newdata %>% select(Reservoir, Site, Date, Discharge_m3_s, Method, Flag_Flow)
-colnames(newdata) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_Flow')
+newdata <- newdata %>% select(Reservoir, Site, Date, Discharge_m3_s, Method, Flag_Flow_cms)
+colnames(newdata) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_Flow_cms')
 
 ggplot(data = newdata, aes(x = Date, y = Flow_cms)) + 
   geom_line() +
@@ -67,6 +67,8 @@ ggplot(data = newdata[newdata$Reservoir=='CCR',], aes(x = Date, y = Flow_cms, co
 ccrvol <- read.csv('./Data/DataNotYetUploadedToEDI/Raw_inflow/Manual_Discharge/2022/CCR_VolumetricFlow_2020_2022_forexport.csv')
 ccrvol$Date <- as.Date(ccrvol$Date)
    # Dexter already formatted these--fantastic!
+
+colnames(ccrvol) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_Flow_cms')
 
 # combine the files together
 all_new <- full_join(newdata, ccrvol)
@@ -85,6 +87,7 @@ ggplot(data = all_new[all_new$Reservoir=='CCR' & all_new$Date > as.Date('2022-01
 # read in data from previous year's publication
 olddata <- read.csv('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021/ManualDischarge_2019_2021.csv')
 olddata$Date <- as.Date(olddata$Date)
+colnames(olddata) <- c('Reservoir', 'Site', 'Date', 'Flow_cms', 'Method', 'Flag_Flow_cms')
 
 edi <- rbind(olddata, newdata)
 edi <- rbind(edi, all_new)
@@ -98,7 +101,7 @@ ggplot(data = edi, aes(x = Date, y = Flow_cms, color = as.factor(Site))) +
   geom_point(aes(color = Site)) +
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
-edi$Flag_Flow <- as.character(edi$Flag_Flow)
+edi$Flag_Flow_cms<- as.character(edi$Flag_Flow_cms)
 edi <- edi %>% 
   distinct(Reservoir, Site, Date, Method, .keep_all = TRUE)
 

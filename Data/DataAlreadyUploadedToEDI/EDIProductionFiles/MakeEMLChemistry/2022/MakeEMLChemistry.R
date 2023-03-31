@@ -2,8 +2,9 @@
 ##Author: Mary Lofton
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
-##5Jun2022 - 2021 nutrient aggregation
+##29Mar2023 - 2022 nutrient aggregation
 #NOTE - 9 samples need to be rerun with 2022 samples - will need to average/add these data when we publish 2022 field season samples (HLW)
+#update from 2023: these 9 samples did not make it to this year so the data are gone (HLW)
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html

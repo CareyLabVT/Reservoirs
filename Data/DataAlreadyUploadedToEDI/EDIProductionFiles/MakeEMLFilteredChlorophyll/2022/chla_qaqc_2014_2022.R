@@ -103,10 +103,10 @@ chla_new<-out.file%>%
   old<-Old_14_21%>%
     dplyr::rename(Flag_Chla_ugL=Flag_Chla,
                   Flag_Pheo_ugL=Flag_Pheo)%>%
-    separate(., col = DateTime, into = c("Date", "Time"), sep = -8)%>%
+    separate(., col = DateTime, into = c("Date", "Time"), sep = -5)%>%
     mutate(Time="12:00:00")%>% # had to fix because there were some midnight times
     mutate(DateTime=paste(Date,Time))%>%
-    mutate(DateTime=ymd_hms(DateTime))%>%
+    mutate(DateTime=mdy_hms(DateTime))%>%
     select(Reservoir,Site,DateTime, Depth_m, Chla_ugL,Pheo_ugL,Flag_Chla_ugL,Flag_Pheo_ugL)
   
   # bind the old and the new  

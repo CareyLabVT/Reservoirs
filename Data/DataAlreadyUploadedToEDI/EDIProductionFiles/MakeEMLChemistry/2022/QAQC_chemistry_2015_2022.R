@@ -18,12 +18,16 @@ TNTP <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/collation/2022/202
 #drop samplID col 
 TNTP <- TNTP [,!(names(TNTP) %in% c("SampleID_lachat"))]
 
+#drop defrost tag column
+TNTP <- TNTP [,!(names(TNTP) %in% c("Notes_defrost.tag"))]
+
 #drop rows with NA values
 TNTP <- TNTP[!is.na(TNTP$TP_ugL) | !is.na(TNTP$TN_ugL) ,]
 
 #add DateTime flag
-TNTP$DateTime <- mdy_hm(TNTP$DateTime)
-TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="datetime_flag!", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
+class(TNTP$DateTime)
+TNTP$DateTime <- ymd_hms(TNTP$DateTime)
+TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="Flag_DateTime", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
 
 #also add datetime flag for ISCO because time is from weir sampling
 TNTP$Flag_DateTime <- ifelse(TNTP$Site=="100.1",1,TNTP$Flag_DateTime)
@@ -69,7 +73,7 @@ for (i in 1:length(TNTP_dups)) {
   }  
 }
 
-# remove dups (7 in 2021)
+# remove dups (3 in 2022)
 TNTP <- TNTP[!TNTP_dups,]
 
 # move the averaged data over to the original columns
@@ -92,26 +96,30 @@ TNTP$Rep <- ifelse(TNTP$Rep=="R2",2,1)
 #   averaged across all runs for most recent field season   #
 #                "rolling spiked blank 250"                #
 #                      TP      TN                          #  
-#                     10      76.4                         #
+#                     3.5      56                         #
 ############################################################  
+## MDL's come from TNTP MDL 2016 +... 24mar23 excel sheet.
+##Using rolling spike blanks for runs in 2023: 22 Feb - 22 March were the runs that went into this years data 
+
 #    Historical MDL's:           #
 #    2020: TP = 6.8; TN = 72.2   #
 #    2021: TP = 10; TN = 76.4    #
+#    2022: TP = 3.5; TN = 56     #
 ##################################
 
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TP_ugL[i] < 10 & TNTP$Flag_TP[i]==7,
+  ifelse(TNTP$TP_ugL[i] < 3.5 & TNTP$Flag_TP[i]==7,
     TNTP$Flag_TP[i] <- "73",
-  ifelse(TNTP$TP_ugL[i] < 10,
+  ifelse(TNTP$TP_ugL[i] < 3.5,
     TNTP$Flag_TP[i] <- 3, TNTP$Flag_TP[i]))
   }
 
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TN_ugL[i] < 76.4 & TNTP$Flag_TN[i]==7,
+  ifelse(TNTP$TN_ugL[i] < 56 & TNTP$Flag_TN[i]==7,
     TNTP$Flag_TN[i] <- "73",
-  ifelse(TNTP$TN_ugL[i] < 76.4,
+  ifelse(TNTP$TN_ugL[i] < 56,
     TNTP$Flag_TN[i] <- 3, TNTP$Flag_TN[i]))
 }
 
@@ -550,20 +558,20 @@ TNTP <- TNTP %>%
   mutate(DateTime = ymd_hms(DateTime))
 
 doc <- doc %>% 
-  mutate(DateTime = mdy_hm(DateTime))
+  mutate(DateTime = ymd_hms(DateTime))
 
 np <- np %>% 
-  mutate(DateTime = mdy_hm(DateTime))
+  mutate(DateTime = ymd_hms(DateTime))
 
 #new df with solubles, totals, and DOC
 solubles_and_DOC <- full_join(np, doc, by = c('Reservoir', 'Site', 'DateTime',  'Depth_m','Rep'))
 chem <- full_join(TNTP, solubles_and_DOC, by = c('Reservoir', 'Site', 'DateTime',  'Depth_m', 'Rep'))
 
 #get rid of notes and run date
-chem <- chem %>% select(-c(RunDate_DOC,SampleID_DOC, RunDate, Notes_lachat, SampleID_lachat,Flag_DateTime.y, Date.NOTES))
+chem <- chem %>% select(-c(RunDate_DOC,SampleID_DOC, RunDate.x, RunDate.y, Notes_lachat.x, Notes_lachat.y, SampleID_lachat, Flag_DateTime.x, Flag_DateTime.y, Date.NOTES))
 
 chem <- chem %>%
-  rename(Flag_DateTime = Flag_DateTime.x) %>% 
+  # rename(Flag_DateTime = Flag_DateTime.x) %>% 
   mutate(TP_ugL = as.numeric(TP_ugL),
                         TN_ugL = as.numeric(TN_ugL),
                         NH4_ugL = as.numeric(NH4_ugL),
@@ -585,7 +593,10 @@ chem_final <-chem %>% mutate(SRP_ugL = round(SRP_ugL, 0),
                 DC_mgL = round(DC_mgL, 1),
                 DN_mgL = round(DN_mgL, 3))
 
-chem_final <- chem_final %>% mutate(Flag_TP_ugL= as.numeric(Flag_TP_ugL),
+chem_final <- chem_final %>% 
+  rename(Flag_TP_ugL = Flag_TP,
+         Flag_TN_ugL = Flag_TN) %>% 
+  mutate(Flag_TP_ugL= as.numeric(Flag_TP_ugL),
                         Flag_TN_ugL= as.numeric(Flag_TN_ugL),
                         Flag_NH4_ugL = as.numeric(Flag_NH4_ugL),
                         Flag_SRP_ugL = as.numeric(Flag_SRP_ugL),

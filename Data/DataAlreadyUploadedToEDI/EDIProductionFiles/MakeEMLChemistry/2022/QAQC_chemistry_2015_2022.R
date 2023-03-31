@@ -34,7 +34,7 @@ TNTP$DateTime <- as.character(TNTP$DateTime)
 
 # set flags for TN & TP
 ###################################################
-# add 7 for rows that will be averaged                #NOTE - should be 0?
+# add 7 for rows that will be averaged              
 ###################################################
 # create flag columns
 # no flag value = 0
@@ -628,7 +628,7 @@ chem_final$Flag_SRP_ugL <- ifelse(is.na(chem_final$Flag_SRP_ugL), 0, chem_final$
 chem_final<- chem_final %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
 #drop sun samples
-chem_final <- chem_final[chem_final$Reservoir!="SUN",]
+chem_final <- chem_final[chem_final$Reservoir!="SUNP",]
 
 #remove NA rows
 chem_final <- chem_final[!is.na(chem_final$Reservoir),]

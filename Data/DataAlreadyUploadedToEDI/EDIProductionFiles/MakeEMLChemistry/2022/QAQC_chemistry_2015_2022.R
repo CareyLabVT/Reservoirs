@@ -633,6 +633,9 @@ chem_final <- chem_final[chem_final$Reservoir!="SUNP",]
 #remove NA rows
 chem_final <- chem_final[!is.na(chem_final$Reservoir),]
 
+#remove ISCO samples because these will be a separate data product one day
+chem_final <- chem_final[chem_final$Site!=100.1,]
+
 #save final df
 write.csv(chem_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
 

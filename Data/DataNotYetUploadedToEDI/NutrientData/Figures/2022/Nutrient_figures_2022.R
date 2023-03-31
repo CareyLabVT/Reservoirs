@@ -110,7 +110,7 @@ ggsave(file.path(getwd(),"./Data/DataNotYetUploadedToEDI/NutrientData/Figures/20
 
 
 # CCR other sites nutrient time series
-ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
+p1 <- ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
   geom_point(cex=2) + theme_bw() +
   facet_grid(metric ~ ., scales='free') +
   scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +

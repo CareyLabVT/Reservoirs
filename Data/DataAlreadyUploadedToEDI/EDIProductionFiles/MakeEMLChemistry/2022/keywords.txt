@@ -18,5 +18,4 @@ dissolved organic carbon	lter controlled vocabulary
 dissolved inorganic carbon	lter controlled vocabulary
 ammonium	lter controlled vocabulary
 total nitrogen	lter controlled vocabulary
-total dissolved nitrogen	lter controlled vocabulary
 total phosphorus	lter controlled vocabulary

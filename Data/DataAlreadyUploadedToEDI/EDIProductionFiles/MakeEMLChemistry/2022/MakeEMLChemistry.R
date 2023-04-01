@@ -34,6 +34,9 @@ old <- old %>% rename(Flag_TP_ugL = Flag_TP,
 #also drop ISCO samples bc being published in separate data product
 old <- old[old$Site!=100.1,]
 
+#add 8 flag for all DIC and DOC values run with NPOC
+old$Flag_DIC_mgL[old$Flag_DOC_mgL==8] <- 8
+
 #get cols in same order
 new <- new[,colnames(old)]
 
@@ -262,7 +265,7 @@ make_eml(
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.1') #reserve new staging environment package id each year
+  package.id = 'edi.1025.2') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

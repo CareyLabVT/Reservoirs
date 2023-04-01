@@ -6,7 +6,7 @@ Most sampling occurred between the hours of 9:00 and 15:00; however, some sampli
 SAMPLE COLLECTION AND EQUIPMENT
 
 
-Total nitrogen (TN) and total phosphorus (TP) unfiltered water samples were collected at specified depths for each reservoir using a 4L Van Dorn water sampler (Wildco, Yulee, Florida, USA). Samples were stored in acid-washed 125 mL polypropylene bottles and frozen within 12 hours.  Samples were generally analyzed within one year of collection date.
+Total nitrogen (TN) and total phosphorus (TP) unfiltered water samples were collected at specified depths for each reservoir using a 4L Van Dorn water sampler (Wildco, Yulee, Florida, USA). Samples were stored in acid-washed 125 mL polypropylene bottles and frozen within 12 hours. Samples were generally analyzed within one year of collection date, with soluble samples usually analyzed within 6 months of collection or sooner.
 
 Soluble reactive phosphorus (SRP), nitrate (NO3), ammonium (NH4), dissolved organic carbon (DOC), dissolved inorganic carbon (DIC), and total dissolved nitrogen (DN) water samples were collected at specified depths for each reservoir using a Van Dorn water sampler and were filtered with a 0.7 um glass fiber filter (Thomas Scientific GF/F) before being stored in acid-washed 125 mL polypropylene bottles. Samples were generally analyzed within six months of collection date.
 
@@ -16,11 +16,11 @@ In 2019, an ISCO 6712 automatic portable sampler was installed at the gauged wei
 CHEMICAL ANALYSES AND EQUIPMENT
 
 
-TN and TP samples were digested with alkaline persulfate (Patton and Kryskalla 2003) and then analyzed colorimetrically using flow injection analysis (APHA 2005).  TN was analyzed using the cadmium reduction method (APHA 1998) and TP was analyzed using the ascorbic acid method (Murphy and Riley 1962) on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
+TN and TP samples were digested with alkaline persulfate (Patton and Kryskalla 2003) and then analyzed colorimetrically using flow injection analysis (APHA 2005). TN was analyzed using the cadmium reduction method (APHA 1998) and TP was analyzed using the ascorbic acid method (Murphy and Riley 1962) on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
 
 SRP, NO3, NH4 samples were analyzed colorimetrically using flow injection analysis (APHA 2005). SRP was analyzed using the ascorbic acid method (Murphy and Riley 1962), NO3 was analyzed using the cadmium reduction method, where nitrate is reduced to nitrite (APHA 1998), and NH4 was analyzed using the Berthelot Reaction method (Solorzano 1969, APHA 2005) with a common modification as to the source of the hypochlorite ion as described in Zhang et al. 1997 on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
 
-DOC was analyzed using the persulfate catalytic method (Brenton and Arnett 1993) on a TOCA 1010 from OI Analytical from 2013-2016 (OI Analytical 1010 Total Organic Carbon Analyzer with 1051 autosampler, College Station, TX USA) and on a Vario TOC Cube from Elementar from 2016-2017 (vario TOC cube, Elementar Analysensysteme GmbH, Hanau, Germany). Carbon in samples is oxidized to carbon dioxide (CO2) either by reaction with acid or by catalyzed combustion at 850 C. Resulting carbon dioxide is detected by nondispersive infrared (NDIR) spectrometry. This method allowed for the measurement of total dissolved carbon, dissolved organic carbon, and dissolved inorganic carbon. A modified version of this method was used to measure dissolved organic carbon through the measurement of non-puregable organic carbon (NPOC) in streams that had high inorganic carbon (IC) values. Organic carbon was still measured following the method above but the sample was first acidifed and purged with air zero gas to remove inorganic carbon fractions. Samples measured with this method were flagged with an 8 in the Flag_DOC column.
+DOC was analyzed using the persulfate catalytic method (Brenton and Arnett 1993) on a TOCA 1010 from OI Analytical from 2013-2016 (OI Analytical 1010 Total Organic Carbon Analyzer with 1051 autosampler, College Station, TX USA) and on a Vario TOC Cube from Elementar from 2016-2017 (vario TOC cube, Elementar Analysensysteme GmbH, Hanau, Germany). Carbon in samples is oxidized to carbon dioxide (CO2) either by reaction with acid or by catalyzed combustion at 850 C. Resulting carbon dioxide is detected by nondispersive infrared (NDIR) spectrometry. This method allowed for the measurement of total dissolved carbon, dissolved organic carbon, and dissolved inorganic carbon. A modified version of this method was used to measure dissolved organic carbon through the measurement of non-puregable organic carbon (NPOC) in streams that had high inorganic carbon (IC) values. Organic carbon was still measured following the method above but the sample was first acidified and purged with air zero gas to remove inorganic carbon fractions. Samples measured with this method were flagged with an 8 in the Flag_DOC column.
 
 DN samples were combusted using the Vario TOC Cube from Elemantar at 850 degrees C. Total bound nitrogen in the combustion product is converted to nitrogen monoxide (NO) by oxidative pyrolysis then reacts with electrolyte in the electrochemical cell producing a measurable current to calculate total dissolved nitrogen (organic and inorganic together).
 
@@ -41,7 +41,7 @@ We note that measurements with multiple flags are coded as a multiple-digit numb
 
 Please note
 
-When pulling the file via EDI's API, we recommend using the function """"read.csv"""" instead of """"read_csv"""". The function """"read_csv"""" identifies the columns as """"logical"""" instead of """"double"""" due to >100 NA's at the beginning of the dataset. This is avoided when using the function """"read.csv"""".
+When pulling the file via EDI's API, we recommend using the function "read.csv" instead of "read_csv". The function "read_csv" identifies the columns as "logical" instead of "double" due to >100 NA's at the beginning of the dataset. This is avoided when using the function "read.csv".
 
 
 
@@ -50,7 +50,7 @@ APHA. 2012. Standard methods for the examination of water and wastewater. 22nd e
 
 Brenton R, Arnett T. 1993. Method of analysis by the U.S. Geological Survey National Water Quality Laboratory - Determination of dissolved organic carbon by UV-promoted persulfate oxidation and infrared spectrometry. Denver, CO: U.S. Geological Survey.
 
-Carey, C. C., Hanson, P. C., Thomas, R. Q., Gerling, A. B., Hounshell, A. G., Lewis, A. S., ... & Schreiber, M. E. (2022). Anoxia decreases the magnitude of the carbon, nitrogen, and phosphorus sink in freshwaters.¬†Global Change Biology.
+Carey, C. C., Hanson, P. C., Thomas, R. Q., Gerling, A. B., Hounshell, A. G., Lewis, A. S., ... & Schreiber, M. E. (2022). Anoxia decreases the magnitude of the carbon, nitrogen, and phosphorus sink in freshwaters.¬†Global Change Biology, 28(16), 4861-4881.
 
 Patton CJ, Kryskalla JR. 2003. Methods of Analysis by the U.S. Geological Survey National Water Quality Laboratory--Evaluation of Alkaline Persulfate Digestion as an Alternative to Kjeldahl Digestion for Determination of Total and Dissolved Nitrogen and Phosphorus in Water. Denver, CO: U.S. Geological Survey.
 

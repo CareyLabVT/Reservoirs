@@ -126,18 +126,18 @@ for (i in 1:nrow(TNTP)) {
 ###################################################
 
 for (i in 1:nrow(TNTP)) {
-  if(TNTP$TP_ugL[i] < 0) {TNTP$TP_ugL[i]== 0}
+  if(TNTP$TP_ugL[i] < 0) {TNTP$TP_ugL[i] <- 0}
   
   ifelse(TNTP$TP_ugL[i] == 0.000000 & TNTP$Flag_TP[i]=="7",
-      TNTP$Flag_TP[i] <- "74",
+         TNTP$Flag_TP[i] <- "74",
   ifelse(TNTP$TP_ugL[i] == 0.000000 & TNTP$Flag_TP[i]=="3",
-      TNTP$Flag_TP[i] <- "43", 
+          TNTP$Flag_TP[i] <- "43", 
   ifelse(TNTP$TP_ugL[i] ==	0.000000 & TNTP$Flag_TP[i]=="73",
-      TNTP$Flag_TP[i] <- "743",
+          TNTP$Flag_TP[i] <- "743",
   ifelse(TNTP$TP_ugL[i] == 0.000000, TNTP$Flag_TP[i] <- "4",
-      TNTP$Flag_TP[i]))))
+          TNTP$Flag_TP[i]))))
 }
-
+  
 
 for (i in 1:nrow(TNTP)) {
   if(TNTP$TN_ugL[i] < 0) {TNTP$TN_ugL[i] <- 0}
@@ -637,5 +637,5 @@ chem_final <- chem_final[!is.na(chem_final$Reservoir),]
 chem_final <- chem_final[chem_final$Site!=100.1,]
 
 #save final df
-write.csv(chem_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
+write.csv(chem_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/2022_chemistry_collation_final_nocommas.csv")
 

@@ -405,12 +405,6 @@ jpeg("./Figs/physics_climate.jpg",res = 300, units = "in",width = 8, height = 6)
 ggarrange(temp,wind,rain,water,buoy_fig,schmidt_fig,align = "hv",labels = "auto",nrow=2,ncol=3,common.legend = T, legend = "bottom")
 dev.off()
 
-legend = get_legend(surf_plot_save)
-library(cowplot)
-jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
-plot_grid(air,surf_plot_save,water,buoy_fig,schmidt_fig,legend, align = "hv",labels = list("a","b","c","d","e",""),nrow=2,ncol=3,axis = "rltb")
-dev.off()
-
 air_temp_plot = weather_sum%>%
   mutate(Year = year(Date),
          Air_Temp = AirTemp_C_Average,
@@ -428,9 +422,15 @@ air_temp_plot%>%
   summarize(mean = mean(Air_Temp),
             sd = sd(Air_Temp))
 
+legend = get_legend(temp)
+library(cowplot)
+jpeg("./Figs/physics_all.jpg",res = 300, units = "in",width = 8, height = 6)
+plot_grid(temp+theme(legend.position = "none"),surf_plot_save,water,buoy_fig,schmidt_fig,legend, align = "hv",labels = list("a","b","c","d","e",""),nrow=2,ncol=3,axis = "rltb")
+dev.off()
+
 library(ggpubr)
 jpeg("./Figs/air_and_water_temp.jpg",res = 300, units = "in",width = 6, height = 4)
-ggarrange(air,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
+ggarrange(temp,water+ylim(min(air_temp_plot$Air_Temp),max(air_temp_plot$Air_Temp)), common.legend = T)
 dev.off()
 ```
 
@@ -590,6 +590,39 @@ lake_number_df%>%
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 dev.off()
+
+#Just added, need to test
+dens_comb = dens_df%>%
+  rename(Epi_density = Density)%>%
+  left_join(hypo_dens_df%>%rename(Hypo_density = Density))%>%
+  mutate(Date_22 = Date,
+         Year = as.factor(year(Date)))%>%
+  filter(Year%in%c(2021,2022))
+year(dens_comb$Date_22) = 2022
+
+dens_comb%>%
+  ggplot(aes(x = Date_22, y = Epi_density-Hypo_density, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Epi. density - hypo. density")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
+dens_comb%>%
+  ggplot(aes(x = Date_22, y = Hypo_density, fill = Year, color = Year))+
+  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Epi. density - hypo. density")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
 ```
 
 

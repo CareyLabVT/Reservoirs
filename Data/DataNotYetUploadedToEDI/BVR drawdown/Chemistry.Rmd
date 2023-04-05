@@ -59,7 +59,8 @@ chem = nuts%>%
 
 
 ```{r}
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/199/10/aa2ccc23688fc908f9d61cb217210a3d" 
+#NOTE this is in staging, need to update
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1025/3/509f39850b6f95628d10889d66885b76" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -84,15 +85,15 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                     "DC_mgL",     
                     "DN_mgL",     
                     "Flag_DateTime",     
-                    "Flag_TN",     
-                    "Flag_TP",     
-                    "Flag_NH4",     
-                    "Flag_NO3NO2",     
-                    "Flag_SRP",     
-                    "Flag_DOC",     
-                    "Flag_DIC",     
-                    "Flag_DC",     
-                    "Flag_DN"    ), check.names=TRUE)
+                    "Flag_TN_ugL",     
+                    "Flag_TP_ugL",     
+                    "Flag_NH4_ugL",     
+                    "Flag_NO3NO2_ugL",     
+                    "Flag_SRP_ugL",     
+                    "Flag_DOC_mgL",     
+                    "Flag_DIC_mgL",     
+                    "Flag_DC_mgL",     
+                    "Flag_DN_mgL"    ), check.names=TRUE)
                
 unlink(infile1)
 
@@ -100,8 +101,7 @@ dt1 = dt1%>%
   mutate(DateTime=as.Date(DateTime))%>%
   rename(PO4_ugL = SRP_ugL)
 
-chem_full = chem%>%
-  full_join(dt1)%>%
+chem_full = dt1%>%
   filter(Reservoir=="BVR",
          Site==50,
          year(DateTime)%in% c(2021,2022))
@@ -521,24 +521,25 @@ ggsave("./Figs/Abby_money_plot_biogeo.jpeg", dpi = 300, width = 6.5, height = 4)
 
 sum_plot4 = chem_full%>%
   filter(Depth_m ==0.1)%>%
-  select(DateTime, PO4_ugL,DOC_mgL,DIC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  select(DateTime, TP_ugL, PO4_ugL,DOC_mgL,DIC_mgL,NO3NO2_ugL,NH4_ugL)%>%
   full_join(fluora_surface%>%
               filter(year(DateTime)%in% c(2021,2022)))%>%
   full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Reservoir))%>%
   full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
-  select(DateTime, PO4_ugL,DOC_mgL,TotalConc_ugL,pH,NH4_ugL,co2_umolL,ch4_umolL,Bluegreens_ugL)%>%
-  pivot_longer(cols = c(PO4_ugL,DOC_mgL,TotalConc_ugL,pH,co2_umolL,ch4_umolL,NH4_ugL,Bluegreens_ugL))%>%
+  select(DateTime, TP_ugL, PO4_ugL,DOC_mgL,TotalConc_ugL,pH,NH4_ugL,co2_umolL,ch4_umolL,Bluegreens_ugL)%>%
+  pivot_longer(cols = c(TP_ugL, PO4_ugL,DOC_mgL,TotalConc_ugL,pH,co2_umolL,ch4_umolL,NH4_ugL,Bluegreens_ugL))%>%
   filter(!is.na(value),
          month(DateTime)>4,
          month(DateTime)<9)%>%
   mutate(Year = year(DateTime),
          color = name,
-         name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name))%>%
-  mutate(name = factor(name, levels=c("PO4_ugL","Phyto","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")),
-         color = factor(color, levels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
-                        labels=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")))
+         name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name),
+         name = ifelse(name%in%c("TP_ugL","PO4_ugL"),"Phosphorus",name))%>%
+  mutate(name = factor(name, levels=c("Phosphorus","Phyto","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")),
+         color = factor(color, levels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
+                        labels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")))
 
 maxes = sum_plot4%>%
   group_by(name,color, Year)%>%
@@ -552,11 +553,11 @@ as.Date("2022-07-05")-as.Date("2022-06-27")
 as.Date("2022-07-18")-as.Date("2022-06-27")
 
 # New facet label names for sum_plot
-fac.labs <- c("SRP (ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
-names(fac.labs) <- c("PO4_ugL", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
+fac.labs <- c("Phosphorus\n(ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("Phosphorus", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
 
-my_colors = c("grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4")
-names(my_colors)=c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")
+my_colors = c("black","grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4")
+names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")
 
 sum_plot4%>%
   ggplot(aes(x = DateTime, y = value, color = color))+

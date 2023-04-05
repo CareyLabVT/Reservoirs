@@ -1,32 +1,32 @@
-﻿Reservoir,Site,Site_description,Latitude,Longitude,,,,,,,,,,,,,,,,,,,,,
-FCR,1,Outflow site at spillway,37.30247,-79.83692,,,,,,,,,,,,,,,,,,,,,
-FCR,10,Furthest upstream pelagic site in transitional zone,37.308619,-79.836774,,,,,,,,,,,,,,,,,,,,,
-FCR,20,Different upstream pelagic site in transitional zone,37.30769,-79.8371,,,,,,,,,,,,,,,,,,,,,
-FCR,30,Upstream pelagic site in transitional zone,37.30534,-79.8383,,,,,,,,,,,,,,,,,,,,,
-BVR,40,Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir,37.314783,-79.820864,,,,,,,,,,,,,,,,,,,,,
-FCR,45,Upstream pelagic site nearest to the deep hole,37.30418,-79.8383,,,,,,,,,,,,,,,,,,,,,
-BVR,50,Deep hole or site nearest to dam,37.31288,-79.8159,,,,,,,,,,,,,,,,,,,,,
-CCR,50,Pelagic deep hole site of Carvins Cove Reservoir near dam,37.3706,-79.9582,,,,,,,,,,,,,,,,,,,,,
-FCR,50,Deep hole or site nearest to dam,37.30325,-79.8373,,,,,,,,,,,,,,,,,,,,,
-GWR,50,Pelagic deep hole nearest to dam at Gatewood Reservoir,37.04435281,-80.86329915,,,,,,,,,,,,,,,,,,,,,
-SHR,50,Pelagic deep hole nearest to dam at Spring Hollow Reservoir,37.23085223,-80.17590014,,,,,,,,,,,,,,,,,,,,,
-BVR,51,Littoral site west of deep pelagic site (50),37.31267,-79.816592,,,,,,,,,,,,,,,,,,,,,
-CCR,51,Site aadjacent to dam,37.3697,-79.958,,,,,,,,,,,,,,,,,,,,,
-FCR,99,Farthest downstream site on inflow stream,37.307613,79.8360878,,,,,,,,,,,,,,,,,,,,,
-BVR,100,Inflow stream,37.31957,-79.82437,,,,,,,,,,,,,,,,,,,,,
-CCR,100,Horse Pen Branch standing water inflow,37.3654,-79.972,,,,,,,,,,,,,,,,,,,,,
-FCR,100,Inflow stream,37.30858,-79.83494,,,,,,,,,,,,,,,,,,,,,
-FCR,100.1,ISCO Site at the weir,37.30858,-79.83494,,,,,,,,,,,,,,,,,,,,,
-FCR,101,Upstream site along inflow ,37.309653,-79.830467,,,,,,,,,,,,,,,,,,,,,
-CCR,101,Horse Pen Branch inflow,37.3646,-79.9733,,,,,,,,,,,,,,,,,,,,,
-FCR,102,Furthest upstream site on inflow stream,37.311678,-79.827357,,,,,,,,,,,,,,,,,,,,,
-CCR,110,Ephemeral Stream near Horse Pen Branch Inflow,37.3665,-79.9719,,,,,,,,,,,,,,,,,,,,,
-BVR,175,Inflow stream on the west fork of the right arm,37.321861,-79.818368,,,,,,,,,,,,,,,,,,,,,
-BVR,200,Right arm inflow,37.322851,-79.81721,,,,,,,,,,,,,,,,,,,,,
-FCR,200,Secondary inflow (wetland) stream,37.30943,-79.83619,,,,,,,,,,,,,,,,,,,,,
-BVR,215,Inflow stream on the east fork of the right arm,37.321412,-79.814012,,,,,,,,,,,,,,,,,,,,,
-CCR,300,Sawmill Branch inflow site closest to reservoir,37.4094,-79.9699,,,,,,,,,,,,,,,,,,,,,
-CCR,301,Sawmill Branch inflow upstream of reservoir,37.4169,-79.9771,,,,,,,,,,,,,,,,,,,,,
-CCR,400,Tinker Creek Tunnel Inflow ,37.399,-79.9485,,,,,,,,,,,,,,,,,,,,,
-CCR,500,Catawaba Creek Tunnel inflow downstream of tunnel emergence,37.4073,-79.9852,,,,,,,,,,,,,,,,,,,,,
-CCR,501,Catawaba Creek Tunnel inflow emergence,37.4082,-79.9897,,,,,,,,,,,,,,,,,,,,,
+﻿Reservoir,Site,Site_description,Latitude,Longitude
+FCR,1,Outflow site at spillway,37.30247,-79.83692
+FCR,10,Furthest upstream pelagic site in transitional zone,37.308619,-79.836774
+FCR,20,Different upstream pelagic site in transitional zone,37.30769,-79.8371
+FCR,30,Upstream pelagic site in transitional zone,37.30534,-79.8383
+BVR,40,Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir,37.314783,-79.820864
+FCR,45,Upstream pelagic site nearest to the deep hole,37.30418,-79.8383
+BVR,50,Deep hole or site nearest to dam,37.31288,-79.8159
+CCR,50,Pelagic deep hole site of Carvins Cove Reservoir near dam,37.3706,-79.9582
+FCR,50,Deep hole or site nearest to dam,37.30325,-79.8373
+GWR,50,Pelagic deep hole nearest to dam at Gatewood Reservoir,37.04435281,-80.86329915
+SHR,50,Pelagic deep hole nearest to dam at Spring Hollow Reservoir,37.23085223,-80.17590014
+BVR,51,Littoral site west of deep pelagic site (50),37.31267,-79.816592
+CCR,51,Site aadjacent to dam,37.3697,-79.958
+FCR,99,Farthest downstream site on inflow stream,37.307613,79.8360878
+BVR,100,Inflow stream,37.31957,-79.82437
+CCR,100,Horse Pen Branch standing water inflow,37.3654,-79.972
+FCR,100,Inflow stream,37.30858,-79.83494
+FCR,100.1,ISCO Site at the weir,37.30858,-79.83494
+FCR,101,Upstream site along inflow ,37.309653,-79.830467
+CCR,101,Horse Pen Branch inflow,37.3646,-79.9733
+FCR,102,Furthest upstream site on inflow stream,37.311678,-79.827357
+CCR,110,Ephemeral Stream near Horse Pen Branch Inflow,37.3665,-79.9719
+BVR,175,Inflow stream on the west fork of the right arm,37.321861,-79.818368
+BVR,200,Right arm inflow,37.322851,-79.81721
+FCR,200,Secondary inflow (wetland) stream,37.30943,-79.83619
+BVR,215,Inflow stream on the east fork of the right arm,37.321412,-79.814012
+CCR,300,Sawmill Branch inflow site closest to reservoir,37.4094,-79.9699
+CCR,301,Sawmill Branch inflow upstream of reservoir,37.4169,-79.9771
+CCR,400,Tinker Creek Tunnel Inflow ,37.399,-79.9485
+CCR,500,Catawaba Creek Tunnel inflow downstream of tunnel emergence,37.4073,-79.9852
+CCR,501,Catawaba Creek Tunnel inflow emergence,37.4082,-79.9897

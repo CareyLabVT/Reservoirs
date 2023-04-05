@@ -3,8 +3,9 @@
 ##Modified by Whitney Woelmer
 ##Slight modification by Jacob Wynne
 ##29Mar2023 - 2022 nutrient aggregation
-#NOTE - 9 samples need to be rerun with 2022 samples - will need to average/add these data when we publish 2022 field season samples (HLW)
-#update from 2023: these 9 samples did not make it to this year so the data are gone (HLW)
+#NOTE - 11 samples need to be rerun with 2023 samples - will need to average/add these data when we publish 2022 field season samples (HLW)
+#F100 5Jul22 0.1m NO3, F50 2May22 1.6m DOC, F50 23May22 5m SRP, B50 21Mar23 0.1, 6, and 9m NO3, B50 11Oct22 7m SRP, B50 19Sep22 6m SRP
+#C50 30Jun22 21m SRP, C50 19Aug22 20m NH4, C50 17Nov22 21m NO3
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -16,33 +17,59 @@ library(viridis)
 library(plotly)
 
 old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/chemistry_2013_2021.csv")
-new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/Data/2022_chemistry_collation_final_nocommas.csv")
+new <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/2022_chemistry_collation_final_nocommas.csv")
 new <- new %>% select(-X)
 
 #change column names to match new format
+old <- old %>% rename(Flag_TP_ugL = Flag_TP,
+                      Flag_TN_ugL = Flag_TN,
+                      Flag_SRP_ugL = Flag_SRP,
+                      Flag_NO3NO2_ugL = Flag_NO3NO2,
+                      Flag_NH4_ugL = Flag_NH4,
+                      Flag_DC_mgL = Flag_DC,
+                      Flag_DIC_mgL = Flag_DIC,
+                      Flag_DOC_mgL = Flag_DOC,
+                      Flag_DN_mgL = Flag_DN)
 
 #also drop ISCO samples bc being published in separate data product
 old <- old[old$Site!=100.1,]
 
+#add 8 flag for all DIC and DOC values run with NPOC
+old$Flag_DN_mgL[old$Flag_DOC_mgL==8] <- 8
+
 #get cols in same order
-new <- new[names(old)]
+new <- new[,colnames(old)]
+
+#manually remove 11 samples from 2022 data pub to be published at a later date after reruns
+new$NO3NO2_ugL[new$Reservoir=="FCR" & as.Date(new$DateTime)=="2022-07-05" & new$Depth_m==0.1 & new$Site==100] <- NA
+new$DOC_mgL[new$Reservoir=="FCR" & as.Date(new$DateTime)=="2022-05-02" & new$Depth_m==1.6 & new$Site==50] <- NA
+new$SRP_ugL[new$Reservoir=="FCR" & as.Date(new$DateTime)=="2022-05-23" & new$Depth_m==5 & new$Site==50] <- NA
+new$NO3NO2_ugL[new$Reservoir=="BVR" & as.Date(new$DateTime)=="2023-03-21" & new$Depth_m==0.1 & new$Site==50] <- NA
+new$NO3NO2_ugL[new$Reservoir=="BVR" & as.Date(new$DateTime)=="2023-03-21" & new$Depth_m==6 & new$Site==50] <- NA
+new$NO3NO2_ugL[new$Reservoir=="BVR" & as.Date(new$DateTime)=="2023-03-21" & new$Depth_m==9 & new$Site==50] <- NA
+new$SRP_ugL[new$Reservoir=="BVR" & as.Date(new$DateTime)=="2022-10-11" & new$Depth_m==7 & new$Site==50] <- NA
+new$SRP_ugL[new$Reservoir=="BVR" & as.Date(new$DateTime)=="2022-09-19" & new$Depth_m==6 & new$Site==50] <- NA
+new$SRP_ugL[new$Reservoir=="CCR" & as.Date(new$DateTime)=="2022-06-30" & new$Depth_m==21 & new$Site==50] <- NA
+new$NH4_ugL[new$Reservoir=="CCR" & as.Date(new$DateTime)=="2022-08-19" & new$Depth_m==20 & new$Site==50] <- NA
+new$NO3NO2_ugL[new$Reservoir=="CCR" & as.Date(new$DateTime)=="2022-11-17" & new$Depth_m==21 & new$Site==50] <- NA
+
 
 #merge old and new dfs
 chem <- rbind(old, new) 
 
 #replace NA flags with 0
 chem$Flag_DateTime[is.na(chem$Flag_DateTime)] <- 0
-chem$Flag_TN[is.na(chem$Flag_TN)] <- 0
-chem$Flag_TP[is.na(chem$Flag_TP)] <- 0
-chem$Flag_NH4[is.na(chem$Flag_NH4)] <- 0
-chem$Flag_NO3NO2[is.na(chem$Flag_NO3NO2)] <- 0
-chem$Flag_SRP[is.na(chem$Flag_SRP)] <- 0
-chem$Flag_DOC[is.na(chem$Flag_DOC)] <- 0
-chem$Flag_DIC[is.na(chem$Flag_DIC)] <- 0
-chem$Flag_DC[is.na(chem$Flag_DC)] <- 0
-chem$Flag_DN[is.na(chem$Flag_DN)] <- 0
+chem$Flag_TN_ugL[is.na(chem$Flag_TN_ugL)] <- 0
+chem$Flag_TP_ugL[is.na(chem$Flag_TP_ugL)] <- 0
+chem$Flag_NH4_ugL[is.na(chem$Flag_NH4_ugL)] <- 0
+chem$Flag_NO3NO2_ugL[is.na(chem$Flag_NO3NO2_ugL)] <- 0
+chem$Flag_SRP_ugL[is.na(chem$Flag_SRP_ugL)] <- 0
+chem$Flag_DOC_mgL[is.na(chem$Flag_DOC_mgL)] <- 0
+chem$Flag_DIC_mgL[is.na(chem$Flag_DIC_mgL)] <- 0
+chem$Flag_DC_mgL[is.na(chem$Flag_DC_mgL)] <- 0
+chem$Flag_DN_mgL[is.na(chem$Flag_DN_mgL)] <- 0
 
-write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021/chemistry_2013_2021.csv",row.names = FALSE)
+write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/chemistry_2013_2022.csv",row.names = FALSE)
 
 #select columns for plotting
 raw_chem <- chem [,(names(chem) %in% c("Reservoir","Site","DateTime",
@@ -56,7 +83,7 @@ chemistry_long <- raw_chem %>%
   mutate(DateTime = as.Date(DateTime))
 
 # FCR deep hole data time series plot
-ggplot(subset(chemistry_long, metric=="TN_ugL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
+ggplot(subset(chemistry_long, metric=="DOC_mgL" & Depth_m==0.1 & Reservoir=="FCR"), aes(x=DateTime, y=value )) +
 geom_point(cex=2) + theme_bw()
 
 
@@ -71,8 +98,9 @@ fcrplots <- chemistry_long %>%
   theme_bw()+
   facet_wrap(~metric, scales = 'free_y')
 
-fcrplots
-#ggplotly(fcrplots) #interactive plot 
+ggsave(file.path(getwd(),"./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2022/FCR_allyears_andnutrients.jpg"), width=4, height=4)
+
+ggplotly(fcrplots) #interactive plot 
 
 bvrplots <- chemistry_long %>% 
   filter(Reservoir == 'BVR') %>% 
@@ -84,6 +112,7 @@ bvrplots <- chemistry_long %>%
   facet_wrap(~metric, scales = 'free_y')
 
 bvrplots
+ggsave(file.path(getwd(),"./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2022/BVR_allyears_andnutrients.jpg"), width=4, height=4)
 
 ccrplots <- chemistry_long %>% 
   filter(Reservoir == 'CCR') %>% 
@@ -95,7 +124,7 @@ ccrplots <- chemistry_long %>%
   facet_wrap(~metric, scales = 'free_y')
 
 ccrplots
-
+ggsave(file.path(getwd(),"./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2022/CCR_allyears_andnutrients.jpg"), width=4, height=4)
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
@@ -133,22 +162,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                       data.table = c("chemistry_2013_2021.csv", "reservoir_site_descriptions.csv"),
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+                       data.table = c("chemistry_2013_2022.csv", "reservoir_site_descriptions.csv"),
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                          data.table = c("chemistry_2013_2021.csv","reservoir_site_descriptions.csv"),
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+                          data.table = c("chemistry_2013_2022.csv","reservoir_site_descriptions.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -197,8 +226,8 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -222,21 +251,21 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
-  temporal.coverage = c("2013-04-04", "2022-04-19"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
+  temporal.coverage = c("2013-04-04", "2023-03-21"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2021.csv", 
+  data.table = c("chemistry_2013_2022.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "2021_chemistry_collation.R",
+  other.entity = "QAQC_chemistry_2015_2022.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.890.10') #reserve new staging environment package id each year
+  package.id = 'edi.1025.3') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -275,17 +304,17 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2021",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2021",
-  temporal.coverage = c("2013-04-04", "2022-04-19"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
+  temporal.coverage = c("2013-04-04", "2023-03-21"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2021.csv",
+  data.table = c("chemistry_2013_2022.csv",
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "2021_chemistry_collation.R",
+  other.entity = "2022_chemistry_collation.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',

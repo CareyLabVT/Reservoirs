@@ -321,17 +321,17 @@ doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
 #                 if below detection, flag = 3                  #
 #     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      # 
 #                    DIC     DOC     DC    DN                   #
-#                    0.70   0.85   0.84   0.05                  #
+#                    0.67   0.76   0.98   0.05                  #
 #################################################################
 #    Historical MDL's:                                     #
 #    2020: DIC = 0.97; DOC = 0.76 ; DC = 0.63; DN = 0.05   #
 #    2021: DIC = 0.47; DOC = 0.45; DC = 0.69; DN = 0.11    #
-#    2022: DIC = 0.70; DOC = 0.85; DC = 0.84; DN = 0.05    #
+#    2022: DIC = 0.67; DOC = 0.76; DC = 0.98; DN = 0.05    #
 ############################################################
 
 # DIC
 for (i in 1:nrow(doc)) {
-  if(doc$DIC_mgL[i] <0.70 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DIC_mgL[i] <0.67 & !is.na(doc$DIC_mgL[i])){
     if(doc$Flag_DIC[i]>0){
       doc$Flag_DIC[i] <- paste0(doc$Flag_DIC[i], 3)
       
@@ -341,7 +341,7 @@ for (i in 1:nrow(doc)) {
 
 # DOC
 for (i in 1:nrow(doc)) {
-  if(doc$DOC_mgL[i] <0.85){
+  if(doc$DOC_mgL[i] <0.76){
     if(doc$Flag_DOC[i]>0){
       doc$Flag_DOC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -352,7 +352,7 @@ for (i in 1:nrow(doc)) {
 
 # DC
 for (i in 1:nrow(doc)) {
-  if(doc$DC_mgL[i] < 0.84 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DC_mgL[i] < 0.98 & !is.na(doc$DC_mgL[i])){
     if(doc$Flag_DC[i]>0){
       doc$Flag_DC[i] <- paste0(doc$Flag_DOC[i], 3)
       

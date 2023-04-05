@@ -13,11 +13,22 @@ library(lubridate)
 ```
 
 ```{r}
-sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
+
+# ABP added the BVR EDI data 
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/725/3/a9a7ff6fe8dc20f7a8f89447d4dc2038" 
+infile1 <- tempfile()
+options(timeout=3000)
+try(download.file(inUrl1,infile1,method="auto"))
+
+ sensor <-read_csv(infile1)
+
+
+#sensor <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv"))
 
 sensor_depth = sensor%>%
-  mutate(DateTime = as.POSIXct(TIMESTAMP),
-         WaterLevel = Lvl_psi*0.70455)%>%
+  #mutate(DateTime = as.POSIXct(TIMESTAMP),
+         #WaterLevel = Lvl_psi*0.70455)%>%
   filter(year(DateTime)==2022,
          month(DateTime)>3,
          WaterLevel>7.5)%>%
@@ -44,17 +55,18 @@ sensor_depth%>%
 dev.off()
 
 sensor_depth = sensor%>%
-  mutate(DateTime = as.POSIXct(TIMESTAMP),
-         WaterLevel = Lvl_psi*0.70455)%>%
+  mutate(WaterLevel=Depth_m_13)%>%#the sensor is 0.5m off the bottom
+  #mutate(DateTime = as.POSIXct(TIMESTAMP),
+         #WaterLevel = Lvl_psi*0.70455)%>%
   #filter(WaterLevel>7.5)%>%
   arrange(DateTime)%>%
-  filter(!lag(WaterLevel)-WaterLevel>0.05)%>%
+  #filter(!lag(WaterLevel)-WaterLevel>0.05)%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(WaterLevel = mean(WaterLevel))%>%
+  summarize(WaterLevel = mean(WaterLevel, na.rm=T))%>%
   mutate(Year = year(Date),
-         Site = 50)%>%
-  filter(!lag(WaterLevel)-WaterLevel>0.05)
+         Site = 50)
+  #filter(!lag(WaterLevel)-WaterLevel>0.05)
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
 
@@ -108,3 +120,78 @@ p
 dev.off()
 ```
 
+```{r ABP checking water level}
+# ABP comparing historic water level from 09Apr20_BVR_WaterLevelDaily.xlsx to observations from the staff gauge. I think that 0 on the staff gauge is 13m????
+
+# How far is the pressure sensor actually off the bottom of the reservoir???
+
+# read in waterlevel observations from Carey Lab
+
+wl <- dir(path = "./Data", pattern = "WaterLevel.csv")%>% 
+  map_df(~ read_csv(file.path(path = "./Data", .), col_types = cols(.default = "c")))
+
+
+# filter out just BVR
+BVR_wl<-wl%>%
+  filter(Reservoir=="BVR")%>%
+  select(DateTime, WaterLevel_ft)%>%
+  mutate(WaterLevel_ft=as.numeric(WaterLevel_ft))%>%
+  mutate(WaterLevel_m=WaterLevel_ft*0.3048)%>%
+  mutate(WaterLevel_m=13+WaterLevel_m)%>%
+  mutate(WaterLevel_m=round(WaterLevel_m, digits= 1))
+  
+    
+ BVR_wl$Date<-parse_date_time(BVR_wl$DateTime, c('mdy HM', 'mdy'))
+ BVR_wl$Date<-as.Date(BVR_wl$Date)
+ # take out observation from 2020-10-05 because recorded wrong
+ BVR_wl<-BVR_wl%>%
+   filter(Date!="2020-10-05")
+ 
+ # read in waterlevel observations from WVWA
+WVWA_level <- read.csv(text = getURL("https://raw.githubusercontent.com/CareyLabVT/BVR-GLM/master/Data_Output/09Nov20_BVR_WaterLevel.csv"))%>%
+  mutate(Date=ymd(Date))%>%
+  mutate(BVR_WaterLevel_m=as.numeric(BVR_WaterLevel_m))
+
+all<-merge(WVWA_level, BVR_wl, by="Date", all=T)
+
+all$BVR_WaterLevel_m<-coalesce(all$BVR_WaterLevel_m, all$WaterLevel_m)
+ 
+
+ # merge the two to compare staff gauge height to sensor measured water level
+ 
+ all<-merge(all, sensor_depth, by="Date", all=T)
+
+all$diff=all$BVR_WaterLevel_m-all$WaterLevel
+
+# correct sensor depth to match staff gauge
+all$cor_wl=all$WaterLevel+0.2
+
+#merge the observed water level with the sensor measurments
+all$BVR_wl<-coalesce(all$BVR_WaterLevel_m, all$cor_wl)
+
+median(all$diff, na.rm=T)
+
+ggplot(all, aes(x=Date))+
+  geom_point(aes(y=BVR_WaterLevel_m), color="red")+
+  geom_point(aes(y=WaterLevel), color="blue")+
+  geom_point(aes(y=WaterLevel+0.2), color="green")
+
+g = all%>%
+  ggplot(aes(x = Date, y = BVR_wl))+
+  geom_line()+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none")
+g
+library(plotly)
+ggplotly(g)
+
+jpeg("./Figs/full_timeseries_ABP.jpeg", width = 6, height = 4, units = "in", res = 300)
+g
+while (!is.null(dev.list()))  dev.off()
+  
+
+```

@@ -14,7 +14,7 @@ library(colorRamps)
 source("custom_facets.R")
 
 #Define drawdown lines
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022, year_class = "2022")
 ```
 
 ```{r}
@@ -104,7 +104,8 @@ dt1 = dt1%>%
 chem_full = dt1%>%
   filter(Reservoir=="BVR",
          Site==50,
-         year(DateTime)%in% c(2021,2022))
+         #year(DateTime)%in% c(2021,2022)
+         )
 
 chem_full$Date_22<-chem_full$DateTime
 chem_full$Year = year(chem_full$DateTime)
@@ -682,3 +683,379 @@ sum_plot5%>%
 ggsave("./Figs/Abby_money_plot_phytos.jpeg", dpi = 300, width = 6.5, height = 4)
 ```
 
+TS figs all years
+```{r}
+#Load data
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/272/7/001cb516ad3e8cbabe1fdcf6826a0a45"
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "GreenAlgae_ugL",     
+                    "Bluegreens_ugL",     
+                    "BrownAlgae_ugL",     
+                    "MixedAlgae_ugL",     
+                    "YellowSubstances_ugL",     
+                    "TotalConc_ugL",     
+                    "Transmission",     
+                    "Temp_degC",     
+                    "RFU_525nm",     
+                    "RFU_570nm",     
+                    "RFU_610nm",     
+                    "RFU_370nm",     
+                    "RFU_590nm",     
+                    "RFU_470nm",     
+                    "Flag_GreenAlgae",     
+                    "Flag_BluegreenAlgae",     
+                    "Flag_BrownAlgae",     
+                    "Flag_MixedAlgae",     
+                    "Flag_TotalConc",     
+                    "Flag_Temp",     
+                    "Flag_Transmission",     
+                    "Flag_525nm",     
+                    "Flag_570nm",     
+                    "Flag_610nm",     
+                    "Flag_370nm",     
+                    "Flag_590nm",     
+                    "Flag_470nm"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+#Combine current and historical data
+fluora = dt1
+
+fluora_surface=fluora%>%
+  filter(Reservoir=="BVR",
+         Site==50,
+         Depth_m<1)%>%
+  mutate(DateTime = as.Date(DateTime))%>%
+  group_by(DateTime)%>%
+  mutate(min_depth = min(Depth_m))%>%
+  filter(Depth_m==min_depth)
+
+
+fluora_surface$DateTime
+
+thermo_depth = read.csv("./Data/thermocline_depth.csv")
+min(thermo_depth$Date, na.rm=T)
+
+light = read.csv("./Data/attenuation_calc.csv")
+min(light$Date, na.rm=T)
+
+ctd = read.csv("./Data/CTD at 0.1m.csv")%>%
+  filter(hour(DateTime)>8,hour(DateTime)<17)
+min(ctd$DateTime, na.rm=T)
+
+ghg = read.csv("./Data/GHG at 0.1m.csv")
+min(ghg$DateTime, na.rm=T)
+
+metals = read.csv("./Data/Metals at 0.1m.csv")
+min(metals$Date, na.rm=T)
+
+cmax_depth = read.csv("./Data/FP_CmaxDepth.csv")
+peak_width = read.csv("./Data/FP_PeakWidth.csv")
+
+sum_plot3 = chem_full%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, PO4_ugL,DOC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  full_join(fluora_surface)%>%
+  full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Year,-Depth_m))%>%
+  full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
+  select(DateTime, TFe_mgL,TMn_mgL,DOsat_percent,thermo)%>%
+  pivot_longer(cols = c(TFe_mgL,TMn_mgL,DOsat_percent,thermo))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime))%>%
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
+
+maxes = sum_plot3%>%
+  group_by(name, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  filter(Year=="2022")%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date),
+         year_class = ifelse(Year == 2022,"2022","2013-2021"))
+
+sum_plot3%>%
+  group_by(name, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            max = max(value),
+            min_date = DateTime[which.min(value)],
+            min = min(value))%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
+
+# New facet label names for sum_plot
+fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
+names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
+library(ggh4x)
+scales <- list(
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_continuous(),
+  scale_y_continuous(),
+  scale_y_continuous()
+)
+horiz_line = data.frame(name=rep("DOsat_percent",5),y = rep(100,5),Year=2018:2022)%>%
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
+sum_plot3%>%
+  mutate(show_points = ifelse(name == "thermo","n","y"))%>%
+  ggplot(aes(x = DateTime, y = value, color = name))+
+  geom_hline(aes(yintercept = y),data=horiz_line, color = "cyan4",alpha=0.3,size=1)+
+  geom_point(aes(alpha = show_points))+
+  geom_line()+
+  scale_alpha_manual(values = c(0,1))+
+  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(values = c("darkblue","cyan4","lightsalmon","coral4"))+
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside", legend.position = "none",
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(
+     ))+
+  facetted_pos_scales(y = scales)+
+  ylab("")+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_biogeo_long.jpeg", dpi = 300, width = 25, height = 4)
+
+sum_plot3%>%
+  mutate(show_points = ifelse(name == "thermo","n","y"),
+         year_class = ifelse(Year == 2022,"2022","2013-2021"),
+         Year = as.factor(Year))%>%
+  ggplot(aes(x = yday(DateTime), y = value, color = Year))+
+  geom_hline(aes(yintercept = y),data=horiz_line, color = "grey50",alpha=0.3,size=1)+
+  geom_point(aes(alpha = show_points), show.legend = F)+
+  geom_line()+
+  scale_alpha_manual(values = c(0,1))+
+  geom_vline(aes(xintercept = yday(as.Date(max_date, origin="1970-01-01")), color = year_class), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = yday(as.Date(Dates, origin="1970-01-01")), lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  #scale_color_manual(values = c("darkblue","cyan4","lightsalmon","coral4"))+
+  facet_grid(rows = vars(name), cols = vars(year_class), scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside",
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(
+     ))+
+  facetted_pos_scales(y = scales)+
+  ylab("")+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_biogeo_allYears.jpeg", dpi = 300, width = 7, height = 4)
+
+sum_plot4 = chem_full%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, TP_ugL, PO4_ugL,DOC_mgL,DIC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  full_join(fluora_surface)%>%
+  full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Reservoir))%>%
+  full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
+  select(DateTime, TP_ugL, PO4_ugL,DOC_mgL,TotalConc_ugL,NH4_ugL,co2_umolL,Bluegreens_ugL)%>%
+  pivot_longer(cols = c(TP_ugL, PO4_ugL,DOC_mgL,TotalConc_ugL,co2_umolL,NH4_ugL,Bluegreens_ugL))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime),
+         color = name,
+         name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name),
+         name = ifelse(name%in%c("TP_ugL","PO4_ugL"),"Phosphorus",name))%>%
+  mutate(name = factor(name, levels=c("Phosphorus","Phyto","DOC_mgL","co2_umolL","NH4_ugL")),
+         color = factor(color, levels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL"),
+                        labels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL")))
+
+maxes = sum_plot4%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  filter(Year=="2022")%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date),
+         year_class = ifelse(Year == 2022,"2022","2013-2021"))
+maxes%>%
+  mutate(max_date=as.Date(max_date, origin="1970-01-01"),
+         )
+as.Date("2022-07-05")-as.Date("2022-06-27")
+as.Date("2022-07-18")-as.Date("2022-06-27")
+
+# New facet label names for sum_plot
+fac.labs <- c("Phosphorus\n(ug/L)", "Phyto.\n(ug/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("Phosphorus", "Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
+
+my_colors = c("black","grey50","darkgreen","turquoise","#8E4412","skyblue","magenta4")
+names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL")
+
+sum_plot4%>%
+  ggplot(aes(x = DateTime, y = value, color = color))+
+  geom_point()+
+  geom_line()+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
+                     labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
+                     #limits = c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
+                     values = my_colors
+                     )+
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside", 
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        legend.position = c(0.04,0.72),
+        legend.title=element_blank(),
+        legend.background = element_blank(),
+        legend.key= element_blank(),
+        legend.spacing.y = unit(0, 'cm'),
+        legend.text=element_text(size=7)
+        )+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
+  ylab("")+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_doc_long.jpeg", dpi = 300, width = 25, height = 5)
+
+sum_plot4%>%
+  mutate(year_class = ifelse(Year == 2022,"2022","2013-2021"),
+         Year = as.factor(Year),
+         group = paste0(color,Year))%>%
+  ggplot(aes(x = yday(DateTime), y = value, color = Year, group = group))+
+  geom_point()+
+  geom_line()+
+  geom_vline(aes(xintercept = yday(as.Date(max_date, origin = "1970-01-01")), color = as.factor(Year)), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = yday(as.Date(Dates, origin = "1970-01-01")), lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  #scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
+  #                   labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
+                     #limits = c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
+                     #values = my_colors
+                     #)+
+  facet_grid(rows = vars(name), cols = vars(year_class), scales = "free", switch = "y",
+             #labeller = labeller(name = fac.labs)
+             )+
+  theme_bw()+
+  theme(strip.placement = "outside", 
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank()
+        )+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
+  ylab("")+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_doc_allYears.jpeg", dpi = 300, width = 7, height = 5)
+
+sum_plot5 = chem_full%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, PO4_ugL,DOC_mgL,NO3NO2_ugL,NH4_ugL)%>%
+  full_join(fluora_surface%>%
+              filter(year(DateTime)%in% c(2021,2022)))%>%
+  full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Year,-Depth_m))%>%
+  full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
+  full_join(cmax_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(peak_width%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  select(DateTime, Turbidity_NTU, Zeu, CmaxDepth_TotalConc_ugL, CmaxDepth_Bluegreens_ugL, PeakWidth_TotalConc_m, PeakWidth_Bluegreens_m)%>%
+  pivot_longer(cols = c(Turbidity_NTU, Zeu, CmaxDepth_TotalConc_ugL, CmaxDepth_Bluegreens_ugL, PeakWidth_TotalConc_m, PeakWidth_Bluegreens_m))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime),
+         color = ifelse(name%in%c("CmaxDepth_TotalConc_ugL", "PeakWidth_TotalConc_m"),"TotalConc_ugL",
+                        ifelse(name%in%c("PeakWidth_Bluegreens_m", "CmaxDepth_Bluegreens_ugL"),"Bluegreens_ugL",name)),
+         name = ifelse(name%in%c("CmaxDepth_TotalConc_ugL", "CmaxDepth_Bluegreens_ugL"),"Cmax_depth",name),
+         name = ifelse(name%in%c("PeakWidth_TotalConc_m", "PeakWidth_Bluegreens_m"),"PeakWidth",name))%>%
+  mutate(name = factor(name, levels=c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")),
+         color = factor(color, levels=c("Turbidity_NTU", "Zeu","TotalConc_ugL", "Bluegreens_ugL")))
+
+maxes = sum_plot5%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  filter(Year=="2022")%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date))
+
+sum_plot5%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            max = max(value),
+            min_date = DateTime[which.min(value)],
+            min = min(value))%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min_date,max_date),
+         max = ifelse(name %in% c("thermo","Zeu","DO_mgL","Cmax_depth", "PeakWidth"),min,max))%>%
+  group_by(name,color)%>%
+  mutate(pct = (max[Year==2022]-max[Year==2021])/max[Year==2021]*100)
+
+# New facet label names for sum_plot
+fac.labs <- c("Turbidity\n(NTU)", "Euphotic zone\ndepth (m)", "C[max]\ndepth(m)", "Peak width\n(m)")
+names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
+my_colors = c("grey20","goldenrod","darkgreen","turquoise")
+names(my_colors)=c("Turbidity_NTU", "Zeu","TotalConc_ugL", "Bluegreens_ugL")
+scales <- list(
+  scale_y_continuous(),
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_reverse(limits = c(NA,0)),
+  scale_y_continuous()
+)
+sum_plot5%>%
+  ggplot(aes(x = DateTime, y = value, color = color))+
+  geom_point()+
+  geom_line()+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
+                     labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
+                     values = my_colors
+                     )+
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
+             labeller = labeller(.rows = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside", 
+        legend.position = c(.2,.42),
+        legend.title=element_blank(),
+        legend.background = element_blank(),
+        legend.key= element_blank(),
+        legend.spacing.y = unit(0, 'cm'),
+        legend.text=element_text(size=7),
+        strip.text.x = element_text(
+          size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(
+     ))+
+  ylab("")+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
+  facetted_pos_scales(y = scales)+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+
+ggsave("./Figs/Abby_money_plot_phytos.jpeg", dpi = 300, width = 6.5, height = 4)
+```

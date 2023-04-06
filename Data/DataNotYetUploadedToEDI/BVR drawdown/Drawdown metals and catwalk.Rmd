@@ -17,20 +17,20 @@ library(RCurl)
 
 BVR metals heatmaps
 ```{r}
-metals = read_csv("./Data/Drawdown Metals_updated.csv")
-vars = c("TFe_ppb","SFe_ppb","TMn_ppb","SMn_ppb","TNa_ppb","SNa_ppb","TMg_ppb","SMg_ppb","TSi_ppb","SSi_ppb","TP_ppb","SP_ppb","TS_ppm","SS_ppm")
+#metals = read_csv("./Data/Drawdown Metals_updated.csv")
+#vars = c("TFe_ppb","SFe_ppb","TMn_ppb","SMn_ppb","TNa_ppb","SNa_ppb","TMg_ppb","SMg_ppb","TSi_ppb","SSi_ppb","#TP_ppb","SP_ppb","TS_ppm","SS_ppm")
+#
+#metals_new = read.csv("../Metals_Data/Raw_Data/2022/ICP_data_2022.csv")%>%
+#  select(-X)%>%
+#  rename(Li_mgL = X7Li, Na_mgL = X23Na, Mg_mgL = X24Mg, Al_mgL = X27Al, Si_mgL = X29Si, P_mgL = X31P, S_mgL = #X34S, Cl_mgL = X35Cl, K_mgL = X39K, Ca_mgL = X44Ca, Ti_mgL = X48Ti, V_mgL = X51V, Cr_mgL = X52Cr, Fe_mgL = #X54Fe, Mn_mgL = X55Mn, Co_mgL = X59Co, Ni_mgL = X60Ni, Cu_mgL = X65Cu, Zn_mgL = X66Zn, As_mgL = X75As, Se_mgL = X78Se, Sr_mgL = X88Sr, Mo_mgL = X95Mo, Ag_mgL = X107Ag, Cd_mgL = X111Cd, Sn_mgL = X120Sn, Ba_mgL = X138Ba, #Pb_mgL = X208Pb, U_mgL = X238U, Depth_m = 'Sample.Depth..m.')%>%
+#  mutate(Date=as.Date(Date))%>%
+#  select(-Sample)%>%
+#  filter(!Site==100.1)%>%
+#  pivot_wider(names_from = Filter, 
+#              values_from = contains("mgL"),
+#              names_glue = "{Filter}{.value}")
 
-metals_new = read.csv("../Metals_Data/Raw_Data/2022/ICP_data_2022.csv")%>%
-  select(-X)%>%
-  rename(Li_mgL = X7Li, Na_mgL = X23Na, Mg_mgL = X24Mg, Al_mgL = X27Al, Si_mgL = X29Si, P_mgL = X31P, S_mgL = X34S, Cl_mgL = X35Cl, K_mgL = X39K, Ca_mgL = X44Ca, Ti_mgL = X48Ti, V_mgL = X51V, Cr_mgL = X52Cr, Fe_mgL = X54Fe, Mn_mgL = X55Mn, Co_mgL = X59Co, Ni_mgL = X60Ni, Cu_mgL = X65Cu, Zn_mgL = X66Zn, As_mgL = X75As, Se_mgL = X78Se, Sr_mgL = X88Sr, Mo_mgL = X95Mo, Ag_mgL = X107Ag, Cd_mgL = X111Cd, Sn_mgL = X120Sn, Ba_mgL = X138Ba, Pb_mgL = X208Pb, U_mgL = X238U, Depth_m = 'Sample.Depth..m.')%>%
-  mutate(Date=as.Date(Date))%>%
-  select(-Sample)%>%
-  filter(!Site==100.1)%>%
-  pivot_wider(names_from = Filter, 
-              values_from = contains("mgL"),
-              names_glue = "{Filter}{.value}")
-
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/6/57912981e3e857c85924484806492446" 
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/7/e71d70cac1650610e6a3fbbf7928007f" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -54,7 +54,7 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                     "Flag_SFe",     
                     "Flag_SMn"    ), check.names=TRUE)%>%
    mutate(DateTime = as.Date(DateTime))%>%
-   filter(year(DateTime)==2021)%>%
+   #filter(year(DateTime)==2021)%>%
    rename(Date = DateTime) #%>%
    #mutate(TFe_ppb = TFe_mgL*1000,
    #       SFe_ppb = SFe_mgL*1000,
@@ -64,9 +64,9 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                
 unlink(infile1)
 
-metals = metals_new%>%
-  full_join(metals_edi)%>%
-  filter(month(Date)>=4,month(Date)<=9)
+metals = #metals_new%>%
+  metals_edi
+#%>%filter(month(Date)>=4,month(Date)<=9)
 
 metals$Date_22 = metals$Date
 year(metals$Date_22)=2022
@@ -77,7 +77,8 @@ lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2
 
 jpeg("./Figs/Surface iron (ppb).jpeg", res = 300, width = 6, height = 4, units = "in")
 metals%>%
-  filter(Reservoir == "BVR",
+  filter(year(Date)%in%c(2021,2022),
+         Reservoir == "BVR",
          Depth_m == 0.1,
          !is.na(TFe_mgL),
          Site==50)%>%
@@ -92,7 +93,8 @@ dev.off()
 
 jpeg("./Figs/Surface iron ST ratio.jpeg", res = 300, width = 6, height = 4, units = "in")
 metals%>%
-  filter(Reservoir == "BVR",
+  filter(year(Date)%in%c(2021,2022),
+         Reservoir == "BVR",
          Depth_m == 0.1,
          !is.na(TFe_mgL),
          !SFe_mgL<0,
@@ -110,7 +112,8 @@ dev.off()
 
 jpeg("./Figs/Surface Mn (ppb).jpeg", res = 300, width = 6, height = 4, units = "in")
 metals%>%
-  filter(Reservoir == "BVR",
+  filter(year(Date)%in%c(2021,2022),
+         Reservoir == "BVR",
          Depth_m == 0.1,
          !is.na(TMn_mgL),
          Site==50)%>%
@@ -125,7 +128,8 @@ dev.off()
 
 jpeg("./Figs/Surface Mn ST ratio.jpeg", res = 300, width = 6, height = 4, units = "in")
 metals%>%
-  filter(Reservoir == "BVR",
+  filter(year(Date)%in%c(2021,2022),
+         Reservoir == "BVR",
          Depth_m == 0.1,
          !is.na(TMn_mgL),
          !SMn_mgL<0,
@@ -302,7 +306,7 @@ ggarrange(p1,p2, common.legend = T, legend = "bottom")
 ```
 
 
-Weir figures
+Weir figures - HASN'T BEEN UPDATED WITH NEW METALS EDI PACKAGE
 ```{r}
 metals_2022 = read_csv("./Data/Drawdown Metals_updated.csv")
 

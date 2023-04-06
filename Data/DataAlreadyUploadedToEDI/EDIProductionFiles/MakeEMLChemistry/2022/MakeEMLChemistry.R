@@ -37,6 +37,7 @@ old <- old[old$Site!=100.1,]
 #add 8 flag for all DIC and DOC values run with NPOC
 old$Flag_DN_mgL[old$Flag_DOC_mgL==8] <- 8
 
+
 #get cols in same order
 new <- new[,colnames(old)]
 
@@ -68,6 +69,21 @@ chem$Flag_DOC_mgL[is.na(chem$Flag_DOC_mgL)] <- 0
 chem$Flag_DIC_mgL[is.na(chem$Flag_DIC_mgL)] <- 0
 chem$Flag_DC_mgL[is.na(chem$Flag_DC_mgL)] <- 0
 chem$Flag_DN_mgL[is.na(chem$Flag_DN_mgL)] <- 0
+
+#change B1 to B40
+chem$Site[chem$Site==1 & chem$Reservoir=="BVR"] <- 40
+
+#add a 1 flag for all NA samples
+chem$Flag_TN_ugL[is.na(chem$TN_ugL)] <- 1
+chem$Flag_TP_ugL[is.na(chem$TP_ugL)] <- 1
+chem$Flag_NH4_ugL[is.na(chem$NH4_ugL)] <- 1
+chem$Flag_NO3NO2_ugL[is.na(chem$NO3NO2_ugL)] <- 1
+chem$Flag_SRP_ugL[is.na(chem$SRP_ugL)] <- 1
+chem$Flag_DOC_mgL[is.na(chem$DOC_mgL)] <- 1
+chem$Flag_DIC_mgL[is.na(chem$DIC_mgL)] <- 1
+chem$Flag_DC_mgL[is.na(chem$DC_mgL)] <- 1
+chem$Flag_DN_mgL[is.na(chem$DN_mgL)] <- 1
+
 
 write.csv(chem, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022/chemistry_2013_2022.csv",row.names = FALSE)
 
@@ -265,7 +281,7 @@ make_eml(
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.3') #reserve new staging environment package id each year
+  package.id = 'edi.1025.5') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

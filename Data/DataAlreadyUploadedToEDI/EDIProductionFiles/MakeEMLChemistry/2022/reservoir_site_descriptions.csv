@@ -1,12 +1,15 @@
 ﻿Reservoir,Site,Site_description,Latitude,Longitude
-BVR,1,Outflow site at spillway,,
 FCR,1,Outflow site at spillway,37.30247,-79.83692
 FCR,10,Furthest upstream pelagic site in transitional zone,37.308619,-79.836774
 FCR,20,Different upstream pelagic site in transitional zone,37.30769,-79.8371
 FCR,30,Upstream pelagic site in transitional zone,37.30534,-79.8383
+BVR,40,Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir,37.314783,-79.820864
 FCR,45,Upstream pelagic site nearest to the deep hole,37.30418,-79.8383
 BVR,50,Deep hole or site nearest to dam,37.31288,-79.8159
+CCR,50,Pelagic deep hole site of Carvins Cove Reservoir near dam,37.3706,-79.9582
 FCR,50,Deep hole or site nearest to dam,37.30325,-79.8373
+GWR,50,Pelagic deep hole nearest to dam at Gatewood Reservoir,37.04435281,-80.86329915
+SHR,50,Pelagic deep hole nearest to dam at Spring Hollow Reservoir,37.23085223,-80.17590014
 BVR,51,Littoral site west of deep pelagic site (50),37.31267,-79.816592
 CCR,51,Site aadjacent to dam,37.3697,-79.958
 FCR,99,Farthest downstream site on inflow stream,37.307613,79.8360878

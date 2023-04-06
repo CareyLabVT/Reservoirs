@@ -26,7 +26,7 @@ Read data from EDI publication locally (Jan 2023)
 ```{r}
 ctd_edi <- read.csv("../CTD_EDI/CTD_2013_2022.csv")
 
-ctd = ctd_edi%>% #load saved data
+ctd = ctd_edi%>% #format
   mutate(Date = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))%>%
   filter(Reservoir=="BVR")
 ```
@@ -104,7 +104,7 @@ ysi_formatted = ysi%>%
   select(-DOSat)%>%
   filter(Date!="2021-05-31"|Depth_m<=10)
 
-Years = c(2021,2022)
+Years = 2013:2022
 Sites = c(50)
 
 # Combine CTD and YSI data

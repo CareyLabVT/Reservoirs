@@ -890,9 +890,11 @@ maxes = sum_plot4%>%
   summarize(max_date = DateTime[which.max(value)],
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
-  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date),
+         year_class = ifelse(Year == 2022,"2022","2013-2021"))
 maxes%>%
-  mutate(max_date=as.Date(max_date, origin="1970-01-01"))
+  mutate(max_date=as.Date(max_date, origin="1970-01-01"),
+         )
 as.Date("2022-07-05")-as.Date("2022-06-27")
 as.Date("2022-07-18")-as.Date("2022-06-27")
 
@@ -938,38 +940,36 @@ sum_plot4%>%
 ggsave("./Figs/Abby_money_plot_doc_long.jpeg", dpi = 300, width = 25, height = 5)
 
 sum_plot4%>%
-  ggplot(aes(x = DateTime, y = value, color = color))+
+  mutate(year_class = ifelse(Year == 2022,"2022","2013-2021"),
+         Year = as.factor(Year),
+         group = paste0(color,Year))%>%
+  ggplot(aes(x = yday(DateTime), y = value, color = Year, group = group))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(aes(xintercept = yday(as.Date(max_date, origin = "1970-01-01")), color = as.factor(Year)), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = yday(as.Date(Dates, origin = "1970-01-01")), lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
-                     labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
+  #scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
+  #                   labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
                      #limits = c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
-                     values = my_colors
-                     )+
-  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
-             labeller = labeller(name = fac.labs))+
+                     #values = my_colors
+                     #)+
+  facet_grid(rows = vars(name), cols = vars(year_class), scales = "free", switch = "y",
+             #labeller = labeller(name = fac.labs)
+             )+
   theme_bw()+
   theme(strip.placement = "outside", 
         strip.text.x = element_text(
         size = 12, face = "bold"
         ),
         axis.title.x = element_blank(),
-        strip.background = element_blank(),
-        legend.position = c(0.04,0.72),
-        legend.title=element_blank(),
-        legend.background = element_blank(),
-        legend.key= element_blank(),
-        legend.spacing.y = unit(0, 'cm'),
-        legend.text=element_text(size=7)
+        strip.background = element_blank()
         )+
   guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
-ggsave("./Figs/Abby_money_plot_doc.jpeg", dpi = 300, width = 25, height = 5)
+ggsave("./Figs/Abby_money_plot_doc_allYears.jpeg", dpi = 300, width = 7, height = 5)
 
 sum_plot5 = chem_full%>%
   filter(Depth_m ==0.1)%>%

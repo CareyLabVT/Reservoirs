@@ -8,7 +8,7 @@ library(stringr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("~/Documents/Virginia Tech/Sed Traps/2022")
+setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Metals")
 filteringlog <- read_excel('2022_SedTraps_FilteringLog.xlsx')
 
 #create first data frame
@@ -98,33 +98,34 @@ frame2 <- frame2 %>%
   mutate(Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'F','FCR',NA),
          Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'B','BVR', Reservoir),
          Depth_m = as.numeric(str_extract(frame2$Filter1ID, '(?<=_)[:digit:]+(?=m)')),
-         Site = 50, TrapXSA_m2 = 0.0040715, CombinedSedMass_g = Filter1Mass_g + Filter2Mass_g)
+         Site = 50, TrapXSA_m2 = 0.0040715)
 
+#
 
-#this will work when there is only one rep being used, but will not work for older data sets... might need
-#to set up an ifelse or for loop
-frame2 <- frame1 %>% 
-  select(FilterID, CollectionVol_L) %>% 
-  inner_join(frame2, by = join_by(FilterID == Filter1ID)) %>% 
-  rename(Filter1ID = FilterID, CombinedCollectionVol_L = CollectionVol_L)
-
-FilterSummary <- frame1 %>% 
-    filter(str_detect(FilterID, 'F1') | str_detect(FilterID, 'F2')) %>% 
-  group_by(Reservoir,DateTime,Depth_m,TrapRep) %>% 
-  summarise(CombinedFilterVol_L = sum(FilterVol_L))
-
-frame2 <- frame2 %>% 
-    mutate(TrapRep = as.numeric(str_extract(Filter1ID, '(?<=_R)[:digit:]+')))
-
-frame2 <- frame2 %>% 
-  full_join(FilterSummary)
+#Set up empty columns
+frame2_complete = frame2%>%
+  mutate(CombinedCollectionVol_L = NA,
+         CombinedFilterVol_L = NA,
+         CombinedSedMass_g_forLoop = NA,
+         CombinedXSA_m2 = NA)
+#Loop through all rows and sum data
+for(i in 1:nrow(frame2_complete)){
+  filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
+  filter2 = frame1%>%filter(FilterID==frame2_complete$Filter2ID[i]) #filter to the second filter
+  frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
+  frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
+  frame2_complete$CombinedSedMass_g_forLoop[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
+  frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
+}
   
 
-frame2 <- frame2 %>% mutate(ICPTFe_mgL = Fe_ppb/1000, ICPTMn_mgL = Mn_ppb/1000, DilutionFactor = 20,
+frame2 <- frame2_complete %>% mutate(ICPTFe_mgL = Fe_ppb/1000, ICPTMn_mgL = Mn_ppb/1000, DilutionFactor = 20,
                             TFe_g = (ICPTFe_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
                             TMn_g = (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L))
 
 #sort out the names and column order
 frame2 <- frame2 %>% rename("AcidVol_L" = "Vol_acid_L")
 
-#whoops still need to add Duration column                          
+#whoops still need to add Duration column         
+
+write.csv(frame2,"2022_FeMnCN.csv",row.names = F)

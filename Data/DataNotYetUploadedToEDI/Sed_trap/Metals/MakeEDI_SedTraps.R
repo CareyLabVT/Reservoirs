@@ -69,6 +69,7 @@ frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_mL",
                             "FilterMassPost_g" = "Filter_mass_post_filtering_g", 
                             "SedMass_g" = "Mass_of_sediment_g", "FilterID" = "Sample_ID")
 
+write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)
 
 #
 #
@@ -112,10 +113,15 @@ frame2_complete = frame2%>%
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
   filter2 = frame1%>%filter(FilterID==frame2_complete$Filter2ID[i]) #filter to the second filter
-  frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
-  frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
-  frame2_complete$CombinedSedMass_g_forLoop[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
-  frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
+  if(nrow(filter1)==1){
+    frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
+    frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
+    frame2_complete$CombinedSedMass_g_forLoop[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
+    frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
+  } else { warning(
+    paste0("Filter ",
+           frame2_complete$Filter1ID[i], 
+           " is in the filtering log ",  nrow(filter1)," times\n"))}
 }
   
 

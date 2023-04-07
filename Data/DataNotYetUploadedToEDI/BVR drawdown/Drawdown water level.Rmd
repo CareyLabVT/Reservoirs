@@ -31,12 +31,12 @@ sensor_depth = sensor%>%
          #WaterLevel = Lvl_psi*0.70455)%>%
   filter(year(DateTime)==2022,
          month(DateTime)>3,
-         WaterLevel>7.5)%>%
+         Depth_m_13>7.5)%>%
   arrange(DateTime)%>%
-  filter(!lag(WaterLevel)-WaterLevel>0.2)%>%
+  filter(!lag(Depth_m_13)-Depth_m_13>0.2)%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(WaterLevel = mean(WaterLevel))%>%
+  summarize(WaterLevel = mean(Depth_m_13))%>%
   mutate(Year = year(Date),
          Site = 50)
 
@@ -118,6 +118,23 @@ ggplotly(p)
 jpeg("./Figs/full_timeseries.jpg", width = 6, height = 4, units = "in", res = 300)
 p
 dev.off()
+
+full%>%
+  mutate(Date_22 = as.Date(yday(Date),origin = "2022-01-01"),
+         Year = as.factor(year(Date)),
+         year_class = ifelse(Year==2022,"2022","2013-2021"))%>%
+  filter(Year%in%2013:2022)%>%
+  ggplot(aes(x = Date_22, y = WaterLevel, color = year_class, group = Year))+
+  geom_line()+
+  scale_color_manual(values = c("grey80","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  expand_limits(y = 0)+
+  scale_x_date(date_labels = "%b")+
+  theme_bw()+
+  ylab("Depth (m)")+
+  theme(legend.position = "none",
+        axis.title.x = element_blank())
 ```
 
 ```{r ABP checking water level}

@@ -103,12 +103,14 @@ frame2 <- frame2 %>%
 
 #
 
+#Need to get data from each filter separately. Doing that in a for loop
 #Set up empty columns
 frame2_complete = frame2%>%
   mutate(CombinedCollectionVol_L = NA,
          CombinedFilterVol_L = NA,
          CombinedSedMass_g = NA,
-         CombinedXSA_m2 = NA)
+         CombinedXSA_m2 = NA,
+         Duration_days = NA)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
@@ -118,6 +120,7 @@ for(i in 1:nrow(frame2_complete)){
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
+    frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
   } else { warning(
     paste0("Filter ",
            frame2_complete$Filter1ID[i], 

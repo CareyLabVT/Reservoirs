@@ -107,7 +107,7 @@ frame2 <- frame2 %>%
 frame2_complete = frame2%>%
   mutate(CombinedCollectionVol_L = NA,
          CombinedFilterVol_L = NA,
-         CombinedSedMass_g_forLoop = NA,
+         CombinedSedMass_g = NA,
          CombinedXSA_m2 = NA)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
@@ -116,7 +116,7 @@ for(i in 1:nrow(frame2_complete)){
   if(nrow(filter1)==1){
     frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
-    frame2_complete$CombinedSedMass_g_forLoop[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
+    frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
   } else { warning(
     paste0("Filter ",

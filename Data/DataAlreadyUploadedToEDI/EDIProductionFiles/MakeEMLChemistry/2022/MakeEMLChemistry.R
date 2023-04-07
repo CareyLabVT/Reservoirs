@@ -340,11 +340,13 @@ make_eml(
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "2022_chemistry_collation.R",
+  other.entity = "QAQC_chemistry_2015_2022.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.10') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.11') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+
+# 2023 data pub = 199.10
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

@@ -37,6 +37,16 @@ old <- old[old$Site!=100.1,]
 #add 8 flag for all DIC and DOC values run with NPOC
 old$Flag_DN_mgL[old$Flag_DOC_mgL==8] <- 8
 
+#manual manipulation - NA for 2 2014 SRP values and associated 5 demonic intrusion flag 
+old$SRP_ugL[as.Date(old$DateTime)=="2014-04-30" & old$Reservoir=="BVR" & old$Depth_m==0.1] <- NA
+old$Flag_SRP_ugL[as.Date(old$DateTime)=="2014-04-30" & old$Reservoir=="BVR" & old$Depth_m==0.1] <- 5
+
+old$SRP_ugL[as.Date(old$DateTime)=="2014-06-04" & old$Reservoir=="BVR" & old$Depth_m==0.1] <- NA
+old$Flag_SRP_ugL[as.Date(old$DateTime)=="2014-06-04" & old$Reservoir=="BVR" & old$Depth_m==0.1] <- 5
+
+#and suspect sample flag (9) for 2017 TP sample
+old$Flag_TP_ugL[as.Date(old$DateTime)=="2017-07-20" & old$Reservoir=="BVR" & old$Depth_m==0.1 & old$TP_ugL==247.0 ] <- 9
+old$Flag_TN_ugL[as.Date(old$DateTime)=="2017-07-20" & old$Reservoir=="BVR" & old$Depth_m==0.1 & old$TN_ugL==3680 ] <- 9
 
 #get cols in same order
 new <- new[,colnames(old)]
@@ -126,8 +136,8 @@ bvrplots <- chemistry_long %>%
   ggtitle("BVR chem")+
   theme_bw()+
   facet_wrap(~metric, scales = 'free_y')
+ggplotly(bvrplots)
 
-bvrplots
 ggsave(file.path(getwd(),"./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2022/BVR_allyears_andnutrients.jpg"), width=4, height=4)
 
 ccrplots <- chemistry_long %>% 
@@ -281,7 +291,7 @@ make_eml(
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.5') #reserve new staging environment package id each year
+  package.id = 'edi.1025.6') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -330,11 +340,13 @@ make_eml(
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "2022_chemistry_collation.R",
+  other.entity = "QAQC_chemistry_2015_2022.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.10') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.11') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+
+# 2023 data pub = 199.10
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

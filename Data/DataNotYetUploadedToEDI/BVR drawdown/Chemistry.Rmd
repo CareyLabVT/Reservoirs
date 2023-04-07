@@ -60,7 +60,7 @@ chem = nuts%>%
 
 ```{r}
 #NOTE this is in staging, need to update
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1025/3/509f39850b6f95628d10889d66885b76" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1025/6/509f39850b6f95628d10889d66885b76" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -98,8 +98,12 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 unlink(infile1)
 
 dt1 = dt1%>%
+  filter(hour(DateTime)>8,hour(DateTime)<17)%>%
   mutate(DateTime=as.Date(DateTime))%>%
-  rename(PO4_ugL = SRP_ugL)
+  rename(PO4_ugL = SRP_ugL)%>%
+  mutate(PO4_ugL = ifelse(PO4_ugL>TP_ugL,NA,PO4_ugL),
+         TP_ugL = ifelse(Flag_TP_ugL%in%c(5,9)|TP_ugL>60,NA,TP_ugL),
+         TN_ugL = ifelse(Flag_TN_ugL%in%c(5,9),NA,TN_ugL))
 
 chem_full = dt1%>%
   filter(Reservoir=="BVR",
@@ -882,8 +886,8 @@ sum_plot4 = chem_full%>%
          name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name),
          name = ifelse(name%in%c("TP_ugL","PO4_ugL"),"Phosphorus",name))%>%
   mutate(name = factor(name, levels=c("Phosphorus","Phyto","DOC_mgL","co2_umolL","NH4_ugL")),
-         color = factor(color, levels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL"),
-                        labels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL")))
+         color = factor(color, levels=c("PO4_ugL","TP_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL"),
+                        labels=c("SRP (ug/L)","Total\nPhosphorus\n(ug/L)", "Total\nPhyto.\n(ug/L)", "Cyano\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")))
 
 maxes = sum_plot4%>%
   group_by(name,color, Year)%>%
@@ -939,23 +943,27 @@ sum_plot4%>%
                    cols = unit(2.5, "in"))
 ggsave("./Figs/Abby_money_plot_doc_long.jpeg", dpi = 300, width = 25, height = 5)
 
+# New facet label names for sum_plot
+fac.labs <- c("Total\nPhosphorus\n(ug/L)", "SRP (ug/L)","Total\nPhyto.\n(ug/L)", "Cyano\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("TP_ugL", "PO4_ugL", "TotalConc_ugL","Bluegreens_ugL","DOC_mgL", "co2_umolL", "NH4_ugL")
 sum_plot4%>%
   mutate(year_class = ifelse(Year == 2022,"2022","2013-2021"),
          Year = as.factor(Year),
          group = paste0(color,Year))%>%
-  ggplot(aes(x = yday(DateTime), y = value, color = Year, group = group))+
+  ggplot(aes(x = as.Date(yday(DateTime), origin = "2022-01-01"), y = value, color = year_class, group = group))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = yday(as.Date(max_date, origin = "1970-01-01")), color = as.factor(Year)), data = maxes, lwd = 2, alpha = 0.5)+
-  geom_vline(data=lines,aes(xintercept = yday(as.Date(Dates, origin = "1970-01-01")), lty = status), show.legend = F)+
+  geom_point(data = .%>%filter(Year==2022))+
+  geom_line(data = .%>%filter(Year==2022))+
+  geom_vline(aes(xintercept = max_date, color = year_class), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
-  #scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
-  #                   labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
-                     #limits = c("PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL"),
-                     #values = my_colors
-                     #)+
-  facet_grid(rows = vars(name), cols = vars(year_class), scales = "free", switch = "y",
-             #labeller = labeller(name = fac.labs)
+  scale_color_manual(values = c("grey80","#0800FA")
+                     )+
+  facet_grid(rows = vars(color), 
+             #cols = vars(year_class), 
+             scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs)
              )+
   theme_bw()+
   theme(strip.placement = "outside", 
@@ -963,13 +971,14 @@ sum_plot4%>%
         size = 12, face = "bold"
         ),
         axis.title.x = element_blank(),
-        strip.background = element_blank()
+        strip.background = element_blank(),
+        legend.position = "none"
         )+
   guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
-ggsave("./Figs/Abby_money_plot_doc_allYears.jpeg", dpi = 300, width = 7, height = 5)
+ggsave("./Figs/Abby_money_plot_doc_allYears.jpeg", dpi = 300, width = 4, height = 7)
 
 sum_plot5 = chem_full%>%
   filter(Depth_m ==0.1)%>%

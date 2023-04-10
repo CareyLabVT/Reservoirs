@@ -531,13 +531,14 @@ horiz_line = data.frame(name=rep("DOsat_percent",2),y = rep(100,2),Year=c(2021,2
   mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL","SFe_mgL","SMn_mgL")))
 sum_plot3%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
-  ggplot(aes(x = DateTime, y = value, lty = lty, color = name))+
+  ggplot()+
   #geom_hline(aes(yintercept = y),data=horiz_line, color = "grey20",alpha=0.3,size=1)+
-  geom_point(aes(alpha = show_points, color = name))+
-  geom_line()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(alpha = show_points, color = name,x = DateTime, y = value))+
+  geom_line(aes(x = DateTime, y = value, lty = lty, color = name))+
   scale_alpha_manual(values = c(0,1))+
   geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
+  #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   scale_linetype_manual(values = c("solid","11"),
                         breaks = c("solid","dashed"),
                         labels = c("Total","Soluble"),)+
@@ -677,7 +678,7 @@ as.Date("2022-07-05")-as.Date("2022-06-27")
 as.Date("2022-07-18")-as.Date("2022-06-27")
 
 # New facet label names for sum_plot
-fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","Phytoplankton\n(ug/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
+fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","Phytoplankton\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
 names(fac.labs) <- c("Phosphorus", "Nitrogen","Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
 
 my_colors = c("black","grey50","darkgreen","turquoise","blue","#8E4412","skyblue","magenta4","pink")
@@ -685,10 +686,10 @@ names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL"
 
 sum_plot4%>%
   ggplot()+
-  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey20", data = lines_rect, alpha = 0.2)+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
   geom_point(aes(y = value, x = DateTime,color = color))+
   geom_line(aes(y = value, lty=lty,x = DateTime,color = color))+
-  #geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("11","solid","solid"))+
   scale_color_manual(values = my_colors)+
@@ -730,7 +731,8 @@ sum_plot5 = chem_full%>%
          color = ifelse(name%in%c("CmaxDepth_TotalConc_ugL", "PeakWidth_TotalConc_m"),"TotalConc_ugL",
                         ifelse(name%in%c("PeakWidth_Bluegreens_m", "CmaxDepth_Bluegreens_ugL"),"Bluegreens_ugL",name)),
          name = ifelse(name%in%c("CmaxDepth_TotalConc_ugL", "CmaxDepth_Bluegreens_ugL"),"Cmax_depth",name),
-         name = ifelse(name%in%c("PeakWidth_TotalConc_m", "PeakWidth_Bluegreens_m"),"PeakWidth",name))%>%
+         name = ifelse(name%in%c("PeakWidth_TotalConc_m", "PeakWidth_Bluegreens_m"),"PeakWidth",name),
+         lty = ifelse(color == "Bluegreens_ugL","dashed","solid"))%>%
   mutate(name = factor(name, levels=c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")),
          color = factor(color, levels=c("Turbidity_NTU", "Zeu","TotalConc_ugL", "Bluegreens_ugL")))
 
@@ -764,16 +766,17 @@ scales <- list(
   scale_y_continuous()
 )
 sum_plot5%>%
-  ggplot(aes(x = DateTime, y = value, color = color))+
-  geom_point()+
-  geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = DateTime, y = value, color = color))+
+  geom_line(aes(x = DateTime, y = value, color = color,lty=lty))+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),
                      labels = c("Total (µg/L)","Cyanobacteria (µg/L)"),
                      values = my_colors
                      )+
+  scale_linetype_manual(values = c("11","solid"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(.rows = fac.labs))+
   theme_bw()+
@@ -791,7 +794,8 @@ sum_plot5%>%
         strip.background = element_blank(
      ))+
   ylab("")+
-  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75),
+         lty = "none")+
   facetted_pos_scales(y = scales)+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))

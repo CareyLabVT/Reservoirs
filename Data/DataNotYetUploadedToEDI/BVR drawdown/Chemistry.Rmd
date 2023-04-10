@@ -18,6 +18,10 @@ lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2
 
 lines = lines%>%
   filter(status == "init")
+
+lines_rect = lines%>%
+  select(-type)%>%
+  pivot_wider(names_from = desc, values_from = Dates)
 ```
 
 ```{r}
@@ -600,7 +604,7 @@ as.Date("2022-07-18")-as.Date("2022-06-27")
 fac.labs <- c("Phosphorus\n(ug/L)", "Phyto.\n(ug/L)", "pH", "DOC\n(mg/L)", "CO2\n(µmol/L)", "CH4\n(µmol/L)", "NH4 (µg/L)")
 names(fac.labs) <- c("Phosphorus", "Phyto", "pH", "DOC_mgL", "co2_umolL", "ch4_umolL", "NH4_ugL")
 
-my_colors = c("black","grey50","darkgreen","turquoise","blue","#8E4412","skyblue","pink","magenta4")
+my_colors = c("black","grey50","darkgreen","turquoise","blue","#8E4412","skyblue","magenta4","pink")
 names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","pH","DOC_mgL","ch4_umolL","co2_umolL","NH4_ugL")
 
 sum_plot4%>%
@@ -636,6 +640,75 @@ sum_plot4%>%
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
 ggsave("./Figs/Abby_money_plot_doc.jpeg", dpi = 300, width = 6.5, height = 6.5)
+
+sum_plot4 = chem_full%>%
+  filter(Depth_m ==0.1)%>%
+  select(DateTime, TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,DIC_mgL,NO3NO2_ugL,NH4_ugL, NO3NO2_ugL)%>%
+  full_join(fluora_surface%>%
+              filter(year(DateTime)%in% c(2021,2022)))%>%
+  full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Reservoir))%>%
+  full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
+  select(DateTime, TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,NH4_ugL,co2_umolL,Bluegreens_ugL)%>%
+  pivot_longer(cols = c(TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,co2_umolL,NH4_ugL,Bluegreens_ugL))%>%
+  filter(!is.na(value),
+         month(DateTime)>4,
+         month(DateTime)<9)%>%
+  mutate(Year = year(DateTime),
+         color = name,
+         name = ifelse(name%in%c("TotalConc_ugL","Bluegreens_ugL"),"Phyto",name),
+         name = ifelse(name%in%c("TP_ugL","PO4_ugL"),"Phosphorus",name),
+         name = ifelse(name%in%c("TN_ugL","NO3NO2_ugL","NH4_ugL"),"Nitrogen",name),
+         lty = ifelse(color%in%c("NO3NO2_ugL","NH4_ugL","PO4_ugL","Bluegreens_ugL"),"dashed","solid"))%>%
+  mutate(name = factor(name, levels=c("Phosphorus","Nitrogen","Phyto","DOC_mgL","co2_umolL")),
+         color = factor(color, levels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL"),
+                        labels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL")))
+
+maxes = sum_plot4%>%
+  group_by(name,color, Year)%>%
+  summarize(max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  filter(Year=="2022")%>%
+  mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
+maxes%>%
+  mutate(max_date=as.Date(max_date, origin="1970-01-01"))
+as.Date("2022-07-05")-as.Date("2022-06-27")
+as.Date("2022-07-18")-as.Date("2022-06-27")
+
+# New facet label names for sum_plot
+fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","Phytoplankton\n(ug/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("Phosphorus", "Nitrogen","Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
+
+my_colors = c("black","grey50","darkgreen","turquoise","blue","#8E4412","skyblue","magenta4","pink")
+names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL","NO3NO2_ugL")
+
+sum_plot4%>%
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey20", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(y = value, x = DateTime,color = color))+
+  geom_line(aes(y = value, lty=lty,x = DateTime,color = color))+
+  #geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("11","solid","solid"))+
+  scale_color_manual(values = my_colors)+
+  facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
+             labeller = labeller(name = fac.labs))+
+  theme_bw()+
+  theme(strip.placement = "outside", 
+        strip.text.x = element_text(
+        size = 12, face = "bold"
+        ),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        legend.position = "bottom")+
+  guides(color = guide_legend(byrow = TRUE,keyheight = 0.75),
+         lty= "none")+
+  ylab("")+
+  force_panelsizes(rows = unit(.75, "in"),
+                   cols = unit(2.5, "in"))
+ggsave("./Figs/Abby_money_plot_doc_short.jpeg", dpi = 300, width = 6.5, height = 5.5)
+
 
 sum_plot5 = chem_full%>%
   filter(Depth_m ==0.1)%>%

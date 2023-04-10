@@ -180,7 +180,7 @@ buoy_fig = buoy_max%>%
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
-  ylab("Buoyancy frequency")+
+  ylab("Maximum buoyancy\nfrequency (1/s)")+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank(),
         legend.position = "none")
@@ -374,10 +374,22 @@ wind = weather_sum%>%
   theme(axis.title.x = element_blank())
 
 rain = weather_sum%>%
+  filter(Rain_Total_mm>0)%>%
   ggplot(aes(x = Date_22, y = Rain_Total_mm, fill = Year, color = Year))+
   geom_point(shape = 21, stroke = .5, size = 1.5)+
-  scale_fill_manual(values = c("black","#00F7FF"))+
+  scale_fill_manual(values = c("black","#08F7FA"))+
   scale_color_manual(values = c("black","#0800FA"))+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  scale_linetype_manual(values = c("solid","dashed"))+
+  ylab("Rain (mm)")+
+  theme_bw()+
+  scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
+  theme(axis.title.x = element_blank())
+
+rain_bar = weather_sum%>%
+  ggplot(aes(x = Date_22, y = Rain_Total_mm, fill = Year))+
+  geom_col()+
+  scale_fill_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Rain (mm)")+
@@ -387,7 +399,7 @@ rain = weather_sum%>%
 
 rain_cum = cum_rain%>%
   ggplot(aes(x = Date_22, y = cum_rain_mm, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  geom_line(size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
@@ -437,6 +449,7 @@ dev.off()
 
 Lake number
 ```{r}
+source("thermo.depth.density.R")
 thermo_raw = catwalk_format%>%
   filter(!is.na(Reading),
          Sensor_depth>=0)%>%
@@ -448,7 +461,7 @@ thermo_raw = catwalk_format%>%
   arrange(Date,Depth_m)%>%
   group_by(Date)%>%
   filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
-  dplyr::summarize(thermo = thermo.depth(Temp_C, Depth_m),
+  dplyr::summarize(thermo = thermo.depth.density(Temp_C, Depth_m),
             Reservoir_depth = mean(Reservoir_depth))
 thermo_raw$Date_22 = thermo_raw$Date
 year(thermo_raw$Date_22)=2022
@@ -967,6 +980,7 @@ sensor_depth_plot = filt_no_surf%>%
   unique()%>%
   mutate(Date=as.Date(paste0(Year,"-01-01")))
 
+
 #Heatmap
 jpeg(paste0("./Figs/BVR_catwalk_heatmap_2022.jpeg"),width = 8, height = 4, units = "in", res = 300)
 p = interp%>%
@@ -979,10 +993,11 @@ p = interp%>%
   #geom_line(data = thermo_raw%>%
   #            mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
-  geom_line(data = light%>%
+  geom_line(data = thermo_raw%>%
               mutate(Year=year(Date))%>%
-              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth-Zeu, color = "Euphotic zone"))+
-  scale_color_manual(values = "black")+
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth-thermo, lty = "Thermocline"))+
+  geom_hline(aes(yintercept = 6.6, lty = "Out-take pipe"))+
+  #scale_linetype_manual(values = "dashed")+
   #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
   labs(y = "Height above sediments (m)")+
@@ -997,7 +1012,7 @@ p = interp%>%
   labs(color = "")+
   geom_point(data = sensor_depth_plot, aes(x = Date, y = Sensor_depth), shape = 23, fill = "black", color = "white", size  =2.5)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  scale_linetype_manual(values = c("solid","dotted","solid","dashed"),limits = c("Thermocline","Out-take pipe","final","init"),  name= NULL)+
   scale_fill_gradientn(name = "Water temperature\n(°C)",
                        limits = c(-1, 30),
                        colours = c("#313695", "#4575b4", "#74add1",

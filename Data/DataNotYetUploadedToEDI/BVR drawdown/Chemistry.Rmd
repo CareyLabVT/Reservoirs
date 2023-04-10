@@ -15,6 +15,9 @@ source("custom_facets.R")
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022, year_class = "2022")
+
+lines = lines%>%
+  filter(status == "init")
 ```
 
 ```{r}
@@ -219,6 +222,8 @@ chem_bvr%>%
   filter(Year==2021,month(DateTime)==9)
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
+lines = lines%>%
+  filter(status == "init")
 
 vars = c("NH4_ugL","PO4_ugL","DOC_mgL","NO3NO2_ugL")
 years = c(2021,2022)
@@ -335,7 +340,8 @@ fluora_surface=fluora%>%
   mutate(DateTime = as.Date(DateTime))%>%
   group_by(DateTime)%>%
   mutate(min_depth = min(Depth_m))%>%
-  filter(Depth_m==min_depth)
+  filter(Depth_m==min_depth)%>%
+  filter(year(DateTime)%in%c(2021,2022))
 
 
 fluora_surface$DateTime
@@ -385,7 +391,7 @@ sum_plot%>%
 dev.off()
 
 thermo_depth = read.csv("./Data/thermocline_depth.csv")%>%
-  filter(!year(Date)==2020)
+  filter(year(Date)%in%c(2022,2021))
 
 light = read.csv("./Data/attenuation_calc.csv")%>%
   filter(year(Date)%in%c(2021,2022))
@@ -396,10 +402,26 @@ ctd = read.csv("./Data/CTD at 0.1m.csv")%>%
 ghg = read.csv("./Data/GHG at 0.1m.csv")%>%
   filter(year(DateTime)%in%c(2021,2022))
 
-metals = read.csv("./Data/Metals at 0.1m.csv")
+metals_raw = read.csv("./Data/Metals at 0.1m.csv")%>%
+  filter(year(Date)%in%c(2021,2022))
 
-cmax_depth = read.csv("./Data/FP_CmaxDepth.csv")
-peak_width = read.csv("./Data/FP_PeakWidth.csv")
+#Additional QAQC needed (Days where soluble>total)
+metals = metals_raw%>%
+  mutate(TFe_mgL = ifelse(Date=="2022-05-09",metals_raw$SFe_mgL[metals_raw$Date=="2022-05-09"],TFe_mgL),
+         TMn_mgL = ifelse(Date=="2022-05-09",metals_raw$SMn_mgL[metals_raw$Date=="2022-05-09"],TMn_mgL),
+         SFe_mgL = ifelse(Date=="2022-05-09",metals_raw$TFe_mgL[metals_raw$Date=="2022-05-09"],SFe_mgL),
+         SMn_mgL = ifelse(Date=="2022-05-09",metals_raw$TMn_mgL[metals_raw$Date=="2022-05-09"],SMn_mgL),
+         TFe_mgL = ifelse(Date=="2022-06-07",NA,TFe_mgL),
+         TMn_mgL = ifelse(Date=="2022-06-07",NA,TMn_mgL))
+
+cmax_depth = read.csv("./Data/FP_CmaxDepth.csv")%>%
+  filter(year(Date)%in%c(2021,2022))
+
+peak_width = read.csv("./Data/FP_PeakWidth.csv")%>%
+  filter(year(Date)%in%c(2021,2022))
+
+chem_full = chem_full%>%
+  filter(year(DateTime)%in%c(2021,2022))
 
 sum_plot2 = chem_full%>%
   filter(Depth_m ==0.1)%>%
@@ -462,23 +484,29 @@ sum_plot3 = chem_full%>%
   full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Year,-Depth_m))%>%
   full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
-  select(DateTime, TFe_mgL,TMn_mgL,DOsat_percent,thermo)%>%
-  pivot_longer(cols = c(TFe_mgL,TMn_mgL,DOsat_percent,thermo))%>%
+  select(DateTime, TFe_mgL,TMn_mgL,SFe_mgL,SMn_mgL,DOsat_percent,thermo)%>%
+  pivot_longer(cols = c(TFe_mgL,TMn_mgL,SFe_mgL,SMn_mgL,DOsat_percent,thermo))%>%
   filter(!is.na(value),
          month(DateTime)>4,
          month(DateTime)<9)%>%
-  mutate(Year = year(DateTime))%>%
-  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
+  mutate(Year = year(DateTime),
+         color = name,
+         name = ifelse(name%in%c("SFe_mgL","TFe_mgL"),"Fe_mgL",name),
+         name = ifelse(name%in%c("SMn_mgL","TMn_mgL"),"Mn_mgL",name))%>%
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","Fe_mgL","Mn_mgL")),
+         color = factor(color, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL","SFe_mgL","SMn_mgL"),
+                        labels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL","SFe_mgL","SMn_mgL")),
+         lty = ifelse(color %in%c("SFe_mgL","SMn_mgL"),"dashed","solid"))
 
 maxes = sum_plot3%>%
-  group_by(name, Year)%>%
+  group_by(name, color,lty,Year)%>%
   summarize(max_date = DateTime[which.max(value)],
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
 
 sum_plot3%>%
-  group_by(name, Year)%>%
+  group_by(name, color,Year)%>%
   summarize(max_date = DateTime[which.max(value)],
             max = max(value),
             min_date = DateTime[which.min(value)],
@@ -486,8 +514,8 @@ sum_plot3%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
 
 # New facet label names for sum_plot
-fac.labs <- c("Surface DO\n(mgL)","Total Fe\n(mg/L)","Total Mn\n(mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
-names(fac.labs) <- c("DO_mgL","TFe_mgL","TMn_mgL","thermo","DOsat_percent")
+fac.labs <- c("Surface DO\n(mgL)","Fe (mg/L)","Mn (mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
+names(fac.labs) <- c("DO_mgL","Fe_mgL","Mn_mgL","thermo","DOsat_percent")
 library(ggh4x)
 scales <- list(
   scale_y_reverse(limits = c(NA,0)),
@@ -496,28 +524,39 @@ scales <- list(
   scale_y_continuous()
 )
 horiz_line = data.frame(name=rep("DOsat_percent",2),y = rep(100,2),Year=c(2021,2022))%>%
-  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL")))
+  mutate(name = factor(name, levels=c("thermo","DOsat_percent","TFe_mgL","TMn_mgL","SFe_mgL","SMn_mgL")))
 sum_plot3%>%
   mutate(show_points = ifelse(name == "thermo","n","y"))%>%
-  ggplot(aes(x = DateTime, y = value, color = name))+
-  geom_hline(aes(yintercept = y),data=horiz_line, color = "cyan4",alpha=0.3,size=1)+
-  geom_point(aes(alpha = show_points))+
+  ggplot(aes(x = DateTime, y = value, lty = lty, color = name))+
+  #geom_hline(aes(yintercept = y),data=horiz_line, color = "grey20",alpha=0.3,size=1)+
+  geom_point(aes(alpha = show_points, color = name))+
   geom_line()+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2, alpha = 0.5)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  geom_vline(aes(xintercept = max_date, color = name), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
+  scale_linetype_manual(values = c("solid","11"),
+                        breaks = c("solid","dashed"),
+                        labels = c("Total","Soluble"),)+
   scale_color_manual(values = c("darkblue","cyan4","lightsalmon","coral4"))+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+
-  theme(strip.placement = "outside", legend.position = "none",
+  theme(strip.placement = "outside", 
         strip.text.x = element_text(
         size = 12, face = "bold"
         ),
         axis.title.x = element_blank(),
-        strip.background = element_blank(
-     ))+
+        strip.background = element_blank(),
+        legend.position = c(0.15,0.42),
+        legend.title=element_blank(),
+        legend.background = element_blank(),
+        legend.key= element_blank(),
+        legend.spacing.y = unit(0, 'cm'),
+        legend.text=element_text(size=7)
+        )+
+  guides(lty = guide_legend(byrow = TRUE,keyheight = 0.75),
+         color = "none",
+         alpha = "none")+
   facetted_pos_scales(y = scales)+
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
@@ -568,7 +607,7 @@ sum_plot4%>%
   ggplot(aes(x = DateTime, y = value, color = color))+
   geom_point()+
   geom_line()+
-  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5)+
+  geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   scale_color_manual(breaks = c("TotalConc_ugL","Bluegreens_ugL"),

@@ -664,8 +664,8 @@ sum_plot4 = chem_full%>%
          name = ifelse(name%in%c("TN_ugL","NO3NO2_ugL","NH4_ugL"),"Nitrogen",name),
          lty = ifelse(color%in%c("NO3NO2_ugL","NH4_ugL","PO4_ugL","Bluegreens_ugL"),"dashed","solid"))%>%
   mutate(name = factor(name, levels=c("Phosphorus","Nitrogen","TNTP","Phyto","DOC_mgL","co2_umolL")),
-         color = factor(color, levels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL","TNTP"),
-                        labels=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL","TNTP")))
+         color = factor(color, levels=c("TP_ugL","PO4_ugL","TN_ugL","NH4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","TNTP"),
+                        labels=c("TP","PO4","TN","NH4","Total phytoplankton", "Cyanobacteria", "DOC", "CO2", "TN:TP")))
 
 maxes = sum_plot4%>%
   group_by(name,color, Year)%>%
@@ -683,7 +683,7 @@ fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","TN:TP ratio","Phytopla
 names(fac.labs) <- c("Phosphorus", "Nitrogen","TNTP","Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
 
 my_colors = c("black","black","darkgreen","darkgreen","#8E4412","blue","skyblue","skyblue","pink","orange")
-names(my_colors)=c("TP_ugL","PO4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","NH4_ugL","TN_ugL","NO3NO2_ugL","TNTP")
+names(my_colors)=c("TP","PO4","Total phytoplankton","Cyanobacteria","DOC","CO2","NH4","TN","NO3NO2_ugL","TN:TP")
 
 sum_plot4%>%
   ggplot()+
@@ -692,8 +692,14 @@ sum_plot4%>%
   geom_line(aes(y = value, lty=color,x = DateTime,color = color))+
   geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","11","solid","11","solid","solid","11","solid","solid"))+
-  scale_color_manual(values = my_colors)+
+  scale_linetype_manual(values = c("solid","11","solid","11","solid","11","solid","solid","solid"),
+                        #breaks = c("TP_ugL","PO4_ugL","TN_ugL","NH4_ugL","TotalConc_ugL","Bluegreens_ugL"),
+                        #labels = c("TP","PO4","TN","NH4","Total phytoplankton","Cyanobacteria")
+                        )+
+  scale_color_manual(values = my_colors, 
+                     #breaks = c("TP_ugL","PO4_ugL","TN_ugL","NH4_ugL","TotalConc_ugL","Bluegreens_ugL"),
+                     #labels = c("TP","PO4","TN","NH4","Total phytoplankton","Cyanobacteria")
+                     )+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   theme_bw()+
@@ -703,7 +709,8 @@ sum_plot4%>%
         ),
         axis.title.x = element_blank(),
         strip.background = element_blank(),
-        legend.position = "bottom")+
+        legend.position = "bottom",
+        legend.title = element_blank())+
   guides(color = guide_legend(byrow = TRUE,keyheight = 0.75))+
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),

@@ -13,6 +13,15 @@ library(lubridate)
 library(rLakeAnalyzer)
 library(akima)
 library(colorRamps)
+
+lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022, year_class = "2022")
+#Only plot pipe manipulations for now
+lines = lines%>%
+  filter(status == "init")
+#Re-format for rectangle instead of discrete lines
+lines_rect = lines%>%
+  select(-type)%>%
+  pivot_wider(names_from = desc, values_from = Dates)
 ```
 
 This file uses sensor data to create lake physics plots
@@ -148,19 +157,18 @@ year(bot$Date_22) = 2022
 # PLOT RESULTS
 ###
 
-lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022) #Drawdown dates
-
 jpeg("./Figs/Schmidt_exo.jpg",res = 300, units = "in",width = 6, height = 4)
 schmidt_fig = schmidt_df%>%
   filter(Year %in% c(2021,2022),
          !is.na(Schmidt))%>%
   mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = Schmidt, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22,y = Schmidt, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -173,12 +181,13 @@ jpeg("./Figs/buoyancy_freq.jpg",res = 300, units = "in",width = 6, height = 4)
 buoy_fig = buoy_max%>%
   mutate(Year = as.factor(year(Date)))%>%
   filter(Year %in% c(2021,2022))%>%
-  ggplot(aes(x = Date_22, y= max, color = Year, fill = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y= max, color = Year, fill = Year),shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
   ylab("Maximum buoyancy\nfrequency (1/s)")+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -192,12 +201,13 @@ water = vw_temp_df%>%
   filter(Year %in% c(2021,2022),
          !is.na(vw_temp))%>%
   mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = vw_temp, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = vw_temp, fill = Year, color = Year),shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Volume-weighted\nwater temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -209,12 +219,13 @@ dev.off()
 jpeg("./Figs/surface_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 surf_plot_save = surf_plot%>%
   mutate(Year = as.factor(Year))%>%
-  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = Reading, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Surface water temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -224,12 +235,13 @@ dev.off()
 
 jpeg("./Figs/hypo_temp.jpg",res = 300, units = "in",width = 6, height = 4)
 bot%>%
-  ggplot(aes(x = Date_22, y = Reading, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = Reading, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Bottom water temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -350,24 +362,26 @@ cum_rain = weather_sum%>%
   mutate(cum_rain_mm = cumsum(Rain_Total_mm))
 
 temp = weather_sum%>%
-  ggplot(aes(x = Date_22, y = AirTemp_C_Average, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = AirTemp_C_Average, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Air temperature (ºC)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
   theme(axis.title.x = element_blank())
 
 wind = weather_sum%>%
-  ggplot(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Wind speed (m/s)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -375,12 +389,13 @@ wind = weather_sum%>%
 
 rain = weather_sum%>%
   filter(Rain_Total_mm>0)%>%
-  ggplot(aes(x = Date_22, y = Rain_Total_mm, fill = Year, color = Year))+
-  geom_point(shape = 21, stroke = .5, size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_point(aes(x = Date_22, y = Rain_Total_mm, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#08F7FA"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Rain (mm)")+
   theme_bw()+
   scale_x_date(date_breaks = "2 month", date_labels =  "%b")+
@@ -388,6 +403,7 @@ rain = weather_sum%>%
 
 rain_bar = weather_sum%>%
   ggplot(aes(x = Date_22, y = Rain_Total_mm, fill = Year))+
+  #geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
   geom_col()+
   scale_fill_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
@@ -398,8 +414,9 @@ rain_bar = weather_sum%>%
   theme(axis.title.x = element_blank())
 
 rain_cum = cum_rain%>%
-  ggplot(aes(x = Date_22, y = cum_rain_mm, fill = Year, color = Year))+
-  geom_line(size = 1.5)+
+  ggplot()+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
+  geom_line(aes(x = Date_22, y = cum_rain_mm, fill = Year, color = Year),size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
@@ -709,10 +726,18 @@ meta_depths_raw%>%
   theme_bw()
 dev.off()
 
+flexible_bathy = cat_depths%>%
+  mutate(Reservoir = "BVR")%>%
+  full_join(bathy)%>%
+  group_by(Date)%>%
+  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(WaterLevel)) + 1)%>%
+  filter(Depth_m>=-1)
+
 meta_ratio = flexible_bathy%>%
   left_join(meta_depths%>%pivot_wider(names_from = name, values_from = value))%>%
   filter(!is.na(epi_depth),
          !is.na(hypo_depth))%>%
+  mutate(Volume_L = Volume_layer_L)%>%
   group_by(Date)%>%
   dplyr::summarize(depth_above_epi = max(Depth_m[Depth_m<(epi_depth)]),
             epi_and_below = sum(Volume_L[Depth_m<=depth_above_epi]),
@@ -782,18 +807,19 @@ dev.off()
 
 meta_ratio = flexible_bathy%>%
   left_join(thermo_raw)%>%
-  filter(!is.na(thermo))%>%
+  filter(!is.na(thermo),thermo>0)%>%
   group_by(Date)%>%
+  rename(Volume_L = Volume_layer_L)%>%
   dplyr::summarize(depth_above_thermo = max(Depth_m[Depth_m<(thermo)]),
             thermo_and_just_below = sum(Volume_L[Depth_m<=depth_above_thermo]), #1m layers
             correction_thermo = unique(1-(thermo-depth_above_thermo))*Volume_L[Depth_m==depth_above_thermo],
-            depth_above_water = Depth_m[Depth_m<0],
+            depth_above_water = unique(Depth_m[Depth_m<0]),
             correction_surf = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
-            epi_volume = thermo_and_just_below-correction_thermo-correction_surf,
+            epi_volume = unique(thermo_and_just_below-correction_thermo-correction_surf),
             hypo_and_above = sum(Volume_L[Depth_m>=depth_above_thermo]),
             correction_hypo = unique(thermo-depth_above_thermo)*Volume_L[Depth_m==depth_above_thermo],
-            hypo_volume = hypo_and_above-correction_hypo,
-            epi_hypo_ratio = epi_volume/hypo_volume
+            hypo_volume = unique(hypo_and_above-correction_hypo),
+            epi_hypo_ratio = unique(epi_volume/hypo_volume)
   )
 
 meta_ratio$Date_22 = meta_ratio$Date
@@ -857,9 +883,10 @@ meta_ratio%>%
   pivot_longer(cols = c(epi_volume,hypo_volume))%>%
   mutate(name = ifelse(name=="epi_volume","Epilimnetic volume","Hypolimnetic volume"),
          name = factor(name,levels = c("Epilimnetic volume","Hypolimnetic volume")))%>%
-  ggplot(aes(x = Date_22, y = value/1000, fill = name))+
+  ggplot()+
   scale_fill_manual(values = c("#77c7fc","#104466"))+
-  geom_area()+
+  geom_area(aes(x = Date_22, y = value/1000, fill = name))+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "black", data = lines_rect, alpha = 0.15)+
   geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   scale_linetype_manual(values = c("solid","dashed"))+
   facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
@@ -989,14 +1016,15 @@ p = interp%>%
   filter(!is.na(z))%>%
   ggplot()+
   geom_raster(aes(x=x, y=y,fill = z))+
-  geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.2)+
+  geom_ribbon(data = depth_sum, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white", color = "black",lwd=.3)+
+  geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "black", data = lines_rect, alpha = 0.15)+
   #geom_line(data = thermo_raw%>%
   #            mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth - thermo))+
   geom_line(data = thermo_raw%>%
               mutate(Year=year(Date))%>%
-              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth-thermo, lty = "Thermocline"))+
-  geom_hline(aes(yintercept = 6.6, lty = "Out-take pipe"))+
+              filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth-thermo, lty = "Thermocline"), lwd = .2)+
+  geom_hline(aes(yintercept = 6.6, lty = "Out-take pipe"), alpha = 0.3)+
   #scale_linetype_manual(values = "dashed")+
   #geom_line(data = meta_depths%>%mutate(Year=year(Date))%>%
   #            filter(Year%in%c(2021,2022)), aes(x = Date, y = Reservoir_depth -value, group = name), lty = "dashed")+
@@ -1011,8 +1039,8 @@ p = interp%>%
              )+
   labs(color = "")+
   geom_point(data = sensor_depth_plot, aes(x = Date, y = Sensor_depth), shape = 23, fill = "black", color = "white", size  =2.5)+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dotted","solid","dashed"),limits = c("Thermocline","Out-take pipe","final","init"),  name= NULL)+
+  geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
+  scale_linetype_manual(values = c("solid","84"),limits = c("Thermocline","Out-take pipe"),  name= NULL)+
   scale_fill_gradientn(name = "Water temperature\n(°C)",
                        limits = c(-1, 30),
                        colours = c("#313695", "#4575b4", "#74add1",

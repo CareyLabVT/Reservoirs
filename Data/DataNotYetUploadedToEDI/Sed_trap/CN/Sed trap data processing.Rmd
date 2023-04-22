@@ -123,7 +123,6 @@ for(i in 1:nrow(frame2_complete)){
 
 Now that we have sed weights, finish processing
 ```{r}
-  
 CN_DONE = frame2_complete%>%
   filter(!is.na(CombinedXSA_m2))%>%
   rename(Entered_weight_mg = Weight_mg)%>%
@@ -150,6 +149,8 @@ metals_to_combine = read.csv("../Metals/2022_FeMnCN.csv")%>%
 comb_raw = CN_DONE%>%
   rename(DateTime = Date_sampled)%>%
   full_join(metals_to_combine)
+
+mean(unique(frame1$CollectionVol_L), na.rm=T)
 ```
 
 

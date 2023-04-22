@@ -29,6 +29,7 @@ library(tidyverse)
 library(lubridate)
 library(akima)
 library(colorRamps)
+library(ggh4x)
 
 #Define drawdown lines
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022, year_class = "2022")
@@ -233,7 +234,6 @@ sum_plot3%>%
 # New facet label names for sum_plot
 fac.labs <- c("Surface DO\n(mgL)","Fe (mg/L)","Mn (mg/L)","Thermocline\ndepth (m)","Surface DO\n(% saturation)")
 names(fac.labs) <- c("DO_mgL","Fe_mgL","Mn_mgL","thermo","DOsat_percent")
-library(ggh4x)
 scales <- list(
   scale_y_reverse(limits = c(NA,0)),
   scale_y_continuous(),
@@ -291,8 +291,8 @@ sum_plot4 = chem_full%>%
               filter(year(DateTime)%in% c(2021,2022)))%>%
   full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
   mutate(TNTP = TN_ugL/TP_ugL)%>%
-  select(DateTime, TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,NH4_ugL,co2_umolL,Bluegreens_ugL,TNTP)%>%
-  pivot_longer(cols = c(TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,co2_umolL,NH4_ugL,Bluegreens_ugL,TNTP))%>% #pivot for facet wrap
+  select(DateTime, TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,NH4_ugL,co2_umolL,Bluegreens_ugL)%>%
+  pivot_longer(cols = c(TP_ugL, TN_ugL,PO4_ugL,DOC_mgL,TotalConc_ugL,co2_umolL,NH4_ugL,Bluegreens_ugL))%>% #pivot for facet wrap
   filter(!is.na(value),
          month(DateTime)>4,
          month(DateTime)<9)%>%
@@ -302,9 +302,9 @@ sum_plot4 = chem_full%>%
          name = ifelse(name%in%c("TP_ugL","PO4_ugL"),"Phosphorus",name), #Re-format to get solubles on the same plot as totals
          name = ifelse(name%in%c("TN_ugL","NO3NO2_ugL","NH4_ugL"),"Nitrogen",name),
          lty = ifelse(color%in%c("NO3NO2_ugL","NH4_ugL","PO4_ugL","Bluegreens_ugL"),"dashed","solid"))%>%
-  mutate(name = factor(name, levels=c("Phosphorus","Nitrogen","TNTP","Phyto","DOC_mgL","co2_umolL")),
-         color = factor(color, levels=c("TP_ugL","PO4_ugL","TN_ugL","NH4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL","TNTP"),
-                        labels=c("TP","PO4","TN","NH4","Total phytoplankton", "Cyanobacteria", "DOC", "CO2", "TN:TP"))) #Re-label colors
+  mutate(name = factor(name, levels=c("Phosphorus","Nitrogen","Phyto","DOC_mgL","co2_umolL")),
+         color = factor(color, levels=c("TP_ugL","PO4_ugL","TN_ugL","NH4_ugL","TotalConc_ugL","Bluegreens_ugL","DOC_mgL","co2_umolL"),
+                        labels=c("TP","PO4","TN","NH4","Total phytoplankton", "Cyanobacteria", "DOC", "CO2"))) #Re-label colors
 
 #Calculate maxes
 maxes = sum_plot4%>%
@@ -321,11 +321,14 @@ as.Date("2022-07-05")-as.Date("2022-06-27")
 as.Date("2022-07-18")-as.Date("2022-06-27")
 
 # New facet label names for sum_plot
-fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","TN:TP ratio","Phytoplankton\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
-names(fac.labs) <- c("Phosphorus", "Nitrogen","TNTP","Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
+fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","Phytoplankton\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
+names(fac.labs) <- c("Phosphorus", "Nitrogen","Phyto", "DOC_mgL", "co2_umolL", "NH4_ugL")
 #Specify colors
-my_colors = c("black","black","darkgreen","darkgreen","#8E4412","blue","skyblue","skyblue","pink","orange")
-names(my_colors)=c("TP","PO4","Total phytoplankton","Cyanobacteria","DOC","CO2","NH4","TN","NO3NO2_ugL","TN:TP")
+my_colors = c("black","black","magenta4","magenta4","darkgreen","darkgreen","#8E4412","blue")
+my_lines = c("solid","11","solid","11","solid","11","solid","solid")
+labels=c("TP",bquote(PO[4]),"TN",bquote(NH[4]),"Total phytoplankton","Cyanobacteria","DOC",bquote(CO[2]))
+names_orig=c("TP","PO4","TN","NH4","Total phytoplankton","Cyanobacteria","DOC","CO2")
+#names(my_lines)=c("TP",expression(PO[4]),"Total phytoplankton","Cyanobacteria","DOC","CO2","NH4","TN")
 
 #PLOT
 sum_plot4%>%
@@ -334,9 +337,13 @@ sum_plot4%>%
   geom_point(aes(y = value, x = DateTime,color = color))+
   geom_line(aes(y = value, lty=color,x = DateTime,color = color))+
   geom_vline(aes(xintercept = max_date, color = color), data = maxes, lwd = 2, alpha = 0.5, show.legend = F)+
-  scale_linetype_manual(values = c("solid","11","solid","11","solid","11","solid","solid","solid"),
+  scale_linetype_manual(values = my_lines,
+                        labels = labels,
+                        breaks = names_orig
                         )+
-  scale_color_manual(values = my_colors, 
+  scale_color_manual(values = my_colors,
+                     labels = labels,
+                     breaks = names_orig 
                      )+
   facet_grid(rows = vars(name), cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
@@ -353,7 +360,7 @@ sum_plot4%>%
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
-ggsave("./Figs/Abby_money_plot_doc_short.jpeg", dpi = 300, width = 6.5, height = 6.5)
+ggsave("./Figs/Abby_money_plot_doc_short.jpeg", dpi = 300, width = 6.5, height = 5.5)
 ```
 
 Code chunk 7: Make line plot of turbidity, euphotic zone, peak width, and peak depth (Figure PHYTOS)
@@ -399,7 +406,7 @@ sum_plot5%>%
   mutate(pct = (max[Year==2022]-max[Year==2021])/max[Year==2021]*100)
 
 # New facet label names for sum_plot
-fac.labs <- c("Turbidity\n(NTU)", "Euphotic zone\ndepth (m)", "C[max]\ndepth(m)", "Peak width\n(m)")
+fac.labs <- c("Turbidity\n(NTU)", "Euphotic zone\ndepth (m)", "C[max]\ndepth (m)", "Peak width\n(m)")
 names(fac.labs) <- c("Turbidity_NTU", "Zeu", "Cmax_depth", "PeakWidth")
 my_colors = c("grey20","goldenrod","darkgreen","turquoise")
 names(my_colors)=c("Turbidity_NTU", "Zeu","TotalConc_ugL", "Bluegreens_ugL")

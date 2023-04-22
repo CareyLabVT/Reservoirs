@@ -186,6 +186,8 @@ ctd_adj_depth = ctd_sensor%>%
 
 
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
+lines = lines%>%
+  filter(status == "init")
 
 vars = c("Temp_C",
          #"Chla_ugL",
@@ -258,15 +260,16 @@ for(i in 1:length(vars)){
   p = interp%>%
     mutate(x = as.Date(x, origin = "1970-01-01"),
            Year = year(x))%>%
-    ggplot(aes(x=x))+
-    geom_raster(aes(fill = z, y=y))+
+    ggplot()+
+    geom_raster(aes(x=x,fill = z, y=y))+
     scale_y_continuous(expand = c(0,0),limits = c(0, NA))+
     labs(x = "", y = "Height above sediments (m)")+
     scale_fill_gradientn(colours = if(var%in%c("DO_mgL","DO_pSat","ORP_mV")){rev(color_freya)}else{color_freya}, na.value="white", name = names[i])+
     geom_ribbon(data = sensor_depth, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white",color = "black",lwd=.2)+
     geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
+    geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "black", data = lines_rect, alpha = 0.15)+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-  scale_linetype_manual(values = c("solid","dashed"))+
+    #scale_linetype_manual(values = c("solid","dashed"))+
     scale_x_date(expand = c(0,0))+
     theme(panel.border = element_rect(fill = NA),
           panel.background = element_rect(fill = "white"),

@@ -10,9 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 ```
-TO DO: 
-- pull in ALL sediment weights
-
 
 Load data for samples run in 2022/2023
 ```{r}

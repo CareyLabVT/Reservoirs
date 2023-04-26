@@ -58,7 +58,7 @@ frame1 <- frame1 %>%
 frame1 <- frame1 %>% 
     mutate(SedFlux_gm2d = (((Mass_of_sediment_g/Volume_filtered_mL) * CollectionVol_L) / (TrapXSA_m2 * Duration_days)))
 
-#reorder columns in the first data frame and rename
+#reorder columns in the first data frame and rename. Prep for EDI publishing
 frame1 <- frame1 %>% 
   select(Reservoir, DateTime, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
   CollectionVol_L, FilterRep, Volume_filtered_mL, Filter_mass_pre_filtering_g,
@@ -68,6 +68,13 @@ frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_mL",
                             "FilterMassPre_g" = "Filter_mass_pre_filtering_g",
                             "FilterMassPost_g" = "Filter_mass_post_filtering_g", 
                             "SedMass_g" = "Mass_of_sediment_g", "FilterID" = "Sample_ID")
+
+frame1 = frame1%>%
+  mutate(Flag_CollectionVol_L = ifelse(is.na(CollectionVol_L),2,1),
+         CollectionVol_L = ifelse(is.na(CollectionVol_L),1700,CollectionVol_L),
+         Flag_SedMass_g = ifelse(SedMass_g<0,2,1),
+         SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
+  
 
 write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)
 

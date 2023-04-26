@@ -144,7 +144,7 @@ metals_to_combine = read.csv("../Metals/2022_FeMnCN.csv")%>%
   mutate(DateTime=as.Date(DateTime))
 
 comb_raw = CN_DONE%>%
-  rename(DateTime = Date_sampled)%>%
+  rename(Date = Date_sampled)%>%
   full_join(metals_to_combine)
 
 comb_formatted = comb_raw%>%
@@ -153,7 +153,7 @@ comb_formatted = comb_raw%>%
          TOC_g = C_mass_traps_g,
          TN_g = N_mass_traps_g)%>%
   dplyr::select(Reservoir, 
-                DateTime,
+                Date,
                 Site,
                 Duration_days,
                 Depth_m,

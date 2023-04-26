@@ -1,4 +1,4 @@
-"Reservoir","DateTime","Site","Duration_days","Depth_m","TrapRep","TrapXSA_m2","TrapVol_L","CollectionVol_L","FilterRep","FilterVol_L","FilterMassPre_g","FilterMassPost_g","SedMass_g","SedFlux_gm2d","FilterID","Flag_CollectionVol_L","Flag_SedMass_g"
+"Reservoir","Date","Site","Duration_days","Depth_m","TrapRep","TrapXSA_m2","TrapVol_L","CollectionVol_L","FilterRep","FilterVol_L","FilterMassPre_g","FilterMassPost_g","SedMass_g","SedFlux_gm2d","FilterID","Flag_CollectionVol_L","Flag_SedMass_g"
 "FCR",2022-05-02,50,20,4,1,0.0040715,2,1793,1,138,0.108,0.112,0.004,0.638229331852556,"F_sed_4m_R1_F1_02May22",1,1
 "FCR",2022-05-02,50,20,4,1,0.0040715,2,1793,2,142,0.108,0.115,0.00700000000000001,1.0854393214253,"F_sed_4m_R1_F2_02May22",1,1
 "FCR",2022-05-02,50,20,4,1,0.0040715,2,1793,3,140,0.107,0.113,0.00600000000000001,0.943667654953423,"F_sed_4m_R1_F3_02May22",1,1

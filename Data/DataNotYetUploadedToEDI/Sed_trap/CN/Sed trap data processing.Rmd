@@ -141,7 +141,7 @@ CN_DONE%>%
   facet_wrap(~Reservoir)
 
 metals_to_combine = read.csv("../Metals/2022_FeMnCN.csv")%>%
-  mutate(DateTime=as.Date(DateTime))
+  mutate(Date=as.Date(Date))
 
 comb_raw = CN_DONE%>%
   rename(Date = Date_sampled)%>%
@@ -157,9 +157,9 @@ comb_formatted = comb_raw%>%
                 Site,
                 Duration_days,
                 Depth_m,
-                TrapXSA_m2,
                 Filter1ID,
                 Filter2ID,
+                CombinedXSA_m2,
                 CombinedCollectionVol_L,
                 CombinedFilterVol_L,
                 CombinedSedMass_g,
@@ -175,7 +175,7 @@ comb_formatted = comb_raw%>%
                 TN_g,
                 TOCFlux_gm2d,
                 TNFlux_gm2d)%>%
-  arrange(DateTime)
+  arrange(Date)
 
 write.csv(comb_formatted,"../Table2_output_2022.csv",row.names=F)
 

@@ -22,10 +22,10 @@ frame1 <- frame1 %>%
   mutate(Reservoir = ifelse(substring(frame1$Sample_ID, 1,1) == 'F','FCR',NA),
         Reservoir = ifelse(substring(frame1$Sample_ID, 1,1) == 'B','BVR', Reservoir))
 
-    #DateTime
-#frame1$DateTime <- as.Date(substring(frame1$Sample_ID, 16,22), format = '%d%b%y')
+    #Date
+#frame1$Date <- as.Date(substring(frame1$Sample_ID, 16,22), format = '%d%b%y')
 frame1 <- frame1 %>% 
-  mutate(DateTime = as.Date(as.character(str_extract(frame1$Sample_ID, '(?<=_)[:digit:]*[:alpha:]*[:digit:]*$')), format = '%d%b%y'))
+  mutate(Date = as.Date(as.character(str_extract(frame1$Sample_ID, '(?<=_)[:digit:]*[:alpha:]*[:digit:]*$')), format = '%d%b%y'))
          
     #Site
 frame1$Site <- 50
@@ -46,7 +46,7 @@ frame1$TrapVol_L <- 2
 
     #CollectionVol_L
 frame1 <- frame1 %>% 
-  group_by(Reservoir, Depth_m, TrapRep, DateTime) %>% 
+  group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
   mutate(CollectionVol_L = sum(Volume_filtered_mL) + unique(Volume_discarded_mL)) %>% 
   ungroup()
 
@@ -60,7 +60,7 @@ frame1 <- frame1 %>%
 
 #reorder columns in the first data frame and rename. Prep for EDI publishing
 frame1 <- frame1 %>% 
-  select(Reservoir, DateTime, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
+  select(Reservoir, Date, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
   CollectionVol_L, FilterRep, Volume_filtered_mL, Filter_mass_pre_filtering_g,
   Filter_mass_post_filtering_g, Mass_of_sediment_g, SedFlux_gm2d, Sample_ID)
 
@@ -95,9 +95,9 @@ frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple
 
   #separating to get sample date
 frame2 <- frame2 %>% 
-    separate(JeffID,c("Sample","DateTime"),"_")
-frame2$DateTime <- as.Date(frame2$DateTime, format = '%d%b%y') #NIST Standard and Acid Blank will go to NA
-frame2 <- frame2[!(is.na(frame2$DateTime)), ] #removes NIST Standard and Acid Blank
+    separate(JeffID,c("Sample","Date"),"_")
+frame2$Date <- as.Date(frame2$Date, format = '%d%b%y') #NIST Standard and Acid Blank will go to NA
+frame2 <- frame2[!(is.na(frame2$Date)), ] #removes NIST Standard and Acid Blank
 
 
   #let's use the first filter ID to extract reservoir and depth info (should be the same year to year)

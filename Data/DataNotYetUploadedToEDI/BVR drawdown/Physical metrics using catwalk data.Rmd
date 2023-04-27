@@ -167,7 +167,7 @@ schmidt_fig = schmidt_df%>%
   geom_point(aes(x = Date_22,y = Schmidt, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Schmidt stability (J/m^2)")+
   theme_bw()+
@@ -186,7 +186,7 @@ buoy_fig = buoy_max%>%
   geom_point(aes(x = Date_22, y= max, color = Year, fill = Year),shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   theme_bw()+
   ylab("Maximum buoyancy\nfrequency (1/s)")+
@@ -206,7 +206,7 @@ water = vw_temp_df%>%
   geom_point(aes(x = Date_22, y = vw_temp, fill = Year, color = Year),shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Volume-weighted\nwater temperature (ºC)")+
   theme_bw()+
@@ -224,7 +224,7 @@ surf_plot_save = surf_plot%>%
   geom_point(aes(x = Date_22, y = Reading, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Surface water temperature (ºC)")+
   theme_bw()+
@@ -240,7 +240,7 @@ bot%>%
   geom_point(aes(x = Date_22, y = Reading, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Bottom water temperature (ºC)")+
   theme_bw()+
@@ -367,7 +367,7 @@ temp = weather_sum%>%
   geom_point(aes(x = Date_22, y = AirTemp_C_Average, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Air temperature (ºC)")+
   theme_bw()+
@@ -380,7 +380,7 @@ wind = weather_sum%>%
   geom_point(aes(x = Date_22, y = WindSpeed_Average_m_s, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#00F7FF"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Wind speed (m/s)")+
   theme_bw()+
@@ -394,7 +394,7 @@ rain = weather_sum%>%
   geom_point(aes(x = Date_22, y = Rain_Total_mm, fill = Year, color = Year), shape = 21, stroke = .5, size = 1.5)+
   scale_fill_manual(values = c("black","#08F7FA"))+
   scale_color_manual(values = c("black","#0800FA"))+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+  geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
   #scale_linetype_manual(values = c("solid","dashed"))+
   ylab("Rain (mm)")+
   theme_bw()+
@@ -479,7 +479,8 @@ thermo_raw = catwalk_format%>%
   group_by(Date)%>%
   filter((Depth_m-lag(Depth_m)>.4)|(Depth_m-lag(Depth_m)<0)|is.na(lag(Depth_m)))%>%
   dplyr::summarize(thermo = thermo.depth.density(Temp_C, Depth_m),
-            Reservoir_depth = mean(Reservoir_depth))
+            Reservoir_depth = mean(Reservoir_depth))%>%
+  filter(is.na(thermo)|thermo>0)
 thermo_raw$Date_22 = thermo_raw$Date
 year(thermo_raw$Date_22)=2022
 

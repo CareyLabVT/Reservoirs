@@ -6,10 +6,25 @@ library(readxl)
 library(lubridate)
 library(stringr)
 
+###
+# 2022 data
+###
+
+
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
 setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
 filteringlog <- read_excel('2022_SedTraps_FilteringLog.xlsx')
+log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")
+log_2019 <- read_excel("2019_FilteringLog_EDI.xlsx")
+log_2020 <- read_excel("2020_FilteringLog_EDI.xlsx")
+log_2021 <- read_excel("2021_FilteringLog_EDI.xlsx")
+
+filteringlog = filteringlog%>%
+  rbind(log_2018)%>%
+  rbind(log_2019)%>%
+  rbind(log_2020)%>%
+  rbind(log_2021)
 
 #create first data frame
 frame1 <- select(filteringlog, Sample_ID, Volume_filtered_mL, Volume_discarded_mL, 
@@ -46,6 +61,7 @@ frame1$TrapVol_L <- 2
 
     #CollectionVol_L
 frame1 <- frame1 %>% 
+  mutate(Volume_discarded_mL = ifelse(year(Date)==2019&Date<"2019-09-15",NA,Volume_discarded_mL))%>% #Mistakes in filtering log before this point
   group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
   mutate(CollectionVol_L = sum(Volume_filtered_mL) + unique(Volume_discarded_mL)) %>% 
   ungroup()
@@ -72,7 +88,9 @@ frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_mL",
 frame1 = frame1%>%
   mutate(Flag_CollectionVol_L = ifelse(is.na(CollectionVol_L),2,1),
          CollectionVol_L = ifelse(is.na(CollectionVol_L),1700,CollectionVol_L),
-         Flag_SedMass_g = ifelse(SedMass_g<0,2,1),
+         
+         Flag_SedMass_g = ifelse(is.na(SedMass_g),2,1),
+         Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g),
          SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
   
 

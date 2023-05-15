@@ -36,7 +36,7 @@ cn_processed = cn_raw%>%
          Reservoir = ifelse(substring(Name,1,1)%in%c("b","B"),"BVR",Reservoir),
          cut = substring(Name,2),
          Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
-         cut = sub("[0-9]+[a-z]+[0-9]+","",cut),
+         cut = sub("[0-9]+[a-z]+[0-9]+","",cut,ignore.case=T),
          Depth_m = as.numeric(sub("_","",sub("m.+","",cut))),
          cut = sub("_[0-9]+m_","",cut),
          cut = ifelse(cut=="r1f2","r1f2_r1f2",cut),
@@ -82,7 +82,7 @@ cn_to_combine = cn_processed%>%
 
 This bit is copied from Cece's script and could be standardized
 ```{r}
-frame1 = read.csv("../Metals/FilteringLog_EDI.csv")
+frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 
 #let's use the first filter ID to extract reservoir and depth info (should be the same year to year)
 #also add in info that never changes
@@ -103,19 +103,27 @@ frame2_complete = frame2%>%
          Duration_days = NA)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
-  filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
-  filter2 = frame1%>%filter(FilterID==frame2_complete$Filter2ID[i]) #filter to the second filter
-  if(nrow(filter1)==1){
+  filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
+  filter2 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter2ID[i])) #filter to the second filter
+  if(nrow(filter1)==1&nrow(filter2)==1){
     frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
     frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
-  } else { warning(
-    paste0("Filter ",
-           frame2_complete$Filter1ID[i], 
-           " is in the filtering log ",  nrow(filter1)," times\n"))}
+  } else { 
+    if(!nrow(filter1)==1){warning(
+      paste0("Filter ",
+             frame2_complete$Filter1ID[i], 
+             " is in the filtering log ",  nrow(filter1)," times\n"))}
+    if(!nrow(filter2)==1){warning(
+      paste0("Filter ",
+             frame2_complete$Filter2ID[i], 
+             " is in the filtering log ",  nrow(filter2)," times\n"))}
+  }
 }
+
+frame1%>%filter(tolower(FilterID)=="B_sed_8m_R2_F2_12Jun19") #Jun 13
 ```
 
 Now that we have sed weights, finish processing

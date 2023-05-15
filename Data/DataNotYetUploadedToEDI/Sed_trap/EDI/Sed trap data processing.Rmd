@@ -1,0 +1,345 @@
+---
+title: "Sed traps CN 2019-present"
+author: "Abby Lewis"
+date: "2023-02-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+Load data for samples run in 2022/2023
+```{r}
+cn1 = read.csv("./2023 sed trap runs/ASL 23jan23.csv")
+cn2 = read.csv("./2023 sed trap runs/ASL 24jan23.csv")
+cn3 = read.csv("./2023 sed trap runs/ASL 26jan23.csv")
+cn4 = read.csv("./2023 sed trap runs/ASL 27jan23.csv")
+cn5 = read.csv("./2023 sed trap runs/ASL 23mar22.csv")
+cn6 = read.csv("./2023 sed trap runs/ASL 10feb22.csv")
+# Correct format should be F_sed_8m_R2_F2_02May22
+
+cn_raw = cn1%>%
+  full_join(cn2)%>%
+  full_join(cn3)%>%
+  full_join(cn4)%>%
+  full_join(cn5)%>%
+  full_join(cn6)%>%
+  dplyr::select(-X)
+
+cn_processed = cn_raw%>%
+  filter(!Name%in%c("aa as unknown","aspartic acid","RunIn","ref zzyzx","crucible blank","internal reference zzyzx"),
+         Method == "very low")%>%
+  mutate(Reservoir = ifelse(substring(Name,1,1)%in%c("f","F"),"FCR",NA),
+         Reservoir = ifelse(substring(Name,1,1)%in%c("b","B"),"BVR",Reservoir),
+         cut = substring(Name,2),
+         Date_sampled = as.Date(sub("_.*","",cut),format = "%d%b%y"),
+         cut = sub("[0-9]+[a-z]+[0-9]+","",cut,ignore.case=T),
+         Depth_m = as.numeric(sub("_","",sub("m.+","",cut))),
+         cut = sub("_[0-9]+m_","",cut),
+         cut = ifelse(cut=="r1f2","r1f2_r1f2",cut),
+         Filter1ID = ifelse(grepl("_",cut), #First, standardize filter columns
+                             sub("_.+","",cut),
+                             paste0("r1",cut)),
+         Filter2ID = ifelse(grepl("_",cut),
+                             sub(".+_","",cut),
+                             paste0("r2",cut)),
+         Filter1ID = paste0(substr(Reservoir,1,1),"_sed_",
+                             Depth_m,"m_R",substr(Filter1ID,2,2),"_F",substr(Filter1ID,4,4),"_",
+                             format(Date_sampled,"%d%b%y")),
+         Filter2ID = paste0(substr(Reservoir,1,1),"_sed_",
+                             Depth_m,"m_R",substr(Filter2ID,2,2),"_F",substr(Filter2ID,4,4),"_",
+                             format(Date_sampled,"%d%b%y")))%>%
+  select(-cut,-No.,-Hole..Pos.,-Method,-Info,-C..Blank,-N..Blank)%>%
+  rename(Time_run = Time,
+         Weight_mg = Weight...mg.,
+         N_area = N..Area,
+         C_area = C..Area,
+         N_pct = N.....,
+         C_pct = C.....,
+         CN_ratio = C.N..ratio,
+         N_factor = N..Factor,
+         C_factor = C..Factor,
+         Date_run = Date)
+
+cn_processed%>%
+  mutate(layer=ifelse(Depth_m%in%c(4,5),"EPI","HYPO"))%>%
+  ggplot(aes(x=Date_sampled,y=C_pct,color=layer))+
+  #ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+cn_to_combine = cn_processed%>%
+  dplyr::select(Weight_mg,
+                N_pct,
+                C_pct,
+                Filter1ID,
+                Filter2ID,
+                Date_sampled)
+```
+
+This bit is copied from Cece's script and could be standardized
+```{r}
+frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
+
+#let's use the first filter ID to extract reservoir and depth info (should be the same year to year)
+#also add in info that never changes
+frame2 = cn_to_combine
+frame2 <- frame2 %>% 
+  mutate(Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'F','FCR',NA),
+         Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'B','BVR', Reservoir),
+         Depth_m = as.numeric(str_extract(frame2$Filter1ID, '(?<=_)[:digit:]+(?=m)')),
+         Site = 50)
+#
+
+#Set up empty columns
+frame2_complete = frame2%>%
+  mutate(CombinedCollectionVol_L = NA,
+         CombinedFilterVol_L = NA,
+         CombinedSedMass_g = NA,
+         CombinedXSA_m2 = NA,
+         Duration_days = NA)
+#Loop through all rows and sum data
+for(i in 1:nrow(frame2_complete)){
+  filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
+  filter2 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter2ID[i])) #filter to the second filter
+  if(nrow(filter1)==1&nrow(filter2)==1){
+    frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
+    frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
+    frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
+    frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
+    frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+  } else { 
+    if(!nrow(filter1)==1){warning(
+      paste0("Filter ",
+             frame2_complete$Filter1ID[i], 
+             " is in the filtering log ",  nrow(filter1)," times\n"))}
+    if(!nrow(filter2)==1){warning(
+      paste0("Filter ",
+             frame2_complete$Filter2ID[i], 
+             " is in the filtering log ",  nrow(filter2)," times\n"))}
+  }
+}
+
+#B_sed_8m_R1_F2_12Jun19
+#B_sed_8m_R2_F2_12Jun19
+```
+
+Now that we have sed weights, finish processing
+```{r}
+CN_DONE = frame2_complete%>%
+  filter(!is.na(CombinedXSA_m2))%>%
+  rename(Entered_weight_mg = Weight_mg)%>%
+  mutate(C_mass_CN_g = C_pct/100*Entered_weight_mg/1000,#convert to g
+         N_mass_CN_g = N_pct/100*Entered_weight_mg/1000,
+         C_pct = C_mass_CN_g/CombinedSedMass_g*100, #convert to pct
+         N_pct = N_mass_CN_g/CombinedSedMass_g*100)%>%
+  dplyr::select(Reservoir,Date_sampled,Depth_m,Site,Duration_days,Filter1ID,Filter2ID,CombinedCollectionVol_L,CombinedFilterVol_L,CombinedSedMass_g,CombinedXSA_m2,C_mass_CN_g,N_mass_CN_g)%>%
+  mutate(Filt_ratio = CombinedCollectionVol_L/CombinedFilterVol_L,
+         C_mass_traps_g = C_mass_CN_g*Filt_ratio,
+         N_mass_traps_g = N_mass_CN_g*Filt_ratio,
+         C_flux_gm2d = C_mass_traps_g/CombinedXSA_m2/Duration_days,
+         N_flux_gm2d = N_mass_traps_g/CombinedXSA_m2/Duration_days)
+  
+
+CN_DONE%>%
+  ggplot(aes(x = Date_sampled,y=C_flux_gm2d,color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+metals_to_combine = read.csv("../Metals/2022_FeMnCN.csv")%>%
+  mutate(Date=as.Date(Date))
+
+comb_raw = CN_DONE%>%
+  rename(Date = Date_sampled)%>%
+  full_join(metals_to_combine)
+
+comb_formatted = comb_raw%>%
+  rename(TOCFlux_gm2d=C_flux_gm2d,
+         TNFlux_gm2d = N_flux_gm2d,
+         TOC_g = C_mass_traps_g,
+         TN_g = N_mass_traps_g)%>%
+  dplyr::select(Reservoir, 
+                Date,
+                Site,
+                Duration_days,
+                Depth_m,
+                Filter1ID,
+                Filter2ID,
+                CombinedXSA_m2,
+                CombinedCollectionVol_L,
+                CombinedFilterVol_L,
+                CombinedSedMass_g,
+                ICPTFe_mgL,
+                ICPTMn_mgL,
+                AcidVol_L,
+                DilutionFactor,
+                TFe_g,
+                TMn_g,
+                TFeFlux_gm2d,
+                TMnFlux_gm2d,
+                TOC_g,
+                TN_g,
+                TOCFlux_gm2d,
+                TNFlux_gm2d)%>%
+  arrange(Date)
+
+write.csv(comb_formatted,"../Table2_output_2022.csv",row.names=F)
+
+mean(unique(frame1$CollectionVol_L), na.rm=T)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Load 2019 filtering log
+```{r}
+weights2019 <- read.csv("./2019 files/2019_SedTraps_edited.csv")%>%
+  mutate(Day_Filtered=as.POSIXct(Day_Filtered, format = "%d-%b-%y"),
+         Sed_mass_g= Filter_mass_post_filtering_g-Filter_mass_pre_filtering_g,
+         Sed_conc_mg_L= Sed_mass_g / Volume_filtered_mL*1000000,
+         Sample_ID= tolower(Sample_ID),
+         Depth = str_extract(str_extract(Sample_ID, "[0-9]+m"),"[0-9]+"),
+         Rep =str_extract(str_extract(Sample_ID, "r[0-9]+"),"[0-9]+"),
+         Filter =str_extract(str_extract(Sample_ID, "f[0-9]+"),"[0-9]+"),
+         Res= str_extract(Sample_ID, "(fcr|bvr|\\sb\\s|\\sf\\s)"),
+         Date = str_extract(Sample_ID, "\\d+ \\D\\D\\D \\d\\d"),
+         Date= as.POSIXct(Date, format = "%d %b %y"),
+         Type = str_extract(Sample_ID, "(sed\\strap\\sleftover|st\\sleftover|ses\\snet|sed)"))
+         
+weights2019$Date[is.na(weights2019$Date)]=weights2019$Day_Filtered[is.na(weights2019$Date)]
+weights2019$Res[is.na(weights2019$Res) & weights2019$Depth %in% c(4,8)]= "fcr"
+weights2019$Res[is.na(weights2019$Res) & weights2019$Depth %in% c(5,10)]= "bvr"
+weights2019$Type[is.na(weights2019$Type)] = "sed"
+
+weights2019_processed = weights2019%>%
+  filter(Type=="sed")%>%
+  select(-Type)
+```
+
+
+####
+Currently NOT pulling in runs from 2019, because these were dried sed trap samples (not filters) and are not being included for metals. BUT I have a lot of the infrastructure set up to include these if we decide we want to. That code is below.
+###
+
+
+Load 2019 CN runs
+```{r}
+cn1 <- read.csv("./2019 files/MAG03Apr19.csv")
+cn2 <- read.csv("./2019 files/MAG10Apr19.csv")
+cn3 <- read.csv("./2019 files/MAG28mar19.csv")
+# Correct format should be F_sed_8m_R2_F2_02May22
+
+cn_temp <- cn1 %>%
+  full_join(cn2)%>%
+  full_join(cn3)%>%
+  filter(Method == "soil")%>%
+  mutate(Name = tolower(Name),
+         Date_run = Date,
+         Reservoir = str_extract(str_extract(Name, "(f_|fcr|b_|bvr)"),"[a-z]"),
+         Reservoir = ifelse(grepl("f",Reservoir),
+                           "FCR",
+                           ifelse(grepl("b",Reservoir),
+                                  "BVR",
+                                  NA)
+                           ),
+         Depth_m = as.numeric(str_extract(str_extract(Name, "[0-9]+m"),"[0-9]+")),
+         Rep = as.numeric(str_extract(str_extract(Name, "r[0-9]+"),"[0-9]+")),
+         is.dup = str_extract(Name, "dup"),
+         Date_num = str_extract(Name, "\\d\\d\\d\\d+"), #Dates are stored in four different ways...
+         Date_num = ifelse(nchar(Date_num)==5,paste0("0",Date_num),Date_num),
+         Date_num = ifelse(Date_num == "9318","090318",Date_num), #ugh
+         Date_num = as.character(as.Date(Date_num, format = "%m%d%y")),
+         Date_let = as.character(as.Date(str_extract(Name, "\\d+\\D\\D\\D\\d\\d"), format = "%d%b%y")),
+         Date_slash = as.character(as.Date(str_extract(Name, "\\d+[-/]\\d+[-/]\\d+"), format = c("%m/%d/%y","%m-%d-%y"))))%>%
+  rename(Time_run = Time,
+         Weight_mg = Weight...mg.,
+         N_area = N..Area,
+         C_area = C..Area,
+         N_pct = N.....,
+         C_pct = C.....,
+         CN_ratio = C.N..ratio)%>%
+  select(-No.,-Hole..Pos.,-N..Factor,-C..Factor,-N..Blank,-C..Blank)
+cn_17_18 <- unite(cn_temp, "Date_temp", c(Date_num,Date_let,Date_slash), sep = "")%>%
+  mutate(Date_sampled = as.Date(gsub("NA","",Date_temp)))%>%
+  select(-Date_temp,-Date)
+cn_17_18$Layer[cn_17_18$Depth_m %in% c(4,5)] <- "epi"
+cn_17_18$Layer[cn_17_18$Depth_m %in% c(8,10)] <- "hypo"
+
+cn_sd <- cn_17_18 %>%
+  group_by(Reservoir, Layer, Date_sampled)%>%
+  add_tally()%>%
+  summarize(CN_ratio_mean = mean(CN_ratio, na.rm = T),
+            CN_ratio_sd = sd(CN_ratio, na.rm = T),
+            N_pct_mean = mean(N_pct),
+            N_pct_sd = sd(N_pct),
+            C_pct_mean = mean(C_pct),
+            C_pct_sd = sd(C_pct),
+            n = unique(n))%>%
+  mutate(Year = year(Date_sampled))
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = CN_ratio_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (CN_ratio_mean-CN_ratio_sd), ymax = (CN_ratio_mean+CN_ratio_sd)))+
+  ylab("CN ratio")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = C_pct_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (C_pct_mean-C_pct_sd), ymax = (C_pct_mean+C_pct_sd)))+
+  ylab("C pct")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+
+cn_sd%>%
+  filter(!is.na(Date_sampled))%>%
+  ggplot(aes(x = Date_sampled, y = N_pct_mean, col = Reservoir, lty = Layer))+
+  geom_line()+
+  geom_errorbar(aes(ymin = (N_pct_mean-N_pct_sd), ymax = (N_pct_mean+N_pct_sd)))+
+  ylab("N pct")+
+  xlab("")+
+  facet_wrap("Year", scales = "free_x")
+```
+
+```{r}
+names(cn_processed)
+names(cn_17_18)
+
+cn_comb = cn_processed%>%
+  full_join(cn_17_18)
+
+cn_comb%>%
+  ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+```
+

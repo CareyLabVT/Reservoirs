@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1016.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2022</title>
+    <creator>
+      <individualName>
+        <givenName>Madeline</givenName>
+        <givenName>E.</givenName>
+        <surName>Schreiber</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>mschreib@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-1858-7730</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cecelia</givenName>
+        <givenName>E.</givenName>
+        <surName>Wood</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cecelia@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-1488-2174</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Abigail</givenName>
+        <givenName>S. L.</givenName>
+        <surName>Lewis</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aslewis@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-9933-4542</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Nicholas</givenName>
+        <givenName>W.</givenName>
+        <surName>Hammond</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>hammondnw@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Kathryn</givenName>
+        <givenName>M.</givenName>
+        <surName>Krueger</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>kmkvb13@gmail.com</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-3509-0611</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Mary</givenName>
+        <givenName>E.</givenName>
+        <surName>Lofton</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Zackary</givenName>
+        <givenName>W.</givenName>
+        <surName>Munger</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>mungalor@gmail.com</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-3604-2697</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Nicole</givenName>
+        <givenName>K.</givenName>
+        <surName>Ward</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>nkward@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-7549-0153</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alexandra</givenName>
+        <givenName>B.�</givenName>
+        <surName>Gerling</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>alexg13@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-5280-6709</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Barbara</givenName>
+        <givenName>R.</givenName>
+        <surName>Niederlehner</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>bniederl@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6933-336X</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alexandria</givenName>
+        <givenName>G.</givenName>
+        <surName>Hounshell</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>alexgh@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-1616-9399</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Mary</givenName>
+        <givenName>F.</givenName>
+        <surName>Verne</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>vmary1@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <pubDate>2023-05-15</pubDate>
+    <abstract>
+      <para>Sediment traps were deployed to assess the mass and composition (iron, manganese, total organic carbon, and total nitrogen) of settling particulates in the water column of  two drinking water reservoirs—Beaverdam Reservoir and Falling Creek Reservoir, both located in Vinton, Virginia, USA.  Sediment traps were deployed at two depths in each reservoir to capture both epilimnetic and hypolimnetic (total) sediment flux. The particulates were collected from the traps approximately fortnightly from April to December from 2018 to 2022, then filtered, dried, and analyzed for either iron and manganese or total organic carbon and total nitrogen. Beaverdam and Falling Creek are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia.</para>
+      <para>The sediment trap dataset consists of logs detailing the sample filtering process, the mass of dried particulates from each filter, and the raw concentration data for Fe and Mn (the primary metals of focus), and for total organic carbon (TOC) and total nitrogen (TN), the primary nutrients of focus in the dried solids. The final products are the calculated downward fluxes of solid Fe, Mn, TOC and TN during the deployment periods.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Stream Team</keyword>
+      <keyword>Carey Lab</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>reservoir</keyword>
+      <keyword>lakes</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>iron</keyword>
+      <keyword>manganese</keyword>
+      <keyword>carbon</keyword>
+      <keyword>nitrogen</keyword>
+      <keyword>sediment</keyword>
+      <keywordThesaurus>LTER Controlled Vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>metals</keyword>
+      <keyword>sediment trap</keyword>
+    </keywordSet>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2018-05-21</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2022-11-28</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Madeline</givenName>
+        <givenName>E.</givenName>
+        <surName>Schreiber</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>mschreib@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-1858-7730</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>SAMPLE COLLECTION, SAMPLE FILTRATION, AND EQUIPMENT</para>
+          <para>We deployed sedimentation traps (KC Denmark A/S) at the deepest sites (site 50) in Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR) to capture settling particulates within the water column. The particulates were collected from the traps approximately fortnightly from April to December from 2018 to 2022. In FCR, two sedimentation traps were deployed at 4m and 8m. Two sedimentation traps were deployed in BVR at 4m and 8m, except for 2021 when they were deployed at 5m and 10m. Each trap contained two tubes with openings of 7.2 cm in diameter. During sampling, the traps were brought to the surface and the mixture of water and particulates was poured into opaque bottles. Sampling was conducted between 9 AM and 4 PM on the date of sampling.</para>
+          <para>Samples were stored on ice upon transport to the laboratory and were subsequently stored in a refrigerator until sample processing, usually within 48 hours. Samples were processed using vacuum-filtration through pre-weighed glass microfiber filters (1.5 mm; Whatman 934-AH). The filters containing particulates were then dried at 45 C in a drying oven and the retained mass was calculated by difference from the final and starting mass of the filter.  Data on volumes of sample and mass of dried particulates are included in the filtering log.</para>
+          <para>In 2022, BVR experienced a managed drawdown event where water level decreased by approximately 2m. The sedimentation traps were deployed prior to this drawdown event, so 4m and 8m refers to 4m and 8m from the surface pre-drawdown. Please refer to the BVR catwalk dataset (doi:10.6073/pasta/4182de376fde52e15d493fdd9f26d0c7) for more information on water level and depth in 2022. </para>
+          <para>
+CHEMICAL ANALYSES AND EQUIPMENT</para>
+          <para>Fe and Mn</para>
+          <para>We determined the particulate metal flux by digesting the dried particulate matter retained on the filters and analyzing the digestion solution for Fe and Mn concentrations. In 2018 and 2019, one filter from each replicate was combined for digestion and analysis. From 2020 to the present, replicates were not combined. Two filters from within each replicate were digested and analyzed. The dried particulates were microwave-digested with trace metal grade nitric acid following EPA Method 3051A (United States Environmental Protection Agency, 1995). The digestate solution was diluted and we analyzed the resulting solution for Fe, Mn, and other elements using ICP-MS. The relative proportion of Fe and Mn in the collected sediment is calculated by multiplying the ICP concentration, corrected for dilution, by the amount of acid used in the digestion and dividing by the combined sediment mass of the two filters. The total amount of Fe and Mn in each sedimentation trap is calculated by multiplying the ICP concentration by the amount of acid used in the digestion, multiplying by the ratio of the collection volume to the volume filtered, and correcting for the dilution. The downward Fe and Mn flux was calculated by dividing the total Fe and Mn mass by the cross-sectional area of the sedimentation trap tubes and dividing by the deployment duration. </para>
+          <para>TOC and TN</para>
+          <para>Filters for TOC and TN analysis were run on a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA). We used two filters for CN analysis per sampling date. The mass of TOC and TN in the collected sediment is calculated by multiplying the carbon or nitrogen percentage from the CN analyzer by the combined sediment mass of the two filters. The total amount of TOC and TN in each sedimentation trap is calculated by multiplying the CN percentage by ratio of the collection volume to the volume filtered. The downward TOC and TN flux was calculated by dividing the total TOC and TN mass by the cross-sectional area of the sedimentation trap tubes and dividing by the deployment duration.</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Institute of Critical Technology and Applied Science N/A</funding>
+      <relatedProject>
+        <title>N/A</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Global Change Center N/A</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>N/A</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Fralin Life Sciences Institute N/A</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.�</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>No funding to report</funding>
+      </relatedProject>
+    </project>
+    <otherEntity>
+      <entityName>Metal flux script</entityName>
+      <entityDescription>Metal flux calculations script</entityDescription>
+      <physical>
+        <objectName>MakeEDI_SedTraps.R</objectName>
+        <size unit="bytes">5329</size>
+        <authentication method="MD5">0709feffc55813a147d50524c9826fca</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>CN flux script</entityName>
+      <entityDescription>CN flux calculations script</entityDescription>
+      <physical>
+        <objectName>Sed trap data processing.Rmd</objectName>
+        <size unit="bytes">12221</size>
+        <authentication method="MD5">bc8324adc358bf8cc2f71de96a3e1ec5</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

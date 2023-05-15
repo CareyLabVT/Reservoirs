@@ -11,7 +11,7 @@ library(tidyverse)
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
 
-#devtools::install_github("EDIorg/EMLassemblyline")
+devtools::install_github("EDIorg/EMLassemblyline")
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
@@ -20,7 +20,7 @@ library(EMLassemblyline)
 
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2018
+#in this case, our directory is Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/EDI/MakeEMLSedTraps
 
 #Step 2: Move your dataset to the directory
 
@@ -44,22 +44,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+template_core_metadata(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                       data.table = c("chemistry_2013_2022.csv", "reservoir_site_descriptions.csv"),
+template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+                       data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+                       data.table = c("Table2_output_2022.csv", "FilteringLog_EDI.csv"),
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                          data.table = c("chemistry_2013_2022.csv","reservoir_site_descriptions.csv"),
+template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+                             data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+                             data.table = c("Table2_output_2022.csv", "FilteringLog_EDI.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -71,7 +71,7 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 #if you want to check your abstract for non-allowed characters, go to:
 #https://pteo.paranoiaworks.mobi/diacriticsremover/
 #paste text and click remove diacritics
-# updated for 2019 to include info on RC sites
+
 
 #Step 8: Methods
 #copy-paste the methods from your Microsoft Word document into abstract.txt
@@ -80,18 +80,16 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 #paste text and click remove diacritics
 
 #Step 9: Additional information
-#I put the notes about FCR manipulations and pubs documenting it in this file
+
 
 #Step 10: Keywords
 #DO NOT EDIT KEYWORDS FILE USING A TEXT EDITOR!! USE EXCEL!!
-#not sure if this is still true...let's find out! :-)
 #see the LabKeywords.txt file for keywords that are mandatory for all Carey Lab data products
 
 #Step 11: Personnel
 #copy-paste this information in from your metadata document
 #Cayelan needs to be listed several times; she has to be listed separately for her roles as
 #PI, creator, and contact, and also separately for each separate funding source (!!)
-# Updated this for 2019 to include HLW and WMW
 
 #Step 12: Attributes
 #grab attribute names and definitions from your metadata word document
@@ -108,8 +106,8 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+template_categorical_variables(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+                               data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -133,21 +131,23 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-  temporal.coverage = c("2013-04-04", "2023-03-21"),
+  path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+  data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+  eml.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+  dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2022",
+  temporal.coverage = c("2018-05-21", "2022-11-28"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2022.csv", 
-                 "reservoir_site_descriptions.csv"),
-  data.table.description = c("Reservoir water chemistry dataset",
-                             "Description, latitude, and longitude of reservoir sampling sites"),
+  data.table = c("FilteringLog_EDI.csv", 
+                 "Table2_output_2022.csv"),
+  data.table.name = c("Filtering log",
+                       "Fluxes"),
+  data.table.description = c("Sediment trap filtering log",
+                             "Carbon, nitrogen, iron, manganese fluxes"),
   other.entity = "QAQC_chemistry_2015_2022.R",
   other.entity.description = "Nutrient QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.6') #reserve new staging environment package id each year
+  package.id = 'edi.1016.1') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

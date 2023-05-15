@@ -76,7 +76,9 @@ frame1 = frame1%>%
          SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
   
 
-write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)
+#write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)
+
+frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 
 #
 #

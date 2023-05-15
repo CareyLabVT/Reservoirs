@@ -143,8 +143,9 @@ make_eml(
                        "Fluxes"),
   data.table.description = c("Sediment trap filtering log",
                              "Carbon, nitrogen, iron, manganese fluxes"),
-  other.entity = "QAQC_chemistry_2015_2022.R",
-  other.entity.description = "Nutrient QAQC script",
+  other.entity = c("MakeEDI_SedTraps.R", "Sed trap data processing.Rmd"),
+  other.entity.name = c("Metal flux script", "CN flux script"),
+  other.entity.description = c("Metal flux calculations script", "CN flux calculations script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.1016.1') #reserve new staging environment package id each year

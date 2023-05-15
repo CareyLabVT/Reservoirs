@@ -331,6 +331,874 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
         <funding>No funding to report</funding>
       </relatedProject>
     </project>
+    <dataTable>
+      <entityName>Filtering log</entityName>
+      <entityDescription>Sediment trap filtering log</entityDescription>
+      <physical>
+        <objectName>FilteringLog_EDI.csv</objectName>
+        <size unit="bytes">174385</size>
+        <authentication method="MD5">46db47a9820b0889da10cdbabeaf01a4</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Date</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Duration_days</attributeName>
+          <attributeDefinition>Duration of deployment/ time between collection points</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">6</minimum>
+                  <maximum exclusive="false">42</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Water depth where the sample was collected or sensor reading was measured�</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">4</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TrapRep</attributeName>
+          <attributeDefinition>Replicate number of sedimentation trap tube at a specified depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TrapXSA_m2</attributeName>
+          <attributeDefinition>Trap cross sectional area</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>squareMeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0040715</minimum>
+                  <maximum exclusive="false">0.0040715</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TrapVol_L</attributeName>
+          <attributeDefinition>Total trap volume when full</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">2</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CollectionVol_L</attributeName>
+          <attributeDefinition>Volume collected from trap</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">470</minimum>
+                  <maximum exclusive="false">2178</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FilterRep</attributeName>
+          <attributeDefinition>Replicate number of filter for a specified replicate and depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">8</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FilterVol_L</attributeName>
+          <attributeDefinition>Volume of collected sample that was filtered</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">20</minimum>
+                  <maximum exclusive="false">478</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FilterMassPre_g</attributeName>
+          <attributeDefinition>Mass of filter before filtering</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.017</minimum>
+                  <maximum exclusive="false">0.16233</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FilterMassPost_g</attributeName>
+          <attributeDefinition>Mass of filter after filtering</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.10548</minimum>
+                  <maximum exclusive="false">0.17385</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>SedMass_g</attributeName>
+          <attributeDefinition>Mass of sediment on filter after filtering</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">0.107</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>SedFlux_gm2d</attributeName>
+          <attributeDefinition>Calculated downward flux of total sediment�</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.957877931966107</minimum>
+                  <maximum exclusive="false">24.9965944869904</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FilterID</attributeName>
+          <attributeDefinition>Identification code for filter (Reservoir_Depth_TrapRep_FilterRep_Date)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Identification code for filter (Reservoir_Depth_TrapRep_FilterRep_Date)</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_CollectionVol_L</attributeName>
+          <attributeDefinition>Data flag for CollectionVolume (L); 1= no issues; 2 = CollectionVol_L set to 2L because no collection volume was recorded</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_SedMass_g</attributeName>
+          <attributeDefinition>Data flag for SedMass (g); 1= no issues; 2= Missing value; 3= negative value set to NA</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">3</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>1527</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>Fluxes</entityName>
+      <entityDescription>Carbon, nitrogen, iron, manganese fluxes</entityDescription>
+      <physical>
+        <objectName>Table2_output_2022.csv</objectName>
+        <size unit="bytes">124150</size>
+        <authentication method="MD5">d4f9e2cf2faa196238406cd0aa7297d2</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Date</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Duration_days</attributeName>
+          <attributeDefinition>Duration of deployment/ time between collection points</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">6</minimum>
+                  <maximum exclusive="false">42</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Water depth where the sample was collected or sensor reading was measured�</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">4</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>CombinedXSA_m2</attributeName>
+          <attributeDefinition>Trap cross sectional area</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>squareMeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0040715</minimum>
+                  <maximum exclusive="false">0.008143</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Filter1ID</attributeName>
+          <attributeDefinition>Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Filter2ID</attributeName>
+          <attributeDefinition>Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>CombinedCollectionVol_L</attributeName>
+          <attributeDefinition>Total collection volume for two filters analyzed</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">940</minimum>
+                  <maximum exclusive="false">4356</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>CombinedFilterVol_L</attributeName>
+          <attributeDefinition>Total volume of collected sample that was filtered for two filters analyzed</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">45</minimum>
+                  <maximum exclusive="false">700</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>CombinedSedMass_g</attributeName>
+          <attributeDefinition>Total mass of sediment on filter after filtering for two filters analyzed</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.00199999999999999</minimum>
+                  <maximum exclusive="false">0.12</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>ICPTFe_mgL</attributeName>
+          <attributeDefinition>Raw total iron concentration of diluted digestion solution</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.74808224394256</minimum>
+                  <maximum exclusive="false">139.613036518581</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>ICPTMn_mgL</attributeName>
+          <attributeDefinition>Raw total manganese concentration of diluted digestion solution</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0452372346116647</minimum>
+                  <maximum exclusive="false">6.33546702463211</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>AcidVol_L</attributeName>
+          <attributeDefinition>Volume of acid used in digestion</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0098</minimum>
+                  <maximum exclusive="false">0.01</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>DilutionFactor</attributeName>
+          <attributeDefinition>Factor describing dilution of raw digestate for ICPMS analysis</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">20</minimum>
+                  <maximum exclusive="false">20</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TFe_g</attributeName>
+          <attributeDefinition>Total mass of iron in each trap (calculated)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0040415661479952</minimum>
+                  <maximum exclusive="false">0.969380475548546</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TMn_g</attributeName>
+          <attributeDefinition>Total mass of manganese in each trap (calculated)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.000199810270271854</minimum>
+                  <maximum exclusive="false">0.0150309485259553</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TFeFlux_gm2d</attributeName>
+          <attributeDefinition>Calculated downward flux of total iron</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0251281820363035</minimum>
+                  <maximum exclusive="false">5.3051894885155</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TMnFlux_gm2d</attributeName>
+          <attributeDefinition>Calculated downward flux of total manganese</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.00175269092008784</minimum>
+                  <maximum exclusive="false">0.125403410578264</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TOC_g</attributeName>
+          <attributeDefinition>Total organic carbon in each trap</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.00875046666666667</minimum>
+                  <maximum exclusive="false">0.330232133333333</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TN_g</attributeName>
+          <attributeDefinition>Total nitrogen in each trap</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>gram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.00353146666666667</minimum>
+                  <maximum exclusive="false">0.167373777777778</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TOCFlux_gm2d</attributeName>
+          <attributeDefinition>Calculated downward flux of total organic carbon</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0472846568879972</minimum>
+                  <maximum exclusive="false">1.80114513164065</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>TNFlux_gm2d</attributeName>
+          <attributeDefinition>Calculated downward flux of total nitrogen</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0441220329467904</minimum>
+                  <maximum exclusive="false">1.06350762302068</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>587</numberOfRecords>
+    </dataTable>
     <otherEntity>
       <entityName>Metal flux script</entityName>
       <entityDescription>Metal flux calculations script</entityDescription>

@@ -18,13 +18,34 @@ frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 #
 #frame 2 let's gooo
   #need to read in the Jeff sheets, will do a little QA/QC to account for Jeff's formatting
-ICPData <- read_excel('2022_ICPData.xlsx', skip = 3)
+ICP2022 <- read_excel('2022_ICPData.xlsx', skip = 3) %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
+ICP2021 <- read_excel('2021_ICPData.xlsx', skip = 3) %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
+ICP2020 <- read_excel('2020_ICPData.xlsx', skip = 3) %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
+ICP2019 <- read_excel('2019_ICPData.xlsx', skip = 3) %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
+ICP2018 <- read_excel('2018_ICPData.xlsx', skip = 3) %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
+
+ICPData = ICP2022%>%
+  rbind(ICP2021)%>%
+  rbind(ICP2020)%>%
+  rbind(ICP2019)%>%
+  rbind(ICP2018)
+
 glimpse(ICPData)
-ICPData <- ICPData %>% select(...1, `54Fe (STDR)`, `55Mn (STDR)`)
 ICPData <- ICPData %>% rename('Fe_ppb' = `54Fe (STDR)`, 'Mn_ppb' = `55Mn (STDR)`, 'JeffID' = '...1')
 
   #need to join digestion spreadsheet while sample names are still in code
-Digestion <-  read_excel('2022_SedTraps_FilteringLog.xlsx', sheet = 'Sheet2')
+Digestion2022 <-  read_excel('2022_AcidDigestion_EDI.xlsx')
+Digestion2021 <-  read_excel('2021_AcidDigestion_EDI.xlsx')
+Digestion2020 <-  read_excel('2020_AcidDigestion_EDI.xlsx')
+Digestion2019 <-  read_excel('2019_AcidDigestions_EDI.xlsx')
+Digestion2018 <-  read_excel('2018_AcidDigestions_EDI.xlsx')
+
+Digestion <- Digestion2022%>%
+  rbind(Digestion2021)%>%
+  rbind(Digestion2020)%>%
+  rbind(Digestion2019)%>%
+  rbind(Digestion2018)
+
 frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple = "all")
 
   #separating to get sample date
@@ -56,22 +77,41 @@ frame2_complete = frame2%>%
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
   filter2 = frame1%>%filter(FilterID==frame2_complete$Filter2ID[i]) #filter to the second filter
-  if(nrow(filter1)==1){
+  if(nrow(filter1)==1&nrow(filter2)==1){
     frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
     frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
-  } else { warning(
-    paste0("Filter ",
-           frame2_complete$Filter1ID[i], 
-           " is in the filtering log ",  nrow(filter1)," times\n"))}
+  } else { 
+    if(!nrow(filter1)==1){warning(
+      paste0("Filter ",
+             frame2_complete$Filter1ID[i], 
+             " is in the filtering log ",  nrow(filter1)," times\n"))}
+    if(!nrow(filter2)==1&!is.na(frame2_complete$Filter2ID[i])){warning(
+      paste0("Filter ",
+             frame2_complete$Filter2ID[i], 
+             " is in the filtering log ",  nrow(filter2)," times\n"))}
+    if(is.na(frame2_complete$Filter2ID[i])&nrow(filter1)==1){ #If only one filter was used
+      frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L 
+      frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L
+      frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g
+      frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2 
+      frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+    }
+    
+  }
 }
   
+frame2_complete=frame2_complete%>%
+  mutate(Fe_ppb=as.numeric(Fe_ppb),
+         Mn_ppb=as.numeric(Mn_ppb))
 
 frame2 <- frame2_complete %>% mutate(ICPTFe_mgL = Fe_ppb/1000, ICPTMn_mgL = Mn_ppb/1000, DilutionFactor = 20,
                             TFe_g = (ICPTFe_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                            TMn_g = (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L))
+                            TMn_g = (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
+                            TFeFlux_gm2d = TFe_g/CombinedXSA_m2/Duration_days,
+                            TMnFlux_gm2d = TMn_g/CombinedXSA_m2/Duration_days)
 
 #sort out the names and column order
 frame2 <- frame2 %>% rename("AcidVol_L" = "Vol_acid_L")

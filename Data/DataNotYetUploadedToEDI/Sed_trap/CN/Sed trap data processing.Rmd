@@ -123,7 +123,8 @@ for(i in 1:nrow(frame2_complete)){
   }
 }
 
-frame1%>%filter(tolower(FilterID)=="B_sed_8m_R2_F2_12Jun19") #Jun 13
+#B_sed_8m_R1_F2_12Jun19
+#B_sed_8m_R2_F2_12Jun19
 ```
 
 Now that we have sed weights, finish processing

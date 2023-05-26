@@ -13,7 +13,7 @@ FilterVol_L	Volume of collected sample that was filtered	numeric	liter		NA	No da
 FilterMassPre_g	Mass of filter before filtering	numeric	gram		NA	No data
 FilterMassPost_g	Mass of filter after filtering	numeric	gram		NA	No data
 SedMass_g	Mass of sediment on filter after filtering	numeric	gram		NA	No data
-SedFlux_gm2d	Calculated downward flux of total sediment 	numeric	dimensionless		NA	No data
+SedFlux_gm2d	Calculated downward flux of total sediment 	numeric	gramPerMeterSquaredPerDay		NA	No data
 FilterID	Identification code for filter (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
 Flag_CollectionVol_L	Data flag for CollectionVolume (L); 1= no issues; 2 = CollectionVol_L set to 2L because no collection volume was recorded	numeric	dimensionless		NA	No data
 Flag_SedMass_g	Data flag for SedMass (g); 1= no issues; 2= Missing value; 3= negative value set to NA	numeric	dimensionless		NA	No data

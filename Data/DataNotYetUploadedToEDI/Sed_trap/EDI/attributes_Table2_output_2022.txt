@@ -16,9 +16,9 @@ AcidVol_L	Volume of acid used in digestion	numeric	liter
 DilutionFactor	Factor describing dilution of raw digestate for ICPMS analysis	numeric	dimensionless			
 TFe_g	Total mass of iron in each trap (calculated)	numeric	gram			
 TMn_g	Total mass of manganese in each trap (calculated)	numeric	gram			
-TFeFlux_gm2d	Calculated downward flux of total iron	numeric	dimensionless			
-TMnFlux_gm2d	Calculated downward flux of total manganese	numeric	dimensionless			
+TFeFlux_gm2d	Calculated downward flux of total iron	numeric	gramPerMeterSquaredPerDay			
+TMnFlux_gm2d	Calculated downward flux of total manganese	numeric	gramPerMeterSquaredPerDay			
 TOC_g	Total organic carbon in each trap	numeric	gram			
 TN_g	Total nitrogen in each trap	numeric	gram			
-TOCFlux_gm2d	Calculated downward flux of total organic carbon	numeric	dimensionless			
-TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	dimensionless			
+TOCFlux_gm2d	Calculated downward flux of total organic carbon	numeric	gramPerMeterSquaredPerDay			
+TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquaredPerDay			

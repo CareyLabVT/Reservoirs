@@ -63,24 +63,29 @@ frame1$TrapVol_L <- 2
 frame1 <- frame1 %>% 
   mutate(Volume_discarded_mL = ifelse(year(Date)==2019&Date<"2019-09-15",NA,Volume_discarded_mL))%>% #Mistakes in filtering log before this point
   group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
-  mutate(CollectionVol_L = sum(Volume_filtered_mL) + unique(Volume_discarded_mL)) %>% 
+  mutate(CollectionVol_L = (sum(Volume_filtered_mL) + unique(Volume_discarded_mL))/1000) %>% 
   ungroup()
 
     #FilterRep
 frame1 <- frame1 %>% 
   mutate(FilterRep = as.numeric(str_extract(frame1$Sample_ID, '(?<=_F)[:digit:]+')))
 
+    #make Volume_filtered column in correct units
+frame1 <- frame1 %>% 
+  rename("Volume_filtered_L" = "Volume_filtered_mL")
+frame1$Volume_filtered_L <- frame1$Volume_filtered_L/1000
+
     #SedFlux_gm2d
 frame1 <- frame1 %>% 
-    mutate(SedFlux_gm2d = (((Mass_of_sediment_g/Volume_filtered_mL) * CollectionVol_L) / (TrapXSA_m2 * Duration_days)))
+    mutate(SedFlux_gm2d = (((Mass_of_sediment_g/Volume_filtered_L) * CollectionVol_L) / (TrapXSA_m2 * Duration_days)))
 
 #reorder columns in the first data frame and rename. Prep for EDI publishing
 frame1 <- frame1 %>% 
   select(Reservoir, Date, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
-  CollectionVol_L, FilterRep, Volume_filtered_mL, Filter_mass_pre_filtering_g,
+  CollectionVol_L, FilterRep, Volume_filtered_L, Filter_mass_pre_filtering_g,
   Filter_mass_post_filtering_g, Mass_of_sediment_g, SedFlux_gm2d, Sample_ID)
 
-frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_mL", 
+frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_L", 
                             "FilterMassPre_g" = "Filter_mass_pre_filtering_g",
                             "FilterMassPost_g" = "Filter_mass_post_filtering_g", 
                             "SedMass_g" = "Mass_of_sediment_g", "FilterID" = "Sample_ID")
@@ -93,5 +98,5 @@ frame1 = frame1%>%
          Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g),
          SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
   
-
+frame1 <- arrange(frame1, frame1$Date)
 write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)

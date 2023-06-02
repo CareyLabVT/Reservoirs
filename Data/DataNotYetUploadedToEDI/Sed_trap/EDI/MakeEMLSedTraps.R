@@ -51,7 +51,7 @@ template_core_metadata(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 
 template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                        data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                       data.table = c("Table2_output_2022.csv", "FilteringLog_EDI.csv"),
+                       data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv"),
                        write.file = TRUE)
 
 
@@ -59,7 +59,7 @@ template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                              data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                             data.table = c("Table2_output_2022.csv", "FilteringLog_EDI.csv"),
+                             data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -138,7 +138,7 @@ make_eml(
   temporal.coverage = c("2018-05-21", "2022-11-28"),
   maintenance.description = 'ongoing',
   data.table = c("FilteringLog_EDI.csv", 
-                 "Table2_output_2022.csv"),
+                 "CN_Metals_Flux_EDI.csv"),
   data.table.name = c("Filtering log",
                        "Fluxes"),
   data.table.description = c("Sediment trap filtering log",
@@ -186,22 +186,22 @@ make_eml(
 # ALL OTHER entries in the make_eml() command should match what you ran above,
 # in step 7
 
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-  temporal.coverage = c("2013-04-04", "2023-03-21"),
-  maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2022.csv",
-                 "reservoir_site_descriptions.csv"),
-  data.table.description = c("Reservoir water chemistry dataset",
-                             "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "QAQC_chemistry_2015_2022.R",
-  other.entity.description = "Nutrient QAQC script",
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.199.11') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+#make_eml(
+#  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
+#  temporal.coverage = c("2013-04-04", "2023-03-21"),
+#  maintenance.description = 'ongoing',
+#  data.table = c("chemistry_2013_2022.csv",
+#                 "reservoir_site_descriptions.csv"),
+#  data.table.description = c("Reservoir water chemistry dataset",
+#                             "Description, latitude, and longitude of reservoir sampling sites"),
+#  other.entity = "QAQC_chemistry_2015_2022.R",
+#  other.entity.description = "Nutrient QAQC script",
+#  user.id = 'ccarey',
+#  user.domain = 'EDI',
+#  package.id = 'edi.199.11') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
 
 # 2023 data pub = 199.10
 

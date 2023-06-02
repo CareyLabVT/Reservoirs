@@ -92,7 +92,7 @@ frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_L",
 
 frame1 = frame1%>%
   mutate(Flag_CollectionVol_L = ifelse(is.na(CollectionVol_L),2,1),
-         CollectionVol_L = ifelse(is.na(CollectionVol_L),1700,CollectionVol_L),
+         CollectionVol_L = ifelse(is.na(CollectionVol_L),1.7,CollectionVol_L),
          
          Flag_SedMass_g = ifelse(is.na(SedMass_g),2,1),
          Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g),

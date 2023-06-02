@@ -3,7 +3,7 @@ Reservoir	Three-letter code corresponding to sampled reservoir	categorical
 Date	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD		
 Site	Sampling site within each reservoir	numeric	dimensionless			
 Duration_days	Duration of deployment/ time between collection points	numeric	dimensionless			
-Depth_m	Water depth where the sample was collected or sensor reading was measured 	numeric	meter			
+Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter			
 CombinedXSA_m2	Trap cross sectional area	numeric	squareMeter			
 Filter1ID	Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character				
 Filter2ID	Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character				

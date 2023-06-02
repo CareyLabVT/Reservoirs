@@ -186,7 +186,7 @@ comb_formatted = comb_raw%>%
                 TNFlux_gm2d)%>%
   arrange(Date)
 
-write.csv(comb_formatted,"../Table2_output_2022.csv",row.names=F)
+write.csv(comb_formatted,"../CN_Metals_Flux_EDI.csv",row.names=F)
 
 mean(unique(frame1$CollectionVol_L), na.rm=T)
 ```

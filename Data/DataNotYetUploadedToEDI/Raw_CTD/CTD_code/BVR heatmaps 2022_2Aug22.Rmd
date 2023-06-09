@@ -188,6 +188,10 @@ ctd_adj_depth = ctd_sensor%>%
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"), Year = 2022)
 lines = lines%>%
   filter(status == "init")
+#Re-format for rectangle instead of discrete lines
+lines_rect = lines%>%
+  select(-type)%>%
+  pivot_wider(names_from = desc, values_from = Dates)
 
 vars = c("Temp_C",
          #"Chla_ugL",
@@ -269,7 +273,10 @@ for(i in 1:length(vars)){
     geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "black", data = lines_rect, alpha = 0.15)+
     geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
-    #scale_linetype_manual(values = c("solid","dashed"))+
+    geom_hline(aes(yintercept = 6.6, lty = "Out-take pipe"), alpha = 0.3)+
+    scale_linetype_manual(values = c("84","solid"),
+                          breaks = c("Out-take pipe","Thermocline"),
+                          labels = c("Out-take pipe", NA),  name= NULL)+
     scale_x_date(expand = c(0,0))+
     theme(panel.border = element_rect(fill = NA),
           panel.background = element_rect(fill = "white"),

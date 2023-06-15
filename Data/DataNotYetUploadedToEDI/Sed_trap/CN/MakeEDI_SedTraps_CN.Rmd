@@ -80,7 +80,7 @@ cn_to_combine = cn_processed%>%
                 Date_sampled)
 ```
 
-This bit is copied from Cece's script and could be standardized
+This bit is copied from the metals script and could be standardized in the future
 ```{r}
 frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 
@@ -100,7 +100,8 @@ frame2_complete = frame2%>%
          CombinedFilterVol_L = NA,
          CombinedSedMass_g = NA,
          CombinedXSA_m2 = NA,
-         Duration_days = NA)
+         Duration_days = NA,
+         Volume_flag = NA)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
@@ -111,6 +112,7 @@ for(i in 1:nrow(frame2_complete)){
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
     frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+    frame2_complete$Volume_flag[i]=ifelse(filter1$Flag_CollectionVol_L==2|filter2$Flag_CollectionVol_L==2,2,1) #Save flag for volume
   } else { 
     if(!nrow(filter1)==1){warning(
       paste0("Filter ",
@@ -122,9 +124,6 @@ for(i in 1:nrow(frame2_complete)){
              " is in the filtering log ",  nrow(filter2)," times\n"))}
   }
 }
-
-#B_sed_8m_R1_F2_12Jun19
-#B_sed_8m_R2_F2_12Jun19
 ```
 
 Now that we have sed weights, finish processing

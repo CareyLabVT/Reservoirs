@@ -4,7 +4,7 @@ We deployed sedimentation traps (KC Denmark A/S) at the deepest sites (site 50) 
 
 Samples were stored on ice upon transport to the laboratory and were subsequently stored in a refrigerator until sample processing, usually within 48 hours. Samples were processed using vacuum-filtration through pre-weighed glass microfiber filters (1.5 mm; Whatman 934-AH). The filters containing particulates were then dried at 45 C in a drying oven and the retained mass was calculated by difference from the final and starting mass of the filter.  Data on volumes of sample and mass of dried particulates are included in the filtering log.
 
-In 2022, BVR experienced a managed drawdown event where water level decreased by approximately 2m. The sedimentation traps were deployed prior to this drawdown event, so 4m and 8m refers to 4m and 8m from the surface pre-drawdown. Please refer to the BVR catwalk dataset (doi:10.6073/pasta/4182de376fde52e15d493fdd9f26d0c7) for more information on water level and depth in 2022. 
+BVR has experienced fluctuations in water level throughout the data collection period, including a managed drawdown event in 2022. Sedimentation traps were deployed at the specified depth and remained at a fixed height above the sediment, regardless of water level fluctuation after the day of deployment. Known deployment dates 19 July 18 at BVR, 15 April 19 at FCR, 08 April 19 at BVR, 24 May 21 in FCR, 12 April 22 in FCR and BVR. Please refer to the BVR catwalk dataset (doi:10.6073/pasta/4182de376fde52e15d493fdd9f26d0c7) for more information on water level and depth.  
 
 
 CHEMICAL ANALYSES AND EQUIPMENT

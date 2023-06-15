@@ -51,7 +51,7 @@ template_core_metadata(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 
 template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                        data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                       data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv"),
+                       data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                        write.file = TRUE)
 
 
@@ -59,7 +59,7 @@ template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                              data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                             data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv"),
+                             data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -138,11 +138,14 @@ make_eml(
   temporal.coverage = c("2018-05-21", "2022-11-28"),
   maintenance.description = 'ongoing',
   data.table = c("FilteringLog_EDI.csv", 
-                 "CN_Metals_Flux_EDI.csv"),
+                 "CN_Metals_Flux_EDI.csv",
+                 "site_descriptions.csv"),
   data.table.name = c("Filtering log",
-                       "Fluxes"),
+                       "Fluxes",
+                      "Site desciptions"),
   data.table.description = c("Sediment trap filtering log",
-                             "Carbon, nitrogen, iron, manganese fluxes"),
+                             "Carbon, nitrogen, iron, manganese fluxes",
+                             "Sampling site descriptions"),
   other.entity = c("MakeEDI_SedTraps.R", "MakeEDI_SedTraps_CN.Rmd","Load_filtering_logs.R"),
   other.entity.name = c("Metal flux script", "CN flux script","Filtering log script"),
   other.entity.description = c("Metal flux calculations script", "CN flux calculations script","Script to generate filtering log record for EDI"),

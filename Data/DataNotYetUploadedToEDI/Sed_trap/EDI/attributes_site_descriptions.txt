@@ -1,0 +1,6 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir		character			NA	No data
+Site		numeric	dimensionless		NA	No data
+Site_description		character			NA	No data
+Latitude		numeric	dimensionless		NA	No data
+Longitude		numeric	dimensionless		NA	No data

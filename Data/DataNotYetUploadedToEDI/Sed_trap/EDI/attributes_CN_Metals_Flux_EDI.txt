@@ -29,4 +29,4 @@ Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L). 1 = no issues; 2 = not run	numeric	
 Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
 Flag_TOC_g	Data flag for TOC (g). 1 = no issues; 2 = not run	numeric	dimensionless			
 Flag_TN_g	Data flag for TN (g). 1 = no issues; 2 = not run	numeric	dimensionless			
-						
+Flag_Duration_days	"Data flag for duration. 1 = no issues; 2 = deployment date not recorded, inferred"	numeric	dimensionless			

@@ -17,3 +17,4 @@ SedFlux_gm2d	Calculated downward flux of total sediment	numeric	gramPerMeterSqua
 FilterID	Identification code for filter (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
 Flag_CollectionVol_L	Data flag for CollectionVolume (L); 1= no issues; 2 = CollectionVol_L set to 2L because no collection volume was recorded	numeric	dimensionless		NA	No data
 Flag_SedMass_g	Data flag for SedMass (g); 1= no issues; 2= Missing value; 3= negative value set to NA	numeric	dimensionless		NA	No data
+Flag_Duration_days	"Data flag for duration. 1 = no issues; 2 = deployment date not recorded, inferred"	numeric	dimensionless		NA	No data

@@ -230,6 +230,9 @@ comb_formatted = comb_formatted%>%
                                      2, 
                                      Flag_Duration_days))
 
+comb_formatted = comb_formatted%>%
+  filter(is.na(Duration_days))
+
 write.csv(comb_formatted,"../CN_Metals_Flux_EDI.csv",row.names=F)
 
 mean(unique(frame1$CollectionVol_L), na.rm=T)

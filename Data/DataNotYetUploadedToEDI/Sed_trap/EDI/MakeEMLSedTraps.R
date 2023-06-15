@@ -18,19 +18,6 @@ devtools::install_github("EDIorg/EMLassemblyline")
 #for github which allows you to submit more than 60 API requests in an hour
 library(EMLassemblyline)
 
-#Add flags for flux file
-
-flux = read.csv("./Data/DataNotYetUploadedToEDI/Sed_trap/EDI/CN_Metals_Flux_EDI.csv")
-flux_flagged = flux%>%
-  mutate(Flag_Filter2ID = ifelse(is.na(Filter2ID),2,1), #1 = no issues; 2 = only one filter used, set to NA
-         Flag_CombinedCollectionVol_L = ifelse(is.na(Filter2ID),2,1), #1 = no issues; 2 = only one filter used, set to NA
-         Flag_CombinedSedMass_g = ifelse(is.na(Filter2ID),2,1), #1= no issues, 2 = only one filter used, set to NA
-         Flag_ICPTFe_mgL = 1, #No flagging for these currently
-         Flag_ICPTMn_mgL = 1,
-         Flag_TOC_g = 1,
-         Flag_TN_g = 1
-  )
-
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/EDI/MakeEMLSedTraps
 

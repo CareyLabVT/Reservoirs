@@ -942,7 +942,7 @@ b3<-sum_plot5%>%
         legend.key= element_blank(),
         legend.spacing.y = unit(0, 'cm'),
         legend.text=element_text(size=7),
-        plot.margin = unit(c(-1.2,0,-2.3,0), "cm")
+        plot.margin = unit(c(-1,0,-1.6,0), "cm")
         )+
   guides(lty = guide_legend(byrow = TRUE,keyheight = 0.75, ncol = 2),
          color = guide_legend(byrow = TRUE,keyheight = 0.75),
@@ -978,7 +978,7 @@ c3<-cmax%>%
                         #labels = labels,
                         #breaks = names_orig
                         #)+
-  scale_color_manual(values = c("darkgreen","turquoise"))+
+  scale_color_manual(values = c("darkgreen","darkgreen"))+
   facet_grid(rows = NULL, cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   scale_y_reverse()+
@@ -1002,7 +1002,7 @@ c3<-cmax%>%
         legend.key= element_blank(),
         legend.spacing.y = unit(0, 'cm'),
         legend.text=element_text(size=7),
-        plot.margin = unit(c(-2,0,-2,0), "cm")
+        plot.margin = unit(c(-1.8,0,-1.4,0), "cm")
         )+
   guides(lty = guide_legend(byrow = TRUE,keyheight = 0.75, ncol = 2),
          color = guide_legend(byrow = TRUE,keyheight = 0.75),
@@ -1040,7 +1040,7 @@ d4<-pkw%>%
                         #labels = labels,
                         #breaks = names_orig
                         #)+
-  scale_color_manual(values = c("darkgreen","turquoise"))+
+  scale_color_manual(values = c("darkgreen","darkgreen"))+
   facet_grid(rows = NULL, cols = vars(Year), scales = "free", switch = "y",
              labeller = labeller(name = fac.labs))+
   #scale_y_reverse()+
@@ -1058,13 +1058,13 @@ d4<-pkw%>%
         axis.title.x = element_blank(),
         axis.title.y = element_text(size=9),
         strip.background = element_blank(),
-        legend.position = c(0.30,0.75),
+        legend.position = c(0.30,0.77),
         legend.title=element_blank(),
         legend.background = element_blank(),
         legend.key= element_blank(),
         legend.spacing.y = unit(0, 'cm'),
         legend.text=element_text(size=7),
-        plot.margin = unit(c(-1.4,0,-0.4,0), "cm")
+        plot.margin = unit(c(-1.7,0,-0.4,0), "cm")
         )+
   guides(lty = guide_legend(byrow = TRUE,keyheight = 0.75, ncol = 2),
          color = guide_legend(byrow = TRUE,keyheight = 0.75),

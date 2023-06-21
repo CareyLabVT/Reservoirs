@@ -80,7 +80,7 @@ cn_to_combine = cn_processed%>%
                 Date_sampled)
 ```
 
-This bit is copied from Cece's script and could be standardized
+This bit is copied from the metals script and could be standardized in the future
 ```{r}
 frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 
@@ -92,15 +92,20 @@ frame2 <- frame2 %>%
          Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'B','BVR', Reservoir),
          Depth_m = as.numeric(str_extract(frame2$Filter1ID, '(?<=_)[:digit:]+(?=m)')),
          Site = 50)
-#
 
+#Need to get data from each filter separately. Doing that in a for loop
 #Set up empty columns
 frame2_complete = frame2%>%
   mutate(CombinedCollectionVol_L = NA,
          CombinedFilterVol_L = NA,
          CombinedSedMass_g = NA,
          CombinedXSA_m2 = NA,
-         Duration_days = NA)
+         Duration_days = NA,
+         Flag_CombinedCollectionVol_L = 1,
+         Flag_Filter2ID = 1, 
+         Flag_CombinedSedMass_g = 1, 
+         Flag_TOC_g = 1, #Not currently changing these below
+         Flag_TN_g= 1)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
@@ -111,20 +116,32 @@ for(i in 1:nrow(frame2_complete)){
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
     frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+    frame2_complete$Flag_CombinedCollectionVol_L[i]=ifelse(filter1$Flag_CollectionVol_L==2|filter2$Flag_CollectionVol_L==2,
+                                                           3,
+                                                           frame2_complete$Flag_CombinedCollectionVol_L[i]) #Save flag for volume
   } else { 
     if(!nrow(filter1)==1){warning(
       paste0("Filter ",
              frame2_complete$Filter1ID[i], 
              " is in the filtering log ",  nrow(filter1)," times\n"))}
-    if(!nrow(filter2)==1){warning(
+    if(!nrow(filter2)==1&!is.na(frame2_complete$Filter2ID[i])){warning(
       paste0("Filter ",
              frame2_complete$Filter2ID[i], 
              " is in the filtering log ",  nrow(filter2)," times\n"))}
+    if(is.na(frame2_complete$Filter2ID[i])&nrow(filter1)==1){ #If only one filter was used
+      frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L 
+      frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L
+      frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g
+      frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2 
+      frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+      frame2_complete$Flag_CombinedCollectionVol_L[i]=2
+      frame2_complete$Flag_Filter2ID[i]=2
+      frame2_complete$Flag_CombinedCollectionVol_L[i]=2
+      frame2_complete$Flag_CombinedSedMass_g[i]=2
+    }
+    
   }
 }
-
-#B_sed_8m_R1_F2_12Jun19
-#B_sed_8m_R2_F2_12Jun19
 ```
 
 Now that we have sed weights, finish processing
@@ -136,7 +153,7 @@ CN_DONE = frame2_complete%>%
          N_mass_CN_g = N_pct/100*Entered_weight_mg/1000,
          C_pct = C_mass_CN_g/CombinedSedMass_g*100, #convert to pct
          N_pct = N_mass_CN_g/CombinedSedMass_g*100)%>%
-  dplyr::select(Reservoir,Date_sampled,Depth_m,Site,Duration_days,Filter1ID,Filter2ID,CombinedCollectionVol_L,CombinedFilterVol_L,CombinedSedMass_g,CombinedXSA_m2,C_mass_CN_g,N_mass_CN_g)%>%
+  dplyr::select(Reservoir,Date_sampled,Depth_m,Site,Duration_days,Filter1ID,Filter2ID,CombinedCollectionVol_L,CombinedFilterVol_L,CombinedSedMass_g,CombinedXSA_m2,C_mass_CN_g,N_mass_CN_g,Flag_CombinedCollectionVol_L,Flag_Filter2ID, Flag_CombinedCollectionVol_L, Flag_CombinedSedMass_g, Flag_TOC_g, Flag_TN_g)%>%
   mutate(Filt_ratio = CombinedCollectionVol_L/CombinedFilterVol_L,
          C_mass_traps_g = C_mass_CN_g*Filt_ratio,
          N_mass_traps_g = N_mass_CN_g*Filt_ratio,
@@ -183,8 +200,38 @@ comb_formatted = comb_raw%>%
                 TOC_g,
                 TN_g,
                 TOCFlux_gm2d,
-                TNFlux_gm2d)%>%
-  arrange(Date)
+                TNFlux_gm2d,
+                Flag_Filter2ID,
+                Flag_CombinedCollectionVol_L,
+                Flag_CombinedSedMass_g,
+                Flag_TOC_g,
+                Flag_TN_g,
+                Flag_ICPTFe_mgL,
+                Flag_ICPTMn_mgL)%>%
+  arrange(Date)%>%
+  mutate(Flag_ICPTFe_mgL = ifelse(is.na(ICPTFe_mgL)&!is.na(TOC_g),2,Flag_ICPTFe_mgL),
+         Flag_ICPTMn_mgL = ifelse(is.na(ICPTMn_mgL)&!is.na(TOC_g),2,Flag_ICPTMn_mgL),
+         Flag_TOC_g = ifelse(is.na(TOC_g)&!is.na(ICPTFe_mgL),2,Flag_TOC_g),
+         Flag_TN_g = ifelse(is.na(TN_g)&!is.na(ICPTFe_mgL),2,Flag_TN_g))
+
+#Some durations are unknown at the beginning of each year
+comb_formatted = comb_formatted%>%
+  mutate(Flag_Duration_days = 1,
+         Flag_Duration_days = ifelse(Date == "2018-05-21" & Reservoir == "FCR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2020-07-06" & Reservoir == "FCR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2020-07-02" & Reservoir == "BVR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2021-06-28" & Reservoir == "BVR", 
+                                     2, 
+                                     Flag_Duration_days))
+
+comb_formatted = comb_formatted%>%
+  filter(is.na(Duration_days))
 
 write.csv(comb_formatted,"../CN_Metals_Flux_EDI.csv",row.names=F)
 

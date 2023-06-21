@@ -97,6 +97,22 @@ frame1 = frame1%>%
          Flag_SedMass_g = ifelse(is.na(SedMass_g),2,1),
          Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g),
          SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
+
+#Some durations are unknown at the beginning of each year
+frame1 = frame1%>%
+  mutate(Flag_Duration_days = 1,
+         Flag_Duration_days = ifelse(Date == "2018-05-21" & Reservoir == "FCR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2020-07-06" & Reservoir == "FCR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2020-07-02" & Reservoir == "BVR", 
+                                     2, 
+                                     Flag_Duration_days),
+         Flag_Duration_days = ifelse(Date == "2021-06-28" & Reservoir == "BVR", 
+                                     2, 
+                                     Flag_Duration_days))
   
 frame1 <- arrange(frame1, frame1$Date)
 write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)

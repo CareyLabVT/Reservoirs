@@ -22,11 +22,11 @@ TOC_g	Total organic carbon in each trap	numeric	gram		NA	No data
 TN_g	Total nitrogen in each trap	numeric	gram		NA	No data
 TOCFlux_gm2d	Calculated downward flux of total organic carbon	numeric	gramPerMeterSquaredPerDay		NA	No data
 TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquaredPerDay		NA	No data
-Flag_Filter2ID	"Flag indicating when only one filter was used for a given analysis. 1 = no issues; 2 = only one filter used, set to NA"	categorical			NA	No data
-Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L). 1 = no issues; 2 = only one filter used; 3 = at least one collection volume was not recorded and set to 1700 mL	categorical			NA	No data
-Flag_CombinedSedMass_g	"Data flag for CombinedSedMass (g). 1= no issues; 2 = only one filter used, set to NA"	categorical			NA	No data
-Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L). 1 = no issues; 2 = not run	categorical			NA	No data
-Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L). 1 = no issues; 2 = not run	categorical			NA	No data
-Flag_TOC_g	Data flag for TOC (g). 1 = no issues; 2 = not run	categorical			NA	No data
-Flag_TN_g	Data flag for TN (g). 1 = no issues; 2 = not run	categorical			NA	No data
-Flag_Duration_days	"Data flag for duration. 1 = no issues; 2 = deployment date not recorded, inferred"	categorical			NA	No data
+Flag_Filter2ID	Flag indicating when only one filter was used for a given analysis	categorical			NA	No data
+Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L)	categorical			NA	No data
+Flag_CombinedSedMass_g	Data flag for CombinedSedMass (g)	categorical			NA	No data
+Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L)	categorical			NA	No data
+Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L)	categorical			NA	No data
+Flag_TOC_g	Data flag for TOC (g)	categorical			NA	No data
+Flag_TN_g	Data flag for TN (g)	categorical			NA	No data
+Flag_Duration_days	Data flag for Duration (days)	categorical			NA	No data

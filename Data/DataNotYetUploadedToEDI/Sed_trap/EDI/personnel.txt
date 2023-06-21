@@ -13,7 +13,7 @@ Nicole	K.	Ward	Virginia Tech	nkward@vt.edu	0000-0001-7549-0153	creator
 Alexandra	B.	Gerling	Virginia Tech	alexg13@vt.edu	0000-0001-5280-6709	creator			
 Barbara	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator			
 Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
-Mary	F.	Verne	Virginia Tech	vmary1@vt.edu		creator			
+Mary	F.	Verne	Virginia Tech	vmary1@vt.edu	0009-0008-7752-6533	creator			
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator			
 Cayelan	C.	Carey			0000-0001-8835-4476	PI	N/A	Western Virginia Water Authority	N/A
 Cayelan	C.	Carey			0000-0001-8835-4476	PI	Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality	Institute of Critical Technology and Applied Science	N/A

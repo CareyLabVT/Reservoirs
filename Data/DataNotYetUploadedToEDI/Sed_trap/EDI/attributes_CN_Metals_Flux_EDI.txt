@@ -25,8 +25,8 @@ TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquar
 Flag_Filter2ID	Flag indicating when only one filter was used for a given analysis	categorical			NA	No data
 Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L)	categorical			NA	No data
 Flag_CombinedSedMass_g	Data flag for CombinedSedMass (g)	categorical			NA	No data
-Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L)	categorical			NA	No data
-Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L)	categorical			NA	No data
 Flag_TOC_g	Data flag for TOC (g)	categorical			NA	No data
 Flag_TN_g	Data flag for TN (g)	categorical			NA	No data
+Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L)	categorical			NA	No data
+Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L)	categorical			NA	No data
 Flag_Duration_days	Data flag for Duration (days)	categorical			NA	No data

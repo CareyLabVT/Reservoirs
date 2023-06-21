@@ -7,10 +7,11 @@ Falling Creek Reservoir	carey lab controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
 reservoir	cuahsi controlled vocabulary
 lakes	lter controlled vocabulary
-iron	
-manganese	
-metals	
-carbon	
-nitrogen	
-sediment	
-sediment trap	
+iron	lter controlled vocabulary
+manganese	lter controlled vocabulary
+metals	carey lab controlled vocabulary
+carbon	lter controlled vocabulary
+nitrogen	lter controlled vocabulary
+sediments	lter controlled vocabulary
+sediment trap	carey lab controlled vocabulary
+sedimentation	lter controlled vocabulary

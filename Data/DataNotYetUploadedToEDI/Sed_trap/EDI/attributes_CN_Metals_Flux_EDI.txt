@@ -1,32 +1,32 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
-Date	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD		
-Site	Sampling site within each reservoir	numeric	dimensionless			
-Duration_days	Duration of deployment/ time between collection points	numeric	dimensionless			
-Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter			
-CombinedXSA_m2	Trap cross sectional area	numeric	squareMeter			
-Filter1ID	Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character				
-Filter2ID	Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character				
-CombinedCollectionVol_L	Total collection volume for two filters analyzed	numeric	liter			
-CombinedFilterVol_L	Total volume of collected sample that was filtered for two filters analyzed	numeric	liter			
-CombinedSedMass_g	Total mass of sediment on filter after filtering for two filters analyzed	numeric	gram			
-ICPTFe_mgL	Raw total iron concentration of diluted digestion solution	numeric	milligramPerLiter			
-ICPTMn_mgL	Raw total manganese concentration of diluted digestion solution	numeric	milligramPerLiter			
-AcidVol_L	Volume of acid used in digestion	numeric	liter			
-DilutionFactor	Factor describing dilution of raw digestate for ICPMS analysis	numeric	dimensionless			
-TFe_g	Total mass of iron in each trap (calculated)	numeric	gram			
-TMn_g	Total mass of manganese in each trap (calculated)	numeric	gram			
-TFeFlux_gm2d	Calculated downward flux of total iron	numeric	gramPerMeterSquaredPerDay			
-TMnFlux_gm2d	Calculated downward flux of total manganese	numeric	gramPerMeterSquaredPerDay			
-TOC_g	Total organic carbon in each trap	numeric	gram			
-TN_g	Total nitrogen in each trap	numeric	gram			
-TOCFlux_gm2d	Calculated downward flux of total organic carbon	numeric	gramPerMeterSquaredPerDay			
-TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquaredPerDay			
-Flag_Filter2ID	"Flag indicating when only one filter was used for a given analysis. 1 = no issues; 2 = only one filter used, set to NA"	numeric	dimensionless			
-Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L). 1 = no issues; 2 = only one filter used; 3 = at least one collection volume was not recorded and set to 1700 mL	numeric	dimensionless			
-Flag_CombinedSedMass_g	"Data flag for CombinedSedMass (g). 1= no issues; 2 = only one filter used, set to NA"	numeric	dimensionless			
-Flag_TOC_g	Data flag for TOC (g). 1 = no issues; 2 = not run	numeric	dimensionless			
-Flag_TN_g	Data flag for TN (g). 1 = no issues; 2 = not run	numeric	dimensionless			
-Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
-Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
-Flag_Duration_days	"Data flag for duration. 1 = no issues; 2 = deployment date not recorded, inferred"	numeric	dimensionless			
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	No data
+Date	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD	NA	No data
+Site	Sampling site within each reservoir	numeric	dimensionless		NA	No data
+Duration_days	Duration of deployment/ time between collection points	numeric	dimensionless		NA	No data
+Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	No data
+CombinedXSA_m2	Trap cross sectional area	numeric	squareMeter		NA	No data
+Filter1ID	Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
+Filter2ID	Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
+CombinedCollectionVol_L	Total collection volume for two filters analyzed	numeric	liter		NA	No data
+CombinedFilterVol_L	Total volume of collected sample that was filtered for two filters analyzed	numeric	liter		NA	No data
+CombinedSedMass_g	Total mass of sediment on filter after filtering for two filters analyzed	numeric	gram		NA	No data
+ICPTFe_mgL	Raw total iron concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
+ICPTMn_mgL	Raw total manganese concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
+AcidVol_L	Volume of acid used in digestion	numeric	liter		NA	No data
+DilutionFactor	Factor describing dilution of raw digestate for ICPMS analysis	numeric	dimensionless		NA	No data
+TFe_g	Total mass of iron in each trap (calculated)	numeric	gram		NA	No data
+TMn_g	Total mass of manganese in each trap (calculated)	numeric	gram		NA	No data
+TFeFlux_gm2d	Calculated downward flux of total iron	numeric	gramPerMeterSquaredPerDay		NA	No data
+TMnFlux_gm2d	Calculated downward flux of total manganese	numeric	gramPerMeterSquaredPerDay		NA	No data
+TOC_g	Total organic carbon in each trap	numeric	gram		NA	No data
+TN_g	Total nitrogen in each trap	numeric	gram		NA	No data
+TOCFlux_gm2d	Calculated downward flux of total organic carbon	numeric	gramPerMeterSquaredPerDay		NA	No data
+TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquaredPerDay		NA	No data
+Flag_Filter2ID	Flag indicating when only one filter was used for a given analysis	categorical			NA	No data
+Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L)	categorical			NA	No data
+Flag_CombinedSedMass_g	Data flag for CombinedSedMass (g)	categorical			NA	No data
+Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L)	categorical			NA	No data
+Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L)	categorical			NA	No data
+Flag_TOC_g	Data flag for TOC (g)	categorical			NA	No data
+Flag_TN_g	Data flag for TN (g)	categorical			NA	No data
+Flag_Duration_days	Data flag for Duration (days)	categorical			NA	No data

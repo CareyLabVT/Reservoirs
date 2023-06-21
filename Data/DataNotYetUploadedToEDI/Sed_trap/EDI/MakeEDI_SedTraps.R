@@ -72,17 +72,25 @@ frame2_complete = frame2%>%
          CombinedFilterVol_L = NA,
          CombinedSedMass_g = NA,
          CombinedXSA_m2 = NA,
-         Duration_days = NA)
+         Duration_days = NA,
+         Flag_CombinedCollectionVol_L = 1,
+         Flag_Filter2ID = 1, 
+         Flag_CombinedSedMass_g = 1, 
+         Flag_ICPTFe_mgL = 1, #Not currently changing these below
+         Flag_ICPTMn_mgL= 1)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
-  filter1 = frame1%>%filter(FilterID==frame2_complete$Filter1ID[i]) #filter to the first filter
-  filter2 = frame1%>%filter(FilterID==frame2_complete$Filter2ID[i]) #filter to the second filter
+  filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
+  filter2 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter2ID[i])) #filter to the second filter
   if(nrow(filter1)==1&nrow(filter2)==1){
     frame2_complete$CombinedCollectionVol_L[i]=filter1$CollectionVol_L+filter2$CollectionVol_L #sum collection volumes
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
     frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2+filter2$TrapXSA_m2 #sum surface area
     frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+    frame2_complete$Flag_CombinedCollectionVol_L[i]=ifelse(filter1$Flag_CollectionVol_L==2|filter2$Flag_CollectionVol_L==2,
+                                                           3,
+                                                           frame2_complete$Flag_CombinedCollectionVol_L[i]) #Save flag for volume
   } else { 
     if(!nrow(filter1)==1){warning(
       paste0("Filter ",
@@ -98,6 +106,10 @@ for(i in 1:nrow(frame2_complete)){
       frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g
       frame2_complete$CombinedXSA_m2[i]=filter1$TrapXSA_m2 
       frame2_complete$Duration_days[i]=filter1$Duration_days #save duration
+      frame2_complete$Flag_CombinedCollectionVol_L[i]=2
+      frame2_complete$Flag_Filter2ID[i]=2
+      frame2_complete$Flag_CombinedCollectionVol_L[i]=2
+      frame2_complete$Flag_CombinedSedMass_g[i]=2
     }
     
   }
@@ -115,7 +127,5 @@ frame2 <- frame2_complete %>% mutate(ICPTFe_mgL = Fe_ppb/1000, ICPTMn_mgL = Mn_p
 
 #sort out the names and column order
 frame2 <- frame2 %>% rename("AcidVol_L" = "Vol_acid_L")
-
-#whoops still need to add Duration column         
 
 write.csv(frame2,"2022_FeMnCN.csv",row.names = F)

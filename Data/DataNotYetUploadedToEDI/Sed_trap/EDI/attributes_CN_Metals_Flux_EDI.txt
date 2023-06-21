@@ -25,8 +25,8 @@ TNFlux_gm2d	Calculated downward flux of total nitrogen	numeric	gramPerMeterSquar
 Flag_Filter2ID	"Flag indicating when only one filter was used for a given analysis. 1 = no issues; 2 = only one filter used, set to NA"	numeric	dimensionless			
 Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L). 1 = no issues; 2 = only one filter used; 3 = at least one collection volume was not recorded and set to 1700 mL	numeric	dimensionless			
 Flag_CombinedSedMass_g	"Data flag for CombinedSedMass (g). 1= no issues; 2 = only one filter used, set to NA"	numeric	dimensionless			
-Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
-Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
 Flag_TOC_g	Data flag for TOC (g). 1 = no issues; 2 = not run	numeric	dimensionless			
 Flag_TN_g	Data flag for TN (g). 1 = no issues; 2 = not run	numeric	dimensionless			
+Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
+Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L). 1 = no issues; 2 = not run	numeric	dimensionless			
 Flag_Duration_days	"Data flag for duration. 1 = no issues; 2 = deployment date not recorded, inferred"	numeric	dimensionless			

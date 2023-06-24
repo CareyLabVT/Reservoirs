@@ -272,11 +272,11 @@ for(i in 1:length(vars)){
     geom_ribbon(data = sensor_depth, aes(x = Date, ymin= Reservoir_depth, ymax = max), fill = "white",color = "black",lwd=.2)+
     geom_point(data = bvr, aes(x = Date, y = max), shape = 25, fill = "black", color = "white", size  =2)+
     geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "black", data = lines_rect, alpha = 0.15)+
-    geom_vline(data=lines,aes(xintercept = Dates, lty = status), show.legend = F)+
+    geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
     geom_hline(aes(yintercept = 6.6, lty = "Out-take pipe"), alpha = 0.3)+
-    scale_linetype_manual(values = c("84","solid"),
-                          breaks = c("Out-take pipe","Thermocline"),
-                          labels = c("Out-take pipe", NA),  name= NULL)+
+    scale_linetype_manual(values = c("84"),
+                          breaks = c("Out-take pipe"),
+                          labels = c("Out-take pipe"),  name= NULL)+
     scale_x_date(expand = c(0,0))+
     theme(panel.border = element_rect(fill = NA),
           panel.background = element_rect(fill = "white"),

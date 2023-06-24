@@ -892,7 +892,7 @@ meta_ratio%>%
   scale_linetype_manual(values = c("solid","dashed"))+
   facet_grid(rows = ~Year, scales = "free_x", space = "free_x")+
   theme_bw()+
-  ylab("Volume (m3)")+
+  ylab(bquote('Volume'~(m^3)))+
   theme(axis.title.x = element_blank(),
         legend.title = element_blank(),
         legend.position = "bottom",

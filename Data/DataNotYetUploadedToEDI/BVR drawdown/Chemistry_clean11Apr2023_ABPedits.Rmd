@@ -256,7 +256,7 @@ a<-sum_plot3%>%
   #geom_point(aes(alpha = show_points, color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, lty = lty, color = name))+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19177, color = "thermo"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19177, color = "thermo"), lwd = 2, alpha = 0.3, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   scale_linetype_manual(values = c("solid","11"),
                         breaks = c("solid","dashed"),
@@ -300,7 +300,7 @@ b<-sum_plot3%>%
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, lty = lty, color = name))+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19184, color = "DOsat_percent"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19184, color = "DOsat_percent"), lwd = 2, alpha = 0.3, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   scale_linetype_manual(values = c("solid","11"),
                         breaks = c("solid","dashed"),
@@ -343,7 +343,7 @@ fe<-sum_plot3%>%
 # combine color and linetype in a new column 
 fe$comb <- paste(fe$color, fe$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 fe<-fe%>%
   mutate(comb2=ifelse(comb=="SFe_mgL dashed","Soluble Fe", "Total Fe"))
 
@@ -360,8 +360,8 @@ ggplot()+
                 colour = comb2,
                 linetype = comb2)) +
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19184, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19178, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19184, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   #scale_linetype_manual(values = c("solid","11"),
                         #breaks = c("solid","dashed"),
@@ -400,14 +400,14 @@ ggplot()+
                    cols = unit(2.5, "in"))
 
 
-# Filter Iron out for the plot
+# Filter Mn out for the plot
 mn<-sum_plot3%>%
   filter(name=="Mn_mgL")
 
 # combine color and linetype in a new column 
 mn$comb <- paste(mn$color, mn$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 mn<-mn%>%
   mutate(comb2=ifelse(comb=="SMn_mgL dashed","Soluble Mn", "Total Mn"))
 
@@ -425,8 +425,8 @@ d<-mn%>%
                 colour = comb2,
                 linetype = comb2)) +
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19184, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19184, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   #scale_linetype_manual(values = c("solid","11"),
                         #breaks = c("solid","dashed"),
@@ -465,7 +465,7 @@ d<-mn%>%
 bio<-plot_grid(a, b,c,d, nrow = 4, align = "v")
 
 
- ggsave(file="./Figs/Abby_money_plot_biogeo_wLegend.jpeg",bio, dpi = 300, width = 6.5, height = 4)
+ ggsave(file="./Figs/Abby_money_plot_biogeo_wLegend.jpeg",bio, dpi = 300, width = 6.5, height = 4, bg = "white")
  
 ```
 
@@ -532,7 +532,7 @@ ph<-sum_plot4%>%
 # combine color and linetype in a new column 
 ph$comb <- paste(ph$color, ph$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 ph<-ph%>%
   mutate(comb2=ifelse(comb=="TP solid","Total P", "Phosphate"))
 
@@ -549,8 +549,8 @@ aa<-ph%>%
                 y=value,
                 colour = comb2,
                 linetype = comb2)) +
-  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #scale_linetype_manual(values = my_lines,
                         #labels = labels,
                         #breaks = names_orig
@@ -592,7 +592,7 @@ ni<-sum_plot4%>%
 
 ni$comb <- paste(ni$color, ni$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 ni<-ni%>%
   mutate(comb2=ifelse(comb=="TN solid","Total N", "Ammonium"))
 
@@ -609,8 +609,8 @@ bb<-ni%>%
                 y=value,
                 colour = comb2,
                 linetype = comb2)) +
-  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19191, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19191, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #scale_linetype_manual(values = my_lines,
                         #labels = labels,
                         #breaks = names_orig
@@ -652,7 +652,7 @@ pl<-sum_plot4%>%
 
 pl$comb <- paste(pl$color, pl$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 pl<-pl%>%
   mutate(comb2=ifelse(comb=="Total phytoplankton solid","Total phytoplankton", "Cyanobacteria"))
 
@@ -668,8 +668,8 @@ cc<-pl%>%
                 y=value,
                 colour = comb2,
                 linetype = comb2)) +
-  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19170, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #scale_linetype_manual(values = my_lines,
                         #labels = labels,
                         #breaks = names_orig
@@ -713,7 +713,7 @@ dd<-sum_plot4%>%
   geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, color = name))+
-  geom_vline(aes(xintercept = 19178, color = "DOC"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = "DOC"), lwd = 2, alpha = 0.3, show.legend = F)+
   scale_linetype_manual(values = my_lines,
                         labels = labels,
                         breaks = names_orig
@@ -757,7 +757,7 @@ ee<-sum_plot4%>%
   geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, color = name))+
-  geom_vline(aes(xintercept = 19178, color = "DOC"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = "DOC"), lwd = 2, alpha = 0.3, show.legend = F)+
   scale_linetype_manual(values = my_lines,
                         labels = labels,
                         breaks = names_orig
@@ -796,7 +796,7 @@ ee<-sum_plot4%>%
 
 bloom<-plot_grid(aa,bb,cc,dd,ee, nrow = 5, align = "v", hjust = -0.5)
 
-ggsave("./Figs/Abby_money_plot_doc_short_wlegend.jpeg",bloom, dpi = 300, width = 6.5, height = 5.5)
+ggsave("./Figs/Abby_money_plot_doc_short_wlegend.jpeg",bloom, dpi = 300, width = 6.5, height = 5.5, bg = "white")
 ```
 
 Code chunk 7: Make line plot of turbidity, euphotic zone, peak width, and peak depth (Figure PHYTOS)
@@ -867,7 +867,7 @@ a3<-sum_plot5%>%
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, color = name))+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19178, color = "Turbidity_NTU"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = "Turbidity_NTU"), lwd = 2, alpha = 0.3, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   scale_linetype_manual(values = c("solid","11"),
                         breaks = c("solid","dashed"),
@@ -912,7 +912,7 @@ b3<-sum_plot5%>%
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, color = name))+
   scale_alpha_manual(values = c(0,1))+
-  geom_vline(aes(xintercept = 19178, color = "Turbidity_NTU"), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = "Turbidity_NTU"), lwd = 2, alpha = 0.3, show.legend = F)+
   #geom_vline(data=lines,aes(xintercept = Dates), show.legend = F)+
   scale_linetype_manual(values = c("solid","11"),
                         breaks = c("solid","dashed"),
@@ -956,7 +956,7 @@ cmax<-sum_plot5%>%
 
 cmax$comb <- paste(cmax$color, cmax$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 cmax<-cmax%>%
   mutate(comb2=ifelse(comb=="TotalConc_ugL solid","Total phytoplankton", "Cyanobacteria"))
 
@@ -972,8 +972,8 @@ c3<-cmax%>%
                 y=value,
                 colour = comb2,
                 linetype = comb2)) +
-  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19178, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19178, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #scale_linetype_manual(values = my_lines,
                         #labels = labels,
                         #breaks = names_orig
@@ -1017,7 +1017,7 @@ pkw<-sum_plot5%>%
 
 pkw$comb <- paste(pkw$color, pkw$lty)
 
-# remane the column for the legend
+# rename the column for the legend
 pkw<-pkw%>%
   mutate(comb2=ifelse(comb=="TotalConc_ugL solid","Total phytoplankton", "Cyanobacteria"))
 
@@ -1034,8 +1034,8 @@ d4<-pkw%>%
                 y=value,
                 colour = comb2,
                 linetype = comb2)) +
-  geom_vline(aes(xintercept = 19156, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
-  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.5, show.legend = F)+
+  geom_vline(aes(xintercept = 19156, color = comb2), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19163, color = comb2), lwd = 2, alpha = 0.3, show.legend = F, linetype = "11")+
   #scale_linetype_manual(values = my_lines,
                         #labels = labels,
                         #breaks = names_orig
@@ -1074,5 +1074,5 @@ d4<-pkw%>%
 
 phytos<-plot_grid(a3,b3,c3,d4, nrow = 4, align = "v", hjust = -0.5)
 
-ggsave("./Figs/Abby_money_plot_phytos_wlegend.jpeg",phytos, dpi = 300, width = 6.5, height = 4)
+ggsave("./Figs/Abby_money_plot_phytos_wlegend.jpeg",phytos, dpi = 300, width = 6.5, height = 4, bg = "white")
 ```

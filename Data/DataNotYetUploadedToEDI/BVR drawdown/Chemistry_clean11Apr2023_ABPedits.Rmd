@@ -509,6 +509,7 @@ maxes%>%
   mutate(max_date=as.Date(max_date, origin="1970-01-01"))
 as.Date("2022-07-05")-as.Date("2022-06-27")
 as.Date("2022-07-18")-as.Date("2022-06-27")
+as.numeric(maxes$max_date)
 
 # New facet label names for sum_plot
 fac.labs <- c("Phosphorus\n(µg/L)", "Nitrogen\n(µg/L)","Phytoplankton\n(µg/L)", "DOC\n(mg/L)", "CO2\n(µmol/L)", "NH4 (µg/L)")
@@ -752,12 +753,12 @@ dd<-sum_plot4%>%
 # Plots CO2
 
 ee<-sum_plot4%>%
-  filter(name=="DOC_mgL")%>%
+  filter(name=="co2_umolL")%>%
   ggplot()+
   geom_rect(aes(xmin = opened,xmax = closed,ymin=-Inf,ymax=Inf),fill = "grey40", data = lines_rect, alpha = 0.2)+
   geom_point(aes(color = name,x = DateTime, y = value))+
   geom_line(aes(x = DateTime, y = value, color = name))+
-  geom_vline(aes(xintercept = 19178, color = "DOC"), lwd = 2, alpha = 0.3, show.legend = F)+
+  geom_vline(aes(xintercept = 19184, color = "CO2"), lwd = 2, alpha = 0.3, show.legend = F)+
   scale_linetype_manual(values = my_lines,
                         labels = labels,
                         breaks = names_orig

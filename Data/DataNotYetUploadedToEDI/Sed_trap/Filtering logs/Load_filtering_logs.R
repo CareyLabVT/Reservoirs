@@ -75,15 +75,12 @@ frame1 <- frame1 %>%
   rename("Volume_filtered_L" = "Volume_filtered_mL")
 frame1$Volume_filtered_L <- frame1$Volume_filtered_L/1000
 
-    #SedFlux_gm2d
-frame1 <- frame1 %>% 
-    mutate(SedFlux_gm2d = (((Mass_of_sediment_g/Volume_filtered_L) * CollectionVol_L) / (TrapXSA_m2 * Duration_days)))
 
 #reorder columns in the first data frame and rename. Prep for EDI publishing
 frame1 <- frame1 %>% 
   select(Reservoir, Date, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
   CollectionVol_L, FilterRep, Volume_filtered_L, Filter_mass_pre_filtering_g,
-  Filter_mass_post_filtering_g, Mass_of_sediment_g, SedFlux_gm2d, Sample_ID)
+  Filter_mass_post_filtering_g, Mass_of_sediment_g, Sample_ID)
 
 frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_L", 
                             "FilterMassPre_g" = "Filter_mass_pre_filtering_g",
@@ -114,5 +111,18 @@ frame1 = frame1%>%
                                      2, 
                                      Flag_Duration_days))
   
+#SedFlux_gm2d, put at the end because we need Duration and Collection Vol to be fixed before we can calculate this
+frame1 <- frame1 %>% 
+  mutate(SedFlux_gm2d = (((SedMass_g/FilterVol_L) * CollectionVol_L) / (TrapXSA_m2 * Duration_days)))
+
+
+#order columns correctly
+frame1 <- frame1 %>% 
+  select(Reservoir, Date, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L,
+         CollectionVol_L, FilterRep, FilterVol_L, FilterMassPre_g, FilterMassPost_g, 
+         SedMass_g, SedFlux_gm2d, FilterID, Flag_CollectionVol_L, Flag_SedMass_g, 
+         Flag_Duration_days)
+
+#ready to write csv!
 frame1 <- arrange(frame1, frame1$Date)
 write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)

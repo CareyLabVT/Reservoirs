@@ -15,3 +15,5 @@ nitrogen	lter controlled vocabulary
 sediments	lter controlled vocabulary
 sediment trap	carey lab controlled vocabulary
 sedimentation	lter controlled vocabulary
+particulates	lter controlled vocabulary
+suspended sediment	carey lab controlled vocabulary

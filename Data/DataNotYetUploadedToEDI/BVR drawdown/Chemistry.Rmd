@@ -434,7 +434,7 @@ sum_plot2 = chem_full%>%
               filter(year(DateTime)%in% c(2021,2022)))%>%
   full_join(thermo_depth%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(light%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
-  full_join(ctd%>%mutate(DateTime = as.Date(DateTime))%>%select(-Date))%>%
+  full_join(ctd%>%mutate(DateTime = as.Date(Date))%>%select(-Date))%>%
   full_join(ghg%>%mutate(DateTime = as.Date(DateTime)))%>%
   full_join(metals%>%mutate(DateTime = as.Date(Date))%>%select(-Date,-Date_22))%>%
   select(DateTime, PO4_ugL,DOC_mgL,Bluegreens_ugL,TotalConc_ugL,co2_umolL,ch4_umolL,thermo,Zeu,Turbidity_NTU,SpCond_uScm,DO_mgL,NO3NO2_ugL,NH4_ugL, pH,TFe_mgL)%>%

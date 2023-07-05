@@ -226,6 +226,26 @@ maxes = sum_plot3%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL","DOsat_percent"),min_date,max_date))
 
+maxes_sum = sum_plot3%>%
+  group_by(name,color, Year)%>%
+  summarize(max = max(value),
+            max_date = DateTime[which.max(value)],
+            min_date = DateTime[which.min(value)])%>%
+  group_by(name,color)%>%
+  mutate(dif = max[Year==2022]-max[Year==2021],
+         pct = (max[Year==2022]-max[Year==2021])/max[Year==2021]*100,
+         date_dif = max_date[Year==2022]-(max_date[Year==2021]+365))
+
+mins_sum = sum_plot3%>%
+  group_by(name,color, Year)%>%
+  summarize(min = min(value),
+            min_date = DateTime[which.min(value)],
+            min_date = DateTime[which.min(value)])%>%
+  group_by(name,color)%>%
+  mutate(dif = min[Year==2022]-min[Year==2021],
+         pct = (min[Year==2022]-min[Year==2021])/min[Year==2021]*100,
+         date_dif = min_date[Year==2022]-(min_date[Year==2021]+365))
+
 #Stats
 sum_plot3%>%
   group_by(name, color,Year)%>%
@@ -503,6 +523,13 @@ maxes = sum_plot4%>%
             min_date = DateTime[which.min(value)])%>%
   filter(Year=="2022")%>%
   mutate(max_date = ifelse(name %in% c("thermo","Zeu","DO_mgL"),min_date,max_date))
+
+maxes_sum = sum_plot4%>%
+  group_by(name,color, Year)%>%
+  summarize(max = max(value))%>%
+  group_by(name,color)%>%
+  mutate(dif = max[Year==2022]-max[Year==2021],
+         pct = (max[Year==2022]-max[Year==2021])/max[Year==2021]*100)
 
 #Stats
 maxes%>%

@@ -279,6 +279,28 @@ surf%>%
 
 #How much earlier was turnover?
 yday("2022-11-6")-yday("2021-10-19")
+
+vw_temp_df%>%
+  filter(month(Date)%in%c(7))%>%
+  group_by(Year)%>%
+  dplyr::summarise(mean = mean(vw_temp, na.rm = T),
+                   sd = sd(vw_temp, na.rm = T))
+22.44-19.70
+
+buoy_max%>%
+  filter(month(Date)%in%c(7))%>%
+  mutate(Year = year(Date))%>%
+  group_by(Year)%>%
+  dplyr::summarise(mean = mean(max, na.rm = T),
+                   sd = sd(max, na.rm = T))
+(0.01260153-0.01007704)/0.01007704
+
+schmidt_df%>%
+  filter(month(Date)%in%c(7))%>%
+  group_by(Year)%>%
+  dplyr::summarise(mean = mean(Schmidt, na.rm = T),
+                   sd = sd(Schmidt, na.rm = T))
+(124.55-66.87)/124.55
 ```
 
 Figure PHYSICS - air temp/wind/etc

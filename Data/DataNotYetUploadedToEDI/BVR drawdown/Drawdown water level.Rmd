@@ -54,6 +54,14 @@ sensor_depth%>%
   theme(legend.position = "none")
 dev.off()
 
+sensor_depth%>%filter(Date<"2022-11-06", Date>"2022-06-28")%>%
+  dplyr::summarize(max = max(WaterLevel),
+                   min = min(WaterLevel),
+                   mu = mean(WaterLevel),
+                   sd = sd(WaterLevel))
+
+sensor_depth$WaterLevel[sensor_depth$Date=="2022-05-19"]-sensor_depth$WaterLevel[sensor_depth$Date=="2022-06-28"]
+
 sensor_depth = sensor%>%
   mutate(WaterLevel=Depth_m_13)%>%#the sensor is 0.5m off the bottom
   #mutate(DateTime = as.POSIXct(TIMESTAMP),
@@ -68,32 +76,14 @@ sensor_depth = sensor%>%
          Site = 50)
   #filter(!lag(WaterLevel)-WaterLevel>0.05)
 
+sensor_depth%>%
+  filter(year(Date)==2021)%>%
+  dplyr::summarize(max = max(WaterLevel),
+                   min = min(WaterLevel),
+                   mu = mean(WaterLevel),
+                   sd = sd(WaterLevel))
+
 lines = data.frame(Dates = as.Date(c("2022-06-28", "2022-05-19","2022-05-28", "2022-07-01")), desc = c("closed","opened", "decreasing", "stable"), type = c("close","open","open","close"), status = c("init","init","final","final"))
-
-jpeg("./Figs/WaterLevel_long.jpeg", width = 6, height = 4, units = "in", res = 300)
-sensor_depth%>%
-  ggplot(aes(x = Date, y = WaterLevel))+
-  geom_line()+
-  #geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  expand_limits(y = 0)+
-  theme_bw()+
-  ylab("Depth (m)")+
-  theme(legend.position = "none")
-dev.off()
-
-
-jpeg("./Figs/WaterLevel_long_lines.jpeg", width = 6, height = 4, units = "in", res = 300)
-sensor_depth%>%
-  ggplot(aes(x = Date, y = WaterLevel))+
-  geom_line()+
-  geom_vline(data=lines,aes(xintercept = Dates, lty = status))+
-  scale_linetype_manual(values = c("solid","dashed"))+
-  expand_limits(y = 0)+
-  theme_bw()+
-  ylab("Depth (m)")+
-  theme(legend.position = "none")
-dev.off()
 
 library(readxl)
 hist = read_excel("./Data/09Apr20_BVR_WaterLevelDaily.xlsx")%>%

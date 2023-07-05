@@ -1,5 +1,37 @@
 #Make Zooplankton EML
 #Cayelan Carey, based on EDI workshop 24 May 2018
+#updated 5 Jul 2023 HLW
+
+#Create site description file
+#Install the required googlesheets4 package
+#install.packages('googlesheets4')
+
+#Load the library 
+library(googlesheets4)
+library(tidyverse)
+
+#set up permissions
+#gs4_auth(cache = FALSE)
+
+#read in all sites from google drive
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+
+#read in zoop df
+data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton.csv") 
+
+#only select sites that are in your df
+trim_sites = function(data,sites){
+  data_res_site=data%>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites%>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+    filter(res_site%in%data_res_site$res_site)%>%
+    select(-res_site)
+}
+sites_trimmed = trim_sites(data,sites) 
+
+#save as a csv
+write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/site_descriptions.csv", row.names = FALSE)
 
 # Install devtools
 install.packages("devtools")

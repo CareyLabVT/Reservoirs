@@ -1,0 +1,133 @@
+#Zooplankton QAQC script for visualizing and merging files
+#Created 5 Jul 2023
+
+#read in libraries
+#if (!require("pacman"))install.packages("pacman")
+pacman::p_load(ggplot2)
+
+#read in new zoop files
+zoop <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/EDI_zoop_taxa_2019-2022.csv")
+
+zoop_dens <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/EDI_zoop_raw_dens_2019-2022.csv")
+
+zoop_biom <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/EDI_zoop_raw_biom_2019-2022.csv")
+
+#get zoop date into correct format
+zoop$DateTime <- as.POSIXct(zoop$DateTime)
+
+#hypo tows
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Density_IndPerL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Biomass_ugL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanLength_mm, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanWeight_ug, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+#hypo schindlers
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")),
+       aes(DateTime, Density_IndPerL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Biomass_ugL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanLength_mm, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m %in% c(7, 8, 9,10) & 
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanWeight_ug, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon)
+  
+
+#epi tows
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Density_IndPerL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Biomass_ugL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")),
+       aes(DateTime, MeanLength_mm, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")),
+       aes(DateTime, MeanWeight_ug, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+#epi schindlers
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Density_IndPerL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, Biomass_ugL, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanLength_mm, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+ggplot(data=subset(zoop, CollectionMethod %in% c("Schindler") & StartDepth_m <=6.9 &
+                     Taxon %in% c("Cladocera", "Copepoda", "Rotifera")), 
+       aes(DateTime, MeanWeight_ug, color=as.factor(StartDepth_m))) + 
+  geom_point() + theme_bw() + facet_wrap(~Reservoir+Site+Taxon, scales="free")
+
+
+#raw # check
+ggplot(data=subset(zoop_dens, CollectionMethod %in% c("Tow")), 
+       aes(DateTime, Zooplankton_No., color=as.factor(StartDepth_m))) + geom_point() +
+  theme_bw() + facet_wrap(~Reservoir+Site)
+
+ggplot(data=subset(zoop_dens, CollectionMethod %in% c("Schindler")), 
+       aes(DateTime, Zooplankton_No., color=as.factor(StartDepth_m))) + geom_point() +
+  theme_bw() + facet_wrap(~Reservoir+Site)
+
+#-------------------------------------------------------------------------------#
+#combine new + old zoop files
+
+#read in old files
+old <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/zooplankton.csv")
+fcr <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/FCR_zooplankton_2014.csv")
+
+#get 2014 file into right date format
+fcr$DateTime <- as.POSIXct(paste(fcr$DateTime, "12:00"), format = "%m/%d/%y %H:%M", tz="EST")
+old$DateTime <- as.POSIXct(old$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
+
+#merge old dfs
+old_final <- rbind(old, fcr)
+
+#merge old df with new df
+zoops_final <- rbind(old_final, zoop)
+
+#export final df
+write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/2022_zoop_collation_final.csv", row.names=F)
+
+#need to do the same with raw dens and biom files??????

@@ -827,6 +827,7 @@ bloom<-plot_grid(aa,bb,cc,dd,ee, nrow = 5, align = "v", hjust = -0.5)
 ggsave("./Figs/Abby_money_plot_doc_short_wlegend.jpeg",bloom, dpi = 300, width = 6.5, height = 5.5, bg = "white")
 ```
 
+TNTP
 ```{r}
 #Combine all data
 tntp = chem_full%>%
@@ -901,7 +902,11 @@ tntp%>%
   ylab("")+
   force_panelsizes(rows = unit(.75, "in"),
                    cols = unit(2.5, "in"))
-ggsave("./Figs/Abby_money_plot_doc_short.jpeg", dpi = 300, width = 6.5, height = 6.5)
+ggsave("./Figs/TNTP.jpeg", dpi = 300, width = 6.5, height = 3)
+
+before = tntp$value[tntp$DateTime=="2022-05-23"&tntp$name=="TNTP"]
+after = tntp$value[tntp$DateTime=="2022-06-27"&tntp$name=="TNTP"]
+(after-before)/before*100
 ```
 
 Code chunk 7: Make line plot of turbidity, euphotic zone, peak width, and peak depth (Figure PHYTOS)

@@ -3,7 +3,7 @@
 #after receiving the Excel sheet from Jeff, save only the Schreiber lab data in a csv file
 #the sheet with reservoir data should be named after the person who submitted samples
 
-metal_read<-read.csv("metals_8_12.csv")
+metal_read<-read.csv("~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230203_230501.csv")
 #pick out only Fe and Mn columns with date ID column
 Fe_Mn<-cbind(metal_read$ICP.MS.Data, metal_read$X.13, metal_read$X.14)
 #convert from matrix to data frame
@@ -65,13 +65,15 @@ fill.ids<-function(sample.date){
     id.tf<-j %in% sample.ids$cleanIDs 
     if (id.tf==TRUE){
       fcr.isSampled<-TRUE
-    }}
+    }
+    } #all this chunk wil tell you is if FCR was sampled AT LEAST once this date, not which ones or how many
     ##check to see if there are numbers between 19-26 (would indicate BVR was sampled)
     for (k in bvr.ids){
-      id.tf<-bvr.ids %in% sample.ids$cleanIDs 
+      id.tf<- k %in% sample.ids$cleanIDs 
       if (id.tf==TRUE){
         bvr.isSampled<-TRUE
-      }}
+      }
+      } #same for BVR
       #outersect to find difference between sample.ids for that date vs. full set for FCR and BVR
       #returns an array of ids to insert into dataframe
       if (fcr.isSampled==TRUE){
@@ -83,7 +85,8 @@ fill.ids<-function(sample.date){
           newRow<-c(sample.date,-999,-999,l)
           sample.ids<-rbind(sample.ids,newRow)
           #insertRow(sample.ids,newRow,length(sample.ids$cleanIDs)+1)
-        }}
+        }
+        }
       if (bvr.isSampled==TRUE){
         missing.idsBVR<-outersect(bvr.ids,sample.ids$cleanIDs)
         #only take outersect values that are between 19-26 - exclude FCR IDs
@@ -92,7 +95,8 @@ fill.ids<-function(sample.date){
           #insert new row onto end of sample.ids (dataframe containing samples from one date). 
           newRow<-c(sample.date,-999,-999,m)
           sample.ids<-rbind(sample.ids,newRow)
-        }}
+        }
+        }
         #take sample.ids with appended rows and order 
         sample_order<-sample.ids[order(sample.ids$cleanIDs),]
         return(sample_order)
@@ -101,8 +105,7 @@ fill.ids<-function(sample.date){
 #then merge completed dataframes for each date
 #use rbind
 
-Fe_Mn<-fill.ids(sample.dates[i])
-
+Fe_Mn<-fill.ids(sample.dates[1])
 for (i in 2:length(sample.dates)){
   Fe_Mn<-rbind(Fe_Mn,fill.ids(sample.dates[i]))
 }
@@ -129,13 +132,13 @@ for (i in seq(1,length(cleanIDs))){
   else if (ID==21 | ID==22){depths<-c(depths,3.0)}
   else if (ID==23 | ID==24){depths<-c(depths,6.0)}
   #line below is for samples 25 and 26 from BVR
-  else {depths<-c(depths,9.0)}
+  else if (ID==25 | ID==26){depths<-c(depths,9.0)}
   
   ####Commented out conditions below are not currently sampled for summer '23
   
  # else if (ID==27 | ID==28){depths<-c(depths,11.0)}
-  #ISCO
- # else if (ID==29 | ID==30){depths<-c(depths,0.1)}
+  #ISCO is 29 and 30
+ else {depths<-c(depths,0.1)}
   #BVR 40
   #else if (ID==31 | ID==32){depths<-c(depths,0.1)}
   #else if (ID==33 | ID==34){depths<-c(depths,3.0)}
@@ -229,7 +232,7 @@ for (i in seq(1,length(Fe_Mn$cleanIDs))){
 
 siteNo<-c(siteNo[c(T,F)])
 
-finalDF<-cbind(reservoir,siteNo, sampleDates,TFe,TMn,SFe,SMn)
+finalDF<-cbind(reservoir,siteNo,rep(sample.date, each = length(reservoir)),TFe,TMn,SFe,SMn)
 
 metalsnumeric<-as.data.frame(apply(finalDF[,4:7],2,as.numeric))
 

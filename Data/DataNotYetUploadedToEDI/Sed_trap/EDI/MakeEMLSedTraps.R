@@ -148,9 +148,9 @@ make_eml(
   other.entity = c("MakeEDI_SedTraps.R", "MakeEDI_SedTraps_CN.Rmd","Load_filtering_logs.R"),
   other.entity.name = c("Metal flux script", "CN flux script","Filtering log script"),
   other.entity.description = c("Metal flux calculations script", "CN flux calculations script","Script to generate filtering log record for EDI"),
-  user.id = 'ccarey',
+  user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1016.5') #reserve new staging environment package id each year
+  package.id = 'edi.326.1') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

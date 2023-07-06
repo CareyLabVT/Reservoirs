@@ -1,0 +1,10 @@
+givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	creator			
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	contact			
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality	Institute of Critical Technology and Applied Science	
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI		Virginia Tech Global Change Center	
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI		Fralin Life Sciences Institute	
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	DISSERTATION RESEARCH: Hypoxia-induced trade-offs on zooplankton vertical distribution and community structure in freshwaters	National Science Foundation	DEB-1601061
+Heather	L.	Wander	Virginia Tech	hwander@vt.edu	0000-0002-3762-6045	creator			
+Jonathan	P.	Doubek	Virginia Tech	jpdoubek@vt.edu	0000-0003-2651-4715	creator			

@@ -1,0 +1,32 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+CollectionMethod	Tow	Zooplankton Collection Method
+CollectionMethod	Schindler	Zooplankton Collection Method
+Taxon	Bosmina	Bosmina
+Taxon	Chydorus	Chydorus
+Taxon	Conochilus	Conochilus
+Taxon	Cyclopoids	Cyclopoids
+Taxon	Keratella	Keratella
+Taxon	Nauplii	Nauplii
+Taxon	Polyarthra	Polyarthra
+Taxon	Total Rotifers	Total Rotifers
+Taxon	Trichocerca	Trichocerca
+Taxon	D. catawba	D. catawba
+Taxon	Diaptomus	Diaptomus
+Taxon	Ascomorpha	Ascomorpha
+Taxon	D. ambigua	D. ambigua
+Taxon	Kellicottia	Kellicottia
+Taxon	Asplanchna	Asplanchna
+Taxon	Diaphanosoma	Diaphanosoma
+Taxon	Lecane	Lecane
+Taxon	Chaoborus	Chaoborus
+Taxon	Ceriodaphnia	Ceriodaphnia
+Taxon	Bipalpus	Bipalpus
+Taxon	Finilia	Finilia
+Taxon	Synchaeta	Synchaeta
+Taxon	Leptodora	Leptodora
+Taxon	bipalpus	bipalpus
+Taxon	Monostyla	Monostyla

@@ -1,0 +1,19 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Lakes	lter controlled vocabulary
+Zooplankton	lter controlled vocabulary
+Chaoborus	carey lab controlled vocabulary
+Cladoceran	carey lab controlled vocabulary
+Copepod	carey lab controlled vocabulary
+Density	lter controlled vocabulary
+Daphnia	carey lab controlled vocabulary
+Diel vertical migration	carey lab controlled vocabulary
+Invertebrates	lter controlled vocabulary
+Rotifer	carey lab controlled vocabulary
+Schindler trap	carey lab controlled vocabulary
+Vertical net tow	carey lab controlled vocabulary

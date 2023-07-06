@@ -1,0 +1,5 @@
+geographicDescription	westBoundingCoordinate	eastBoundingCoordinate	northBoundingCoordinate	southBoundingCoordinate
+Beaverdam Reservoir	-79.824834	-79.813848	37.322865	37.311961
+Carvins Cove Reservoir	-79.978642	-79.944052	37.409127	37.365345
+Gatewood Reservoir	-80.89188	-80.858492	37.054358	37.03819
+Spring Hollow Reservoir	-80.179076	-80.170407	37.231092	37.217594

@@ -13,7 +13,7 @@ library(stringr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
+setwd("~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
 filteringlog <- read_excel('2022_SedTraps_FilteringLog.xlsx')
 log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")
 log_2019 <- read_excel("2019_FilteringLog_EDI.xlsx")

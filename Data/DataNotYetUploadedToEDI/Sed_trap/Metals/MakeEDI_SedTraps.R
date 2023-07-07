@@ -8,7 +8,7 @@ library(stringr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Metals")
+setwd('~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Metals')
 
 frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 

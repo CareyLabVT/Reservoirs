@@ -50,7 +50,7 @@ template_core_metadata(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 
 template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                        data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                       data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
+                       data.table = c("FluxSummary.csv","CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                        write.file = TRUE)
 
 
@@ -58,7 +58,7 @@ template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
                              data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                             data.table = c("CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
+                             data.table = c("FluxSummary.csv", "CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -136,18 +136,21 @@ make_eml(
   dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2022",
   temporal.coverage = c("2018-05-21", "2022-11-28"),
   maintenance.description = 'ongoing',
-  data.table = c("FilteringLog_EDI.csv", 
+  data.table = c("FluxSummary.csv",
+                 "FilteringLog_EDI.csv", 
                  "CN_Metals_Flux_EDI.csv",
                  "site_descriptions.csv"),
-  data.table.name = c("Filtering log",
-                       "Fluxes",
+  data.table.name = c("Flux Summary",
+                      "Filtering log",
+                      "Fluxes",
                       "Site desciptions"),
-  data.table.description = c("Sediment trap filtering log",
+  data.table.description = c("Summary of sediment, CN, and metals data",
+                             "Sediment trap filtering log",
                              "Carbon, nitrogen, iron, manganese fluxes",
                              "Sampling site descriptions"),
-  other.entity = c("MakeEDI_SedTraps.R", "MakeEDI_SedTraps_CN.Rmd","Load_filtering_logs.R"),
-  other.entity.name = c("Metal flux script", "CN flux script","Filtering log script"),
-  other.entity.description = c("Metal flux calculations script", "CN flux calculations script","Script to generate filtering log record for EDI"),
+  other.entity = c("MakeEDI_FluxSummary.R","MakeEDI_SedTraps.R", "MakeEDI_SedTraps_CN.Rmd","Load_filtering_logs.R"),
+  other.entity.name = c("Flux summary script","Metal flux script", "CN flux script","Filtering log script"),
+  other.entity.description = c("Script to summarize sediment, CN, and metals fluxes","Metal flux calculations script", "CN flux calculations script","Script to generate filtering log record for EDI"),
   user.id = 'mschreib',
   user.domain = 'EDI',
   package.id = 'edi.326.1') #reserve new staging environment package id each year

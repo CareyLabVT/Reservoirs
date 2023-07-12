@@ -1,0 +1,14 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Date		Date		YYYY-MM-DD	NA	No data
+Reservoir		categorical			NA	No data
+Depth_m		numeric	meter		NA	No data
+AvgSedFlux_gm2d		numeric	gramPerMeterSquaredPerDay		NA	No data
+TFeFlux_gm2d		numeric	gramPerMeterSquaredPerDay		NA	No data
+TMnFlux_gm2d		numeric	gramPerMeterSquaredPerDay		NA	No data
+TOCFlux_gm2d		numeric	gramPerMeterSquaredPerDay		NA	No data
+TNFlux_gm2d		numeric	gramPerMeterSquaredPerDay		NA	No data
+Flag_AvgSedFlux_gm2d		categorical			NA	No data
+Flag_TFeFlux_gm2d		categorical			NA	No data
+Flag_TMnFlux_gm2d		categorical			NA	No data
+Flag_TOCFlux_gm2d		categorical			NA	No data
+Flag_TNFlux_gm2d		categorical			NA	No data

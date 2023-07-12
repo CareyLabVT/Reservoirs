@@ -16,7 +16,7 @@ fluxes <- fluxes %>%
 flux_summary <- fluxes %>% 
   group_by(Date, Reservoir, Depth_m) %>% 
   summarise(n_Fe = sum(!is.na(TFeFlux_gm2d)),
-            n_CN = sum(!is.na(TOCFlux_gm2d)),
+            n_Mn = sum(!is.na(TMnFlux_gm2d)),
             AvgSedFlux_gm2d = mean(SedFlux_gm2d, na.rm = TRUE),
             TFeFlux_gm2d = mean(TFeFlux_gm2d, na.rm = TRUE), 
             TMnFlux_gm2d = mean(TMnFlux_gm2d, na.rm = TRUE), 
@@ -41,7 +41,7 @@ flux_summary_final <- flux_summary %>%
          Flag_TFeFlux_gm2d = ifelse(n_Fe > 1, 3, Flag_TFeFlux_gm2d),
          Flag_TFeFlux_gm2d = ifelse(is.na(TFeFlux_gm2d), 2, Flag_TFeFlux_gm2d),
          Flag_TMnFlux_gm2d = 1,
-         Flag_TMnFlux_gm2d = ifelse(n_Fe > 1, 3, Flag_TMnFlux_gm2d),
+         Flag_TMnFlux_gm2d = ifelse(n_Mn > 1, 3, Flag_TMnFlux_gm2d),
          Flag_TMnFlux_gm2d = ifelse(is.na(TMnFlux_gm2d), 2, Flag_TMnFlux_gm2d),
          Flag_TOCFlux_gm2d = 1,
          Flag_TOCFlux_gm2d = ifelse(is.na(TOCFlux_gm2d), 2, Flag_TOCFlux_gm2d),

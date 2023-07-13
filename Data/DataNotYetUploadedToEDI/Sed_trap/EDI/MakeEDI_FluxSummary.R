@@ -48,7 +48,7 @@ flux_summary_final <- flux_summary %>%
          Flag_TNFlux_gm2d = 1,
          Flag_TNFlux_gm2d = ifelse(is.na(TNFlux_gm2d), 2, Flag_TNFlux_gm2d),
          Flag_AvgSedFlux_gm2d = 1,
-         Flag_AvgSedFlux_gm2d = ifelse(Flag_CombinedCollectionVol_L != 1 | Flag_Duration_days != 1 | Flag_Filter2ID != 1 | Flag_CombinedSedMass_g != 1, 4, Flag_AvgSedFlux_gm2d),
+         Flag_AvgSedFlux_gm2d = ifelse(Flag_CombinedCollectionVol_L != 1 | Flag_Duration_days != 1 | Flag_Filter2ID != 1 | Flag_CombinedSedMass_g != 1, 3, Flag_AvgSedFlux_gm2d),
          Flag_AvgSedFlux_gm2d = ifelse(is.na(AvgSedFlux_gm2d), 2, Flag_AvgSedFlux_gm2d)) %>% 
   select(Date, Reservoir, Depth_m, AvgSedFlux_gm2d, TFeFlux_gm2d, TMnFlux_gm2d, TOCFlux_gm2d,
          TNFlux_gm2d, Flag_AvgSedFlux_gm2d, Flag_TFeFlux_gm2d, Flag_TMnFlux_gm2d, Flag_TOCFlux_gm2d,

@@ -6,53 +6,39 @@ library(lubridate)
 library(stringr)
 
 #read in most recent ICPMS sheet
-ICP<-read.csv("~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230203_230501.csv",
+ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230203_230501.csv",
                      skip = 5) %>% 
   select(X, X.14, X.15) %>%
   rename(Jeff_ID = X, Fe_mgL = X.14, Mn_mgL = X.15) %>% #note: Fe and Mn are still ppb or ug/L
-  separate(Jeff_ID,c("DateTime","Sample")," - ")
- ICP$Sample <- as.numeric(ICP$Sample) #must be numeric for join to work
- ICP$Fe_mgL <- ICP$Fe_mgL/1000 #converting to ppm
- ICP$Mn_mgL <- ICP$Mn_mgL/1000 #converting to ppm
- ICP$DateTime <-as.Date(ICP$DateTime, format = "%m/%d/%Y")
+  separate(Jeff_ID,c("DateTime","Sample")," - ") %>%
+  mutate(Sample = as.numeric(Sample), #must be numeric for join to work
+         Fe_mgL = Fe_mgL/1000, #converting to ppm
+         Mn_mgL = Mn_mgL/1000, #converting to ppm
+         DateTime = as.Date(DateTime, format = "%m/%d/%Y"))
+ 
    
 #read in metals ID, reservoir, site, depth, and total/soluble key
- metals_key <- read.csv('~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv') %>%
+ metals_key <- read.csv('./Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv') %>%
    rename(Depth_m = Sample.Depth..m.)
  
+ 
 #set up final data frame with correct formatting!
- frame1 <- ICP %>%
-   group_by(DateTime) %>% 
-   expand(Sample = 1:30) %>% #note - 1:30 includes ALL of the FCR and BVR sites that are sampled
-   left_join(ICP, by = c('Sample', 'DateTime')) %>% 
-   full_join(metals_key, by = 'Sample') %>% 
+ frame1 <- left_join(ICP, metals_key, by = c('Sample')) %>% 
+   select(-Sample) %>%
    pivot_wider(names_from = 'Filter', values_from = c('Fe_mgL', 'Mn_mgL')) %>% 
-   rename(TFe_mgL = Fe_mgL_T, SFe_mgL = Fe_mgL_S, TMn_mgL = Mn_mgL_T, SMn_mgL = Mn_mgL_S) %>% 
-   group_by(DateTime, Reservoir, Depth_m, Site) %>% 
-   summarise(TFe_mgL = mean(TFe_mgL, na.rm = TRUE),
-             TMn_mgL = mean(TMn_mgL, na.rm = TRUE), 
-             SFe_mgL = mean(SFe_mgL, na.rm = TRUE),
-             SMn_mgL = mean(SMn_mgL, na.rm = TRUE),
-             n_TFe = sum(!is.na(TFe_mgL)),
+   rename(TFe_mgL = Fe_mgL_T, SFe_mgL = Fe_mgL_S, TMn_mgL = Mn_mgL_T, SMn_mgL = Mn_mgL_S) %>%
+   group_by(DateTime, Reservoir, Depth_m, Site) %>%
+   summarize(n_TFe = sum(!is.na(TFe_mgL)),
              n_TMn = sum(!is.na(TMn_mgL)),
              n_SFe = sum(!is.na(SFe_mgL)),
-             n_SMn = sum(!is.na(SMn_mgL))) %>%
-   ungroup () 
+             n_SMn = sum(!is.na(SMn_mgL)),
+             TFe_mgL = mean(TFe_mgL, na.rm = TRUE),
+             SFe_mgL = mean(SFe_mgL, na.rm = TRUE),
+             TMn_mgL = mean(TMn_mgL, na.rm = TRUE),
+             SMn_mgL = mean(SMn_mgL, na.rm = TRUE)) %>%
+   ungroup() %>%
+   mutate_all(~ifelse(is.nan(.), NA, .)) #need to get rid of NaNs created by taking mean during summarise step
  
-  #need to get rid of NaNs created by taking mean during summarise step
-  frame1$TFe_mgL[is.nan(frame1$TFe_mgL)] <- NA
-  frame1$TMn_mgL[is.nan(frame1$TMn_mgL)] <- NA
-  frame1$SFe_mgL[is.nan(frame1$SFe_mgL)] <- NA
-  frame1$SMn_mgL[is.nan(frame1$SMn_mgL)] <- NA
-
-
-frame1 <- frame1 %>% 
-   arrange(DateTime, Reservoir, Site, Depth_m) %>% 
-   rowwise %>% 
-   mutate(Sum = sum(TFe_mgL, SFe_mgL, TMn_mgL, SMn_mgL, na.rm = TRUE)) %>% 
-   subset(Sum != 0) %>% 
-   ungroup()
-
  
  #let's set up flags! Some will be manually entered, but we can at least make the columns
  frame1 <- frame1 %>% 

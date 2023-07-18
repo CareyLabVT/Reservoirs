@@ -1,3 +1,10 @@
+# Title: Metals data wrangling script
+# Author: Cece Wood
+# Date: 18JUL23
+
+# Purpose: convert metals data from the ICP-MS lab format to the format needed
+# for publication to EDI
+
 rm(list=ls(all=TRUE))
 library(dplyr)
 library(tidyr)

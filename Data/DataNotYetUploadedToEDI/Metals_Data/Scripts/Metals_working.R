@@ -28,11 +28,11 @@ ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_
    pivot_wider(names_from = 'Filter', values_from = c('Fe_mgL', 'Mn_mgL')) %>% 
    rename(TFe_mgL = Fe_mgL_T, SFe_mgL = Fe_mgL_S, TMn_mgL = Mn_mgL_T, SMn_mgL = Mn_mgL_S) %>%
    group_by(DateTime, Reservoir, Depth_m, Site) %>%
-   summarize(n_TFe = sum(!is.na(TFe_mgL)),
+   summarize(n_TFe = sum(!is.na(TFe_mgL)), #this is needed in case there are duplicate samples
              n_TMn = sum(!is.na(TMn_mgL)),
              n_SFe = sum(!is.na(SFe_mgL)),
              n_SMn = sum(!is.na(SMn_mgL)),
-             TFe_mgL = mean(TFe_mgL, na.rm = TRUE),
+             TFe_mgL = mean(TFe_mgL, na.rm = TRUE), #tabulator for duplicate samples, needed for flags below
              SFe_mgL = mean(SFe_mgL, na.rm = TRUE),
              TMn_mgL = mean(TMn_mgL, na.rm = TRUE),
              SMn_mgL = mean(SMn_mgL, na.rm = TRUE)) %>%

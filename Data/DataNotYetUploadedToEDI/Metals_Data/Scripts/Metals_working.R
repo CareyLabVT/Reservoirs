@@ -15,7 +15,7 @@ library(stringr)
 
 #read in most recent ICPMS sheet
 #note: you must edit this script each time to pull the correct csv
-ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230203_230501.csv",
+ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230508_230529.csv",
                      skip = 5) %>% 
   select(X, X.14, X.15) %>%
   rename(Jeff_ID = X, Fe_mgL = X.14, Mn_mgL = X.15) %>% #note: Fe and Mn are still ppb or ug/L
@@ -46,7 +46,8 @@ ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_
              SFe_mgL = mean(SFe_mgL, na.rm = TRUE), 
              SMn_mgL = mean(SMn_mgL, na.rm = TRUE)) %>%
    ungroup() %>%
-   mutate(across(c(TFe_mgL, TMn_mgL, SFe_mgL, SMn_mgL), ~ifelse(is.nan(.), NA, .))) #gets rid of NaNs created by taking mean during summarize step
+   mutate(across(c(TFe_mgL, TMn_mgL, SFe_mgL, SMn_mgL), ~ifelse(is.nan(.), NA, .))) %>%  #gets rid of NaNs created by taking mean during summarize step
+   subset(Site != 100.1) #removes ISCO samples, part of different data package
  
  
  #let's set up flags! Some will be manually entered, but we can at least make the columns
@@ -87,5 +88,5 @@ ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_
           Flag_TFe_mgL, Flag_TMn_mgL, Flag_SFe_mgL, Flag_SMn_mgL) %>% 
    arrange(DateTime, Reservoir, Site, Depth_m)
  
-write.csv(frame1, file = '~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/EDI_Working/2023/Metals_230203_230501.csv')
+write.csv(frame1, file = '~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/EDI_Working/2023/Metals_230508_230529.csv')
  

@@ -17,3 +17,4 @@ sediment trap	carey lab controlled vocabulary
 sedimentation	lter controlled vocabulary
 particulates	lter controlled vocabulary
 suspended sediment	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary

@@ -2,7 +2,7 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	No data
 Date	"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD	NA	No data
 Site	Sampling site within each reservoir	numeric	dimensionless		NA	No data
-Duration_days	Duration of deployment/ time between collection points	numeric	dimensionless		NA	No data
+Duration_days	Duration of deployment/ time between collection points	numeric	nominalDay		NA	No data
 Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	No data
 CombinedXSA_m2	Trap cross sectional area	numeric	squareMeter		NA	No data
 Filter1ID	Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data

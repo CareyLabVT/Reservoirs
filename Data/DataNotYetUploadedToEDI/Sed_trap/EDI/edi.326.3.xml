@@ -748,7 +748,7 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
       <physical>
         <objectName>FilteringLog_EDI.csv</objectName>
         <size unit="bytes">186321</size>
-        <authentication method="MD5">2d6706569f2c38ede719201afcf04f5c</authentication>
+        <authentication method="MD5">3f3c0211279783e06a6ee38ec50066c9</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1205,12 +1205,12 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
       <entityDescription>Carbon, nitrogen, iron, manganese fluxes</entityDescription>
       <physical>
         <objectName>CN_Metals_Flux_EDI.csv</objectName>
-        <size unit="bytes">114767</size>
-        <authentication method="MD5">b35edc4a80093c115944af8b2431f64e</authentication>
+        <size unit="bytes">139697</size>
+        <authentication method="MD5">7fb26a1375c6e3cfdfa04b11c3cd125d</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
-            <recordDelimiter>\r\n</recordDelimiter>
+            <recordDelimiter>\n</recordDelimiter>
             <attributeOrientation>column</attributeOrientation>
             <simpleDelimited>
               <fieldDelimiter>,</fieldDelimiter>
@@ -1445,7 +1445,7 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.002</minimum>
+                  <minimum exclusive="false">0.00199999999999999</minimum>
                   <maximum exclusive="false">0.101</maximum>
                 </bounds>
               </numericDomain>
@@ -1468,8 +1468,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">1.748082244</minimum>
-                  <maximum exclusive="false">139.6130365</maximum>
+                  <minimum exclusive="false">1.74808224394256</minimum>
+                  <maximum exclusive="false">139.613036518581</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1491,8 +1491,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.045237235</minimum>
-                  <maximum exclusive="false">6.335467025</maximum>
+                  <minimum exclusive="false">0.0452372346116647</minimum>
+                  <maximum exclusive="false">6.33546702463211</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1560,8 +1560,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.004041566</minimum>
-                  <maximum exclusive="false">0.969380476</maximum>
+                  <minimum exclusive="false">0.0040415661479952</minimum>
+                  <maximum exclusive="false">0.969380475548546</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1583,8 +1583,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.00019981</minimum>
-                  <maximum exclusive="false">0.015030949</maximum>
+                  <minimum exclusive="false">0.000199810270271854</minimum>
+                  <maximum exclusive="false">0.0150309485259553</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1606,8 +1606,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.025128182</minimum>
-                  <maximum exclusive="false">5.305189489</maximum>
+                  <minimum exclusive="false">0.0251281820363035</minimum>
+                  <maximum exclusive="false">5.3051894885155</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1629,8 +1629,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.001752691</minimum>
-                  <maximum exclusive="false">0.125403411</maximum>
+                  <minimum exclusive="false">0.00175269092008784</minimum>
+                  <maximum exclusive="false">0.125403410578264</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1652,8 +1652,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.008750467</minimum>
-                  <maximum exclusive="false">0.330232133</maximum>
+                  <minimum exclusive="false">0.00875046666666667</minimum>
+                  <maximum exclusive="false">0.330232133333333</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1675,8 +1675,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.003531467</minimum>
-                  <maximum exclusive="false">0.167373778</maximum>
+                  <minimum exclusive="false">0.00353146666666667</minimum>
+                  <maximum exclusive="false">0.167373777777778</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1698,8 +1698,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.047284657</minimum>
-                  <maximum exclusive="false">1.801145132</maximum>
+                  <minimum exclusive="false">0.0472846568879972</minimum>
+                  <maximum exclusive="false">1.80114513164065</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1721,8 +1721,8 @@ CHEMICAL ANALYSES AND EQUIPMENT</para>
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.044122033</minimum>
-                  <maximum exclusive="false">1.063507623</maximum>
+                  <minimum exclusive="false">0.0441220329467904</minimum>
+                  <maximum exclusive="false">1.06350762302068</maximum>
                 </bounds>
               </numericDomain>
             </ratio>

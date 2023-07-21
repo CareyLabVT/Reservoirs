@@ -209,10 +209,10 @@ comb_formatted = comb_raw%>%
                 Flag_ICPTFe_mgL,
                 Flag_ICPTMn_mgL)%>%
   arrange(Date)%>%
-  mutate(Flag_ICPTFe_mgL = ifelse(is.na(ICPTFe_mgL)&!is.na(TOC_g),2,Flag_ICPTFe_mgL),
-         Flag_ICPTMn_mgL = ifelse(is.na(ICPTMn_mgL)&!is.na(TOC_g),2,Flag_ICPTMn_mgL),
-         Flag_TOC_g = ifelse(is.na(TOC_g)&!is.na(ICPTFe_mgL),2,Flag_TOC_g),
-         Flag_TN_g = ifelse(is.na(TN_g)&!is.na(ICPTFe_mgL),2,Flag_TN_g))
+  mutate(Flag_ICPTFe_mgL = ifelse(is.na(ICPTFe_mgL),2,Flag_ICPTFe_mgL),
+         Flag_ICPTMn_mgL = ifelse(is.na(ICPTMn_mgL),2,Flag_ICPTMn_mgL),
+         Flag_TOC_g = ifelse(is.na(TOC_g),2,Flag_TOC_g),
+         Flag_TN_g = ifelse(is.na(TN_g),2,Flag_TN_g))
 
 #Some durations are unknown at the beginning of each year
 comb_formatted = comb_formatted%>%

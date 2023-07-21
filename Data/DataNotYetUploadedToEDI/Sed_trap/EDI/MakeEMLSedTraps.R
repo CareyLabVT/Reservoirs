@@ -162,7 +162,7 @@ make_eml(
                                "Script to generate filtering log record for EDI"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.326.3') #reserve new staging environment package id each year
+  package.id = 'edi.1474.1') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

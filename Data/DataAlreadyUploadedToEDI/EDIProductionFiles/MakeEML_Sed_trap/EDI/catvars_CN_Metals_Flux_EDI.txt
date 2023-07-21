@@ -1,0 +1,20 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Flag_Filter2ID	1	No issues
+Flag_Filter2ID	2	Only one filter used; set to NA
+Flag_CombinedCollectionVol_L	1	No issues
+Flag_CombinedCollectionVol_L	2	 Only one filter used
+Flag_CombinedCollectionVol_L	3	 At least one collection volume was not recorded and set to 1.7 L
+Flag_CombinedSedMass_g	1	No issues
+Flag_CombinedSedMass_g	2	Only one filter used; set to NA
+Flag_ICPTFe_mgL	1	No issues
+Flag_ICPTFe_mgL	2	Not run
+Flag_ICPTMn_mgL	1	No issues
+Flag_ICPTMn_mgL	2	Not run
+Flag_TOC_g	1	No issues
+Flag_TOC_g	2	Not run
+Flag_TN_g	1	No issues
+Flag_TN_g	2	Not run
+Flag_Duration_days	1	No issues
+Flag_Duration_days	2	Deployment date not recorded; inferred

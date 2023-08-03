@@ -19,11 +19,11 @@
       <Sensor index="0" SensorID="58" >
         <TemperatureSensor SensorID="58" >
           <SerialNumber>7809</SerialNumber>
-          <CalibrationDate>25-Sep-21</CalibrationDate>
-          <A0>1.23251324e-003</A0>
-          <A1>2.76322262e-004</A1>
-          <A2>-9.50188734e-007</A2>
-          <A3>1.71801404e-007</A3>
+          <CalibrationDate>31-Jan-23</CalibrationDate>
+          <A0>1.21823180e-003</A0>
+          <A1>2.81508993e-004</A1>
+          <A2>-1.57888696e-006</A2>
+          <A3>1.97234302e-007</A3>
           <Slope>1.00000000</Slope>
           <Offset>0.0000</Offset>
         </TemperatureSensor>
@@ -31,7 +31,7 @@
       <Sensor index="1" SensorID="3" >
         <ConductivitySensor SensorID="3" >
           <SerialNumber>7809</SerialNumber>
-          <CalibrationDate>25-Sep-21</CalibrationDate>
+          <CalibrationDate>31-Jan-23</CalibrationDate>
           <UseG_J>1</UseG_J>
           <!-- Cell const and series R are applicable only for wide range sensors. -->
           <SeriesR>0.0000</SeriesR>
@@ -46,10 +46,10 @@
             <CPcor>-9.57000000e-008</CPcor>
           </Coefficients>
           <Coefficients equation="1" >
-            <G>-1.00443970e+000</G>
-            <H>1.26460406e-001</H>
-            <I>-7.85436262e-005</I>
-            <J>2.21093811e-005</J>
+            <G>-1.00565232e+000</G>
+            <H>1.26796307e-001</H>
+            <I>-1.56170788e-004</I>
+            <J>2.64594368e-005</J>
             <CPcor>-9.57000000e-008</CPcor>
             <CTcor>3.2500e-006</CTcor>
             <!-- WBOTC not applicable unless ConductivityType = 1. -->
@@ -62,16 +62,16 @@
       <Sensor index="2" SensorID="46" >
         <PressureSensor SensorID="46" >
           <SerialNumber>7809</SerialNumber>
-          <CalibrationDate>10-Sep-21</CalibrationDate>
-          <PA0>4.78919585e-002</PA0>
-          <PA1>4.85365526e-004</PA1>
-          <PA2>-3.68927597e-012</PA2>
-          <PTEMPA0>-5.40164371e+001</PTEMPA0>
-          <PTEMPA1>5.39065456e+001</PTEMPA1>
-          <PTEMPA2>-2.19411190e-002</PTEMPA2>
-          <PTCA0>5.25494622e+005</PTCA0>
-          <PTCA1>1.32519328e+001</PTCA1>
-          <PTCA2>-3.88927502e-001</PTCA2>
+          <CalibrationDate>20-Jan-23</CalibrationDate>
+          <PA0>4.41643944e-002</PA0>
+          <PA1>4.85050239e-004</PA1>
+          <PA2>-3.09042623e-012</PA2>
+          <PTEMPA0>-5.47081996e+001</PTEMPA0>
+          <PTEMPA1>5.48542136e+001</PTEMPA1>
+          <PTEMPA2>-3.44657813e-001</PTEMPA2>
+          <PTCA0>5.25475731e+005</PTCA0>
+          <PTCA1>1.05025484e+001</PTCA1>
+          <PTCA2>-2.92243463e-001</PTCA2>
           <PTCB0>2.51668750e+001</PTCB0>
           <PTCB1>3.75000000e-004</PTCB1>
           <PTCB2>0.00000000e+000</PTCB2>
@@ -81,7 +81,7 @@
       <Sensor index="3" SensorID="38" >
         <OxygenSensor SensorID="38" >
           <SerialNumber>0434</SerialNumber>
-          <CalibrationDate>25-Sep-21</CalibrationDate>
+          <CalibrationDate>18-Feb-23</CalibrationDate>
           <Use2007Equation>1</Use2007Equation>
           <CalibrationCoefficients equation="0" >
             <!-- Coefficients for Owens-Millard equation. -->
@@ -94,16 +94,16 @@
           </CalibrationCoefficients>
           <CalibrationCoefficients equation="1" >
             <!-- Coefficients for Sea-Bird equation - SBE calibration in 2007 and later. -->
-            <Soc>4.7287e-001</Soc>
+            <Soc>5.1878e-001</Soc>
             <offset>-0.5046</offset>
-            <A>-3.6094e-003</A>
-            <B> 1.1544e-004</B>
-            <C>-1.3802e-006</C>
+            <A>-4.2788e-003</A>
+            <B> 1.5372e-004</B>
+            <C>-2.1853e-006</C>
             <D0> 2.5826e+000</D0>
             <D1> 1.92634e-004</D1>
             <D2>-4.64803e-002</D2>
             <E> 3.6000e-002</E>
-            <Tau20> 0.7700</Tau20>
+            <Tau20> 0.9900</Tau20>
             <H1>-3.3000e-002</H1>
             <H2> 5.0000e+003</H2>
             <H3> 1.4500e+003</H3>
@@ -123,15 +123,15 @@
       <Sensor index="5" SensorID="43" >
         <pH_Sensor SensorID="43" >
           <SerialNumber>0363</SerialNumber>
-          <CalibrationDate>16-Sep-21</CalibrationDate>
-          <Slope>4.5144</Slope>
-          <Offset>2.4957</Offset>
+          <CalibrationDate>28-Feb-23</CalibrationDate>
+          <Slope>4.7364</Slope>
+          <Offset>2.5433</Offset>
         </pH_Sensor>
       </Sensor>
       <Sensor index="6" SensorID="41" >
         <OxidationReductionPotentialSensor SensorID="41" >
           <SerialNumber>0363</SerialNumber>
-          <CalibrationDate>16-Sep-21</CalibrationDate>
+          <CalibrationDate>28-Feb-23</CalibrationDate>
           <B>2.499480</B>
           <M>-0.496195</M>
           <Offset>0.0</Offset>
@@ -148,7 +148,7 @@
       </Sensor>
       <Sensor index="8" SensorID="67" >
         <TurbidityMeter SensorID="67" >
-          <SerialNumber>FLNTURT-2496</SerialNumber>
+          <SerialNumber>FLNTURT--2496</SerialNumber>
           <CalibrationDate>02-Sep-2021</CalibrationDate>
           <ScaleFactor>197.000000</ScaleFactor>
           <!-- Dark output -->

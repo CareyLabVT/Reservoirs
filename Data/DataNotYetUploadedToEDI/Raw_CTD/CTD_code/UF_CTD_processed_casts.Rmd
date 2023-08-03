@@ -1,0 +1,57 @@
+---
+title: "Robotics CTD casts"
+author: "Adrienne"
+date: "2023-07-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, lubridate, akima, colorRamps, googlesheets4)
+
+```
+
+```{r Read in CTD files}
+
+# This reads all the files into the R environment
+files = list.files("../csv_outputs/UF_Robotics_casts_S8188/",pattern = ".csv") #Get all csv files
+
+#This reads the first file in
+ctd = read_csv(paste0("../csv_outputs/UF_Robotics_casts_S8188/",files[1])) 
+location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
+ctd = ctd%>%
+    mutate(Reservoir = toupper(sub("XX_.*", "", location)),
+           Cast_Number = as.numeric(sub("_S8188*","",sub("^[A-Z|a-z]*","",location))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')
+
+# Loop through and pull all the files in
+for (i in 2:length(files)){
+  new = read_csv(paste0("../csv_outputs/UF_Robotics_casts_S8188/",files[i]))
+  location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
+  new = new%>%
+    mutate(Reservoir = toupper(sub("XX_.*", "", location)),
+           Cast_Number = as.numeric(sub("_S8188*","",sub("^[A-Z|a-z]*","",location))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')
+    
+  ctd = ctd %>%
+    full_join(new)
+}
+write_csv(ctd, "../csv_outputs/UF_Robotics_casts_S8188/CTD_UF_FCR_20230627.csv")
+
+```
+```{r read in CTD coordinates}
+
+GPS_cords <- read_sheet('https://docs.google.com/spreadsheets/d/1VcCdhW1afPSDflB3ynBE5YRNPVzy2635XrwdkLQfSCs/edit#gid=0')
+
+cords <- GPS_cords%>%
+  rename("Cast_Number" = "CTD_cast")
+
+```
+
+```{r merge data frames to get coordinates}
+
+```
+

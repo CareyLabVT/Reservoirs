@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1090.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Heather</givenName>
+        <givenName>L.</givenName>
+        <surName>Wander</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>hwander@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-3762-6045</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Jonathan</givenName>
+        <givenName>P.</givenName>
+        <surName>Doubek</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>jpdoubek@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-2651-4715</userId>
+    </creator>
+    <pubDate>2023-08-24</pubDate>
+    <abstract>
+      <para>Crustacean and rotifer density and biomass were measured from 2014 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Falling Creek Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Falling Creek, Carvins Cove and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The dataset consists of both integrated vertical tow samples from the whole water column, just the epilimnion, and just the hypolimnion (as the difference between the full water column and epilimnion tows), as well as discrete depth measurements collected with a Schindler trap. Most samples were collected at the deepest site of each reservoir adjacent to the dam. The samples were collected approximately fortnightly in the spring, summer, and autumn months and there are also data from 24-hour sampling campaigns. During the 24-hour sampling campaigns conducted from 2019-2022, samples were collected from both deep and shallow sites.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Chaoborus</keyword>
+      <keyword>Cladoceran</keyword>
+      <keyword>Copepod</keyword>
+      <keyword>Daphnia</keyword>
+      <keyword>Diel vertical migration</keyword>
+      <keyword>Rotifer</keyword>
+      <keyword>Schindler trap</keyword>
+      <keyword>Vertical net tow</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Reservoir</keyword>
+      <keyword>Lake</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Lakes</keyword>
+      <keyword>Zooplankton</keyword>
+      <keyword>Density</keyword>
+      <keyword>Invertebrates</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.409127</northBoundingCoordinate>
+          <southBoundingCoordinate>37.365345</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Gatewood Reservoir is located in Pulaski, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-80.89188</westBoundingCoordinate>
+          <eastBoundingCoordinate>-80.858492</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.054358</northBoundingCoordinate>
+          <southBoundingCoordinate>37.03819</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Spring Hollow Reservoir is located in Salem, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-80.179076</westBoundingCoordinate>
+          <eastBoundingCoordinate>-80.170407</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.231092</northBoundingCoordinate>
+          <southBoundingCoordinate>37.217594</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2014-04-04</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2022-07-01</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>2014-2016</para>
+          <para>Zooplankton collection:&#13;
+"Crustacean zooplankton and rotifers were collected at the deepest location in each reservoir, close to the dam (coordinates: BVR: 37.313 degrees N, 79.816 degrees W; CCR: 37.371 degrees N, 79.958 degrees W; GWR: 37.043 degrees N, 80.862 degrees W; SHR: 37.231 degrees N, 80.176 degrees W). Zooplankton were collected by 74-micron mesh vertical tow nets (Wildlife Supply Company, Yulee, Florida, USA) approximately fortnightly during the thermally stratified period in 2014-2016 in BVR, CCR, and GWR, and 2014-2015 in SHR. In 2014 and 2015 in BVR, CCR, and GWR, tow nets were lowered to approximately 0.5 m above the bottom lake sediments and pulled up to the surface at a constant speed to collect zooplankton from the full water column. In SHR, zooplankton were only collected from 25-30 m deep to the surface to avoid substantial net catch efficiency issues. In 2016, in addition to the full water column tows in BVR, CCR, and GWR, a second vertical tow was also taken from either 1) the thermocline depth to the nearest meter determined from either a CTD or YSI profile collected at the same time, or the oxycline depth rounded to the nearest meter determined from the CTD or YSI. The second tow was collected in 2016 in these reservoirs to determine zooplankton present in the epilimnion vs. the hypolimnion when the reservoirs were fully oxic, or in the oxic vs. hypoxic parts of the water column in reservoirs experiencing hypolimnetic hypoxia."</para>
+          <para>24-hour sampling camapigns:&#13;
+"In 2016, we also performed 24-hour sampling campaigns to examine the effects of hypolimnetic oxygen concentrations on zooplankton diel vertical migration. Therefore, in addition to vertical tow samples, we also collected 30-L Schindler trap samples. Schindler traps (Wildlife Supply Company, Yulee, Florida, USA) were collected during these sampling events (as well as vertical tows) at noon, dusk, midnight, 2AM, dawn, and noon the following day. The 24-hour sampling campaigns were conducted on 7-8 June and 3-4 August in BVR, 27-28 May and 12-13 August in CCR, and 29-30 April, 26-27 June, and 4-5 September in GWR. Schindler trap samples were collected at each meter in the water column from 0.1 m to a meter just below the thermocline or the oxycline. On the second BVR 24-hour sampling event, we sampled each meter in the water column with the Schindler trap. Zooplankton samples for both vertical net tow and Schindler traps were preserved in 70 percent ethanol."</para>
+          <para>Zooplankton enumeration:&#13;
+"Zooplankton were identified using a Meiji RZ dissecting microscope (Meiji Techno, San Jose, California, USA) at 50x magnification. Because of the large quantity of samples collected, crustacean zooplankton and rotifers were identified predominantly to the genus level. Daphnia were identified to the species level and cyclopoids were identified to the order level. At least 100 crustacean zooplankton and 100 rotifers were counted for each sample, or until three aliquots from each sample were counted. Densities were calculated by scaling counts per subsample to the volume of the vertical net tows from the water column or from the Schindler traps (Downing and Rigler, 1984). All large crustacean zooplankton (Leptodora sp. and Chaoborus sp.) were counted for all samples and then scaled to the volume of the vertical tow net or the volume of the Schindler trap. The first ten individual crustacean zooplankton taxa in each sample were measured and biomass was calculated using published length-weight regressions (Dumont and Balvay, 1979; Downing and Rigler, 1984). Biomass was not calculated for rotifers. If the taxon is not listed for a reservoir on a sampling date, that means that the density, and therefore, its biomass, was 0. Chaoborus and Leptodora were largely only counted for density, not biomass, estimates in 2014 and 2015."</para>
+          <para>Biomass calculations:&#13;
+"Length-weight regression estimates used to calculate biomass, using ln(a) is the y-intercept and b is the slope. Estimates are summarized in Downing and Rigler (1984). Bosmina: ln(a)=2.7116, b=2.5294; Ceriodaphnia: ln(a)=2.5623, b = 3.3380; Chydorus: ln(a) = 4.543, b = 3.636; Daphnia: ln(a) = 1.54, b = 2.29; Diaphanosoma: ln(a) = 1.2894, b = 3.039; Cyclopoids: ln(a) = 2.2266, b = 3.230; Diaptomus: ln(a) = 1.05, b = 2.46; Leptodora: ln(a) = -0.8220, b = 2.670; Chaoborus: ln(a) = -2.183, b = 3.2345"</para>
+          <para>2019-2022</para>
+          <para>Zooplankton collection:&#13;
+"Crustacean zooplankton and rotifers were collected at the deepest location in Beaverdam Reservoir and Falling Creek Reservoir, close to the dam approximately fortnightly during the thermally stratified period in 2019-2022 using 80-micron mesh vertical tow nets (Wildlife Supply Company, Yulee, Florida, USA). Vertical tows were lowered to approximately 0.5 m above the bottom lake sediments and pulled up to the surface at a constant speed to collect zooplankton from the full water column. After collection, samples were preserved in ~70 percent ethanol and brought back to the lab for enumeration."</para>
+          <para>24-hour sampling camapigns:&#13;
+"We conducted five 24-hour sampling campaigns during the summers of 2019-2022 in Beaverdam Reservoir. During each sampling campaign, we collected full water column tows using a zooplankton net at a deep and shallow site at noon, sunset, midnight, sunrise, and noon the following day. Sunrise and sunset sampling occurred over a period of four hours each day (2 hours before sunrise/sunset and one hour after sunrise/sunset). At the pelagic site, we collected full water column tows and oxycline tows that started at the depth where dissolved oxygen concnetrations were just above 2 mg/L to identify differences in community structure in the epilimnion vs. hypolimnion. Additionally, at noon and midnight, we also collected 30-L Schindler trap samples (Wildlife Supply Company, Yulee, Florida, USA)  at the deep site. The 24-hour sampling campaigns were conducted on 10-11 July 2019, 24-25 July 2019, 12-13 August 2020, 15-16 June 2021, and 7-8 July 2021. Schindler trap samples were collected at each meter in the water column from 0.1 m to 10m depth. Zooplankton samples for both vertical net tow and Schindler traps were preserved in 70 percent ethanol in the field."</para>
+          <para>Zooplankton enumeration:&#13;
+"Zooplankton were identified using a Meiji RZ dissecting microscope (Meiji Techno, San Jose, California, USA) between 500x - 750x magnification. Crustacean zooplankton and rotifers were identified to genus, exept for copepods that were identified to order. A minimum of three aliquots were counted to obtain at least 100 total zooplankton, including both crustanceans and rotifers, per sample. Densities were calculated by scaling counts per subsample to the volume of the vertical net tows from the water column or from the Schindler traps (Downing and Rigler, 1984). We calculated net efficiency for each reservoir to scale the densitiy and biomass values and correct for net clogging. Approximately 10-20 individual crustaccean and rotifer zooplankton taxa were measured in each sample and biomass was calculated using published length-weight regressions (Dumont and Balvay, 1979; Downing and Rigler, 1984). If the taxon is not listed for a reservoir on a sampling date, that means that the density, and therefore, its biomass, was 0."</para>
+          <para>Biomass calculations:&#13;
+"Length-weight regression estimates used to calculate biomass, using ln(a) is the y-intercept and b is the slope. Estimates are summarized in Downing and Rigler (1984)."</para>
+          <para>References&#13;
+"Downing, J. A., and F. H. Rigler. 1984. Manual on methods for the assessment of secondary "&#13;
+"productivity in fresh waters. Blackwell Scientific Publications, Oxford, UK."</para>
+          <para>"Dumont, H. J., and G. Balvay. 1979. The dry weight estimate of Chaoborus flavicans (Meigen) as a function of length and instars. Hydrobiologia 64:139-145."</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Institute of Critical Technology and Applied Science</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Global Change Center</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Fralin Life Sciences Institute</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>DISSERTATION RESEARCH: Hypoxia-induced trade-offs on zooplankton vertical distribution and community structure in freshwaters</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation DEB-1601061</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>zooplankton_2014_2022.csv</entityName>
+      <entityDescription>Reservoir zooplankton dataset</entityDescription>
+      <physical>
+        <objectName>zooplankton_2014_2022.csv</objectName>
+        <size unit="bytes">1841516</size>
+        <authentication method="MD5">3dab44a0d33bb45d4cf75b76777ef0d1</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 50=Deep hole or site nearest to dam in each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">49</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>StartDepth_m</attributeName>
+          <attributeDefinition>Water depth where the start of the sample was collected</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">28.5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EndDepth_m</attributeName>
+          <attributeDefinition>Water depth where the sample collection ended</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CollectionMethod</attributeName>
+          <attributeDefinition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Taxon</attributeName>
+          <attributeDefinition>Zooplankton taxa name</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Zooplankton taxa name</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Density_IndPerL</attributeName>
+          <attributeDefinition>Zooplankton density of each taxa (individuals per liter)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>numberPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">18798.8624271349</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>MeanLength_mm</attributeName>
+          <attributeDefinition>Mean zooplankton length calculated from all measured individuals within each taxon</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>millimeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">18.03</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>MeanWeight_ug</attributeName>
+          <attributeDefinition>Mean zooplankton dry weight calculated from all measured individuals within each taxon</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1516.09387294623</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Biomass_ugL</attributeName>
+          <attributeDefinition>Aggregated biomass of a zooplankton taxon, calculated from the mean dry weight of each taxon multiplied by the density of that taxon</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">118255.700172506</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Length</attributeName>
+          <attributeDefinition>Flag indicated for weight data; flag = 1 means sample not taken; 0 = not suspect</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Weight</attributeName>
+          <attributeDefinition>Flag indicated for biomass data; flag = 1 means sample not taken; 0 = not suspect</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Biomass</attributeName>
+          <attributeDefinition>Flag indicated for length data; flag = 1 means sample not taken; 0 = not suspect</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>19223</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>zoop_raw_biom_2019_2022.csv</entityName>
+      <entityDescription>Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass</entityDescription>
+      <physical>
+        <objectName>zoop_raw_biom_2019_2022.csv</objectName>
+        <size unit="bytes">8853883</size>
+        <authentication method="MD5">51ec39cb660bf967446d0b6239b74fd0</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 50=Deep hole or site nearest to dam in each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">49</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>StartDepth_m</attributeName>
+          <attributeDefinition>Water depth where the start of the sample was collected</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">11.5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EndDepth_m</attributeName>
+          <attributeDefinition>Water depth where the sample collection ended</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Field replicate that distinguishes samples collected from the same site, depth, or general time</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CollectionMethod</attributeName>
+          <attributeDefinition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Subsample</attributeName>
+          <attributeDefinition>Alphabetical identifier to differentiate between aliquots taken from each sample</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Alphabetical identifier to differentiate between aliquots taken from each sample</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>LowestTaxonomicLevelOfID</attributeName>
+          <attributeDefinition>Lowest taxonomic identification for each individual zooplankton</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Lowest taxonomic identification for each individual zooplankton</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TaxaID</attributeName>
+          <attributeDefinition>Taxonomic name of each identified zooplankton</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Taxonomic name of each identified zooplankton</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Nauplius</attributeName>
+          <attributeDefinition>Identifies whether copepod is a nauplius</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Identifies whether copepod is a nauplius</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ObjectiveMagnification</attributeName>
+          <attributeDefinition>Objective used to measure zooplankton</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Objective used to measure zooplankton</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>MarksInOcularMicrometer_No.</attributeName>
+          <attributeDefinition>Length measurement of zooplankton using the ocular micrometer</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Length measurement of zooplankton using the ocular micrometer</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>105699</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>reservoir_site_descriptions.csv</entityName>
+      <entityDescription>Description, latitude, and longitude of reservoir sampling sites</entityDescription>
+      <physical>
+        <objectName>reservoir_site_descriptions.csv</objectName>
+        <size unit="bytes">905</size>
+        <authentication method="MD5">4b5bf5959aafad8cca45cde708fa7579</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site at each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">49</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site_description</attributeName>
+          <attributeDefinition>Description of where the reservoir site is located</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Description of where the reservoir site is located</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Latitude of the reservoir site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">37.0443528070071</minimum>
+                  <maximum exclusive="false">37.3706</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Longitude of the reservoir site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-80.8632991493157</minimum>
+                  <maximum exclusive="false">-79.815657</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>7</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>QAQC_zooplankton_2014_2022.R</entityName>
+      <entityDescription>Zooplankton QAQC script</entityDescription>
+      <physical>
+        <objectName>QAQC_zooplankton_2014_2022.R</objectName>
+        <size unit="bytes">7317</size>
+        <authentication method="MD5">a1d9072525f565e6f5513ad692a4014e</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

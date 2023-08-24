@@ -1,6 +1,6 @@
 #Make Zooplankton EML
 #Cayelan Carey, based on EDI workshop 24 May 2018
-#updated 5 Jul 2023 HLW
+#updated 24 Aug 2023 HLW
 
 #Create site description file
 #Install the required googlesheets4 package
@@ -17,7 +17,7 @@ library(tidyverse)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
 
 #read in zoop df
-data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton.csv") 
+data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton_2014_2022.csv") 
 
 #only select sites that are in your df
 trim_sites = function(data,sites){
@@ -31,7 +31,7 @@ trim_sites = function(data,sites){
 sites_trimmed = trim_sites(data,sites) 
 
 #save as a csv
-write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/site_descriptions.csv", row.names = FALSE)
+write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/reservoir_site_descriptions.csv", row.names = FALSE)
 
 # Install devtools
 install.packages("devtools")
@@ -44,25 +44,71 @@ install_github("EDIorg/EMLassemblyline")
 
 library(EMLassemblyline)
 
-setwd("~/Dropbox/ComputerFiles/Virginia_Tech/Falling Creek/DataForWebsite/Github/ReservoirData/Formatted_Data/MakeEMLZooplankton")
+# Import templates for our dataset licensed under CCBY, with 1 table.
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                       license = "CCBY",
+                       file.type = ".txt",
+                       write.file = TRUE)
 
-data<-read.csv('zooplankton.csv', header=TRUE)
-View(data)
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                          data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                                         "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                          write.file = TRUE)
 
-import_templates(path = "~/Dropbox/ComputerFiles/Virginia_Tech/Falling Creek/DataForWebsite/Github/ReservoirData/Formatted_Data/MakeEMLZooplankton",
-                 license = "CCBY", #use CCBY instead of CCBO so that data users need to cite our package
-                 data.files = c("zooplankton")) #csv file name
+#we want empty to be true for this because we don't include lat/long
+#as columns within our dataset but would like to provide them
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                             data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                                            "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                             empty = TRUE,
+                             write.file = TRUE)
 
-define_catvars(path = "~/Dropbox/ComputerFiles/Virginia_Tech/Falling Creek/DataForWebsite/Github/ReservoirData/Formatted_Data/MakeEMLZooplankton")
+#THIS WILL ONLY WORK once you have filled out the attributes_zooplankton.txt and
+#identified which variables are categorical
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+                               write.file = TRUE)
 
-make_eml(path = "/Users/cayelan/Dropbox/ComputerFiles/Virginia_Tech/Falling Creek/DataForWebsite/Github/ReservoirData/Formatted_Data/MakeEMLZooplankton",
-         dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2016",
-         data.files = c("zooplankton"),
-         data.files.description = c("Reservoir zooplankton dataset"), #short title
-         data.files.quote.character = c("\""),
-         temporal.coverage = c("2014-04-04", "2016-10-25"),
-         geographic.description = "Southwestern Virginia, USA, North America",
-         maintenance.description = "completed", 
-         user.id = "carylab0", #your personal ID, will be Carey Lab ID eventually!
-         package.id = "edi.198.1") #from EDI portal, login, and then reserve a package ID via the
-          #Data Package Identifier Reservations
+# Make eml for staging environment
+#https://portal-s.edirepository.org/nis/home.jsp
+make_eml(
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  temporal.coverage = c("2014-04-04", "2022-07-01"),
+  maintenance.description = 'ongoing',
+  data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                 "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+  data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
+                             "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
+                             "Description, latitude, and longitude of reservoir sampling sites"),
+  other.entity = "QAQC_zooplankton_2014_2022.R",
+  other.entity.description = "Zooplankton QAQC script",
+  user.id = 'ccarey',
+  user.domain = 'EDI',
+  package.id = 'edi.1090.1') #reserve new staging environment package id each year
+
+#------------------------------------------------------------------------------#
+# Make eml for production environment
+#https://portal.edirepository.org/nis/logout
+make_eml(
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  temporal.coverage = c("2014-04-04", "2022-07-01"),
+  maintenance.description = 'ongoing',
+  data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                 "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+  data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
+                             "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
+                             "Description, latitude, and longitude of reservoir sampling sites"),
+  other.entity = "QAQC_zooplankton_2014_2022.R",
+  other.entity.description = "Zooplankton QAQC script",
+  user.id = 'ccarey',
+  user.domain = 'EDI',
+  package.id = 'edi.197.2') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  # 197.3 for 2023 pub

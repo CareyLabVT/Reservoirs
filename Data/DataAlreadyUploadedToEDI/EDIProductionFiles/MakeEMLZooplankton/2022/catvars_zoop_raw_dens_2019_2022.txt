@@ -1,0 +1,16 @@
+attributeName	code	definition
+CollectionMethod	Schindler	
+CollectionMethod	Tow	
+Reservoir	BVR	
+Reservoir	FCR	
+Subsample	A	
+Subsample	B	
+Subsample	C	
+Subsample	D	
+Subsample	E	
+Subsample	F	
+Subsample	G	
+Subsample	H	
+Subsample	I	
+Subsample	J	
+Subsample	K	

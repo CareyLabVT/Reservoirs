@@ -1,0 +1,48 @@
+attributeName	code	definition
+CollectionMethod	Schindler	
+CollectionMethod	Tow	
+Reservoir	BVR	
+Reservoir	CCR	
+Reservoir	FCR	
+Reservoir	GWR	
+Reservoir	SHR	
+Taxon	Ascomorpha	
+Taxon	Asplanchna	
+Taxon	Bipalpus	
+Taxon	Bosmina	
+Taxon	Calanoida	
+Taxon	Ceriodaphnia	
+Taxon	Chaoborus	
+Taxon	Chydorus	
+Taxon	Cladocera	
+Taxon	Collothecidae	
+Taxon	Conochilidae	
+Taxon	Conochilus	
+Taxon	Copepoda	
+Taxon	Crustacea	
+Taxon	Cyclopoida	
+Taxon	Cyclopoids	
+Taxon	D. ambigua	
+Taxon	D. catawba	
+Taxon	Daphnia	
+Taxon	Diaphanosoma	
+Taxon	Diaptomus	
+Taxon	Finilia	
+Taxon	Gastropidae	
+Taxon	Kellicottia	
+Taxon	Keratella	
+Taxon	Lecane	
+Taxon	Lepadella	
+Taxon	Leptodora	
+Taxon	Monostyla	
+Taxon	Nauplii	
+Taxon	Ploima	
+Taxon	Polyarthra	
+Taxon	Rotifera	
+Taxon	Synchaeta	
+Taxon	Synchaetidae	
+Taxon	Total Rotifers	
+Taxon	Trichocerca	
+Taxon	Trichocercidae	
+Taxon	bipalpus	
+Taxon	nauplius	

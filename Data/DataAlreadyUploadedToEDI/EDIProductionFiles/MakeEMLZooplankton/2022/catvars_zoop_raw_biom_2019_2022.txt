@@ -1,0 +1,130 @@
+attributeName	code	definition
+CollectionMethod	Schindler	
+CollectionMethod	Tow	
+LowestTaxonomicLevelOfID	Family	
+LowestTaxonomicLevelOfID	Genus	
+LowestTaxonomicLevelOfID	Order	
+LowestTaxonomicLevelOfID	Phylum	
+LowestTaxonomicLevelOfID	Species	
+LowestTaxonomicLevelOfID	Subclass	
+LowestTaxonomicLevelOfID	Suborder	
+LowestTaxonomicLevelOfID	family	
+LowestTaxonomicLevelOfID	genus	
+LowestTaxonomicLevelOfID	order	
+Nauplius	 	
+Nauplius	Nauplius	
+Nauplius	naupliua	
+Nauplius	nauplius	
+Nauplius	nauplius 	
+ObjectiveMagnification	25x	
+ObjectiveMagnification	30x	
+ObjectiveMagnification	35x	
+ObjectiveMagnification	40x	
+ObjectiveMagnification	50x	
+ObjectiveMagnification	60x	
+ObjectiveMagnification	70x	
+ObjectiveMagnification	75x	
+Reservoir	BVR	
+Reservoir	FCR	
+Subsample	6	
+Subsample	A	
+Subsample	A 	
+Subsample	B	
+Subsample	C	
+Subsample	C 	
+Subsample	D	
+Subsample	E	
+Subsample	F	
+Subsample	G	
+Subsample	H	
+Subsample	I	
+Subsample	J	
+Subsample	K	
+TaxaID	A. fissa	
+TaxaID	A. saltans	
+TaxaID	Acanthocyclops	
+TaxaID	Anuraeopsis	
+TaxaID	Ascomorpha	
+TaxaID	Asplanchna	
+TaxaID	B. deitersi	
+TaxaID	B. havanaensis	
+TaxaID	B. longirostris	
+TaxaID	Bosminidae	
+TaxaID	Brachionidae	
+TaxaID	Brachionus	
+TaxaID	C. dubia	
+TaxaID	C. mutabilis	
+TaxaID	C. natans	
+TaxaID	C. rigaudi	
+TaxaID	C. scutifer	
+TaxaID	C. sphaericus	
+TaxaID	C. unicornis	
+TaxaID	Calanoida	
+TaxaID	Ceriodaphnia	
+TaxaID	Chydoridae	
+TaxaID	Chydorus	
+TaxaID	Cladocera	
+TaxaID	Collotheca	
+TaxaID	Conochiloides	
+TaxaID	Conochilus	
+TaxaID	Copepoda	
+TaxaID	Cyclopidae	
+TaxaID	Cyclopoida	
+TaxaID	D. bicuspidatus odessanus	
+TaxaID	D. birgei	
+TaxaID	D. brachyurum	
+TaxaID	D. catawba	
+TaxaID	D. magna	
+TaxaID	D. parvula	
+TaxaID	D. thomasi	
+TaxaID	Daphnia	
+TaxaID	Daphniidae	
+TaxaID	Diaphanosoma	
+TaxaID	Diaptomidae	
+TaxaID	E. affinis	
+TaxaID	E. alata	
+TaxaID	E. coregoni	
+TaxaID	E. lacustris	
+TaxaID	E. longispina	
+TaxaID	E. nordenskioldi	
+TaxaID	E. parva	
+TaxaID	Eubosmina	
+TaxaID	Eurycercus	
+TaxaID	Filinia	
+TaxaID	G. hyptopus	
+TaxaID	G. stylifer	
+TaxaID	Gastropidae	
+TaxaID	Gastropus	
+TaxaID	H. gibberum	
+TaxaID	H. mira	
+TaxaID	Hexarthra	
+TaxaID	K. bostoniensis	
+TaxaID	K. earlinae	
+TaxaID	Kellicottia	
+TaxaID	Keratella	
+TaxaID	L. luna	
+TaxaID	L. mira	
+TaxaID	L. patella	
+TaxaID	Lecane	
+TaxaID	Lepadella	
+TaxaID	M. closterocerca	
+TaxaID	M. edax	
+TaxaID	M. quadridentata	
+TaxaID	M. rubellus	
+TaxaID	Monostyla	
+TaxaID	P. lenticulare	
+TaxaID	P. sulcata	
+TaxaID	Ploima	
+TaxaID	Plomida	
+TaxaID	Polyarthra	
+TaxaID	Pompholyx	
+TaxaID	Rotifera	
+TaxaID	S. crystallina	
+TaxaID	S. kitina	
+TaxaID	S. vetulus	
+TaxaID	Sididae	
+TaxaID	Synchaeta	
+TaxaID	T. monopus	
+TaxaID	T. tetractis	
+TaxaID	Trichocerca	
+TaxaID	Trichotria	

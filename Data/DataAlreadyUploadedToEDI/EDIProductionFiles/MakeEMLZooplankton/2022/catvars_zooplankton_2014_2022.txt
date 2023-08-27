@@ -1,48 +1,48 @@
 attributeName	code	definition
-CollectionMethod	Schindler	
-CollectionMethod	Tow	
-Reservoir	BVR	
-Reservoir	CCR	
-Reservoir	FCR	
-Reservoir	GWR	
-Reservoir	SHR	
-Taxon	Ascomorpha	
-Taxon	Asplanchna	
-Taxon	Bipalpus	
-Taxon	Bosmina	
-Taxon	Calanoida	
-Taxon	Ceriodaphnia	
-Taxon	Chaoborus	
-Taxon	Chydorus	
-Taxon	Cladocera	
-Taxon	Collothecidae	
-Taxon	Conochilidae	
-Taxon	Conochilus	
-Taxon	Copepoda	
-Taxon	Crustacea	
-Taxon	Cyclopoida	
-Taxon	Cyclopoids	
-Taxon	D. ambigua	
-Taxon	D. catawba	
-Taxon	Daphnia	
-Taxon	Diaphanosoma	
-Taxon	Diaptomus	
-Taxon	Finilia	
-Taxon	Gastropidae	
-Taxon	Kellicottia	
-Taxon	Keratella	
-Taxon	Lecane	
-Taxon	Lepadella	
-Taxon	Leptodora	
-Taxon	Monostyla	
-Taxon	Nauplii	
-Taxon	Ploima	
-Taxon	Polyarthra	
-Taxon	Rotifera	
-Taxon	Synchaeta	
-Taxon	Synchaetidae	
-Taxon	Total Rotifers	
-Taxon	Trichocerca	
-Taxon	Trichocercidae	
-Taxon	bipalpus	
-Taxon	nauplius	
+CollectionMethod	Schindler	Zooplankton Collection Method
+CollectionMethod	Tow	Zooplankton Collection Method
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+Taxon	Ascomorpha	Ascomorpha
+Taxon	Asplanchna	Asplanchna
+Taxon	Bipalpus	Bipalpus
+Taxon	Bosmina	Bosmina
+Taxon	Calanoida	Calanoida
+Taxon	Ceriodaphnia	Ceriodaphnia
+Taxon	Chaoborus	Chaoborus
+Taxon	Chydorus	Chydorus
+Taxon	Cladocera	Cladocera
+Taxon	Collothecidae	Collothecidae
+Taxon	Conochilidae	Conochilidae
+Taxon	Conochilus	Conochilus
+Taxon	Copepoda	Copepoda
+Taxon	Crustacea	Crustacea
+Taxon	Cyclopoida	Cyclopoida
+Taxon	Cyclopoids	Cyclopoids
+Taxon	D. ambigua	D. ambigua
+Taxon	D. catawba	D. catawba
+Taxon	Daphnia	Daphnia
+Taxon	Diaphanosoma	Diaphanosoma
+Taxon	Diaptomus	Diaptomus
+Taxon	Finilia	Finilia
+Taxon	Gastropidae	Gastropidae
+Taxon	Kellicottia	Kellicottia
+Taxon	Keratella	Keratella
+Taxon	Lecane	Lecane
+Taxon	Lepadella	Lepadella
+Taxon	Leptodora	Leptodora
+Taxon	Monostyla	Monostyla
+Taxon	Nauplii	Nauplii
+Taxon	Ploima	Ploima
+Taxon	Polyarthra	Polyarthra
+Taxon	Rotifera	Rotifera
+Taxon	Synchaeta	Synchaeta
+Taxon	Synchaetidae	Synchaetidae
+Taxon	Total Rotifers	Total Rotifers
+Taxon	Trichocerca	Trichocerca
+Taxon	Trichocercidae	Trichocercidae
+Taxon	bipalpus	bipalpus
+Taxon	nauplius	nauplius

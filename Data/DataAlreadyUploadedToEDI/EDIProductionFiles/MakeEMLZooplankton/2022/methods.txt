@@ -26,7 +26,7 @@ Zooplankton enumeration:
 Biomass calculations:
 "Length-weight regression estimates used to calculate biomass, using ln(a) is the y-intercept and b is the slope. Estimates are summarized in Downing and Rigler (1984)."
 
-References
+References:
 "Downing, J. A., and F. H. Rigler. 1984. Manual on methods for the assessment of secondary "
 "productivity in fresh waters. Blackwell Scientific Publications, Oxford, UK."
 

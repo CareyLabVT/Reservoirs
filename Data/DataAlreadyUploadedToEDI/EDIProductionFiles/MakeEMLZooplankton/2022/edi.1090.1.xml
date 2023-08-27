@@ -42,7 +42,7 @@
       <electronicMailAddress>jpdoubek@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0003-2651-4715</userId>
     </creator>
-    <pubDate>2023-08-24</pubDate>
+    <pubDate>2023-08-27</pubDate>
     <abstract>
       <para>Crustacean and rotifer density and biomass were measured from 2014 to 2022 in five drinking water reservoirs in southwestern Virginia, USA. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Falling Creek Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Falling Creek, Carvins Cove and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The dataset consists of both integrated vertical tow samples from the whole water column, just the epilimnion, and just the hypolimnion (as the difference between the full water column and epilimnion tows), as well as discrete depth measurements collected with a Schindler trap. Most samples were collected at the deepest site of each reservoir adjacent to the dam. The samples were collected approximately fortnightly in the spring, summer, and autumn months and there are also data from 24-hour sampling campaigns. During the 24-hour sampling campaigns conducted from 2019-2022, samples were collected from both deep and shallow sites.</para>
     </abstract>
@@ -275,9 +275,28 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>GWR</code>
+                    <definition>Gatewood Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>SHR</code>
+                    <definition>Spring Hollow Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -377,9 +396,16 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Schindler</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Tow</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -395,9 +421,168 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Zooplankton taxa name</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Ascomorpha</code>
+                    <definition>Ascomorpha</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Asplanchna</code>
+                    <definition>Asplanchna</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Bipalpus</code>
+                    <definition>Bipalpus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Bosmina</code>
+                    <definition>Bosmina</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Calanoida</code>
+                    <definition>Calanoida</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Ceriodaphnia</code>
+                    <definition>Ceriodaphnia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Chaoborus</code>
+                    <definition>Chaoborus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Chydorus</code>
+                    <definition>Chydorus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cladocera</code>
+                    <definition>Cladocera</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Collothecidae</code>
+                    <definition>Collothecidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Conochilidae</code>
+                    <definition>Conochilidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Conochilus</code>
+                    <definition>Conochilus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Copepoda</code>
+                    <definition>Copepoda</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Crustacea</code>
+                    <definition>Crustacea</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cyclopoida</code>
+                    <definition>Cyclopoida</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cyclopoids</code>
+                    <definition>Cyclopoids</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. ambigua</code>
+                    <definition>D. ambigua</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. catawba</code>
+                    <definition>D. catawba</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Daphnia</code>
+                    <definition>Daphnia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Diaphanosoma</code>
+                    <definition>Diaphanosoma</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Diaptomus</code>
+                    <definition>Diaptomus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Finilia</code>
+                    <definition>Finilia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Gastropidae</code>
+                    <definition>Gastropidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Kellicottia</code>
+                    <definition>Kellicottia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Keratella</code>
+                    <definition>Keratella</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Lecane</code>
+                    <definition>Lecane</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Lepadella</code>
+                    <definition>Lepadella</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Leptodora</code>
+                    <definition>Leptodora</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Monostyla</code>
+                    <definition>Monostyla</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Nauplii</code>
+                    <definition>Nauplii</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Ploima</code>
+                    <definition>Ploima</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Polyarthra</code>
+                    <definition>Polyarthra</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Rotifera</code>
+                    <definition>Rotifera</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Synchaeta</code>
+                    <definition>Synchaeta</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Synchaetidae</code>
+                    <definition>Synchaetidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Total Rotifers</code>
+                    <definition>Total Rotifers</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Trichocerca</code>
+                    <definition>Trichocerca</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Trichocercidae</code>
+                    <definition>Trichocercidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>bipalpus</code>
+                    <definition>bipalpus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>nauplius</code>
+                    <definition>nauplius</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -571,12 +756,12 @@
       <numberOfRecords>19223</numberOfRecords>
     </dataTable>
     <dataTable>
-      <entityName>zoop_raw_biom_2019_2022.csv</entityName>
-      <entityDescription>Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass</entityDescription>
+      <entityName>zoop_raw_dens_2019_2022.csv</entityName>
+      <entityDescription>Zooplankton counts used to calculate density</entityDescription>
       <physical>
-        <objectName>zoop_raw_biom_2019_2022.csv</objectName>
-        <size unit="bytes">8853883</size>
-        <authentication method="MD5">51ec39cb660bf967446d0b6239b74fd0</authentication>
+        <objectName>zoop_raw_dens_2019_2022.csv</objectName>
+        <size unit="bytes">112868</size>
+        <authentication method="MD5">059296eadb3a58d6c53809784ceb6dea</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -596,9 +781,16 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -721,9 +913,325 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Schindler</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Tow</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>InitialSampleVolume_mL</attributeName>
+          <attributeDefinition>Sample volume after dilution or concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milliliter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">2000</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Subsample</attributeName>
+          <attributeDefinition>Alphabetical identifier to differentiate between aliquots taken from each sample</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>A</code>
+                    <definition>A</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>B</code>
+                    <definition>B</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C</code>
+                    <definition>C</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D</code>
+                    <definition>D</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E</code>
+                    <definition>E</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>F</code>
+                    <definition>F</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>G</code>
+                    <definition>G</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>H</code>
+                    <definition>H</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>I</code>
+                    <definition>I</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>J</code>
+                    <definition>J</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>K</code>
+                    <definition>K</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>SubsampleVolume_mL</attributeName>
+          <attributeDefinition>Volume of sample counted in each aliquot</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milliliter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Zooplankton_No.</attributeName>
+          <attributeDefinition>Number of zooplankton counted in each aliquot</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">3</minimum>
+                  <maximum exclusive="false">607</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>1855</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>zoop_raw_biom_2019_2022.csv</entityName>
+      <entityDescription>Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass</entityDescription>
+      <physical>
+        <objectName>zoop_raw_biom_2019_2022.csv</objectName>
+        <size unit="bytes">8755459</size>
+        <authentication method="MD5">28eb4b7556a5425c528a8da18b6f03b0</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 50=Deep hole or site nearest to dam in each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">49</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>StartDepth_m</attributeName>
+          <attributeDefinition>Water depth where the start of the sample was collected</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">11.5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EndDepth_m</attributeName>
+          <attributeDefinition>Water depth where the sample collection ended</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">10</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Field replicate that distinguishes samples collected from the same site, depth, or general time</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No data</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CollectionMethod</attributeName>
+          <attributeDefinition>Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Schindler</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Tow</code>
+                    <definition>Zooplankton Collection Method</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -739,9 +1247,52 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Alphabetical identifier to differentiate between aliquots taken from each sample</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>A</code>
+                    <definition>A</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>B</code>
+                    <definition>B</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C</code>
+                    <definition>C</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D</code>
+                    <definition>D</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E</code>
+                    <definition>E</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>F</code>
+                    <definition>F</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>G</code>
+                    <definition>G</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>H</code>
+                    <definition>H</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>I</code>
+                    <definition>I</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>J</code>
+                    <definition>J</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>K</code>
+                    <definition>K</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -757,9 +1308,36 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Lowest taxonomic identification for each individual zooplankton</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Family</code>
+                    <definition>Family</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Genus</code>
+                    <definition>Genus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Order</code>
+                    <definition>Order</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Phylum</code>
+                    <definition>Phylum</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Species</code>
+                    <definition>Species</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>SubOrder</code>
+                    <definition>SubOrder</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Subclass</code>
+                    <definition>Subclass</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -775,9 +1353,360 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Taxonomic name of each identified zooplankton</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>A. fissa</code>
+                    <definition>A. fissa</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>A. saltans</code>
+                    <definition>A. saltans</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Acanthocyclops</code>
+                    <definition>Acanthocyclops</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Anuraeopsis</code>
+                    <definition>Anuraeopsis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Ascomorpha</code>
+                    <definition>Ascomorpha</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Asplanchna</code>
+                    <definition>Asplanchna</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>B. deitersi</code>
+                    <definition>B. deitersi</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>B. havanaensis</code>
+                    <definition>B. havanaensis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>B. longirostris</code>
+                    <definition>B. longirostris</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Bosminidae</code>
+                    <definition>Bosminidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Brachionidae</code>
+                    <definition>Brachionidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Brachionus</code>
+                    <definition>Brachionus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. dubia</code>
+                    <definition>C. dubia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. mutabilis</code>
+                    <definition>C. mutabilis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. natans</code>
+                    <definition>C. natans</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. rigaudi</code>
+                    <definition>C. rigaudi</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. scutifer</code>
+                    <definition>C. scutifer</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. sphaericus</code>
+                    <definition>C. sphaericus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>C. unicornis</code>
+                    <definition>C. unicornis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Calanoida</code>
+                    <definition>Calanoida</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Ceriodaphnia</code>
+                    <definition>Ceriodaphnia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Chydoridae</code>
+                    <definition>Chydoridae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Chydorus</code>
+                    <definition>Chydorus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cladocera</code>
+                    <definition>Cladocera</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Collotheca</code>
+                    <definition>Collotheca</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Conochiloides</code>
+                    <definition>Conochiloides</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Conochilus</code>
+                    <definition>Conochilus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Copepoda</code>
+                    <definition>Copepoda</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cyclopidae</code>
+                    <definition>Cyclopidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Cyclopoida</code>
+                    <definition>Cyclopoida</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. bicuspidatus odessanus</code>
+                    <definition>D. bicuspidatus odessanus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. birgei</code>
+                    <definition>D. birgei</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. brachyurum</code>
+                    <definition>D. brachyurum</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. catawba</code>
+                    <definition>D. catawba</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. magna</code>
+                    <definition>D. magna</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. parvula</code>
+                    <definition>D. parvula</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>D. thomasi</code>
+                    <definition>D. thomasi</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Daphnia</code>
+                    <definition>Daphnia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Daphniidae</code>
+                    <definition>Daphniidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Diaphanosoma</code>
+                    <definition>Diaphanosoma</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Diaptomidae</code>
+                    <definition>Diaptomidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. affinis</code>
+                    <definition>E. affinis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. alata</code>
+                    <definition>E. alata</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. coregoni</code>
+                    <definition>E. coregoni</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. lacustris</code>
+                    <definition>E. lacustris</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. longispina</code>
+                    <definition>E. longispina</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. nordenskioldi</code>
+                    <definition>E. nordenskioldi</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>E. parva</code>
+                    <definition>E. parva</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Eubosmina</code>
+                    <definition>Eubosmina</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Eurycercus</code>
+                    <definition>Eurycercus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Filinia</code>
+                    <definition>Filinia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>G. hyptopus</code>
+                    <definition>G. hyptopus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>G. stylifer</code>
+                    <definition>G. stylifer</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Gastropidae</code>
+                    <definition>Gastropidae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Gastropus</code>
+                    <definition>Gastropus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>H. gibberum</code>
+                    <definition>H. gibberum</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>H. mira</code>
+                    <definition>H. mira</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Hexarthra</code>
+                    <definition>Hexarthra</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>K. bostoniensis</code>
+                    <definition>K. bostoniensis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>K. earlinae</code>
+                    <definition>K. earlinae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Kellicottia</code>
+                    <definition>Kellicottia</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Keratella</code>
+                    <definition>Keratella</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>L. luna</code>
+                    <definition>L. luna</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>L. mira</code>
+                    <definition>L. mira</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>L. patella</code>
+                    <definition>L. patella</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Lecane</code>
+                    <definition>Lecane</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Lepadella</code>
+                    <definition>Lepadella</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>M. closterocerca</code>
+                    <definition>M. closterocerca</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>M. edax</code>
+                    <definition>M. edax</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>M. quadridentata</code>
+                    <definition>M. quadridentata</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>M. rubellus</code>
+                    <definition>M. rubellus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Monostyla</code>
+                    <definition>Monostyla</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>P. lenticulare</code>
+                    <definition>P. lenticulare</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>P. sulcata</code>
+                    <definition>P. sulcata</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Ploima</code>
+                    <definition>Ploima</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Plomida</code>
+                    <definition>Plomida</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Polyarthra</code>
+                    <definition>Polyarthra</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Pompholyx</code>
+                    <definition>Pompholyx</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Rotifera</code>
+                    <definition>Rotifera</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>S. crystallina</code>
+                    <definition>S. crystallina</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>S. kitina</code>
+                    <definition>S. kitina</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>S. vetulus</code>
+                    <definition>S. vetulus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Sididae</code>
+                    <definition>Sididae</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Synchaeta</code>
+                    <definition>Synchaeta</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T. monopus</code>
+                    <definition>T. monopus</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>T. tetractis</code>
+                    <definition>T. tetractis</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Trichocerca</code>
+                    <definition>Trichocerca</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Trichotria</code>
+                    <definition>Trichotria</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -793,9 +1722,12 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Identifies whether copepod is a nauplius</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>nauplius</code>
+                    <definition>Nauplii Presence</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -811,9 +1743,40 @@
           <measurementScale>
             <nominal>
               <nonNumericDomain>
-                <textDomain>
-                  <definition>Objective used to measure zooplankton</definition>
-                </textDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>25x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>30x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>35x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>40x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>50x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>60x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>70x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>75x</code>
+                    <definition>Microscope Objective</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
               </nonNumericDomain>
             </nominal>
           </measurementScale>
@@ -825,15 +1788,20 @@
         <attribute>
           <attributeName>MarksInOcularMicrometer_No.</attributeName>
           <attributeDefinition>Length measurement of zooplankton using the ocular micrometer</attributeDefinition>
-          <storageType>string</storageType>
+          <storageType>float</storageType>
           <measurementScale>
-            <nominal>
-              <nonNumericDomain>
-                <textDomain>
-                  <definition>Length measurement of zooplankton using the ocular micrometer</definition>
-                </textDomain>
-              </nonNumericDomain>
-            </nominal>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">12.2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
           </measurementScale>
           <missingValueCode>
             <code>NA</code>
@@ -975,8 +1943,8 @@
       <entityDescription>Zooplankton QAQC script</entityDescription>
       <physical>
         <objectName>QAQC_zooplankton_2014_2022.R</objectName>
-        <size unit="bytes">7317</size>
-        <authentication method="MD5">a1d9072525f565e6f5513ad692a4014e</authentication>
+        <size unit="bytes">7463</size>
+        <authentication method="MD5">b183398d4ce58249e41ae2f207f9389e</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

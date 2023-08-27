@@ -1,130 +1,121 @@
 attributeName	code	definition
-CollectionMethod	Schindler	
-CollectionMethod	Tow	
-LowestTaxonomicLevelOfID	Family	
-LowestTaxonomicLevelOfID	Genus	
-LowestTaxonomicLevelOfID	Order	
-LowestTaxonomicLevelOfID	Phylum	
-LowestTaxonomicLevelOfID	Species	
-LowestTaxonomicLevelOfID	Subclass	
-LowestTaxonomicLevelOfID	Suborder	
-LowestTaxonomicLevelOfID	family	
-LowestTaxonomicLevelOfID	genus	
-LowestTaxonomicLevelOfID	order	
-Nauplius	 	
-Nauplius	Nauplius	
-Nauplius	naupliua	
-Nauplius	nauplius	
-Nauplius	nauplius 	
-ObjectiveMagnification	25x	
-ObjectiveMagnification	30x	
-ObjectiveMagnification	35x	
-ObjectiveMagnification	40x	
-ObjectiveMagnification	50x	
-ObjectiveMagnification	60x	
-ObjectiveMagnification	70x	
-ObjectiveMagnification	75x	
-Reservoir	BVR	
-Reservoir	FCR	
-Subsample	6	
-Subsample	A	
-Subsample	A 	
-Subsample	B	
-Subsample	C	
-Subsample	C 	
-Subsample	D	
-Subsample	E	
-Subsample	F	
-Subsample	G	
-Subsample	H	
-Subsample	I	
-Subsample	J	
-Subsample	K	
-TaxaID	A. fissa	
-TaxaID	A. saltans	
-TaxaID	Acanthocyclops	
-TaxaID	Anuraeopsis	
-TaxaID	Ascomorpha	
-TaxaID	Asplanchna	
-TaxaID	B. deitersi	
-TaxaID	B. havanaensis	
-TaxaID	B. longirostris	
-TaxaID	Bosminidae	
-TaxaID	Brachionidae	
-TaxaID	Brachionus	
-TaxaID	C. dubia	
-TaxaID	C. mutabilis	
-TaxaID	C. natans	
-TaxaID	C. rigaudi	
-TaxaID	C. scutifer	
-TaxaID	C. sphaericus	
-TaxaID	C. unicornis	
-TaxaID	Calanoida	
-TaxaID	Ceriodaphnia	
-TaxaID	Chydoridae	
-TaxaID	Chydorus	
-TaxaID	Cladocera	
-TaxaID	Collotheca	
-TaxaID	Conochiloides	
-TaxaID	Conochilus	
-TaxaID	Copepoda	
-TaxaID	Cyclopidae	
-TaxaID	Cyclopoida	
-TaxaID	D. bicuspidatus odessanus	
-TaxaID	D. birgei	
-TaxaID	D. brachyurum	
-TaxaID	D. catawba	
-TaxaID	D. magna	
-TaxaID	D. parvula	
-TaxaID	D. thomasi	
-TaxaID	Daphnia	
-TaxaID	Daphniidae	
-TaxaID	Diaphanosoma	
-TaxaID	Diaptomidae	
-TaxaID	E. affinis	
-TaxaID	E. alata	
-TaxaID	E. coregoni	
-TaxaID	E. lacustris	
-TaxaID	E. longispina	
-TaxaID	E. nordenskioldi	
-TaxaID	E. parva	
-TaxaID	Eubosmina	
-TaxaID	Eurycercus	
-TaxaID	Filinia	
-TaxaID	G. hyptopus	
-TaxaID	G. stylifer	
-TaxaID	Gastropidae	
-TaxaID	Gastropus	
-TaxaID	H. gibberum	
-TaxaID	H. mira	
-TaxaID	Hexarthra	
-TaxaID	K. bostoniensis	
-TaxaID	K. earlinae	
-TaxaID	Kellicottia	
-TaxaID	Keratella	
-TaxaID	L. luna	
-TaxaID	L. mira	
-TaxaID	L. patella	
-TaxaID	Lecane	
-TaxaID	Lepadella	
-TaxaID	M. closterocerca	
-TaxaID	M. edax	
-TaxaID	M. quadridentata	
-TaxaID	M. rubellus	
-TaxaID	Monostyla	
-TaxaID	P. lenticulare	
-TaxaID	P. sulcata	
-TaxaID	Ploima	
-TaxaID	Plomida	
-TaxaID	Polyarthra	
-TaxaID	Pompholyx	
-TaxaID	Rotifera	
-TaxaID	S. crystallina	
-TaxaID	S. kitina	
-TaxaID	S. vetulus	
-TaxaID	Sididae	
-TaxaID	Synchaeta	
-TaxaID	T. monopus	
-TaxaID	T. tetractis	
-TaxaID	Trichocerca	
-TaxaID	Trichotria	
+CollectionMethod	Schindler	Zooplankton Collection Method
+CollectionMethod	Tow	Zooplankton Collection Method
+LowestTaxonomicLevelOfID	Family	Family
+LowestTaxonomicLevelOfID	Genus	Genus
+LowestTaxonomicLevelOfID	Order	Order
+LowestTaxonomicLevelOfID	Phylum	Phylum
+LowestTaxonomicLevelOfID	Species	Species
+LowestTaxonomicLevelOfID	SubOrder	SubOrder
+LowestTaxonomicLevelOfID	Subclass	Subclass
+Nauplius	 	Nauplii Presence
+Nauplius	nauplius	Nauplii Presence
+ObjectiveMagnification	25x	Microscope Objective
+ObjectiveMagnification	30x	Microscope Objective
+ObjectiveMagnification	35x	Microscope Objective
+ObjectiveMagnification	40x	Microscope Objective
+ObjectiveMagnification	50x	Microscope Objective
+ObjectiveMagnification	60x	Microscope Objective
+ObjectiveMagnification	70x	Microscope Objective
+ObjectiveMagnification	75x	Microscope Objective
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Subsample	A	A
+Subsample	B	B
+Subsample	C	C
+Subsample	D	D
+Subsample	E	E
+Subsample	F	F
+Subsample	G	G
+Subsample	H	H
+Subsample	I	I
+Subsample	J	J
+Subsample	K	K
+TaxaID	A. fissa	A. fissa
+TaxaID	A. saltans	A. saltans
+TaxaID	Acanthocyclops	Acanthocyclops
+TaxaID	Anuraeopsis	Anuraeopsis
+TaxaID	Ascomorpha	Ascomorpha
+TaxaID	Asplanchna	Asplanchna
+TaxaID	B. deitersi	B. deitersi
+TaxaID	B. havanaensis	B. havanaensis
+TaxaID	B. longirostris	B. longirostris
+TaxaID	Bosminidae	Bosminidae
+TaxaID	Brachionidae	Brachionidae
+TaxaID	Brachionus	Brachionus
+TaxaID	C. dubia	C. dubia
+TaxaID	C. mutabilis	C. mutabilis
+TaxaID	C. natans	C. natans
+TaxaID	C. rigaudi	C. rigaudi
+TaxaID	C. scutifer	C. scutifer
+TaxaID	C. sphaericus	C. sphaericus
+TaxaID	C. unicornis	C. unicornis
+TaxaID	Calanoida	Calanoida
+TaxaID	Ceriodaphnia	Ceriodaphnia
+TaxaID	Chydoridae	Chydoridae
+TaxaID	Chydorus	Chydorus
+TaxaID	Cladocera	Cladocera
+TaxaID	Collotheca	Collotheca
+TaxaID	Conochiloides	Conochiloides
+TaxaID	Conochilus	Conochilus
+TaxaID	Copepoda	Copepoda
+TaxaID	Cyclopidae	Cyclopidae
+TaxaID	Cyclopoida	Cyclopoida
+TaxaID	D. bicuspidatus odessanus	D. bicuspidatus odessanus
+TaxaID	D. birgei	D. birgei
+TaxaID	D. brachyurum	D. brachyurum
+TaxaID	D. catawba	D. catawba
+TaxaID	D. magna	D. magna
+TaxaID	D. parvula	D. parvula
+TaxaID	D. thomasi	D. thomasi
+TaxaID	Daphnia	Daphnia
+TaxaID	Daphniidae	Daphniidae
+TaxaID	Diaphanosoma	Diaphanosoma
+TaxaID	Diaptomidae	Diaptomidae
+TaxaID	E. affinis	E. affinis
+TaxaID	E. alata	E. alata
+TaxaID	E. coregoni	E. coregoni
+TaxaID	E. lacustris	E. lacustris
+TaxaID	E. longispina	E. longispina
+TaxaID	E. nordenskioldi	E. nordenskioldi
+TaxaID	E. parva	E. parva
+TaxaID	Eubosmina	Eubosmina
+TaxaID	Eurycercus	Eurycercus
+TaxaID	Filinia	Filinia
+TaxaID	G. hyptopus	G. hyptopus
+TaxaID	G. stylifer	G. stylifer
+TaxaID	Gastropidae	Gastropidae
+TaxaID	Gastropus	Gastropus
+TaxaID	H. gibberum	H. gibberum
+TaxaID	H. mira	H. mira
+TaxaID	Hexarthra	Hexarthra
+TaxaID	K. bostoniensis	K. bostoniensis
+TaxaID	K. earlinae	K. earlinae
+TaxaID	Kellicottia	Kellicottia
+TaxaID	Keratella	Keratella
+TaxaID	L. luna	L. luna
+TaxaID	L. mira	L. mira
+TaxaID	L. patella	L. patella
+TaxaID	Lecane	Lecane
+TaxaID	Lepadella	Lepadella
+TaxaID	M. closterocerca	M. closterocerca
+TaxaID	M. edax	M. edax
+TaxaID	M. quadridentata	M. quadridentata
+TaxaID	M. rubellus	M. rubellus
+TaxaID	Monostyla	Monostyla
+TaxaID	P. lenticulare	P. lenticulare
+TaxaID	P. sulcata	P. sulcata
+TaxaID	Ploima	Ploima
+TaxaID	Plomida	Plomida
+TaxaID	Polyarthra	Polyarthra
+TaxaID	Pompholyx	Pompholyx
+TaxaID	Rotifera	Rotifera
+TaxaID	S. crystallina	S. crystallina
+TaxaID	S. kitina	S. kitina
+TaxaID	S. vetulus	S. vetulus
+TaxaID	Sididae	Sididae
+TaxaID	Synchaeta	Synchaeta
+TaxaID	T. monopus	T. monopus
+TaxaID	T. tetractis	T. tetractis
+TaxaID	Trichocerca	Trichocerca
+TaxaID	Trichotria	Trichotria

@@ -34,13 +34,13 @@ sites_trimmed = trim_sites(data,sites)
 write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/reservoir_site_descriptions.csv", row.names = FALSE)
 
 # Install devtools
-install.packages("devtools")
+#install.packages("devtools")
 
 # Load devtools
 library(devtools)
 
 # Install and load EMLassemblyline
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 
 library(EMLassemblyline)
 

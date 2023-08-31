@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	"Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir"	categorical			NA	No data
-Site	"Sampling site within each reservoir, 50=Deep hole or site nearest to dam in each reservoir"	numeric	dimensionless		NA	No data
+Reservoir	"Three-letter code corresponding to sampled reservoir, either: BVR = Beaverdam Reservoir, FCR = Falling Creek Reservoir, CCR = Carvins Cove Reservoir, GWR = Gatewood Reservoir, SHR = Spring Hollow Reservoir"	categorical			NA	No data
+Site	"Sampling site within each reservoir, 49 = Littoral site southeast of deep site in Beaverdam Reservoir, 50 = Deep hole or site nearest to dam in each reservoir, 51 = Littoral site southwest of deep site in Beaverdam Reservoir"	numeric	dimensionless		NA	No data
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	No data
 StartDepth_m	Water depth where the start of the sample was collected	numeric	meter		NA	No data
 EndDepth_m	Water depth where the sample collection ended	numeric	meter		NA	No data

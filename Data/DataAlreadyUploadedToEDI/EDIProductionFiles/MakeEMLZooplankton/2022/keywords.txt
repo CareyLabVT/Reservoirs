@@ -3,6 +3,10 @@ Carey Lab	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Gatewood Reservoir	carey lab controlled vocabulary
+Spring Hollow Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
 Reservoir	cuahsi controlled vocabulary
 Lake	cuahsi controlled vocabulary
 Lakes	lter controlled vocabulary
@@ -13,6 +17,7 @@ Copepod	carey lab controlled vocabulary
 Density	lter controlled vocabulary
 Daphnia	carey lab controlled vocabulary
 Diel vertical migration	carey lab controlled vocabulary
+Diel horizontal migration	carey lab controlled vocabulary
 Invertebrates	lter controlled vocabulary
 Rotifer	carey lab controlled vocabulary
 Schindler trap	carey lab controlled vocabulary

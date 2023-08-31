@@ -77,7 +77,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
-  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
   data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
@@ -89,7 +89,7 @@ make_eml(
   other.entity.description = "Zooplankton QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.1') #reserve new staging environment package id each year
+  package.id = 'edi.1090.3') #reserve new staging environment package id each year
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment
@@ -98,7 +98,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
-  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
   data.table = c("zooplankton_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",

@@ -1,0 +1,1215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.923.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Discharge time series for the primary inflow tributary entering Falling Creek Reservoir, Vinton, Virginia, USA 2013-2022</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <pubDate>2023-02-17</pubDate>
+    <abstract>
+      <para>Discharge rates and water temperature of the primary inflow tributary into Falling Creek Reservoir (Vinton, Virginia, USA) were measured at a gauged weir on a 15-minute temporal resolution from May 2013 to December 2022. Falling Creek Reservoir is a drinking water supply reservoir owned and managed by the Western Virginia Water Authority (WVWA). The dataset consists of water temperatures and discharge rates calculated from a pressure transducer deployed by the WVWA in a rectangular weir (15 May 2013 - 06 June 2019) and in a v-notched weir (07 June 2019 - 31 December 2022) at the same site. From 07 June 2019 to 31 December 2022, water temperature and discharge data were also collected from a Virginia Tech-deployed (VT) pressure transducer installed in the same weir.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>weir</keyword>
+      <keyword>time series</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lakes</keyword>
+      <keyword>water temperature</keyword>
+      <keyword>pressure</keyword>
+      <keyword>streamflow</keyword>
+      <keyword>water balance</keyword>
+      <keyword>discharge</keyword>
+      <keyword>atmospheric pressure</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lake</keyword>
+      <keyword>reservoir</keyword>
+      <keyword>reservoirs</keyword>
+      <keyword>high-frequency sensors</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>CCC developed and led the reservoir monitoring program 2013-present, and oversaw purchasing, use, and maintenance of sensors used for collection of this dataset throughout this time. ABP led the field crew, conducted substantial field work, developed new QAQC script, and published the data in 2022.</para>
+      <para>Acknowledgments and historical contributions: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.&#13;
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2013-05-15</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2022-12-31</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>We calculated the daily discharge rate of water in cubic meters per second entering Falling Creek Reservoir through the gauged weir on its primary inflow. This weir was rectangular from 15 May 2013 to 6 June 2019, when it was replaced by a V-notched weir (7 June 2019 to present). Inflow was calculated from a pressure sensor installed at the weir by the Western Virginia Water Authority (WVWA) from 15 May 2013 to 31 December 2022 and a pressure sensor installed by Virginia Tech (VT) researchers (PI Cayelan Carey) from 22 April 2019 to December 2022. Collection of both datasets is ongoing.</para>
+          <para>We measured discharge at the weir with an INW Aquistar PT2X pressure sensor (INW, Kirkland, Washington, USA) installed by the WVWA on 15 May 2013, which recorded water pressure and stream temperature every 15 minutes. From 22 April 2019 to December 2022, we also measured pressure and stream temperature every 15 minutes using a Campbell Scientific CS451 (Campbell Scientific, Logan, Utah, USA; SN: 5318) pressure transducer installed by VT. From 15 May 2013 - 6 June 2019, a rectangular weir was installed; from 7 June 2019 to 31 Dec 2022, a v-notch weir was installed. Observed water level from a staff gauge was recorded weekly to monthly and used to calculate the daily flow, following Gerling et al. (2014) for the rectangular weir (15 May 2013 - 6 June 2019) and the equation below for the v-notch weir (7 June 2019 - December 2022):</para>
+          <para>V-notch weir, discharge equation:&#13;
+Q = 2.391 x H^2.5</para>
+          <para>Where Q is the calculated discharge (m^3 s^-1), 2.391 is the conversion factor for a 120 degree angle -notch weir in m^3 s^-1, and H is the head on the weir (m). We note that for the VT sensor, there was no rating curve developed for the rectangular weir (22 Apr 2019 to 6 Jun 2019) and discharge could not be calculated but pressure and temperature are still reported for this time interval.</para>
+          <para>Multiple rating curves have been developed over the time period of this dataset. Rating curves were developed using correlations between gauge height and pressure measured for each of the installed pressure sensors (WVWA and VT) from 10 June 2019 to 6 Jul 2020 (included as a supplementary dataset, FCR_Inflow_GaugeHeight_2013_2022.csv). Briefly, the weir level (cm) was intermittently recorded throughout 10 June 2019 to 6 Jul 2020. The date and time stamp from each measurement was used to identify the closest pressure reading for both the WVWA and VT pressure sensors. A separate rating curve was developed for the WVWA (gauge height = 63.163 x pressure - 8.7014) and VT (gauge height = 70.640 x pressure - 5.6633) data to convert pressure to gage height (cm) from 6 June 2019 to 24 Aug 2020. Gauge height was then converted to (m) and used to calculate discharge as described above. </para>
+          <para>On 20 Jul 2020, there was a rapid drop in pressure measured at the weir. On 10 Aug 2020, field crew personnel noted the weir had been breached. Thus, both pressure sensors (WVWA and VT) were removed from the weir on 13 Aug 2020 and were re-installed on 24 Aug 2020 after the weir had been fixed. &#13;
+A rating curve was developed for the time period from 24 Aug 2020 to 02 Sep 2020 for both the WVWA (gauge height = 53.191 x pressure - 1.0851) and VT (gauge height = 58.140 x pressure + 2.9302) sensors. On 02 Sep 2020, the pressure transducers (WVWA and VT) were moved again to prevent sediment burial. Therefore, a third rating curve was developed from 02 Sep 2020 to 08 Nov 2021 for both the WVWA (gauge height = 69.021 x pressure + 0.812) and VT (gauge height = 71.993 x pressure + 5.801) sensors when batteries in the WVWA pressure sensor were replaced. Another rating curve was developed from 08 Nov 2021 to 09 May 2022 when the weir was dredged WVWA (gauge height = 84.52082 x pressure -6.381252) and VT (gauge height = 84.86239 x pressure + 1.719037).  Subsequent rating curves were made for VT sensor from 09 May 2022 to 16 Nov 2022 VT (gauge height = 71.6103 x pressure + 2.412859) and 16 Nov 2022 to 31 Dec 2022 (gauge height = 71.42857 x pressure + 1.5). For the WVWA senor a rating curve was developed from 09 May 2022 to 31 Dec 2022 (gauge height = 72.51036 x pressure -5.226).  The rating curve is calculated in the Inflow_QAQC_function_2013_2022.R script and the time period for each rating curve is in the FCR_Inflow_Maintenance_RatingCurveLog_2013_2022.csv under RATING.  As new observations from the gauge height (see FCR_Inflow_GaugeHeight_2013_2022.csv) are added the current rating curve will be updated each year.  </para>
+          <para>From 08 Nov 2021 to 16 Nov 2022 the VT sensor was about 2.3 cm higher than the WVWA senor which resulted in lower estimated flow. We converted cm to psi using the relationship 1psi = 2.31 ft. from the Campbell Scientific CS451 Manual. So, we added 0.033 psi to all observations from the VT_Pressure_psia observations and flagged with a 1 for- value corrected to account for artificial increase in pressure after sensor maintenance. </para>
+          <para>All other maintenance issues can be found in the FCR_Inflow_Maintenance_RatingCurveLog_2013_2022.csv. </para>
+          <para>Using the QAQC files: We create a function to QAQC the observations and calculate flow (Inflow_QAQC_function_2013_2022.R). This function is used in Inflow_QAQC_Plots_2013_2022.Rmd which is an R Markdown file that uses the QAQC function, identifies data gaps, and creates QAQC plots. </para>
+          <para>### Data Flags&#13;
+For 15 May 2013 - 6 June 2019, the weir installed at the inflow was rectangular, and thus very low flows were often not well-resolved by our flow equation. At these times, flow is reported as NA. However, the Falling Creek Reservoir inflow stream generally does have perennial flow.</para>
+          <para>Flow observations which over-topped the weir (at 27.5 cm) were retained but flagged as 6 in the data set. Flows below the pressure sensors were set to NA and flagged as 3. We note that measurements with multiple flags are coded as a multiple-digit number (e.g., a flag of '12' indicates there was 1 = value down-corrected to account for artificial increase in pressure after sensor maintenance and 2 = sensor malfunction). No delimiter was added to separate flag codes in those columns.&#13;
+We added data flags for missing data and when sensors were removed for maintenance, 7 and 8 respectively. </para>
+          <para>### Notes&#13;
+We note several changes in this dataset (EDI identifier 202.9) from previous versions (202.8 and earlier). First, WVWA sensor observations have been given the correct time stamp. In previous datasets all observations were assumed to be in EST when in fact the time zone was based on when the original data file had begun. Because of this some of the rating curves for the WVWA sensors have changed slightly.  &#13;
+This year we also added a section to calculate the rating curves automatically in the script so when new observations are added to the FCR_Inflow_GaugeHeight_2013_2022.csv the rating curve will be updated. The script outputs the slope and intercept, along with low observations and high observations for each rating curve. The outputs are updated the methods section each year.  &#13;
+The Maintenance log as well as rating curve time periods are published with the data set so it is easier to find the dates and times of both sensor issues and when the sensors were moved and rating curves started and ended. </para>
+          <para>Please note: When pulling the file via EDI's API, we recommend using the function "read.csv" instead of "read_csv". The function 'read_csv' identifies the columns for the VT data and associated flags  as "logical" instead of "double" due to &gt;100 NA's at the beginning of the dataset. This is avoided when using the function "read.csv".</para>
+          <para>### References:&#13;
+Gerling, A. B., R. G. Browne, P. A. Gantzer, M. H. Mobley, J. C. Little, and C. C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research 67: 129-143. DOI: 10.1016/j.watres.2014.09.002&#13;
+014.09.002&#13;
+</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>University of Florida</organizationName>
+          <electronicMailAddress>renato@ece.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>Inflow_2013_2022</entityName>
+      <entityDescription>FCR inflow dataset from 2013 to 2022</entityDescription>
+      <physical>
+        <objectName>Inflow_2013_2022.csv</objectName>
+        <size unit="bytes">37014498</size>
+        <authentication method="MD5">30c02dc0a0e80314101186496e5a0c0c</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; FCR = Falling Creek Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; 100 = Inflow stream of Falling Creek Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">100</minimum>
+                  <maximum exclusive="false">100</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the Eastern Standard Time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WVWA_Pressure_psi</attributeName>
+          <attributeDefinition>Uncorrected pressure measured by the WVWA INW sensor at the weir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>poundsPerSquareInch</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">13.712</minimum>
+                  <maximum exclusive="false">14.594</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WVWA_Baro_pressure_psi</attributeName>
+          <attributeDefinition>Atmospheric pressure measured by WVWA INW sensor at the dam of Falling Creek Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>poundsPerSquareInch</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">13.367</minimum>
+                  <maximum exclusive="false">14.429</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WVWA_Pressure_psia</attributeName>
+          <attributeDefinition>Corrected pressure (with atmospheric pressure subtracted) measured by WVWA INW sensor at the weir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>poundsPerSquareInch</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.0640000000000001</minimum>
+                  <maximum exclusive="false">0.763999999999999</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WVWA_Flow_cms</attributeName>
+          <attributeDefinition>Discharge flow rate derived from the WVWA pressure measured at the weir and weir rating curve. For 15 May 2013 - 6 June 2019 (rectangular weir) see Gerling et al. 2014 for equations. For 7 June 2019 - present (v-notch weir), see equations in metadata.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>cubicMetersPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.74810937239995e-07</minimum>
+                  <maximum exclusive="false">0.426317032507407</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WVWA_Temp_C</attributeName>
+          <attributeDefinition>Water temperature measured at the weir entering the reservoir by WVWA</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-1.94</minimum>
+                  <maximum exclusive="false">26.94</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>VT_Pressure_psia</attributeName>
+          <attributeDefinition>Corrected pressure (with atmospheric pressure subtracted) by VT sensor</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>poundsPerSquareInch</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.037</minimum>
+                  <maximum exclusive="false">0.675</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>VT_Flow_cms</attributeName>
+          <attributeDefinition>Discharge flow rate derived from the VT pressure measured at the weir and weir rating curve. For 22 April 2019 - 6 June 2019 (rectangular weir) see Gerling et al. 2014 for equations. For 7 June 2019 - present (v-notch weir), see equations in metadata.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>cubicMetersPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.000835274976487727</minimum>
+                  <maximum exclusive="false">0.416660744899482</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>VT_Temp_C</attributeName>
+          <attributeDefinition>Water temperature measured at the weir entering the reservoir by VT sensor</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.26</minimum>
+                  <maximum exclusive="false">27.49</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WVWA_Pressure_psi</attributeName>
+          <attributeDefinition>Data flag for WVWA_Pressure_psi</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value corrected to account for artificial increase in pressure after sensor maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>value of NA due to leaking at weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WVWA_Baro_pressure_psi</attributeName>
+          <attributeDefinition>Data flag for  WVWA_Baro_pressure_psi</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WVWA_Pressure_psia</attributeName>
+          <attributeDefinition>Data flag for  WVWA_Pressure_psia</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>value of NA due to leaking at weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WVWA_Flow_cms</attributeName>
+          <attributeDefinition>Data flag for  WVWA_Flow_cms</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>value of NA due to extremely low flows that are not well captured by rectangular or v-notch weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>demonic intrusion</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>value of NA due to leaking at weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>6</code>
+                    <definition>flow topping the v-notch weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>13</code>
+                    <definition>value down corrected due to low flows on the rectangular weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>16</code>
+                    <definition>value downcorrected due to flow overtopping the rectangular weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WVWA_Temp_C</attributeName>
+          <attributeDefinition>Data flag for  WVWA_Temp_C</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>value of NA due to leaking at weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_VT_Pressure_psia</attributeName>
+          <attributeDefinition>Data flag for  VT_Pressure_psia</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value corrected to account for artificial increase in pressure after sensor maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_VT_Flow_cms</attributeName>
+          <attributeDefinition>Data flag for  VT_Flow_cms</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>value of NA due to extremely low flows that are not well captured by rectangular or v-notch weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>6</code>
+                    <definition>flow topping the v-notch weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_VT_Temp_C</attributeName>
+          <attributeDefinition>Data flag for  VT_Temp_C</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>332661</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>Inflow_Maintenance_RatingCurveLog_2013_2022</entityName>
+      <entityDescription>Maintenance for the weir along with time periods for the rating curves</entityDescription>
+      <physical>
+        <objectName>Inflow_Maintenance_RatingCurveLog_2013_2022.csv</objectName>
+        <size unit="bytes">5334</size>
+        <authentication method="MD5">d69fb6e27c95ce9fbd7b1cf4f35fd423</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 100=Inflow stream of Falling Creek Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">100</minimum>
+                  <maximum exclusive="false">100</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Station</attributeName>
+          <attributeDefinition>Code corresponding to if the entry is for a maintenance issue or for the rating curve; WEIR=maintenance or issues at the weir; RATING=the start and end of a certain rating curve period</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>RATING</code>
+                    <definition>Time period for a specifc rating curve</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WEIR</code>
+                    <definition>Maintenance or issues with the weir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime_start</attributeName>
+          <attributeDefinition>Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime_end</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Parameter</attributeName>
+          <attributeDefinition>Name of variable corresponding to weir data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>All_Weir</code>
+                    <definition>All observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>VT</code>
+                    <definition>All observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>VT_Flow</code>
+                    <definition>Observations with the flow measurement (VT_Flow_cms) with the VT pressure sensor; corresponds to ColumnNumber 8 and FlagColumn 16</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>VT_Press</code>
+                    <definition>Observations with the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WVWA</code>
+                    <definition>All observations with the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WVWA_Baro</code>
+                    <definition>Observations with the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WVWA_Flow</code>
+                    <definition>Observations with the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WVWA_Pres</code>
+                    <definition>Observations with the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ColumnNumber</attributeName>
+          <attributeDefinition>Column number associated with parameter used in the QAQC script</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>Column number for the the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>Column number for the  the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>Column number for the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>Column number for the flow measurement (VT_Flow_cms) with the VT pressure sensor; corresponds to ColumnNumber 8 and FlagColumn 16</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(2:6)</code>
+                    <definition>Column number for the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(2:9)</code>
+                    <definition>Column number for all observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(3:5)</code>
+                    <definition>Column number for the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(4:6)</code>
+                    <definition>Column number for the WVWA pressure readings (WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds with ColumnNumber c(4:6) and FlagColumn c(12:14)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(7:9)</code>
+                    <definition>Column number for all observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag</attributeName>
+          <attributeDefinition>Data flag applying to associated variable; for RATING it is a three digit number to denote new rating curve</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value corrected to account for artificial increase in pressure after sensor maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>100</code>
+                    <definition>ID for rating curve from 2013-05-15 16:00:00 EST- 2019-06-07 00:00:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>101</code>
+                    <definition>ID for rating curve from 2019-06-07 00:15:00 EST-2020-08-24 13:00:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>102</code>
+                    <definition>ID for rating curve from 2020-08-24 15:00:00 EST-2020-09-02 13:15:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>103</code>
+                    <definition>ID for rating curve from 2020-09-02 13:45:00 EST-2021-11-08 13:45:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>104</code>
+                    <definition>ID for rating curve from 2021-11-08 14:00:00 EST-2022-05-09 13:15:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>105</code>
+                    <definition>ID for rating curve from 2022-05-09 13:20:00 EST-2022-11-16 16:38:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>106</code>
+                    <definition>ID for rating curve from 2022-05-09 14:15:00 EST-2023-12-31 23:59:00 EST</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sensor malfunction</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>24</code>
+                    <definition>weir damaged due to weather</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>demonic intrusion</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>value of NA due to leaking at weir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing observation/not recorded</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8</code>
+                    <definition>values removed because of maintenance</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>FlagColumn</attributeName>
+          <attributeDefinition>Column number associated with the Flag column for the parameter in raw file during QAQC</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>10</code>
+                    <definition>Flag column for the observations with the WVWA pressure sensor(WVWA_Pressure_psi); corresponds with ColumnNumber 2 and FlagColumn 10</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>13</code>
+                    <definition>Flag column for the observations with the WVWA flow measurment (WVWA_Flow_cms); corresponds with ColumnNumber 5 and FlagColumn 13</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>15</code>
+                    <definition>Flag column for the observations with the pressure reading (VT_Pressure_psia) from the VT pressure sensor; corresponds to ColumnNumber 7 and FlagColumn 15</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(10:14)</code>
+                    <definition>Flag column for all observations with the WVWA sensors ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds to ColumnNumber c(2:6) and Flag Column c(10:14)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(10:17)</code>
+                    <definition>Flag column for all observations ( WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C, VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(2:9) and Flag Column c(10:17)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(11:13)</code>
+                    <definition>Flag column for observations with the WVWA pressure reading (WVWA_Baro_Pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms); corresponds to ColumnNumber c(3:5) and FlagColumn c(11:13)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(12:14)</code>
+                    <definition>Flag column for the WVWA pressure readings (WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C); corresponds with ColumnNumber c(4:6) and FlagColumn c(12:14)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>c(15:17)</code>
+                    <definition>Flag column for all observations with the VT pressure sensors ( VT_Pressure_psia, VT_Flow_cms, VT_Temp_C); corresponds to ColumnNumber c(7:9) and Flag Column c(15:17)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Value not associated with entry</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Notes</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No note recorded</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>34</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>Inflow_QAQC_function_2013_2022</entityName>
+      <entityDescription>QAQC function used in Inflow_QAQC_Plots_2013_2022.Rmd to take out observations from the dataset based on the maintenance log and calculate flow based on calculated water level</entityDescription>
+      <physical>
+        <objectName>Inflow_QAQC_function_2013_2022.R</objectName>
+        <size unit="bytes">19488</size>
+        <authentication method="MD5">6abd7a234e368990381eeb28d14cbfdb</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Inflow_QAQC_Plots_2013_2022</entityName>
+      <entityDescription>Script that uses the function in Inflow_QAQC_function_2013_2022.R and creates QAQC plots</entityDescription>
+      <physical>
+        <objectName>Inflow_QAQC_Plots_2013_2022.Rmd</objectName>
+        <size unit="bytes">15930</size>
+        <authentication method="MD5">3f1d689ed295885f4c6f85b31f1c9087</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Inflow_GaugeHeight_2013_2022</entityName>
+      <entityDescription>Observed water level from the staff gauge used for the rating curve</entityDescription>
+      <physical>
+        <objectName>Inflow_GaugeHeight_2013_2022.csv</objectName>
+        <size unit="bytes">2710</size>
+        <authentication method="MD5">b3c39425061368cb1e8cb7938bc46b00</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/csv</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

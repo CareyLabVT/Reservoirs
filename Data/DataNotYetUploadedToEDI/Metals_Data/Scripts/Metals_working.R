@@ -80,6 +80,7 @@ ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_
  
     #metals flags 2 (instrument malfunction) and 6 (non-standard method) will have to be entered manually
   
+#make a test to see if the totals and solubles didn't get mixed up: difference column, print values that are negative?
  
 #let's write the final csv
 #note: you must edit the script each time to save the correct file name

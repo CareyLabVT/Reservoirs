@@ -89,7 +89,7 @@ make_eml(
   other.entity.description = "Zooplankton QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.4') #reserve new staging environment package id each year
+  package.id = 'edi.1090.5') #reserve new staging environment package id each year
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment

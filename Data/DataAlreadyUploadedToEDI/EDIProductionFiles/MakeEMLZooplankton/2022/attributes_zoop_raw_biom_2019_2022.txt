@@ -11,4 +11,5 @@ LowestTaxonomicLevelOfID	Lowest taxonomic identification for each individual zoo
 TaxaID	Taxonomic name of each identified zooplankton	categorical			NA	No data
 Nauplius	Identifies whether copepod is a nauplius	categorical			NA	No data
 ObjectiveMagnification	Objective used to measure zooplankton	categorical			NA	No data
+OcularMagnification	Magnification of ocular lens on microscope	categorical			NA	No data
 MarksInOcularMicrometer_No.	Length measurement of zooplankton using the ocular micrometer	numeric	dimensionless		NA	No data

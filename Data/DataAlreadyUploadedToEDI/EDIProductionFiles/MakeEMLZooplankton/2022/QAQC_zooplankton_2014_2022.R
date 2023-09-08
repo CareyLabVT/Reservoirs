@@ -133,6 +133,6 @@ zoops_final <- rbind(old_final, zoop)
 zoop_biom$MarksInOcularMicrometer_No. <- as.numeric(zoop_biom$MarksInOcularMicrometer_No.)
 
 #export final dfs
-write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton_2014_2022.csv", row.names=F)
+write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton_summary_2014_2022.csv", row.names=F)
 write.csv(zoop_dens, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zoop_raw_dens_2019_2022.csv", row.names=F)
 write.csv(zoop_biom, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zoop_raw_biom_2019_2022.csv", row.names=F)

@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 11 * * *"
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      container:
+        #image: rqthomas/flare-rocker:4.2.1
+        image: rocker/tidyverse:4.2
+      steps:
+        -name: Checkout repo
+         uses: actions/checkout@v3
+         with:
+          fetch-depth: 0
+          
+        -name: Run automated target files
+         env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/fluroprobe_qaqc.R
+        run: Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/secchi_qaqc.R

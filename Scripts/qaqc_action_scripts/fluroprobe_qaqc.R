@@ -110,3 +110,7 @@ fp_final <- fp8 %>%
 write.csv(fp_final, "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv", row.names = FALSE)
 
 }
+
+# run the function
+fluoroprobe_qaqc()
+

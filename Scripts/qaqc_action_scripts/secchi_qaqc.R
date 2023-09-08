@@ -13,7 +13,7 @@ secchi_df$Flag_Datetime <- NA
 secchi_reformat <- secchi_df |> 
   rename(Flag_Secchi_m = Flag_Secchi)
 
-write.csv(secchi_reformat, '~/Reservoirs/Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv')
+write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv')
 
 }
 

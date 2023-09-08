@@ -22,7 +22,7 @@ jobs:
       - name: Run automated target files
         run: |
           Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/fluroprobe_qaqc.R
-          R -e 'remotes:install_version("gsheet", version = "0.4.5")'
+          R -e 'remotes::install_version("gsheet", version = "0.4.5")'
           Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/secchi_qaqc.R
       
       - name: Commit and Push

@@ -15,7 +15,7 @@ zoop_biom <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEM
                       na.strings = "")
 
 #get zoop date into correct format
-zoop$DateTime <- as.POSIXct(zoop$DateTime)
+zoop$DateTime <- as.POSIXct(zoop$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
 
 #hypo tows
 ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 

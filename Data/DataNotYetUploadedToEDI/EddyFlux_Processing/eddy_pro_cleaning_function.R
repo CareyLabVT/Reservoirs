@@ -20,7 +20,7 @@ pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
 
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
                                     gdrive, # Are the files on Google Drive. True or False
-                                    gshared_drive, # Name of the shared drive where the files are held
+                                    gshared_drive, # Name of the shared drive where the files are held or use as_id()and the ID of the folder
                                     current_year )# Current Year. Must be numeric
   {
   
@@ -360,9 +360,9 @@ write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
 }
 
 ## Function Example
- # eddypro_cleaning_function(
- #   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
- #      gdrive = T, # Are the files on Google Drive. True or False
- #      gshared_drive = "VT-UBC FCR Team",
- #                           current_year = 2023
- #   )
+ eddypro_cleaning_function(
+   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
+      gdrive = T, # Are the files on Google Drive. True or False
+      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
+                           current_year = 2023
+   )

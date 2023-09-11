@@ -338,10 +338,10 @@ ec_all <- current.ec %>%
          qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
          qc_h2o_flux = ifelse(is.na(h2o_flux_umolm2s), 3, qc_h2o_flux),
          qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux), 
-         qc_co2_flux = ifelse(flowrate_mean>10 & flowrate_mean<20, 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
-         co2_flux_umolm2s = ifelse(flowrate_mean>10 & flowrate_mean<20,NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-         qc_h2o_flux = ifelse(flowrate_mean>10 & flowrate_mean<20, 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
-         h2o_flux_umolm2s = ifelse(flowrate_mean>10 & flowrate_mean<20,NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+         qc_co2_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
+         co2_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+         qc_h2o_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
+         h2o_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
          qc_ch4_flux = ifelse(ch4_flux_umolm2s>200 | ch4_flux_umolm2s< -200, 4, qc_ch4_flux),
          ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s>200|ch4_flux_umolm2s< -200, 4, ch4_flux_umolm2s))%>%
          distinct()%>% # take out duplicates

@@ -353,6 +353,9 @@ ec_all <- current.ec %>%
 # Clean up and make it useable for plotting
 ec_all[ec_all ==-9999] <- NA # Remove -9999 and replace with NAs
 
+# order the observations
+ec_all<-ec_all[order(ec_all$date),]
+
 
 # Output data
 write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
@@ -360,9 +363,9 @@ write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
 }
 
 ## Function Example
- eddypro_cleaning_function(
-   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
-      gdrive = T, # Are the files on Google Drive. True or False
-      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-                           current_year = 2023
-   )
+ # eddypro_cleaning_function(
+ #   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
+ #      gdrive = T, # Are the files on Google Drive. True or False
+ #      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
+ #                           current_year = 2023
+ #   )

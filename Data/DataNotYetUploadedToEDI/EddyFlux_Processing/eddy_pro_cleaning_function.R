@@ -35,7 +35,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   if(gdrive==T){
     # Get the file info of the EddyPro Full output files
-    gdrive_files<-drive_find(pattern = "_full_output_", 
+    gdrive_files<-googledrive::drive_find(pattern = "_full_output_", 
                              type="csv",
                              n_max = Inf, 
                              shared_drive = gshared_drive)
@@ -54,7 +54,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
         
         name<-gdrive_files$name[i]
         
-        drive_download(gdrive_files$id[i], path = paste0(mydir,"data/",name))
+        googledrive::drive_download(gdrive_files$id[i], path = paste0(mydir,"data/",name))
         
       }else{
         
@@ -345,7 +345,7 @@ ec_all <- current.ec %>%
          qc_ch4_flux = ifelse(ch4_flux_umolm2s>200 | ch4_flux_umolm2s< -200, 4, qc_ch4_flux),
          ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s>200|ch4_flux_umolm2s< -200, 4, ch4_flux_umolm2s))%>%
          distinct()%>% # take out duplicates
-         select(-Year, -flowrate_mean) # take out the columns not in EDI
+         select(-Year, -flowrate_mean, -datetime) # take out the columns not in EDI
   
 
 

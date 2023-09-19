@@ -34,7 +34,7 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
     return()
   }
   
-  ## Generate QAQCed versions of these files (stored in csv_outputs folder)
+  ## Generate csv versions of these files (stored in csv_outputs folder)
   for(file in file_names) {
     process_CTD_file(file, 
                      raw_downloads = raw_downloads,
@@ -46,7 +46,7 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
                        ctd_season_csvs = ctd_season_csvs,
                        output_file_name = "CTD_Meta_2023.csv")
   
-  ## Add data flags
+  ## Add data flags to seasonal csv
   flag_seasonal_csvs(directory = ctd_season_csvs,
                      input_file_name = "CTD_Meta_2023.csv",
                      output_file_name = "CTD_2023.csv")

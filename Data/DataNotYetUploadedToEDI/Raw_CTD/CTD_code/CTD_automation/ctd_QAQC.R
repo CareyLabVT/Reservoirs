@@ -7,6 +7,19 @@ source("process_CTD_file.R")
 source("identify_new_files.R")
 source("update_seasonal_csvs.R")
 
+#' 
+#' @author Abigail Lewis
+#' @title ctd_QAQC
+#' @description This function runs QAQC for any new CTD files and re-processes seasonal CSVs
+#' 
+#' @param raw_downloads directory where raw cnvs are stored
+#' @param ctd_cast_csvs directory where output csvs for individual casts are stored
+#' @param ctd_season_csvs directory where seasonal output csvs are stored
+#' @param CTD_FOLDER high level CTD folder (used to reference metadata, pdf outputs, etc)
+#'
+#' @return no output
+#'
+
 ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
                      ctd_cast_csvs = "../../csv_outputs",
                      ctd_season_csvs = "../../CTD_season_csvs",

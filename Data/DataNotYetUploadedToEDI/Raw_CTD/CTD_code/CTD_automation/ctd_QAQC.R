@@ -1,6 +1,6 @@
 pacman::p_load(oce, ocedata, tidyverse, lubridate)
 
-setwd(".Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/CTD_automation/")
+setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/CTD_automation/")
 source("ctd_functions_CTD7809_automated.R") #Load Carey Lab ctd functions
 source("flag_seasonal_csvs.R")
 source("process_CTD_file.R")
@@ -14,8 +14,9 @@ source("update_seasonal_csvs.R")
 #' 
 #' @param raw_downloads directory where raw cnvs are stored
 #' @param ctd_cast_csvs directory where output csvs for individual casts are stored
-#' @param ctd_season_csvs directory where seasonal output csvs are stored
-#' @param CTD_FOLDER high level CTD folder (used to reference metadata, pdf outputs, etc)
+#' @param ctd_season_csvs directory where seasonal output csv should be stored
+#' @param CTD_FOLDER high level CTD folder (used to reference metadata, pdf outputs, etc). 
+#' This is also where the ctd_L1.csv file will be stored
 #'
 #' @return no output
 #'
@@ -47,12 +48,9 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
                        output_file_name = "CTD_Meta_2023.csv")
   
   ## Add data flags to seasonal csv
-  flag_seasonal_csvs(directory = ctd_season_csvs,
+  flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                      input_file_name = "CTD_Meta_2023.csv",
-                     output_file_name = "CTD_2023.csv")
+                     output_file_name = "ctd_L1.csv")
 }
 
-ctd_QAQC(raw_downloads = "../../RawDownloads",
-         ctd_cast_csvs = "../../csv_outputs",
-         ctd_season_csvs = "../../CTD_season_csvs",
-         CTD_FOLDER = "../../")
+ctd_QAQC()

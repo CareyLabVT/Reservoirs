@@ -3,18 +3,20 @@
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year and adds data flags
 #' 
-#' @param directory directory of CTD seasonal csvs
+#' @param ctd_season_csvs directory of CTD seasonal csvs
 #' @param input_file_name file name of un-flagged dataset
 #' @param output_file_name file name of flagged dataset
+#' @param CTD_FOLDER high level CTD folder where L1 output will be stored
 #'
 #' @return no output
 #'
 
-flag_seasonal_csvs <- function(directory = "../../CTD_season_csvs",
+flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
                                input_file_name = "CTD_Meta_2023.csv",
-                               output_file_name = "CTD_2023.csv") {
+                               output_file_name = "CTD_2023.csv",
+                               CTD_FOLDER = "../../") {
   
-  ctd1 <- read.csv(paste0(directory, "/", input_file_name)) #Load saved data
+  ctd1 <- read.csv(paste0(ctd_season_csvs, "/", input_file_name)) #Load saved data
   ctd = ctd1 %>%
     mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
            Reservoir = as.factor(Reservoir))
@@ -156,6 +158,6 @@ flag_seasonal_csvs <- function(directory = "../../CTD_season_csvs",
   CTD_fix_renamed%>%
     filter(Flag_DateTime==7)
   
-  write.csv(CTD_fix_renamed,paste0(directory, "/", output_file_name), row.names = FALSE)
-  message(paste0("Successfully updated ", paste0(directory, "/", output_file_name)))
+  write.csv(CTD_fix_renamed,paste0(CTD_FOLDER, output_file_name), row.names = FALSE)
+  message(paste0("Successfully updated ", output_file_name))
 }

@@ -3,7 +3,7 @@
 
 #read in libraries
 #if (!require("pacman"))install.packages("pacman")
-pacman::p_load(ggplot2)
+pacman::p_load(ggplot2, tidyverse)
 
 #read in new zoop files
 zoop <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/Data/EDI_zoop_taxa_2019-2022.csv")
@@ -15,7 +15,7 @@ zoop_biom <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEM
                       na.strings = "")
 
 #get zoop date into correct format
-zoop$DateTime <- as.POSIXct(zoop$DateTime)
+zoop$DateTime <- as.POSIXct(zoop$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
 
 #hypo tows
 ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
@@ -126,13 +126,25 @@ old$DateTime <- as.POSIXct(old$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
 #merge old dfs
 old_final <- rbind(old, fcr)
 
+#add a rep column to JPD data
+old_final$Rep <- 1
+
+#change order of cols
+old_final <- old_final |> select(Reservoir, Site, DateTime, 
+                                 StartDepth_m, EndDepth_m, Rep,
+                                 CollectionMethod, Taxon, 
+                                 Density_IndPerL, MeanLength_mm,
+                                 MeanWeight_ug, Biomass_ugL,
+                                 Flag_Length, Flag_Weight,
+                                 Flag_Biomass)
+
 #merge old df with new df
 zoops_final <- rbind(old_final, zoop)
 
-#make sure marks in ocular micrometer col is numeric 
+#make sure marks in ocular micrometer col is numeric (NA warning bc NAs in this column)
 zoop_biom$MarksInOcularMicrometer_No. <- as.numeric(zoop_biom$MarksInOcularMicrometer_No.)
 
 #export final dfs
-write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton_2014_2022.csv", row.names=F)
+write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zooplankton_summary_2014_2022.csv", row.names=F)
 write.csv(zoop_dens, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zoop_raw_dens_2019_2022.csv", row.names=F)
 write.csv(zoop_biom, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022/zoop_raw_biom_2019_2022.csv", row.names=F)

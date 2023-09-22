@@ -6,8 +6,8 @@ LowestTaxonomicLevelOfID	Genus	Genus
 LowestTaxonomicLevelOfID	Order	Order
 LowestTaxonomicLevelOfID	Phylum	Phylum
 LowestTaxonomicLevelOfID	Species	Species
-LowestTaxonomicLevelOfID	SubOrder	SubOrder
-LowestTaxonomicLevelOfID	Subclass	Subclass
+LowestTaxonomicLevelOfID	Subclass	SubOrder
+LowestTaxonomicLevelOfID	Suborder	Subclass
 Nauplius	 	Nauplii Presence
 Nauplius	nauplius	Nauplii Presence
 ObjectiveMagnification	25x	Microscope Objective
@@ -18,6 +18,7 @@ ObjectiveMagnification	50x	Microscope Objective
 ObjectiveMagnification	60x	Microscope Objective
 ObjectiveMagnification	70x	Microscope Objective
 ObjectiveMagnification	75x	Microscope Objective
+OcularMagnification	10x	Ocular Lens Magnification
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	FCR	Falling Creek Reservoir
 Subsample	A	A

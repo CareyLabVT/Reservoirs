@@ -1,14 +1,15 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	"Three-letter code corresponding to sampled reservoir, either: BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir"	categorical			NA	No data
-Site	"Sampling site within each reservoir, 50=Deep hole or site nearest to dam in each reservoir"	numeric	dimensionless		NA	No data
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	No data
+Reservoir	Three-letter code corresponding to sampled reservoir, BVR = Beaverdam Reservoir, FCR = Falling Creek Reservoir	categorical			NA	No data
+Site	Sampling site within each reservoir, 49 = Littoral site southeast of deep site in Beaverdam Reservoir, 50 = Deep hole or site nearest to dam in each reservoir, 51 = Littoral site southwest of deep site in Beaverdam Reservoir	numeric	dimensionless		NA	No data
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed	Date		YYYY-MM-DD hh:mm:ss	NA	No data
 StartDepth_m	Water depth where the start of the sample was collected	numeric	meter		NA	No data
 EndDepth_m	Water depth where the sample collection ended	numeric	meter		NA	No data
-Rep	"Field replicate that distinguishes samples collected from the same site, depth, or general time"	numeric	dimensionless		NA	No data
-CollectionMethod	"Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap"	categorical			NA	No data
+Rep	Field replicate that distinguishes samples collected from the same site, depth, or general time	numeric	dimensionless		NA	No data
+CollectionMethod	Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap	categorical			NA	No data
 Subsample	Alphabetical identifier to differentiate between aliquots taken from each sample	categorical			NA	No data
 LowestTaxonomicLevelOfID	Lowest taxonomic identification for each individual zooplankton	categorical			NA	No data
 TaxaID	Taxonomic name of each identified zooplankton	categorical			NA	No data
 Nauplius	Identifies whether copepod is a nauplius	categorical			NA	No data
-ObjectiveMagnification	Objective used to measure zooplankton	categorical			NA	No data
+ObjectiveMagnification	Magnification of objective on the microscope 	categorical			NA	No data
+OcularMagnification	Magnification of ocular lens on microscope	categorical			NA	No data
 MarksInOcularMicrometer_No.	Length measurement of zooplankton using the ocular micrometer	numeric	dimensionless		NA	No data

@@ -10,7 +10,7 @@
 #' @return no output
 #'
 
-update_seasonal_csvs <- function(file, 
+process_CTD_file <- function(file, 
                                  raw_downloads = "../../RawDownloads",
                                  CTD_FOLDER = "../../") {
   #Specify global variables
@@ -23,12 +23,16 @@ update_seasonal_csvs <- function(file,
   AUTO_NAME <- TRUE 
   AUTO_FOLDER <- TRUE 
   REP <- str_extract(file, "_S[0-9]+")
+  SN <- as.numeric(str_extract(location, "\\d{4}"))
   
   #trim ctd
   ctdTrimmed <- trim_ctd(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloads)
   
   #do the rest of the processing
-  epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, REP, AUTO_NAME, 
-                    NAME_OVERRIDE, AUTO_FOLDER, CSV_FOLDER_OVERRIDE, MAX_DEPTH,
-                    CTD_FOLDER)
+  epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
+                    REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
+                    CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER)
+  
+  
+  
 }

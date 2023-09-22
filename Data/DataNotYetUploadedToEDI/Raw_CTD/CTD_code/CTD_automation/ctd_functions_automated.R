@@ -35,12 +35,8 @@ trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloa
 }
 
 
-
-
-
-
 epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
-                              REP, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
+                              REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
                               CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER){
   ### Format date and names for the rest of the automated script
   DATE<- dmy(DATE_TEXT)
@@ -55,6 +51,10 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
   
   ### Add a date column to the dataframe. This will actually give the EXACT TIME of the cast
   data$Date <- as_datetime(ctdTrimmed@metadata$startTime)
+  
+  # If statement to decide which variables to select based on which CTD is being processed
+  
+  if(SN==7809){
   
   ### Extract and order columns we want
   data <- data %>% 
@@ -77,23 +77,78 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
           flag)
   
   ### rename the columns so they are easy to decifer and reeproducible for future appending                
-  names(data) <- c("Date", 
+  names(data) <- c("DateTime", 
                    "Depth_m",
                    "Temp_C", 
                    "Chla_ugL", 
-                   "Turb_NTU", 
+                   "Turbidity_NTU", 
                    "Cond_uScm", 
-                   "Spec_Cond_uScm", 
+                   "SpCond_uScm", 
                    "DO_mgL", 
-                   "DO_pSat", 
+                   "DOsat_percent", 
                    "pH", 
                    "ORP_mV", 
                    "PAR", 
                    "Salinity",
-                   "Descent Rate (m/s)",
+                   "DescRate_ms ",
                    #"Pressure (PSI)",
                    #"Density_mg_m3",
                    "Flag")
+  }else if(SN==8188){
+    
+    ### Extract and order columns we want
+    data <- data %>% 
+      dplyr::select(Date,
+                    depth, 
+                    temperature, 
+                    fluorescence, 
+                    fluorescence2,
+                    fluorescence3,
+                    fluorescence4,
+                    turbidity, 
+                    conductivity2, 
+                    conductivity,
+                    oxygen,
+                    oxygen2,
+                    #pH,
+                    #orp,
+                    par.sat.log,
+                    salinity, 
+                    descentRate,
+                    #density,
+                    #pressurePSI,
+                    flag)
+    
+    ### rename the columns so they are easy to decipher and reproducible for future appending                
+    names(data) <- c("DateTime", 
+                     "Depth_m",
+                     "Temp_C", 
+                     "CDOM_ugL",
+                     "Chla_ugL",
+                     "Phycoerythrin_ugL",
+                     "Phycocyanin_ugL",
+                     "Turbidity_NTU", 
+                     "Cond_uScm", 
+                     "SpCond_uScm", 
+                     "DO_mgL", 
+                     "DOsat_percent", 
+                     #"pH", 
+                     #"ORP_mV", 
+                     "PAR", 
+                     "Salinity",
+                     "DescRate_ms ",
+                     #"Pressure (PSI)",
+                     #"Density_mg_m3",
+                     "Flag")
+    
+  }else{
+    warning("CTD Serial Number did not match the current serial numbers we have. Could not select and rename columns. 
+            Check that the serial number is used in the file name of the cnv")
+  }
+  
+  
+  
+  
   
   ### REMOVE THE BOTTOM NA values ###
   data <- data[!is.na(data$DO_mgL),]

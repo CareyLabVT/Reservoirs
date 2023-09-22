@@ -33,7 +33,7 @@ identify_new_files <- function(raw_downloads = "../../RawDownloads",
   to_process <- missing_2023[!is.na(Reservoir)&!is.na(Site)]
   
   # FOR NOW ONLY PROCESS OLD CTD
-  to_process_S7809 <- to_process[!grepl("S8188",to_process)]
+  #to_process_S7809 <- to_process[!grepl("S7809",to_process)]
   
-  return(to_process_S7809)
+  return(to_process)
 }

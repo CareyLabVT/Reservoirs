@@ -23,14 +23,25 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../../csv_outputs",
   files <- files[substr(files,5,6)=="23"] #only 2023 files
   #files <- files[file.mtime(paste0("../../csv_outputs/",files))>as.Date("2023-01-01")] #Only read files that have been modified this year
   
+  
+  # list of column headers that need to be changed if they are still in the data frame
+  
+  lookup <- c(PAR_umolm2s  = "PAR",
+              DescRate_ms  = 'Descent Rate (m/s)',
+              DateTime = "Date",
+              DOsat_percent = "DO_pSat",
+              SpCond_uScm = "Spec_Cond_uScm",
+              Turbidity_NTU = "Turb_NTU")
+  
+  
   #This reads the first file in
   ctd = read_csv(paste0(ctd_cast_csvs, "/", files[1])) 
   location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
   ctd = ctd%>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-    rename(PAR_umolm2s = PAR,
-           Desc_rate = 'Descent Rate (m/s)')%>%
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))),
+           SN =  as.numeric(str_extract(location, "\\d{4}")))%>%
+    dplyr::rename(any_of(lookup))%>%
     select(-Salinity)
   
   # Loop through and pull all the files in
@@ -39,9 +50,9 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../../csv_outputs",
     location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
     new = new%>%
       mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-             Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-      rename(PAR_umolm2s = PAR,
-             Desc_rate = 'Descent Rate (m/s)')%>%
+             Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))),
+             SN = as.numeric(str_extract(location, "\\d{4}")))%>%
+      dplyr::rename(any_of(lookup))%>%
       select(-Salinity)
     ctd = ctd %>%
       full_join(new)

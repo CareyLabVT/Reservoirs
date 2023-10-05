@@ -12,7 +12,7 @@ source("update_seasonal_csvs.R")
 #' @title ctd_QAQC
 #' @description This function runs QAQC for any new CTD files and re-processes seasonal CSVs
 #' 
-#' @param raw_downloads directory where raw cnvs are stored
+#' @param raw_downloads directory where raw cvs are stored
 #' @param ctd_cast_csvs directory where output csvs for individual casts are stored
 #' @param ctd_season_csvs directory where seasonal output csv should be stored
 #' @param CTD_FOLDER high level CTD folder (used to reference metadata, pdf outputs, etc). 

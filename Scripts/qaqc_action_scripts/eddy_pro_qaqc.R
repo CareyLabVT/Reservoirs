@@ -85,7 +85,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   out.file<-""
   
   # read in header from an early file will all the columns we want
-  columns <- read.csv(paste0(mydir,"eddyflux_column_header.csv"))
+  columns <- colnames(read.csv(myfiles[1], skip=1, as.is=T))%>%
+    map_dfr( ~tibble(!!.x := logical() ) )
   
   
   for(k in 1:length(myfiles)){

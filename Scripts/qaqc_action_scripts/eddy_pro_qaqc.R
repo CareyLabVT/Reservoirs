@@ -15,7 +15,7 @@
 
 
 # Download/load libraries
-pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive,plyr)
+pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
 
 
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
@@ -85,8 +85,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   out.file<-""
   
   # read in header from an early file will all the columns we want
-  columns <- colnames(read.csv(myfiles[2], skip=1, as.is=T))%>%
-    map_dfr( ~tibble(!!.x := logical() ) )
+  columns <- read.csv(paste0(mydir,"eddyflux_column_header.csv"))
   
   
   for(k in 1:length(myfiles)){
@@ -195,7 +194,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
       # Visualize wind directions that 
       chicago_wind=data2%>%
         select(datetime,wind_speed,wind_dir)%>%
-        rename(date = datetime, ws = wind_speed, wd = wind_dir)
+        dplyr::rename(date = datetime, ws = wind_speed, wd = wind_dir)
       pollutionRose(chicago_wind, pollutant="ws")
       
       # Sonic Temperature

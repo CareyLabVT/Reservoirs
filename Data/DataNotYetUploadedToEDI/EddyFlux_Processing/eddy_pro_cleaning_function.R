@@ -84,8 +84,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
 out.file<-""
 
 # read in header from an early file will all the columns we want
-columns <- colnames(read.csv(myfiles[2], skip=1, as.is=T))%>%
-  map_dfr( ~tibble(!!.x := logical() ) )
+columns <- read.csv(paste0(mydir,"eddyflux_column_header.csv"))
 
 for(k in 1:length(myfiles)){
   
@@ -193,7 +192,7 @@ for(k in 1:length(myfiles)){
   # Visualize wind directions that 
     chicago_wind=data2%>%
       select(datetime,wind_speed,wind_dir)%>%
-      rename(date = datetime, ws = wind_speed, wd = wind_dir)
+      dplyr::rename(date = datetime, ws = wind_speed, wd = wind_dir)
     pollutionRose(chicago_wind, pollutant="ws")
   
   # Sonic Temperature
@@ -370,9 +369,9 @@ write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
 }
 
 ## Function Example
-# eddypro_cleaning_function(
-   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/"
-      gdrive = T # Are the files on Google Drive. True or False
-      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA")
+ eddypro_cleaning_function(
+   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
+      gdrive = T, # Are the files on Google Drive. True or False
+      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
                            current_year = 2023
-#                           )
+                           )

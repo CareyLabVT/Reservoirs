@@ -274,7 +274,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            time=as_hms(time), #takes out the date and just leaves the time
            Year = year(date),
            flowrate_mean = flowrate_mean *60000)%>% # convert the flowrate to L min-1
-    rename(Tau_kgms2 = Tau,
+    dplyr::rename(Tau_kgms2 = Tau,
            H_wm2 = H,
            LE_wm2 = LE,
            co2_flux_umolm2s = co2_flux,

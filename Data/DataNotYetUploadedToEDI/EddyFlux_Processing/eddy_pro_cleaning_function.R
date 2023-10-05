@@ -83,12 +83,19 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
 #create an out.file for the combined data
 out.file<-""
 
+# read in header from an early file will all the columns we want
+columns <- colnames(read.csv(myfiles[2], skip=1, as.is=T))%>%
+  map_dfr( ~tibble(!!.x := logical() ) )
+
 for(k in 1:length(myfiles)){
   
   # read in the file
   header2<-read.csv(myfiles[k], skip=1, as.is=T) #get header minus wonky Campbell rows
   data2<-read.csv(myfiles[k], skip=3, header=F) #get data minus wonky Campbell rows
   names(data2)<-names(header2) #combine the names to deal with Campbell logger formatting
+  
+  # Bind the headers with the data so if there are missing columns in the data frame they are added with NAs
+  data2<-plyr::rbind.fill(columns,data2)
   
   # Clean up and make it useable for plotting
   data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs
@@ -363,8 +370,9 @@ write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
 }
 
 ## Function Example
- eddypro_cleaning_function(
-   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
-      gdrive = F, # Are the files on Google Drive. True or False
-      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-                           current_year = 2023)
+# eddypro_cleaning_function(
+   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/"
+      gdrive = T # Are the files on Google Drive. True or False
+      gshared_drive = as_id("0ACybYKbCwLRPUk9PVA")
+                           current_year = 2023
+#                           )

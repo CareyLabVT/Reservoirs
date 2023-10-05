@@ -1,0 +1,27 @@
+---
+title: "Automation"
+author: "Abby Lewis"
+date: "2023-10-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Step 1: Identify that new GC file is uploaded, load file
+
+Step 2: Load lab conditions from google drive
+
+Step 3: Load sample name harmonizer from google drive
+
+Step 4: Match samples with vial #s. 
+
+Step 5: Identify which GC columns have the correct year's data
+
+Step 6: Calculate concentrations using lab conditions, GC output, and equations from Bobbie's sheet
+
+Step 7: Combine with historical data from this year
+
+Step 8: Run through checks
+

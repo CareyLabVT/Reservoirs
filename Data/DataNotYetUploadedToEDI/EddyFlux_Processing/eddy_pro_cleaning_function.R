@@ -86,8 +86,8 @@ out.file<-""
 # read in header from an early file will all the columns we want
 # columns <- read.csv(paste0(mydir,"eddyflux_column_header.csv"))
 
-columns <- colnames(read.csv(myfiles[1], skip=1, as.is=T))%>%
-  map_dfr( ~tibble(!!.x := logical() ) )
+# columns <- colnames(read.csv(myfiles[1], skip=1, as.is=T))%>%
+#  map_dfr( ~tibble(!!.x := logical() ) )
 
 for(k in 1:length(myfiles)){
   
@@ -97,7 +97,7 @@ for(k in 1:length(myfiles)){
   names(data2)<-names(header2) #combine the names to deal with Campbell logger formatting
   
   # Bind the headers with the data so if there are missing columns in the data frame they are added with NAs
-  data2<-plyr::rbind.fill(columns,data2)
+#  data2<-plyr::rbind.fill(columns,data2)
   
   # Clean up and make it useable for plotting
   data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs

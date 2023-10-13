@@ -37,6 +37,7 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
   
   ## Generate csv versions of these files (stored in csv_outputs folder)
   for(file in file_names) {
+    print(file)
     process_CTD_file(file, 
                      raw_downloads = raw_downloads,
                      CTD_FOLDER = CTD_FOLDER) 

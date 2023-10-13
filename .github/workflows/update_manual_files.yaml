@@ -33,6 +33,7 @@ jobs:
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 
 
   secchi:
+    needs: fluoroprobe
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -62,6 +63,7 @@ jobs:
           
 
   eddy_flux:
+    needs: secchi
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -91,6 +93,7 @@ jobs:
           
           
   ctd:
+    needs: eddy_flux
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

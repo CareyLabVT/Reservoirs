@@ -7,12 +7,36 @@ trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloa
     NAME <- paste(raw_downloads, "/", DATE_NUM,"_",SITE, REP, sep = "")
   } else {NAME <- NAME_OVERRIDE}
   
+  
   ### Upload the raw CTD file as a .cnv format ###
   name_cnv <- paste(NAME,"cnv", sep = ".")
-  ctdRaw <- read.ctd.sbe(name_cnv,            
+ 
+  # Wrap read.ctd.sbe in a try() function so if there is a warning it keeps running
+  ctdRaw<-try(read.ctd.sbe(name_cnv,            
                          columns = list(), 
                          monitor = T,
-                         debug = getOption("oceDebug"))
+                         debug = getOption("oceDebug")), silent = T)
+  
+  ### If the file fails then there is a issue with the conductivity reading and it needs an extra space
+  ### Read in all the lines and then find the dashes and add a space but then remove it for e-0001
+  if(is.null(nrow(ctdRaw))){
+    lines <- readLines(name_cnv)
+    
+  ### For loop to find the dashes and add a space to sort out column issues
+  for(i in 1:length(lines)){
+      if(grepl('^[*]|^[#]', lines[i])==F){
+      lines[i] <-  gsub("e\\s","e",gsub("-"," -",lines[i]))
+      }
+      else{}
+    
+  }
+    ### Let's try reading it in again
+    ctdRaw <- read.ctd.sbe(textConnection(lines),            
+                           columns = list(), 
+                           monitor = T,
+                           debug = getOption("oceDebug"))
+   
+  }
   
   ### Find the range of the cast that only includes the downcast ###
   par(mfrow=c(1,1))
@@ -63,8 +87,8 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
           temperature, 
           fluorescence, 
           turbidity, 
-          conductivity, 
-          conductivity2,
+          conductivity2, 
+          conductivity,
           oxygen,
           oxygen2,
           pH,

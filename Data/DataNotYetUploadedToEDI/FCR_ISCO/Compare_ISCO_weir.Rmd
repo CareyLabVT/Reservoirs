@@ -1,0 +1,222 @@
+---
+title: "Check High Flow from Weir in 2020"
+output: html_notebook
+---
+
+
+```{r set up}
+
+pacman::p_load("tidyverse","lubridate", "scattermore","RCurl")
+
+```
+
+```{r read in ISCO waterlevel}
+
+waterlevel <- dir(path = "Data/WaterLevel", pattern = "_full_")%>%  
+  map_df(~ read_csv(file.path(path = "Data/WaterLevel", .),
+                    col_names = c("DateTime", "WaterLevel_m"), col_types = cols(.default = "c"), skip = 6))
+
+waterlevel_2<-waterlevel%>%
+  mutate(DateTime=mdy_hms(DateTime),
+         WaterLevel_m=as.numeric(WaterLevel_m))%>%
+  filter(DateTime>ymd_hms("2019-06-06 14:51:00"))%>%
+  filter(WaterLevel_m<2)%>%
+  mutate(Date = date(DateTime),
+         Year=year(DateTime),
+         DOY=yday(DateTime))%>%
+  filter(DOY>50)%>%
+  drop_na()
+
+waterlevel_ISCO<-waterlevel_2%>%
+  select(DateTime, WaterLevel_m)%>%
+  mutate(WaterLevel_m=ifelse(DateTime>ymd_hms("2020-07-20 10:00:00")&DateTime<ymd_hms("2020-08-24 14:50:00"), NA, WaterLevel_m))
+  
+# Need to take out 2020-07-20 10:00:00 EST, 2020-08-24 14:49:00 EST for when the weir was blown out
+
+```
+
+```{r read in staff guage readings}
+
+sg_reading <- read.csv(text = getURL("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/Inflow_Gauge_Height_at_Weir.csv"))
+
+sg_reading$DateTime=ymd_hms(sg_reading$DateTime)
+
+```
+
+```{r Check the ISCO waterlevel against staff gauge}
+
+level<-merge(sg_reading,waterlevel_ISCO, by="DateTime")
+
+level$GageHeight_m=level$GageHeight_cm*0.01
+
+ggplot(level, aes(x=DateTime))+
+  geom_point(aes(y=GageHeight_m),color="red")+
+  geom_point(aes(y=WaterLevel_m), color="blue")
+
+```
+
+```{r read in weir data from EDI}
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/202/9/c065ff822e73c747f378efe47f5af12b" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+bad_weir <-read_csv(infile1)
+
+cor_weir <- read_csv("Data/Inflow_2013_2022.csv")
+
+```
+
+```{r calculate flow for ISCO}
+
+waterlevel_ISCO$ISCO_Flow_cms= 2.391*(waterlevel_ISCO$WaterLevel_m^2.5)
+
+```
+
+```{r Plot discharge}
+
+all<- merge(waterlevel_ISCO,bad_weir, by="DateTime", all=T)
+
+twe<-all%>%
+  filter(DateTime<ymd_hms("2021-01-01 00:00:00"))%>%
+  filter(DateTime>ymd_hms("2019-01-01 00:00:00"))
+
+cor_twe<-cor_weir%>%
+  filter(DateTime<ymd_hms("2021-01-01 00:00:00"))%>%
+  filter(DateTime>ymd_hms("2019-01-01 00:00:00"))
+
+ggplot(NULL)+
+  geom_scattermore(data=bad_weir, aes(x=DateTime, y=WVWA_Flow_cms), color="orange")+
+  #geom_scattermore(data=bad_weir,aes(x=DateTime, y=VT_Flow_cms), color="black")+
+  geom_scattermore(data=cor_weir, aes(x=DateTime, y=WVWA_Flow_cms), color="red")
+  #geom_scattermore(data=cor_weir, aes(x=DateTime, y=VT_Flow_cms), color="white")
+  
+  # compare bad vs. cor weir data
+
+bad<- bad_weir%>%
+  select(DateTime, WVWA_Pressure_psia, WVWA_Flow_cms, VT_Pressure_psia, VT_Flow_cms)
+
+cor<- cor_weir%>%
+  select(DateTime, WVWA_Pressure_psia, WVWA_Flow_cms, VT_Pressure_psia, VT_Flow_cms)
+
+fg<- merge(bad,cor, by="DateTime")
+
+fg$diff_WVWA<-fg$WVWA_Flow_cms.x-fg$WVWA_Flow_cms.y
+
+fg$diff_VT<-fg$VT_Flow_cms.x-fg$VT_Flow_cms.y
+
+fg$Year<-year(fg$DateTime)
+
+dh<-fg%>%
+  group_by(Year)%>%
+  summarise_at(vars("WVWA_Flow_cms.x","WVWA_Flow_cms.y","VT_Flow_cms.x","VT_Flow_cms.y"),mean, na.rm=T)
+
+
+# average differance flow between correct and incorrect
+df<-fg%>%
+  group_by(Year)%>%
+  summarise_at(vars("diff_WVWA","diff_VT"),mean, na.rm=T)
+
+write.csv(df, "Compare_bad_flow_to_corrected_flow.csv")
+
+# read in the weir file from 2022
+
+inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/202/8/cc045f9fe32501138d5f4e1e7f40d492" 
+infile2 <- tempfile()
+try(download.file(inUrl2,infile2,method="curl"))
+if (is.na(file.size(infile2))) download.file(inUrl2,infile2,method="auto")
+
+                   
+ weir_2022 <-read.csv(infile2)%>%
+   mutate(DateTime=ymd_hms(DateTime))%>%
+   select(DateTime, WVWA_Pressure_psia, WVWA_Flow_cms, VT_Pressure_psia, VT_Flow_cms)
+ 
+ check<- merge(fg, weir_2022, by="DateTime", all=T)
+ 
+ ggplot(check, aes(x=DateTime))+
+   geom_scattermore(aes(y=WVWA_Flow_cms.x), color="red")+
+   geom_scattermore(aes(y=WVWA_Flow_cms.y), color="blue")+
+   geom_scattermore(aes(y=WVWA_Flow_cms), color="white")
+ 
+  ggplot(check, aes(x=DateTime))+
+   geom_scattermore(aes(y=VT_Flow_cms.x), color="orange")+
+   geom_scattermore(aes(y=VT_Flow_cms.y), color="purple")+
+   geom_scattermore(aes(y=VT_Flow_cms), color="yellow")
+
+# Look at just 2019-2020
+
+h<-all%>%
+  filter(DateTime<ymd_hms("2021-01-01 00:00:00"))%>%
+  filter(DateTime>ymd_hms("2019-01-01 00:00:00"))%>%
+  ggplot(., aes(x=DateTime))+
+  geom_point(aes(y=ISCO_Flow_cms), color="green")+
+  geom_point(aes(y=WVWA_Flow_cms), color="orange")+
+  geom_point(aes(y=VT_Flow_cms), color="black")
+h
+
+```
+
+```{r Look rating curve for 2019-2020}
+
+rating_curvess<-merge(sg_reading, weir, by="DateTime")%>%
+  drop_na(GageHeight_cm)
+
+
+# from 2019-06-07 00:15:00 EST, 2020-08-24 13:00:00 EST
+
+tw<-rating_curvess%>%
+  filter(DateTime>ymd_hms("2019-06-07 00:15:00") & DateTime<ymd_hms("2020-08-24 13:00:00"))
+
+plot(tw$GageHeight_m, tw$WVWA_Pressure_psia)
+
+plot(tw$GageHeight_m, tw$VT_Pressure_psia)
+
+fit_WVWA <- lm(GageHeight_cm ~ WVWA_Pressure_psia, data = tw)
+fit_VT<-lm(GageHeight_cm~VT_Pressure_psia, data=tw)
+
+summary(fit_WVWA)
+summary(fit_VT)
+
+# check that the rating curve observations are the same
+
+check_rt_curve<-rating_curvess%>%select(DateTime, GageHeight_cm,WVWA_Pressure_psia,VT_Pressure_psia)
+
+bg<-merge(check_rt_curve,rating_curve)
+
+# compare waterlevel to calculated waterlevel
+
+dg<-all%>%
+  filter(DateTime>ymd_hms("2019-06-07 00:15:00") & DateTime<ymd_hms("2020-08-24 13:00:00"))%>%
+  select(DateTime, WaterLevel_m, WVWA_Pressure_psia, VT_Pressure_psia, WVWA_Flow_cms,VT_Flow_cms)%>%
+  mutate(WVWA_wl_m=(WVWA_Pressure_psia*0.631)-0.087)%>%
+  mutate(VT_wl_m=(VT_Pressure_psia*0.706)-0.057)
+
+
+ggplot(dg, aes(DateTime))+
+  geom_point(aes(y=WaterLevel_m), color="green")+
+  geom_point(aes(y=WVWA_wl_m), color="orange")+
+  geom_point(aes(y=VT_wl_m), color="black")
+
+# That looks good! The waterlevel and calculated water level look pretty good
+
+
+```
+
+```{r Calculate Flow}
+
+dh<-dg%>%
+  mutate(ISCO_flow_cms=2.391*(WaterLevel_m^2.5),
+         Check_WVWA_flow_cms=2.391*(WVWA_wl_m^2.5),
+         Check_VT_flow_cms=2.391*(VT_wl_m^2.5))
+
+ggplot(dh, aes(DateTime))+
+  geom_point(aes(y=ISCO_flow_cms), color="green")+
+  geom_point(aes(y=WVWA_Flow_cms), color="orange")+
+  geom_point(aes(y=VT_Flow_cms), color="black")+
+  geom_point(aes(y=Check_WVWA_flow_cms), color="purple")+
+  geom_point(aes(y=Check_VT_flow_cms), color="white")
+
+  
+
+```

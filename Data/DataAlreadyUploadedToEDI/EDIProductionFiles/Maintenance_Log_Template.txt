@@ -1,1 +1,1 @@
-Reservoir, Site, DataStream, TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, flagcol, notes
+Reservoir, Site, DataStream, TIMESTAMP_start, TIMESTAMP_end, parameter, colnumber, flag, flagcol, update_value, notes

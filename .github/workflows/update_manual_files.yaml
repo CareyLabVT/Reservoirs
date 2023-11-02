@@ -21,7 +21,7 @@ jobs:
           
       - name: Run automated target files
         run: |
-          Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/fluoroprobe_qaqc.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/fluoroprobe_qaqc.R
           R -e 'remotes::install_version("gsheet", version = "0.4.5")'
       
       - name: Commit and Push
@@ -50,7 +50,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("gsheet", version = "0.4.5")'
-          Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/secchi_qaqc.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/secchi_qaqc.R
 
       
       - name: Commit and Push
@@ -80,7 +80,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
-          Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/eddy_pro_qaqc.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/eddy_flux_qaqc.R
 
       - name: Commit and Push
         run: |
@@ -110,7 +110,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
-          Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/ctd_qaqc.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/ctd_qaqc.R
       
       - name: Commit and Push
         run: |
@@ -138,7 +138,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
-          Rscript $GITHUB_WORKSPACE/Scripts/qaqc_action_scripts/WVWA_inflow_collate.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/WVWA_inflow_collate.R
       
       - name: Commit and Push
         run: |

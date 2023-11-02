@@ -23,7 +23,7 @@ pacman::p_load("tidyverse","lubridate")
 WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Inflow_CSV",
                                 raw_baro_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Barometric_CSV",
                                 year = format(Sys.Date(), "%Y"),
-                                outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWAweirInflow_L1"){
+                                outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1"){
   
   # Function used to read in the files from the WVWA sensors and convert all times to EST
   EST_convert<-function(data) {
@@ -99,5 +99,5 @@ WVWA_inflow_collate(
   raw_inflow_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Inflow_CSV",
   raw_baro_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Barometric_CSV",
   year = format(Sys.Date(), "%Y"),
-  outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWAweirInflow_L1"
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1"
 )

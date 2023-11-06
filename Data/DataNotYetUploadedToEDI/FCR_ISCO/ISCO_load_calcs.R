@@ -27,16 +27,20 @@ library(hrbrthemes)
 
 
 # set working directory to location of ISCO data
-setwd("~/Reservoirs/Data/DataNotYetUploadedToEDI/FCR_ISCO")
+setwd("~/Reservoirs/Data/DataNotYetUploadedToEDI/FCR_ISCO/Data/WaterLevel")
 
 #Load data
 Discharge <- read.csv("190601_191201_ISCO_FCRWeir_Level.csv", skip=6)
 colnames(Discharge) <- c("Date_Time","head")
 Discharge <- as.data.frame(Discharge)
 
+#delete last row that shows average water level
+Discharge <- head(Discharge,-1)
+
 #make Head values numeric
 Discharge=Discharge%>%
   mutate(head=as.numeric(head))
+
 
 
 #Calculate Q from head

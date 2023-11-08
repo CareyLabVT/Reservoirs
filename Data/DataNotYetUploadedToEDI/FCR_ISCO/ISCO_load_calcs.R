@@ -11,19 +11,21 @@
 
 ### Created by Nick Hammond ###
 ## Last updated: 09 Aug 2022 ##
+## Editing by Carly Bauer 30 October 2023
 
 
 #clear environment
 rm(list=ls(all=TRUE))
 #load packages
 library(lubridate)
+library(plyr)
 library(dplyr)
 library(magrittr)
 library(readxl)
-library(plyr)
 library(ggplot2)
 library(patchwork) # To display 2 charts together
 library(hrbrthemes)
+library(scattermore)
 
 
 # set working directory to location of ISCO data
@@ -56,7 +58,7 @@ Discharge_r <- Discharge %>% mutate(Flow_cms = ifelse(head > 0.275,
 2.391*(0.275^2.5) + (1.84*B*((head-0.275)^1.5)), 2.391*(head^2.5))) %>% 
 select(Date_Time, head, Flow_cms)
 
-# Plot to check
+#plot to check  
 par(mfrow=c(1,2))
 plot(Discharge_v$Date_Time,Discharge_v$Flow_cms) 
 plot(Discharge_r$Date_Time,Discharge_r$Flow_cms) 

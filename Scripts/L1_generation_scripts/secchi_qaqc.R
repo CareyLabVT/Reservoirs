@@ -8,7 +8,8 @@ secchi_qaqc <- function(maintenance_log = NULL){
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
 secchi_df <- gsheet::gsheet2tbl(gsheet_url)
 
-secchi_df$DateTime <- as.POSIXct(strptime(secchi_df$DateTime, "%Y-%m-%d %H:%M"), tz = 'America/New_York') ## need to fix dates that don't have timestamp
+secchi_df$DateTime =parse_date_time(secchi_df$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'))
+#secchi_df$DateTime <- as.POSIXct(strptime(secchi_df$DateTime, "%Y-%m-%d %H:%M"), tz = 'America/New_York') ## need to fix dates that don't have timestamp
 secchi_df$Flag_Datetime <- NA
 
 secchi_reformat <- secchi_df |> 

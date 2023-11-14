@@ -1,0 +1,155 @@
+SAMPLER ID# 1129903085  10:32  5-JUN-23
+  Hardware:     A1  Software: 2.31
+*********** PROGRAM SETTINGS ***********
+     ----------
+                    
+ SITE DESCRIPTION:  
+    "FCR IN FLO"    
+                    
+     ----------
+   UNITS SELECTED:  
+   FLOW RATE: m3s   
+  FLOW VOLUME: m3   
+                    
+     ----------
+  SUBMERGED PROBE:  
+        WEIR        
+        120         
+      V-NOTCH       
+     ----------
+   1, 10.0 lit BTLS 
+                    
+ 3.1 m SUCTION LINE 
+                    
+     ----------
+      PACING:       
+    FLOW, EVERY     
+      600.0 m3      
+                    
+     ----------
+     COMPOSITE:     
+                    
+  RUN CONTINUOUSLY  
+                    
+     ----------
+                    
+   200 ml SAMPLES   
+                    
+                    
+     ----------
+                    
+ NO DELAY TO START  
+                    
+ 999 HOURS RUN TIME 
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  10:32  5-JUN-23
+  Hardware:     A1  Software: 2.31
+*********** SAMPLING RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 09:58 MO 29-MAY-23
+Nominal Sample Volume =  200 ml
+                                   COUNT
+                                      TO
+SAMPLE  BOTTLE TIME  SOURCE ERROR LIQUID
+------- ------ ----      -- --    ------
+              09:58  PGM ENABLED
+    1     1   19:57      F  P          *
+              19:58  POWER FAILED!
+              19:58  POWER RESTORED
+------------- TU 30-MAY-23 -------------
+    2     1   00:34      F           237
+    3     1   08:17      F  P          *
+              08:17  POWER FAILED!
+              08:17  POWER RESTORED
+    4     1   18:20      F  P          *
+              18:20  POWER FAILED!
+              18:20  POWER RESTORED
+------------- WE 31-MAY-23 -------------
+    5     1   05:30      F  P          *
+              05:30  POWER FAILED!
+              05:30  POWER RESTORED
+    6     1   18:19      F  P          *
+              18:19  POWER FAILED!
+              18:19  POWER RESTORED
+------------- TH 01-JUN-23 -------------
+    7     1   08:18      F  P          *
+              08:18  POWER FAILED!
+              08:18  POWER RESTORED
+              08:18  PGM STOPPED 01-JUN
+
+ 
+   SOURCE F  ==> FLOW                
+    ERROR P  ==> POWER FAILED!       
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  10:32  5-JUN-23
+  Hardware:     A1  Software: 2.31
+ SUBMERGED PROBE: 1125394991
+  Hardware:     A0  Software: 1.00
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 09:58 MO 29-MAY-23
+Nominal Sample Volume =  200 ml
+                             FLOW         TOTAL
+                     LEVEL   RATE          FLOW
+SAMPLE  BOTTLE TIME      m    m3s            m3
+------- ------ ----  -----  ----- -------------
+    1     1   19:57  0.127  0.013     000000600
+-------------------- TU 30-MAY-23 ------
+    2     1   00:34  0.161  0.025     000001200
+    3     1   08:17  0.141  0.017     000001800
+
+    4     1   18:20  0.135  0.016     000002399
+-------------------- WE 31-MAY-23 ------
+    5     1   05:30  0.128  0.014     000002999
+
+    6     1   18:19  0.120  0.011     000003600
+-------------------- TH  1-JUN-23 ------
+    7     1   08:18  0.120  0.011     000004199
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  10:32  5-JUN-23
+  Hardware:     A1  Software: 2.31
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 09:58 MO 29-MAY-23
+Nominal Sample Volume =  200 ml
+                        FR-TEMP
+SAMPLE  BOTTLE TIME           C
+------- ------ ----        ----
+                    NO FR-TEMPERATURE
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  10:33  5-JUN-23
+  Hardware:     A1  Software: 2.31
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 09:58 MO 29-MAY-23
+Nominal Sample Volume =  200 ml
+SAMPLE  BOTTLE TIME 
+------- ------ ----------- ------ ----
+                    NO RAIN GAUGE
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  10:33  5-JUN-23
+  Hardware:     A1  Software: 2.31
+SDI-12 DATA
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 09:58 MO 29-MAY-23
+Nominal Sample Volume =  200 ml
+ 
+ 
+                    NO SDI-12 SONDE
+----------------------------------------

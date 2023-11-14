@@ -1,0 +1,7 @@
+""
+"CTD_SN"	"8188"
+"CTD_type"	"SBE"
+"Institute"	"Carey Lab, Virginia Tech"
+"Sampling_event"	"Sampling on 12-Sep-2023"
+"Cast_location"	"bvr50"
+"User"	""

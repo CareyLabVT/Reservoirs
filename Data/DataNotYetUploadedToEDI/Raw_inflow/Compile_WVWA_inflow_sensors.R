@@ -6,6 +6,93 @@ pacman::p_load("RCurl","tidyverse","lubridate")
 
 ### Read in current WVWA sensor files ####
 
+WVWA_inflow_collate <- function(raw_inflow__files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Inflow_CSV",
+                                raw_Baro_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Barometric_CSV",
+                                year = format(Sys.Date(), "%Y"),
+                                outfile = "../../fileL1"){
+  
+  # Function used to read in the files from the WVWA sensors and convert all times to EST
+  EST_convert<-function(data) {
+    files<-read.csv(data,skip= 28, header=T) #get header minus wonky Campbell rows
+    
+    # Give datetime the EST timestamp before converting
+    CCR_1_5_EXO$TIMESTAMP = parse_date_time(CCR_1_5_EXO$TIMESTAMP, 'mdy HMS', tz="Etc/GMT+5")
+    
+    # Use ifelse statement to convert EDT to EST
+    
+    all<-CCR_1_5_EXO%>%
+      mutate(TIMESTAMP=ifelse(Date==T, with_tz(force_tz(TIMESTAMP-3600,"Etc/GMT+4"), "Etc/GMT+5"), TIMESTAMP),
+             TIMESTAMP=as.POSIXct(TIMESTAMP, origin="1970-01-01"))%>%
+      select(-Date)
+    
+    
+    # convert date time so we can determine if it is in EST or EDT
+    Date = parse_date_time(files[1,"Date.Time"], 'dmy HMS', tz="America/New_York")
+    
+    # Give datetime the EST timestamp before converting
+    CCR_1_5_EXO$TIMESTAMP = parse_date_time(CCR_1_5_EXO$TIMESTAMP, 'mdy HMS', tz="Etc/GMT+5")
+    
+    # Check if the first observation was in EST or EDT. 
+    # If FALSE then it is in EST, if TRUE then EDT
+    if(dst(Date)==T){
+      
+      all<-CCR_1_5_EXO%>%
+        mutate(TIMESTAMP=ifelse(Date==T, with_tz(force_tz(TIMESTAMP-3600,"Etc/GMT+4"), "Etc/GMT+5"), TIMESTAMP),
+               TIMESTAMP=as.POSIXct(TIMESTAMP, origin="1970-01-01"))%>%
+        select(-Date)
+      
+      
+      # Data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+      files$DateTime[c(1:nrow(files))]<-with_tz(force_tz(files$DateTime[c(1:nrow(files))],"Etc/GMT+4"), "Etc/GMT+5") 
+      
+      # now has a file with all times in EST
+      return(files)
+    }else{# This is already in EST. Yea!!
+      
+      # Don't have to do anything except return the file. Now trying to 
+      return(files)
+    }
+  }
+  
+  # List files based on current year
+  
+  myfiles = list.files(path=raw_files, pattern=paste0("_",year), full.names=TRUE)
+  
+  # Read in the Inflow file
+  
+  # Force it to EST if it is in EDT
+  
+  # Combine them together
+  
+  # Delete duplicates
+  
+  # Read in Barometric pressure file
+  
+  # Force to EST if in EDT
+  
+  # Combine together and delete duplicates
+  
+  #merge inflow and barometric pressures to do differencing
+  diff = left_join(pressure_a4d, inflow_pressure, by = "DateTime")%>% 
+    select(DateTime, Temp_C, Pressure_psi, Baro_pressure_psi)%>%
+    dplyr::rename('WVWA_Temp_C'='Temp_C', 
+                  'WVWA_Pressure_psi'='Pressure_psi', 
+                  'WVWA_Baro_pressure_psi'='Baro_pressure_psi')
+  
+  # Find the pressure of the water by correcting with atmospheric pressure
+  diff$WVWA_Pressure_psia=diff$WVWA_Pressure_psi-diff$WVWA_Baro_pressure_psi
+  
+  # Take out NAs when one value is missing
+  diff<-diff%>%drop_na(WVWA_Pressure_psia)
+  
+  # combine old and new together
+  final <- rbind(current, diff)
+  
+  
+}
+
+
+
 current<- read_csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_pressure_readings_2013_current.csv")
 
 # Function used to read in the files from the WVWA sensors and convert all times to EST
@@ -91,21 +178,7 @@ pressure_a4d<-list.files(path="./Data/DataNotYetUploadedToEDI/Raw_inflow/Baromet
 # Take out duplicates 
 #baro_pressure=baro_pressure[!duplicated(baro_pressure$DateTime), ]
 
-#merge inflow and barometric pressures to do differencing
-diff = left_join(pressure_a4d, inflow_pressure, by = "DateTime")%>% 
-  select(DateTime, Temp_C, Pressure_psi, Baro_pressure_psi)%>%
-  dplyr::rename('WVWA_Temp_C'='Temp_C', 
-                'WVWA_Pressure_psi'='Pressure_psi', 
-                'WVWA_Baro_pressure_psi'='Baro_pressure_psi')
 
-# Find the pressure of the water by correcting with atmospheric pressure
-diff$WVWA_Pressure_psia=diff$WVWA_Pressure_psi-diff$WVWA_Baro_pressure_psi
-
-# Take out NAs when one value is missing
-diff<-diff%>%drop_na(WVWA_Pressure_psia)
-
-# combine old and new together
-final <- rbind(current, diff)
 
 folder <- "./Data/DataNotYetUploadedToEDI/Raw_inflow/"
 # Write to csv

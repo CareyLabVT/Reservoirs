@@ -7,8 +7,8 @@ library(lubridate)
 library(stringr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
-  #for now, need to set working directories to read sheets in
-setwd('~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Metals')
+ #for now, need to set working directories to read sheets in
+setwd('~/Documents/R/GitHub/Metals')
 
 frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
 
@@ -31,7 +31,9 @@ ICPData = ICP2022%>%
   rbind(ICP2018)
 
 glimpse(ICPData)
-ICPData <- ICPData %>% rename('Fe_ppb' = `54Fe (STDR)`, 'Mn_ppb' = `55Mn (STDR)`, 'JeffID' = '...1')
+ICPData <- ICPData %>% dplyr::rename('Fe_ppb' = `54Fe (STDR)`,
+                              'Mn_ppb' = `55Mn (STDR)`,
+                              'JeffID' = '...1')
 
   #need to join digestion spreadsheet while sample names are still in code
 Digestion2022 <-  read_excel('2022_AcidDigestion_EDI.xlsx')

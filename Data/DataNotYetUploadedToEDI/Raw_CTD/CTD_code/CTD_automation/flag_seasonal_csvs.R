@@ -18,7 +18,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", input_file_name)) #Load saved data
   ctd = ctd1 %>%
-    mutate(Date = as.POSIXct(Date, format = "%Y-%m-%dT%H:%M:%SZ"),
+    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
            Reservoir = as.factor(Reservoir))
   
   #Flag codes
@@ -35,51 +35,51 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
   
   ctd_flagged = ctd %>% #Add flags
     select(-Flag)%>%
-    mutate(Flag_Temp = 0,
-           Flag_DO= 0,
-           Flag_DO_pSat = 0,
-           Flag_Cond = 0,
-           Flag_SpecCond = 0,
-           Flag_Chla = 0,
-           Flag_Turb = 0,
+    mutate(Flag_DateTime = 0,
+           Flag_Temp_C = 0,
+           Flag_DO_mgL = 0,
+           Flag_DOsat_percent = 0,
+           Flag_Cond_uScm = 0,
+           Flag_SpCond_uScm = 0,
+           Flag_Chla_ugL = 0,
+           Flag_Turbidity_NTU = 0,
            Flag_pH = 0,
-           Flag_ORP = 0,
-           Flag_PAR = 0,
-           Flag_DescRate = 0,
-           Flag_DateTime = 0) %>%
+           Flag_ORP_mV = 0,
+           Flag_PAR_umolm2s = 0,
+           Flag_DescRate_ms = 0) %>%
     mutate(
       #TEMP
-      Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp), #Flag NA temperatures
+      Flag_Temp_C = ifelse(is.na(Temp_C),2,Flag_Temp_C), #Flag NA temperatures
       
       #DO
-      Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
+      Flag_DO_mgL = ifelse(DO_mgL < 0,4,Flag_DO_mgL),
       DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
-      Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO), #Flag NA
+      Flag_DO_mgL = ifelse(is.na(DO_mgL),2,Flag_DO_mgL), #Flag NA
       
       #DO pSat
-      Flag_DO_pSat = ifelse(DO_pSat < 0,4,Flag_DO_pSat),
-      Flag_DO_pSat = ifelse(is.na(DO_pSat),2,Flag_DO_pSat), #Flag NA
-      DO_pSat = ifelse(DO_pSat < 0, 0, DO_pSat), #Flag pSat<0
+      Flag_DOsat_percent = ifelse(DOsat_percent < 0,4,Flag_DOsat_percent),
+      Flag_DOsat_percent = ifelse(is.na(DOsat_percent),2,Flag_DOsat_percent), #Flag NA
+      DOsat_percent = ifelse(DOsat_percent < 0, 0, DOsat_percent), #Flag pSat<0
       
       #COND
-      Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond), #Flag NA
-      Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
+      Flag_Cond_uScm = ifelse(is.na(Cond_uScm),2,Flag_Cond_uScm), #Flag NA
+      Flag_Cond_uScm = ifelse(Cond_uScm < 0,4,Flag_Cond_uScm),
       Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0. 
       
       #SPECCOND
-      Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond), #Flag NA
-      Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
-      Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, NA, Spec_Cond_uScm), #Flag Cond < 0.
+      Flag_SpCond_uScm = ifelse(is.na(SpCond_uScm),2,Flag_SpCond_uScm), #Flag NA
+      Flag_SpCond_uScm = ifelse(SpCond_uScm < 0,4,Flag_SpCond_uScm),
+      SpCond_uScm = ifelse(SpCond_uScm < 0, NA, SpCond_uScm), #Flag Cond < 0.
       
       #CHLA
-      Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla), #Flag NA
-      Flag_Chla = ifelse(Chla_ugL < 0,4,Flag_Chla),
+      Flag_Chla_ugL = ifelse(is.na(Chla_ugL),2,Flag_Chla_ugL), #Flag NA
+      Flag_Chla_ugL = ifelse(Chla_ugL < 0,4,Flag_Chla_ugL),
       Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), #Flag Chla <0
       
       #TURB
-      Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb), #Flag NA
-      Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
-      Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU), #Flag turbidity <0
+      Flag_Turbidity_NTU = ifelse(is.na(Turbidity_NTU),2,Flag_Turbidity_NTU), #Flag NA
+      Flag_Turbidity_NTU = ifelse(Turbidity_NTU < 0,4,Flag_Turbidity_NTU),
+      Turbidity_NTU = ifelse(Turbidity_NTU < 0, 0, Turbidity_NTU), #Flag turbidity <0
       
       #pH
       Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
@@ -87,26 +87,25 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
       pH = ifelse(pH < 0, 0, pH), #Flag pH < 0 
       
       #ORP
-      Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP), #Flag NA
+      Flag_ORP_mV = ifelse(is.na(ORP_mV),2,Flag_ORP_mV), #Flag NA
       
       #PAR
-      Flag_PAR = ifelse(is.na(PAR_umolm2s),2,Flag_PAR), #Flag NA
-      Flag_PAR = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR), #Flag negative
+      Flag_PAR_umolm2s = ifelse(is.na(PAR_umolm2s),2,Flag_PAR_umolm2s), #Flag NA
+      Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR_umolm2s), #Flag negative
       PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s), 
       
       #DESC RATE
-      Flag_DescRate = ifelse(is.na(Desc_rate),2,Flag_DescRate)) #Flag NA
+      Flag_DescRate_ms = ifelse(is.na(DescRate_ms),2,Flag_DescRate_ms)) #Flag NA
   
   
   #Not all variables are meaningful out of the water
   Above_surface_flag = 6
-  ctd_flagged[ctd_flagged$Depth_m<0,c("Chla_ugL","Turb_NTU","Cond_uScm","Spec_Cond_uScm","DO_mgL","DO_pSat","pH","ORP_mV")]<-NA
-  ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla","Flag_Turb","Flag_Cond","Flag_SpecCond","Flag_DO","Flag_DO_pSat","Flag_pH","Flag_ORP")]<-Above_surface_flag
+  ctd_flagged[ctd_flagged$Depth_m<0,c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL","DOsat_percent","pH","ORP_mV")]<-NA
+  ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla_ugL","Flag_Turbidity_NTU","Flag_Cond_uScm","Flag_SpCond_uScm","Flag_DO_mgL","Flag_DOsat_percent","Flag_pH","Flag_ORP_mV")]<-Above_surface_flag
   
   final = ctd_flagged%>%
-    mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))%>%
-    select(Reservoir, Site, Date, Depth_m, Temp_C, DO_mgL, DO_pSat, Cond_uScm, Spec_Cond_uScm, Chla_ugL, Turb_NTU, pH, ORP_mV,PAR_umolm2s, Desc_rate, Flag_Temp, Flag_DO, Flag_Cond, Flag_SpecCond, Flag_Chla, Flag_Turb, Flag_pH, Flag_ORP, Flag_PAR, Flag_DescRate, Flag_DateTime)
-  
+    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
+    
   #Fix for CTD when conductivity and specific conductivity columns were switched
   #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is
   # less than specific conductivity and if temp is greater than 25 then conductivity is greater than 
@@ -119,41 +118,28 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
     add_column(CTD_check = NA)%>%#create the CTD_check column
     #sets up criteria for the CTD_check column either "good","bad" or "NA"(if no data)
     mutate(
-      CTD_check=ifelse(Temp_C<25& Cond_uScm<Spec_Cond_uScm & !is.na(Spec_Cond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C<25& Cond_uScm>Spec_Cond_uScm & !is.na(Spec_Cond_uScm), "bad",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm>Spec_Cond_uScm & !is.na(Spec_Cond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm<Spec_Cond_uScm & !is.na(Spec_Cond_uScm), "bad",CTD_check),
-      CTD_check=ifelse(is.na(Spec_Cond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Temp_C<25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Temp_C<25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
+      CTD_check=ifelse(is.na(SpCond_uScm), "good",CTD_check),
       CTD_check=ifelse(Cond_uScm==0, "bad", CTD_check))%>%
     #the next part switches the column if labeled "bad" in CTD_check 
-    transform(., Spec_Cond_uScm = ifelse(CTD_check == 'bad' & !is.na(Spec_Cond_uScm), Cond_uScm, Spec_Cond_uScm), 
-              Cond_uScm = ifelse(CTD_check == 'bad' & !is.na(Spec_Cond_uScm), Spec_Cond_uScm, Cond_uScm))%>%
+    transform(., SpCond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), Cond_uScm, SpCond_uScm), 
+              Cond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), SpCond_uScm, Cond_uScm))%>%
     select(-CTD_check)%>%
     mutate(Site=ifelse(Reservoir=="BVR"&Site==1,40,Site),
            Site=ifelse(Site==49,50,Site))%>%
     
     mutate(
       #DateTime needs to be flagged
-      Flag_DateTime = ifelse(hour(Date)==12&minute(Date)==0,7,0)
+      Flag_DateTime = ifelse(hour(DateTime)==12&minute(DateTime)==0,7,0)
     )
   
-  CTD_fix_renamed = CTD_fix%>% #Renaming flag columns in 2022
-    rename(DateTime = Date,
-           DOsat_percent = DO_pSat,
-           DescRate_ms = Desc_rate,
-           SpCond_uScm = Spec_Cond_uScm,
-           Turbidity_NTU = Turb_NTU,
-           Flag_Temp_C = Flag_Temp,
-           Flag_DO_mgL = Flag_DO,
-           Flag_Cond_uScm = Flag_Cond,
-           Flag_SpCond_uScm = Flag_SpecCond,
-           Flag_Chla_ugL = Flag_Chla,
-           Flag_Turbidity_NTU = Flag_Turb,
-           Flag_ORP_mV = Flag_ORP,
-           Flag_PAR_umolm2s = Flag_PAR,
-           Flag_DescRate_ms = Flag_DescRate)%>%
+  CTD_fix_renamed = CTD_fix%>% 
     mutate(Flag_DOsat_percent = Flag_DO_mgL)%>% #Adding this column, and it is currently the same as DO_mgL flags
-    select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s, DescRate_ms, Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_DescRate_ms)
+    select(Reservoir, Site, SN, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s, DescRate_ms,
+           Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_DescRate_ms)
   
   CTD_fix_renamed%>%
     filter(Flag_DateTime==7)

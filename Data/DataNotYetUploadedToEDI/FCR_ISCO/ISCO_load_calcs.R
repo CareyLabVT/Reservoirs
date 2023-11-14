@@ -13,6 +13,8 @@
 ## Last updated: 09 Aug 2022 ##
 
 
+#clear environment
+rm(list=ls(all=TRUE))
 #load packages
 library(lubridate)
 library(dplyr)
@@ -25,12 +27,16 @@ library(hrbrthemes)
 
 
 # set working directory to location of ISCO data
-setwd("C:/FCR_BVR Metals Data/Spreadsheets for Plotting/ISCO_INFLOW_WETLAND")
+setwd("~/Reservoirs/Data/DataNotYetUploadedToEDI/FCR_ISCO")
 
 #Load data
-Discharge <- read_xlsx("190601_191201_ISCO_FCRWeir_Level.xlsx")
+Discharge <- read.csv("190601_191201_ISCO_FCRWeir_Level.csv", skip=6)
 colnames(Discharge) <- c("Date_Time","head")
 Discharge <- as.data.frame(Discharge)
+
+#make Head values numeric
+Discharge=Discharge%>%
+  mutate(head=as.numeric(head))
 
 
 #Calculate Q from head

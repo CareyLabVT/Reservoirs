@@ -1,0 +1,163 @@
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+*********** PROGRAM SETTINGS ***********
+     ----------
+                    
+ SITE DESCRIPTION:  
+    "FCR IN FLO"    
+                    
+     ----------
+   UNITS SELECTED:  
+   FLOW RATE: m3s   
+  FLOW VOLUME: m3   
+                    
+     ----------
+  SUBMERGED PROBE:  
+        WEIR        
+        120         
+      V-NOTCH       
+     ----------
+   1, 10.0 lit BTLS 
+                    
+ 3.1 m SUCTION LINE 
+                    
+     ----------
+      PACING:       
+    FLOW, EVERY     
+      600.0 m3      
+                    
+     ----------
+     COMPOSITE:     
+                    
+  RUN CONTINUOUSLY  
+                    
+     ----------
+                    
+   200 ml SAMPLES   
+                    
+                    
+     ----------
+                    
+ NO DELAY TO START  
+                    
+ 999 HOURS RUN TIME 
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+*********** SAMPLING RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 12:43 TU  3-OCT-23
+Nominal Sample Volume =  200 ml
+                                   COUNT
+                                      TO
+SAMPLE  BOTTLE TIME  SOURCE ERROR LIQUID
+------- ------ ----      -- --    ------
+              12:43  PGM ENABLED
+              12:44  MANUAL PAUSE
+              12:45  ADJUSTED LEVEL
+                       TO 0.080 m
+              12:46  MANUAL RESUME
+------------- TH 05-OCT-23 -------------
+    1     1   02:59      F           233
+------------- FR 06-OCT-23 -------------
+    2     1   16:37      F           227
+------------- SU 08-OCT-23 -------------
+    3     1   04:50      F           229
+------------- MO 09-OCT-23 -------------
+    4     1   17:31      F           229
+------------- WE 11-OCT-23 -------------
+    5     1   04:17      F           225
+------------- TH 12-OCT-23 -------------
+    6     1   18:35      F           223
+------------- SA 14-OCT-23 -------------
+    7     1   09:02      F           229
+------------- SU 15-OCT-23 -------------
+    8     1   14:40      F           225
+------------- TU 17-OCT-23 -------------
+    9     1   02:11      F           223
+              12:40  MANUAL PAUSE
+              12:40  MANUAL RESUME
+              12:41  MANUAL PAUSE
+              12:41  PGM STOPPED 17-OCT
+
+ 
+   SOURCE F  ==> FLOW                
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+ SUBMERGED PROBE: 1125394991
+  Hardware:     A0  Software: 1.00
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 12:43 TU  3-OCT-23
+Nominal Sample Volume =  200 ml
+                             FLOW         TOTAL
+                     LEVEL   RATE          FLOW
+SAMPLE  BOTTLE TIME      m    m3s            m3
+------- ------ ----  -----  ----- -------------
+-------------------- TH  5-OCT-23 ------
+    1     1   02:59  0.081  0.004     000000600
+-------------------- FR  6-OCT-23 ------
+    2     1   16:37  0.078  0.004     000001200
+-------------------- SU  8-OCT-23 ------
+    3     1   04:50  0.082  0.004     000001800
+-------------------- MO  9-OCT-23 ------
+    4     1   17:31  0.098  0.007     000002400
+-------------------- WE 11-OCT-23 ------
+    5     1   04:17  0.082  0.004     000003000
+-------------------- TH 12-OCT-23 ------
+    6     1   18:35  0.077  0.004     000003600
+-------------------- SA 14-OCT-23 ------
+    7     1   09:02  0.101  0.007     000004200
+-------------------- SU 15-OCT-23 ------
+    8     1   14:40  0.083  0.004     000004800
+-------------------- TU 17-OCT-23 ------
+    9     1   02:11  0.083  0.004     000005400
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 12:43 TU  3-OCT-23
+Nominal Sample Volume =  200 ml
+                        FR-TEMP
+SAMPLE  BOTTLE TIME           C
+------- ------ ----        ----
+                    NO FR-TEMPERATURE
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 12:43 TU  3-OCT-23
+Nominal Sample Volume =  200 ml
+SAMPLE  BOTTLE TIME 
+------- ------ ----------- ------ ----
+                    NO RAIN GAUGE
+----------------------------------------
+ 
+ 
+ 
+SAMPLER ID# 1129903085  13:09 17-OCT-23
+  Hardware:     A1  Software: 2.31
+SDI-12 DATA
+*********** COMBINED RESULTS ***********
+   SITE: FCR IN FLO
+Program Started at 12:43 TU  3-OCT-23
+Nominal Sample Volume =  200 ml
+ 
+ 
+                    NO SDI-12 SONDE
+----------------------------------------

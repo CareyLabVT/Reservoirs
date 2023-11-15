@@ -23,7 +23,7 @@ mydir = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/"
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
 
-ec <- read_csv(paste0(mydir,"2021/EddyPro_Cleaned_2020_2023.csv"))
+ec <- read_csv(paste0(mydir,"data/EddyPro_Cleaned_2020_2023.csv"))
 
 # Take out duplicates. 
 
@@ -81,7 +81,7 @@ co2_month=ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime,
 # Load data Meteorological data from EDI
 
 # Downloaded from EDI staging: 20 January 2023
-#inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/143/20/02d36541de9088f2dd99d79dc3a7a853" 
+#inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853" 
 #infile1 <- paste0(getwd(),"/Data/Met_final_2015_2022.csv")
 #download.file(inUrl1,infile1,method="curl")
 

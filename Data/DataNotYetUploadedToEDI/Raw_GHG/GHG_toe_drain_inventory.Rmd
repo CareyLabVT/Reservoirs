@@ -1,0 +1,88 @@
+---
+title: "GHG Toe Drain Inventory"
+author: "Adrienne Breef-Pilz"
+date: "2023-03-16"
+output: html_document
+---
+The current inventory of GHG samples from the toe drains at Falling Creek Reservoir and Beaverdam Reservoir. At Falling Creek there is only one site we have sampled. At Beaverdam Reservoir we sampled from 4 different sites below the dam. 
+
+```{r setup, include=FALSE}
+
+pacman::p_load("RCurl","tidyverse","lubridate", "knitr")
+```
+
+```{r Download Data, include=FALSE}
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/551/7/38d72673295864956cccd6bbba99a1a3" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+ghg <-read_csv(infile1)
+
+```
+
+```{r Create Data frame, include=FALSE}
+
+toe<- ghg %>%
+  filter(Reservoir=="FCR"|Reservoir=="BVR")%>%
+  filter(Site>1 & Site<2)%>%
+  group_by(Reservoir,DateTime,Site)%>%
+  summarise_at(c("CH4_umolL", "CO2_umolL"), mean, na.rm = TRUE)%>%
+  ungroup()%>%
+  pivot_longer(-c(Reservoir, Site, DateTime), names_to="Gas", values_to="Concentration", values_drop_na=FALSE)%>%
+  mutate(DOY=yday(DateTime))%>%
+  mutate(Year=year(DateTime))
+
+```
+
+There are samples from the toe drains at FCR from `r list(unique(toe[which(toe$Reservoir=="FCR"),"Year"]))` and BVR from `r list(unique(toe[which(toe$Reservoir=="BVR"),"Year"]))`. 
+
+Below is a table of the number of times we sampled each year at each reservoir
+
+```{r Sample Table, echo=FALSE}
+
+print(ghg%>%
+  filter(Reservoir=="FCR"|Reservoir=="BVR")%>%
+  filter(Site>1 & Site<2)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Reservoir,Date)%>%
+  summarise_at(c("CH4_umolL", "CO2_umolL"), mean, na.rm = TRUE)%>%
+  mutate(Year=year(Date))%>%
+  count(Reservoir, Year)%>%
+    dplyr::rename("Sampling_Days"="n"))
+
+```
+
+```{r Plots, echo=FALSE, warning = FALSE, results='hide'}
+a<-toe%>%
+  filter(Reservoir=="FCR")%>%
+ggplot(., aes(x=DateTime, y=Concentration))+
+  geom_point()+
+  facet_wrap(~Gas, scales="free")+
+  ggtitle("FCR GHG Time Series")
+a
+
+b<-toe%>%
+  filter(Reservoir=="FCR")%>%
+ggplot(., aes(x=DOY, y=Concentration, color=as.factor(Year)))+
+  geom_point()+
+  facet_wrap(~Gas, scales="free")+
+  ggtitle("FCR GHG DOY")
+ b
+ 
+ c<-toe%>%
+  filter(Reservoir=="BVR")%>%
+ ggplot(., aes(x=DateTime, y=Concentration, color=as.factor(Site)))+
+  geom_point()+
+  facet_wrap(~Gas, scales="free")+
+  ggtitle("BVR GHG Time Series")
+c
+
+d<-toe%>%
+  filter(Reservoir=="BVR")%>%
+ggplot(., aes(x=DOY, y=Concentration, color=as.factor(Site), shape=as.factor(Year) ))+
+  geom_point()+
+  facet_wrap(~Gas, scales="free")+
+  ggtitle("BVR GHG DOY")
+ d
+```

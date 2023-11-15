@@ -1,0 +1,280 @@
+---
+title: "EddyFlux Check for Cold Air Drift"
+author: "Adrienne"
+date: "2023-09-18"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+
+# Read in packages
+pacman::p_load(tidyverse, lubridate)
+```
+
+
+```{r read in data, include=FALSE}
+# Read in the current file from GitHub
+dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
+  
+  # read in historical data file 
+  # EDI
+  inUrl1 <- "https://pasta.lternet.edu/package/data/eml/edi/1061/2/f837d12dc12ab37a6772598578875e00"
+  infile1 <- tempfile()
+  try(download.file(inUrl1,infile1,method="curl"))
+  if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+  
+  # read in the data file downloaded from EDI
+  dt2 <-read_csv(infile1) 
+
+```
+
+
+```{r combine files, echo=FALSE}
+
+# combine EDI and current files
+
+EF_data<-dt2%>%
+  bind_rows(.,dt1)%>%
+  mutate(datetime=ymd_hms(paste0(date,"",time)))
+```
+
+
+Let's see if we see cold air drift in our data.
+
+Decided to use the mixing ratio because it seems to be the best way to compare across temperatures.  
+
+From the EddyPro manual-
+For closed path gas analyzers, data may be converted to mixing ratios. At this point
+in the raw data processing, metadata concerning gas concentrations from closed path
+systems are analyzed by EddyPro to autonomously decide whether to perform a
+sample-by-sample conversion into mixing ratios (r, moles of gas per mole of dry air).
+Expressing gas concentrations as mixing ratios is convenient because this makes it
+unnecessary to apply the WPL correction (Webb et al., 1980). It is an alternative way
+to account for air density fluctuations resulting from thermal expansion/contraction
+and concentration/dilution due to water vapor (see Ibrom et al., 2007b, for
+example). For a thorough discussion concerning the use of mixing ratios in closed
+path instruments, see Burba et al. (2012).
+
+First let's just look at September 6th 2023
+```{r echo=FALSE}
+# Plot density of CO2 and CH4 over 24 hours
+
+# Let's do 6 Sep 23
+
+EF_data%>%
+  filter(date==ymd("2023-09-06"))%>%
+  select(date,time, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=time, y=observation))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+```
+
+Now let's look at the mixing ratio from September 5th - 12th, 2023
+
+```{r echo=FALSE}
+
+# add in 8 am sun up lines
+
+EF_data%>%
+  filter(date>=ymd("2023-09-05") & date <= ymd("2023-09-12"))%>%
+  select(date,time, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(date)))+
+  geom_point()+
+  geom_vline(xintercept = hms("08:00:00"))+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+ggsave("FCR_SeptMixingRatio.jpg", width=11, height=7, units="in")
+
+```
+
+```{r }
+EF_data%>%
+  filter(date>=ymd("2023-09-05") & date <= ymd("2023-09-12"))%>%
+  select(datetime, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=datetime, y=observation))+
+  geom_point()+
+  #geom_vline(xintercept = hms("08:00:00"))+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+ggsave("FCR_SepttsMixingRatio.jpg", width=11, height=7, units="in")
+
+```
+Let's see what the wind and temperature looked like for that week
+
+```{r echo=FALSE}
+
+EF_data%>%
+  filter(date>=ymd("2023-09-05") & date <= ymd("2023-09-12"))%>%
+  select(datetime, air_temperature_k, wind_speed_ms, air_density_kgm3)%>%
+  pivot_longer(cols=c(air_temperature_k, wind_speed_ms, air_density_kgm3), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=datetime, y=observation))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+ggsave("FCR_SepttsMixingRatio_met.jpg", width=11, height=7, units="in")
+
+```
+
+```{r Time series}
+
+EF_data%>%
+  filter(date>=ymd("2023-09-05") & date <= ymd("2023-09-12"))%>%
+  select(date,time, air_temperature_k, wind_speed_ms, air_density_kgm3)%>%
+  pivot_longer(cols=c(air_temperature_k, wind_speed_ms, air_density_kgm3), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(date)))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+
+
+```
+
+
+
+
+Let's see what the fluxes look like from Sept 5- 12th, 2023
+
+```{r echo=FALSE}
+
+EF_data%>%
+  filter(date>=ymd("2023-09-05") & date <= ymd("2023-09-12"))%>%
+  select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s)%>%
+  pivot_longer(cols=c(co2_flux_umolm2s, ch4_flux_umolm2s), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=datetime, y=observation))+
+  geom_point()+
+  geom_line()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+ggsave("FCR_Septtsfluxes.jpg", width=11, height=7, units="in")
+
+```
+
+Let's see what February looks like when there are no leaves on the tree
+
+```{r echo=FALSE}
+
+# Add in sun up line at 9:15
+
+EF_data%>%
+  filter(date>=ymd("2022-02-05") & date <= ymd("2022-02-12"))%>%
+  select(date,time, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(date)))+
+  geom_point()+
+  geom_vline(xintercept = hms("09:15:00"))+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+```
+
+Let's look at Air Temperature, Air density, and wind speed over the same time in February
+
+```{r echo=FALSE}
+
+EF_data%>%
+  filter(date>=ymd("2022-02-05") & date <= ymd("2022-02-12"))%>%
+  select(date,time, air_temperature_k, air_density_kgm3, wind_speed_ms)%>%
+  pivot_longer(cols=c(air_temperature_k, air_density_kgm3, wind_speed_ms), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(date)))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+```
+
+
+
+Let's look at all the data averaged for each month to the 24 hour time steps for 2020-2023.
+
+```{r echo=FALSE}
+EF_data%>%
+  select(date,time, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  mutate(month=month(date))%>%
+  group_by(month,time)%>%
+  summarise_if(is.numeric, mean, na.rm = TRUE)%>%
+    ungroup()%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  filter(observation>-10)%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(month)))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+```
+
+Let's do the same thing for the weather variables
+
+```{r echo=FALSE}
+EF_data%>%
+  select(date,time, air_temperature_k, air_pressure_pa, wind_speed_ms)%>%
+  mutate(month=month(date))%>%
+  group_by(month,time)%>%
+  summarise_if(is.numeric, mean, na.rm = TRUE)%>%
+    ungroup()%>%
+  pivot_longer(cols=c(air_temperature_k, air_pressure_pa, wind_speed_ms), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  #filter(observation>-10)%>%
+  ggplot(., aes(x=time, y=observation, color=as.factor(month)))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+```
+
+
+
+Let's look at the timeseries of mixing ratio
+
+```{r echo=FALSE}
+EF_data%>%
+  select(datetime,date,time, co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol)%>%
+  pivot_longer(cols=c(co2_mixing_ratio_umolmol, ch4_mixing_ratio_umolmol), # make the wide data frame into a long one so each observation has a depth
+                 names_to='variable',
+                 values_to='observation')%>%
+  filter(observation>-10)%>%
+  ggplot(., aes(x=datetime, y=observation))+
+  geom_point()+
+  facet_wrap(~variable, scales="free_y", ncol=1)+
+  theme_bw()
+
+```
+
+What is happening to the CH4 mixing ration in 2023?
+
+```{r echo=FALSE}
+EF_data%>%
+  filter(date>ymd("2022-12-31")& date<ymd("2024-01-01"))%>%
+  filter(ch4_mixing_ratio_umolmol>-10)%>%
+  ggplot(.,aes(x=datetime, y= ch4_mixing_ratio_umolmol))+
+  geom_point()+
+  theme_bw()
+```
+

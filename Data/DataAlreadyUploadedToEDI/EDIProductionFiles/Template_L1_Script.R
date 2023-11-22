@@ -133,12 +133,12 @@ variable_qaqc<- function(raw_file =,
     
     ### Get the name of the flag column
     
-    flag_col <- paste0("Flag_", maintenance_cols)
+    flag_cols <- paste0("Flag_", maintenance_cols)
     
     ### remove any Flag columns that don't exsist because we don't have a flag column for them
     # and they get removed before publishing
     
-    flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
+    flag_cols = flag_cols[!flag_cols %in% c(COLUMN NAMES HERE)]
     
     ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs 
     # until the maintenance log is updated

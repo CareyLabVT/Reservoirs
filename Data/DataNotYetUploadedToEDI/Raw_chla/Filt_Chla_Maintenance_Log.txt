@@ -1,0 +1,48 @@
+# Title: Filtered Chla Maintenance Log
+# Here is a template the the Maintenance Log. Any questions let Adrienne know. 
+# THIS FILE IS READ IN AS A CSV MEANING DO NOT PUT ANY COMMAS IN THE NOTES SECTION
+# Make sure to fill out all the columns even if it just with an NA. 
+
+### Description of the columns
+# Date_processed = The date the samples were run on the spec
+
+# ResSite = The name of the reservoir and Site combined with the inital of the Reservoir and the number of the site
+# Eg. F50 = FCR 50, B50 = BVR 50 
+
+# DataStream = Nickname for each of data package. 
+# Eg. Flora, CTD, YSI, Secchi, GHG, Metals, SedTraps, UGGA, FiltChla, Weir, Ice, EddyFlux
+
+# Rep = Is the sample a duplicate or not. If it is a duplicate it will be labeled DUP
+
+# Sample.ID = Name of sample used for running the sample. It is made up of a number an underscore followed by b
+# for before acid or a for after acid
+
+# Sample_date = The date the chla sample was collected
+
+# start_parameter = The name of the first column of the affected observation. Use the name of the column 
+# you use in the L1 script. 
+
+# end_parameter = The name of the last column of the affected observations. Use the name of the column
+# you use in the L1 scipt. If you are only selecting one column put the same column name in the start_parameter
+# and the end_parameter. You can also put NA. 
+
+# flag = the number flag associated with the maintenance. Each datapackage has their own set of flags. 
+
+# notes = a description of why the values were removed or changed. Provide as much detail as necessary for 
+# co authors and people who will use your data package. DO NOT INCLUDE COMMAS IN THE NOTES SECTION. 
+    
+
+### START HERE###
+Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_parameter, end_parameter,  flag,  notes
+2023-09-28, B50, FiltChla, NA, 21_b, 2023-07-24, WL750.0, WL384.0, 2, Not enough sample so remove
+2023-09-28, B50, FiltChla, NA, 21_b_2, 2023-07-24, WL750.0, WL384.0, 2, Not enough sample so remove
+2023-09-28, F50, FiltChla, NA, 7_b, 2023-07-10, WL750.0, WL384.0, 2, 750 wave length too high so reran sample again and removed observation
+2023-09-28, B50, FiltChla, DUP, 32_b, 2023-09-05, WL750.0, WL384.0, 2, 750 wave length too high was a duplicate so removed
+2023-09-28, B50, FiltChla, DUP, 32_a, 2023-09-05, WL750.0, WL384.0, 2, 750 wave length too high was a duplicate so removed
+2023-09-28, B50, FiltChla, NA, 31_b, 2023-04-13, WL750.0, WL384.0, 2, 750 wave lenth too low so reran sample again and removed observation
+2023-09-28, F50, FiltChla, NA, 6_b, 2023-07-03, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and ran the duplicate
+2023-09-28, F50, FiltChla, NA, 6_a, 2023-07-03, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and ran the duplicate
+2023-09-28, F50, FiltChla, NA, 46_a, 2023-04-04, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and kept the duplicate
+2023-09-28, F50, FiltChla, NA, 46_b, 2023-04-04, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and kept the duplicate
+2023-09-28, F50, FiltChla, NA, 20_b, 2023-05-22, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and kept the duplicate
+2023-09-28, F50, FiltChla, NA, 20_a, 2023-05-22, WL750.0, WL384.0, 2, 750 wave lenth too high so removed this sample and kept the duplicate

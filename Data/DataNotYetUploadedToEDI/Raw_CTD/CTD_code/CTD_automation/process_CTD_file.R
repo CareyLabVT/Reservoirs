@@ -22,7 +22,7 @@ process_CTD_file <- function(file,
   MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
   AUTO_NAME <- TRUE 
   AUTO_FOLDER <- TRUE 
-  REP <- str_extract(file, "_S[0-9]+")
+  REP <- str_extract(file, "_S[0-9]+[a-z]+|_S[0-9]+") # get the ending of the file
   SN <- as.numeric(str_extract(location, "\\d{4}"))
   
   #trim ctd

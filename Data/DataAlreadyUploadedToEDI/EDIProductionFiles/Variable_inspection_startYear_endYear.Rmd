@@ -18,6 +18,7 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
 ```
 
 
@@ -43,7 +44,7 @@ L1 <- read_csv(LINK TO L1 FILE HERE)
 
 ```{r Bind historic and L1 files together}
 
-current_df <- bind_rows(historic, L1)
+current_df <- dplyr::bind_rows(historic, L1)
 
 ```
 
@@ -70,6 +71,33 @@ for(f in 1:(ncol(Flags))){
 ```
 
 ```{r Plots}
+
+```
+
+```{r Make new CSV with current and historic files}
+
+# Need to decide on a naming convention for this file
+write.csv(current_df, "Variable_startYear_EndYear.csv", row.names = F)
+
+```
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  data <- current_df #This is the line you need to modify!
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  sites_trimmed = trim_sites(data,sites) 
+  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
 
 ```
 

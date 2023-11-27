@@ -1,4 +1,6 @@
-# GHG L1 creation Script
+# Title: GHG L1 creation Script
+# By: Adrienne Breef-Pilz
+# Written: 24 Nov 23
 
 # This function:
 # 1. Read in the Maintenance Log and then Raw files 
@@ -32,7 +34,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   #### 1. Read in the Maintenance Log and then Raw files ####
   
-  # Read in Maintenance file 
+  ### 1.1 Read in Maintenance file ####
   log_read <- read_csv(maintenance_file, skip=43, col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
@@ -42,7 +44,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   log <- log_read
   
-  
+ 
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
   
@@ -50,7 +52,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   rfiles <- list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)
   
   
-  ### 1.1 Get Files off of Google Drive ####
+  ### 1.2 Get Files off of Google Drive ####
 
   # Are the files on Google Drive? If so then download missing GHG files
   # This should be False until we figure out how to use GitHub actions and 
@@ -393,16 +395,16 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
         
       } else if (is.na(Depth)){
         # Just use the time and vial number for indexing
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] = vial))), maintenance_cols] <- NA
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] = vial))), flag_cols] <- flag
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), maintenance_cols] <- NA
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), flag_cols] <- flag
         
       } else {
         
         # Use time, depth and vial number for indexing
         
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] = vial) & (raw_df[,"Depth_m"] = Depth))), 
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))), 
                maintenance_cols] <- NA
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] = vial) & (raw_df[,"Depth_m"] = Depth))), 
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))), 
                flag_cols] <- flag
         
       }

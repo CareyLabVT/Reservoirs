@@ -26,16 +26,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
                       outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
   {
-  
-  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" 
-  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk/edit#gid=0"
-  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv/edit#gid=614471881"
-  Year = "2023"
-  final_vol_extract = 6
-  blank_vol_filt = 500
-  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt"
-  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
-  
+
   #### 1. Read in Maintenance file and the Raw files from the spec ####
   ### 1.1 Read in Maintenance file ####
   log_read <- read_csv(maintenance_file, skip=35, col_types = cols(

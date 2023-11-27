@@ -2,14 +2,15 @@
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
 
-# Things it needs to do 
-# 1. Read in raw chla file from the spec
+# Things the script does: 
+# 1. Read in Maintenance log and read in raw chla file from the spec
 #   Put in the right format for processing
 # 2. Read in the filtering log and rack map
 # 3. Merge everything together
-# 4. Process with a script based on BNN Excel script
-# 5. Maintenance log to flag or remove issues
+# 4. Maintenance log to flag or remove issues
+# 5. Process with a script based on BNN Excel script
 # 6. Further QAQC processing
+# 7. Save files
 
 # Load packages
 if (!require("pacman")) install.packages("pacman")
@@ -26,7 +27,17 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
   {
   
-  # Read in Maintenance file 
+  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" 
+  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk/edit#gid=0"
+  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv/edit#gid=614471881"
+  Year = "2023"
+  final_vol_extract = 6
+  blank_vol_filt = 500
+  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt"
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  
+  #### 1. Read in Maintenance file and the Raw files from the spec ####
+  ### 1.1 Read in Maintenance file ####
   log_read <- read_csv(maintenance_file, skip=35, col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
@@ -36,10 +47,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
   
   log <- log_read
   
+  ### 1.2 Select files from current year ####
   # Name the directory where the full output files are found. Ours are on GitHub 
-  
-#  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
-#  Year = "2023"
   mydir <-directory
   
   # list of raw chla samples for the current year
@@ -56,13 +65,14 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
  # loop through the files and only select those that happened after April of the selected year
  for(i in 1:length(rfiles)) {
-   
+   # Get the date from the name of the file
    sed <- str_extract(rfiles[i], "_\\d+")
-   
+   # Take out the extra underscore
    Date <- sub("_","",sed)
-   
+   # Get the Date the samples were processed in the right format
    procces_date <- as.Date(Date, "%Y%m%d")
    
+  # Only take files that happened after April 1 of the current year 
   if(procces_date>filt_date){
     
     files[i]=rfiles[grepl(Date,rfiles)]
@@ -72,26 +82,31 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    }
  }
 
-
+ #### 1.3 Read in files ####
+ 
+# Create a blank data frame to use in the for loop below
  out.file<-NULL
  
  
- #  Collate the files and add a processing date
+ #  Collate the files and add a processing date to the file
  
  for(j in 1:length(files)){
    
    if(!is.na(files[j])){
-     
+     # Get the date the samples were processed on the spec
      sed <- str_extract(files[j], "_\\d+")
      
+     # Take out the extra underscore
      Date <- sub("_","",sed)
      
+     # Put the date in the proper format
      Date_processed <- as.Date(Date, "%Y%m%d")
      
      data <- read.csv(files[j])
-     
+     # Add the date processed to the files
      data$Date_processed <- as.Date(Date, "%Y%m%d")
      
+     # Bind the files
      out.file=bind_rows(data, out.file)
      
    }
@@ -99,22 +114,24 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  }
  
  
- # Put ethanol blank in a seperate df
+ ### 1.4  Label observations ####
  
+ # Label the types of samples are so they are easier to sort label
  out.file2<- out.file%>%
    mutate(
      samp_type = ifelse(grepl("et", Sample.ID), "eth_blank",NA),
      samp_type = ifelse(grepl("[0-9]", Sample.ID), "res_samp", samp_type),
-     #samp_type = ifelse(grepl("fa", Sample.ID), "fake", samp_type),
-     #samp_type = ifelse(grepl("ref", Sample.ID), "ref", samp_type)
+     samp_type = ifelse(grepl("fa", Sample.ID), "fake", samp_type),
+     samp_type = ifelse(grepl("ref", Sample.ID), "ref", samp_type)
      
    )
  
  # Create an ethanol blank data frame
- ethon_blank <- out.file2%>%
-   filter(samp_type=="eth_blank")
+ # ethon_blank <- out.file2%>%
+ #   filter(samp_type=="eth_blank")
  
- # Create a data frame of just the samples. Put the before and after acid labels in a column. 
+ # Create a data frame of just the samples. 
+ # Put the before and after acid labels in the timing column. 
  # Isolate Sample ID number to match to rack map
  res_samp <- out.file2%>%
    filter(samp_type=="res_samp")%>%
@@ -131,9 +148,9 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    )
  
  
- ### Get the sample ID number and match with the reservoir and site
+ ### 2. Get the sample ID number and match with the reservoir and site
  
- # Read in the rack map file 
+ ### 2.1 Read in the rack map file ####
  
  rack_map <- gsheet::gsheet2tbl(rack_map)
  
@@ -147,7 +164,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  # perform full_join based on multiple columns
  df3 <- full_join(res_samp, rack_map, by=c('Date_processed'='Date_processed', 'Sample_ID'='Sample_ID'))
  
- # label ethanol blanks
+ # label ethanol blank samples so we can find them later
  
  df4 <- df3%>%
    mutate(
@@ -162,7 +179,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Sample_date = as.Date(Sample_date2) # put date in format
    )
    
- ### read in filtering log ####
+ ### 2.2 read in filtering log ####
  
  filtering_log <- gsheet::gsheet2tbl(filtering_log)
  
@@ -175,19 +192,21 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    )%>%
    select(ResSite, Depth,Sample_date, Rep, Vol_filt_mL, Final_vol_extract_mL, Comments)
  
- # combine with the filtering log
+ ### 3. Combine with the filtering log ####
  comb <- left_join(res_samp2, filtering_log2, 
                    by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep"))
  
  
  # add the vol filt and final vol used for the ethanol samples 
+ # We use 500 mL for volume filtered for the ethanol blanks
  comb2 <- comb%>%
    mutate(
      Vol_filt_mL = ifelse(samp_type=="eth_blank", 500, Vol_filt_mL),
      Final_vol_extract_mL = ifelse(samp_type=="eth_blank",final_vol_extract, Final_vol_extract_mL)
    )
  
- # Use Maintenance Log to take out samples before calculating 
+ 
+ ### 4. Take out values based on the Maintenance Log ####
  
  # Add Flag columns
  
@@ -196,8 +215,6 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Flag_Chla_ugL  = 0,
      Flag_Pheo_ugL  = 0
    )
- 
- ### 4. Take out values based on the Maintenance Log ####
  
  ### 4.1 Set up the Values to be used ####
  # modify raw_df based on the information in the log   
@@ -246,12 +263,12 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
    }
    
-   ### Get the name of the flag column
+   ### Get the name of the flag column. These are the only flags we have
    
    flag_cols <- c("Flag_Chla_ugL",
                   "Flag_Pheo_ugL")
    
-   ### remove any Flag columns that don't exsist because we don't have a flag column for them
+   ### remove any Flag columns that don't exist because we don't have a flag column for them
    # and they get removed before publishing
    
    #flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
@@ -278,10 +295,10 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  }
  
  
- # Now let's work on processing from the spec to get concentration
+ ### 5. Get the Chla concentration from wavelengths from Spec ####
+ # The calculations are from BNN Chla processing excel sheet
 
- 
- # Separate by before and after and then merge together wider
+ ### 5.1 Separate the wavelength by before acid and after and then merge together wider ####
  
  before_comb2 <- raw_df%>%
    filter(Flag_Chla_ugL!=2)%>%
@@ -321,10 +338,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth", "Rep", "Sample_date",
                            "Need_Rep", "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes"))
  
- # e_blank <- e_blank%>%
- #   filter(Sample_ID!="")
- 
- # Figure out how to deal with different processing dates 
+### 5.2 Claculate the concentration of Chla in ugL #### 
  
  comb3_calc <- comb3%>%
    mutate(
@@ -340,7 +354,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
   diff_be_af = before_acid-after_acid)
  
- # Get the average blanks for each processing date
+ ### 5.21 Get the average blanks for each processing date ####
 
  avg_e_blank <- comb3_calc%>%
    filter(samp_type=="eth_blank")%>%
@@ -354,8 +368,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    
    comb4_calc <- left_join(comb3_calc, avg_e_blank, by="Date_processed")
    
-   # Now finish the calcs
-   # might make this into a function
+   ### 5.22 Now finish the calculations ####
    
    comb5_calc <- comb4_calc%>%
      
@@ -391,8 +404,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    (after_acid-blank_after_acid_avg)
 )
    
-   # Select only the columns of interest
-   # select the rows you want 
+  ### 5.3 Select only the columns of interest and need for EDI and QAQC ###
+   # Take out the ethanol blank rows 
    chla_df<- comb5_calc%>%
      filter(samp_type!="eth_blank")%>%
      select(ResSite,
@@ -405,7 +418,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
             pheo_in_water,
             Flag_Chla_ugL,
             Flag_Pheo_ugL)%>%
-     dplyr::rename(
+     dplyr::rename( # rename the columns for below
        Date = Sample_date,
        Depth_m = Depth,
        Check_Absorb = before_acid_abs_664,
@@ -417,7 +430,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
 
    
    
-   ### QAQC ###
+   ### 6. Further QAQC ####
    
    
    chla_new<-chla_df%>%
@@ -459,7 +472,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      #all_chla <- all_chla[all_chla$DateTime<ymd_hms(end_date),]
      
      
-     ### Save L1 File ####
+  ### 7. Save L1 File ####
    
      write.csv(chla_new, outfile, row.names=F)
   

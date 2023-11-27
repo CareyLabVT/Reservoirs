@@ -15,7 +15,7 @@ process_CTD_file <- function(file,
                                  CTD_FOLDER = "../../") {
   #Specify global variables
   location <- sub("^[0-9]*_","",sub("\\.cnv","",file))
-  SITE <- sub("_S[0-9]+", "",location)
+  SITE <- sub("_S[0-9]+", "",sub("test","",location))
   SAMPLER <- ""
   DATE <- substr(file,1,6)
   DATE_TEXT <- format(as.Date(DATE, "%m%d%y"), '%d-%b-%Y') #format should be "01-Aug-2019"

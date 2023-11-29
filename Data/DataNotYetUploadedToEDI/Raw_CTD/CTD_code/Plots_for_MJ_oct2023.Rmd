@@ -1,0 +1,580 @@
+---
+title: "Show and Tell Plots for MJ"
+author: "Adrienne"
+date: "2023-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, lubridate, RColorBrewer, akima,colorRamps, scales)
+
+# library(akima)
+# library(dplyr)
+# library(ggplot2)
+# library(tidyverse)
+# library(reshape2)
+# library(gridExtra)
+# library(grid)
+# library(colorRamps)
+# library(RColorBrewer)
+# library(rLakeAnalyzer)
+```
+
+```{r Read in and Combine CTD data}
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+EDI_CTD<-read_csv(infile1)%>%
+  filter(Reservoir=="FCR")%>%
+  filter(Site==50)%>%
+  filter(DateTime>ymd_hms("2020-04-01 00:00:00"))%>%
+  filter(Depth_m>0)
+
+
+# Read in L1 file which is only from S7809
+
+CTD<- read_csv("./Data/DataNotYetUploadedToEDI/Raw_CTD/ctd_L1.csv")%>%
+  filter(Reservoir=="FCR")%>%
+  filter(Site==50)%>%
+  bind_rows(EDI_CTD,.)%>%
+  select(-starts_with("Flag_"))
+
+# Read in file from S8188
+
+# Combine all of the S8188 files
+
+lookup <- c(PAR_umolm2s  = "PAR",
+              DescRate_ms  = 'Descent Rate (m/s)',
+              DateTime = "Date",
+              DOsat_percent = "DO_pSat",
+              SpCond_uScm = "Spec_Cond_uScm",
+              Turbidity_NTU = "Turb_NTU",
+              Phycoerythrin_ugL = "Phycoerythrin",
+              Phycocyanin_ugL = "Phycocyanin")
+
+# This reads all the files into the R environment
+files = list.files("./Data/DataNotYetUploadedToEDI/Raw_CTD/csv_outputs/",pattern = "_S8188")%>%
+  stringr::str_subset(., ".csv", negate = F) #only .csv files
+
+#This reads the first file in
+ctd = read_csv(paste0("./Data/DataNotYetUploadedToEDI/Raw_CTD/csv_outputs/",files[1])) 
+location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
+ctd = ctd%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
+    dplyr::rename(any_of(lookup))%>%
+    select(-Salinity)
+    
+
+# Loop through and pull all the files in
+for (i in 2:length(files)){
+  new = read_csv(paste0("./Data/DataNotYetUploadedToEDI/Raw_CTD/csv_outputs/",files[i]))
+  location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
+new = new%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
+    dplyr::rename(any_of(lookup))%>%
+    select(-Salinity)
+    
+  ctd = ctd %>%
+    full_join(new)
+}
+
+# Change some Columns and rund through a quick QAQC
+new_CTD<-ctd%>%
+  filter(Reservoir=="FCR")%>%
+  filter(Site==50)%>%
+  filter(DateTime>ymd_hms("2023-01-01 00:00:00") & DateTime<ymd_hms("2023-07-01 00:00:00"))%>%
+  filter(Depth_m>0)%>%
+  mutate(SN=8188)%>%
+  select(-Flag)%>%
+  
+
+# Run through a quick QAQC
+
+mutate(
+  
+      #DO
+      DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
+      
+      #DO pSat
+      DOsat_percent = ifelse(DOsat_percent < 0, 0, DOsat_percent), #Flag pSat<0
+      
+      #COND
+      Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0. 
+      
+      #SPECCOND
+      SpCond_uScm = ifelse(SpCond_uScm < 0, NA, SpCond_uScm), #Flag Cond < 0.
+      
+      #CHLA
+      Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), #Flag Chla <0
+      
+      #Phycoerythrin
+      Phycoerythrin_ugL = ifelse(Phycoerythrin_ugL < 0, 0, Phycoerythrin_ugL), #Flag Chla <0
+      
+      #Phycocyanin
+      Phycocyanin_ugL = ifelse(Phycocyanin_ugL < 0, 0, Phycocyanin_ugL), #Flag Chla <0
+      
+      #TURB
+      Turbidity_NTU = ifelse(Turbidity_NTU < 0, 0, Turbidity_NTU), #Flag turbidity <0
+      
+      #PAR
+      PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s))%>%
+      
+      
+  
+  #Fix for CTD when conductivity and specific conductivity columns were switched
+  #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is
+  # less than specific conductivity and if temp is greater than 25 then conductivity is greater than 
+  # specific conductivity. Based on this I created the a CTD_check column if the columns were good or bad. 
+  # If they were bad then the conductivity and the spec. conductivity column need to be flipped. 
+  
+  #ABP 10 DEC 21
+  
+  
+    add_column(CTD_check = NA)%>%#create the CTD_check column
+    #sets up criteria for the CTD_check column either "good","bad" or "NA"(if no data)
+    mutate(
+      CTD_check=ifelse(Temp_C<25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Temp_C<25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
+      CTD_check=ifelse(is.na(SpCond_uScm), "good",CTD_check),
+      CTD_check=ifelse(Cond_uScm==0, "bad", CTD_check))%>%
+    #the next part switches the column if labeled "bad" in CTD_check 
+    transform(., SpCond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), Cond_uScm, SpCond_uScm), 
+              Cond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), SpCond_uScm, Cond_uScm))%>%
+    select(-CTD_check)
+
+# Add in the new CTD to old and the EDI 
+
+all_CTD<-bind_rows(CTD, new_CTD)
+  
+```
+
+```{r DO Temp and Chla plots with CTD}
+
+###getting heat maps 
+#come back here after you do it for BVR and now do it for FCR 
+ctd <- all_CTD%>%
+  mutate(Date=as.Date(DateTime))
+
+
+
+depths = seq(0, 9.5, by = 0.1)
+df.final<-data.frame()
+
+for (i in 1:length(depths)){
+  
+  fp_layer<-ctd %>% 
+    group_by(Date) %>% 
+    slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  
+  # Bind each of the data layers together.
+  df.final = bind_rows(df.final, fp_layer)
+}
+  
+  
+  
+
+ctd <- arrange(df.final, Date)
+#ctd$Depth_m <- round(as.numeric(ctd$Depth_m), digits = 1)
+ctd$Depth_m <-   round(ctd$Depth_m/0.5)*0.5  # new rounding function to ensure values get to nearest 0.5 
+
+
+FCR_DO <-ctd%>%
+  #filter(Date>ymd("2023-01-01"))%>%
+  mutate(DOY=yday(DateTime))%>%
+  select(DOY,Date, DateTime, Depth_m, DO_mgL)%>%
+  drop_na()%>%
+  unique()
+
+
+  FCR_Temp <- ctd%>%
+    select(DateTime, Depth_m, Temp_C)%>%
+    drop_na()%>%
+  unique()
+  
+  
+  FCR_Chla <- ctd%>%
+    select(DateTime, Depth_m, Chla_ugL)%>%
+    drop_na()%>%
+    unique()
+
+
+
+
+#DO
+interp_FCR_DO <- interp(x=FCR_DO$DateTime, y = FCR_DO$Depth_m, z = FCR_DO$DO_mgL,
+                             #xo = seq(min(FCR_DO$DOY), max(FCR_DO$DOY), by = 0.1), 
+                             xo = seq(min(ymd_hms(FCR_DO$DateTime)), max(ymd_hms(FCR_DO$DateTime)), by = "day"),
+                             yo = seq(0.1, 9.5, by = 0.1),
+                             extrap = F, linear = T, duplicate = "strip")
+interp_FCR_DO <- interp2xyz(interp_FCR_DO, data.frame=T)
+
+interp_FCR_DO=interp_FCR_DO%>%
+  mutate(Date = as.POSIXct(x, origin = "1970-01-01")) 
+
+#temperature
+interp_FCR_Temp <- interp(x=FCR_Temp$DateTime, y = FCR_Temp$Depth_m, z = FCR_Temp$Temp_C,
+                             #xo = seq(min(FCR_DO$DOY), max(FCR_DO$DOY), by = 0.1), 
+                             xo = seq(min(ymd_hms(FCR_Temp$DateTime)), max(ymd_hms(FCR_Temp$DateTime)), by = "day"),
+                             yo = seq(0.1, 9.5, by = 0.1),
+                             extrap = F, linear = T, duplicate = "strip")
+interp_FCR_Temp <- interp2xyz(interp_FCR_Temp, data.frame=T)
+
+interp_FCR_Temp=interp_FCR_Temp%>%
+  mutate(Date = as.POSIXct(x, origin = "1970-01-01")) 
+
+# Chla
+interp_FCR_Chla <- interp(x=FCR_Chla$DateTime, y = FCR_Chla$Depth_m, z = FCR_Chla$Chla_ugL,
+                             #xo = seq(min(FCR_DO$DOY), max(FCR_DO$DOY), by = 0.1), 
+                             xo = seq(min(ymd_hms(FCR_Chla$DateTime)), max(ymd_hms(FCR_Chla$DateTime)), by = "day"),
+                             yo = seq(0.1, 9.5, by = 0.1),
+                             extrap = F, linear = T, duplicate = "strip")
+interp_FCR_Chla <- interp2xyz(interp_FCR_Chla, data.frame=T)
+
+interp_FCR_Chla=interp_FCR_Chla%>%
+  mutate(Date = as.POSIXct(x, origin = "1970-01-01")) 
+
+
+
+
+
+# Plotting #
+
+# This a theme I have adapted from 
+#https://gist.github.com/jslefche/eff85ef06b4705e6efbc
+# I LIKE IT!
+theme_black = function(base_size = 12, base_family = "") {
+  
+  theme_grey(base_size = base_size, base_family = base_family) %+replace%
+    
+    theme(
+      # Specify axis options
+      axis.line = element_line(size = 1, colour = "white"),  
+      axis.text.x = element_text(size = base_size*1, color = "white", lineheight = 0.9),  
+      axis.text.y = element_text(size = base_size*1, color = "white", lineheight = 0.9),  
+      axis.ticks = element_line(color = "white", size  =  1),  
+      axis.title.x = element_text(size = base_size, color = "white", margin = margin(0, 10, 0, 0)),  
+      axis.title.y = element_text(size = base_size, color = "white", angle = 90, margin = margin(0, 10, 0, 0)),  
+      axis.ticks.length = unit(0.5, "lines"),   
+      # Specify legend options
+      legend.background = element_rect(color = NA, fill = "black"),  
+      legend.key = element_rect(color = "white",  fill = "black"),  
+      legend.key.size = unit(2, "lines"),  
+      legend.key.height = NULL,  
+      legend.key.width = NULL,      
+      legend.text = element_text(size = base_size*0.8, color = "white"),  
+      legend.title = element_text(size = base_size*1.5, face = "bold", hjust = 0, color = "white"),  
+      legend.position = "right",  
+      legend.text.align = NULL,  
+      legend.title.align = NULL,  
+      legend.direction = "vertical",  
+      legend.box = NULL, 
+      # Specify panel options
+      panel.background = element_rect(fill = "black", color  =  NA),  
+      panel.border = element_rect(fill = NA, color = "black"),  
+      panel.grid.major = element_line(color = "black"),  
+      panel.grid.minor = element_line(color = "black"),  
+      panel.spacing = unit(0, "lines"),   #chagned to panel.spacing from panel.margin in orginal code
+      # Specify facetting options
+      strip.background = element_rect(fill = "grey30", color = "grey10"),  
+      strip.text.x = element_text(size = base_size*0.8, color = "white"),  
+      strip.text.y = element_text(size = base_size*0.8, color = "white",angle = -90),  
+      # Specify plot options
+      plot.background = element_rect(color = "black", fill = "black"),  
+      plot.title = element_text(size = base_size*1.5, color = "white"),  
+      plot.margin = unit(rep(1, 4), "lines")
+      
+    )
+  
+}
+
+# Create a pdf so the plots can all be saved in one giant bin!
+jpeg("./CCR_plots/CCR_CTD_2013_2019_test.jpg", width=1440, height=480, quality = 150)  
+
+#DO
+p1<-interp_FCR_DO%>%
+  #filter(DateTime>ymd_hms("2023-01-01 00:00:00"))%>%
+  ggplot(., aes(x=as.Date(Date), y=y))+
+  geom_raster(aes(fill=z),interpolate = TRUE)+
+  scale_y_reverse()+
+  ylim(9.5,0)+
+  #geom_point(data = ctd, aes(x=DOY, y=Flag, z=NULL), pch = 25, size = 1.5, color = "white", fill = "black")+
+  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray")+
+  labs(x = "Date", y = "Depth (m)", title = "FCR DO from June 2020 - Oct. 2023",fill= "mg/L")+ #x was day of year
+  scale_x_date(date_breaks = "4 months") +
+  theme_black()
+
+ggsave("FCR_DO_20230510.jpg", width=13, height=5, units="in")
+
+#temperature
+p2<-interp_FCR_Temp%>%
+  #filter(DateTime>ymd_hms("2023-01-01 00:00:00"))%>%
+  ggplot(., aes(x=as.Date(Date), y=y))+
+  geom_raster(aes(fill=z),interpolate = TRUE)+
+  scale_y_reverse()+
+  ylim(9.5,0)+
+  #geom_point(data = ctd, aes(x=DOY, y=Flag, z=NULL), pch = 25, size = 1.5, color = "white", fill = "black")+
+  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray")+
+  labs(x = "Date", y = "Depth (m)", title = "FCR Water Temp from June 2020 - Oct. 2023",fill= "Degree C")+ #x was day of year
+  scale_x_date(date_breaks = "4 months") +
+  theme_black()
+
+ggsave("FCR_Temp_20230510.jpg", width=13, height=5, units="in")
+
+#breaks <- c(0,10,30,60,800,100)
+
+#temperature
+p3<-interp_FCR_Chla%>%
+  #filter(DateTime>ymd_hms("2023-01-01 00:00:00"))%>%
+  ggplot(., aes(x=as.Date(Date), y=y))+
+  geom_raster(aes(fill=z),interpolate = TRUE)+
+  scale_y_reverse()+
+  ylim(9.5,0)+
+  #geom_point(data = ctd, aes(x=DOY, y=Flag, z=NULL), pch = 25, size = 1.5, color = "white", fill = "black")+
+  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray")+
+  labs(x = "Date", y = "Depth (m)", title = "FCR Chla from June 2020 - Oct. 2023",fill= "ugL")+ #x was day of year
+  scale_x_date(date_breaks = "4 months") +
+  theme_black()
+
+ggsave("FCR_Chla_20230510.jpg", width=13, height=5, units="in")
+
+```
+
+
+
+```{r Read in and Combine EXO data}
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/271/7/71e6b946b751aa1b966ab5653b01077f" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read_csv(infile1)%>%
+   select(-starts_with("Flag_"))%>%
+   select(-starts_with("Therm"))%>%
+   select(-starts_with("RDO"))%>%
+   filter(DateTime>ymd_hms("2020-04-01 00:00:00"))
+ 
+ # Read in the L1 file
+ 
+ cur_EXO<- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")%>%
+   select(-starts_with("Flag_"))%>%
+   select(-starts_with("Therm"))%>%
+   select(-starts_with("RDO"))
+ 
+ all_EXO<-bind_rows(dt1,cur_EXO)
+
+```
+
+```{r Chla and fdom plot}
+
+ggplot(all_EXO, aes(x=DateTime, y=EXOChla_ugL_1))+
+  geom_point()+
+  #labs(x = "Date", y = "ug/L", title = "FCR Chla at 1.6m from EXO")+
+  xlab("Date") + ylab("ug/L") +
+  ggtitle("FCR Chla at 1.6m from EXO")+
+  scale_x_datetime(minor_breaks = "3 months")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+ggsave("FCR_ChlaEXO_20230510.jpg", width=11, height=7, units="in")
+
+ggplot(all_EXO, aes(x=DateTime, y=EXOfDOM_QSU_1))+
+  geom_point()+
+  #labs(x = "Date", y = "ug/L", title = "FCR Chla at 1.6m from EXO")+
+  xlab("Date") + ylab("QSU") +
+  ggtitle("FCR fDOM at 1.6m from EXO")+
+  scale_x_datetime(minor_breaks = "3 months")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+ggsave("FCR_fDOMEXO_20230510.jpg", width=11, height=7, units="in")
+
+```
+
+
+```{r Read in and Combine FCR met data}
+
+# Downloaded from EDI staging: 09 December 2021
+#inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853"  
+#infile2 <- ("Met_final_2015_2022.csv")
+
+#options(timeout=500)
+#download.file(inUrl2,infile2,method="auto")
+
+# Add in current L1 file from github
+
+met_curr<-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv")
+
+met_all <- read.csv("Met_final_2015_2022.csv")%>%
+  mutate(DateTime = ymd_hms(DateTime)) %>% 
+  filter(DateTime > as.Date("2020-01-01"))%>%
+  dplyr::bind_rows(.,met_curr)
+
+
+```
+
+```{r Met Plots}
+
+met_all%>%
+  select(DateTime, AirTemp_C_Average)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  dplyr::filter(AirTemp_C_Average == max(AirTemp_C_Average))%>%
+  mutate(Year=year(DateTime))%>%
+  mutate(DOY=yday(DateTime))%>%
+  ggplot(., aes(x=DOY, y=AirTemp_C_Average, color=as.factor(Year)))+
+  geom_point()+
+  xlab("Date") + ylab("Degrees C") +
+  ggtitle("FCR Daily Max Air Temp")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_MetTemp.jpg", width=11, height=7, units="in")
+
+met_all%>%
+  select(DateTime, AirTemp_C_Average)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarise(AirTemp_C_Average = mean(AirTemp_C_Average))%>%
+  ungroup()%>%
+  mutate(Year=year(Date))%>%
+  mutate(DOY=yday(Date))%>%
+  ggplot(., aes(x=DOY, y=AirTemp_C_Average, color=as.factor(Year)))+
+  geom_point()+
+  xlab("Date") + ylab("Degrees C") +
+  ggtitle("FCR Daily Average Air Temp")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_MetTempAvg.jpg", width=11, height=7, units="in")
+
+met_all%>%
+  select(DateTime, WindSpeed_Average_m_s)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarise(WindSpeed_Average_m_s = mean(WindSpeed_Average_m_s))%>%
+  ungroup()%>%
+  mutate(Year=year(Date))%>%
+  mutate(DOY=yday(Date))%>%
+  ggplot(., aes(x=DOY, y=WindSpeed_Average_m_s, color=as.factor(Year)))+
+  geom_point()+
+  xlab("Date") + ylab("meter/sec") +
+  ggtitle("FCR Daily Average Wind Speed")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_MetwindAvg.jpg", width=11, height=7, units="in")
+
+met_all%>%
+  select(DateTime, Rain_Total_mm)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarise(Rain_Total_mm = sum(Rain_Total_mm))%>%
+  ungroup()%>%
+  mutate(Year=year(Date))%>%
+  mutate(DOY=yday(Date))%>%
+  ggplot(., aes(x=DOY, y=Rain_Total_mm, color=as.factor(Year)))+
+  geom_point()+
+  xlab("Date") + ylab("millimeters") +
+  ggtitle("FCR Daily Rain Total")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_Raintotal.jpg", width=11, height=7, units="in")
+
+
+
+
+```
+
+```{r}
+met_all%>%
+  filter(DateTime>ymd_hms("2022-02-08 09:15:00")& DateTime<ymd_hms("2022-02-08 18:00:00"))%>%
+  #separate(DateTime, c('Date', 'Time'), sep= " ")
+  #mutate(Time=times(Time))
+ggplot(., aes(x=DateTime, y=PAR_umolm2s_Average))+
+  geom_point()
+
+
+```
+
+```{r Flux plot with NEE }
+
+# Make plots here while the other Markdown is processing
+
+EF<- read_csv("2023-10-09_EC_processed_withBDScript_just_nee.csv")
+
+EF%>%
+  ggplot(.,aes(x=DateTime))+
+  geom_point(aes(y=NEE_uStar_f), color="black")+
+  geom_point(aes(y=NEE), color="red")+
+  xlab("Date") + ylab("umolL") +
+  ggtitle("FCR EddyFlux Gap Filled CO2")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_CO2 gap filled.jpg", width=11, height=7, units="in")
+
+EF%>%
+  ggplot(.,aes(x=DateTime))+
+  #geom_point(aes(y=NEE_uStar_f), color="black")+
+  geom_point(aes(y=ch4_flux), color="red")+
+  xlab("Date") + ylab("umolL") +
+  ggtitle("FCR EddyFlux CH4")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_Ch4 gap filled.jpg", width=11, height=7, units="in")
+
+EF%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarise(NEE_mean = mean(NEE, na.rm=T))%>%
+  ungroup()%>%
+  mutate(DOY=yday(Date))%>%
+  mutate(Year=year(Date))%>%
+  ggplot(., aes(x=DOY, y=NEE_mean, color=as.factor(Year)))+
+  geom_point()+
+  xlab("DOY") + ylab("umolL") +
+  ggtitle("FCR Daily Average Co2 Flux")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_CO2_Daily_Average.jpg", width=11, height=7, units="in")
+
+EF%>%
+  mutate(Date=as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarise(ch4_flux_mean = mean(ch4_flux, na.rm=T))%>%
+  ungroup()%>%
+  mutate(DOY=yday(Date))%>%
+  mutate(Year=year(Date))%>%
+  ggplot(., aes(x=DOY, y=ch4_flux_mean, color=as.factor(Year)))+
+  geom_point()+
+  xlab("DOY") + ylab("umolL") +
+  ggtitle("FCR Daily Average CH4 Flux")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  theme(text = element_text(size=20))
+
+ggsave("FCR_CH4_Daily_Average.jpg", width=11, height=7, units="in")
+
+```
+

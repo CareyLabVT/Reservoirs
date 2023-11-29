@@ -15,14 +15,14 @@ process_CTD_file <- function(file,
                                  CTD_FOLDER = "../../") {
   #Specify global variables
   location <- sub("^[0-9]*_","",sub("\\.cnv","",file))
-  SITE <- sub("_S[0-9]+", "",location)
+  SITE <- sub("_S[0-9]+", "",sub("test","",location))
   SAMPLER <- ""
   DATE <- substr(file,1,6)
   DATE_TEXT <- format(as.Date(DATE, "%m%d%y"), '%d-%b-%Y') #format should be "01-Aug-2019"
   MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
   AUTO_NAME <- TRUE 
   AUTO_FOLDER <- TRUE 
-  REP <- str_extract(file, "_S[0-9]+")
+  REP <- str_extract(file, "_S[0-9]+[a-z]+|_S[0-9]+") # get the ending of the file
   SN <- as.numeric(str_extract(location, "\\d{4}"))
   
   #trim ctd

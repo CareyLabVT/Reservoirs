@@ -1,0 +1,5 @@
+id	unitType	parentSI	multiplierToSI	description
+micromolesPerSecondPerSquareMeter	light	mole	0.000001	micromolesPerSecondPerSquareMeter
+millimolesPerSquareMeter	light	mole	0.001	millimolesPerSquareMeter
+percent	humidity	NA	NA	percent
+wattsPerSquareMeter	light	watt	1	wattsPerSquareMeter

@@ -1,0 +1,4 @@
+Authorship Statement-CCC developed and led the reservoir monitoring program in 2022. ABP is the point person for EC data collection and collation, conducted routine maintenance, data downloads, troubleshooting, and publishing the data set. AGH did the EC data collation (following processing in EddyPro), and QA/QC up to May 2022. BMD assisted with EC data collation and correction in EddyPro and provided QA/QC scripts. MSJ provided the EC system, helped with maintenance, and assisted with QA/QC.
+
+Acknowledgments and historical contributions:This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.
+

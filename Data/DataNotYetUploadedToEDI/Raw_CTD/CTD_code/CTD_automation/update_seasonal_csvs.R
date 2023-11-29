@@ -20,6 +20,7 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../../csv_outputs",
   omit <- c("") #fill in with any files you need to omit
   files <- files[!files %in% omit]
   files <- files[!grepl("8188",files)] #only old CTD for now
+  files <- files[!grepl("test", files)] # take out files that were labeled test
   files <- files[substr(files,5,6)=="23"] #only 2023 files
   #files <- files[file.mtime(paste0("../../csv_outputs/",files))>as.Date("2023-01-01")] #Only read files that have been modified this year
   

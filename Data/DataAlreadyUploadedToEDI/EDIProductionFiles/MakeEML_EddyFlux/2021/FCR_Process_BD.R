@@ -23,7 +23,7 @@ mydir = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/"
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
 
-ec <- read_csv(paste0(mydir,"data/EddyPro_Cleaned_2020_2023.csv"))
+ec <- read_csv(paste0(mydir,"2021/EddyPro_Cleaned_2020_2023.csv"))
 
 # Take out duplicates. 
 

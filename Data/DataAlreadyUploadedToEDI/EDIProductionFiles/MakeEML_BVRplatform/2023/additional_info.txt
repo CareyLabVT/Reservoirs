@@ -1,0 +1,6 @@
+Authorship Contribution Statement:
+CCC is the PI on the project, designed the sensor array, coordinated the purchasing and deployment, and led purchasing. ABP is the point person for the data set along with leading the maintenance, data management, and QAQC for 2022. BJB was the point person in 2018-2020 and led the deployment of the MiniDot. RPM was the point person from 2017-2018 and helped lead the deployments of the HOBO temperature sensors. JHW was responsible for helping with data wrangling, visualization, and QAQC, ultimately leading to publication of this data set.  
+
+Acknowledgments and historical contributions:
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.
+

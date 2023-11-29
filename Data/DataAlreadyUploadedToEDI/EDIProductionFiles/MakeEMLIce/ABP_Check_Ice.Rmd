@@ -1,0 +1,354 @@
+---
+title: "ICE Check"
+author: "Adrienne"
+date: "2023-08-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=10, fig.height=5)
+library(tidyverse)
+
+# Read in FCR, Met, and BVR data
+FCR_Catwalk_EDI_2018_2023 <- read_csv("../MakeEML_FCRcatwalk/2023/FCR_Catwalk_EDI_2018_2023.csv")
+
+FCR_met<-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv")
+
+BVR_platform_data_2020_2023 <- read_csv("../MakeEML_BVRplatform/2023/BVR_platform_data_2020_2023.csv")
+
+
+
+
+```
+
+```{r function, include=FALSE}
+profile_plot<-function(DATA,start_time,end_time, Varibles){
+  DATA%>%
+  filter(DateTime>ymd_hms(start_time) & DateTime<ymd_hms(end_time))%>%
+  select(DateTime, Varibles)%>%
+  pivot_longer(!DateTime, names_to = "sensor", values_to = "obs")%>%
+  separate_wider_delim(sensor, "_", names = c("sensor", "unit", "depth"))%>%
+    drop_na()%>%
+  mutate(depth=ifelse(depth=="surface", 0.1, depth))%>%
+    mutate(depth=as.numeric(depth))%>%
+    
+
+  ggplot(., aes(DateTime,obs, col=as.factor(depth)))+
+  geom_line()+
+    scale_x_datetime(date_breaks = "2 day", date_minor_breaks = "1 day")+
+    theme_bw()
+  
+  
+  
+}
+```
+
+## Falling Creek 
+
+#### Checking the difference between the top and the bottom
+
+```{r Compare 1m and 8m, echo=FALSE}
+
+FCR_Catwalk_EDI_2018_2023%>%
+  filter(DateTime>ymd_hms("2022-12-20 00:00:00") & DateTime<ymd_hms("2023-02-10 00:00:00"))%>%
+  mutate(inverse=ThermistorTemp_C_1-ThermistorTemp_C_9)%>%
+  mutate(inverse2=ThermistorTemp_C_surface-ThermistorTemp_C_9)%>%
+  select(DateTime, inverse, inverse2)%>%
+  pivot_longer(!DateTime, names_to = "name", values_to = "obs")%>%
+  ggplot(., aes(DateTime, obs, col=name))+
+  geom_line()+
+  geom_hline(yintercept=-0.1, linetype="dashed", color = "red")+
+  scale_x_datetime(date_breaks = "8 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+```
+
+Checking the Winter timeseries for when the difference between the top and the bottom is greater than -0.1. 
+The red line "inverse" is the 1m thermistor minus the 9m thermistor while "inverse 2" is the surface thermistor minus the 9m thermistor. The red dotted line is at -0.1 because the accuracy of the thermistors is 0.075.
+
+After looking at the the timeseries let's break it down for each period and look more closely at the temperature profiles, disolved oxygen profiles, and images from the camera at the catwalk. 
+
+#### When was the first day of Ice on in December
+
+```{r Dec}
+
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2022-12-22 00:00:00",
+           end_time = "2023-01-05 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2022-12-22 00:00:00",
+           end_time = "2023-01-05 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+```
+
+Pretty clear inverse stratification from about Dec. 23 to January 2nd. 
+
+It looks like we see ice on the camera on Dec. 25th 
+
+![Thin layer of ice on the reservoir](Ice_pictures/ICE_2023_12_25.jpg)
+
+#### When did ice come off at the beginning of January 2023
+
+```{r}
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2022-12-31 00:00:00",
+           end_time = "2023-01-05 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2022-12-22 00:00:00",
+           end_time = "2023-01-05 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+```
+
+It looks like there is no longer inverse stratification on some time on January 2nd. Let's look at the pictures
+
+![There could be faint ice in the backaground](Ice_pictures/ICE_2023_01_01.jpg)
+
+![Don't see any ice in this picture and getting warm](Ice_pictures/No_Ice_2023_01_02.jpg)
+
+#### Let's check out the ice on and off from January 15th - January 17th
+
+```{r}
+
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-01-15 00:00:00",
+           end_time = "2023-01-18 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-01-15 00:00:00",
+           end_time = "2023-01-18 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+```
+
+### Pictures from the Camera
+
+![Could be ice near the far shore](Ice_pictures/Maybe_Ice_2023_01_15.jpg)
+
+![Don't see any ice in this picture and getting warm](Ice_pictures/No_Ice_2023_01_16.jpg)
+
+![Raining and no ice](Ice_pictures/No_Ice_2023_01_17.jpg)
+
+
+#### Let's check out Janurary 26th- 29th
+
+```{r pressure, echo=FALSE}
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-01-26 00:00:00",
+           end_time = "2023-01-29 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-01-26 00:00:00",
+           end_time = "2023-01-29 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+# Shortwave Down
+weather<-FCR_met%>%
+  filter(DateTime>ymd_hms("2023-01-26 00:00:00") & DateTime<ymd_hms("2023-01-29 00:00:00"))%>%
+  ggplot(., aes(DateTime, ShortwaveRadiationDown_Average_W_m2))+
+  geom_line()+
+  scale_x_datetime(date_breaks = "2 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+weather
+
+# Albedo
+weather2<-FCR_met%>%
+  filter(DateTime>ymd_hms("2023-01-26 00:00:00") & DateTime<ymd_hms("2023-01-29 00:00:00"))%>%
+  ggplot(., aes(DateTime, Albedo_Average_W_m2))+
+  geom_line()+
+  scale_x_datetime(date_breaks = "2 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+weather2
+```
+
+#### Check out a few pictures from the Catwalk 
+
+![Don't see any ice in this picture and ducks swimming](Ice_pictures/No_ice_2023_01_26.jpg)
+
+![Ducks in the foreground and no ice but cold](Ice_pictures/No_ice_2023_01_27.jpg)
+
+![Hard to tell if there is ice but there is something strange in the middle of the picture](Ice_pictures/No_Ice_2023_01_28.jpg)
+
+![Raining and don't see any ice](Ice_pictures/No_Ice_2023_01_29.jpg)
+
+#### There appears to be a cold spell in the beginning of February
+
+```{r}
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-02-04 00:00:00",
+           end_time = "2023-02-07 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2023,
+           start_time = "2023-02-04 00:00:00",
+           end_time = "2023-02-07 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+# Shortwave Down
+weather<-FCR_met%>%
+  filter(DateTime>ymd_hms("2023-02-04 00:00:00") & DateTime<ymd_hms("2023-02-07 00:00:00"))%>%
+  ggplot(., aes(DateTime, ShortwaveRadiationDown_Average_W_m2))+
+  geom_line()+
+  scale_x_datetime(date_breaks = "2 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+weather
+
+# Albedo
+weather2<-FCR_met%>%
+  filter(DateTime>ymd_hms("2023-02-04 00:00:00") & DateTime<ymd_hms("2023-02-07 00:00:00"))%>%
+  ggplot(., aes(DateTime, Albedo_Average_W_m2))+
+  geom_line()+
+  scale_x_datetime(date_breaks = "2 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+weather2
+
+```
+
+#### Let's see what the pictures from the Catwalk look like
+
+![Can't tell if there is ice and the camera angle is different](Ice_pictures/No_Ice_2023_02_04.jpg)
+
+![Ducks on the water and can't see any ice](Ice_pictures/No_Ice_2023_02_05.jpg)
+ 
+
+
+## Beaverdam
+
+#### Checking the difference between the top and the bottom
+
+```{r Compare surface and bottom}
+
+BVR_platform_data_2020_2023%>%
+  filter(DateTime>ymd_hms("2022-12-20 00:00:00") & DateTime<ymd_hms("2023-02-10 00:00:00"))%>%
+  mutate(inverse=ThermistorTemp_C_5-ThermistorTemp_C_13)%>%
+  mutate(inverse2=ThermistorTemp_C_6-ThermistorTemp_C_13)%>%
+  select(DateTime, inverse, inverse2)%>%
+  pivot_longer(!DateTime, names_to = "name", values_to = "obs")%>%
+  ggplot(., aes(DateTime, obs, col=name))+
+  geom_line()+
+  geom_hline(yintercept=-0.1, linetype="dashed", color = "red")+
+  scale_x_datetime(date_breaks = "5 day", date_minor_breaks = "1 day")+
+  theme_bw()
+
+```
+
+Checking the Winter timeseries for when the difference between the top and the bottom is greater than -0.1. 
+The red line "inverse" is the thermistor closest to the surface minus the bottom thermistor while "inverse 2" is the second highest thermistor minus the bottom one. The red dotted line is at -0.1 because the accuracy of the thermistors is 0.075.
+
+After looking at the the timeseries let's break it down for each period and look more closely at the temperature profiles, disolved oxygen profiles, and images from the camera at the catwalk. 
+
+#### Ice Period from December 20th-22nd
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2022-12-20 00:00:00",
+           end_time = "2022-12-23 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2022-12-20 00:00:00",
+           end_time = "2022-12-23 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+```
+
+#### Ice Period from December 25th- January 3rd
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2022-12-25 00:00:00",
+           end_time = "2023-01-04 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2022-12-25 00:00:00",
+           end_time = "2023-01-04 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+```
+
+#### Ice Period from January 10th-12th
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-10 00:00:00",
+           end_time = "2023-01-13 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-10 00:00:00",
+           end_time = "2023-01-13 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+#### Ice Period from January 16th-17th
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-16 00:00:00",
+           end_time = "2023-01-18 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-16 00:00:00",
+           end_time = "2023-01-18 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+#### Ice Period from January 21st-23rd and then Jaunary 24th-26th
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-21 00:00:00",
+           end_time = "2023-01-27 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-21 00:00:00",
+           end_time = "2023-01-27 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+#### Ice Period from January 28th-30th
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-28 00:00:00",
+           end_time = "2023-01-30 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-01-28 00:00:00",
+           end_time = "2023-01-30 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+#### Ice Period from February 4th-6th
+
+```{r}
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-02-4 00:00:00",
+           end_time = "2023-02-07 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2023,
+           start_time = "2023-02-04 00:00:00",
+           end_time = "2023-02-07 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+

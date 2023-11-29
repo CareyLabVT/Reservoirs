@@ -13,7 +13,42 @@ library(lubridate)
 library(stringr)
 library(readr)
 
+pacman::p_load(tidyverse, lubridate, gsheet)
 
+metals_qaqc <- function(directory =,
+                        maintenance_file =,
+                        sample_time =,
+                        LDT_sheet = 
+                        outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"){
+  
+  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
+  maintenance_file =
+  sample_time =
+  LDT_sheet = 
+  outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+  
+  # make a function that reads in the files and takes the columns we want
+  read_metals_files <- function(FILES){
+    
+  al <- read_csv(FILES, skip = 3, col_names = T)%>%
+    dplyr::rename(Date_ID = `...1`)%>%
+    drop_na(Date_ID)%>%
+    rename_with(~paste0(gsub("[[:digit:]]", "", gsub("\\s*\\([^\\)]+\\)", "", .)), "_mgL"), -1)%>%
+    separate(Date_ID,c("DateTime","Sample")," - ") %>%
+    mutate(DateTime = as.Date(DateTime,format = "%m/%d/%Y"),
+           Sample = as.numeric(Sample))%>%
+    select(DateTime, Sample, Li_mgL, Na_mgL, Mg_mgL, Al_mgL, Si_mgL, K_mgL, Ca_mgL,
+           Fe_mgL, Mn_mgL,Cu_mgL, Sr_mgL, Ba_mgL)%>%
+    modify_if(is.character, ~as.numeric(gsub(",","",.))/1000)
+    
+    return(al)
+ 
+  }
+  # use purr to read in all the files using the function above
+  all<-list.files(path=directory, pattern="", full.names=TRUE)%>%
+    map_df(~ read_metals_files(.x))
+  
+  
 #read in most recent ICPMS sheet
 #note: you must edit this script each time to pull the correct csv
 ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230508_230529.csv",
@@ -131,4 +166,4 @@ ICP <- ICP %>% #now we can continue with the rest of the data processing!
    arrange(DateTime, Reservoir, Site, Depth_m)
  
 write.csv(frame1, file = '~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/EDI_Working/2023/Metals_230508_230529.csv')
- 
+}

@@ -6,13 +6,6 @@
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
 
-rm(list=ls(all=TRUE))
-library(dplyr)
-library(tidyr)
-library(readxl)
-library(lubridate)
-library(stringr)
-library(readr)
 
 pacman::p_load(tidyverse, lubridate, gsheet)
 
@@ -52,58 +45,8 @@ metals_qaqc <- function(directory =,
     map_df(~ read_metals_files(.x))
   
   
-# #read in most recent ICPMS sheet
-# #note: you must edit this script each time to pull the correct csv
-# ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230508_230529.csv",
-#                      skip = 5) %>% 
-#   select(X, X.1, X.2, X.3, X.4, X.5, X.9, X.10, X.14, X.15, X.18, X.22, X.27) %>%
-#   rename(Jeff_ID = X,
-#          Li_mgL = X.1,
-#          Na_mgL = X.2,
-#          Mg_mgL = X.3,
-#          Al_mgL = X.4,
-#          Si_mgL = X.5,
-#          K_mgL = X.9,
-#          Ca_mgL = X.10,
-#          Fe_mgL = X.14,
-#          Mn_mgL = X.15,
-#          Cu_mgL = X.18,
-#          Sr_mgL = X.22,
-#          Ba_mgL = X.27) #note: Fe and Mn are still ppb or ug/L
-# 
-# #because some of the values have commas, the concentrations are read in as
-# #characters rather than doubles; decomma will remove the commas and convert
-# #to doubles
-# ICP$Li_mgL <- decomma(ICP$Li_mgL)
-# ICP$Na_mgL <- decomma(ICP$Na_mgL)
-# ICP$Mg_mgL <- decomma(ICP$Mg_mgL)
-# ICP$Al_mgL <- decomma(ICP$Al_mgL)
-# ICP$Si_mgL <- decomma(ICP$Si_mgL)
-# ICP$K_mgL <- decomma(ICP$K_mgL)
-# ICP$Ca_mgL <- decomma(ICP$Ca_mgL)
-# ICP$Fe_mgL <- decomma(ICP$Fe_mgL)
-# ICP$Mn_mgL <- decomma(ICP$Mn_mgL)
-# ICP$Cu_mgL <- decomma(ICP$Cu_mgL)
-# ICP$Sr_mgL <- decomma(ICP$Sr_mgL)
-# ICP$Ba_mgL <- decomma(ICP$Ba_mgL)
-# 
-# ICP <- ICP %>% #now we can continue with the rest of the data processing!
-#   separate(Jeff_ID,c("DateTime","Sample")," - ") %>%
-#   mutate(Sample = as.numeric(Sample), #must be numeric for join to work
-#          Li_mgL = as.numeric(gsub(',', '', ICP$Li_mgL))/1000, #converting to ppm
-#          Na_mgL = as.numeric(Na_mgL)/1000, #converting to ppm
-#          Mg_mgL = as.numeric(Mg_mgL)/1000, #converting to ppm
-#          Al_mgL = as.numeric(Al_mgL)/1000, #converting to ppm
-#          Si_mgL = as.numeric(Si_mgL)/1000, #converting to ppm
-#          K_mgL = as.numeric(K_mgL)/1000,   #converting to ppm
-#          Ca_mgL = as.numeric(Ca_mgL)/1000, #converting to ppm
-#          Fe_mgL = as.numeric(Fe_mgL)/1000, #converting to ppm
-#          Mn_mgL = as.numeric(Mn_mgL)/1000, #converting to ppm
-#          Cu_mgL = as.numeric(Cu_mgL)/1000, #converting to ppm
-#          Sr_mgL = as.numeric(Sr_mgL)/1000, #converting to ppm
-#          Ba_mgL = as.numeric(Ba_mgL)/1000, #converting to ppm
-#          DateTime = as.Date(DateTime, format = "%m/%d/%Y"))
-#  
+#joining maintenance log
+  
    
 #read in metals ID, reservoir, site, depth, and total/soluble key
  metals_key <- read_csv(sample_ID_key)%>% 

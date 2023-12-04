@@ -5,9 +5,9 @@
 
 ### Description of the columns
 # Reservoir= This is the 3 character code used to identify each reservoir
-    FCR = Falling Creek Reservoir,
-    BVR = Beaverdam Reservoir,
-    CCR = Carvins Cove Reservoir,
+#    FCR = Falling Creek Reservoir,
+#    BVR = Beaverdam Reservoir,
+#    CCR = Carvins Cove Reservoir,
     
 # Site = The number assigned to the site. Eg. The deep hole is 50 
 

@@ -1,9 +1,10 @@
 # YSI and PAR QAQC/collation
 # last edited: Austin Delany
-# 2023-11-02
+# 2023-12-04
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load other packages
+library(gsheet)
 
 #### YSI Profiles ####
 
@@ -26,13 +27,16 @@ pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load
 #------------------------------------------------------------------------------#
 #read in new data
 #raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv"))
-raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
+#raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
+
+gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 
 #rename sp cond column because for some reason it changed...
 names(raw_profiles)[names(raw_profiles) == 'SpCond_uScm'] <- 'Sp_cond_uScm'
 
 #date format
-raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ))#"%m/%d/%y %H:%M"
+raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ), tz =  "America/New_York")#"%m/%d/%y %H:%M"
 
 #make depth numeric
 raw_profiles$Depth_m <- as.numeric(raw_profiles$Depth_m)
@@ -101,10 +105,23 @@ profiles$Flag_Sp_Cond[is.na(profiles$Flag_Sp_Cond)] <- 0
 profiles$Flag_DOSat[is.na(profiles$Flag_DOSat)] <- 0
 profiles$Flag_DateTime[is.na(profiles$Flag_DateTime)] <- 0
 
-#change saome variable names and flags to include units in the final df
+#change some variable names and flags to include units in the final df
 names(profiles) <- c(names(profiles)[1:6],"DOsat_percent","Cond_uScm","SpCond_uScm",names(profiles)[10:13],"Flag_Temp_C","Flag_DO_mgL",
                 "Flag_DOsat_percent","Flag_Cond_uScm","Flag_SpCond_uScm",
                 "Flag_PAR_umolm2s","Flag_ORP_mV","Flag_pH")
 
+#change all ccr site 100 to 101
+ysi$Site[ysi$Reservoir=="CCR" & ysi$Site==100] <- 101
+
+#add a 5 flag for all pH values between 4 and 5 from past years
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 5] <- 5 
+
+#manually switch the one pH value < 4 to have a 2 flag for instrument malfunction
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
+
+#then set that value to NA
+ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
+
 # Write to CSV -- save as L1 file
-write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
+#write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
+write.csv(profiles, 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', row.names = FALSE)

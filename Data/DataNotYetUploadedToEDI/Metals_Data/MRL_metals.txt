@@ -1,0 +1,30 @@
+Symbol,	MRL_mgL				
+Al_mgL,	0.001
+As_mgL,	0.0005
+Ba_mgL,	0.00005
+Cd_mgL,	0.00005
+Ca_mgL,	0.05
+Cr_mgL,	0.001
+Co_mgL,	0.00005
+Cu_mgL,	0.001
+Fe_mgL,	0.01
+Pb_mgL,	0.0001
+Li_mgL,	0.0005
+Mg_mgL,	0.001
+Mn_mgL,	0.0001
+Mo_mgL,	0.0005
+Ni_mgL,	0.0001
+P_mgL,	0.005
+K_mgL,	0.01
+Se_mgL,	0.001
+Si_mgL,	0.1
+Ag_mgL,	0.00005
+Na_mgL,	0.05
+Sr_mgL,	0.00005
+Sn_mgL,	0.00005
+Ti_mgL,	0.0005
+U_mgL,	0.00005
+V_mgL,	0.001
+Zn_mgL,	0.001
+
+

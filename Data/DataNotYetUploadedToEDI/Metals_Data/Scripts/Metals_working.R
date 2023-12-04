@@ -1,95 +1,128 @@
 # Title: Metals data wrangling script
 # Author: Cece Wood
 # Date: 18JUL23
+# Edit: 29 Nov 23 A. Breef-Pilz
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
 
-rm(list=ls(all=TRUE))
-library(dplyr)
-library(tidyr)
-library(readxl)
-library(lubridate)
-library(stringr)
-library(readr)
 
+pacman::p_load(tidyverse, lubridate, gsheet)
 
-#read in most recent ICPMS sheet
-#note: you must edit this script each time to pull the correct csv
-ICP <- read.csv("./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/ICPMS_230508_230529.csv",
-                     skip = 5) %>% 
-  select(X, X.1, X.2, X.3, X.4, X.5, X.9, X.10, X.14, X.15, X.18, X.22, X.27) %>%
-  rename(Jeff_ID = X,
-         Li_mgL = X.1,
-         Na_mgL = X.2,
-         Mg_mgL = X.3,
-         Al_mgL = X.4,
-         Si_mgL = X.5,
-         K_mgL = X.9,
-         Ca_mgL = X.10,
-         Fe_mgL = X.14,
-         Mn_mgL = X.15,
-         Cu_mgL = X.18,
-         Sr_mgL = X.22,
-         Ba_mgL = X.27) #note: Fe and Mn are still ppb or ug/L
-
-#because some of the values have commas, the concentrations are read in as
-#characters rather than doubles; decomma will remove the commas and convert
-#to doubles
-ICP$Li_mgL <- decomma(ICP$Li_mgL)
-ICP$Na_mgL <- decomma(ICP$Na_mgL)
-ICP$Mg_mgL <- decomma(ICP$Mg_mgL)
-ICP$Al_mgL <- decomma(ICP$Al_mgL)
-ICP$Si_mgL <- decomma(ICP$Si_mgL)
-ICP$K_mgL <- decomma(ICP$K_mgL)
-ICP$Ca_mgL <- decomma(ICP$Ca_mgL)
-ICP$Fe_mgL <- decomma(ICP$Fe_mgL)
-ICP$Mn_mgL <- decomma(ICP$Mn_mgL)
-ICP$Cu_mgL <- decomma(ICP$Cu_mgL)
-ICP$Sr_mgL <- decomma(ICP$Sr_mgL)
-ICP$Ba_mgL <- decomma(ICP$Ba_mgL)
-
-ICP <- ICP %>% #now we can continue with the rest of the data processing!
-  separate(Jeff_ID,c("DateTime","Sample")," - ") %>%
-  mutate(Sample = as.numeric(Sample), #must be numeric for join to work
-         Li_mgL = as.numeric(gsub(',', '', ICP$Li_mgL))/1000, #converting to ppm
-         Na_mgL = as.numeric(Na_mgL)/1000, #converting to ppm
-         Mg_mgL = as.numeric(Mg_mgL)/1000, #converting to ppm
-         Al_mgL = as.numeric(Al_mgL)/1000, #converting to ppm
-         Si_mgL = as.numeric(Si_mgL)/1000, #converting to ppm
-         K_mgL = as.numeric(K_mgL)/1000,   #converting to ppm
-         Ca_mgL = as.numeric(Ca_mgL)/1000, #converting to ppm
-         Fe_mgL = as.numeric(Fe_mgL)/1000, #converting to ppm
-         Mn_mgL = as.numeric(Mn_mgL)/1000, #converting to ppm
-         Cu_mgL = as.numeric(Cu_mgL)/1000, #converting to ppm
-         Sr_mgL = as.numeric(Sr_mgL)/1000, #converting to ppm
-         Ba_mgL = as.numeric(Ba_mgL)/1000, #converting to ppm
-         DateTime = as.Date(DateTime, format = "%m/%d/%Y"))
+metals_qaqc <- function(directory =,
+                        sample_ID_key = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
+                        maintenance_file =,
+                        sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056",
+                        LDT_sheet = 
+                        outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"){
+  
+  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
+  sample_ID_key = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+  maintenance_file =
+  sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056"
+  LDT_sheet = 
+  outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+  
+  # make a function that reads in the files and takes the columns we want
+  read_metals_files <- function(FILES){
+    
+  al <- read_csv(FILES, skip = 3, col_names = T)%>%
+    dplyr::rename(Date_ID = `...1`)%>%
+    drop_na(Date_ID)%>%
+    rename_with(~paste0(gsub("[[:digit:]]", "", gsub("\\s*\\([^\\)]+\\)", "", .)), "_mgL"), -1)%>%
+    separate(Date_ID,c("DateTime","Sample")," - ") %>%
+    mutate(DateTime = as.Date(DateTime,format = "%m/%d/%Y"),
+           Sample = as.numeric(Sample))%>%
+    select(DateTime, Sample, Li_mgL, Na_mgL, Mg_mgL, Al_mgL, Si_mgL, K_mgL, Ca_mgL,
+           Fe_mgL, Mn_mgL,Cu_mgL, Sr_mgL, Ba_mgL)%>%
+    modify_if(is.character, ~as.numeric(gsub(",","",.))/1000)
+    
+    return(al)
  
+  }
+  # use purr to read in all the files using the function above
+  ICP<-list.files(path=directory, pattern="", full.names=TRUE)%>%
+    map_df(~ read_metals_files(.x))
+  
+  
+#joining maintenance log
+  
    
 #read in metals ID, reservoir, site, depth, and total/soluble key
- metals_key <- read.csv('./Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv') %>%
-   rename(Depth_m = Sample.Depth..m.)
+ metals_key <- read_csv(sample_ID_key)%>% 
+   rename(Depth_m =`Sample Depth (m)`)
  
  
 #set up final data frame with correct formatting!
- frame1 <- left_join(ICP, metals_key, by = c('Sample')) %>% 
-   select(-Sample) %>%
-   pivot_wider(names_from = 'Filter', values_from = c('Fe_mgL', 'Mn_mgL')) %>% 
-   rename(TFe_mgL = Fe_mgL_T, SFe_mgL = Fe_mgL_S, TMn_mgL = Mn_mgL_T, SMn_mgL = Mn_mgL_S) %>%
-   group_by(DateTime, Reservoir, Depth_m, Site) %>%
-   summarize(n_TFe = sum(!is.na(TFe_mgL)), #tabulator for duplicate samples, needed for flags below
-             n_TMn = sum(!is.na(TMn_mgL)),
-             n_SFe = sum(!is.na(SFe_mgL)),
-             n_SMn = sum(!is.na(SMn_mgL)),
-             TFe_mgL = mean(TFe_mgL, na.rm = TRUE), #this is needed in case there are duplicate samples
-             TMn_mgL = mean(TMn_mgL, na.rm = TRUE), 
-             SFe_mgL = mean(SFe_mgL, na.rm = TRUE), 
-             SMn_mgL = mean(SMn_mgL, na.rm = TRUE)) %>%
-   ungroup() %>%
-   mutate(across(c(TFe_mgL, TMn_mgL, SFe_mgL, SMn_mgL), ~ifelse(is.nan(.), NA, .))) %>%  #gets rid of NaNs created by taking mean during summarize step
+ frame1 <- left_join(ICP, metals_key, by = c('Sample'))%>% 
+   select(-Sample)%>%
+   group_by(DateTime, Reservoir, Depth_m, Site)%>% 
+   pivot_wider(names_from = 'Filter', 
+                              values_from = c('Li_mgL':'Ba_mgL'),
+                               names_glue = "{Filter}{.value}")%>%  # names the columns as we want
+   # sum obs is for a tabulator for duplicates and average in case there are duplicates
+   summarise(across(everything(), list(z = ~mean(.x, na.rm = TRUE), n = ~ sum(!is.na(.))), .names ="{.fn}_{.col}"))%>%
+   rename_all(~ str_remove(., "^z_"))%>% #named the mean column z but then remove the z
+   mutate(across(everything(), ~ifelse(is.nan(.), NA, .))) %>%  #gets rid of NaNs created by taking mean during summarize step
+   ungroup()%>%
    subset(Site != 100.1) #removes ISCO samples, part of different data package
+   
+   
+   # read in the timesheet with the date and time the samples were taken
+   
+   time_sheet <- gsheet::gsheet2tbl(sample_time)%>%
+     select(Reservoir, Site,DateTime,Depth_m,VT_Metals)%>%
+     filter(VT_Metals =="X")%>% #only take obs when metals samples were collected
+     mutate(
+       DateTime = parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy')),
+       Date = as.Date(DateTime),
+       Site = as.numeric(Site),
+       Depth_m = as.numeric(Depth_m))%>%
+     select(-VT_Metals)
+   
+   # add the time the sample was collected
+   
+   frame2 <- 
+     merge(frame1,time_sheet, by.x=c("DateTime", "Reservoir", "Site", "Depth_m"), 
+                                by.y=c("Date", "Reservoir", "Site", "Depth_m"), all.x=T)%>%
+     mutate(
+       DateTime.y = ifelse(is.na(DateTime.y), as_datetime(DateTime), DateTime.y),
+       DateTime.y = as_datetime(DateTime.y) # time is in seconds put it in ymd_hms
+     )%>%
+     select(-DateTime)%>%
+     dplyr::rename(DateTime=DateTime.y)%>%
+     # This section flags if there was no time recorded and also changes time to 25 hour time
+     mutate(Time = format(DateTime,"%H:%M:%S"),
+            Time = ifelse(Time == "00:00:00", "12:00:00",Time),
+            Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
+            Date = as.Date(DateTime),
+            DateTime = ymd_hms(paste0(Date, "", Time)),
+            Hours = hour(DateTime),
+            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
+            DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
+     select(-c(Time, Date, Hours))%>%
+     relocate(DateTime, .before = Depth_m) 
+   
+   # Read in the minimum detection limits from Jeff
+   
+   
+   # Establish flag columns and add ones for missing values
+   for(j in colnames(frame2%>%select(starts_with(c("T","S")), -Site))) { 
+     #for loop to create new columns in data frame
+     frame2[,paste0("Flag_",colnames(frame2[j]))] <- 0 #creates flag column + name of variable
+     frame2[c(which(is.na(frame2[,j]))),paste0("Flag_",colnames(frame2[j]))] <- 1 #puts in flag 1 if value not collected
+     frame2[c(which(frame2[,paste0("n_",colnames(frame2[j]))]>1)),paste0("Flag_",colnames(frame2[j]))] <- 7 #puts in flag 7 for sample run twice and we report the mean
+     }
+   
+   # Now we can remove the number of observation columns
+   frame3 <- frame2%>%
+     select(-starts_with("n_"))
+   
+   
+   
+   # Use the maintenance Log to take out values
  
+  
  
  #let's set up flags! Some will be manually entered, but we can at least make the columns
  frame1 <- frame1 %>% 
@@ -131,4 +164,4 @@ ICP <- ICP %>% #now we can continue with the rest of the data processing!
    arrange(DateTime, Reservoir, Site, Depth_m)
  
 write.csv(frame1, file = '~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Metals_Data/EDI_Working/2023/Metals_230508_230529.csv')
- 
+}

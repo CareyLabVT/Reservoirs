@@ -37,4 +37,4 @@
 
 ### START HERE###
 Reservoir, Site, Depth_m, DataStream, Sample_ID, Sample_Date, start_parameter, end_parameter, flag, notes
-NA, NA, NA, Metals, 5, 2023-07-31, Li_mgL, Ba_mgL, 6, sample had particulates was microwave digested. See digestion notebook
+NA, NA, NA, Metals, 5, 2023-07-31, T_Li_mgL, S_Ba_mgL, 6, sample had particulates was microwave digested. See digestion notebook

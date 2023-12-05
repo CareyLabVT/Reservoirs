@@ -117,6 +117,21 @@ fp_final <- fp8 %>%
 
 log <- fread("grep -v '^#' Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt", data.table = FALSE)
 
+# log_read <- read_csv(maintenance_file, skip=43, col_types = cols(
+#   .default = col_character(),
+#   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   flag = col_integer()
+# ))
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt'
+log_read <- read_csv(maintenance_file, col_types = cols(
+  .default = col_character(),
+  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  flag = col_integer()
+))
+
+log <- log_read
 
 for(i in 1:nrow(log))
 {

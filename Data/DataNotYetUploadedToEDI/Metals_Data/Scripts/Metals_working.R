@@ -193,13 +193,33 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    
    ### 5. Use Maintenance Log to flag or change observations ####
    
+   # Filter the Maintenance Log based on observations in the data frame
+   raw_df <- raw_df%>%
+      arrange(DateTime)
+   
+   # Get the date the data starts
+    start_date <- raw_df[1,"DateTime"]
+     
+   # Get the date the data ends
+    end_date <- tail(raw_df, n=1)$DateTime
+    
+    # Filter out the maintenance log
+    log <- log%>%
+      filter(Sample_Date>=start_date & Sample_Date<= end_date)
+   
+   
    ### 5.1 Get the information in each row of the Maintenance Log ####
-   # modify raw_df based on the information in the log   
+   # modify raw_df based on the information in the log  
+    
+  # only run if there are observations in the maintenance log  
+  if(nrow(log)>0){
    
    for(i in 1:nrow(log)){
      
      ### Get the date the samples was taken
      Sample_Date <- log$Sample_Date[i]
+     
+     
      
      ### Get the Reservoir
      
@@ -247,7 +267,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      ### 5.2 Actually remove values in the maintenance log from the data frame ####
      ## This is where information in the maintenance log gets removed. 
      # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
-     
+    
      # replace relevant data with NAs and set flags while maintenance was in effect
      if(flag==1){ 
        # Sample not collected. Not used in the maintenance log
@@ -258,16 +278,21 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
        raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               maintenance_cols] <- NA
+       
        raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               flag_cols] <- flag
      } 
      else if (flag ==6){
-       # Sample was digested so need to do some extra processing
-       # Add the processing here.
+       # Sample was digested because there were so need to multiply the concentration by 2.2
+      
        raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              maintenance_cols] <- NA
+              maintenance_cols] <- 
+         raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+                                                  & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
+                                          maintenance_cols] * 2.2
+       # Flag the sample here
        raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               flag_cols] <- flag
@@ -276,9 +301,10 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      else {
        warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
      }
+    
      next
    }
- 
+  }
    
    #### 6. Switch observations if total and soluble samples were mixed up ####
    

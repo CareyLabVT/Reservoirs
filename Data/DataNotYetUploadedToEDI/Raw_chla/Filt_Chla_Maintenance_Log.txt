@@ -46,10 +46,10 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2023-09-28, F50, FiltChla, NA, 46_b, 2023-04-04, WL750.0, WL384.0, 2, NA, 750 wave length too high so removed this sample and kept the duplicate
 2023-09-28, F50, FiltChla, NA, 20_b, 2023-05-22, WL750.0, WL384.0, 2, NA, 750 wave length too high so removed this sample and kept the duplicate
 2023-09-28, F50, FiltChla, NA, 20_a, 2023-05-22, WL750.0, WL384.0, 2, NA, 750 wave length too high so removed this sample and kept the duplicate
-2023-12-05, F50, FiltChla, NA, 15_a, 2023-12-04, Sample_ID, NA, 99, 15_b, sample ID recorded wrong
-2023-12-05, F50, FiltChla, NA, 15_a_2, 2023-12-04, Sample_ID, NA, 99, 15_a, sample ID recorded wrong
-2023-12-05, F50, FiltChla, NA, 22_a, 2023-10-17, Sample_ID, NA, 99, 22_b, sample ID recorded wrong
-2023-12-05, F50, FiltChla, NA, 22_a_2, 2023-10-17, Sample_ID, NA, 99, 22_a, sample ID recorded wrong
+2023-12-05, F50, FiltChla, NA, 15_a, 2023-12-04, Sample.ID, NA, 99, 15_b, sample ID recorded wrong
+2023-12-05, F50, FiltChla, NA, 15_a_2, 2023-12-04, Sample.ID, NA, 99, 15_a, sample ID recorded wrong
+2023-12-05, F50, FiltChla, NA, 22_a, 2023-10-17, Sample.ID, NA, 99, 22_b, sample ID recorded wrong
+2023-12-05, F50, FiltChla, NA, 22_a_2, 2023-10-17, Sample.ID, NA, 99, 22_a, sample ID recorded wrong
 2023-12-05, F50, FiltChla, NA, 2_a, 2023-11-14, WL750.0, WL384.0, 2, NA, ran too early for acid; rerun again after acid sat for 2 minutes
 2023-12-05, B50, FiltChla, NA, 6_b, 2023-11-14, WL750.0, WL384.0, 2, NA, 750 wave length too low so reran sample again and removed observation
 2023-12-05, F50, FiltChla, NA, 19_b, 2023-10-09, WL750.0, WL384.0, 2, NA, didn't put the sample in! reran sample

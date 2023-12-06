@@ -23,13 +23,13 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       Year = "2023",
                       final_vol_extract = 6, 
                       blank_vol_filt = 500, 
-                      maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
+                      maintenance_file = "https://github.com/CareyLabVT/Reservoirs/blob/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
                       outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
   {
 
   #### 1. Read in Maintenance file and the Raw files from the spec ####
-  ### 1.1 Read in Maintenance file ####
-  log_read <- read_csv(maintenance_file, skip=35, col_types = cols(
+  ### 1.1 Read in Maintenance file #### 
+  log_read <- read_csv(maintenance_file, skip = 35,col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
     Sample_date = col_date("%Y-%m-%d"),
@@ -107,10 +107,12 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
  ### 1.4  Label observations ####
  
+ 
+ 
  # Label the types of samples are so they are easier to sort label
  out.file2<- out.file%>%
    mutate(
-     samp_type = ifelse(grepl("et", Sample.ID), "eth_blank",NA),
+     samp_type = ifelse(grepl("et|blan", Sample.ID), "eth_blank",NA),
      samp_type = ifelse(grepl("[0-9]", Sample.ID), "res_samp", samp_type),
      samp_type = ifelse(grepl("fa", Sample.ID), "fake", samp_type),
      samp_type = ifelse(grepl("ref", Sample.ID), "ref", samp_type)
@@ -130,28 +132,21 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
      timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
                      ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
-     Sample_ID = sub("_", "", gsub("[a-z]+", "", Sample.ID)),
+     Sample_ID = sub("_", "", gsub("[a-z]+", "", Sample.ID))
    )%>%
    separate(Sample_ID, c("Sample_ID", "Need_Rep"))%>%
    mutate(
      Sample_ID = as.numeric(Sample_ID),
      Need_Rep = as.numeric(Need_Rep)
    )
- 
- 
+
  ### 2. Get the sample ID number and match with the reservoir and site
  
  ### 2.1 Read in the rack map file ####
  
  rack_map <- gsheet::gsheet2tbl(rack_map)
  
- # Join together by Date_processed and 
- 
- 
- # samples that were take less than 3 days from the process date. Usually they are processed the next day
- # use the join_by and between to say that lab processing had to happened after the samples were collected
- # but less that 4 days after collection. That is what Date_upper is. 
- 
+ # Join together by Date_processed and Sample_ID
  # perform full_join based on multiple columns
  df3 <- full_join(res_samp, rack_map, by=c('Date_processed'='Date_processed', 'Sample_ID'='Sample_ID'))
  
@@ -196,7 +191,6 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Final_vol_extract_mL = ifelse(samp_type=="eth_blank",final_vol_extract, Final_vol_extract_mL)
    )
  
- 
  ### 4. Take out values based on the Maintenance Log ####
  
  # Add Flag columns
@@ -224,11 +218,15 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    
    ### Get the Sample.ID. This is how we will pick out the samples
    
-  Sample.ID <- log$Sample.ID[i]
+   Sample.ID <- log$Sample.ID[i]
    
    ### Get the Rep 
    
    Rep <- log$Rep[i]
+   
+   ### Get the updated value that will be replaced
+   
+   Updated_value <- log$updated_value[i]
    
    ### Get the Maintenance Flag 
    
@@ -244,11 +242,11 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    
    if(is.na(colname_start)){
      
-     maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
+     maintenance_cols <- colnames(raw_df%>%select(all_of(colname_end))) 
      
    }else if(is.na(colname_end)){
      
-     maintenance_cols <- colnames(raw_df%>%select(colname_start))
+     maintenance_cols <- colnames(raw_df%>%select(all_of(colname_start)))
      
    }else{
      maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
@@ -259,11 +257,6 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    flag_cols <- c("Flag_Chla_ugL",
                   "Flag_Pheo_ugL")
    
-   ### remove any Flag columns that don't exist because we don't have a flag column for them
-   # and they get removed before publishing
-   
-   #flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
-   
    
    ### 4.2 Actually remove values in the maintenance log from the data frame ####
    ## This is where information in the maintenance log gets removed. 
@@ -272,13 +265,20 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    # replace relevant data with NAs and set flags while maintenance was in effect
    if(flag==1){ 
      # Sample below detection. Not used in the maintenance log
-    
+     
    }else if (flag==2){
      # This one is below minimum detection level and most likely won't be in the maintenance log
      raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
             maintenance_cols] <- NA
      raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
             flag_cols] <- flag
+     
+   }else if (flag==99){
+     # Rename the Sample.ID if there were messed up while processing
+     raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
+            maintenance_cols] <- Updated_value
+     
+     
    }else {
      warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
    }
@@ -286,12 +286,30 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  }
  
  
+ 
  ### 5. Get the Chla concentration from wavelengths from Spec ####
+ 
+ # Re run this because we changed some of Sample.IDs in the maintenance log 
+ # because before and after were mixed up
+ raw_df2 <- raw_df%>%
+   mutate(
+     timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
+     timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
+                     ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
+     Sample_ID = sub("_", "", gsub("[a-z]+", "", Sample.ID))
+   )%>%
+   separate(Sample_ID, c("Sample_ID", "Need_Rep"))%>%
+   mutate(
+     Sample_ID = as.numeric(Sample_ID),
+     Need_Rep = as.numeric(Need_Rep)
+   )
+ 
+ 
  # The calculations are from BNN Chla processing excel sheet
 
  ### 5.1 Separate the wavelength by before acid and after and then merge together wider ####
  
- before_comb2 <- raw_df%>%
+ before_comb2 <- raw_df2%>%
    filter(Flag_Chla_ugL!=2)%>%
    filter(timing=="b"|timing=="before")%>%
    dplyr::rename("before_acid_abs_750" = "WL750.0",
@@ -303,12 +321,12 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                  "before_acid_abs_490" = "WL490.0",
                  "before_acid_abs_384" = "WL384.0"
                  )%>%
-   select(Sample_ID, Date_processed, samp_type, ResSite, Depth, Rep, Sample_date, Need_Rep,Vol_filt_mL, Final_vol_extract_mL,
+   select(Sample_ID, Date_processed, samp_type, ResSite, Depth, Rep, Sample_date,Vol_filt_mL, Final_vol_extract_mL,
           before_acid_abs_750:before_acid_abs_384, Flag_Chla_ugL, Flag_Pheo_ugL, Notes)
  
  # Now do it for after acid readings
  
- after_comb2 <- raw_df%>%
+ after_comb2 <- raw_df2%>%
    filter(Flag_Chla_ugL!=2)%>%
    filter(timing=="a"|timing=="after")%>%
    dplyr::rename("after_acid_abs_750" = "WL750.0",
@@ -320,14 +338,14 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                  "after_acid_abs_490" = "WL490.0",
                  "after_acid_abs_384" = "WL384.0"
    )%>%
-   select(Sample_ID, Date_processed, samp_type, ResSite, Depth,Rep, Sample_date, Need_Rep,Vol_filt_mL, Final_vol_extract_mL,
+   select(Sample_ID, Date_processed, samp_type, ResSite, Depth, Rep, Sample_date,Vol_filt_mL, Final_vol_extract_mL,
           after_acid_abs_750:after_acid_abs_384,Flag_Chla_ugL, Flag_Pheo_ugL, Notes)
  
  # Join the two data frames together
  
  comb3 <- full_join(before_comb2, after_comb2, 
-                      by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth", "Rep", "Sample_date",
-                           "Need_Rep", "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes"))
+                      by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth","Rep", "Sample_date",
+                            "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes"))
  
 ### 5.2 Claculate the concentration of Chla in ugL #### 
  
@@ -419,13 +437,11 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
        Pheo_ugL = pheo_in_water
      )
 
-   
-   
    ### 6. Further QAQC ####
-   
    
    chla_new<-chla_df%>%
      #filter(Sample_ID!="")%>%
+     # Get Reservoir and Site
      separate(.,col = ResSite, into = c("Reservoir", "Site"), sep = 1)%>%
      mutate(Reservoir=ifelse(Reservoir=="B","BVR", Reservoir),
             Reservoir=ifelse(Reservoir=="F","FCR", Reservoir),

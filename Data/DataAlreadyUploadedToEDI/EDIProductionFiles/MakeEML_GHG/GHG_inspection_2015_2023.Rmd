@@ -67,7 +67,7 @@ for(f in 1:(ncol(Flags))){
 ```{r Plots}
 # Plot CH4 at Site 50 in FCR
 current_df |>  
-  filter(Depth_m<100,
+  filter(Depth_m<100,  Site == 50,
          Reservoir == "FCR") |> 
     mutate(Depth_m = as_factor(Depth_m)) |> 
   ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
@@ -76,7 +76,7 @@ current_df |>
 
 # Plot CO2 at Site 50 in FCR
 current_df |>  
-  filter(Depth_m<100,
+  filter(Depth_m<100, Site == 50,
          Reservoir == "FCR") |> 
     mutate(Depth_m = as_factor(Depth_m)) |> 
   ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
@@ -85,7 +85,7 @@ current_df |>
 
 # Plot CH4 at Site 50 in BVR
 current_df |>  
-  filter(Depth_m<100,
+  filter(Depth_m<100, Site == 50,
          Reservoir == "BVR") |> 
     mutate(Depth_m = as_factor(Depth_m)) |> 
   ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
@@ -94,7 +94,7 @@ current_df |>
 
 # Plot CO2 at Site 50 in BVR
 current_df |>  
-  filter(Depth_m<100,
+  filter(Depth_m<100, Site == 50,
          Reservoir == "BVR") |> 
     mutate(Depth_m = as_factor(Depth_m)) |> 
   ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
@@ -133,6 +133,86 @@ current_df %>%
 
 
 ```
+
+Look at this year only:
+
+```{r plots-current-year}
+# CH4 plots current year
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'FCR CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'FCR Site 50, CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'BVR CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'BVR Site 50, CH4')
+
+# CO2 plots current year
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'FCR CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'FCR Site 50, CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'BVR CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'BVR Site 50, CO2')
+
+```
+
 
 ```{r Make new CSV with current and historic files}
 

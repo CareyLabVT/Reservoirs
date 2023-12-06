@@ -33,9 +33,9 @@ gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyl
 raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 
 #date format
-raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'))
+raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'), tz = "America/New_York")
 
-raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ), tz =  "America/New_York")#"%m/%d/%y %H:%M"
+#raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ), tz =  "America/New_York")#"%m/%d/%y %H:%M"
 
 # ### Create a DateTime Flag for non-recorded times ####
 # # (i.e., 12:00) and set to noon
@@ -45,10 +45,10 @@ raw_profiles <- raw_profiles %>%
          Time = ifelse(Time == "00:00:00", "12:00:00",Time),
          Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
          Date = as.Date(DateTime),
-         DateTime = ymd_hms(paste0(Date, "", Time)),
+         DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
          Hours = hour(DateTime),
          DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
-         DateTime = as.POSIXct(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
+         DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
   select(-c(Time, Date, Hours))
 
 #make sure other columns are the correct type

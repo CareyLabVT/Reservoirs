@@ -35,7 +35,7 @@ secchi_df <- secchi_df %>%
 # secchi_reformat <- secchi_df |> 
 #   rename(Flag_Secchi_m = Flag_Secchi)
 
-secchi_reformat <- secchi_reformat |> 
+secchi_reformat <- secchi_df |> 
   #filter(!is.na(Secchi_m) ) |>   # Omit rows where all Secchi values NA (e.g., rows from files with trailing ,'s) ## DO WE WANT TO COMPLETELY REMOVE NAS? IF SO WE NEED TO RETHINK HOW FLAGS ARE ASSIGNED IN NEXT LINE
   mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0), 
   Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling) 

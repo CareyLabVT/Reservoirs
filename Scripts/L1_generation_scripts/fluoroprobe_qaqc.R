@@ -115,7 +115,7 @@ fp_final <- fp8 %>%
 
 #log <- utils::read.table('Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt', sep = ',', header = TRUE)
 
-log <- fread("grep -v '^#' Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt", data.table = FALSE)
+#log <- fread("grep -v '^#' Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt", data.table = FALSE)
 
 # log_read <- read_csv(maintenance_file, skip=43, col_types = cols(
 #   .default = col_character(),
@@ -123,115 +123,117 @@ log <- fread("grep -v '^#' Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintena
 #   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
 #   flag = col_integer()
 # ))
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt'
-log_read <- read_csv(maintenance_file, col_types = cols(
-  .default = col_character(),
-  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-  flag = col_integer()
-))
 
-log <- log_read
-
-for(i in 1:nrow(log))
-{
-  ### Assign variables based on lines in the maintenance log. 
-  
-  ### get start and end time of one maintenance event
-  start <- log$TIMESTAMP_start[i]
-  end <- log$TIMESTAMP_end[i]
-  
-  ### Get the Reservoir Name
-  
-  Reservoir <- log$Reservoir[i]
-  
-  ### Get the Site Number
-  
-  Site <- as.numeric(log$Site)
-  
-  ### Get the depth if it is not NA
-  
-  if(!is.na(log$Depth[i])){
-    Depth <- as.numeric(log$new_value[i]) ## IS THERE SUPPOSED TO BE A COLUMN ADDED TO MAINT LOG CALLED NEW_VALUE?
-  }
-  
-  ### Get the Maintenance Flag 
-  
-  flag <- log$flag[i]
-  
-  ### Get the new value for a column or an offset. If it is not an NA
-  
-  if(!is.na(log$update_value[i])){
-    
-    update_value <- as.numeric(log$update_value[i])
-  }
-  
-  
-  ### Get the names of the columns affected by maintenance
-  
-  colname_start <- log$start_parameter[i]
-  colname_end <- log$end_parameter[i]
-  
-  ### if it is only one parameter parameter then only one column will be selected
-  
-  if(is.na(colname_start)){
-    
-    maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
-    
-  }else if(is.na(colname_end)){
-    
-    maintenance_cols <- colnames(raw_df%>%select(colname_start))
-    
-  }else{
-    maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
-  }
-  
-  ### Get the name of the flag column -- mostly used for EXO -- remove here
-  
-  #flag_col <- paste0("Flag_", maintenance_cols)
-  
-  ### remove any Flag columns that don't exsist because we don't have a flag column for them
-  # and they get removed before publishing
-  
-  #flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
-  
-  ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs 
-  # until the maintenance log is updated
-  
-  if(is.na(end)){
-    # If there the maintenance is on going then the columns will be removed until
-    # and end date is added
-    Time <- raw_df$DateTime >= start
-    
-  }else if (is.na(start)){
-    # If there is only an end date change columns from beginning of data frame until end date
-    Time <- raw_df$DateTime <= end
-    
-  }else {
-    
-    Time <- raw_df$DateTime >= start & raw_df$DateTime <= end
-  }
-  
-  ### This is where information in the maintenance log gets removed. 
-  # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
-  
-  # replace relevant data with NAs and set flags while maintenance was in effect
-  if(flag==1)
-  { # THIS IS FOR VALUES THAT ARE FLAGGED BUT LEFT IN THE DATA SET
-    raw_df[Time, flag_cols] <- flag
-  }
-  else if (flag==2){
-    
-    # The observations are changed to NA for maintenance or other issues found in the maintenance log
-    raw_df[Time, maintenance_cols] <- NA
-    raw_df[Time, flag_cols] <- flag 
-  }
-  else 
-  {
-    warning("Flag not coded in the L1 script. See Austin or Adrienne")
-  }
-}
-
+### MAINTENANCE LOG CODE -- UNCOMMENT WHEN FILE IS READY ####
+# maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt'
+# log_read <- read_csv(maintenance_file, col_types = cols(
+#   .default = col_character(),
+#   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   flag = col_integer()
+# ))
+# 
+# log <- log_read
+# 
+# for(i in 1:nrow(log))
+# {
+#   ### Assign variables based on lines in the maintenance log. 
+#   
+#   ### get start and end time of one maintenance event
+#   start <- log$TIMESTAMP_start[i]
+#   end <- log$TIMESTAMP_end[i]
+#   
+#   ### Get the Reservoir Name
+#   
+#   Reservoir <- log$Reservoir[i]
+#   
+#   ### Get the Site Number
+#   
+#   Site <- as.numeric(log$Site)
+#   
+#   ### Get the depth if it is not NA
+#   
+#   if(!is.na(log$Depth[i])){
+#     Depth <- as.numeric(log$new_value[i]) ## IS THERE SUPPOSED TO BE A COLUMN ADDED TO MAINT LOG CALLED NEW_VALUE?
+#   }
+#   
+#   ### Get the Maintenance Flag 
+#   
+#   flag <- log$flag[i]
+#   
+#   ### Get the new value for a column or an offset. If it is not an NA
+#   
+#   if(!is.na(log$update_value[i])){
+#     
+#     update_value <- as.numeric(log$update_value[i])
+#   }
+#   
+#   
+#   ### Get the names of the columns affected by maintenance
+#   
+#   colname_start <- log$start_parameter[i]
+#   colname_end <- log$end_parameter[i]
+#   
+#   ### if it is only one parameter parameter then only one column will be selected
+#   
+#   if(is.na(colname_start)){
+#     
+#     maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
+#     
+#   }else if(is.na(colname_end)){
+#     
+#     maintenance_cols <- colnames(raw_df%>%select(colname_start))
+#     
+#   }else{
+#     maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
+#   }
+#   
+#   ### Get the name of the flag column -- mostly used for EXO -- remove here
+#   
+#   #flag_col <- paste0("Flag_", maintenance_cols)
+#   
+#   ### remove any Flag columns that don't exsist because we don't have a flag column for them
+#   # and they get removed before publishing
+#   
+#   #flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
+#   
+#   ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs 
+#   # until the maintenance log is updated
+#   
+#   if(is.na(end)){
+#     # If there the maintenance is on going then the columns will be removed until
+#     # and end date is added
+#     Time <- raw_df$DateTime >= start
+#     
+#   }else if (is.na(start)){
+#     # If there is only an end date change columns from beginning of data frame until end date
+#     Time <- raw_df$DateTime <= end
+#     
+#   }else {
+#     
+#     Time <- raw_df$DateTime >= start & raw_df$DateTime <= end
+#   }
+#   
+#   ### This is where information in the maintenance log gets removed. 
+#   # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
+#   
+#   # replace relevant data with NAs and set flags while maintenance was in effect
+#   if(flag==1)
+#   { # THIS IS FOR VALUES THAT ARE FLAGGED BUT LEFT IN THE DATA SET
+#     raw_df[Time, flag_cols] <- flag
+#   }
+#   else if (flag==2){
+#     
+#     # The observations are changed to NA for maintenance or other issues found in the maintenance log
+#     raw_df[Time, maintenance_cols] <- NA
+#     raw_df[Time, flag_cols] <- flag 
+#   }
+#   else 
+#   {
+#     warning("Flag not coded in the L1 script. See Austin or Adrienne")
+#   }
+# }
+### END MAINTENANCE LOG CODE ###
 
 write.csv(fp_final, "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv", row.names = FALSE)
 

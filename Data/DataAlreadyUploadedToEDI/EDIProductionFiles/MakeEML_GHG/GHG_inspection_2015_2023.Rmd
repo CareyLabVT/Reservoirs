@@ -1,0 +1,243 @@
+---
+title: "GHG_inspection_2015_2023"
+author: "Freya Olsson"
+date: "2023-11-30"
+output: html_document
+---
+
+This is the visualisation script for the greenhouse gas data product. 
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+```
+
+
+
+```{r Read in Historical files from EDI}
+
+inUrl1  <- 'https://pasta.lternet.edu/package/data/eml/edi/551/7/38d72673295864956cccd6bbba99a1a3'
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"), silent = T)
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+historic <-read_csv(infile1)
+
+```
+
+
+```{r Read in L1 file}
+
+L1 <- read_csv('../../../DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv')
+
+```
+
+```{r Bind historic and L1 files together}
+
+current_df <- dplyr::bind_rows(historic, L1)
+
+```
+
+This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
+
+```{r Check there are no NAs in Flag columns}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df |> 
+  select(DateTime, starts_with("Flag"))
+
+RowsNA <- Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df |> 
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+```
+
+```{r Plots}
+# Plot CH4 at Site 50 in FCR
+current_df |>  
+  filter(Depth_m<100,  Site == 50,
+         Reservoir == "FCR") |> 
+    mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'FCR CH4')
+
+# Plot CO2 at Site 50 in FCR
+current_df |>  
+  filter(Depth_m<100, Site == 50,
+         Reservoir == "FCR") |> 
+    mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point()+
+  labs(title = 'FCR CO2')
+
+# Plot CH4 at Site 50 in BVR
+current_df |>  
+  filter(Depth_m<100, Site == 50,
+         Reservoir == "BVR") |> 
+    mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point()+
+  labs(title = 'BVR CH4')
+
+# Plot CO2 at Site 50 in BVR
+current_df |>  
+  filter(Depth_m<100, Site == 50,
+         Reservoir == "BVR") |> 
+    mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'BVR CO2')
+
+
+
+# FCR NOT Site 50 - CH4
+current_df |>  
+  filter(Reservoir == "FCR", Site != 50) |> 
+  ggplot(aes(x=DateTime, y=CH4_umolL, colour=as.factor(Site)))+
+  geom_point() +
+  labs(title = 'FCR CH4 other sites')
+
+
+current_df |>  
+  filter(Reservoir == "FCR", Site != 50) |> 
+  ggplot(aes(x=DateTime, y=CO2_umolL, colour=as.factor(Site)))+
+  geom_point() +
+  labs(title = 'FCR CO2 other sites')
+
+
+# BVR NOT Site 50 
+current_df %>% 
+  filter(Reservoir == "BVR", Site != 50) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = as.factor(Site)))+
+  geom_point() +
+  labs(title = 'BVR CH4 other sites')
+
+current_df %>% 
+  filter(Reservoir == "BVR", Site != 50) |>  
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = as.factor(Site)))+
+  geom_point() +
+  labs(title = 'BVR CO2 other sites')
+
+
+```
+
+Look at this year only:
+
+```{r plots-current-year}
+# CH4 plots current year
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'FCR CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'FCR Site 50, CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'BVR CH4')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'BVR Site 50, CH4')
+
+# CO2 plots current year
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'FCR CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "FCR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'FCR Site 50, CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site != 50, 
+         DateTime >= '2023-01-01') |>
+  mutate(Site = as.factor(Site)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
+  geom_point() +
+  labs(title = 'BVR CO2')
+
+current_df |>  
+  filter(Depth_m<100,
+         Reservoir == "BVR", Site == 50, 
+         DateTime >= '2023-01-01') |> 
+  mutate(Depth_m = as_factor(Depth_m)) |> 
+  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
+  geom_point() +
+  labs(title = 'BVR Site 50, CO2')
+
+```
+
+
+```{r Make new CSV with current and historic files}
+
+# Need to decide on a naming convention for this file
+write.csv(current_df, "GHG_2015_2023.csv", row.names = F)
+
+```
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  data <- current_df #This is the line you need to modify!
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  sites_trimmed = trim_sites(data,sites) 
+  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

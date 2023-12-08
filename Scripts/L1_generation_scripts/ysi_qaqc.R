@@ -29,6 +29,9 @@ library(gsheet)
 #raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv"))
 #raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
 
+
+
+
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
 raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 

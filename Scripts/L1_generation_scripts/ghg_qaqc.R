@@ -26,11 +26,10 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
                                     current_year = 2023, # Current Year. Must be numeric
                                     Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
                                     vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                                    Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=584937439",
+                                    Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
                                     output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
                                     MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
-                                    Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")
-{
+                                    Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"){
   
   #### 1. Read in the Maintenance Log and then Raw files ####
   
@@ -292,155 +291,154 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
            Hours = hour(DateTime),
            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
            DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
-    select(-c(Time, Date, Hours)) 
-  
-  
+    select(-c(Time, Date, Hours))
+
+
   ### 4. Take out values based on the Maintenance Log ####
-  
+
   ### 4.1 Set up the Values to be used ####
-  # modify raw_df based on the information in the log   
-  
+  # modify raw_df based on the information in the log
+
   for(i in 1:nrow(log)){
-  
+
     ### get start and end time of one maintenance event
     start <- log$TIMESTAMP_start[i]
     end <- log$TIMESTAMP_end[i]
-    
+
     ### Get the Reservoir Name
-    
+
     Reservoir <- log$Reservoir[i]
-    
+
     ### Get the Site Number
-    
-    Site <- as.numeric(log$Site)
-    
-    ### Get the depth 
-    
+
+    Site <- as.numeric(log$Site[i])
+
+    ### Get the depth
+
       Depth <- as.numeric(log$Depth[i])
-    
-    ### Get the vial number 
+
+    ### Get the vial number
 
       vial <- as.numeric(log$vial_number[i])
-    
-    ### Get the Maintenance Flag 
-    
+
+    ### Get the Maintenance Flag
+
     flag <- log$flag[i]
-    
-    ### Get the new value for a column or an offset. 
-      
-      update_value <- as.numeric(log$update_value[i])
-    
-    
+
+    ### Get the new value for a column or an offset.
+
+    update_value <- as.numeric(log$update_value[i])
+
+
     ### Get the names of the columns affected by maintenance
-    
+
     colname_start <- log$start_parameter[i]
     colname_end <- log$end_parameter[i]
-    
+
     ### if it is only one parameter parameter then only one column will be selected
-    
+
     if(is.na(colname_start)){
-      
-      maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
-      
+
+      maintenance_cols <- colnames(raw_df%>%select(colname_end))
+
     }else if(is.na(colname_end)){
-      
+
       maintenance_cols <- colnames(raw_df%>%select(colname_start))
-      
+
     }else{
       maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
     }
-    
+
     ### Get the name of the flag column
-    
+
     flag_cols <- paste0("Flag_", maintenance_cols)
-    
+
     ### remove any Flag columns that don't exsist because we don't have a flag column for them
     # and they get removed before publishing
-    
+
     #flag_col = flag_col[!flag_col %in% c(COLUMN NAMES HERE)]
-    
-    ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs 
+
+    ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs
     # until the maintenance log is updated
-    
+
     if(is.na(end)){
       # If there the maintenance is on going then the columns will be removed until
       # and end date is added
       Time <- raw_df$DateTime >= start
-      
+
     }else if (is.na(start)){
       # If there is only an end date change columns from beginning of data frame until end date
       Time <- raw_df$DateTime <= end
-      
+
     }else {
-      
+
       Time <- raw_df$DateTime >= start & raw_df$DateTime <= end
     }
-    
+  #}
+
     ### 4.2 Actually remove values in the maintenance log from the data frame ####
-    ## This is where information in the maintenance log gets removed. 
+    ## This is where information in the maintenance log gets removed.
     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
-    
+
     # replace relevant data with NAs and set flags while maintenance was in effect
-    if(flag==1)
-    { # The observations are changed to NA for maintenance or other issues found in the maintenance log
-      
+    if(flag==1){ # The observations are changed to NA for maintenance or other issues found in the maintenance log
+
       if (is.na(Depth) & is.na(vial)){
       raw_df[Time, maintenance_cols] <- NA
       raw_df[Time, flag_cols] <- flag
-      
+
       } else if (is.na(vial)){
         # Just use the time and depth for indexing
         raw_df[c(which(Time & (raw_df[,"Depth_m"] = Depth))), maintenance_cols] <- NA
         raw_df[c(which(Time & (raw_df[,"Depth_m"] = Depth))), flag_cols] <- flag
-        
+
       } else if (is.na(Depth)){
         # Just use the time and vial number for indexing
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), maintenance_cols] <- NA
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), flag_cols] <- flag
-        
+
       } else {
-        
+
         # Use time, depth and vial number for indexing
-        
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))), 
+
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))),
                maintenance_cols] <- NA
-        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))), 
+        raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))),
                flag_cols] <- flag
-        
+
       }
-      
-    }
-    else if (flag==2){
+
+    } else if (flag==2){
       # This one is below minimum detection level and most likely won't be in the maintenance log
-      
-    }
-     else {
+
+    } else {
        warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
-     }
-    next
+       next
+       }
+    #next
   }
-  
- 
+
+
   #### 5. Additional Maintenance ####
- 
+
   # clean up columns we no longer need
  ghg <- raw_df%>%
    select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL, Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)
- 
+
  ### 5.1 Calculate the Minimum detection ####
- 
- # Read in the Google Drive file of rolling MDL Serum Vial CH4 CO2 2016 style + Rolling 
- # use the charting reference tank. 
- 
+
+ # Read in the Google Drive file of rolling MDL Serum Vial CH4 CO2 2016 style + Rolling
+ # use the charting reference tank.
+
  MDL_from_ref_tank <- gsheet::gsheet2tbl(Rolling_MDL)
- 
- # take out the first 42 rows because we don't need them  
+
+ # take out the first 42 rows because we don't need them
  # and only want the date column and the current seasonal ppm for CH4 and CO2
  MDL_from_ref_tank<-MDL_from_ref_tank[42:nrow(MDL_from_ref_tank), c(3,46:47)]
- 
+
  # Rename the columns
  names(MDL_from_ref_tank)<- c("Date","CH4_GC_headspace_ppm", "CO2_GC_headspace_ppm")
- 
+
  # Reformat the date, get the headspace concentrations as numeric, and only take the columns with a date
  MDL_from_ref_tank <- MDL_from_ref_tank%>%
    drop_na(Date)%>% # take out anything that doesn't have a depth
@@ -448,173 +446,173 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
      Date= as.POSIXct(Date, format = "%m/%d/%y %H:%M"),
      CH4_GC_headspace_ppm = as.numeric(CH4_GC_headspace_ppm),
      CO2_GC_headspace_ppm = as.numeric(CO2_GC_headspace_ppm))
-    
- 
+
+
  ## Filter because we only want the last 2 years
- 
+
  # Get end date as system time
  end_date <- Sys.Date()
  # Start date is years prior. Can change later if we want
  start_date <- end_date - years(2)
- 
- # filter for only the last 2 years 
+
+ # filter for only the last 2 years
  current <- MDL_from_ref_tank%>%
    filter(Date>=start_date & Date<=end_date)
 
- # Get the ppm for CH4 and CO2 of the MDL  
+ # Get the ppm for CH4 and CO2 of the MDL
  MDL_ppm <- current%>%
    mutate(
-     # standard deviation for CH4 and 
+     # standard deviation for CH4 and
       CH4_standard_dev = sd(CH4_GC_headspace_ppm),
       CO2_standard_dev = sd(CO2_GC_headspace_ppm),
-      
+
     # find the t value based on the number of observations
     # To find the critical t-value for a 98% confidence interval with x degrees freedom:
       CH4_tvalue = qt(1-0.02/2, (length(CH4_GC_headspace_ppm)-1)),
       CO2_tvalue = qt(1-0.02/2, (length(CO2_GC_headspace_ppm)-1)),
-    
-    # Get the MDL in ppm of tvalue * standard deviation 
+
+    # Get the MDL in ppm of tvalue * standard deviation
     CH4_GC_headspace_ppm = CH4_tvalue * CH4_standard_dev,
     CO2_GC_headspace_ppm = CO2_tvalue * CO2_standard_dev,
-    
+
     # add in standard lab temperature and bp
     lab_temp = 20,
     weather_station_bp = 29.99
    )%>%
    select(-Date)%>%
    distinct()
- 
- 
+
+
  ### 5.12 Calculate the concentration in umol/L ####
- 
+
   # Use the ghg_concentration function in the source script to get MDL
- 
+
     MDL_umolL <- ghg_concentration(raw_file = MDL_ppm)
- 
+
  # Create a table with the MDL info that gets save every time there is an update
- 
+
     MDL_umolL <- MDL_umolL%>%
       select(CH4_GC_headspace_ppm, CO2_GC_headspace_ppm, CH4_standard_dev, CO2_standard_dev,
              CH4_tvalue, CO2_tvalue, CH4_umolL, CO2_umolL)
- 
-  # Assign them a name to use below 
+
+  # Assign them a name to use below
     CH4_umolL_MDL <- MDL_umolL$CH4_umolL
     CO2_umolL_MDL <- MDL_umolL$CO2_umolL
-    
+
   # Flag with 2 if less than the MDL but don't change the flag if observation was negative and changed to 0
-    
+
     ghg <- ghg%>%
       mutate(
-        Flag_CH4_umolL = ifelse(CH4_umolL>0 & CH4_umolL<CH4_umolL_MDL & !is.na(CH4_umolL), 
+        Flag_CH4_umolL = ifelse(CH4_umolL>0 & CH4_umolL<CH4_umolL_MDL & !is.na(CH4_umolL),
                                 2, Flag_CH4_umolL),
-        Flag_CO2_umolL = ifelse(CO2_umolL>0 & CO2_umolL<CO2_umolL_MDL & !is.na(CO2_umolL), 
+        Flag_CO2_umolL = ifelse(CO2_umolL>0 & CO2_umolL<CO2_umolL_MDL & !is.na(CO2_umolL),
                                 2, Flag_CO2_umolL)
       )
-   
- 
+
+
  ### 5.2 Calculating the difference and percent difference between the reps ####
 
  ## Separate into rep 1 and rep2
- ghgs_rep1 <- ghg %>% 
-   filter(Rep == 1) %>% 
-   dplyr::rename(CH4_umolL_rep1 = CH4_umolL, 
+ ghgs_rep1 <- ghg %>%
+   filter(Rep == 1) %>%
+   dplyr::rename(CH4_umolL_rep1 = CH4_umolL,
           CO2_umolL_rep1 = CO2_umolL,
           Flag_DateTime_rep1 = Flag_DateTime,
           Flag_CH4_umolL_rep1 = Flag_CH4_umolL,
           Flag_CO2_umolL_rep1 = Flag_CO2_umolL)
- 
- ghgs_rep2 <- ghg %>% 
-   filter(Rep == 2) %>% 
-   rename(CH4_umolL_rep2 = CH4_umolL, 
+
+ ghgs_rep2 <- ghg %>%
+   filter(Rep == 2) %>%
+   rename(CH4_umolL_rep2 = CH4_umolL,
           CO2_umolL_rep2 = CO2_umolL,
           Flag_DateTime_rep2 = Flag_DateTime,
           Flag_CH4_umolL_rep2 = Flag_CH4_umolL,
           Flag_CO2_umolL_rep2 = Flag_CO2_umolL)
- 
+
  ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Site","Depth_m","Reservoir"))
- 
+
  # Add '2' when rep 2 is NA
- ghgs_reps <- ghgs_reps %>% 
+ ghgs_reps <- ghgs_reps %>%
    mutate(Rep.y = ifelse(is.na(Rep.y),2,Rep.y))
- 
+
  ## Calculate percent difference between reps
- ghgs_reps <- ghgs_reps %>% 
-   mutate(CH4_pdiff = round((abs(CH4_umolL_rep1-CH4_umolL_rep2)/(abs(CH4_umolL_rep1+CH4_umolL_rep2)/2))*100)) %>% 
+ ghgs_reps <- ghgs_reps %>%
+   mutate(CH4_pdiff = round((abs(CH4_umolL_rep1-CH4_umolL_rep2)/(abs(CH4_umolL_rep1+CH4_umolL_rep2)/2))*100)) %>%
    mutate(CH4_diff = abs(CH4_umolL_rep1-CH4_umolL_rep2))
- 
- ghgs_reps <- ghgs_reps %>% 
-   mutate(CO2_pdiff = round((abs(CO2_umolL_rep1-CO2_umolL_rep2)/(abs(CO2_umolL_rep1+CO2_umolL_rep2)/2))*100)) %>% 
+
+ ghgs_reps <- ghgs_reps %>%
+   mutate(CO2_pdiff = round((abs(CO2_umolL_rep1-CO2_umolL_rep2)/(abs(CO2_umolL_rep1+CO2_umolL_rep2)/2))*100)) %>%
    mutate(CO2_diff = abs(CO2_umolL_rep1 - CO2_umolL_rep2))
- 
+
  # Now that we calculated the differences then seperate rep 1 and rep2 and then bind them on top of each other again
- 
- ghg_rep1 <- ghgs_reps %>% 
+
+ ghg_rep1 <- ghgs_reps %>%
    select(Reservoir, Site, DateTime,Depth_m,CH4_umolL_rep1,CO2_umolL_rep1,
-          CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep1, 
-          Flag_CH4_umolL_rep1, Flag_CO2_umolL_rep1)%>% 
-   mutate(Rep = 1) %>% 
+          CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep1,
+          Flag_CH4_umolL_rep1, Flag_CO2_umolL_rep1)%>%
+   mutate(Rep = 1) %>%
    dplyr::rename(CH4_umolL = CH4_umolL_rep1,
           CO2_umolL = CO2_umolL_rep1,
           Flag_DateTime = Flag_DateTime_rep1,
           Flag_CH4_umolL = Flag_CH4_umolL_rep1,
           Flag_CO2_umolL = Flag_CO2_umolL_rep1)
- 
- ghg_rep2 <- ghgs_reps %>% 
+
+ ghg_rep2 <- ghgs_reps %>%
    select(Reservoir, Site, DateTime,Depth_m,CH4_umolL_rep2,CO2_umolL_rep2,
-          CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep2, 
-          Flag_CH4_umolL_rep2, Flag_CO2_umolL_rep2) %>% 
-   mutate(Rep = 2) %>% 
+          CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep2,
+          Flag_CH4_umolL_rep2, Flag_CO2_umolL_rep2) %>%
+   mutate(Rep = 2) %>%
    dplyr::rename(CH4_umolL = CH4_umolL_rep2,
                  CO2_umolL = CO2_umolL_rep2,
                  Flag_DateTime = Flag_DateTime_rep2,
                  Flag_CH4_umolL = Flag_CH4_umolL_rep2,
                  Flag_CO2_umolL = Flag_CO2_umolL_rep2)
- 
+
  ghg_all <- bind_rows(ghg_rep1,ghg_rep2)
- 
- ghg_all <-  ghg_all %>% 
+
+ ghg_all <-  ghg_all %>%
    arrange(DateTime,Reservoir,Depth_m)
- 
+
  ### 5.21 Flag based on the difference between the reps ####
- 
- # This section gives a Flag or 3 or 4 depending on how different the reps are. 
- # If the data are already Flagged then we leave previous flag in 
- 
- ghg_all <- ghg_all %>% 
-   mutate(Flag_CH4_umolL = ifelse(CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 & 
+
+ # This section gives a Flag or 3 or 4 depending on how different the reps are.
+ # If the data are already Flagged then we leave previous flag in
+
+ ghg_all <- ghg_all %>%
+   mutate(Flag_CH4_umolL = ifelse(CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &
                                     Flag_CH4_umolL == 0,4,
-                        ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 & 
+                        ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
                                  Flag_CH4_umolL == 0,3, Flag_CH4_umolL)),
           Flag_CO2_umolL = ifelse(CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0,4,
                             ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
                                      Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
-    
-    
+
+
   ### 5.3 Check that all NA values are flagged ####
- 
- for(m in colnames(ghg_all%>%select(DateTime, CH4_umolL:CO2_umolL))) { 
+
+ for(m in colnames(ghg_all%>%select(DateTime, CH4_umolL:CO2_umolL))) {
    #for loop to create new columns in data frame
    ghg_all[c(which(is.na(ghg_all[,m]))),paste0("Flag_",colnames(ghg_all[m]))] <-1 #puts in flag 1 if value not collected
  }
-  
-  
+
+
   ### 6. Save files ####
- 
+
  # Make final data frame with only the columns we want
  ghg_final <- ghg_all%>%
    select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)
- 
+
   # Write the MDL file
   write.csv(MDL_umolL, MDL_file, row.names = F)
-  
-  # Write an out of range file to check if vial numbers were messed up 
+
+  # Write an out of range file to check if vial numbers were messed up
   write.csv(out_range, Vial_Number_Check, row.names = F)
-  
-  # Write the L1 file 
+
+  # Write the L1 file
   write.csv(ghg_final, output_file, row.names = F)
-  
-  
+
+
 }
 
 # Use the function here
@@ -626,7 +624,7 @@ ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
                 current_year = 2023, # Current Year. Must be numeric
                 Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
                 vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=584937439",
+                Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
                 output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
                 MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
                 Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")

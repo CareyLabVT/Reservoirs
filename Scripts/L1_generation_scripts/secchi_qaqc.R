@@ -44,7 +44,7 @@ secchi_reformat <- secchi_df |>
 
 secchi_reformat[is.na(secchi_reformat)] <- 0
 
-
+secchi_reformat <- as.data.frame(secchi_reformat)
 # 
 # # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
 # maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt'
@@ -118,11 +118,11 @@ secchi_reformat[is.na(secchi_reformat)] <- 0
 #   }else{
 #     warning("Flag not coded in the L1 script. See Austin or Adrienne")
 #   }
-}
+#}
 # #### END MAINTENANCE LOG CODE #####
 
 
-write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv')
+write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', row.names = FALSE)
 
 }
 

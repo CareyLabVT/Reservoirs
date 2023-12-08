@@ -10,6 +10,9 @@
 # 5. Additional Maintenance
 # 6. Save files
 
+# The MDL file is generated from the Analytical chem lab. Make sure you have the right link if the function fails. 
+# You need the one that is the reference tank
+
 
 # Download/load libraries
 if (!require("pacman")) install.packages("pacman")
@@ -315,7 +318,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
 
     ### Get the depth
 
-      Depth <- as.numeric(log$Depth[i])
+     Depth <- as.numeric(log$Depth[i])
 
     ### Get the vial number
 
@@ -374,10 +377,9 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
 
       Time <- raw_df$DateTime >= start & raw_df$DateTime <= end
     }
-  #}
-
-    ### 4.2 Actually remove values in the maintenance log from the data frame ####
-    ## This is where information in the maintenance log gets removed.
+    
+    ### 4.2 Actually remove values in the maintenance log from the data frame 
+    ## This is where information in the maintenance log gets removed. 
     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
 
     # replace relevant data with NAs and set flags while maintenance was in effect
@@ -611,7 +613,6 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
 
   # Write the L1 file
   write.csv(ghg_final, output_file, row.names = F)
-
 
 }
 

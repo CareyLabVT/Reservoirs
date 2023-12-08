@@ -264,7 +264,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
   
      
      
-     ### 5.2 Actually remove values in the maintenance log from the data frame ####
+     ### 5.2 Actually remove values in the maintenance log from the data frame 
      ## This is where information in the maintenance log gets removed. 
      # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
     

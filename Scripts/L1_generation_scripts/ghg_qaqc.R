@@ -10,6 +10,9 @@
 # 5. Additional Maintenance
 # 6. Save files
 
+# The MDL file is generated from the Analytical chem lab. Make sure you have the right link if the function fails. 
+# You need the one that is the reference tank
+
 
 # Download/load libraries
 if (!require("pacman")) install.packages("pacman")
@@ -26,7 +29,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
                                     current_year = 2023, # Current Year. Must be numeric
                                     Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
                                     vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                                    Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=584937439",
+                                    Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
                                     output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
                                     MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
                                     Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")
@@ -312,7 +315,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
     
     ### Get the Site Number
     
-    Site <- as.numeric(log$Site)
+    Site <- as.numeric(log$Site[i])
     
     ### Get the depth 
     
@@ -376,7 +379,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
       Time <- raw_df$DateTime >= start & raw_df$DateTime <= end
     }
     
-    ### 4.2 Actually remove values in the maintenance log from the data frame ####
+    ### 4.2 Actually remove values in the maintenance log from the data frame 
     ## This is where information in the maintenance log gets removed. 
     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
     
@@ -613,8 +616,6 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   # Write the L1 file 
   write.csv(ghg_final, output_file, row.names = F)
-  
-  
 }
 
 # Use the function here
@@ -626,7 +627,7 @@ ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
                 current_year = 2023, # Current Year. Must be numeric
                 Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
                 vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=584937439",
+                Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
                 output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
                 MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
                 Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")

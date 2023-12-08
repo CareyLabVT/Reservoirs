@@ -23,13 +23,13 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       Year = "2023",
                       final_vol_extract = 6, 
                       blank_vol_filt = 500, 
-                      maintenance_file = "https://github.com/CareyLabVT/Reservoirs/blob/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
+                      maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
                       outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
   {
-
+  
   #### 1. Read in Maintenance file and the Raw files from the spec ####
   ### 1.1 Read in Maintenance file #### 
-  log_read <- read_csv(maintenance_file, skip = 35,col_types = cols(
+  log_read <- read_csv(maintenance_file, skip = 35 ,col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
     Sample_date = col_date("%Y-%m-%d"),
@@ -192,6 +192,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    )
  
  ### 4. Take out values based on the Maintenance Log ####
+ 
+ ## Define Maintenance Flags HERE:
  
  # Add Flag columns
  

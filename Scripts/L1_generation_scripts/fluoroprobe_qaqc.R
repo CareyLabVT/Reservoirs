@@ -108,7 +108,7 @@ fp_final <- fp8 %>%
          Transmission_perc = Transmission) 
 
 
-### 4. Take out values based on the Maintenance Log #### (THIS IS A TEST FOR NOW) -- ALSO MIGHT MOVE SOMEWHERE ELSE IN SCRIPT
+### 4. Take out values based on the Maintenance Log (THIS IS A TEST FOR NOW) -- ALSO MIGHT MOVE SOMEWHERE ELSE IN SCRIPT
 ## TRY ADDING FLEXIBILITY TO IGNORE ANY COMMENTS IN MAINT LOG
 
 # modify raw_df based on the information in the log   
@@ -124,7 +124,7 @@ fp_final <- fp8 %>%
 #   flag = col_integer()
 # ))
 
-### MAINTENANCE LOG CODE -- UNCOMMENT WHEN FILE IS READY ####
+### MAINTENANCE LOG CODE -- UNCOMMENT WHEN FILE IS READY
 # maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt'
 # log_read <- read_csv(maintenance_file, col_types = cols(
 #   .default = col_character(),

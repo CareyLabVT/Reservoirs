@@ -48,9 +48,23 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
                        output_file_name = "CTD_Meta_2023.csv")
   
   ## Add data flags to seasonal csv
-  flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
+  ctd_df_flagged <- flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                      input_file_name = "CTD_Meta_2023.csv",
                      output_file_name = "ctd_L1.csv")
+  
+  ## Add maintenance log
+  #Flag codes
+  #0=Not suspect, 
+  #1=Sample not taken, 
+  #2=Instrument malfunction, 
+  #3=Sample below detection,
+  #4=Negative value set to 0 or NA
+  #5=No sensor on CTD,
+  #6=Measurement above water (removed for most vars)
+  #7=Datetime missing time (date is meaningful but not time)
+  #8=Measurement outside of expected range but retained in dataset
+  
+  ## No date specific flags assigned yet. All automated flags are assigned in 'flag_seasonal_csvs'
 }
 
 ctd_QAQC()

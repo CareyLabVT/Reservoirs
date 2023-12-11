@@ -186,7 +186,7 @@ for(i in 1:nrow(log)){
     warning("Flag not coded in the L1 script. See Austin or Adrienne")
   }
 }
-#### END MAINTENANCE LOG CODE #####
+#### END MAINTENANCE LOG CODE
 
 
 ## ORGANIZE FINAL TABLE ##

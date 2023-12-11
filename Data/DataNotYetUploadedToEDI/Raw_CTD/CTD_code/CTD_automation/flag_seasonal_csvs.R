@@ -146,4 +146,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../../CTD_season_csvs",
   
   write.csv(CTD_fix_renamed,paste0(CTD_FOLDER, output_file_name), row.names = FALSE)
   message(paste0("Successfully updated ", output_file_name))
+  
+  return(CTD_fix_renamed)
 }

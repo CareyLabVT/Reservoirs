@@ -47,9 +47,8 @@ BVR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae
 CCR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
 SHR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
 GWR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
-BVR, 50, NA, Flora, 2023-06-14 00:00:00 EDT, 2023-06-14 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
-CCR, 50, NA, Flora, 2023-06-30 00:00:00 EDT, 2023-06-30 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
-FCR, 50, NA, Flora, 2023-03-21 00:00:00 EDT, 2023-03-21 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
-FCR, 50, NA, Flora, 2023-06-19 00:00:00 EDT, 2023-06-19 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
-FCR, 50, NA, Flora, 2023-06-26 00:00:00 EDT, 2023-06-26 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
-FCR, 50, NA, Flora, 2023-07-17 00:00:00 EDT, 2023-07-17 11:59:59 EDT, Transmission_perc, Transmission_perc, 9, NA, low transmission values (<80)
+CCR, 50, NA, Flora, 2023-06-30 00:00:00 EDT, 2023-06-30 11:59:59 EDT, Transmission_perc, Transmission_perc, 3, NA, low transmission values (<80)
+FCR, 50, NA, Flora, 2023-03-21 00:00:00 EDT, 2023-03-21 11:59:59 EDT, Transmission_perc, Transmission_perc, 3, NA, low transmission values (<80)
+FCR, 50, NA, Flora, 2023-06-19 00:00:00 EDT, 2023-06-19 11:59:59 EDT, Transmission_perc, Transmission_perc, 3, NA, low transmission values (<80)
+FCR, 50, NA, Flora, 2023-06-26 00:00:00 EDT, 2023-06-26 11:59:59 EDT, Transmission_perc, Transmission_perc, 3, NA, low transmission values (<80)
+FCR, 50, NA, Flora, 2023-07-17 00:00:00 EDT, 2023-07-17 11:59:59 EDT, Transmission_perc, Transmission_perc, 3, NA, low transmission values (<80)

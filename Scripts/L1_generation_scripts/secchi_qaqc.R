@@ -84,27 +84,27 @@ secchi_reformat <- as.data.frame(secchi_reformat)
 # 
 #   if(is.na(colname_start)){
 # 
-#     maintenance_cols <- colnames(update_profiles%>%select(colname_end))
+#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_end))
 # 
 #   }else if(is.na(colname_end)){
 # 
-#     maintenance_cols <- colnames(update_profiles%>%select(colname_start))
+#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_start))
 # 
 #   }else{
-#     maintenance_cols <- colnames(update_profiles%>%select(colname_start:colname_end))
+#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_start:colname_end))
 #   }
 # 
 #   if(is.na(end)){
 #     # If there the maintenance is on going then the columns will be removed until
 #     # and end date is added
-#     Time <- update_profiles |> filter(DateTime >= start) |> select(DateTime)
+#     Time <- secchi_reformat |> filter(DateTime >= start) |> select(DateTime)
 # 
 #   }else if (is.na(start)){
 #     # If there is only an end date change columns from beginning of data frame until end date
-#     Time <- update_profiles |> filter(DateTime <= end) |> select(DateTime)
+#     Time <- secchi_reformat |> filter(DateTime <= end) |> select(DateTime)
 # 
 #   }else {
-#     Time <- update_profiles |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+#     Time <- secchi_reformat |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
 #   }
 # 
 #   ### This is where information in the maintenance log gets updated
@@ -112,8 +112,8 @@ secchi_reformat <- as.data.frame(secchi_reformat)
 #   if(flag %in% c(5,6)){ ## UPDATE THIS WITH ANY NEW FLAGS
 #     # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
 # 
-#     update_profiles[c(which(update_profiles[,'Site'] == Site & update_profiles$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
-#     update_profiles[c(which(update_profiles[,'Site'] == Site & update_profiles$DateTime %in% Time$DateTime)),maintenance_cols] <- as.numeric(update_value)
+#     secchi_reformat[c(which(secchi_reformat[,'Site'] == Site & secchi_reformat$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
+#     secchi_reformat[c(which(secchi_reformat[,'Site'] == Site & secchi_reformat$DateTime %in% Time$DateTime)),maintenance_cols] <- as.numeric(update_value)
 # 
 #   }else{
 #     warning("Flag not coded in the L1 script. See Austin or Adrienne")
@@ -121,6 +121,13 @@ secchi_reformat <- as.data.frame(secchi_reformat)
 #}
 # #### END MAINTENANCE LOG CODE #####
 
+# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+package_ID <- 'edi.198.11'
+eml <- read_metadata(package_ID)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
+secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
 
 write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', row.names = FALSE)
 

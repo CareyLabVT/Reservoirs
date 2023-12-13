@@ -95,6 +95,7 @@ fp_final <- fp8 %>%
          Flag_BluegreenAlgae_ugL = 0,
          Flag_BrownAlgae_ugL = 0,
          Flag_MixedAlgae_ugL = 0,
+         Flag_YellowSubstances_ugL = 0,
          Flag_TotalConc_ugL = 0,
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
          Flag_Transmission_perc = 0,

@@ -211,6 +211,16 @@ ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
 #then set that value to NA
 ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
 
+
+# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+package_ID <- 'edi.198.11'
+eml <- read_metadata(package_ID)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
+ysi <- ysi |> filter(DateTime > last_edi_date)
+
+
 # Write to CSV -- save as L1 file
 #write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
 write.csv(ysi, 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', row.names = FALSE)

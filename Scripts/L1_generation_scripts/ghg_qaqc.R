@@ -597,6 +597,13 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
    ghg_all[c(which(is.na(ghg_all[,m]))),paste0("Flag_",colnames(ghg_all[m]))] <-1 #puts in flag 1 if value not collected
  }
 
+ # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+ package_ID <- 'edi.551.7'
+ eml <- read_metadata(package_ID)
+ date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+ last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+ 
+ ghg_all <- ghg_all |> filter(DateTime > last_edi_date)
 
   ### 6. Save files ####
 

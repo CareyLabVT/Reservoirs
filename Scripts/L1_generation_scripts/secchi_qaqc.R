@@ -3,6 +3,7 @@
 library(tidyverse)
 library(gsheet)
 library(EDIutils)
+library(xml2)
 
 secchi_qaqc <- function(maintenance_log = NULL){
   

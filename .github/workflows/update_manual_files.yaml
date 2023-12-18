@@ -51,6 +51,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("gsheet", version = "0.4.5")'
+          R -e 'remotes::install_version("EDIutils", version = "1.0.3")'
           Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/secchi_qaqc.R
 
       

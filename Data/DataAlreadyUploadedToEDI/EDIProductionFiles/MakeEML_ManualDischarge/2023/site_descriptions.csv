@@ -1,0 +1,17 @@
+"Reservoir","Site","Site_description","Latitude","Longitude"
+"BVR",100,"Inflow stream site to BVR on western reservoir arm",37.31957,-79.82437
+"BVR",200,"Inflow stream site to BVR on eastern reservoir arm that drains upstream impoundment",37.322851,-79.81721
+"CCR",101,"Inflow stream site to Carvins Cove Reservoir at Horse Pen Branch",37.3646,-79.9733
+"CCR",100,"Inflow stream site to Carvins Cove Reservoir where Horse Pen Branch meets the reservoir and is a standing water inflow (downstream of site 100)",37.3654,-79.972
+"CCR",201,"Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns",37.3958,-79.9937
+"CCR",300,"Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow closest to reservoir (downstream of 301)",37.4094,-79.9699
+"CCR",301,"Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream",37.4169,-79.9771
+"CCR",400,"Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel",37.399,-79.9485
+"CCR",500,"Inflow stream site to Carvins Cove Reservoir downstream of where Catawaba Creek Tunnel emerges",37.4073,-79.9852
+"CCR",501,"Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel",37.4082,-79.9897
+"FCR",1,"Outflow stream site at Falling Creek Reservoir spillway",37.30248264,-79.8373672
+"FCR",99,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir just above where the stream enters into the reservoir",37.307613,-79.8360878
+"FCR",100,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located",37.30858,-79.83494
+"FCR",101,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; upstream of weir and downstream of confluence of BVR inflow pipe and overland flow stream",37.309653,-79.830467
+"FCR",102,"Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; upstream of weir and just below where the BVR pipe emerges",37.311678,-79.827357
+"FCR",200,"Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream",37.30943,-79.83619

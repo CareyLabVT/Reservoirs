@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(gsheet)
+library(EDIutils)
 
 secchi_qaqc <- function(maintenance_log = NULL){
   

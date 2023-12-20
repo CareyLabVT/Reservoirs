@@ -39,4 +39,4 @@ vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm
 vars_to_plot %>%
   map(plot_var)
 
-# DO and temp are messed up for Jul 24 at BVR, but FCR looks fine
+# DO and temp are messed up for Jul 24 at BVR, but FCR looks fine. Added to maintenance log.

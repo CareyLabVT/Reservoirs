@@ -1,0 +1,47 @@
+Reservoir, Site, Depth, RunDate, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter ,flag, update_value, notes
+FCR, 100, 0.1, NA, Chem, 2022-07-05 10:11:00 EST, 2022-07-05 10:11:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+FCR, 50, 1.6, NA, Chem, 2022-05-02 14:35:00 EST, 2022-05-02 14:35:00 EST, DOC_mgL, NA, 9, NA, suspect sample
+FCR, 50, 5, NA, Chem, 2022-05-23 10:22:00 EST, 2022-05-23 10:22:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 0.1, NA, Chem, 2022-03-21 10:55:00 EST, 2022-03-21 10:55:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+BVR, 50, 6, NA, Chem, 2022-03-21 11:46:00 EST, 2022-03-21 11:46:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+BVR, 50, 9, NA, Chem, 2022-03-21 11:58:00 EST, 2022-03-21 11:58:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+BVR, 50, 7, NA, Chem, 2022-10-11 11:26:00 EST, 2022-10-11 11:26:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 6, NA, Chem, 2022-09-19 10:12:00 EST, 2022-09-19 10:12:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+CCR, 50, 21, NA, Chem, 2022-06-30 10:35:00 EST, 2022-06-30 10:35:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+CCR, 50, 20, NA, Chem, 2022-08-19 10:38:00 EST, 2022-08-19 10:38:00 EST, NH4_ugL, NA, 9, NA, suspect sample
+CCR, 50, 21, NA, Chem, 2022-11-17 13:45:00 EST, 2022-11-17 13:45:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+BVR, 50, 11, 7/20/21, Chem, 2021-06-15 16:52:00 EST, 2021-06-15 16:52:00 EST, SRP_ugL, NA, 9, NA, suspect sample - set initial to NA
+BVR, 50, 11, 1/26/22, Chem, 2021-06-15 16:52:00 EST, 2021-06-15 16:52:00 EST, NH4_ugL, NA, 9, NA, suspect sample - set rerun to NA
+BVR, 50, 11, 1/26/22, Chem, 2021-06-15 16:52:00 EST, 2021-06-15 16:52:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample - set rerun to NA
+BVR, 50, 10, 10/5/21, Chem, 2021-09-21 10:41:00 EST, 2021-09-21 10:41:00 EST, NH4_ugL, NA, 9, NA, suspect sample - set initial to NA
+BVR, 50, 10, 1/26/22, Chem, 2021-09-21 10:41:00 EST, 2021-09-21 10:41:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample - set rerun to NA
+BVR, 50, 10, 1/26/22, Chem, 2021-09-21 10:41:00 EST, 2021-09-21 10:41:00 EST, SRP_ugL, NA, 9, NA, suspect sample - set rerun to NA
+CCR, 50, 21, 10/5/21, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00, NH4_ugL, NA, 9, NA, suspect sample - set initial to NA
+CCR, 50, 21, 10/5/21, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00, NO3NO2_ugL, NA, 9, NA, suspect sample - set initial to NA
+CCR, 50, 21, 1/26/22, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00, SRP_ugL, NA, 9, NA, suspect sample - set rerun to NA
+FCR, 50, 0.1, 6/16/21, Chem, 2021-02-08 11:22:00 EST, 2021-02-08 11:22:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample - set initial to NA
+FCR, 50, 0.1, 1/26/22, Chem, 2021-02-08 11:22:00 EST, 2021-02-08 11:22:00 EST, NH4_ugL, NA, 9, NA, suspect sample - set rerun to NA
+FCR, 50, 0.1, 1/26/22, Chem, 2021-02-08 11:22:00 EST, 2021-02-08 11:22:00 EST, SRP_ugL, NA, 9, NA, suspect sample - set rerun to NA
+FCR, 50, 1.6, 10/5/21, Chem, 2021-07-26 12:50:00 EST, 2021-07-26 12:50:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample - set initial to NA
+FCR, 50, 1.6, 1/26/22, Chem, 2021-07-26 12:50:00 EST, 2021-07-26 12:50:00 EST, NH4_ugL, NA, 9, NA, suspect sample - set rerun to NA
+FCR, 50, 1.6, 1/26/22, Chem, 2021-07-26 12:50:00 EST, 2021-07-26 12:50:00 EST, SRP_ugL, NA, 9, NA, suspect sample - set rerun to NA
+BVR, 50, 10, NA, Chem, 2021-08-09 11:10:00 EST, 2021-08-09 11:10:00 EST, DOC_mgL, NA, 9, NA, suspect sample
+BVR, 50, 9, NA, Chem, 2021-11-22 10:18:00 EST, 2021-11-22 10:18:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+BVR, 50, 9, NA, Chem, 2021-10-12 11:53:00 EST, 2021-10-12 11:53:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 11, NA, Chem, 2021-03-08 10:58:00 EST, 2021-03-08 10:58:00 EST, TP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 11, NA, Chem, 2021-08-23 10:39:00 EST, 2021-08-23 10:39:00 EST, TP_ugL, NA, 9, NA, suspect sample
+CCR, 50, 21, NA, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00 EST, NO3NO2_ugL, NA, 9, NA, suspect sample
+CCR, 50, 21, NA, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00 EST, NH4_ugL, NA, 9, NA, suspect sample
+CCR, 50, 21, NA, Chem, 2021-08-19 12:00:00 EST, 2021-08-19 12:00:00 EST, SRP_ugL, NA, 9, NA, suspect sample
+CCR, 50, 20, NA, Chem, 2021-09-23 13:55:00 EST, 2021-09-23 13:55:00 EST, TN_ugL, NA, 9, NA, suspect sample
+CCR, 50, 0.1, NA, Chem, 2021-11-19 12:11:00 EST, 2021-11-19 12:11:00 EST, TN_ugL, NA, 9, NA, suspect sample
+FCR, 50, 3.8, NA, Chem, 2021-07-12 09:40:00 EST, 2021-11-19 12:11:00 EST, TP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 11, NA, Chem, 2019-06-06 12:00:00 EST, 2019-06-06 12:00:00 EST, TP_ugL, NA, 9, NA, suspect sample
+BVR, 50, 3, NA, Chem, 2019-05-23 12:00:00 EST, 2019-05-23 12:00:00 EST, NO3NO2_ugL, NA, 5, 30.5, demonic intrusion
+BVR, 50, 0.1, NA, Chem, 2017-07-20 00:00:00 EST, 2017-07-20 00:00:00 EST, TP_ugL, NA, 9, 247.0, suspect sample
+BVR, 50, 0.1, NA, Chem, 2017-07-20 00:00:00 EST, 2017-07-20 00:00:00 EST, TN_ugL, NA, 9, 3680, suspect sample
+BVR, 50, 0.1, NA, Chem, 2014-06-04 12:00:00 EST, 2014-06-04 12:00:00 EST, SRP_ugL, NA, 5, NA, demonic intrusion
+BVR, 50, 0.1, NA, Chem, 2014-04-30 12:00:00 EST, 2014-04-30 12:00:00 EST, SRP_ugL, NA, 5, NA, demonic intrusion
+
+
+

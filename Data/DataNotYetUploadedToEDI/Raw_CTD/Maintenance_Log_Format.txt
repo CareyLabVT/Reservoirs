@@ -1,0 +1,43 @@
+# Title: Template for Maintenance Log
+# Here is a template the the Maintenance Log. Any questions let Adrienne know. 
+# THIS FILE IS READ IN AS A CSV MEANING DO NOT PUT ANY COMMAS IN THE NOTES SECTION
+# Make sure to fill out all the columns even if it just with an NA. 
+
+### Description of the columns
+# Reservoir= This is the 3 character code used to identify each reservoir
+    FCR = Falling Creek Reservoir,
+    BVR = Beaverdam Reservoir,
+    CCR = Carvins Cove Reservoir,
+    
+# Site = The number assigned to the site. Eg. The deep hole is 50 
+
+# Depth = The depth of the sample. If not applicable put NA. This is not used with streaming sensors. 
+
+# DataStream = Nickname for each of data package. 
+# Eg. Flora, CTD, YSI, Secchi, GHG, Metals, SedTraps, UGGA, FiltChla, Weir, Ice, EddyFlux
+
+# TIMESTAMP_start = The starting time for the observation or observations you want removed or changed. 
+# Please use the format YYYY-MM-DD HH:MM:SS and indicate the timezone either EST or EDT. Since the streaming
+# sensors are in EST all my times in the maintenance log are in EST. 
+
+# TIMESTAMP_end = The ending time for the observation or observation you want removed or changed. 
+# See above for formatting. 
+# If the maintenance does not have an end time put NA. 
+
+# start_parameter = The name of the first column of the affected observation. Use the name of the column 
+# you use in the L1 script. 
+
+# end_parameter = The name of the last column of the affected observations. Use the name of the column
+# you use in the L1 scipt. If you are only selecting one column put the same column name in the start_parameter
+# and the end_parameter. You can also put NA. 
+
+# flag = the number flag associated with the maintenance. Each datapackage has their own set of flags. 
+
+# update_value = the value to change an observation to or if you are using an offset to change an observation. 
+# Indicate in the notes if the value is being changed or if it is begin used as an offset. 
+
+# notes = a description of why the values were removed or changed. Provide as much detail as necessary for 
+# co authors and people who will use your data package. DO NOT INCLUDE COMMAS IN THE NOTES SECTION. 
+
+
+

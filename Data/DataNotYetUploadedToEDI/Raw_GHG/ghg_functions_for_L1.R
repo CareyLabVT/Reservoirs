@@ -67,75 +67,75 @@ ghg_concentration <- function(
   
   # For both CO2 and CH4
   
-  concentration <- raw_file%>%
+  concentration <- raw_file %>%
     mutate(
-  # Head space volume in Liters
-  headspace_L = headspace,
-  
-  # Volume of water in Liters
-  vol_water_L = (21.0733341666667/1000)-headspace_L,
-  
-  # Temperature in Kelvin at the time when headspace concentration is equalibreted
-  Temp_headspace_K = temp_headspace,
-  
-  # Total pressure in atm- calculated from amount of HS 
-  # added at room temp then adjusted to presssure at agitator temperature of 40 C (p2 = (t2 *p1)/t1) 
-  tot_pressure_atm = ((0.001316*((weather_station_bp*25.4)-(2.5*2053/100)))*
-                        (273.15+40))/(273.15+lab_temp),
-  
-  
-  
-  ## Just for CH4
-  
-  # Partial Pressure for the CH4 gas
-  CH4_partial_pressure = tot_pressure_atm*(CH4_GC_headspace_ppm/10^6),
-  
-  
-  # mols compound in CH4 gas (calculated from partial pressure)
-  CH4_mol = (CH4_partial_pressure*headspace_L)/(0.082057*Temp_headspace_K),
-  
-  # Unnamed column. Check with Bobbie but used to calculate the mol compund in water
-  hen_law_CH4 = 101.325*(0.000014*exp(1600*((1/Temp_headspace_K)-(1/298.15)))),
-  
-  
-  # mol compound in water (estimated from Henry's)
-  CH4_mol_water = CH4_partial_pressure*hen_law_CH4*vol_water_L,
-  
-  # Mols of CH4 gas used to make the headspace. Needs to be taken out of the final concentration
-  CH4_headspace_mol = CH4_used_in_headspacePrep,
-  
-  # mols of CH4 in gas in vessel (calculated from partial pressure)
-  CH4_tot_vessel = CH4_mol + CH4_mol_water,
-  
-  ### Total Concentration of CH4.  
-  # Total concentration of CH4 in the original aqueous sample in µmol/L
-  CH4_umolL = 10^6*(CH4_tot_vessel-CH4_headspace_mol)/vol_water_L,
-  
-  
-  ## Just for CO2 
-  
-  # Partial Pressure for CO2 gas from amount of CO2 in the headspace
-  CO2_partial_pressure = tot_pressure_atm*(CO2_GC_headspace_ppm/10^6),
-  
-  # mols of CO2 in gas (estimated from Henry's)
-  CO2_mol = (CO2_partial_pressure*headspace_L)/(0.082057*Temp_headspace_K),
-  
-  
-  # Unnamed column. Check with Bobbie but used to calculate the mol compund in water
-  hen_law_CO2 = 101.325*(0.00033*exp(2400*((1/Temp_headspace_K)-(1/298.15)))),
-  
-  # mol of CO2 in water
-  CO2_mol_water = CO2_partial_pressure*hen_law_CO2*vol_water_L,
-  
-  # Total mols of CO2 in gas in vessel (calculated from partial pressure)
-  CO2_tot_vessel = CO2_mol + CO2_mol_water,
-  
-  # mols compound in gas used to make headspace
-  CO2_headspace_mol = CO2_used_in_heaspacePrep,
-  
-  ### Total Concentration of CH4.  
-  # Total concentration of CH4 in the original aqueous sample in µmol/L
-  CO2_umolL = 10^6*(CO2_tot_vessel-CO2_headspace_mol)/vol_water_L
+    # Head space volume in Liters
+    headspace_L = headspace, #input to function
+    
+    # Volume of water in Liters
+    vol_water_L = (21.0733341666667/1000)-headspace_L,
+    
+    # Temperature in Kelvin at the time when headspace concentration is equilibrated
+    Temp_headspace_K = temp_headspace, #input to function
+    
+    # Total pressure in atm- calculated from amount of HS 
+    # added at room temp then adjusted to pressure at agitator temperature of 40 C (p2 = (t2 *p1)/t1) 
+    tot_pressure_atm = ((0.001316*((weather_station_bp*25.4)-(2.5*2053/100)))*
+                          (273.15+40))/(273.15+lab_temp),
+    
+    
+    
+    ## Just for CH4
+    
+    # Partial Pressure for the CH4 gas
+    CH4_partial_pressure = tot_pressure_atm*(CH4_GC_headspace_ppm/10^6),
+    
+    
+    # mols compound in CH4 gas (calculated from partial pressure)
+    CH4_mol = (CH4_partial_pressure*headspace_L)/(0.082057*Temp_headspace_K),
+    
+    # Unnamed column. Check with Bobbie but used to calculate the mol compund in water
+    hen_law_CH4 = 101.325*(0.000014*exp(1600*((1/Temp_headspace_K)-(1/298.15)))),
+    
+    
+    # mol compound in water (estimated from Henry's)
+    CH4_mol_water = CH4_partial_pressure*hen_law_CH4*vol_water_L,
+    
+    # Mols of CH4 gas used to make the headspace. Needs to be taken out of the final concentration
+    CH4_headspace_mol = CH4_used_in_headspacePrep,
+    
+    # mols of CH4 in gas in vessel (calculated from partial pressure)
+    CH4_tot_vessel = CH4_mol + CH4_mol_water,
+    
+    ### Total Concentration of CH4.  
+    # Total concentration of CH4 in the original aqueous sample in µmol/L
+    CH4_umolL = 10^6*(CH4_tot_vessel-CH4_headspace_mol)/vol_water_L,
+    
+    
+    ## Just for CO2 
+    
+    # Partial Pressure for CO2 gas from amount of CO2 in the headspace
+    CO2_partial_pressure = tot_pressure_atm*(CO2_GC_headspace_ppm/10^6),
+    
+    # mols of CO2 in gas (estimated from Henry's)
+    CO2_mol = (CO2_partial_pressure*headspace_L)/(0.082057*Temp_headspace_K),
+    
+    
+    # Unnamed column. Check with Bobbie but used to calculate the mol compund in water
+    hen_law_CO2 = 101.325*(0.00033*exp(2400*((1/Temp_headspace_K)-(1/298.15)))),
+    
+    # mol of CO2 in water
+    CO2_mol_water = CO2_partial_pressure*hen_law_CO2*vol_water_L,
+    
+    # Total mols of CO2 in gas in vessel (calculated from partial pressure)
+    CO2_tot_vessel = CO2_mol + CO2_mol_water,
+    
+    # mols compound in gas used to make headspace
+    CO2_headspace_mol = CO2_used_in_heaspacePrep,
+    
+    ### Total Concentration of CH4.  
+    # Total concentration of CH4 in the original aqueous sample in µmol/L
+    CO2_umolL = 10^6*(CO2_tot_vessel-CO2_headspace_mol)/vol_water_L
   )
   
   return(concentration)

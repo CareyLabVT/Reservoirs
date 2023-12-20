@@ -5,4 +5,3 @@ FCR, 200, manual_Discharge, 2019-09-02 12:00:00, 2019-09-02 12:00:00, Flow_cms, 
 FCR, 200, manual_Discharge, 2019-10-04 12:00:00, 2019-10-04 12:00:00, Flow_cms, Flow_cms, 5, NA, Value suspect conditions not well captured by velocity float method
 FCR, 200, manual_Discharge, 2019-10-30 12:00:00, 2019-10-30 12:00:00, Flow_cms, Flow_cms, 3, NA, Value suspect conditions not well captured by flowmeter method
 CCR, 500, manual_Discharge, 2021-09-23 12:00:00, 2021-09-23 12:00:00, Flow_cms, Flow_cms, 5, NA, Value suspect conditions not well captured by velocity float method
-

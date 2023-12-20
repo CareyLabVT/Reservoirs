@@ -59,7 +59,7 @@ historic_datetime <- historic %>%
 
 ```{r Read in L1 file}
 
-L1 <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/manualDischarge_L1.csv")
+L1 <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv")
 
 ```
 
@@ -73,7 +73,7 @@ current_df <- dplyr::bind_rows(historic_datetime, L1)
 
 ```{r Make sure all historic flags have been added}
 #read in maintenance log
-log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/manualDischarge_Maintenance_Log.txt") %>% 
+log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt") %>% 
   mutate(flag = as.integer(flag))
 
 #run for loop to assign flags
@@ -198,7 +198,7 @@ current_df %>%
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(current_df, "manualDischarge_2019_2023.csv", row.names = F)
+write.csv(current_df, "ManualDischarge_2019_2023.csv", row.names = F)
 
 ```
 

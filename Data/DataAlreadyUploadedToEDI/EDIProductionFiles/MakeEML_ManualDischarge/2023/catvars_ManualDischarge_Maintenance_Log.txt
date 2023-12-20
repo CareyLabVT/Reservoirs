@@ -1,7 +1,7 @@
 attributeName	code	definition
-Flag	0	data not suspect
-Flag	3	"Value suspect, conditions not well captured by flowmeter method"
-Flag	5	"Value suspect, conditions not well captured by velocity float method"
+flag	0	data not suspect
+flag	3	"Value suspect, conditions not well captured by flowmeter method"
+flag	5	"Value suspect, conditions not well captured by velocity float method"
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvin's Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir

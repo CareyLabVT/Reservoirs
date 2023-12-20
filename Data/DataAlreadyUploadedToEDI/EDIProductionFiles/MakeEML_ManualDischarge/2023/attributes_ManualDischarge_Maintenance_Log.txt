@@ -1,12 +1,11 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	"Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir, BVR = Beaverdam Reservoir, CCR = Carvins Cove Reservoir"	categorical	dimensionless		NA	value is missing
 Site	"Sampling site within each reservoir, 50=Deepest part of the reservoir "	categorical	dimensionless		NA	value is missing
-Depth	Depth sample was taken					
-DataStream	Code corresponding to data set nickname;manual_Discharge	categorical	dimensionless		NA	value is missing
+DataStream	Code corresponding to data set nickname;manual_Discharge	character	dimensionless		NA	value is missing
 TIMESTAMP_start	"Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 TIMESTAMP_end	"Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-start_parameter	Name of variable corresponding to first parameter QAQCd	categorical			NA	value is missing
-end_parameter	Name of variable corresponding to last parameter QAQCd	categorical			NA	value is missing
-Flag	flag assigned to measurement 	categorical			NA	value is missing
-update_value	value to be updated if applicable	numeric			NA	value is missing
+start_parameter	Name of variable corresponding to first parameter QAQCd	character			NA	value is missing
+end_parameter	Name of variable corresponding to last parameter QAQCd	character			NA	value is missing
+flag	flag assigned to measurement 	categorical			NA	value is missing
+update_value	value to be updated if applicable	numeric	cubicMetersPerSecond		NA	value is missing
 notes	notes on why flagging occurred	character			NA	value is missing

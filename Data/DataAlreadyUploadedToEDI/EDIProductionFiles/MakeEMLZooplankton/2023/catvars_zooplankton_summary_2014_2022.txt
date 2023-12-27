@@ -20,6 +20,7 @@ Taxon	Cladocera	Zooplankton Taxon
 Taxon	Collotheca	Zooplankton Taxon
 Taxon	Conochiloides	Zooplankton Taxon
 Taxon	Conochilus	Zooplankton Taxon
+Taxon	Copepoda	Zooplankton Taxon
 Taxon	Cyclopoida	Zooplankton Taxon
 Taxon	Cyclopoids	Zooplankton Taxon
 Taxon	D. ambigua	Zooplankton Taxon

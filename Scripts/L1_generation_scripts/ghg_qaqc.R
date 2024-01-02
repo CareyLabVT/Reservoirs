@@ -23,16 +23,16 @@ source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
 
 
 ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
-                          maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.txt",
-                                    gdrive = F, # Are the files on Google Drive. True or False
-                                    gshared_drive = as_id("1YD8QyV4AsaMMzn974jPY8lhb2pcr2ql2"),
-                                    current_year = 2023, # Current Year. Must be numeric
-                                    Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
-                                    vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                                    Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
-                                    output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
-                                    MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
-                                    Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"){
+                   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.txt",
+                   gdrive = F, # Are the files on Google Drive. True or False
+                   gshared_drive = as_id("1YD8QyV4AsaMMzn974jPY8lhb2pcr2ql2"),
+                   current_year = 2023, # Current Year. Must be numeric
+                   Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
+                   vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
+                   Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=1697504481",
+                   output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
+                   MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
+                   Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"){
   
   #### 1. Read in the Maintenance Log and then Raw files ####
   
@@ -48,7 +48,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
  
   # Name the directory where the full output files are found. Ours are on GitHub 
-  mydir <-directory
+  mydir <- directory
   
   # list of GHG files on Github
   rfiles <- list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)
@@ -102,6 +102,14 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   all<-list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
+  # some timestamps are duplicated between files. Inspect:
+  duplicate_timestamps <- all[duplicated(all$date_acquired), ]
+  dups <- all %>%
+    filter(date_acquired %in% duplicate_timestamps$date_acquired)
+  # based on this, we should be okay to remove duplicates
+  all <- all %>%
+    filter(!duplicated(date_acquired))
+  
   # If the headspace_ppm is NA then there was no peak and should be set to Flag 6. 
   # This will happen later but right now want to set to NO_PEAK depending on it is for CO2 or CH4. 
   # This info will live in the notes column until we get to the Flag section
@@ -110,7 +118,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
     mutate(
       notes = ifelse(is.na(CH4_GC_headspace_ppm) & is.na(CO2_GC_headspace_ppm),"CH4CO2_NO_PEAK", 
                      ifelse(is.na(CH4_GC_headspace_ppm), "CH4_NO_PEAK",
-                     ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", ""))))
+                     ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", notes))))
   
   #### 2.2 Assign Air temp and lab pressure for time of lab sampling ####
   # read in the file Bobbie created for air temp and pressure
@@ -136,14 +144,15 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   #### 2.2 Assign the lab temp and BP based on the observations ####
   
   # set date_acquired as just a date. The dates should line up but just in case they don't 
-  # let's take the closes observation
-  all$date_acquired_comp<-as.Date(all$date_acquired)
+  # let's take the closest observation
+  all$date_acquired_comp <- as.Date(all$date_acquired)
 
   # find the closest date and then join the two data frames
-  by<-join_by(closest(date_acquired_comp>= Date))
-  fg<-full_join(all, temp_pres2, by)
+  by <- join_by(closest(date_acquired_comp >= Date))
+  fg <- full_join(all, temp_pres2, by)
   
-  fg<-fg%>%drop_na(date_acquired)
+  fg <- fg %>% 
+    drop_na(date_acquired) 
   
   
   #### 2.3 Calculate the GHG concentration from ppm to umolL ####
@@ -160,7 +169,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   site_info <- gsheet::gsheet2tbl(vial_digitized_sheet)
   
   # convert the date and DateTime into usable form
-  site_info <- site_info%>%
+  site_info <- site_info %>%
     #dplyr::rename(clean_vial_number="Vial Number")%>%
     mutate(
       clean_vial_number= `Vial Number`,
@@ -189,22 +198,51 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   work_check$lab_date = as.Date(as.character(with_tz(work_check$lab_date, "America/Nome")))
   
-  
   # Make a list of observations that don't fall with in the 3 days after collection
   
-  out_range<-work_check%>%
+  out_range <- work_check%>%
     filter(is.na(lab_vial_number)|is.na(field_vial_number))%>%
     mutate(miss = ifelse(is.na(field_date),"no_field_obs", "no_lab_obs"),
            com_date=coalesce(lab_date, field_date))%>%
     select(com_date, miss, field_date, lab_date, upper_date, field_vial_number, lab_vial_number)%>%
     dplyr::arrange(., com_date)
   
+  #Warn about missing information
+  
+  #Missing field info
+  if(nrow(out_range[out_range$miss == "no_field_obs",]) > 0){
+    format_to_print_field <- out_range %>%
+      filter(miss == "no_field_obs") %>%
+      mutate(message = paste0("Date: ", com_date, ", Vial Number: ", lab_vial_number)) %>%
+      summarize(message = paste(message, collapse = "\n"))
+    
+    warning("There are ", nrow(out_range[out_range$miss == "no_field_obs",]), 
+            " samples without field observations. 
+            These are the samples with missing information:\n",
+            format_to_print_field$message)
+  }
+  
+  #Missing lab info
+  if(nrow(out_range[out_range$miss == "no_lab_obs",]) > 0){
+    format_to_print_lab <- out_range %>%
+      filter(miss == "no_lab_obs") %>%
+      mutate(message = paste0("Date: ", com_date, ", Vial Number: ", field_vial_number)) %>%
+      summarize(message = paste(message, collapse = "\n"))
+    
+    warning("There are ", nrow(out_range[out_range$miss == "no_lab_obs",]), 
+            " samples without lab observations. 
+            These are the samples with missing information:\n",
+            format_to_print_lab$message)
+  }
+  
   
   # Make a working data frame for QAQC that goes into QAQC
-  working_final_df<-ab%>%
-    distinct()%>%
-    mutate(field_lab_date_check = coalesce(DateTime, date_acquired))%>%
-    mutate(Notes = str_c(coalesce(notes, Notes), coalesce(Notes, notes), sep="_"))%>% 
+  working_final_df <- ab%>%
+    distinct() %>%
+    mutate(field_lab_date_check = coalesce(DateTime, date_acquired),
+           Notes = ifelse(is.na(Notes), "", Notes),
+           notes = ifelse(is.na(notes), "", notes),
+           Notes = paste0(notes, Notes)) %>% 
     select(Reservoir, Site, DateTime, Depth_m,`Vial Number`,CH4_umolL, CO2_umolL, Notes)
     
   
@@ -225,10 +263,10 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   
   #### 3.1  for loop to create flag columns ####
-  for(j in colnames(working_final_df%>%select(DateTime, CH4_umolL:CO2_umolL))) { 
+  for(j in colnames(working_final_df %>% select(DateTime, CH4_umolL:CO2_umolL))) { 
     #for loop to create new columns in data frame
     working_final_df[,paste0("Flag_",colnames(working_final_df[j]))] <- 0 #creates flag column + name of variable
-    working_final_df[c(which(is.na(working_final_df[,j]))),paste0("Flag_",colnames(working_final_df[j]))] <-1 #puts in flag 1 if value not collected
+    working_final_df[c(which(is.na(working_final_df[, j]))), paste0("Flag_",colnames(working_final_df[j]))] <- 1 #puts in flag 1 if value not collected
   }
   
   ### 3.2 Flag for No Peak ####
@@ -237,26 +275,23 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   
   working_final_df <- working_final_df%>%
     mutate(
-      Flag_CO2_umolL = ifelse(Notes=="CO2_NO_PEAK_CO2_NO_PEAK" | 
-                                Notes == "CH4CO2_NO_PEAK_CH4CO2_NO_PEAK", 
+      Flag_CO2_umolL = ifelse(grepl("CO2_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
                               6, Flag_CO2_umolL),
-      Flag_CH4_umolL = ifelse(Notes=="CH4_NO_PEAK_CH4_NO_PEAK" | 
-                                Notes == "CH4CO2_NO_PEAK_CH4CO2_NO_PEAK", 
+      Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
                               6, Flag_CH4_umolL)
     )
   
   #### 3.3  Change negative values to 0 ####
-  for(k in colnames(working_final_df%>%select(CH4_umolL:CO2_umolL))) { 
+  for(k in colnames(working_final_df %>% select(CH4_umolL:CO2_umolL))) { 
     #for loop to create new columns in data frame
-    working_final_df[c(which(working_final_df[,k]<0)),paste0("Flag_",colnames(working_final_df[k]))] <- 2
-    working_final_df[c(which(working_final_df[,k]<0)),k] <- 0 #replaces value with 0
-    working_final_df[c(which(working_final_df[,paste0("Flag_",colnames(working_final_df[k]))]==6)),k] <- 0
+    working_final_df[c(which(working_final_df[,k] < 0)), paste0("Flag_", colnames(working_final_df[k]))] <- 2
+    working_final_df[c(which(working_final_df[,k] < 0)), k] <- 0 #replaces value with 0
+    working_final_df[c(which(working_final_df[,paste0("Flag_", colnames(working_final_df[k]))] == 6)), k] <- 0
   }
   
-  ### 3.4 Drop samples that don't have a depth ####
-  
+  ### 3.4 Drop samples that don't have a depth (these are samples that did not have a match in site info) ####
   working_final_df <- working_final_df%>%
-    filter(!is.na(Depth_m))%>%
+    filter(!is.na(Depth_m)) %>%
     group_by(Reservoir, Site, DateTime, Depth_m) %>% 
     mutate(Rep = row_number())%>%
     ungroup()
@@ -265,9 +300,14 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   # If there are three samples per a time then one of the obs is an NA and drop it
    
   # Get data frame with just the observations that have more than 2 reps
- a <- working_final_df[which(working_final_df$Rep >2),]
+  a <- working_final_df[which(working_final_df$Rep > 2),]
   
- # label those observations that have over 2 reps and the obs is an NA
+  # label those observations that have over 2 reps and the obs is an NA
+  # Note from ASL 19 Dec 2023 -> there is only one sample being flagged here.  
+  # Its a sample that was run twice because there was an issue the first time. 
+  # I'd strongly recommend putting this in the maintenance log to remove the 
+  # first run, rather than systematically dealing with all cases where there are
+  # 3 reps in the same way. Let me know if I can help with this!
   for(g in 1:nrow(a)){
   working_final_df[which(working_final_df$DateTime==ymd_hms(a$DateTime[g])& 
                            (is.na(working_final_df$CH4_umolL)|is.na(working_final_df$CO2_umolL))), "Remove"]<- "Remove"
@@ -287,8 +327,8 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   # Convert time that are in 12 hours to 24 hours
   raw_df <- working_final_df %>% 
     mutate(Time = format(DateTime,"%H:%M:%S"),
+           Flag_DateTime = ifelse(Time == "00:00:00", 1, 0), # Flag if set time to noon
            Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-           Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
            Date = as.Date(DateTime),
            DateTime = ymd_hms(paste0(Date, "", Time)),
            Hours = hour(DateTime),

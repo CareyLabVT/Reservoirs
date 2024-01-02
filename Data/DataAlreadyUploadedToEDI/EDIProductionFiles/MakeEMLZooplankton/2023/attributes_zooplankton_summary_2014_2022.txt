@@ -1,0 +1,16 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	"Three-letter code corresponding to sampled reservoir, BVR = Beaverdam Reservoir, CCR = Carvins Cove Reservoir, FCR = Falling Creek Reservoir, GWR = Gatewood Reservoir, SHR = Spring Hollow Reservoir"	categorical	NA		NA	No data
+Site	"Sampling site within each reservoir, 49 = Littoral site southeast of deep site in Beaverdam Reservoir, 50 = Deep hole or site nearest to dam in each reservoir, 51 = Littoral site southwest of deep site in Beaverdam Reservoir"	numeric	dimensionless		NA	No data
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	No data
+StartDepth_m	Water depth where the start of the sample was collected	numeric	meter		NA	No data
+EndDepth_m	Water depth where the sample collection ended	numeric	meter		NA	No data
+Rep	"Field replicate that distinguishes samples collected from the same site, depth, or general time"	numeric	dimensionless		NA	No data
+CollectionMethod	"Method that was used to sample the zooplankton, either a vertical net tow or Schindler trap"	categorical			NA	No data
+Taxon	Taxonomic name of each identified zooplankton	categorical			NA	No data
+Density_IndPerL	Zooplankton density for each sample	numeric	numberPerLiter		NA	No data
+MeanLength_mm	Mean length of zooplankton in each sample	numeric	millimeter		NA	No data
+MeanWeight_ug	Mean weight of zooplankton in each sample	numeric	microgram		NA	No data
+Biomass_ugL	Zooplankton biomass for each sample	numeric	microgramsPerLiter		NA	No data
+Flag_Length	Data flag for missing length measurements; 1 = sample not taken; 0 = no flag	numeric	dimensionless		NA	No data
+Flag_Weight	Data flag for missing weight measurements; 1 = sample not taken; 0 = no flag	numeric	dimensionless		NA	No data
+Flag_Biomass	Data flag for missing biomass measurements; 1 = sample not taken; 0 = no flag	numeric	dimensionless		NA	No data

@@ -4,6 +4,7 @@ author: "Austin Delany"
 date: "2023-12-08"
 output: html_document
 ---
+
 ```{r setup packages, include=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -18,8 +19,7 @@ current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/YSI_PAR_Secc
 historic_file <- read_csv('https://portal.edirepository.org/nis/dataviewer?packageid=edi.198.11&entityid=6e5a0344231de7fcebbe6dc2bed0a1c3', col_types = cols())
 ```
 
-
-```{r combine current and historic data if needed} 
+```{r combine current and historic data if needed}
 profiles <- bind_rows(current_file, historic_file)
 ```
 
@@ -81,26 +81,39 @@ ggplot(subset(profiles_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col
 ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
 ```
 
-
 <!-- #combine old and new ysi and secchi files here -->
+
 <!-- ysi_old <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/YSI_PAR_profiles_2013-2021_final.csv")) #only final because I had to modify the published dataset -->
+
 <!-- ysi_new <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv"))  -->
 
 <!-- ysi <- rbind(ysi_old,ysi_new) -->
 
-write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv"), row.names=FALSE)
+
+```{r save the data}
+write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/YSI_PAR_profiles_2013-2023.csv"), row.names=FALSE)
+```
 
 <!-- #### YSI diagnostic plots #### -->
+
 <!-- ysi_long <- ysi %>%  -->
+
 <!--   gather(metric, value, Temp_C:pH) %>%  -->
+
 <!--   mutate(month = strftime(DateTime, "%b")) %>% -->
+
 <!--   mutate(DateTime = as.Date(DateTime)) -->
 
 <!-- # FCR only; all sampling sites  -->
-<!-- ggplot(subset(ysi_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col=Depth_m)) + -->
-<!--   geom_point(cex=2) + -->
-<!--   facet_grid(metric ~ Site, scales='free') + -->
-<!--   scale_y_continuous("Concentration") + -->
-<!--   theme(axis.text.x = element_text(angle = 45, hjust=1)) + -->
-<!--   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue") -->
 
+<!-- ggplot(subset(ysi_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col=Depth_m)) + -->
+
+<!--   geom_point(cex=2) + -->
+
+<!--   facet_grid(metric ~ Site, scales='free') + -->
+
+<!--   scale_y_continuous("Concentration") + -->
+
+<!--   theme(axis.text.x = element_text(angle = 45, hjust=1)) + -->
+
+<!--   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue") -->

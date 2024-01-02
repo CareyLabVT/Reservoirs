@@ -17,6 +17,9 @@
 # Download/load libraries
 pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
 
+library(EDIutils)
+library(xml2)
+
 
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
                                     gdrive, # Are the files on Google Drive. True or False

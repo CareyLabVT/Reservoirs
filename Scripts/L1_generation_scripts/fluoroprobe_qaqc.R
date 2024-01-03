@@ -77,7 +77,10 @@ for (i in 1:length(unique(fp3$cast))){
   fp4 <- bind_rows(fp4, profile_trim)
 } 
 
-fp6 <- fp4
+# general QAQC of other variables
+
+# transmission
+fp6 <- fp4 
 
 #get rid of columns we don't need for final publication
 fp7 <- fp6 %>%
@@ -91,20 +94,20 @@ fp8 <- fp7[,c(1,2,3,11,4,5,6,7,8,9,10,12,13,14,15,16,17,18)]
 #ADD FLAGS
 
 fp_final <- fp8 %>%
-  mutate(Flag_GreenAlgae_ugL = 0,
-         Flag_BluegreenAlgae_ugL = 0,
-         Flag_BrownAlgae_ugL = 0,
-         Flag_MixedAlgae_ugL = 0,
-         Flag_YellowSubstances_ugL = 0,
-         Flag_TotalConc_ugL = 0,
+  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_BluegreenAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_BrownAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_MixedAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_YellowSubstances_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_TotalConc_ugL = ifelse(Transmission < 90, 3, 0),
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission_perc = 0,
-         Flag_RFU_525nm = 0,
-         Flag_RFU_570nm = 0,
-         Flag_RFU_610nm = 0,
-         Flag_RFU_370nm = 0,
-         Flag_RFU_590nm = 0,
-         Flag_RFU_470nm = 0) %>%
+         Flag_Transmission_perc = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_525nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_570nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_610nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_370nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_590nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_470nm = ifelse(Transmission < 90, 3, 0)) %>%
   rename(Temp_C = Temp_degC,
          Transmission_perc = Transmission) 
 

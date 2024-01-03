@@ -1,9 +1,16 @@
 ## Script to visualize seasonal UGGA data
 ## Abigail Lewis
-## 20 December 2023
+## created: 20 December 2023
+## last edit: 03 January 2024 (ADD)
 
-#Load data
-flux_all <- read.csv("2023_season_Flux_Output.csv")
+## load historical data 
+historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
+
+#Load current data
+current_data <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_L1.csv')
+
+## combine all data
+flux_all <- bind_rows(current_data, historical_data)
 
 #Plot all CH4
 flux_all%>%

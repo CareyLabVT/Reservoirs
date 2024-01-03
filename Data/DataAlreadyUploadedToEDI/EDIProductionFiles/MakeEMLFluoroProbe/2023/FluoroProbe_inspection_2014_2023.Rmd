@@ -1,0 +1,184 @@
+---
+title: "FluoroProbe_inspection_2014_2023"
+author: "Adrienne + Mary"
+date: "2023-12-13"
+output: html_document
+---
+
+This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+```
+
+
+
+```{r Read in Historical files from EDI}
+historic_data <- "https://portal.edirepository.org/nis/dataviewer?packageid=edi.272.7&entityid=001cb516ad3e8cbabe1fdcf6826a0a45"
+historic <- readr::read_csv(historic_data)
+```
+
+
+```{r Read in L1 file}
+current_data <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv"
+L1 <- readr::read_csv(current_data)
+```
+
+```{r Bind historic and L1 files together}
+
+current_df <- dplyr::bind_rows(historic, L1)
+
+```
+
+This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
+
+```{r Check there are no NAs in Flag columns}
+
+#make sure no NAS in the Flag columns
+Flags=current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+```
+```{r Data Wrangling for Plotting}
+plot_data <- current_df %>%
+  filter(year(DateTime) == 2023) %>%
+  mutate(Date = date(DateTime),
+         Hour = hour(DateTime)) %>%
+  group_by(Reservoir, Date, Hour) %>%
+  mutate(cast_id = cur_group_id())
+
+```
+
+
+```{r Plots}
+#create png plots for every cast for QAQC purposes (algal biomass)
+#these are just written to a file I temporarily create on my desktop
+#for EDI day
+for (i in 1:length(unique(plot_data$cast_id))){ #for every unique FP cast
+  profile = subset(plot_data, cast_id == unique(plot_data$cast_id)[i])
+  castname = paste(profile$Reservoir[1], profile$Site[1], profile$Date[1],
+                   paste0(profile$Hour[1],"h"),
+                   sep = "-")
+  
+  profile2 = profile %>%
+    select(Depth_m, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)%>%
+    gather(GreenAlgae_ugL:TotalConc_ugL, key = spectral_group, value = ugL)
+  
+  profile_plot <- ggplot(data = profile2, aes(x = ugL, y = Depth_m, group = spectral_group, colour = spectral_group))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+  
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/biomass/",castname,".png")
+  ggsave(filename = filename, plot = profile_plot, device = "png")
+
+}
+
+#create png plots for every cast for QAQC purposes (RFUs)
+#these are just written to a file I temporarily create on my desktop
+#for EDI day
+for (i in 1:length(unique(plot_data$cast_id))){ #for every unique FP cast
+  profile = subset(plot_data, cast_id == unique(plot_data$cast_id)[i])
+   castname = paste(profile$Reservoir[1], profile$Site[1], profile$Date[1],
+                   paste0(profile$Hour[1],"h"),
+                   sep = "-")
+  
+  profile2 = profile %>%
+    select(Depth_m, RFU_525nm, RFU_570nm, RFU_610nm, RFU_370nm, RFU_590nm, RFU_470nm)%>%
+    gather(RFU_525nm:RFU_470nm, key = wavelength, value = RFU)
+  
+  profile_plot <- ggplot(data = profile2, aes(x = RFU, y = Depth_m, group = wavelength, colour = wavelength))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+  
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/RFUs/",castname,".png")
+  ggsave(filename = filename, plot = profile_plot, device = "png")
+
+}
+
+#create png plots for every cast for QAQC purposes (temperature)
+#these are just written to a file I temporarily create on my desktop
+#for EDI day
+for (i in 1:length(unique(plot_data$cast_id))){
+  profile = subset(plot_data, cast_id == unique(plot_data$cast_id)[i])
+   castname = paste(profile$Reservoir[1], profile$Site[1], profile$Date[1],
+                   paste0(profile$Hour[1],"h"),
+                   sep = "-")
+  profile_plot <- ggplot(data = profile, aes(x = Temp_C, y = Depth_m))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/temperature/",castname,".png")
+  ggsave(filename = filename, plot = profile_plot, device = "png")
+  
+}
+
+#create png plots for every cast for QAQC purposes (transmission)
+for (i in 1:length(unique(plot_data$cast_id))){
+  profile = subset(plot_data, cast_id == unique(plot_data$cast_id)[i])
+   castname = paste(profile$Reservoir[1], profile$Site[1], profile$Date[1],
+                   paste0(profile$Hour[1],"h"),
+                   sep = "-")
+  profile_plot <- ggplot(data = profile, aes(x = Transmission_perc, y = Depth_m))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/transmission/",castname,".png")
+  ggsave(filename = filename, plot = profile_plot, device = "png")
+  
+}
+```
+
+```{r Make new CSV with current and historic files}
+# Need to decide on a naming convention for this file
+write.csv(current_df, "FluoroProbe_2014_2023.csv", row.names = F)
+
+```
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  data <- current_df #This is the line you need to modify!
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  sites_trimmed = trim_sites(data,sites) 
+  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

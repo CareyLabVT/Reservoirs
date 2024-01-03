@@ -103,20 +103,20 @@ This identifies if there are any sub-daily gaps in the current record, as gaps o
 
 The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata and are also noted in the maintenance log.
 
-```{r Check for sub daily gaps, echo=FALSE}
-
-# Because we can't have NAs for this for loop let's make a new df
- cat2 <- current_df%>%
-  filter(!is.na(RECORD))%>%
-  filter(DateTime>current_time_start)
-
-  for(i in 2:length(cat2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if( abs(cat2$RECORD[i]-cat2$RECORD[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>10){
-      print(c(cat2$DateTime[i-1], cat2$DateTime[i]))
-      print(c(cat2$RECORD[i-1], cat2$RECORD[i]))
-    }
-  }
-```
+# ```{r Check for sub daily gaps, echo=FALSE}
+# 
+# # Because we can't have NAs for this for loop let's make a new df
+#  cat2 <- current_df%>%
+#   filter(!is.na(RECORD))%>%
+#   filter(DateTime>current_time_start)
+# 
+#   for(i in 2:length(cat2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+#     if( abs(cat2$RECORD[i]-cat2$RECORD[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>10){
+#       print(c(cat2$DateTime[i-1], cat2$DateTime[i]))
+#       print(c(cat2$RECORD[i-1], cat2$RECORD[i]))
+#     }
+#   }
+# ```
 
 QAQC Historical Files: If you need to QAQC the historical file then run it through the qaqc function without start_date and end_date as NULL
 

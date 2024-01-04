@@ -574,7 +574,7 @@ chem <- full_join(TNTP, solubles_and_DOC, by = c('Reservoir', 'Site',
                                                  'DateTime',  'Depth_m', 'Rep'))
 
 ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/NutrientData/maintenance_log.txt'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/NutrientData/maintenance_log.csv'
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),

@@ -23,7 +23,7 @@ source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
 
 
 ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
-                   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.txt",
+                   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
                    gdrive = F, # Are the files on Google Drive. True or False
                    gshared_drive = as_id("1YD8QyV4AsaMMzn974jPY8lhb2pcr2ql2"),
                    current_year = 2023, # Current Year. Must be numeric

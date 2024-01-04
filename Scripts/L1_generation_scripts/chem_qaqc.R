@@ -642,7 +642,7 @@ for(i in 1:nrow(log)){
   
   ### This is where information in the maintenance log gets updated 
   
-  if(flag %in% c(5,6)){ 
+  if(flag %in% c(9,5)){ 
     # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
     
     update_profiles[c(which(update_profiles[,'Site'] == Site & update_profiles$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)

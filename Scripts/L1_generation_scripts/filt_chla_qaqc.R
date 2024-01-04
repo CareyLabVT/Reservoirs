@@ -502,6 +502,6 @@ filt_chla_qaqc(
   Year = "2023",
   blank_vol_filt = 500,
   final_vol_extract = 6,
-  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
+  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
 )

@@ -37,7 +37,7 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
   #### 1. Read in the Maintenance Log and then Raw files ####
   
   ### 1.1 Read in Maintenance file ####
-  log_read <- read_csv(maintenance_file, skip=43, col_types = cols(
+  log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),

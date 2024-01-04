@@ -111,7 +111,7 @@ update_profiles <- update_profiles |>
   
 
 ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.csv'
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),

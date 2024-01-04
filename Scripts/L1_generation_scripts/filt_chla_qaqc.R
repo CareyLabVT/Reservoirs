@@ -29,7 +29,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
   
   #### 1. Read in Maintenance file and the Raw files from the spec ####
   ### 1.1 Read in Maintenance file #### 
-  log_read <- read_csv(maintenance_file, skip = 35 ,col_types = cols(
+  log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
     Sample_date = col_date("%Y-%m-%d"),

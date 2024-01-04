@@ -128,7 +128,8 @@ qaqc_ccrmet(data_file= current_df,
          maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRM_Maintenancelog_new.csv", 
          output_file = "new_df", 
          start_date = NULL, 
-         end_date = NULL)
+         end_date = NULL, 
+         notes = FALSE)
 
 ```
 

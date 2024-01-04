@@ -36,7 +36,7 @@ all_plot<-function(Var, y_lab, y_lab2, Water=T, Use_plotly=F){
         Switch=F # Used to switch on and off the layer for the pressure sensor
       }else if (Var=="ThermistorTemp_C_13"){
         Var2="RDOTemp_C_13"
-        Var3="LvlTemp_C_913"
+        Var3="LvlTemp_C_13"
         Switch=T # Used to switch on and off the layer for the pressure sensor
       }
       }else if (Res=="CCR" & Var =="ThermistorTemp_C_13"){

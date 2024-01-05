@@ -49,6 +49,16 @@ secchi_reformat[is.na(secchi_reformat)] <- 0
 secchi_reformat <- as.data.frame(secchi_reformat)
 
 
+## CHECK FOR DUPLICATES 
+secchi_dup <- secchi_reformat |> 
+  group_by(Reservoir, Site, DateTime) |> 
+  mutate(n = n()) |> 
+  filter(n > 1)
+
+if (nrow(secchi_dup) > 0){
+  print('DUPLICATE DATA FOUND')
+}
+
 # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
 
 log_read <- read_csv(maintenance_file, col_types = cols(

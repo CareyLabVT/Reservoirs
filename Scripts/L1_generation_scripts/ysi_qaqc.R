@@ -1,9 +1,6 @@
 # YSI and PAR QAQC/collation
 # last edited: Austin Delany
-# 2023-11-02
-
-#install.packages('pacman') ## Run this line if you don't have "pacman" package installed
-pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load other packages
+# 2023-12-04
 
 #### YSI Profiles ####
 
@@ -24,87 +21,220 @@ pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load
 # ysi$DOsat_percent[as.Date(ysi$DateTime)=="2020-05-25" & ysi$Reservoir=="FCR" & ysi$Depth_m==4.0] <- 46.6
 
 #------------------------------------------------------------------------------#
+#install.packages('pacman') ## Run this line if you don't have "pacman" package installed
+pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load other packages
+library(gsheet)
+
 #read in new data
 #raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv"))
-raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
+#raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
 
-#rename sp cond column because for some reason it changed...
-names(raw_profiles)[names(raw_profiles) == 'SpCond_uScm'] <- 'Sp_cond_uScm'
+
+
+
+gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 
 #date format
-raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ))#"%m/%d/%y %H:%M"
+raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'), tz = "America/New_York")
 
-#make depth numeric
+#raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ), tz =  "America/New_York")#"%m/%d/%y %H:%M"
+
+# ### Create a DateTime Flag for non-recorded times ####
+# # (i.e., 12:00) and set to noon
+# # Convert time that are in 12 hours to 24 hours
+raw_profiles <- raw_profiles %>%
+  mutate(Time = format(DateTime,"%H:%M:%S"),
+         Time = ifelse(Time == "00:00:00", "12:00:00",Time),
+         Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
+         Date = as.Date(DateTime),
+         DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
+         Hours = hour(DateTime),
+         DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
+         DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
+  select(-c(Time, Date, Hours))
+
+#make sure other columns are the correct type
+raw_profiles$Reservoir <- as.character(raw_profiles$Reservoir)
+raw_profiles$Site <- as.numeric(raw_profiles$Site)
+raw_profiles$Temp_C <- as.numeric(raw_profiles$Temp_C)
 raw_profiles$Depth_m <- as.numeric(raw_profiles$Depth_m)
+raw_profiles$DO_mgL <- as.numeric(raw_profiles$DO_mgL)
+raw_profiles$DOsat_percent <- as.numeric(raw_profiles$DOsat_percent)
+raw_profiles$Cond_uScm <- as.numeric(raw_profiles$Cond_uScm)
+raw_profiles$SpCond_uScm <- as.numeric(raw_profiles$SpCond_uScm)
+raw_profiles$PAR_umolm2s <- as.numeric(raw_profiles$PAR_umolm2s)
+raw_profiles$ORP_mV <- as.numeric(raw_profiles$ORP_mV)
+raw_profiles$pH <- as.numeric(raw_profiles$pH)
 
-#rename notes col
-names(raw_profiles)[20] <- "Notes"
 
-#add flag datetime col
-raw_profiles$Flag_DateTime <- NA
+## update raw data into new table to make rerunnig easier 
+update_profiles <- raw_profiles
 
-#QAQC data + add flags
-profiles <- raw_profiles %>%
-  mutate(Flag_DateTime = ifelse(Notes=="There is no time recorded",1,0)) %>%
-  select(!Notes) %>%
-  group_by(Reservoir, DateTime) %>% # columns not to parse to numeric
-  mutate_if(is.character,funs(round(as.double(.), 2))) %>%  # parse all other columns to numeric
+## ADD FLAGS
+# 0 - NOT SUSPECT 
+# 1 - SAMPLE NOT TAKEN
+# 2 - INSTRUMENT MALFUNCTION
+# 3 - SAMPLE BELOW DETECTION LIMIT
+# 4 - NEGATIVE VALUE SET TO ZERO
+# 5 - SUSPECT SAMPLE 
+# 6 - HUMAN ERROR
+
+## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
+for(j in colnames(update_profiles%>%select(DateTime, Temp_C:pH))) { 
   
-  # Add 'flag' columns for each variable; 1 = flag for NA value
-  mutate(Flag_pH = ifelse(is.na(pH), 1,
-                          ifelse((pH > 14 | pH < 4), 2, # Flag 2 = inst. malfunction
-                                 ifelse(pH < 0, 4, #Flag 4 = negative set to 0
-                                        ifelse(pH < 5, paste0(Flag_pH,5), Flag_pH)))), 
-         Flag_ORP = ifelse(is.na(ORP_mV), 1, 
-                           ifelse(ORP_mV > 750, 2, 0)),  # Flag 2 = inst. malfunction
-         Flag_PAR = ifelse(is.na(PAR_umolm2s), 1,
-                           ifelse(PAR_umolm2s < 0, 4, 0)), #Flag 4 = negative set to 0
-         Flag_Temp = ifelse(is.na(Temp_C), 1, 
-                            ifelse(Temp_C > 35, 2, 0)), # Flag 2 = inst. malfunction
-         Flag_DO = ifelse(is.na(DO_mgL), 1,
-                          ifelse(DO_mgL > 70, 2, # Flag 2 = inst. malfunction
-                                 ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
-         Flag_DOSat = ifelse(is.na(DOSat), 1,
-                             ifelse(DOSat > 200, 2, # Flag 2 = inst. malfunction
-                                    ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
-         Flag_Cond = ifelse(is.na(Cond_uScm), 1,
-                            ifelse((Cond_uScm < 10 | Cond_uScm > 250), 2, # Flag 2 = inst. malfunction
-                                   ifelse(DO_mgL < 0, 4, 0))),  #Flag 4 = negative set to 0
-         Flag_Sp_Cond = ifelse(is.na(Sp_cond_uScm), 1,
-                               ifelse(DO_mgL > 250, 2,  # Flag 2 = inst. malfunction
-                                      ifelse(DO_mgL < 0, 4, 0)))) %>%  #Flag 4 = negative set to 0
+  #create new flag column in data frame and set to zero
+  update_profiles[,paste0("Flag_",colnames(update_profiles[j]))] <- 0 #creates flag column + name of variable
   
-  
-  #set data for any 2 flags to NA and any 4 flags to 0
-  mutate(pH = ifelse(Flag_pH == 2, NA, 
-                     ifelse(Flag_pH == 4, 0, paste0(pH))),
-         ORP_mV = ifelse(Flag_ORP == 2, NA, ORP_mV),
-         Temp_C = ifelse(Flag_Temp == 2, NA, paste0(Temp_C)),
-         PAR_umolm2s = ifelse(Flag_PAR == 4, 0, paste0(PAR_umolm2s)),
-         DO_mgL = ifelse(Flag_DO == 2, NA, 
-                         ifelse(Flag_DO == 4, 0, DO_mgL)),
-         DOSat = ifelse(Flag_DOSat == 2, NA,
-                        ifelse(Flag_DOSat == 4, 0, DOSat)),
-         Cond_uScm = ifelse(Flag_Cond == 2, NA, 
-                            ifelse(Flag_Cond == 4, 0, paste0(Cond_uScm))),
-         Sp_cond_uScm = ifelse(Flag_Sp_Cond == 2, NA, 
-                               ifelse(Flag_Sp_Cond == 4, 0, paste0(Sp_cond_uScm)))) %>%
-  
-  # Arrange order of columns for final data table
-  select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOSat, 
-         Cond_uScm, Sp_cond_uScm, PAR_umolm2s, ORP_mV, pH, Flag_DateTime, Flag_Temp, Flag_DO, Flag_DOSat,
-         Flag_Cond, Flag_Sp_Cond, Flag_PAR, Flag_ORP, Flag_pH) %>%
-  arrange(Reservoir, DateTime, Depth_m) 
+  #puts in flag 1 if value not collected
+  update_profiles[c(which(is.na(update_profiles[,j]))),paste0("Flag_",colnames(update_profiles[j]))] <- 1
+}
 
-#manually replace NA flags with 0
-profiles$Flag_Sp_Cond[is.na(profiles$Flag_Sp_Cond)] <- 0
-profiles$Flag_DOSat[is.na(profiles$Flag_DOSat)] <- 0
-profiles$Flag_DateTime[is.na(profiles$Flag_DateTime)] <- 0
+# ## check for values less than zero
+for(j in colnames(update_profiles%>%select(DO_mgL:pH))){ # omit temp because it can be negative
+  ## set flags for negative values
+  update_profiles[c(which(update_profiles[,j] < 0)),paste0("Flag_",colnames(update_profiles[j]))] <- 4
+  update_profiles[c(which(update_profiles[,j]<0)),j] <- 0 #replaces value with 0
+}
 
-#change saome variable names and flags to include units in the final df
-names(profiles) <- c(names(profiles)[1:6],"DOsat_percent","Cond_uScm","SpCond_uScm",names(profiles)[10:13],"Flag_Temp_C","Flag_DO_mgL",
-                "Flag_DOsat_percent","Flag_Cond_uScm","Flag_SpCond_uScm",
-                "Flag_PAR_umolm2s","Flag_ORP_mV","Flag_pH")
+## AUTOMATED FLAGS THAT ARE DONE FOR EACH VARIABLE INDIVIDUALLY (Instrument malfunction / MDL)
+update_profiles <- update_profiles |> 
+  mutate(Flag_pH = ifelse((!is.na(pH) & (pH > 14 | pH < 4)), 2, Flag_pH), 
+         Flag_ORP_mV = ifelse((!is.na(ORP_mV) & (ORP_mV > 750)), 2, Flag_ORP_mV), 
+         #Flag_PAR_umolm2s = No bounds given, 
+         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, Flag_Temp_C), 
+         Flag_DO_mgL = ifelse((!is.na(DO_mgL) & (DO_mgL > 70)), 2, Flag_DO_mgL),
+         Flag_DOsat_percent = ifelse((!is.na(DOsat_percent) & (DOsat_percent > 200)), 2,Flag_DOsat_percent), 
+         Flag_Cond_uScm = ifelse((!is.na(Cond_uScm) & ((Cond_uScm < 10 | Cond_uScm > 250))), 2, Flag_Cond_uScm),
+         Flag_SpCond_uScm = ifelse((!is.na(SpCond_uScm) & (SpCond_uScm > 250)), 2, Flag_SpCond_uScm)
+  )
+  
+
+## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.csv'
+log_read <- read_csv(maintenance_file, col_types = cols(
+  .default = col_character(),
+  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  flag = col_integer()
+))
+
+log <- log_read
+
+for(i in 1:nrow(log)){
+  ### Assign variables based on lines in the maintenance log. 
+  
+  ### get start and end time of one maintenance event
+  start <- force_tz(as.POSIXct(log$TIMESTAMP_start[i]), tzone = "America/New_York")
+  end <- force_tz(as.POSIXct(log$TIMESTAMP_end[i]), tzone = "America/New_York")
+  
+  ### Get the Reservoir Name
+  Reservoir <- log$Reservoir[i]
+  
+  ### Get the Site Number
+  Site <- as.numeric(log$Site[i])
+  
+  ### Get the depth value
+  Depth <- as.numeric(log$Depth[i]) ## IS THERE SUPPOSED TO BE A COLUMN ADDED TO MAINT LOG CALLED NEW_VALUE?
+
+  ### Get the Maintenance Flag 
+  flag <- log$flag[i]
+  
+  ### Get the new value for a column or an offset
+  update_value <- as.numeric(log$update_value[i])
+  
+  ### Get the names of the columns affected by maintenance
+  colname_start <- log$start_parameter[i]
+  colname_end <- log$end_parameter[i]
+  
+  ### if it is only one parameter parameter then only one column will be selected
+  
+  if(is.na(colname_start)){
+    
+    maintenance_cols <- colnames(update_profiles%>%select(colname_end)) 
+    
+  }else if(is.na(colname_end)){
+    
+    maintenance_cols <- colnames(update_profiles%>%select(colname_start))
+    
+  }else{
+    maintenance_cols <- colnames(update_profiles%>%select(colname_start:colname_end))
+  }
+  
+  if(is.na(end)){
+    # If there the maintenance is on going then the columns will be removed until
+    # and end date is added
+    Time <- update_profiles |> filter(DateTime >= start) |> select(DateTime)
+    
+  }else if (is.na(start)){
+    # If there is only an end date change columns from beginning of data frame until end date
+    Time <- update_profiles |> filter(DateTime <= end) |> select(DateTime)
+    
+  }else {
+    Time <- update_profiles |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+  }
+  
+  ### This is where information in the maintenance log gets updated 
+
+  if(flag %in% c(1,2)){
+    # The observations are changed to NA for maintenance or other issues found in the maintenance log
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(3)){ 
+    ## BDL
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(4)){
+    ## change negative values are changed to 0
+    
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- 0
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  } else if(flag %in% c(5)){ 
+    # Suspect sample
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else{
+    warning("Flag not coded in the L1 script. See Austin or Adrienne")
+  }
+}
+#### END MAINTENANCE LOG CODE
+
+
+## ORGANIZE FINAL TABLE ##
+ysi <- update_profiles |> 
+  select(Reservoir, Site, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, 
+         Cond_uScm, SpCond_uScm, PAR_umolm2s, ORP_mV, pH, Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent,
+         Flag_Cond_uScm, Flag_SpCond_uScm, Flag_PAR_umolm2s, Flag_ORP_mV, Flag_pH) |> 
+  arrange(Reservoir, DateTime, Depth_m)
+  
+
+## FINAL GENERAL QAQC ##
+
+#change all ccr site 100 to 101
+ysi$Site[ysi$Reservoir=="CCR" & ysi$Site==100] <- 101
+
+#add a 5 flag for all pH values between 4 and 5 from past years
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 5] <- 5 
+
+#manually switch the one pH value < 4 to have a 2 flag for instrument malfunction
+ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
+
+#then set that value to NA
+ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
+
+
+# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+package_ID <- 'edi.198.11'
+eml <- read_metadata(package_ID)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
+ysi <- ysi |> filter(DateTime > last_edi_date)
+
 
 # Write to CSV -- save as L1 file
-write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
+#write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
+write.csv(ysi, 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', row.names = FALSE)

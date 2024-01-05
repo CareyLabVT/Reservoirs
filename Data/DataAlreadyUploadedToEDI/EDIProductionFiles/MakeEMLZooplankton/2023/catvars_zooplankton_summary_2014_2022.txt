@@ -1,0 +1,55 @@
+attributeName	code	definition
+CollectionMethod	Schindler	Zooplankton Collection Method
+CollectionMethod	Tow	Zooplankton Collection Method
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+Taxon	Anuraeopsis	Zooplankton Taxon
+Taxon	Ascomorpha	Zooplankton Taxon
+Taxon	Asplanchna	Zooplankton Taxon
+Taxon	Bipalpus	Zooplankton Taxon
+Taxon	Bosmina	Zooplankton Taxon
+Taxon	Brachionus	Zooplankton Taxon
+Taxon	Calanoida	Zooplankton Taxon
+Taxon	Ceriodaphnia	Zooplankton Taxon
+Taxon	Chaoborus	Zooplankton Taxon
+Taxon	Chydorus	Zooplankton Taxon
+Taxon	Cladocera	Zooplankton Taxon
+Taxon	Collotheca	Zooplankton Taxon
+Taxon	Conochiloides	Zooplankton Taxon
+Taxon	Conochilus	Zooplankton Taxon
+Taxon	Copepoda	Zooplankton Taxon
+Taxon	Cyclopoida	Zooplankton Taxon
+Taxon	Cyclopoids	Zooplankton Taxon
+Taxon	D. ambigua	Zooplankton Taxon
+Taxon	D. catawba	Zooplankton Taxon
+Taxon	Daphnia	Zooplankton Taxon
+Taxon	Diaphanosoma	Zooplankton Taxon
+Taxon	Diaptomus	Zooplankton Taxon
+Taxon	Euchlanis	Zooplankton Taxon
+Taxon	Filinia	Zooplankton Taxon
+Taxon	Finilia	Zooplankton Taxon
+Taxon	Gastropus	Zooplankton Taxon
+Taxon	Hexarthra	Zooplankton Taxon
+Taxon	Holopedium	Zooplankton Taxon
+Taxon	Kellicottia	Zooplankton Taxon
+Taxon	Keratella	Zooplankton Taxon
+Taxon	Lecane	Zooplankton Taxon
+Taxon	Lepadella	Zooplankton Taxon
+Taxon	Leptodora	Zooplankton Taxon
+Taxon	Monostyla	Zooplankton Taxon
+Taxon	Nauplii	Zooplankton Taxon
+Taxon	Notholca	Zooplankton Taxon
+Taxon	Polyarthra	Zooplankton Taxon
+Taxon	Pompholyx	Zooplankton Taxon
+Taxon	Rotifera	Zooplankton Taxon
+Taxon	Sida	Zooplankton Taxon
+Taxon	Synchaeta	Zooplankton Taxon
+Taxon	Total Rotifers	Zooplankton Taxon
+Taxon	Trichocerca	Zooplankton Taxon
+Taxon	Trichotria	Zooplankton Taxon
+Taxon	Tylotrocha	Zooplankton Taxon
+Taxon	bipalpus	Zooplankton Taxon
+Taxon	nauplius	Zooplankton Taxon

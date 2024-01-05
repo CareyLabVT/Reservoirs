@@ -2,7 +2,7 @@
 #Author: Mary Lofton
 #Updated version: Austin Delany
 #Date created: 16DEC19
-#Last updated: 2023-09-07
+#Last updated: 2024-01-05
 
 
 library(tidyverse)
@@ -15,7 +15,9 @@ rm(list=ls())
 #install.packages('pacman')
 #pacman::p_load(tidyverse, lubridate, googlesheets4)
 
-fluoroprobe_qaqc <- function(){
+fluoroprobe_qaqc <- function(maintenance_file ,
+                             start_date = NULL, 
+                             end_date = NULL){
 
 # Load in column names for .txt files to get template
 col_names <- names(read_tsv("./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/20230111_BVR_50.txt", n_max = 0))
@@ -77,7 +79,10 @@ for (i in 1:length(unique(fp3$cast))){
   fp4 <- bind_rows(fp4, profile_trim)
 } 
 
-fp6 <- fp4
+# general QAQC of other variables
+
+# transmission
+fp6 <- fp4 
 
 #get rid of columns we don't need for final publication
 fp7 <- fp6 %>%
@@ -91,26 +96,187 @@ fp8 <- fp7[,c(1,2,3,11,4,5,6,7,8,9,10,12,13,14,15,16,17,18)]
 #ADD FLAGS
 
 fp_final <- fp8 %>%
-  mutate(Flag_GreenAlgae_ugL = 0,
-         Flag_BluegreenAlgae_ugL = 0,
-         Flag_BrownAlgae_ugL = 0,
-         Flag_MixedAlgae_ugL = 0,
-         Flag_TotalConc_ugL = 0,
+  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_BluegreenAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_BrownAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_MixedAlgae_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_YellowSubstances_ugL = ifelse(Transmission < 90, 3, 0),
+         Flag_TotalConc_ugL = ifelse(Transmission < 90, 3, 0),
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission_perc = 0,
-         Flag_RFU_525nm = 0,
-         Flag_RFU_570nm = 0,
-         Flag_RFU_610nm = 0,
-         Flag_RFU_370nm = 0,
-         Flag_RFU_590nm = 0,
-         Flag_RFU_470nm = 0) %>%
+         Flag_Transmission_perc = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_525nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_570nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_610nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_370nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_590nm = ifelse(Transmission < 90, 3, 0),
+         Flag_RFU_470nm = ifelse(Transmission < 90, 3, 0)) %>%
   rename(Temp_C = Temp_degC,
          Transmission_perc = Transmission) 
+
+
+### 4. Take out values based on the Maintenance Log (THIS IS A TEST FOR NOW) -- ALSO MIGHT MOVE SOMEWHERE ELSE IN SCRIPT
+## TRY ADDING FLEXIBILITY TO IGNORE ANY COMMENTS IN MAINT LOG
+
+# modify raw_df based on the information in the log
+
+#log <- utils::read.table('Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt', sep = ',', header = TRUE)
+
+#log <- fread("grep -v '^#' Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/maintenance_log.txt", data.table = FALSE)
+
+# log_read <- read_csv(maintenance_file, skip=43, col_types = cols(
+#   .default = col_character(),
+#   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+#   flag = col_integer()
+# ))
+
+### MAINTENANCE LOG CODE -- UNCOMMENT WHEN FILE IS READY
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+
+log_read <- read_csv(maintenance_file, col_types = cols(
+  .default = col_character(),
+  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  flag = col_integer()
+))
+
+log <- log_read
+
+### identify the date subsetting for the data
+if (!is.null(start_date)){
+  fp_final <- fp_final %>% 
+    filter(DateTime >= start_date)
+  log <- log %>%
+    filter(TIMESTAMP_start <= end_date)
+}
+
+if(!is.null(end_date)){
+  fp_final <- fp_final %>% 
+    filter(DateTime <= end_date)
+  log <- log %>%
+    filter(TIMESTAMP_end >= start_date)
+}
+
+# if (nrow(log) == 0){
+#   log <- log_read
+# }
+
+if (nrow(log) > 0){
+  
+for(i in 1:nrow(log)){
+  ### Assign variables based on lines in the maintenance log.
+
+  ### get start and end time of one maintenance event
+  start <- log$TIMESTAMP_start[i]
+  end <- log$TIMESTAMP_end[i]
+
+  ### Get the Reservoir Name
+
+  Reservoir <- log$Reservoir[i]
+
+  ### Get the Site Number
+
+  Site <- as.numeric(log$Site)
+
+  ### Get the depth if it is not NA
+
+  if(!is.na(log$Depth[i])){
+    Depth <- as.numeric(log$new_value[i]) ## IS THERE SUPPOSED TO BE A COLUMN ADDED TO MAINT LOG CALLED NEW_VALUE?
+  }
+
+  ### Get the Maintenance Flag
+
+  flag <- log$flag[i]
+
+  ### Get the new value for a column or an offset. If it is not an NA
+
+  if(!is.na(log$update_value[i])){
+
+    update_value <- as.numeric(log$update_value[i])
+  }
+
+
+  ### Get the names of the columns affected by maintenance
+
+  colname_start <- log$start_parameter[i]
+  colname_end <- log$end_parameter[i]
+
+  ### if it is only one parameter parameter then only one column will be selected
+
+  if(is.na(colname_start)){
+
+    maintenance_cols <- colnames(fp_final%>%select(colname_end))
+
+  }else if(is.na(colname_end)){
+
+    maintenance_cols <- colnames(fp_final%>%select(colname_start))
+
+  }else{
+    maintenance_cols <- colnames(fp_final%>%select(colname_start:colname_end))
+  }
+  
+  # remove flag and notes cols in the maint_col vector
+  maintenance_cols <- maintenance_cols[!grepl('Flag', maintenance_cols)]
+  maintenance_cols <- maintenance_cols[!grepl('Note', maintenance_cols)]
+
+  if(is.na(end)){
+    # If there the maintenance is on going then the columns will be removed until
+    # and end date is added
+    Time <- fp_final$DateTime >= start
+
+  }else if (is.na(start)){
+    # If there is only an end date change columns from beginning of data frame until end date
+    Time <- fp_final$DateTime <= end
+
+  }else {
+
+    Time <- fp_final$DateTime >= start & fp_final$DateTime <= end
+  }
+
+  ### This is where information in the maintenance log gets removed.
+  # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
+
+  # replace relevant data with NAs and set flags while maintenance was in effect
+  if(flag %in% c(1)){
+    # Flagged values but keep in dataset
+    #Met[Met$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    fp_final[fp_final$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(2)){ 
+    ## Instrument error
+    
+    fp_final[c(which(fp_final[,'Site'] == Site & fp_final$DateTime %in% Time$DateTime)),maintenance_cols] <- NA
+    fp_final[fp_final$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }
+  else
+  {
+    warning("Flag not coded in the L1 script. See Austin or Adrienne")
+  }
+} # end for loop
+} # end conditional statement
+
+### END MAINTENANCE LOG CODE ###
+
+# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+# package_ID <- 'edi.272.7'
+# eml <- read_metadata(package_ID)
+# date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+# last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+# 
+# 
+# fp_final <- raw_df |> filter(DateTime > last_edi_date)
 
 write.csv(fp_final, "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv", row.names = FALSE)
 
 }
 
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+start_date <- '2023-01-01'
+end_date <- '2023-12-31'
+
 # run the function
-fluoroprobe_qaqc() 
+fluoroprobe_qaqc(maintenance_file = maintenance_file, 
+                 start_date = start_date,
+                 end_date = end_date) 
 

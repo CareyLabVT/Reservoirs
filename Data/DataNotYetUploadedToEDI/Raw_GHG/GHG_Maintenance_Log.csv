@@ -1,0 +1,6 @@
+Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter, vial_number, flag, update_value, notes
+FCR, 100, 0.1, GHG, 2023-02-03 10:15:00 EST, 2023-02-03 10:22:00 EST,  CH4_umolL, CO2_umolL, NA, 1, NA, sample collected but not analysed until over a month later
+FCR, 50, NA, GHG, 2023-02-03 12:25:00 EST, 2023-02-03 13:05:00 EST, CH4_umolL, CO2_umolL, NA, 1, NA, sample collected but not analysed until over a month later
+
+
+

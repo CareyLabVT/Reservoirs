@@ -31,12 +31,13 @@ ICP2020 <- read_excel('2020_ICPData.xlsx', skip = 3)
 ICP2019 <- read_excel('2019_ICPData.xlsx', skip = 3) 
 ICP2018 <- read_excel('2018_ICPData.xlsx', skip = 3)
 
+#combine all ICP data into one frame - ICPData
 ICPData = ICP2022%>%
   rbind.fill(ICP2021)%>%
   rbind.fill(ICP2020)%>%
   rbind.fill(ICP2019)%>%
   rbind.fill(ICP2018)
-
+#rename headers to element in ppb
 glimpse(ICPData)
 ICPData <- ICPData %>% dplyr::rename('Li_ppb'=`7Li (STDR)`,
                                'Na_ppb' =`23Na (STDR)`,
@@ -80,12 +81,14 @@ Digestion2020 <-  read_excel('2020_AcidDigestion_EDI.xlsx')
 Digestion2019 <-  read_excel('2019_AcidDigestions_EDI.xlsx')
 Digestion2018 <-  read_excel('2018_AcidDigestions_EDI.xlsx')
 
+#combine all digestion years into one frame
 Digestion <- Digestion2022%>%
   rbind(Digestion2021)%>%
   rbind(Digestion2020)%>%
   rbind(Digestion2019)%>%
   rbind(Digestion2018)
 
+#combine all ICPdata with digestion information
 frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple = "all",relationship = "many-to-many")
 
 #separating to get sample date
@@ -190,7 +193,7 @@ frame2_complete=frame2_complete%>%
          Tb_ppb=as.numeric(Tb_ppb),
          Ho_ppb=as.numeric(Ho_ppb),
          Ti48_ppb=as.numeric(Ti48_ppb))
-#change ppb to mg/L by dividing by 1000
+#change ppb to mg/L by dividing by 1000 #changing ppb to concentration
 frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000,
                                      ICPTNa_mgL = Na_ppb/1000,
                                      ICPTMg_mgL = Mg_ppb/1000,
@@ -224,8 +227,8 @@ frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000,
                                      ICPTTb_mgL = Tb_ppb/1000,
                                      ICPTHo_mgL = Ho_ppb/1000,
                                      ICPTTi48_mgL = Ti48_ppb/1000,
-                                     DilutionFactor = 20,
-                                     TLi_g = (ICPTLi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
+                                     DilutionFactor = 20, #insert dilution factor which is constant
+                                     TLi_g = (ICPTLi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), #total mass of metals in sed traps
                                      TNa_g = (ICPTNa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
                                      TMg_g = (ICPTMg_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
                                      TAl_g = (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
@@ -258,7 +261,7 @@ frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000,
                                      TTb_g = (ICPTTb_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
                                      THo_g = (ICPTHo_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
                                      TTi48_g = (ICPTTi48_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
-                                     TLiFlux_gm2d = TLi_g/CombinedXSA_m2/Duration_days,
+                                     TLiFlux_gm2d = TLi_g/CombinedXSA_m2/Duration_days, #total mass per trap changed to flux
                                      TNaFlux_gm2d = TNa_g/CombinedXSA_m2/Duration_days,
                                      TMgFlux_gm2d = TMg_g/CombinedXSA_m2/Duration_days,
                                      TAlFlux_gm2d = TAl_g/CombinedXSA_m2/Duration_days,

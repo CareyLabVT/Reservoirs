@@ -13,12 +13,24 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
-```{r setup packages, include=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE)
+```{r Set Up, include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
 
-# Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet)
+# Source scripts from GitHub
+devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
+devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R')
+
+
+ #turn off pander auto asis
+        pander::panderOptions('knitr.auto.asis', FALSE)
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2023-01-01 00:00:00"
+current_time_end="2023-12-31 23:59:00"
 ```
 
 
@@ -71,7 +83,38 @@ for(f in 1:(ncol(Flags))){
 ```
 
 ```{r Plots}
+```{r Temp, echo=FALSE, results='asis'}
 
+dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly=F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly temp, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
 ```
 
 ```{r Make new CSV with current and historic files}

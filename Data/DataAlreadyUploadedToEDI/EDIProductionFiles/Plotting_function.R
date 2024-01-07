@@ -8,6 +8,9 @@ all_plot<-function(Var,
                    Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
                    Use_plotly = F){ # Do you want to produce plotly interactive plots? 
   
+   # Start off with the extra plot as false and it will change to true if there are extra plots
+  Extra_plot=FALSE
+  
   # Are there raw files. This is only for streaming sensors where we have access to the raw files before qaqc
   if(Raw_file == T){
     switch_raw=T

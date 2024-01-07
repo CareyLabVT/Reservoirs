@@ -1,24 +1,33 @@
-# Functions for streaming Sensors Visual Inspection 
+# Functions for Sensors Visual Inspection 
 # Use in the markdown to create plots and for plotly to work
 
-all_plot<-function(Var, y_lab, y_lab2, Water=T, Raw_file = T, Use_plotly=F){
-  # Are there raw files
+all_plot<-function(Var, 
+                   y_lab,  # This label can take an expression aka have the proper degrees C, 
+                   y_lab2, # This label is for the plotly function which can not handle expression argument. 
+                   Water=T, # Are these plots for inwater streaming sensors?
+                   Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+                   Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+  
+  # Are there raw files. This is only for streaming sensors where we have access to the raw files before qaqc
   if(Raw_file == T){
     switch_raw=T
+    
+    # If there are raw files to compare to then we only want to keep both observations if they are different.
+    # It makes the file smaller. 
+    # Let's just look at the current
+    # only keep observations that are distinct for that variable
+    
+    df_unique <- current_plot_df[!duplicated(current_plot_df[c('DateTime', Var)]),]
+    
+    # create layers
+    qaqc_current <- df_unique%>%filter(type=="qaqc")
+    
+    raw_current <- df_unique%>%filter(type=="raw")
+    
   }else{
     switch_raw=F
   }
   
-  
-  # Let's just look at the current
-  # only keep observations that are distinct for that variable
-  
-  df_unique <- current_plot_df[!duplicated(current_plot_df[c('DateTime', Var)]),]
-  
-  # create layers
-  qaqc_current <- df_unique%>%filter(type=="qaqc")
-  
-  raw_current <- df_unique%>%filter(type=="raw")
   
   
   if(Water==T){

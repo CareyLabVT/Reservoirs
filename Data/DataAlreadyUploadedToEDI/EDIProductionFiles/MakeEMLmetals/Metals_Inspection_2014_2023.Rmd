@@ -1,5 +1,5 @@
 ---
-title: "Variable_inspection_startYear_endYear"
+title: "Metals_inspection_2014_2023"
 author: "Adrienne"
 date: "2023-11-15"
 output: html_document
@@ -19,7 +19,9 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
 
 # Source scripts from GitHub
-devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
+# QAQC script
+# devtools::source_url(ADD METALS L1 FUNCTION HERE)
+# Plotting script
 devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R')
 
 
@@ -37,7 +39,7 @@ current_time_end="2023-12-31 23:59:00"
 
 ```{r Read in Historical files from EDI}
 
-inUrl1  <- ADD PASTA FROM EDI HERE
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/7/e71d70cac1650610e6a3fbbf7928007f"
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -56,7 +58,8 @@ L1 <- read_csv(LINK TO L1 FILE HERE)
 
 ```{r Bind historic and L1 files together}
 
-current_df <- dplyr::bind_rows(historic, L1)
+current_df <- dplyr::bind_rows(historic, L1)%>%
+  filter(DateTime<ymd_hms(current_time_end))
 
 ```
 
@@ -82,13 +85,42 @@ for(f in 1:(ncol(Flags))){
 
 ```
 
-```{r Plots}
-```{r Temp, echo=FALSE, results='asis'}
+ADD THE FLAGS HERE AND WAHT EACH FLAG MEANS
 
-dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
+
+```{r Filter for current year and daily average, include=FALSE}
+
+current <- current_df%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(-contains("Flag"))
+    mutate(type = "qaqc")
+
+daily <- current_df%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+
+  
+current_df <- current_df%>%
+  mutate(Year=year(DateTime))
+
+# colors 
+colors <- c("raw" = "red", "qaqc" = "black")
+
+```
+
+### QAQC Plots
+
+```{r QAQC Plots, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("mgL",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly=F)
+outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L", Water=F, Raw_file = F, Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -115,12 +147,12 @@ output <- unlist(outputs, recursive = F)
   )
   }  
 ```
-```
+
 
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(current_df, "Variable_startYear_EndYear.csv", row.names = F)
+write.csv(current_df, "Metals_2014_2023.csv", row.names = F)
 
 ```
 

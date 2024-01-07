@@ -15,11 +15,11 @@
 # 7. Save files
 
 # Read in packages
-pacman::p_load(tidyverse, lubridate, gsheet)
+pacman::p_load("tidyverse", "lubridate", "gsheet")
 
 metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/",
-                        sample_ID_key = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-                        maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.txt",
+                        sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/f27fc159d6436fdf05b0202746c8f0331c3764fd/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
+                        maintenance_file = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
                         sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056",
                         MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
                         outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv",
@@ -28,8 +28,8 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
   # These are so I can run the function one step at a time and figure everything out. 
   # Leave for now while still in figuring out mode
   directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
-  sample_ID_key = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.txt"
+  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/f27fc159d6436fdf05b0202746c8f0331c3764fd/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+  maintenance_file = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
   sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056"
   MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
   outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"

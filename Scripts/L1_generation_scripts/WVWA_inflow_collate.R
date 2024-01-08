@@ -98,6 +98,6 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
 WVWA_inflow_collate(
   raw_inflow_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Inflow_CSV",
   raw_baro_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Barometric_CSV",
-  year = format(Sys.Date(), "%Y"),
+  year = 2023,
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1"
 )

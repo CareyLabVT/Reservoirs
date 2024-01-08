@@ -375,7 +375,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
   last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
-  ec_all <- ec_all |> filter(DateTime > last_edi_date)
+  ec_all <- ec_all |> filter(date> last_edi_date)
   
   # Output data
   write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)

@@ -73,7 +73,7 @@ current_df <- dplyr::bind_rows(historic_datetime, L1)
 
 ```{r Make sure all historic flags have been added}
 #read in maintenance log
-log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt") %>% 
+log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv") %>% 
   mutate(flag = as.integer(flag))
 
 #run for loop to assign flags

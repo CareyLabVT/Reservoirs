@@ -47,80 +47,94 @@ secchi_reformat <- secchi_df |>
 secchi_reformat[is.na(secchi_reformat)] <- 0
 
 secchi_reformat <- as.data.frame(secchi_reformat)
-# 
-# # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-# maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt'
-# log_read <- read_csv(maintenance_file, col_types = cols(
-#   .default = col_character(),
-#   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-#   TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-#   flag = col_integer()
-# ))
-# 
-# log <- log_read
-# 
-# for(i in 1:nrow(log)){
-#   ### Assign variables based on lines in the maintenance log.
-# 
-#   ### get start and end time of one maintenance event
-#   start <- force_tz(as.POSIXct(log$TIMESTAMP_start[i]), tzone = "America/New_York")
-#   end <- force_tz(as.POSIXct(log$TIMESTAMP_end[i]), tzone = "America/New_York")
-# 
-#   ### Get the Reservoir Name
-#   Reservoir <- log$Reservoir[i]
-# 
-#   ### Get the Site Number
-#   Site <- as.numeric(log$Site[i])
-# 
-#   ### Get the Maintenance Flag
-#   flag <- log$flag[i]
-# 
-#   ### Get the new value for a column or an offset
-#   update_value <- as.numeric(log$update_value[i])
-# 
-#   ### Get the names of the columns affected by maintenance
-#   colname_start <- log$start_parameter[i]
-#   colname_end <- log$end_parameter[i]
-# 
-#   ### if it is only one parameter parameter then only one column will be selected
-# 
-#   if(is.na(colname_start)){
-# 
-#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_end))
-# 
-#   }else if(is.na(colname_end)){
-# 
-#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_start))
-# 
-#   }else{
-#     maintenance_cols <- colnames(secchi_reformat%>%select(colname_start:colname_end))
-#   }
-# 
-#   if(is.na(end)){
-#     # If there the maintenance is on going then the columns will be removed until
-#     # and end date is added
-#     Time <- secchi_reformat |> filter(DateTime >= start) |> select(DateTime)
-# 
-#   }else if (is.na(start)){
-#     # If there is only an end date change columns from beginning of data frame until end date
-#     Time <- secchi_reformat |> filter(DateTime <= end) |> select(DateTime)
-# 
-#   }else {
-#     Time <- secchi_reformat |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
-#   }
-# 
-#   ### This is where information in the maintenance log gets updated
-# 
-#   if(flag %in% c(5,6)){ ## UPDATE THIS WITH ANY NEW FLAGS
-#     # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
-# 
-#     secchi_reformat[c(which(secchi_reformat[,'Site'] == Site & secchi_reformat$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
-#     secchi_reformat[c(which(secchi_reformat[,'Site'] == Site & secchi_reformat$DateTime %in% Time$DateTime)),maintenance_cols] <- as.numeric(update_value)
-# 
-#   }else{
-#     warning("Flag not coded in the L1 script. See Austin or Adrienne")
-#   }
-#}
+
+
+## CHECK FOR DUPLICATES 
+secchi_dup <- secchi_reformat |> 
+  group_by(Reservoir, Site, DateTime) |> 
+  mutate(n = n()) |> 
+  filter(n > 1)
+
+if (nrow(secchi_dup) > 0){
+  print('DUPLICATE DATA FOUND')
+}
+
+# ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
+
+log_read <- read_csv(maintenance_file, col_types = cols(
+  .default = col_character(),
+  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  flag = col_integer()
+))
+
+log <- log_read
+
+if(nrow(log) > 0){
+
+for(i in 1:nrow(log)){
+  ### Assign variables based on lines in the maintenance log.
+
+  ### get start and end time of one maintenance event
+  start <- force_tz(as.POSIXct(log$TIMESTAMP_start[i]), tzone = "America/New_York")
+  end <- force_tz(as.POSIXct(log$TIMESTAMP_end[i]), tzone = "America/New_York")
+
+  ### Get the Reservoir Name
+  Reservoir <- log$Reservoir[i]
+
+  ### Get the Site Number
+  Site <- as.numeric(log$Site[i])
+
+  ### Get the Maintenance Flag
+  flag <- log$flag[i]
+
+  ### Get the new value for a column or an offset
+  update_value <- as.numeric(log$update_value[i])
+
+  ### Get the names of the columns affected by maintenance
+  colname_start <- log$start_parameter[i]
+  colname_end <- log$end_parameter[i]
+
+  ### if it is only one parameter parameter then only one column will be selected
+
+  if(is.na(colname_start)){
+
+    maintenance_cols <- colnames(secchi_reformat%>%select(colname_end))
+
+  }else if(is.na(colname_end)){
+
+    maintenance_cols <- colnames(secchi_reformat%>%select(colname_start))
+
+  }else{
+    maintenance_cols <- colnames(secchi_reformat%>%select(colname_start:colname_end))
+  }
+
+  if(is.na(end)){
+    # If there the maintenance is on going then the columns will be removed until
+    # and end date is added
+    Time <- secchi_reformat |> filter(DateTime >= start) |> select(DateTime)
+
+  }else if (is.na(start)){
+    # If there is only an end date change columns from beginning of data frame until end date
+    Time <- secchi_reformat |> filter(DateTime <= end) |> select(DateTime)
+
+  }else {
+    Time <- secchi_reformat |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+  }
+
+  ### This is where information in the maintenance log gets updated
+
+  if(flag %in% c(1)){ ## UPDATE THIS WITH ANY NEW FLAGS
+    # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
+    secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+
+  }else{
+    warning("Flag not coded in the L1 script. See Austin or Adrienne")
+  }
+} # end for loop
+} #end conditional statement
+
 # #### END MAINTENANCE LOG CODE #####
 
 # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
@@ -134,5 +148,7 @@ secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
 write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', row.names = FALSE)
 
 }
+
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'
 
 secchi_qaqc()

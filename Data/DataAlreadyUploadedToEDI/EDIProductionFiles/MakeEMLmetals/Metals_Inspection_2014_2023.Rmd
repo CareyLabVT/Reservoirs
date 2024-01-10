@@ -1,0 +1,178 @@
+---
+title: "Metals_inspection_2014_2023"
+author: "Adrienne"
+date: "2023-11-15"
+output: html_document
+---
+
+This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+
+```{r Set Up, include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
+
+# Source scripts from GitHub
+# QAQC script
+# devtools::source_url(ADD METALS L1 FUNCTION HERE)
+# Plotting script
+devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R')
+
+
+ #turn off pander auto asis
+        pander::panderOptions('knitr.auto.asis', FALSE)
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2023-01-01 00:00:00"
+current_time_end="2023-12-31 23:59:00"
+```
+
+
+
+```{r Read in Historical files from EDI}
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/7/e71d70cac1650610e6a3fbbf7928007f"
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ historic <-read_csv(infile1)
+
+```
+
+
+```{r Read in L1 file}
+
+L1 <- read_csv(LINK TO L1 FILE HERE)
+
+```
+
+```{r Bind historic and L1 files together}
+
+current_df <- dplyr::bind_rows(historic, L1)%>%
+  filter(DateTime<ymd_hms(current_time_end))
+
+```
+
+This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
+
+```{r Check there are no NAs in Flag columns}
+
+#make sure no NAS in the Flag columns
+Flags=current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+```
+
+ADD THE FLAGS HERE AND WAHT EACH FLAG MEANS
+
+
+```{r Filter for current year and daily average, include=FALSE}
+
+current <- current_df%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(-contains("Flag"))
+    mutate(type = "qaqc")
+
+daily <- current_df%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+
+  
+current_df <- current_df%>%
+  mutate(Year=year(DateTime))
+
+# colors 
+colors <- c("raw" = "red", "qaqc" = "black")
+
+```
+
+### QAQC Plots
+
+```{r QAQC Plots, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("mgL",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L", Water=F, Raw_file = F, Use_plotly=F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly temp, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+
+```{r Make new CSV with current and historic files}
+
+# Need to decide on a naming convention for this file
+write.csv(current_df, "Metals_2014_2023.csv", row.names = F)
+
+```
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  data <- current_df #This is the line you need to modify!
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  sites_trimmed = trim_sites(data,sites) 
+  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

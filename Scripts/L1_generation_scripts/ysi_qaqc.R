@@ -111,7 +111,7 @@ update_profiles <- update_profiles |>
   
 
 ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.csv'
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
@@ -176,11 +176,25 @@ for(i in 1:nrow(log)){
   
   ### This is where information in the maintenance log gets updated 
 
-  if(flag %in% c(5,6)){ 
-    # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
+  if(flag %in% c(1,2)){
+    # The observations are changed to NA for maintenance or other issues found in the maintenance log
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
     
-    update_profiles[c(which(update_profiles[,'Site'] == Site & update_profiles$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
-    update_profiles[c(which(update_profiles[,'Site'] == Site & update_profiles$DateTime %in% Time$DateTime)),maintenance_cols] <- as.numeric(update_value)
+  }else if (flag %in% c(3)){ 
+    ## BDL
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(4)){
+    ## change negative values are changed to 0
+    
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- 0
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    
+  } else if(flag %in% c(5)){ 
+    # Suspect sample
+    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
     
   }else{
     warning("Flag not coded in the L1 script. See Austin or Adrienne")

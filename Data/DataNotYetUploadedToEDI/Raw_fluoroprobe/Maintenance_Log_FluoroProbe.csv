@@ -1,0 +1,6 @@
+Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
+FCR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
+BVR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
+CCR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
+SHR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration
+GWR, 50, NA, Flora, 2017-01-01 00:00:00 EDT, 2017-12-31 11:59:59 EDT, GreenAlgae_ugL, RFU_470nm, 1, NA, bbe moldaenke posthoc recalibration

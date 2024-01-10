@@ -1,5 +1,5 @@
 ---
-title: "YSI_inspection_2018_2023"
+title: "YSI_inspection_2013_2023"
 author: "Austin Delany"
 date: "2023-12-08"
 output: html_document
@@ -15,6 +15,8 @@ pacman::p_load(tidyverse, lubridate, gsheet)
 
 ```{r read in current and historic data}
 current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', col_types = cols())
+#note that this file path doesn't not work for HLW - need to replace "~/Reservoirs" with "."
+#and make sure wd is set to project directory
 
 historic_file <- read_csv('https://portal.edirepository.org/nis/dataviewer?packageid=edi.198.11&entityid=6e5a0344231de7fcebbe6dc2bed0a1c3', col_types = cols())
 ```
@@ -91,7 +93,7 @@ ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/
 
 
 ```{r save the data}
-write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/YSI_PAR_profiles_2013-2023.csv"), row.names=FALSE)
+write.csv(profiles,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/YSI_PAR_profiles_2013-2023.csv"), row.names=FALSE)
 ```
 
 <!-- #### YSI diagnostic plots #### -->

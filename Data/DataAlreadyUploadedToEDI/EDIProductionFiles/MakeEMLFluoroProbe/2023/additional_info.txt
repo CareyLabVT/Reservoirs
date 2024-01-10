@@ -1,8 +1,8 @@
 
 AUTHORSHIP STATEMENT
-CCC developed and led the reservoir monitoring program, and oversaw FluoroProbe purchasing, use, and maintenance throughout 2014-present. ABP led the field crew, oversaw use of the instrument, and downloaded data in 2023. MEL assisted with troubleshooting and led data collation and publication in 2023. ADD assisted with development and maintenance of automated workflows and quality assurance protocols in 2023.
+CCC developed and led the reservoir monitoring program, and oversaw FluoroProbe purchasing, use, and maintenance throughout 2014-present. ABP led the field crew, oversaw use of the instrument, and downloaded data in 2023. MEL assisted with troubleshooting and led data collation, QAQC, and publication in 2023. ADD assisted with development and maintenance of automated workflows and quality assurance protocols in 2023.
 
 ACKNOWLEDGEMENTS
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Freya Olsson and Katie Hoffman for providing friendly reviews of these data and metadata.
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Freya Olsson and Katie Hoffman for providing friendly reviews of these data and metadata, and Quinn Thomas for inspiring and leading workflow automation efforts in 2023.
 
 

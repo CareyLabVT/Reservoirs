@@ -13,7 +13,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDisc
 #package_url <- 'https://cran.r-project.org/bin/windows/contrib/3.5/EML_1.0.3.zip'
 #install.packages(package_url, repos = NULL, type = 'source')
 
-#install_github("EDIorg/EMLassemblyline")
+# install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
@@ -123,7 +123,7 @@ make_eml(path = folder,
          data.table = c("ManualDischarge_2019_2023.csv",
                         "site_descriptions.csv",
                          # "../../../../../Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"),
-                        "ManualDischarge_Maintenance_Log.txt"),
+                        "ManualDischarge_Maintenance_Log.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenace Log'),
@@ -139,7 +139,7 @@ make_eml(path = folder,
                                       'Script used to collate 2019-2023 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.6", #### this is the one that I need to change!!!
+         package.id = "edi.1017.7", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 # make_eml(path = folder,

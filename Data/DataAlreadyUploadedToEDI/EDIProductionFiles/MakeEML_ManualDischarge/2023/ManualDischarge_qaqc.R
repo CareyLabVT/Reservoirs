@@ -149,7 +149,7 @@ for(i in 1:nrow(log)){
 write.csv(final_Q, './Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv', row.names = FALSE)
 
 #write maint log as csv to data publishing folder
-write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_Maintenace_Log.csv', row.names = FALSE)
+write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_Maintenance_Log.csv', row.names = FALSE)
 
 
 }

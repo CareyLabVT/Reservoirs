@@ -1,0 +1,15 @@
+attributeName	code	definition
+DataStream	CCRM	Carvins Cove Met Station
+Reservoir	CCR	Carvins Cove Reservoir
+end_parameter	InfraredRadiationDown_Average_W_m2	Short wave radiation facing the reservoir averaged over measurement interval.
+end_parameter	PAR_Total_mmol_m2	Total photosynthetic active radiation over measurement interval
+end_parameter	RH_percent	Relative Humidity at time of measurement
+flag	1	value removed due to maintenance and set to NA
+flag	4	"potentially questionable value and changed or set to NA, see note"
+start_parameter	AirTemp_C_Average	Air Temperature averaged over measurement interval
+start_parameter	InfraredRadiationDown_Average_W_m2	Infrared wave radiation facing the reservoir averaged over measure interval
+start_parameter	InfraredRadiationUp_Average_W_m2	Infrared wave radiation facing the sky averaged over measurement interval.
+start_parameter	PAR_umolm2s_Average	Photosynthetic active radiation averaged over measurement interval
+start_parameter	RH_percent	Relative Humidity at time of measurement
+start_parameter	Rain_Total_mm	Total rainfall over measurement interval
+start_parameter	ShortwaveRadiationDown_Average_W_m2	Short wave radiation facing the reservoir averaged over measurement interval.

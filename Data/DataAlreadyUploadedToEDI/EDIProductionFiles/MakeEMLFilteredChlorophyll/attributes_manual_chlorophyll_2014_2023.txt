@@ -1,9 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir;  BVR=Beaverdam Reservoir, CCR= Carvins Cove Reservoir, CLY = Claytor Lake, Reservoir, FCR=Falling Creek Reservoir, GWR=Gatewood Reservoir, SHR=Spring Hollow Reservoir, SML = Smith Mountain Lake, SNP = Lake Sunapee	categorical			NA	value is missing
-Site	Sampling site within each reservoir	numeric	dimensionless		NA	value is missing
-DateTime	Date of sampling. All data were collected in the eastern time zone of the U.S.A., with Eastern Standard Time Observed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Depth_m	Water depth where the sample was collected 	numeric	meter		NA	value is missing
-Chla_ugL	Chlorophyll a concentration	numeric	microgramsPerLiter		NA	value is missing
-Pheo_ugL	Phaeophytin concentration	numeric	microgramsPerLiter		NA	value is missing
-Flag_Chla_ugL	Data flag for chlorophyll a	categorical			NA	value is missing
-Flag_Pheo_ugL	Data flag for phaeophytin	categorical			NA	value is missing

@@ -65,3 +65,7 @@ Sample,Reservoir,Sample Depth (m),Filter,Site
 64,CCR,0.1,S,400
 65,CCR,0.1,T,201
 66,CCR,0.1,S,201
+67,BVR,10.0,T,50
+68,BVR,10.0,S,50
+69,BVR,8.0,T,50
+70,BVR,8.0,S,50

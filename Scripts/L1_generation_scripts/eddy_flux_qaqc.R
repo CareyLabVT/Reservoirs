@@ -370,12 +370,12 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   
   # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-  package_ID <- 'edi.1061.2'
-  eml <- read_metadata(package_ID)
-  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+#  package_ID <- 'edi.1061.2'
+# eml <- read_metadata(package_ID)
+#  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+#  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
-  ec_all <- ec_all |> filter(DateTime > last_edi_date)
+ # ec_all <- ec_all |> filter(date> last_edi_date)
   
   # Output data
   write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)

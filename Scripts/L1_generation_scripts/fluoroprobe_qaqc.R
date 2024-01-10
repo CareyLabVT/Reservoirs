@@ -2,7 +2,7 @@
 #Author: Mary Lofton
 #Updated version: Austin Delany
 #Date created: 16DEC19
-#Last updated: 2024-01-05
+#Last updated: 2024-01-10
 
 
 library(tidyverse)
@@ -14,6 +14,11 @@ rm(list=ls())
 # load packages
 #install.packages('pacman')
 #pacman::p_load(tidyverse, lubridate, googlesheets4)
+
+##### Function to qaqc Fluoroprobe data
+#' @param maintenance_file filepath to the maintenance log
+#' @param start_date first day of current year (day after last day of data pushed to EDI)
+#' @param end_date last day of current year (last day before we publish a revision to EDI)
 
 fluoroprobe_qaqc <- function(maintenance_file ,
                              start_date = NULL, 

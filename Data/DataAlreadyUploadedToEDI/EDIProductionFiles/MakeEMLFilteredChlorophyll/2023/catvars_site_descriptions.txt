@@ -1,0 +1,9 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CLY	Claytor Lake
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+Reservoir	SML	Smith Mountain Lake
+Reservoir	SNP	Lake Sunapee

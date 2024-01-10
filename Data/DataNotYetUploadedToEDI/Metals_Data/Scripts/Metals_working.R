@@ -305,13 +305,26 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      next
    }
   }
-   
+    
+    
+    
+    
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
    #### 6. Switch observations if total and soluble samples were mixed up ####
    
    # Determine if totals and soluble samples were switched. 
    # Totals plus the Minimum reporting level is less than the soluble sample then they need to be 
    # switched. 
-   # Cece is this what you want it to be? It looks like some of the observations are very close. 
+   # Cece is this what you want it to be? It looks like some of the observations are very close.
+    #we want to do 3 MRL for Fe, Al, and Si, give it a flag of 9, and then see what it looks like
    for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) { 
      #for loop to create new columns in data frame
      raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable

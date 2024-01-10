@@ -13,6 +13,12 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
+## 10JAN24 Notes for next year:
+1. We want to back-apply the L1 generation script to raw historical data also
+2. To do this, you will need to go back to previous versions of the script found in Scripts -> FluoroProbe_aggregation.R
+3. Update the maintenance log to include any date-specific QAQC that occurred in R for 2014-2022 that is not already included in maintenance log, based on historic versions of the FluoroProbe_aggregation.R file over time
+4. Add the qaqc function to the visual inspection script so that all the raw data from all years are read in, combined, and put through the qaqc function
+
 ```{r setup packages, include=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE)

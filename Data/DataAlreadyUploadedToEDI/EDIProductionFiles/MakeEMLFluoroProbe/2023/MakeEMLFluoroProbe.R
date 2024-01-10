@@ -17,6 +17,10 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
+#10JAN23 Notes for tmrw:
+#'1. work on back-applying L1; change filename of visual inspection script to be yearL1start_2023
+#'2. Check on what new keywords need to be added
+
 #Step 0: Create new dataset and do visual QAQC
 
 #' Run the visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> FluoroProbe_inspection_2014-2023.Rmd

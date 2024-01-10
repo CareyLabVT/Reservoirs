@@ -1,5 +1,5 @@
-Contributions to the 2022 revision:
-CCC is the PI on the project, designed the sensor array, coordinated the purchasing and deployment, and helped install the sensors. ABP was the point person for the dataset and led sensor maintenance, data management, and QAQC for 2022. WW led the publishing and participated in QAQC for 2022.
+Contributions to the 2023 revision:
+CCC is the PI on the project, designed the sensor array, coordinated the purchasing and deployment, and helped install the sensors. ABP was the point person for the dataset and led sensor maintenance, data management, wrote the scripts for the new workflows, and QAQC for 2023. ADD implimented new QAQC workflows, as well as maintained them in 2023.
 
 Acknowledgments and historical contributions:
 This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, and the Reservoir Group for contributing to fieldwork.

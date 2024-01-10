@@ -1,0 +1,568 @@
+---
+title: "FCR Catwalk Plots for EDI"
+output: html_document
+theme: null
+date: "`r Sys.Date()`"
+---
+
+This script is the visual inspection scripts. 
+1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
+2. Then the script checks for daily and subdaily gaps in the current file. 
+3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+4. If necessary can QAQC data already on EDI using the QAQC function
+5. Creates plots
+6. Writes data to new csv
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+
+All files are from the link to GitHub and the source scripts are from GitHub as well. 
+
+```{r Set Up, include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
+
+# Source scripts from GitHub
+devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/R/edi_qaqc_function.R")
+devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+
+
+ #turn off pander auto asis
+        pander::panderOptions('knitr.auto.asis', FALSE)
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start="2023-01-01 00:00:00"
+current_time_end="2023-12-31 23:59:00"
+```
+
+```{r Read in EDI Files, include=FALSE}
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/271/7/71e6b946b751aa1b966ab5653b01077f" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ historic <-read_csv(infile1) 
+
+```
+
+```{r Read in current L1 file, include=FALSE}
+
+L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
+
+```
+
+```{r Bind historic and L1 files together, include=FALSE}
+
+current_df <- dplyr::bind_rows(historic, L1)%>%
+  filter(DateTime<ymd_hms(current_time_end))
+
+```
+
+```{r Download Raw data for plotting, include=FALSE}
+
+CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
+                        "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
+                        "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
+                        "ThermistorTemp_C_9", "RDO_mgL_5", "RDOsat_percent_5", "RDOTemp_C_5", "RDO_mgL_9",
+                        "RDOsat_percent_9", "RDOTemp_C_9", "EXO_Date", "EXO_Time", "EXOTemp_C_1", "EXOCond_uScm_1",
+                        "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
+                        "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1","EXOTurbidity_FNU_1",
+                        "EXOPressure_psi", "EXODepth_m", "EXOBattery_V", "EXOCablepower_V", "EXOWiper_V","LvlPressure_psi_9", "LvlTemp_C_9")
+  
+ 
+  # read catwalk data and maintenance log
+  # NOTE: date-times throughout this script are processed as UTC
+  raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", skip = 1, col_names = CATPRES_COL_NAMES,
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  # Take out EXO_Date and EXO_Time
+  raw <- raw%>%select(-c("EXO_Date", "EXO_Time"))
+  
+  #create depth column
+  raw <- raw%>%mutate(LvlDepth_m_9=LvlPressure_psi_9*0.70455)#1psi=2.31ft, 1ft=0.305m
+  
+  
+  # convert NaN to NAs in the dataframe
+  raw[sapply(raw, is.nan)] <- NA
+
+```
+
+## Check for gaps in the data frame
+
+This identifies if there are any daily data gaps in the long-term record
+
+```{r Check for daily gaps, echo=FALSE}
+
+# Get DOY
+catwalk <- current_df
+ catwalk$DOY=yday(catwalk$DateTime)
+
+ for(i in 2:nrow(catwalk)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(catwalk$DOY[i]-catwalk$DOY[i-1]>1){
+      print(c(catwalk$DateTime[i-1],catwalk$DateTime[i]))
+    }
+ }
+```
+
+This identifies if there are any sub-daily gaps in the current record, as gaps of the long term record are found in the metadata.
+
+The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata and are also noted in the maintenance log.
+
+```{r Check for sub daily gaps, echo=FALSE}
+
+# Because we can't have NAs for this for loop let's make a new df
+ cat2 <- current_df%>%
+  filter(!is.na(RECORD))%>%
+  filter(DateTime>current_time_start)
+
+  for(i in 2:length(cat2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if( abs(cat2$RECORD[i]-cat2$RECORD[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>10){
+      print(c(cat2$DateTime[i-1], cat2$DateTime[i]))
+      print(c(cat2$RECORD[i-1], cat2$RECORD[i]))
+    }
+  }
+```
+
+QAQC Historical Files: If you need to QAQC the historical file then run it through the qaqc function without start_date and end_date as NULL
+
+```{r Run the QAQC function again if we need to, eval=FALSE, include=FALSE}
+
+# Run the QAQC function
+qaqc_fcr(data_file= current_df,
+         data2_file = NULL,
+         maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/CAT_MaintenanceLog.csv", 
+         output_file = "new_df", 
+         start_date = NULL, 
+         end_date = NULL)
+
+```
+
+
+## Read in the QAQC File and Check it out
+This section reads in the QAQC file and then you can look at the head, tail and structure. 
+Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 85 columns unless a new one has been added. 
+
+
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for BVR was `r min(bvrdata$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(bvrdata$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(bvrdata$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(bvrdata$LvlDepth_m_13, na.rm=T)`.
+
+### Flag Frequency
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+ Flag values
+ 
+ 0: no flag
+ 
+ 1: value removed due to maintenance and set to NA
+ 
+ 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+ 
+ 3: negative values set to 0 except for temperature
+ 
+ 4: value removed due to fouling and set to NA
+ 
+ 5: questionable value but left in the dataset
+ 
+ 6: Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
+ 
+ 7: missing data
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+```{r Filter for current year and daily average, include=FALSE}
+
+# Raw files
+current_raw <- raw%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  mutate(type = "raw")
+
+current <- current_df%>%
+  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  mutate(type = "qaqc")%>%
+  select(DateTime:CR6Panel_Temp_C,type, -contains("adjusted"))
+
+
+# Let's only keep values that are different instead of plotting the raw and the qaqc value
+current_plot_df <- bind_rows(current, current_raw)%>%
+  dplyr::distinct(across(DateTime:LvlDepth_m_13), .keep_all = T)
+    
+
+daily <- current_df%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+
+  
+catdata <- current_df%>%
+  mutate(Year=year(DateTime))
+
+colors <- c("raw" = "red", "qaqc" = "black")
+# colors for comparing Thermistor, RDO and Pressure sensor
+colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
+```
+
+
+
+## QAQC Plots
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+### Temperature
+
+```{r Temp, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C")
+
+output <- unlist(outputs, recursive = F)
+
+```
+
+```{r Print plotly temp, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+
+```{r All Temperature, echo=FALSE, warning=FALSE, results='hide'}
+
+colors3 <-c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1.5m"="yellow","2m"="gold", 
+                                  "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
+                                  "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="darkslateblue", "9m"="darkmagenta")
+
+# Take out Temperature values 
+
+  All_temp<-current_df%>%
+    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"))%>%
+    pivot_longer(-c(DateTime), names_to="Sensor", values_to="Reading", values_drop_na=TRUE)%>%
+    mutate(DateTime=ymd_hms(DateTime))
+  
+  
+  ggplot(All_temp)+
+    geom_scattermore(aes(x=DateTime, y=Reading))+
+    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_surface","ThermistorTemp_C_1","EXOTemp_C_1", "ThermistorTemp_C_2",  "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9")))+
+    theme_bw()
+  
+  
+# This is all the temps and just the current year
+    ggplot(current,aes(x = DateTime))+
+    geom_line(aes(y=ThermistorTemp_C_surface, color="0.1m"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1m"))+
+    geom_line(aes(y=EXOTemp_C_1, color="EXO_1.5m")) +
+    geom_line(aes(y=ThermistorTemp_C_2, color="2m"))+
+    geom_line(aes(y=ThermistorTemp_C_3, color="3m"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4m"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5m"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6m"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7m"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8m"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9m"))+
+    ggtitle("Current Temperature Profile") +
+    labs(y = expression(''*~degree*C*''),
+           color = "Legend") +
+      scale_color_manual(values = colors3)+
+      theme_bw()
+  
+```
+
+### Depth
+
+```{r Pressure Sensor, echo=FALSE, results='asis'}
+### Plotting depth from pressure sensor 
+   
+dx <- colnames(current%>%select(grep("Depth_m",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Use_plotly=TRUE)
+
+output <- unlist(outputs, recursive = F)
+
+```
+
+```{r Print plotly pres, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Dissolved Oxygen
+
+```{r DO, echo=FALSE, results='asis'}
+
+
+dx <- colnames(current%>%select(grep("DO_mgL|sat_percent",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Use_plotly=T)
+
+output <- unlist(outputs, recursive = F)
+```
+
+```{r Print plotly DO, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Chlorophyll and Phycocanin
+
+```{r Check the EXO Chla and Blue Greens, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("Chla|BGAPC",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L")
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+```
+
+```{r Print plotly algae, echo=FALSE, warning=FALSE, messages=FALSE}
+
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### fDOM
+
+```{r fdom EXO sensor, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab = "RFU or QSU", y_lab2 = "RFU or QSU")
+
+output <- unlist(outputs, recursive = F)
+
+
+```
+
+```{r Print plotly fdom, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Conductivity, Specific Conductivity, TDS
+
+```{r Cond Spcond and TDS, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("^EXOSpCond|^EXOCond|^EXOTDS",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L")
+
+output <- unlist(outputs, recursive = F)
+```
+
+```{r Print plotly cond, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Turbidity
+
+```{r turbidity, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
+
+# make the plots
+outputs <- lapply("EXOTurbidity_FNU_1", all_plot, y_lab="FNU", y_lab2="FNU")
+
+output <- unlist(outputs, recursive = F)
+```
+
+```{r Print plotly tur, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Wiper, Battery, and CablePower
+
+```{r Wiper, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(grep("Wiper_V|Battery_V|power_V",colnames(current))))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab="Volts", y_lab2="Volts")
+
+output <- unlist(outputs, recursive = F)
+```
+
+```{r Print plotly power, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Write to CSV
+
+```{r Make new CSV with current and historic files}
+
+# Double Check naming convention
+# Variable_StartYear_EndYear
+write.csv(current_df, "FCRCatwalk_2018_2023.csv")
+
+```
+
+### Download and save Maintenance Log, Plotting function, and QAQC function
+
+```{r Download and save Maintenance Log, include=FALSE}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv", "FCRCatwalk_MaintenanceLog_2018_2023.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/R/edi_qaqc_function.R", "FCRCatwalk_qaqc_2018_2023.R")
+
+# streaming plots function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R", "Streaming_Plot_function.R")
+
+
+```
+

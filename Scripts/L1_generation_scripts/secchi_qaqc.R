@@ -8,7 +8,7 @@
 pacman::p_load(tidyverse, lubridate,
                dplyr, EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
-source()
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R')
 
 #
 # secchi_qaqc <- function(maintenance_log = NULL, secchi_data, outfile){

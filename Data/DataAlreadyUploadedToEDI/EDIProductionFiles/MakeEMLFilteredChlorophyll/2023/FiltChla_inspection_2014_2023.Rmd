@@ -6,13 +6,12 @@ output: html_document
 ---
 
 This is the visual inspection script for Filtered Chlorophyll. 
+If running for EDI Dayz, start at line 43 and update the pasta with the most recent staged version.
 
 From ABP: This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
 
 ## R Markdown Guide
-
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
 ```{r setup packages, include=FALSE}
@@ -20,7 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet)
 ```
-
 
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI}
@@ -31,8 +29,6 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
  historic <-read_csv(infile1)
 ```
-
-
 **Read in L1 file**
 Set L1 file to NULL if not yet made.
 Need to change this to the GITHUB Link!!!
@@ -44,6 +40,13 @@ L1 <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI
 all_chla <- dplyr::bind_rows(historic, L1)
 ```
 
+```{r Read in data from EDI: START HERE}
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/20/4d92727343445ad28046d57ac852b45f" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+all_chla <- read_csv(infile1)
+```
 **Check there are no NAs in Flag columns**
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
 There should be no NAs.

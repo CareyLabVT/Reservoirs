@@ -21,3 +21,6 @@ Smith Mountain Lake 	carey lab controlled vocabulary
 Claytor Lake	carey lab controlled vocabulary
 Lake Sunapee	carey lab controlled vocabulary
 phaeophytin	lter controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary

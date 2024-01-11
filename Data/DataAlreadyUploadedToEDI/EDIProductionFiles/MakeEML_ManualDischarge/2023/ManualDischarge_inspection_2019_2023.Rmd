@@ -5,7 +5,9 @@ date: "2023-12-15"
 output: html_document
 ---
 
-This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
+The script binds 2023 manual discharge to 2019-2022 EDI publication and provides final QAQC steps and generated site description csv.
+
+Start at line 168 for EDI review
 
 ## R Markdown Guide
 
@@ -49,8 +51,8 @@ historic_datetime <- historic %>%
          DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
          DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
   select(-c(Time, Date, Hours)) %>% 
-  select(Reservoir, Site, DateTime, Flow_cms, Method, Flag_DateTime, Flag_Flow_cms)
-
+  select(Reservoir, Site, DateTime, Flow_cms, Method, Flag_DateTime, Flag_Flow_cms) %>% 
+  distinct() #remove duplicated row from 2020
 
 
 ```
@@ -73,7 +75,7 @@ current_df <- dplyr::bind_rows(historic_datetime, L1)
 
 ```{r Make sure all historic flags have been added}
 #read in maintenance log
-log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt") %>% 
+log <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv") %>% 
   mutate(flag = as.integer(flag))
 
 #run for loop to assign flags
@@ -166,27 +168,41 @@ for(f in 1:(ncol(Flags))){
 
 ```
 
-```{r Plots}
+## Start here to read in EDI data 
 
-current_df %>% 
+```{r}
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1017/7/702d3b355854211a8dbb587094cfccb7" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+staged_edi <- read_csv(infile1)
+```
+
+
+
+
+```{r Plots}
+##change these back to current_df if not testing EDI staged data
+
+staged_edi %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
   geom_point(aes(color = Site)) +
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
-current_df %>% 
+staged_edi %>% 
   filter(Reservoir == 'BVR') %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
   geom_point(aes(color = Site)) +
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
-current_df %>% 
+staged_edi %>% 
   filter(Reservoir == 'FCR',
          Site ==200) %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
   geom_point(aes(color = Site)) +
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
-current_df %>% 
+staged_edi %>% 
   filter(Reservoir == 'CCR') %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
   geom_point(aes(color = Site)) +

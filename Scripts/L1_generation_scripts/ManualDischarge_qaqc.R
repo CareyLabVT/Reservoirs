@@ -154,7 +154,6 @@ write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Manua
 
 }
 
-
 ## Run function
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0Wv_duW33bYS81PHY6o/edit#gid=0'
 maintenance_file <- "./Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"

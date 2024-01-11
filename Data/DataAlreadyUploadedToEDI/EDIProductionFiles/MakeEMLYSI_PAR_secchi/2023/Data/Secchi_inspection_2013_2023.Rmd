@@ -24,7 +24,7 @@ secchi <- bind_rows(current_file, historic_file)
 ```
 
 ```{r}
-#source L1 script
+#source L1 functin to run all data through QAQC process
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_generation_scripts/secchi_qaqc.R")
 
 ```

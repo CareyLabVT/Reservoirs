@@ -25,3 +25,5 @@ Western Virginia Water Authority	carey lab controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
 fluorescence	lter controlled vocabulary
 turbidity 	lter controlled vocabulary
+water level	lter controlled vocabulary
+water storage	cuahsi controlled vocabulary

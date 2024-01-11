@@ -24,7 +24,7 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermor
 
 # Source scripts from GitHub
 devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/met_qaqc_function.R")
-devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R')
+devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
 
  #turn off pander auto asis

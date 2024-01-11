@@ -1,0 +1,4 @@
+attributeName	code	definition
+Flag	0	no flag
+Site	50	Deep hole or site nearest to the dam in the reservoir
+Site	300	Sawmill Branch Inflow to CCR

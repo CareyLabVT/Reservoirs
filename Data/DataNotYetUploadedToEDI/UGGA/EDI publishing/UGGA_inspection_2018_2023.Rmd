@@ -1,0 +1,69 @@
+---
+title: "Flux calc collation for EDI"
+author: "Abby Lewis"
+date: "1/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+QAQC
+```{r}
+## Script to visualize seasonal UGGA data
+## Abigail Lewis
+## created: 20 December 2023
+## last edit: 03 January 2024 (ADD)
+
+## load historical data 
+historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
+
+#Load current data
+current_data <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_L1.csv')
+
+## combine all data
+flux_all <- bind_rows(current_data, historical_data)
+
+#Plot all CH4
+flux_all%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)
+#by day of year
+flux_all%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CH4Flux_umolCm2s),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)
+
+#one negative methane flux in 2020 FCR
+
+#Plot all CO2
+flux_all%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("CO2 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)
+#by day of year
+flux_all%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CO2Flux_umolCm2s),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("CO2 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)
+```

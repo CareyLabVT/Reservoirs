@@ -67,7 +67,9 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
     mutate(DateTime = round_date(DateTime,"15 minutes"))%>% # Round to the nearest 15 minutes if not 
     arrange(DateTime)%>%
     distinct()
-    
+
+  print(nrow(inflow_pressure))
+  print('inflow done')
   
   # Compile all the bp pressure data from the catwalk into one file and clean it up
   pressure_a4d<-list.files(path=raw_baro_files, pattern=paste0("_",year), full.names=TRUE)%>%
@@ -78,7 +80,9 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
     mutate(DateTime = round_date(DateTime,"15 minutes"))%>%
     arrange(DateTime)%>%
     distinct()
-  
+
+  print(nrow(pressure_a4d))
+  print('pressure_a4d')
   
   # merge inflow and barometric pressures to find the true pressure of the sensor
   diff <- left_join(pressure_a4d, inflow_pressure, by = "DateTime")%>% 

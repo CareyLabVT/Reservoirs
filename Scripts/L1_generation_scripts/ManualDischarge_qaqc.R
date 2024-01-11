@@ -145,10 +145,14 @@ for(i in 1:nrow(log)){
 }
 #### END MAINTENANCE LOG CODE #####
 
+#write L1 data csv
 write.csv(final_Q, './Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv', row.names = FALSE)
 
-}
+#write maint log as csv to data publishing folder
+write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_Maintenance_Log.csv', row.names = FALSE)
 
+
+}
 
 ## Run function
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0Wv_duW33bYS81PHY6o/edit#gid=0'

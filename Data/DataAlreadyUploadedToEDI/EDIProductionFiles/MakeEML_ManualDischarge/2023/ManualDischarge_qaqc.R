@@ -1,5 +1,13 @@
-## QAQC manual discharge data -- pull from google sheets and save as csv 
+#QAQC script
+#This QAQC cleaning script was applied to create the data files included in this data package
+#DWH
+#created December 2023
+#Date last modified: 11jan24
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data <and includes additional R scripts available with this package>. This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is.
 
+
+
+#needed packages
 library(tidyverse)
 library(gsheet)
 
@@ -145,16 +153,13 @@ for(i in 1:nrow(log)){
 }
 #### END MAINTENANCE LOG CODE #####
 
-write.csv(final_Q, './Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv', row.names = FALSE)
+#write L1 data csv
+final_Q
 
+#write maint log as csv to data publishing folder
+log
 
 }
 
-
-## Run function
-gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0Wv_duW33bYS81PHY6o/edit#gid=0'
-maintenance_file <- "./Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"
-
-ManualDischarge_qaqc(gsheet_url = gsheet_url, maintenance_file = maintenance_file)
 
 

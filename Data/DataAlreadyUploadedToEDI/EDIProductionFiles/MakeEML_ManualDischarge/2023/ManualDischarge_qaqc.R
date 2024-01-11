@@ -1,5 +1,13 @@
-## QAQC manual discharge data -- pull from google sheets and save as csv 
+#QAQC script
+#This QAQC cleaning script was applied to create the data files included in this data package
+#DWH
+#created December 2023
+#Date last modified: 11jan24
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data <and includes additional R scripts available with this package>. This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is.
 
+
+
+#needed packages
 library(tidyverse)
 library(gsheet)
 

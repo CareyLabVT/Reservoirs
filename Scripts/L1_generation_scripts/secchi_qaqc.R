@@ -1,11 +1,15 @@
-## QAQC secchi data -- pull from google sheets and save as csv
+# Secchi_qaqc_2023.R
+# QAQC of Secchi data from 2023
+# Created by ADD, modified by HLW
+# First developed: 2023-12-04
+# Last edited: 2024-01-11
 
-library(tidyverse)
-library(gsheet)
-library(EDIutils)
-library(xml2)
+#install.packages('pacman')
+pacman::p_load(tidyverse, lubridate,
+               dplyr, EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
-secchi_qaqc <- function(maintenance_log = NULL){
+
+secchi_qaqc <- function(maintenance_log = NULL, secchi_data){
 
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
 secchi_df <- gsheet::gsheet2tbl(gsheet_url)

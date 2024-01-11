@@ -1,44 +1,18 @@
-# YSI and PAR QAQC/collation
-# last edited: Austin Delany
-# 2023-12-04
+# ysi_qaqc_2023.R
+# QAQC of YSI and PAR data from 2023
+# Created by ADD, modified by HLW
+# First developed: 2023-12-04
+# Last edited: 2024-01-11
 
-#### YSI Profiles ####
-
-#Note: I re-processed all data from 2019-2021 because the flags were messed up...(3 was used instead of 4 for negative values)
-
-#----------------------------------- HmmTHINGS TO GO IN THE MAINTENANCE LOG (THESE RECEIVE NEW FLAG [6] -- HUMAN ERROR) -------------------------------------------#
-# read in file from last year (only need to do this to add sp cond and then rewrite to folder)
-# ysi_old <- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/YSI_PAR_profiles_2013-2021.csv")
-#
-# #change DO %sat for fcr 100 15aug 2016 to NA because same as DO mg/L (and is wrong...)
-# ysi_old$DOSat[ysi_old$Reservoir=="FCR" & ysi_old$Site==100 & as.Date(ysi_old$DateTime)=="2016-08-15"] <- NA
-#
-#
-# #manually change a few digitizing errors in 2020
-# ysi$DO_mgL[as.Date(ysi$DateTime)=="2020-08-17" & ysi$Reservoir=="FCR" & ysi$Depth_m==2.4] <- 5.82
-#
-# ysi$DO_mgL[as.Date(ysi$DateTime)=="2020-05-25" & ysi$Reservoir=="FCR" & ysi$Depth_m==4.0] <- 5.05
-# ysi$DOsat_percent[as.Date(ysi$DateTime)=="2020-05-25" & ysi$Reservoir=="FCR" & ysi$Depth_m==4.0] <- 46.6
-
-#------------------------------------------------------------------------------#
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
-pacman::p_load(tidyverse, lubridate,dplyr) ## Use pacman package to install/load other packages
-library(gsheet)
-
-#read in new data
-#raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv"))
-#raw_profiles <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_YSI_PAR_profiles.csv")) ##open file directly from Google Drive -- Ask Adrienne
-
-
-
+pacman::p_load(tidyverse, lubridate, dplyr, 
+               EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
 raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 
 #date format
 raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'), tz = "America/New_York")
-
-#raw_profiles$DateTime <- as.POSIXct(strptime(raw_profiles$DateTime, "%Y-%m-%d %H:%M:%S" ), tz =  "America/New_York")#"%m/%d/%y %H:%M"
 
 # ### Create a DateTime Flag for non-recorded times ####
 # # (i.e., 12:00) and set to noon
@@ -71,7 +45,7 @@ raw_profiles$pH <- as.numeric(raw_profiles$pH)
 ## update raw data into new table to make rerunnig easier
 update_profiles <- raw_profiles
 
-## ADD FLAGS
+## ADD FLAGS (note that only flags 5 and 6 can come from the maintenance file)
 # 0 - NOT SUSPECT
 # 1 - SAMPLE NOT TAKEN
 # 2 - INSTRUMENT MALFUNCTION
@@ -111,7 +85,7 @@ update_profiles <- update_profiles |>
 
 
 ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.csv'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
   TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
@@ -245,5 +219,4 @@ ysi <- ysi |> filter(DateTime > last_edi_date)
 
 
 # Write to CSV -- save as L1 file
-#write.csv(profiles, file.path('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2022_final.csv'), row.names=F)
-write.csv(ysi, 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', row.names = FALSE)
+write.csv(ysi, 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv', row.names = FALSE)

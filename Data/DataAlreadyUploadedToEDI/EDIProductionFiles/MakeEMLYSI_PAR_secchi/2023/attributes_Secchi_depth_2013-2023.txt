@@ -1,0 +1,7 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Secchi_m	Secchi disk depth	numeric	meter		NA	No data
+Flag_DateTime	"Data flag for DateTime; 0=Time recorded, 1=No time recorded, generalized to noon, 2=Value corrected due to igitizing error"	numeric	dimensionless			
+Flag_Secchi_m	"Data flag for Secchi depths; 0=not suspect, 1=sample not taken"	numeric	dimensionless			

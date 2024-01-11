@@ -17,10 +17,31 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-#Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020
+#Step 0: Create new dataset and do visual QAQC
 
-#Step 2: Move your dataset to the directory - duh.
+#' Run the visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> FluoroProbe_inspection_2014-2023.Rmd
+#' This script will both create plots for you to manually inspect the data 
+#' and create a collated dataset of historic and current year's data
+#' 
+#' Look through the plots; if additional QAQC needs to be done, record that in the
+#' maintenance log, located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> Maintenance_Log_FluoroProbe.csv
+#' 
+#' Trigger a run of the automatic workflow to make sure your current year's data 
+#' get updated following any revisions you've made to the maintenance log
+#' This is in Actions in the CareyLabVT/Reservoirs repo
+#' It also runs every day automatically, so alternatively you can just wait 24 h
+
+#Step 1: Create a directory for your dataset
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023
+
+#Step 2: Move your dataset to the directory.
+
+#' Also move your qaqc script, which is located in Reservoirs -> Scripts -> L1_generation_scripts -> fluoroprobe_qaqc.R
+#' Also move your maintenance log, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> Maintenance_Log_FluoroProbe.csv
+#' Also move your visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> FluoroProbe_inspection_2014-2023.Rmd
+#' Also make sure you have a site_descriptions.csv file in there which is up to date
+#' So you should be publishing five files in total: data, qaqc script, maintenance
+#' log, visual inspection script, site description file
 
 #Step 3: Create an intellectual rights license
 #ours is CCBY
@@ -34,7 +55,7 @@ library(EMLassemblyline)
 #THIS IS ONLY NECESSARY FOR A BRAND NEW DATASET!!!!
 #if you are just updating a previous dataset, PLEASE save yourself time
 #by copy-pasting the metadata files from the previous year's folder 
-#(in this case, 2020) into the current year's folder and editing them
+#(in this case, 2022) into the current year's folder and editing them
 #as needed. DON'T CAUSE YOURSELF MORE WORK BY BUILDING FROM SCRATCH!!
 
 #IF you are just appending a new year of data, skip steps 5-12 and instead
@@ -165,13 +186,15 @@ make_eml(
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2023",
   temporal.coverage = c("2014-05-04", "2023-11-14"),
   maintenance.description = 'ongoing',
-  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.txt"),
+  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
+  data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
   other.entity = c("fluoroprobe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
+  other.entity.name = c("fluoroprobe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
   other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
   user.id = 'melofton',
   user.domain = 'EDI',
-  package.id = 'edi.1101.1')
+  package.id = 'edi.1101.2')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

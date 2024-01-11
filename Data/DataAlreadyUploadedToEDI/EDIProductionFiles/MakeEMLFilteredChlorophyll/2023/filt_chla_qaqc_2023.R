@@ -1,11 +1,14 @@
 # Chla Processing L1 script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
+# Edited 10 Jan 24 by KKH to start adding in exact times for chla measurements,
+# will finish after EDI days
 
 # Things the script does: 
 # 1. Read in Maintenance log and read in raw chla file from the spec
 #   Put in the right format for processing
 # 2. Read in the filtering log and rack map
+# 2a. Read in the actual times for chla sample collection 
 # 3. Merge everything together
 # 4. Maintenance log to flag or remove issues
 # 5. Process with a script based on BNN Excel script
@@ -190,6 +193,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
       Vol_filt_mL = ifelse(samp_type=="eth_blank", 500, Vol_filt_mL),
       Final_vol_extract_mL = ifelse(samp_type=="eth_blank",final_vol_extract, Final_vol_extract_mL)
     )
+  
+  ### 2a. Read in raw data for times
   
   ### 4. Take out values based on the Maintenance Log ####
   

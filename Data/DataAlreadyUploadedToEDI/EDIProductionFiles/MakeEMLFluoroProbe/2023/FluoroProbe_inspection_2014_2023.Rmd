@@ -24,7 +24,8 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet)
+#install.packages('pacman')
+pacman::p_load(tidyverse, lubridate, gsheet, plotly)
 ```
 
 
@@ -161,6 +162,118 @@ for (i in 1:length(unique(plot_data$cast_id))){
   
 }
 ```
+
+```{r Heatmap function}
+fp_data = current_df
+reservoir = "FCR"
+year = 2014
+site = 50
+z = "TotalConc_ugL"
+flora_heatmap <- function(fp_data, reservoir, year, site, z){
+  
+  #subset to relevant data
+  fp <- fp_data %>%
+    filter(Reservoir == reservoir & year(DateTime) == year & Site == site) %>%
+    select(DateTime, Depth_m, {{z}}) %>%
+    mutate(Date = date(DateTime)) %>%
+    group_by(Date) %>%
+    summarize(mean_z = mean(pull(fp_data, {{z}}), na.rm = TRUE))
+  
+  #slice by depth for each reservoir
+  if (reservoir == "FCR"){
+  
+  depths = seq(0.1, 9.3, by = 0.3)
+  df.final<-data.frame()
+  
+  for (i in 1:length(depths)){
+    
+fp_layer <- fp %>% 
+  group_by(Date) %>% 
+  slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+
+# Bind each of the data layers together.
+df.final = bind_rows(df.final, fp_layer)
+
+}
+
+
+} else if (reservoir == "BVR"){
+  
+  depths = seq(0.1, 10, by = 0.3)
+  df.final<-data.frame()
+  
+  for (i in 1:length(depths)){
+    
+    fp_layer<-fp %>% group_by(DateTime) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+    
+    # Bind each of the data layers together.
+    df.final = bind_rows(df.final, fp_layer)
+    
+  }
+  
+} else if(reservoir == "CCR"){
+  
+  depths = seq(0.1, 20, by = 0.3)
+  df.final<-data.frame()
+  
+  for (i in 1:length(depths)){
+    
+    fp_layer<-fp %>% group_by(DateTime) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+    
+    # Bind each of the data layers together.
+    df.final = bind_rows(df.final, fp_layer)
+    
+  }
+  } else if(reservoir == "GWR"){
+  
+  depths = seq(0.1, 12, by = 0.3)
+  df.final<-data.frame()
+  
+  for (i in 1:length(depths)){
+    
+    fp_layer<-fp %>% group_by(DateTime) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+    
+    # Bind each of the data layers together.
+    df.final = bind_rows(df.final, fp_layer)
+    
+  }
+  } else if(reservoir == "SHR"){
+  
+  depths = seq(0.1, 30, by = 0.3)
+  df.final<-data.frame()
+  
+  for (i in 1:length(depths)){
+    
+    fp_layer<-fp %>% group_by(DateTime) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+    
+    # Bind each of the data layers together.
+    df.final = bind_rows(df.final, fp_layer)
+    
+  } 
+  
+  }
+  
+  #wrangle final dataframe for plotting
+  # Re-arrange the data frame by date
+  fp_new <- arrange(df.final, DateTime)
+
+  # Round each extracted depth to the nearest 10th. 
+  fp_new$Depth_m <- round(as.numeric(fp_new$Depth_m), digits = 0.5)
+  
+  fig <- plot_ly(
+  x = fp_new$DateTime, 
+  y = fp_new$Depth_m, 
+  z = matrix(c(10, 10.625, 12.5, 15.625, 20, 5.625, 6.25, 8.125, 11.25, 15.625, 2.5, 3.125, 5, 8.125, 12.5, 0.625, 1.25, 3.125,
+        6.25, 10.625, 0, 0.625, 2.5, 5.625, 10), nrow = 5, ncol = 5), 
+  type = "contour" 
+)
+
+fig
+
+  
+}
+```
+
 
 ```{r Make new CSV with current and historic files}
 # Need to decide on a naming convention for this file

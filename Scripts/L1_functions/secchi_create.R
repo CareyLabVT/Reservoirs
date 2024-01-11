@@ -166,7 +166,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
   secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
 
-  write.csv(secchi_reformat, './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', row.names = FALSE)
+  write.csv(secchi_reformat, outfile, row.names = FALSE)
 
 }
 #

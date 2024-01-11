@@ -238,17 +238,19 @@ last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 ysi <- ysi |> filter(DateTime > last_edi_date)
 
-
+if (!is.null(outfile)){
 # Write to CSV -- save as L1 file
 write.csv(ysi, outfile, row.names = FALSE)
-
 }
 
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
-outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
+return(ysi)
+}
 
-ysi_qaqc(data_file = data_file,
-         maintenance_file = maintenance_file,
-         gsheet_data = TRUE,
-         outfile = outfile)
+# maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
+# data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+# outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
+#
+# ysi_qaqc(data_file = data_file,
+#          maintenance_file = maintenance_file,
+#          gsheet_data = TRUE,
+#          outfile = outfile)

@@ -30,7 +30,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   secchi_df$Site <- as.numeric(secchi_df$Site)
   secchi_df$Secchi_m <- as.numeric(secchi_df$Secchi_m)
   secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
-  secchi_df$Notes <- as.character(secchi_df$Notes)
+  #secchi_df$Notes <- as.character(secchi_df$Notes)
 
 
   # fix dates
@@ -55,8 +55,8 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
   secchi_reformat <- secchi_df |>
     #filter(!is.na(Secchi_m) ) |>   # Omit rows where all Secchi values NA (e.g., rows from files with trailing ,'s) ## DO WE WANT TO COMPLETELY REMOVE NAS? IF SO WE NEED TO RETHINK HOW FLAGS ARE ASSIGNED IN NEXT LINE
-    mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0),
-           Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling)
+    mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0)) |>
+           #Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling)
     select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi_m) |>    # Arrange order of columns for final data table
     arrange(Reservoir, DateTime, .by_group = TRUE )
 
@@ -65,15 +65,15 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   secchi_reformat <- as.data.frame(secchi_reformat)
 
 
-  ## CHECK FOR DUPLICATES
-  secchi_dup <- secchi_reformat |>
-    group_by(Reservoir, Site, DateTime) |>
-    mutate(n = n()) |>
-    filter(n > 1)
-
-  if (nrow(secchi_dup) > 0){
-    print('DUPLICATE DATA FOUND')
-  }
+  # ## CHECK FOR DUPLICATES
+  # secchi_dup <- secchi_reformat |>
+  #   group_by(Reservoir, Site, DateTime) |>
+  #   mutate(n = n()) |>
+  #   filter(n > 1)
+  #
+  # if (nrow(secchi_dup) > 0){
+  #   print('DUPLICATE DATA FOUND')
+  # }
 
   if(!is.null(maintenance_file)){ # only run this file if the maint file arugment is non-null
 
@@ -163,13 +163,29 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
   # #### END MAINTENANCE LOG CODE #####
 
-  # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-  package_ID <- 'edi.198.11'
-  eml <- read_metadata(package_ID)
-  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+  ## CHECK FOR DUPLICATES
+  secchi_dup <- secchi_reformat |>
+    group_by(Reservoir, Site, DateTime) |>
+    mutate(n = n()) |>
+    filter(n > 1)
 
-  secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
+  if (nrow(secchi_dup) > 0){
+    warning('DUPLICATE DATA FOUND - removing duplicates')
+    secchi_duplicates <- secchi_reformat
+
+    secchi_deduped <- secchi_duplicates |>
+      distinct()
+
+    secchi_reformat <- secchi_deduped
+  }
+
+  # # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+  # package_ID <- 'edi.198.11'
+  # eml <- read_metadata(package_ID)
+  # date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+  # last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+  #
+  # secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
 
   if (!is.null(outfile)){
     # Write to CSV -- save as L1 file

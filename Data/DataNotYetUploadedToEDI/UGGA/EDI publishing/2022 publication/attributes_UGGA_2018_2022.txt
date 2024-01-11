@@ -1,0 +1,18 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
+Site	Sampling site within each reservoir	numeric	dimensionless			
+Date	Date of sampling	Date		YYYY-MM-DD		
+Rep	"Replicate sample number. Samples are coded as either 1 or 2 for the first and second sampling period, respectively."	numeric	dimensionless			
+Start_time	"Start time for diffusive flux calculations, typically defined as 4 minutes before the visually identified end time using FluxCalR. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		hh:mm:ss		
+End_time	"End time for diffusive flux calculations as visually identified using the FluxCalR package. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		hh:mm:ss		
+Temp_C	Averaged ambient temperature from the measurement time period used to calculate diffusive fluxes in FluxCalR.	numeric	celsius			
+CO2Slope_ppmS	"Slope of CO2 concentration over time, calculated using FluxCalR"	numeric	partsPerMillionPerSecond			
+CO2_R2	R2 for the calculated slope for CO2 concentration	numeric	dimensionless			
+CO2Flux_umolCm2s	Diffusive CO2 flux	numeric	micromolePerMeterSquaredPerSecond			
+CH4Slope_ppmS	"Slope of CH4 concentration over time, calculated using FluxCalR"	numeric	partsPerMillionPerSecond			
+CH4_R2	R2 for the calculated slope for CH4 concentration	numeric	dimensionless			
+CH4Flux_umolCm2s	Diffusive CH4 flux	numeric	micromolePerMeterSquaredPerSecond			
+Flag_CO2Flux_umolCm2s	Flag for diffusive CO2 flux. 0 = No issues; 1 = R2 of slope is under 0.9 	numeric	dimensionless			
+Flag_CH4Flux_umolCm2s	Flag for diffusive CH4 flux. 0 = No issues; 1 = R2 of slope is under 0.9	numeric	dimensionless			
+Flag_Start_time	"Flag for start time. 0 = no issues, 1 = issue with internal clock, time set to 12:00"	numeric	dimensionless			
+Flag_End_time	"Flag for start time. 0 = no issues, 1 = issue with internal clock, time set to 12:00 plus the sampling duration"	numeric	dimensionless			

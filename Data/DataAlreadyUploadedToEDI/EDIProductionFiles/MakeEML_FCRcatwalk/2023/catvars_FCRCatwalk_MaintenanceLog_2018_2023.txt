@@ -1,0 +1,34 @@
+attributeName	code	definition
+DataStream	CAT	Nickname for the sensors that hang off the Catwalk at Falling Creek Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+end_parameter	EXOBGAPC_ugL_1	Blue-Green Algae Phyocycanin at 1.6 meter depth as measured by the EXO2 Sonde in RFU
+end_parameter	EXOTDS_mgL_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO2 Sondein QSU
+end_parameter	EXOWiper_V	Total Dissolved Solids (TDS) at 1.6 meter depth as measured by the EXO2 Sonde
+end_parameter	EXOfDOM_QSU_1	Wiper brush cleaning system activation signal as measured by the EXO2 sonde
+end_parameter	LvlTemp_C_9	Water temperature at the last sensor in the string (about 9m) as measured by the pressure transducer
+end_parameter	RDOTemp_C_9	Dissolved Oxygen (DO) percent saturation at 5 meter depth as measured by the RDO Sensor
+end_parameter	RDOsat_percent_5	Dissolved Oxygen (DO) percent saturation at 9 meter depth as measured by the RDO Sensor
+end_parameter	RDOsat_percent_9	Water temperature as measured by the RDO sonde at 9 meter depth 
+end_parameter	ThermistorTemp_C_9	Water temperature at 9 meter depth as measured by the thermistor
+flag	1	value removed due to maintenance and set to NA
+flag	2	negative or outlier value removed and set to NA
+flag	4	value removed due to fouling and set to NA
+flag	5	questionable value due to potential fouling
+flag	6	very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles
+flag	7	missing data
+flag	8	Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
+start_parameter	EXOChla_RFU_1	Fluorecent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO2 Sonde in RFU
+start_parameter	EXOCond_uScm_1	Conductivity at 1.6 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOTemp_C_1	Fluorecent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO2 Sonde in RFU
+start_parameter	EXOTurbidity_FNU_1	Water temperature at 1.6 meter depth as measured by the EXO Sonde
+start_parameter	EXOfDOM_RFU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde
+start_parameter	LvlPressure_psi_9	Measure of the pressure from the bottom sensor in the string which is about 9m
+start_parameter	RDO_mgL_5	Dissolved Oxygen (DO) concentration at 5 meter depth as measured by the RDO Sensor
+start_parameter	RDO_mgL_9	Dissolved Oxygen (DO) concentration at 9 meter depth as measured by the RDO Sensor
+start_parameter	RDOsat_percent_5	Dissolved Oxygen (DO) percent saturation at 5 meter depth as measured by the RDO Sensor
+start_parameter	RDOsat_percent_9	Dissolved Oxygen (DO) percent saturation at 9 meter depth as measured by the RDO Sensor
+start_parameter	ThermistorTemp_C_1	Water temperature at 1 meter depth as measured by the thermistor
+start_parameter	ThermistorTemp_C_2	Water temperature at 2 meter depth as measured by the thermistor
+start_parameter	ThermistorTemp_C_4	Water temperature at 4 meter depth as measured by the thermistor
+start_parameter	ThermistorTemp_C_5	Water temperature at 5 meter depth as measured by the thermistor
+start_parameter	ThermistorTemp_C_surface	Water temperature at the surface as measured by the thermistor

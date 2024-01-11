@@ -229,6 +229,22 @@ ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
 #then set that value to NA
 ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
 
+## CHECK FOR DUPLICATES
+dup_check <- ysi |>
+  group_by(Reservoir, Site, DateTime, Depth_m) |>
+  mutate(n = n()) |>
+  filter(n > 1)
+
+if (nrow(dup_check) > 0){
+  warning('DUPLICATE DATA FOUND - removing duplicates')
+  duplicates_df <- ysi
+
+  deduped_df <- duplicates_df |>
+    distinct()
+
+  ysi <- deduped_df
+}
+
 
 # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 #package_ID <- 'edi.198.11'
@@ -236,7 +252,7 @@ ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
 #date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
 #last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
-ysi <- ysi |> filter(DateTime > last_edi_date)
+#ysi <- ysi |> filter(DateTime > last_edi_date)
 
 if (!is.null(outfile)){
 # Write to CSV -- save as L1 file

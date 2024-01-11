@@ -238,10 +238,12 @@ ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
 
 ysi <- ysi |> filter(DateTime > last_edi_date)
 
-
+if (!is.null(outfile)){
 # Write to CSV -- save as L1 file
 write.csv(ysi, outfile, row.names = FALSE)
+}
 
+return(ysi)
 }
 
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'

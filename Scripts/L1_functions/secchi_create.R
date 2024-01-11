@@ -171,8 +171,12 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
   secchi_reformat <- secchi_reformat |> filter(DateTime > last_edi_date)
 
-  write.csv(secchi_reformat, outfile, row.names = FALSE)
+  if (!is.null(outfile)){
+    # Write to CSV -- save as L1 file
+    write.csv(secchi_reformat, outfile, row.names = FALSE)
+  }
 
+  return(secchi_reformat)
 }
 #
 # data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'

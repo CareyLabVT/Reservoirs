@@ -27,7 +27,7 @@ process_CTD_file <- function(file,
     REP <- ""
   }
   SN <- as.numeric(str_extract(location, "\\d{4}"))
-  if(is.na(SN)|SN < 1000){
+  if(is.na(SN)|SN < 6000){
     message("SN is missing, setting to 7809")
     SN <- 7809
   }
@@ -35,7 +35,7 @@ process_CTD_file <- function(file,
   #trim ctd
   ctdTrimmed <- trim_ctd(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloads)
   
-  #do the rest of the processing
+  #do the rest of the processing. This does NOT add SN to file
   epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
                     REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
                     CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER)

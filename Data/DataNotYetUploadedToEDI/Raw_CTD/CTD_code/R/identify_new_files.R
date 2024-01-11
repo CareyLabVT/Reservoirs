@@ -33,8 +33,10 @@ identify_new_files <- function(raw_downloads = "../RawDownloads",
                           substr(missing,1,2), "-",
                           substr(missing,3,4)))
   
-  warning("Can't parse the following dates (not processing these files):\n", 
+  if(length(missing[is.na(dates)])>0){
+    warning("Can't parse the following dates (not processing these files):\n", 
           paste0(missing[is.na(dates)], sep = "\n"))
+  }
   
   #Only need files since the start date
   missing_recent <- missing[dates>=as.Date(start_date) & !is.na(dates)]

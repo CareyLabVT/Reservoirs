@@ -8,7 +8,7 @@ trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloa
   } else {NAME <- NAME_OVERRIDE}
   
   
-  ### Upload the raw CTD file as a .cnv format ###
+  ### Pull in the raw CTD file as a .cnv format ###
   name_cnv <- paste(NAME,"cnv", sep = ".")
  
   # Wrap read.ctd.sbe in a try() function so if there is a warning it keeps running

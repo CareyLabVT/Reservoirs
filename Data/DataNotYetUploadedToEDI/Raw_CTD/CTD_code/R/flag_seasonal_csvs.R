@@ -4,7 +4,7 @@
 #' @description This function loads the saved CTD csv from this year and adds data flags
 #' 
 #' @param ctd_season_csvs directory of CTD seasonal csvs
-#' @param input_file_name file name of un-flagged dataset
+#' @param intermediate_file_name file name of un-flagged dataset
 #' @param output_file_name file name of flagged dataset
 #' @param CTD_FOLDER high level CTD folder where L1 output will be stored
 #'
@@ -12,11 +12,11 @@
 #'
 
 flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
-                               input_file_name = "CTD_Meta_2023.csv",
+                               intermediate_file_name = "ctd_L0.csv",
                                output_file_name = "ctd_L1.csv",
                                CTD_FOLDER = "../") {
   
-  ctd1 <- read.csv(paste0(ctd_season_csvs, "/", input_file_name)) #Load saved data
+  ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   ctd = ctd1 %>%
     mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
            Reservoir = as.factor(Reservoir))
@@ -102,6 +102,23 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   Above_surface_flag = 6
   ctd_flagged[ctd_flagged$Depth_m<0,c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL","DOsat_percent","pH","ORP_mV")]<-NA
   ctd_flagged[ctd_flagged$Depth_m<0,c("Flag_Chla_ugL","Flag_Turbidity_NTU","Flag_Cond_uScm","Flag_SpCond_uScm","Flag_DO_mgL","Flag_DOsat_percent","Flag_pH","Flag_ORP_mV")]<-Above_surface_flag
+  
+  # Fix times
+  # CTD times in 2022 are incorrect by ~2 hr
+  ctd_flagged$DateTime[ctd_flagged$DateTime>as.Date("2021-12-01") &
+                         ctd_flagged$DateTime<as.Date("2023-01-01")] = 
+    ctd_flagged$DateTime[ctd_flagged$DateTime>as.Date("2021-12-01") &
+                       ctd_flagged$DateTime<as.Date("2023-01-01")] + hours(2) #to align with published data
+  
+  # CTD times in 2020 and 2021 are incorrect by ~13 hr
+  ctd_flagged$DateTime[ctd_flagged$DateTime > as.Date("2020-01-01") & 
+                     ctd_flagged$DateTime < as.Date("2021-12-01")] = 
+    ctd_flagged$DateTime[ctd_flagged$DateTime > as.Date("2020-01-01") & 
+                       ctd_flagged$DateTime < as.Date("2021-12-01")] + hours(13) #to align with published data
+  
+  # CTD times in 2018 are incorrect by ~4 hr
+  ctd_flagged$DateTime[year(ctd_flagged$DateTime) == 2018] = 
+    ctd_flagged$DateTime[year(ctd_flagged$DateTime) == 2018] - hours(4) #to align with published data
   
   final = ctd_flagged%>%
     mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))

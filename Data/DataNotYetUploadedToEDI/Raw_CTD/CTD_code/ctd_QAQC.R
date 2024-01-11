@@ -32,7 +32,8 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                      CTD_FOLDER = "../",
                      start_date = as.Date(paste0(year(Sys.Date()),"-01-01")),
                      force_reprocessing = FALSE,
-                     output_file_name = "ctd_L1.csv"){
+                     output_file_name = "ctd_L1.csv",
+                     intermediate_file_name = "ctd_L0.csv"){
   
   ## Identify files new files
   file_names <- identify_new_files(raw_downloads = raw_downloads,
@@ -42,7 +43,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   #If no new files, end QAQC
   if(length(file_names)==0){
     message("No new files could be processed")
-    return()
+    #return()
   }
   
   ## Generate csv versions of these files (stored in csv_outputs folder)
@@ -53,17 +54,17 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                      CTD_FOLDER = CTD_FOLDER) 
   }
   
-  ## Generate updated seasonal csv
+  ## Generate updated seasonal csv (L0) - this combines all ctd_cast_csvs and takes a bit to run
+  # This is the function that adds SN to the file!
   update_seasonal_csvs(ctd_cast_csvs = ctd_cast_csvs,
                        ctd_season_csvs = ctd_season_csvs,
-                       output_file_name = "CTD_Meta_2023.csv")
+                       intermediate_file_name = intermediate_file_name,
+                       start_date = start_date)
   
-  ## Add data flags to seasonal csv
+  ## Add data flags to seasonal csv (L1)
   flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
-                     input_file_name = "CTD_Meta_2023.csv",
-                     output_file_name = "ctd_L1.csv")
+                     intermediate_file_name = intermediate_file_name,
+                     output_file_name = output_file_name)
 }
 
 ctd_QAQC(start_date = "2023-01-01") #run function using default values
-
-

@@ -1,0 +1,33 @@
+attributeName	code	definition
+DataStream	BVRplatform	Nickname for the sensor string and other sensors at the platform
+Reservoir	BVR	Three letter code for the Reservoir Beaverdam
+end_parameter	EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde
+end_parameter	EXOTDS_mgL_1.5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO2 Sonde
+end_parameter	EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde
+end_parameter	EXOfDOM_QSU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in QSU at 1.5 meters depth as measured by the EXO2 Sonde
+end_parameter	LvlTemp_C_13	Water temperature at position 13 as measured by the water level logger
+end_parameter	RDOsat_percent_13	Dissolved Oxygen (DO) percent saturation at position 13 as measured by the RDO Sensor
+end_parameter	RDOsat_percent_6	Dissolved Oxygen (DO) percent saturation at position 6 as measured by the RDO Sensor
+end_parameter	ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (located about 0.5 m above sediments)
+flag	1	value removed due to maintenance and set to NA
+flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+flag	4	value removed due to fouling and set to NA
+flag	5	questionable value but left in the dataset
+flag	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
+flag	7	missing data
+start_parameter	EXOBGAPC_RFU_1.5	Blue-Green Algae phycocyanin in RFU at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOChla_RFU_1.5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOCond_uScm_1.5	Conductivity at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXODOsat_percent_1.5	Dissolved Oxygen (DO) percent saturation at position 13 as measured by the RDO Sensor
+start_parameter	EXOSpCond_uScm_1.5	Specific conductance at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOTDS_mgL_1.5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOTemp_C_1.5	Water temperature at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	EXOTurbidity_FNU_1.5	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde
+start_parameter	EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde
+start_parameter	EXOfDOM_RFU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in RFU at 1.5 meter depth as measured by the EXO2 Sonde
+start_parameter	LvlPressure_psi_13	Pressure from pressure sensor at position 13 as measured relative to ambient atmospheric pressure
+start_parameter	RDO_mgL_13	Dissolved Oxygen (DO) concentration at position 13 as measured by the RDO Sensor
+start_parameter	RDO_mgL_6	Dissolved Oxygen (DO) concentration at position 6 as measured by the RDO Sensor
+start_parameter	ThermistorTemp_C_1	Water temperature measured by thermistor at position 13 (highest elevation above sediments)
+start_parameter	ThermistorTemp_C_11	Water temperature measured by thermistor at position 11
+start_parameter	ThermistorTemp_C_5	Water temperature measured by thermistor at position 5

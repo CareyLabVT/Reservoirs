@@ -229,26 +229,44 @@ ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 4] <- 2
 #then set that value to NA
 ysi$pH[!is.na(ysi$pH) & ysi$pH < 4] <- NA
 
+## CHECK FOR DUPLICATES
+dup_check <- ysi |>
+  group_by(Reservoir, Site, DateTime, Depth_m) |>
+  mutate(n = n()) |>
+  filter(n > 1)
 
-# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-package_ID <- 'edi.198.11'
-eml <- read_metadata(package_ID)
-date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+if (nrow(dup_check) > 0){
+  warning('DUPLICATE DATA FOUND - removing duplicates')
+  duplicates_df <- ysi
 
-ysi <- ysi |> filter(DateTime > last_edi_date)
+  deduped_df <- duplicates_df |>
+    distinct()
 
-
-# Write to CSV -- save as L1 file
-write.csv(ysi, outfile, row.names = FALSE)
-
+  ysi <- deduped_df
 }
 
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
-outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
 
-ysi_qaqc(data_file = data_file,
-         maintenance_file = maintenance_file,
-         gsheet_data = TRUE,
-         outfile = outfile)
+# ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+#package_ID <- 'edi.198.11'
+#eml <- read_metadata(package_ID)
+#date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+#last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
+#ysi <- ysi |> filter(DateTime > last_edi_date)
+
+if (!is.null(outfile)){
+# Write to CSV -- save as L1 file
+write.csv(ysi, outfile, row.names = FALSE)
+}
+
+return(ysi)
+}
+
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
+#data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+#outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
+
+#ysi_qaqc(data_file = data_file,
+#         maintenance_file = maintenance_file,
+#         gsheet_data = TRUE,
+#         outfile = outfile)

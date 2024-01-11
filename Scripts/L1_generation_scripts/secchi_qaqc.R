@@ -1,4 +1,4 @@
-## QAQC secchi data -- pull from google sheets and save as csv 
+## QAQC secchi data -- pull from google sheets and save as csv
 
 library(tidyverse)
 library(gsheet)
@@ -6,7 +6,7 @@ library(EDIutils)
 library(xml2)
 
 secchi_qaqc <- function(maintenance_log = NULL){
-  
+
 gsheet_url <- 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
 secchi_df <- gsheet::gsheet2tbl(gsheet_url)
 
@@ -34,25 +34,25 @@ secchi_df <- secchi_df %>%
          DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
   select(-c(Time, Date, Hours))
 
-# secchi_reformat <- secchi_df |> 
+# secchi_reformat <- secchi_df |>
 #   rename(Flag_Secchi_m = Flag_Secchi)
 
-secchi_reformat <- secchi_df |> 
+secchi_reformat <- secchi_df |>
   #filter(!is.na(Secchi_m) ) |>   # Omit rows where all Secchi values NA (e.g., rows from files with trailing ,'s) ## DO WE WANT TO COMPLETELY REMOVE NAS? IF SO WE NEED TO RETHINK HOW FLAGS ARE ASSIGNED IN NEXT LINE
-  mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0), 
-  Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling) 
+  mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0),
+  Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling)
   select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi_m) |>    # Arrange order of columns for final data table
-  arrange(Reservoir, DateTime, .by_group = TRUE ) 
+  arrange(Reservoir, DateTime, .by_group = TRUE )
 
 secchi_reformat[is.na(secchi_reformat)] <- 0
 
 secchi_reformat <- as.data.frame(secchi_reformat)
 
 
-## CHECK FOR DUPLICATES 
-secchi_dup <- secchi_reformat |> 
-  group_by(Reservoir, Site, DateTime) |> 
-  mutate(n = n()) |> 
+## CHECK FOR DUPLICATES
+secchi_dup <- secchi_reformat |>
+  group_by(Reservoir, Site, DateTime) |>
+  mutate(n = n()) |>
   filter(n > 1)
 
 if (nrow(secchi_dup) > 0){
@@ -124,11 +124,17 @@ for(i in 1:nrow(log)){
 
   ### This is where information in the maintenance log gets updated
 
-  if(flag %in% c(1)){ ## UPDATE THIS WITH ANY NEW FLAGS
+  if(flag %in% c(1) & colname_start != 'Site'){ ## UPDATE THIS WITH ANY NEW FLAGS
     # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
     secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- NA
     secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
+  } else if (flag %in% c(2) & colname_start == 'Site'){
+    ## this fixes site issues for now -- no flag shown in data
+    secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
+
+  } else if (flag %in% c(3)){
+    secchi_reformat[!(secchi_reformat$DateTime %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
   }else{
     warning("Flag not coded in the L1 script. See Austin or Adrienne")
   }

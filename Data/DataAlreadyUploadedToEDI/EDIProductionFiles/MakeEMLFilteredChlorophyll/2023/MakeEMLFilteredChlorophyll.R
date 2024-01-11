@@ -1,7 +1,10 @@
 ##MakeEMLFilteredChlorophyll
 ##Author: Mary Lofton
-##Modified by Whitney Woelmer and Jacob Wynne
+##Modified by Whitney Woelmer and Jacob Wynne 
 ##Date: 24Jun2020
+##Modified by Katie Hoffman on 10 Jan 2024
+
+#This script is to stage and publish data to EDI
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -152,9 +155,10 @@ make_eml(
   data.table = c("FiltChla_2014_2023.csv", 'site_descriptions.csv'),
   data.table.name = c("FiltChla_2014_2023", 'site_descriptions'), 
   data.table.description = c("Filtered chlorophyll a data at multiple sites","Sampling site descriptions with latitude and longitude" ),
-  other.entity = c('filt_chla_qaqc_2014_2023.R', 'FiltChla_inspection_2014_2023.Rmd'),
-  other.entity.name = c("filt_chla_qaqc_2014_2023", 'FiltChla_inspection_2014_2023'),
-  other.entity.description = c('Script used to collate and flag data for publication', 'Markdown file used to visualize data for QA/QC'), 
+  other.entity = c('filt_chla_qaqc_2023.R', 'FiltChla_inspection_2014_2023.Rmd', 'Filt_Chla_Maintenance_Log.csv'),
+  other.entity.name = c("filt_chla_qaqc_2023", 'FiltChla_inspection_2014_2023', 'Filt_Chla_Maintenance_Log'),
+  other.entity.description = c('Script used to collate and flag data for publication', 'Markdown file used to visualize data for QA/QC', 
+                               'Maintenance Log through 2023'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.52.20') #THIS IS FOR STAGING
@@ -197,8 +201,8 @@ make_eml(
 # evaluation check again, until you receive a message with no errors.
 
 ## Step 9: PUBLISH YOUR DATA! ####
-#  #DO NOT REQUEST A NEW PACKAGE ID FOR UPDATING THE CHEMISTRY DATASET
-#  SIMPLY INCREASE THE LAST DIGIT OF THE PREVIOUS PACKAGE ID BY 1 TO UPDATE THE CURRENT PUBLICATION
+# DO NOT REQUEST A NEW PACKAGE ID FOR UPDATING
+# SIMPLY INCREASE THE LAST DIGIT OF THE PREVIOUS PACKAGE ID BY 1 TO UPDATE THE CURRENT PUBLICATION
 # DIRECTIONS ON HOW TO GET A NEW ID ARE HERE, BUT DO NOT USE THEM FOR ALREADY PUBLISHED DATASETS BEING UPDATED (E.G. CHEMISTRY, CATWALK, CTD, ETC.)
 # NEVER ASSIGN this identifier to a staging environment package.
 # Go to the EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

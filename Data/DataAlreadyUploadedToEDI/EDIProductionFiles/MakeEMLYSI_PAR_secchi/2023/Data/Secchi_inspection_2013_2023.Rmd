@@ -25,7 +25,12 @@ secchi <- bind_rows(current_file, historic_file)
 
 ```{r}
 #source L1 functin to run all data through QAQC process
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_generation_scripts/secchi_qaqc.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
+
+secchi_cleaned <- secchi_qaqc(data_file = secchi,
+            gsheet_data = FALSE,
+            maintenance_file = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv',
+            outfile = NULL)
 
 ```
 
@@ -33,7 +38,7 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 ```{r make df longer}
 #------------------------------------------------------------------------------#
 #### Secchi diagnostic plots #### 
-secchi_long <- secchi %>%
+secchi_long <- secchi_cleaned %>%
   mutate(year = as.factor(year(DateTime)), day = yday(DateTime))
 ```
 

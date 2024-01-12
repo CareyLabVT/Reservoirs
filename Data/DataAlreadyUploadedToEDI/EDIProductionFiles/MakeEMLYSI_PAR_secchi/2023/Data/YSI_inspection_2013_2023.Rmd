@@ -14,7 +14,7 @@ pacman::p_load(tidyverse, lubridate, gsheet)
 ```
 
 ```{r read in current and historic data}
-current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/ysi_L1.csv', col_types = cols())
+current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv', col_types = cols())
 #note that this file path doesn't not work for HLW - need to replace "~/Reservoirs" with "."
 #and make sure wd is set to project directory
 
@@ -25,12 +25,22 @@ historic_file <- read_csv('https://portal.edirepository.org/nis/dataviewer?packa
 profiles <- bind_rows(current_file, historic_file)
 ```
 
+```{r}
+#source L1 functin to run all data through QAQC process
+#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
+
+profiles_cleaned <- ysi_qaqc(data_file = profiles,
+            gsheet_data = FALSE,
+            maintenance_file = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv',
+            outfile = NULL)
+```
+
 ```{r add additional columns}
 #add column for year
-profiles$year <- year(profiles$DateTime)
+profiles_cleaned$year <- year(profiles$DateTime)
 
 #### YSI diagnostic plots #### 
-profiles_long <- profiles %>%
+profiles_long <- profiles_cleaned %>%
   ungroup(.) %>%
   select(-c(PAR_umolm2s:Flag_pH, Cond_uScm)) %>%
   gather(metric, value, c(Temp_C:DOsat_percent,SpCond_uScm)) 

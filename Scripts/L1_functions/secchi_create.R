@@ -154,6 +154,9 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
       }else if (flag %in% c(3)){
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+        
+      }else if (flag %in% c(4)){
         secchi_reformat[!(secchi_reformat$DateTime %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
       }else{
         warning("Flag not coded in the L1 script. See Austin or Adrienne")

@@ -1,7 +1,20 @@
-qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality.csv",
-                     data2_file = "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/CCRWaterquality_L1.csv",
-                     EXO2_manual_file = "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/CCR_1_5_EXO_L1.csv", 
-                     maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", 
+# Title: QAQC Function for Carvins Cove Reservoir In Situ Water Sensors
+# This QAQC cleaning script was applied to create the data files included in this data package.
+# Author: Adrienne Breef-Pilz
+# First Developled Jan. 2023
+# Last edited: 12 Jan. 2024
+
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 
+# generate data from 2023 in the CCRCatwalk_2021_2023.csv. This function uses and addition function find_depths.R
+# and is available with this package. 
+# This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
+
+
+
+qaqc_ccr <- function(data_file,
+                     data2_file,
+                     EXO2_manual_file, 
+                     maintenance_file, 
                      output_file, 
                      start_date = NULL, 
                      end_date = NULL)
@@ -9,7 +22,8 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   # Call the source function to get the depths
   
-  source_url("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R")
+  source("find_depths.R")
+  
   
   CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp_C", 
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",

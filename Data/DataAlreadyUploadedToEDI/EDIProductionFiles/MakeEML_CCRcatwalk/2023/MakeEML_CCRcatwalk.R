@@ -113,7 +113,7 @@ view_unit_dictionary()
 template_table_attributes(path = folder,
                           data.path = folder,
                           data.table = c("CCRCatwalk_2021_2023.csv", "CCR_Depth_offsets_2021_2023.csv",
-                                         "CCR_hobos_2020_2021.csv", "CCRCatwalk_MaintenanceLog_2021_2023.csv", 
+                                         "CCR_hobos_2020_2021.csv", "CCRCatwalk_maintenancelog_2021_2023.csv", 
                                          "reservoir_site_descriptions.csv"),
                           write.file = TRUE)
 
@@ -163,17 +163,17 @@ make_eml(path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
          total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2023",
          data.table = c("CCRCatwalk_2021_2023.csv","CCR_Depth_offsets_2021_2023.csv", "CCR_hobos_2020_2021.csv", 
-                        "CCRCatwalk_MaintenanceLog_2021_2023.csv", "reservoir_site_descriptions.csv"),
+                        "CCRCatwalk_maintenancelog_2021_2023.csv", "reservoir_site_descriptions.csv"),
          data.table.name = c("CCRCatwalk_2021_2023","CCR_Depth_offsets_2021_2023", "CCR_hobos_2020_2021", 
                              "CCRCatwalk_MaintenanceLog_2021_2023", "reservoir_site_descriptions"),
          data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths", 
                                     "CCR HOBO Temperature String 2020-2021", "CCR sensor maintenace log for waterquality sensors", 
                                     "Sampling site descriptions"),
-         other.entity = c('CCRCatwalk_qaqc_2021_2023.R', 
+         other.entity = c('CCRCatwalk_qaqc_2023.R', 
                           'CCRCatwalk_inspection_2021_2023.Rmd', 
                           'find_depths.R', 
                           'Plot_function.R'),
-         other.entity.name = c('CCRCatwalk_qaqc_2021_2023', 
+         other.entity.name = c('CCRCatwalk_qaqc_2023', 
                                'CCRCatwalk_inspection_2021_2023', 
                               'find_depths',
                                'Plot_function'),
@@ -186,7 +186,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.21", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.22", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
          #package.id = "edi.1069.1", #### THIS IS USED FOR PUBLISHING
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####

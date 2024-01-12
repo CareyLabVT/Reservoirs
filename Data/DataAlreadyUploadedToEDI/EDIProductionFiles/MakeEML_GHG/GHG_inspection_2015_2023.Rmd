@@ -5,7 +5,11 @@ date: "2023-11-30"
 output: html_document
 ---
 
-This is the visualisation script for the greenhouse gas data product. 
+This is the visualisation script for the greenhouse gas data product which was used in the QA/QC process and review of the data package
+1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
+3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+5. Creates plots to visualise all variables and sites
+6. Writes the new comined data to new csv
 
 ```{r setup packages, include=FALSE}
 
@@ -33,7 +37,6 @@ historic <-read_csv(infile1)
 ```{r Read in L1 file}
 
 L1 <- read_csv('../../../DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv')
-
 ```
 
 ```{r Bind historic and L1 files together}
@@ -61,6 +64,71 @@ for(f in 1:(ncol(Flags))){
   #print(colnames(Flags[f]))
   print(table(Flags[,f], useNA = "always"))
 }
+
+```
+
+## Check to make sure that what is in the maintenance log  was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+maint <- read_csv("../../../DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv")
+
+# name the data file
+sd <- tail(maint) %>%
+  filter(flag!=7)
+
+# let's see what the tails look like
+print(tail(sd))
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+start <- as_datetime(last_row$TIMESTAMP_start)
+end <- as_datetime(last_row$TIMESTAMP_end)
+    
+# Get the time of the maintenance
+if(is.na(end)){
+  # If there the maintenance is on going then the columns will be removed until
+  # and end date is added
+  Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+  
+}else if (is.na(start)){
+  # If there is only an end date change columns from beginning of data frame until end date
+  Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+  
+}else {
+  Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+}
+
+
+### Get the names of the columns affected by maintenance
+colname_start <- last_row$start_parameter
+colname_end <- last_row$end_parameter
+
+# Make list of just the columns we want 
+
+test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+
+# Print the head of the table to make sure that data are flagged
+
+head(current_df[current_df$DateTime %in% Time$DateTime, test])
+tail(current_df[current_df$DateTime %in% Time$DateTime, test])
 
 ```
 

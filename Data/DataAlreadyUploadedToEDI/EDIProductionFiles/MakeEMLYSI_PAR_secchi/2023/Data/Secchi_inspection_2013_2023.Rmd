@@ -98,3 +98,12 @@ secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" &
 write.csv(secchi_cleaned,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
 #replace "~/Reservoirs" with "."
 ```
+
+```{r}
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Secchi_MaintenanceLog_2013_2023.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Secchi_qaqc_2013_2023.R")
+```
+

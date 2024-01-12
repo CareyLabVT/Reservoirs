@@ -82,7 +82,7 @@ library(EMLassemblyline)
 #
 #template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
 #                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-#                          data.table = c("final_GHG_2015-Dec2022.csv"),
+#                          data.table = c("GHG_2015_2023.csv"),
 #                          write.file = TRUE)
 #
 #
@@ -90,7 +90,7 @@ library(EMLassemblyline)
 ##as columns within our dataset but would like to provide them
 #template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
 #                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-#                             data.table = c("final_GHG_2015-Dec2022.csv"),
+#                             data.table = c("GHG_2015_2023.csv"),
 #                             empty = TRUE,
 #                             write.file = TRUE)
 #
@@ -108,7 +108,7 @@ library(EMLassemblyline)
 #if you want to check your methods for non-allowed characters, go to:
 #https://pteo.paranoiaworks.mobi/diacriticsremover/
 #paste text and click remove diacritics
-
+  
 #Step 9: Additional information
 # Copy and paste from previous years here
 
@@ -166,18 +166,21 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2022",
-  temporal.coverage = c("2015-03-31", "2022-05-23"),
+  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2023",
+  temporal.coverage = c("2015-03-31", "2023-12-31"),
   maintenance.description = 'ongoing',
-  data.table = c('Dissolved_GHG_2015_2022.csv','site_descriptions.csv'),
+  data.table = c('GHG_2015_2023.csv','site_descriptions.csv'),
   data.table.description = c("GHG Dataset","Descriptions of sites in this dataset with lat/long coordinates"),
   data.table.name = c("GHG Dataset","Site Descriptions"),
-  other.entity= 'QAQC_GHG_2022.R',
-  other.entity.name = "QA/QC Code",
-  other.entity.description = "R script for GHG QA/QC",
+  other.entity= c('GHG_qaqc_2023_2023.R', 'GHG_functions_for_L1.R',
+                  'GHG_inspection_2015_2023.Rmd', "GHG_Maintenance_Log.csv"),
+  other.entity.name = c("L1 generation script", 'L1 generation functions',
+                        "Visual inspection script", "Maintenance log"),
+  other.entity.description = c("R script for GHG QA/QC to generate L1 in 2023", 'functions used in the L1 generation script for QA/QC in 2923',
+                               'script to generate plots and combine L1 and EDI products', 'Maintenance log used in L1 generation'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.551.7')
+  package.id = 'edi.997.7')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

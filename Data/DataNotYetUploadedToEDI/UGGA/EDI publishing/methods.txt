@@ -6,6 +6,8 @@ There was an issue with the UGGA internal clock in 2022. Start times for these m
 
 See site_descriptions.csv provided in this data package for further information regarding sampling sites.
 
+This data package includes data with calculated fluxes (UGGA_2018_2023.csv), a QAQC R script (UGGA_qaqc_2018_2023.R), a visual inspection R script (UGGA_inspection_2018_2023.Rmd), sampling sites (site_descriptions.csv), a data processing script (UGGA_FluxCalR_2023.R), and raw data files for 2023 (RawData.zip). See previous revisions for historical raw data files. 
+
 
 References:
 

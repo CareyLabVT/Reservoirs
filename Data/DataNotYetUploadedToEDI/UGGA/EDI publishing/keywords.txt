@@ -13,3 +13,6 @@ diffusion	carey lab controlled vocabulary
 carbon flux	lter controlled vocabulary
 gas flux	lter controlled vocabulary
 diffusive flux	carey lab controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary

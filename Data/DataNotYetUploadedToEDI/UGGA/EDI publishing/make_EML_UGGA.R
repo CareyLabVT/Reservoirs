@@ -13,10 +13,10 @@ library(EMLassemblyline)
 historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
 
 #Load current data
-current_data <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_L1.csv')
+current_data <- read_csv('UGGA_L1.csv')
 
 ## combine all data
-flux_all <- bind_rows(current_data, historical_data)
+flux_all <- bind_rows(historical_data, current_data)
 min(flux_all$Date)
 max(flux_all$Date)
 
@@ -66,4 +66,4 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.1")
+         package.id = "edi.1102.2")

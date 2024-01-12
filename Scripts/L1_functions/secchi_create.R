@@ -201,7 +201,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 }
 #
 data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
-data _file = 'https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052'
+#data_file = 'https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052'
 maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'
 outfile <- './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv'
 #

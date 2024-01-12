@@ -262,9 +262,9 @@ write.csv(ysi, outfile, row.names = FALSE)
 return(ysi)
 }
 
-#maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-#data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
-#outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
+data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
 
 #ysi_qaqc(data_file = data_file,
 #         maintenance_file = maintenance_file,

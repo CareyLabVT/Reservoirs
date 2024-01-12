@@ -1,6 +1,19 @@
-qaqc_ccrmet <- function(data_file = 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-met.csv',
-                        data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/CCRMetstation_L1.csv',
-                        maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRM_Maintenancelog_new.csv', 
+# Title: QAQC Function for Carvins Cove Met Sensors
+# This QAQC cleaning script was applied to create the data files included in this data package.
+# Author: Adrienne Breef-Pilz and edits to the maintenance log section by Austin Delany
+# First Developled Jan. 2023
+# Last edited: 12 Jan. 2024
+
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 
+# generate data from 2023 in the CCRMet_2015_2023. 
+
+# This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
+
+
+
+qaqc_ccrmet <- function(data_file,
+                        data2_file ,
+                        maintenance_file, 
                         output_file, 
                         start_date = NULL, 
                         end_date = NULL, 
@@ -552,11 +565,3 @@ qaqc_ccrmet <- function(data_file = 'https://raw.githubusercontent.com/FLARE-for
   
 }
 
-# # Example Use
-# sdf <- qaqc_ccrmet(data_file = 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-met.csv',
-# data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/CCRMetstation_L1.csv',
-# maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRM_Maintenancelog_new.csv',
-# output_file = NULL,
-# start_date = force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST"),
-# end_date = Sys.Date(),
-# notes = TRUE)

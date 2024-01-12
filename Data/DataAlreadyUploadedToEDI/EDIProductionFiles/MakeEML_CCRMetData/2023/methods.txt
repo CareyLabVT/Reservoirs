@@ -2,23 +2,23 @@ Meteorological data were collected using a research-grade meteorological station
 
 Site Description and Power:
 
-The Meteorological station was deployed on the concrete walkway on top of the dam at Carvins Cove (37.36944, -79.95778), as such, some of the sensors may be influenced by the dam and structures on the dam itself. Most notably the 4-Component Net Radiometer sensor made up of Shortwave Radiation Up, Shortwave Radiation Down, Infrared Radiation Up and Infrared Radiation Down are hanging over the dam to measure the water below but may be obstructed by the dam.
+The meteorological station was deployed on the concrete walkway on top of the dam at Carvins Cove (37.36944, -79.95778), as such, some of the sensors may be influenced by the dam and structures on the dam itself. Most notably the 4-Component Net Radiometer sensor made up of Shortwave Radiation Up, Shortwave Radiation Down, Infrared Radiation Up and Infrared Radiation Down are hanging over the dam to measure the water below but may be obstructed by the dam.
 The meteorological station (CR3000 data logger and sensors) is powered with AC power from the electrical grid.
 
 
-Data Quality Assurance/Quality Control (QA/QC) procedures: 
+Data Quality Assurance/Quality Control (QAQC) procedures: 
 
-Issues with the Met station:
-On February 28, 2023- the Met station blew over in the early morning due to high winds. We picked up the tower and inspected the sensors. Luckily, there was no damage to the sensors but we did remove observations during this time. See the Maintenance Log for exact times. 
+Issues with the meteorological station:
+On February 28, 2023- the meteorological station blew over in the early morning due to high winds. We picked up the tower and inspected the sensors. Luckily, there was no damage to the sensors but we did remove observations during this time. See the Maintenance Log for exact times. 
 
 Missing data: 
 There were no major gaps lasting longer than 1 day in the record. Sub-daily gaps occurred on April 9, 2021 13:00-13:56, July 2, 2021 14:00-14:41, April 5, 2022 12:00:00-13:56, April 20, 2022 13:00-13:38 and 14:00:00-14:53, May 12, 2022 10:00-10:27, and September 29, 2022 14:00-14:57:00, and 15:00-15:18. In 2023, they occured on January 24, 2023 16:47:00 - 16:49:00,  February 28, 2023 12:10:00 - 12:12:00, March 13, 2023 14:10:00 - 14:13:00, June 7, 2023 11:30:00 - 11:40:00, 12:04:00 - 12:06:00, 12:20:00 - 12:24:00, 12:26:00 - 12:28:00, June 27, 2023 11:00:00 - 11:15:00, and October 16, 2023 14:48:00 - 14:50:00. Most of these gaps are because of new programs being uploaded to the data logger. 
 
 
 Maintenance Log and QAQC:
-The Maintenance Log, CCRMet_maintenancelog_2021_2023.csv, is a file where we record any maintenance on the senor which needs to be removed from the data file. We also include dates where observations need to be changed or modified because of human error. The maintenance log is then used in qaqc_fcrmet function which is in the CCRMet_qaqc_2023.R script. In addition to removing observation during maintenance, the script also flags and removes values that are outliers. Below we describse those thersholds and situations. The years on the qaqc function indicate which years are run through the function. So only 2023 was run through the function and then we merged it with the previous years file on EDI. 
+The Maintenance Log, CCRMet_maintenancelog_2021_2023.csv, is a file where we record any maintenance on the senor which needs to be removed from the data file. We also include dates where observations need to be changed or modified because of human error. The maintenance log is then used in qaqc_fcrmet function which is in the CCRMet_qaqc_2023.R script. In addition to removing observation during maintenance, the script also flags and removes values that are outliers. Below we describse those thersholds and situations. The years on the QAQC function indicate which years are run through the function. So only 2023 was run through the function and then we merged it with the previous years file on EDI. 
 
-All QA/QC code used for the dataset is archived with this dataset. See CCRMet_qaqc_2023.R. In addition to the qaqc script, we have included a visual inspection script which uses the current files, checks for NAs in the flag columns, visual checks to make sure the maintenance log worked properly, creates qaqc plots for inspections, creates newest data file combining the past files and the most recent files we are adding this year, and downloads files and scripts to be uploaded with the datapackage. 
+All QAQC code used for the dataset is archived with this dataset. See CCRMet_qaqc_2023.R. In addition to the QAQC script, we have included a visual inspection script which uses the current files, checks for NAs in the flag columns, visually checks to make sure the maintenance log worked properly, creates QAQC plots for inspections, creates the newest data file by combining the past files and the most recent files we added this year, and downloads files and scripts to be uploaded with the datapackage. 
 
 
 Flag Descriptions:
@@ -27,13 +27,13 @@ We set erroneous values due to maintenance as NA (flag 1) in the dataset. For al
 
 
 Air Temperature:
-The AirTemp_Average_C variable received intensive QA/QC based on the same QA/QC done for Falling Creek Reservoir Met station (EDI package edi.389.6). We used the data from the initial year of deployment (2021) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor. The 2021 relationship can be described by the following equation: AirTemp_Average_C = -3.5595812(0.0044426, 1 SE) + 0.9288955(0.0001895)_CR3000Panel_temp_C This relationship's adjusted R-squared value was 0.98. The residuals from this equation were minimum: -6.6734, 1st quartile: -0.6145, median: 0.0319, 3rd quartile: 0.6333, and maximum: 6.6100. If any air temperature values were above or below 4 standard deviations of the residuals from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. 
+The AirTemp_Average_C variable received intensive QAQC based on the same QAQC done for Falling Creek Reservoir meteorological station (EDI package edi.389.6). We used the data from the initial year of deployment (2021) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor. The 2021 relationship can be described by the following equation: AirTemp_Average_C = -3.5595812(0.0044426, 1 SE) + 0.9288955(0.0001895)_CR3000Panel_temp_C. This relationship's adjusted R-squared value was 0.98. The residuals from this equation were minimum: -6.6734, 1st quartile: -0.6145, median: 0.0319, 3rd quartile: 0.6333, and maximum: 6.6100. If any air temperature values were above or below 4 standard deviations of the residuals from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. 
 
 PAR Sensor:
 PAR data during the night that was greater than 12 umol_s_m2 for the average and 1 mmol_m2 were changed to NA and flagged as 4. We used getSunlightTimes function in the Suncalc package in R (Thieurmel, B., Elmarhraoui, A. (2019).suncalc: Compute Sun Position, Sunlight Phases, Moon Position and Lunar Phase. R package version 0.5.0.) to get sunrise and sunset that was used to determine whether the observation was during the day or at night.
 
 Rain Gauge:
-The rain gauge was clogged from July 19, 2022 to September 12, 2022 at 11:07 when all the water was released into the rain gauge. During this time, we corrected the observations using the rain gauge observations from Falling Creek Reservoir. Using data from from the rain gauges at FCR and CCR from, March 29, 2021 19:00-July 18, 2022 00:00, we deveolped a linear model (y=0.110725x+0.001494). We compared total rain from the raw data which includes when the rain gauge was unclogged and the corrected rain totals. The total for that time was 38.1mm and the corrected total was 34.7mm. 
+The rain gauge was clogged from July 19, 2022 to September 12, 2022 at 11:07 when all the water was released into the rain gauge. During this time, we corrected the observations using the rain gauge observations from Falling Creek Reservoir. Using data from the rain gauges at FCR and CCR from, March 29, 2021 19:00-July 18, 2022 00:00, we deveolped a linear model (y=0.110725x+0.001494). We compared total rain from the raw data which includes when the rain gauge was unclogged and the corrected rain totals. The total for that time was 38.1mm and the corrected total was 34.7mm. 
 
 Outliers:
 After previously described adjustments, outliers were set to NA and received 'flag 4' in the dataset, following these outlier thresholds:
@@ -46,7 +46,7 @@ QAQC scripts:
 We use a QAQC function to remove maintenance times and outliers from the data before publishing. The function is included in the data package as an R script, CCRMet_qaqc_2021_2023.R. In this function, we flag and remove observations that took place during sensor maintenance or when a  sensor malfunctioned and when there were outliers. 
 For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (CCRMet_maintenancelog_2021_2023.csv). This file is used in the QAQC function to identify dates and times during recorded events, change the observations affected and add a flag to indicate the issues. See Maintenance Log and QAQC section above for more information on the maintenance log. In addition to recorded maintenance issues, we identify and remove issues and outliers as described above.
 
-In addition to the qaqc script, we have included a visual inspection script(CCRMet_inspection_2021_2023.Rmd) which uses the current files, checks for NAs in the flag columns, visual checks to make sure the maintenance log worked properly, creates qaqc plots for inspections, creates newest data file combining the past files and the most recent files we are adding this year, and downloads files and scripts to be uploaded with the datapackage. 
+In addition to the qaqc script, we have included a visual inspection script (CCRMet_inspection_2021_2023.Rmd) which uses the current files, checks for NAs in the flag columns, visually checks to make sure the maintenance log worked properly, creates qaqc plots for inspections, creates the newest data file by combining the past files and the most recent files we added this year, and downloads files and scripts to be uploaded with the datapackage. 
  
 
 Instruments, manual, and serial numbers used between 2021-current:

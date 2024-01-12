@@ -16,7 +16,7 @@ pacman::p_load(tidyverse, lubridate)
 ```{r read in current and historic data}
 current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', col_types = cols())
 #note that this file path doesn't not work for HLW - need to replace "~/Reservoirs" with "."
-#and make sure wd is set to project directory
+#and make sure knit directory is set to project directory
 
 historic_file <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052', col_types = cols())
 
@@ -48,7 +48,7 @@ secchi_long <- secchi_cleaned %>%
 # annual mean value indicated with large black dot
 ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
   geom_point(size=1) +
-  stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
+  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
   facet_grid(. ~ Reservoir, scales= 'free_x') +
   scale_x_discrete("Date", breaks=seq(2013,2019,1)) +
   scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
@@ -78,46 +78,23 @@ ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
 ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Figures/Secchi_JulianDay.jpg"),width=3.5, height=4)
 ```
 
-
-<!-- secchi_old <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2021/Secchi_depth_2013-2021.csv")) -->
-<!-- secchi_new <- read_csv(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/2022_secchi_depth_final.csv")) -->
-
-
-<!-- #merge last year's EDI secchi data with new data from this year -->
-<!-- secchi <- rbind(secchi_old,secchi_new) -->
-
-<!-- # Arrange order of columns for final data table -->
-<!-- secchi <- secchi %>% select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi) %>% -->
-<!--   arrange(Reservoir, DateTime)  -->
-
-<!-- #add units to flag column for final df -->
-<!-- names(secchi)[6] <- "Flag_Secchi_m"  -->
-
 ```{r}
 #find duplicate rows
-secchi_dup <- secchi |> 
+secchi_dup <- secchi_cleaned |> 
   group_by(Reservoir, Site, DateTime) |> 
   mutate(n = n()) |> 
   filter(n > 1)
 
-#delete duplicate rows
-secchi_final <- secchi |> 
-  group_by(Reservoir, Site, DateTime) |> 
-  distinct(Secchi_m)
+#catch a couple of manual errors from previous years (should be able to delete this when we read in gsheets from each year)
+secchi_cleaned$Site[secchi_cleaned$DateTime == "2022-05-09 11:03:00" &
+                 secchi_cleaned$Secchi_m == 1.60] <- 50
+
+secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" & Secchi_m == 1.35))
 
 ```
 
 
 ```{r save the data}
-write.csv(secchi_final,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
+write.csv(secchi_cleaned,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
 #replace "~/Reservoirs" with "."
 ```
-
-<!-- #### secchi diagnostic plots #### -->
-<!-- secchi_long <- secchi %>%  -->
-<!--   gather(metric, value, Secchi_m) %>%  -->
-<!--   mutate(month = strftime(DateTime, "%b")) %>% -->
-<!--   mutate(DateTime = as.Date(DateTime)) -->
-
-<!-- ggplot(secchi_long, aes(x=DateTime, y=value )) + -->
-<!--   facet_wrap(~Reservoir) + geom_point(cex=2) + theme_bw() -->

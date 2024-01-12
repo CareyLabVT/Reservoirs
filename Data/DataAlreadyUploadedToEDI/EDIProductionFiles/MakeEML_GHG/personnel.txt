@@ -4,10 +4,13 @@ Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	contact
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933016
-Renato	J.	Figueiredo	University of Florida	reanto@acis.ufl.edu	0000-0001-9841-6060	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933102
-Abigail	S.L.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
-B.	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator			
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management National Science Foundation	2318861	
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales National Science Foundation	2327030	
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
-Arpita		Das	Virginia Tech	arpitadas@vt.edu	0000-0002-9679-0873	creator			
-Beckett		Geisler	Virginia Tech			creator			
+B.	R.	Niederlehner	Virginia Tech	bniederl@vt.edu	0000-0002-6933-336X	creator			
+Abigail	S.L.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
 George		Haynie	Virginia Tech			creator			
+Michael		Kricheldorf	Virginia Tech			creator			
+Ryan		Keverline	Virginia Tech			creator			
+Evelyn		Tipper	Virginia Tech			creator			
+

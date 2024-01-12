@@ -149,6 +149,31 @@ zoops_final$Biomass_ugL[zoops_final$Density_IndPerL==0] <- NA
 #make sure marks in ocular micrometer col is numeric (NA warning bc NAs in this column)
 zoop_biom$MarksInOcularMicrometer_No. <- as.numeric(zoop_biom$MarksInOcularMicrometer_No.)
 
+#if density is NA, drop the row
+zoops_final <- zoops_final[!is.na(zoops_final$Density_IndPerL),]
+
+#also drop rows if density is 0 and mean length is NA
+zoops_final <- zoops_final |> filter(!(Density_IndPerL==0 & is.na(MeanLength_mm)))
+
+#make sure all taxa are uppercase
+zoops_final$Taxon <- str_to_title(zoops_final$Taxon)
+
+#drop GWR schindler data that has a start depth of 12m and end depth of 9m (2016-10-17 09:00:00)
+zoops_final <- zoops_final |> filter(!(StartDepth_m==12 & EndDepth_m==9))
+
+#make sure zoop # is numeric and remove rows that are NA
+zoop_dens <- zoop_dens |> 
+  mutate(Zooplankton_No. = as.numeric(Zooplankton_No.)) |> 
+  filter(!is.na(Zooplankton_No.)) |> 
+  mutate(DateTime = as.POSIXct(DateTime, 
+                               format="%Y-%m-%d %H:%M:%S", tz="EST"))
+
+#biomass
+zoop_biom <- zoop_biom |>   
+  mutate(DateTime = as.POSIXct(DateTime, 
+                               format="%Y-%m-%d %H:%M:%S", tz="EST"))
+  
+
 #export final dfs
 write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zooplankton_summary_2014_2022.csv", row.names=F)
 write.csv(zoop_dens, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zoop_raw_dens_2019_2022.csv", row.names=F)

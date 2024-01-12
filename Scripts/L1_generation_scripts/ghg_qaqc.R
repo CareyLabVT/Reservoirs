@@ -575,7 +575,10 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
 
  # Add '2' when rep 2 is NA
  ghgs_reps <- ghgs_reps %>%
-   mutate(Rep.y = ifelse(is.na(Rep.y),2,Rep.y))
+   mutate(Rep.y = ifelse(is.na(Rep.y),2,Rep.y), 
+          Flag_DateTime_rep2 = ifelse(is.na(Flag_DateTime_rep2), 
+                                      Flag_DateTime_rep1,
+                                      Flag_DateTime_rep2)) # and give it the same DateTime flag as rep1 if it is missing
 
  ## Calculate percent difference between reps
  ghgs_reps <- ghgs_reps %>%
@@ -621,21 +624,23 @@ ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
  # If the data are already Flagged then we leave previous flag in
 
  ghg_all <- ghg_all %>%
-   mutate(Flag_CH4_umolL = ifelse(CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &
-                                    Flag_CH4_umolL == 0,4,
-                        ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
-                                 Flag_CH4_umolL == 0,3, Flag_CH4_umolL)),
-          Flag_CO2_umolL = ifelse(CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0,4,
-                            ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
-                                     Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
+   mutate(Flag_CH4_umolL = ifelse((CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &Flag_CH4_umolL == 0) | 
+                                    is.na(CH4_pdiff), 4,
+                                  ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
+                                           Flag_CH4_umolL == 0, 3, Flag_CH4_umolL)),
+          
+          Flag_CO2_umolL = ifelse((CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0) |
+                                    is.na(CH4_pdiff), 4,
+                                  ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
+                                           Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
 
 
   ### 5.3 Check that all NA values are flagged ####
 
  for(m in colnames(ghg_all%>%select(DateTime, CH4_umolL:CO2_umolL))) {
-   #for loop to create new columns in data frame
-   ghg_all[c(which(is.na(ghg_all[,m]))),paste0("Flag_",colnames(ghg_all[m]))] <-1 #puts in flag 1 if value not collected
+   ghg_all[c(which(is.na(ghg_all[,m]))), paste0("Flag_",colnames(ghg_all[m]))] <- 1 # puts in flag 1 if value not collected
  }
+ 
 
  # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 # package_ID <- 'edi.551.7'

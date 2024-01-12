@@ -87,7 +87,7 @@ secchi_dup <- secchi_cleaned |>
 
 #catch a couple of manual errors from previous years (should be able to delete this when we read in gsheets from each year)
 secchi_cleaned$Site[secchi_cleaned$DateTime == "2022-05-09 11:03:00" &
-                 secchi_cleaned$Secchi_m == 1.60] <- 50
+                 secchi_cleaned$Secchi_m == 1.50] <- 40
 
 secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" & Secchi_m == 1.35))
 

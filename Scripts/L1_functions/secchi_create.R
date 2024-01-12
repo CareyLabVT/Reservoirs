@@ -149,7 +149,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
 
       } else if (flag %in% c(2) & colname_start != 'Site'){
-        ## this fixes site issues for now -- no flag shown in data
+        ## this fixes digitizing issues and adds a flag
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 

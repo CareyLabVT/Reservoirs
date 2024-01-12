@@ -3,6 +3,8 @@
 #Updated version: Austin Delany
 #Date created: 16DEC19
 #Last updated: 2024-01-11 MEL
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data <and includes additional R scripts available with this package>. This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
+
 
 
 library(tidyverse)
@@ -37,6 +39,25 @@ fluoroprobe_qaqc <- function(example_file_for_colnames,
 # Load in column names for .txt files to get template
 col_names <- names(read_tsv(example_file_for_colnames, n_max = 0))
 
+# Load in all txt files from previous years
+historic_fp_casts <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>%
+  map_df(~ data_frame(x = .x), .id = "cast") %>%
+  mutate(cast = as.numeric(cast))
+
+historic_raw_fp <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>% 
+  map_df(~ read_tsv(file.path(path = historic_data_folder, .), 
+                    col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
+  mutate(cast = as.numeric(cast))
+
+num_historic_casts <- length(historic_fp_casts$cast)
+num_pre_2017_casts <- length(historic_fp_casts %>%
+  filter(grepl("2014", x) | grepl("2015", x) | grepl("2016", x)) %>%
+  pull(x))
+num_2017_casts <- 224 # you just have to hard code this to get the cast numbers right because we don't read in 2017 data in till later due to formatting differences
+
+historic_fp_casts <- historic_fp_casts %>%
+  mutate(CastID = c(1:num_pre_2017_casts,((num_pre_2017_casts+1) + num_2017_casts):(num_historic_casts + num_2017_casts)))
+
 # Load in all txt files from current year
 fp_casts <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>%
   map_df(~ data_frame(x = .x), .id = "cast") %>%
@@ -48,21 +69,14 @@ raw_fp <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>%
                     col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
-# Load in all txt files from previous years
-historic_fp_casts <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>%
-  map_df(~ data_frame(x = .x), .id = "cast") %>%
-  mutate(cast = as.numeric(cast) + num_current_year_casts)
+fp_casts <- fp_casts %>%
+  mutate(CastID = c((last(historic_fp_casts$cast) + num_2017_casts + 1):((last(historic_fp_casts$cast) + num_2017_casts + 1) + (num_current_year_casts-1))))
 
-historic_raw_fp <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>% 
-  map_df(~ read_tsv(file.path(path = historic_data_folder, .), 
-                    col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
-  mutate(cast = as.numeric(cast))
-
-fp_casts_all <- bind_rows(fp_casts, historic_fp_casts)
-fp_all <- bind_rows(raw_fp, historic_raw_fp)
+historic <- left_join(historic_fp_casts, historic_raw_fp, by = c("cast"))
+current <- left_join(fp_casts, raw_fp, by = c("cast"))
 
 #split out column containing filename to get Reservoir and Site data
-fp2 <- left_join(fp_all, fp_casts_all, by = c("cast")) %>%
+fp2 <- bind_rows(historic,current) %>%
   rowwise() %>% 
   mutate(Reservoir = unlist(strsplit(x, split='_', fixed=TRUE))[2],
          Site = unlist(strsplit(x, split='_', fixed=TRUE))[3],
@@ -80,19 +94,38 @@ fp2 <- left_join(fp_all, fp_casts_all, by = c("cast")) %>%
 # Rename and select useful columns; drop metrics we don't use or publish such as cell count;
 # eliminate shallow depths because of quenching
 fp3 <- fp2 %>%
-  mutate(DateTime = `Date/Time`, GreenAlgae_ugL = as.numeric(`Green Algae...3`), Bluegreens_ugL = as.numeric(`Bluegreen...4`),
-         BrownAlgae_ugL = as.numeric(`Diatoms...5`), MixedAlgae_ugL = as.numeric(`Cryptophyta...6`), YellowSubstances_ugL = as.numeric(`Yellow substances...10`),
+  mutate(DateTime = `Date/Time`, GreenAlgae_ugL = as.numeric(`Green Algae...5`), Bluegreens_ugL = as.numeric(`Bluegreen...6`),
+         BrownAlgae_ugL = as.numeric(`Diatoms...7`), MixedAlgae_ugL = as.numeric(`Cryptophyta...8`), YellowSubstances_ugL = as.numeric(`Yellow substances...12`),
          TotalConc_ugL = as.numeric(`Total conc.`), Transmission = as.numeric(`Transmission`), Depth_m = as.numeric(`Depth`), Temp_degC = as.numeric(`Temp. Sample`),
          RFU_525nm = as.numeric(`LED 3 [525 nm]`), RFU_570nm = as.numeric(`LED 4 [570 nm]`), RFU_610nm = as.numeric(`LED 5 [610 nm]`),
          RFU_370nm = as.numeric(`LED 6 [370 nm]`), RFU_590nm = as.numeric(`LED 7 [590 nm]`), RFU_470nm = as.numeric(`LED 8 [470 nm]`),
          Pressure_unit = as.numeric(`Pressure`)) %>%
-  select(x,cast, Reservoir, Site, DateTime, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL,
+  select(x,CastID, Reservoir, Site, DateTime, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL,
          TotalConc_ugL, Transmission, Depth_m, Temp_degC, RFU_525nm, RFU_570nm, RFU_610nm,
          RFU_370nm, RFU_590nm, RFU_470nm) %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
   filter(Depth_m >= 0.2) |> 
   dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
                 DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
+
+# #eliminate upcasts 
+fp_downcasts <- fp3[0,]
+upcasts <- c("20160617_FCR_50.txt","20180907_BVR_50.txt")
+
+for (i in 1:length(unique(fp3$CastID))){
+
+  if(unique(fp3$x)[i] %in% upcasts){}else{
+  profile = subset(fp3, CastID == unique(fp3$CastID)[i])
+
+  bottom <- max(profile$Depth_m)
+
+  idx <- which( profile$Depth_m == bottom )
+  if( length( idx ) > 0L ) profile <- profile[ seq_len( idx ) , ]
+
+  fp_downcasts <- bind_rows(fp_downcasts, profile)
+  }
+
+}
 
 #need to pull in 2017 data here
 # Add in 2017 data (different format)
@@ -119,15 +152,15 @@ fp17v2 <- fp2017 %>%
 casts <- fp17v2 %>%
   select(Reservoir, Site, Date, Hour) %>%
   distinct() %>%
-  mutate(cast = c(1:224))
+  mutate(CastID = c((num_pre_2017_casts+1):(num_pre_2017_casts+num_2017_casts)))
 
 fp17v3 <- left_join(fp17v2, casts, by = c("Reservoir","Site","Date","Hour"))
 
 #eliminate upcasts 
 fp2017_downcasts <- fp17v3[0,]
 
-for (i in 1:length(unique(fp17v3$cast))){
-  profile = subset(fp17v3, cast == unique(fp17v3$cast)[i])
+for (i in 1:length(unique(fp17v3$CastID))){
+  profile = subset(fp17v3, CastID == unique(fp17v3$CastID)[i])
   
   bottom <- max(profile$Depth_m)
   
@@ -141,17 +174,15 @@ for (i in 1:length(unique(fp17v3$cast))){
 #final 2017 dataset
 fp2017_final <- fp2017_downcasts %>%
   rename(BrownAlgae_ugL = Browns_ugL,
-         MixedAlgae_ugL = Mixed_ugL,
-         CastID = cast) %>%
+         MixedAlgae_ugL = Mixed_ugL) %>%
   select(Reservoir, Site, DateTime, CastID, Depth_m, GreenAlgae_ugL, Bluegreens_ugL,
          BrownAlgae_ugL, MixedAlgae_ugL, TotalConc_ugL, YellowSubstances_ugL, 
          Temp_C, Transmission_perc, RFU_370nm, RFU_470nm, RFU_525nm, RFU_570nm,
          RFU_590nm, RFU_610nm)
 
 #prep other data for merge
-fp4 <- fp3 %>%
-  rename(CastID = cast,
-         Temp_C = Temp_degC,
+fp4 <- fp_downcasts %>%
+  rename(Temp_C = Temp_degC,
          Transmission_perc = Transmission) %>%
   select(Reservoir, Site, DateTime, CastID, Depth_m, GreenAlgae_ugL, Bluegreens_ugL,
          BrownAlgae_ugL, MixedAlgae_ugL, TotalConc_ugL, YellowSubstances_ugL, 
@@ -159,7 +190,8 @@ fp4 <- fp3 %>%
          RFU_590nm, RFU_610nm)
 
 fp5 <- bind_rows(fp4, fp2017_final) %>%
-  arrange(Reservoir, Site, DateTime, CastID, Depth_m)
+  arrange(DateTime, CastID, Reservoir, Site, Depth_m)
+
 
 #trim casts to eliminate poor readings due to sediment interference at bottom of reservoir
 #for our purposes, we consider the "max depth" of each reservoir to be:

@@ -1,3 +1,6 @@
+DATA PACKAGE CONTENTS
+This data package includes a data file (FluoroProbe_2014_2023.csv), QAQC R script (fluoroprobe_qaqc_2014_2023.R), maintenance log (Maintenance_Log_FluoroProbe_2014_2023.csv), visual inspection R script (FluoroProbe_inspection_2014_2023.Rmd), and sampling sites description file (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package, and the visual inspection script provides code for plotting the data files.  
+
 SAMPLING TIMES
 Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately November to March in 2014-2023. All date times are reported in local time. 
 

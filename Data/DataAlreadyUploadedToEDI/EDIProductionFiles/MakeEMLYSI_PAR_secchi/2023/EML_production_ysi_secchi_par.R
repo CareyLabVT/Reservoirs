@@ -18,7 +18,7 @@ library(tidyverse)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
 
 #read in ysi df
-data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/YSI_PAR_profiles_2013-2022.csv") 
+data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/YSI_PAR_profiles_2013-2023.csv") 
 
 #only select sites that are in your df
 trim_sites = function(data,sites){
@@ -32,51 +32,57 @@ trim_sites = function(data,sites){
 sites_trimmed = trim_sites(data,sites) 
 
 #save as a csv
-write.csv(sites_trimmed,"/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data/site_descriptions.csv", row.names = FALSE)
+write.csv(sites_trimmed,"/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/site_descriptions.csv", row.names = FALSE)
 
 # Import templates for dataset licensed under CCBY, with 2 tables.
-template_core_metadata(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
+template_core_metadata(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
-                          data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data",
-                          data.table = c("Secchi_depth_2013-2022.csv",
-                                         "YSI_PAR_profiles_2013-2022.csv",
+template_table_attributes(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+                          data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
+                          data.table = c("Secchi_depth_2013-2023.csv",
+                                         "YSI_PAR_profiles_2013-2023.csv",
+                                         "Secchi_MaintenanceLog_2013_2023.csv",
+                                         "YSI_MaintenanceLog_2013_2023.csv",
                                          "site_descriptions.csv"))
               
-template_categorical_variables(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
-                               data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data",
+template_categorical_variables(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+                               data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
                                write.file = TRUE)
 
-template_geographic_coverage(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
-                             data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data",
+template_geographic_coverage(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+                             data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
                              data.table = c("Secchi_depth_2013-2022.csv",
                                             "YSI_PAR_profiles_2013-2022.csv",
+                                            "Secchi_MaintenanceLog_2013_2023.csv",
+                                            "YSI_MaintenanceLog_2013_2023.csv",
                                             "site_descriptions.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
 
 # Run this function for staging data
-make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
-         dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Data",
-         eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022",
-         data.table = c("Secchi_depth_2013-2022.csv",
-                        "YSI_PAR_profiles_2013-2022.csv",
+make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+         dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
+         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
+         eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+         data.table = c("Secchi_depth_2013-2023.csv",
+                        "YSI_PAR_profiles_2013-2023.csv",
+                        "Secchi_MaintenanceLog_2013_2023.csv",
+                        "YSI_MaintenanceLog_2013_2023.csv",
                         "site_descriptions.csv"),
          data.table.description = c("Secchi depth data from five reservoirs in southwestern Virginia", 
                                     "Discrete depths of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs"),
-         other.entity = c("QAQC_YSI_PAR_2013_2022.R", "QAQC_Secchi_2013_2022.R"),
+         other.entity = c("YSI_qaqc_2013_2023.R", "Secchi_qaqc_2013_2023.R"),
          other.entity.description = c("YSI and PAR QAQC script for most recent data publication",
                                       "Secchi QAQC script for most recent data publication"),
-         temporal.coverage = c("2013-08-30", "2022-12-12"),
+         temporal.coverage = c("2013-08-30", "2023-12-04"),
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1003.7") #need a new one each year
+         package.id = "edi.1105.1") 
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 

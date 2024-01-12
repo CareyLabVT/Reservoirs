@@ -37,10 +37,10 @@ profiles_cleaned <- ysi_qaqc(data_file = profiles,
 
 ```{r add additional columns}
 #add column for year
-profiles_cleaned$year <- year(profiles$DateTime)
+profiles_cleaned_temp$year <- year(profiles$DateTime)
 
 #### YSI diagnostic plots #### 
-profiles_long <- profiles_cleaned %>%
+profiles_long <- profiles_cleaned_temp %>%
   ungroup(.) %>%
   select(-c(PAR_umolm2s:Flag_pH, Cond_uScm)) %>%
   gather(metric, value, c(Temp_C:DOsat_percent,SpCond_uScm)) 
@@ -100,8 +100,8 @@ write.csv(profiles_cleaned,file.path("./Data/DataAlreadyUploadedToEDI/EDIProduct
 
 ```{r}
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_MaintenanceLog_2013_2023.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_MaintenanceLog_2013_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_qaqc_2013_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_qaqc_2013_2023.R")
 ```

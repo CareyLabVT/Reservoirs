@@ -101,9 +101,9 @@ write.csv(secchi_cleaned,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/E
 
 ```{r}
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Secchi_MaintenanceLog_2013_2023.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/Secchi_MaintenanceLog_2013_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Secchi_qaqc_2013_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/Secchi_qaqc_2013_2023.R")
 ```
 

@@ -154,10 +154,12 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
       }else if (flag %in% c(3)){
+        # value is suspect
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
-        
+
       }else if (flag %in% c(4)){
-        secchi_reformat[!(secchi_reformat$DateTime %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
+        # to be deleted
+        secchi_reformat <- secchi_reformat[!(secchi_reformat$DateTime %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
       }else{
         warning("Flag not coded in the L1 script. See Austin or Adrienne")
       }
@@ -198,9 +200,10 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   return(secchi_reformat)
 }
 #
-# data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
-# maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'
-# outfile <- './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv'
+data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
+data _file = 'https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052'
+maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'
+outfile <- './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv'
 #
 # secchi_qaqc(data_file = data_file,
 #             gsheet_data = TRUE,

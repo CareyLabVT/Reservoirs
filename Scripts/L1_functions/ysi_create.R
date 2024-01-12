@@ -195,6 +195,8 @@ for(i in 1:nrow(log)){
     update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
   }else if(flag %in% c(6) & colname_start == 'Site'){
+    print(start)
+    print(update_value)
     ## human error for site, which we don't indicate in final dataset
     update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
 
@@ -262,9 +264,9 @@ write.csv(ysi, outfile, row.names = FALSE)
 return(ysi)
 }
 
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
-outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
+# maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
+# data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+# outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
 
 #ysi_qaqc(data_file = data_file,
 #         maintenance_file = maintenance_file,

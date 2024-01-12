@@ -27,7 +27,7 @@ profiles <- bind_rows(current_file, historic_file)
 
 ```{r}
 #source L1 functin to run all data through QAQC process
-#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
 
 profiles_cleaned <- ysi_qaqc(data_file = profiles,
             gsheet_data = FALSE,
@@ -37,10 +37,10 @@ profiles_cleaned <- ysi_qaqc(data_file = profiles,
 
 ```{r add additional columns}
 #add column for year
-profiles_cleaned_temp$year <- year(profiles$DateTime)
+profiles_cleaned$year <- year(profiles$DateTime)
 
 #### YSI diagnostic plots #### 
-profiles_long <- profiles_cleaned_temp %>%
+profiles_long <- profiles_cleaned %>%
   ungroup(.) %>%
   select(-c(PAR_umolm2s:Flag_pH, Cond_uScm)) %>%
   gather(metric, value, c(Temp_C:DOsat_percent,SpCond_uScm)) 

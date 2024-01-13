@@ -10,14 +10,18 @@ This script is the visual inspection scripts.
 1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
 2. Then the script checks for daily and subdaily gaps in the current file. 
 3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
-4. If necessary can QAQC data already on EDI using the QAQC function
-5. Creates plots
-6. Writes data to new csv
+4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+5. If necessary can QAQC data already on EDI using the QAQC function
+6. Creates plots
+7. Writes data to new csv
+8. Downloads necessary files for EDI publishing
 
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
 
 
-All files are from the link to GitHub and the source scripts are from GitHub as well. 
+All files are from GitHub or EDI and the source scripts are from GitHub as well. 
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
 ```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
@@ -36,8 +40,8 @@ devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/ma
 # Set up the current time end time of the file and the current year for QAQC plots
 
 #current time of QAQC for graphing
-current_time_start="2023-01-01 00:00:00"
-current_time_end="2023-12-31 23:59:00"
+current_time_start=force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST")
+current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 ```
 
 ```{r Read in EDI Files, include=FALSE}
@@ -52,25 +56,60 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
                    
  historic <-read_csv(infile1)
  
- # need to rename some columns here
+ # Force historical file timestamp to EST
+  historic$DateTime <- force_tz(as.POSIXct(historic$DateTime), tzone = "EST")
 
 ```
+
 
 ```{r Read in current L1 file, include=FALSE}
 
-# L1 <- read_csv("CCRCatwalk_L1.csv")
+# Use the qaqc script to get the qaqc file for the year with notes because the L1 file has the notes column removed
+L1 <- qaqc_ccr(
+          data_file = 
+          data2_file = 
+         output_file = NULL, 
+         start_date = force_tz(as.POSIXct(), tzone = "EST"), 
+         end_date = Sys.Date())
+
  L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/ccre-waterquality_L1.csv")
 
+
+
+# Force historical file timestamp to EST
+  L1$DateTime <- force_tz(as.POSIXct(L1$DateTime), tzone = "EST")
+
 ```
+
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
 
 ```{r Bind historic and L1 files together, include=FALSE}
   
+# If No EDI file exists with all the years you want to look at
   current_df <- dplyr::bind_rows(historic, L1)%>%
-  filter(DateTime<ymd_hms(current_time_end))
+  filter(DateTime<(current_time_end))
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data
+
+ # current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/21/b7e4a95bf842e24c77cfd23dfee543cd")
+ # 
+ # # Force files from EDI to have an EST timestamp
+ #  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
 
 ```
 
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for BVR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(current_df$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(current_df$LvlDepth_m_13, na.rm=T)`.
+
+
 ```{r Download Raw data for plotting, include=FALSE}
+
+# This is the raw files from the data logger before qaqc. I like to plot this with the qaqc values so we can see what has been removed by the qaqc function and maint log and what has been missed. 
 
 CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp_C", 
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -101,6 +140,8 @@ CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp
   # convert NaN to NAs in the dataframe
   raw[sapply(raw, is.nan)] <- NA
   
+  # Force historical file timestamp to EST
+  raw$DateTime <- force_tz(as.POSIXct(raw$DateTime), tzone = "EST")
  
 
 ```
@@ -160,13 +201,6 @@ This section reads in the QAQC file and then you can look at the head, tail and 
 Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 85 columns unless a new one has been added. 
 
 
-## Information for EDI methods text
-This is information that is included in the methods file for EDI 
-
-The minimum water level for BVR was `r min(ccrwater$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(ccrwater$LvlDepth_m_13, na.rm=T)`.
-
-The median water level was `r median(ccrwater$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(ccrwater$LvlDepth_m_13, na.rm=T)`.
-
 ### Flag Frequency
 Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
  Flag values
@@ -186,6 +220,7 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  6: Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
  
  7: missing data
+ 
 ```{r Check out the flags, echo=FALSE}
 
 #make sure no NAS in the Flag columns
@@ -205,15 +240,97 @@ for(f in 1:ncol(Flags)){
 }
 ```
 
+
+### Check to make sure that what is in the maintenance log  was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+ maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv",
+                    show_col_types = FALSE)
+
+
+# name the data file for just the tail of the maintenance log
+# you want to filter out 7 because that is if the observation is missing and there are other ways that is flagged in the data besides the maintenance log, so it is not a good check.
+sd <- tail(maint)%>%
+  filter(flag!=7)
+
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "EST")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "EST")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+
+### Subset and rename the files
+This section will subset the files so you can make plots of the whole time series and the current year. 
+Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
+
 ```{r Filter for current year and daily average, include=FALSE}
 
 # Raw files
 current_raw <- raw%>%
-  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
   mutate(type = "raw")
 
 current <- current_df%>%
-  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
   mutate(type = "qaqc")%>%
   select(DateTime:CR3000Panel_Temp_C,type, -contains("adjusted"))
 
@@ -233,8 +350,8 @@ daily <- current_df%>%
   mutate(DateTime=ymd_hms(DateTime))
 
   
-catdata <- current_df%>%
-  mutate(Year=year(DateTime))
+# current_df <- current_df%>%
+#   mutate(Year=year(DateTime))
 
 colors <- c("raw" = "red", "qaqc" = "black")
 # colors for comparing Thermistor, RDO and Pressure sensor
@@ -245,7 +362,37 @@ colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
 
 ## QAQC Plots
 
+##### QAQC plot information and all_plot function information
+
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The argumenst are:
+Var # The column you want to plot. Make sure it is in quotes
+y_lab,  # This label can take an expression aka have the proper degrees C, 
+y_lab2, # This label is for the plotly function which can not handle expression argument. 
+Water=T, # Are these plots for inwater streaming sensors?
+Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+
+The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
+  
+##### Plot Description:
+
+The plots below are:
+The first 2 plots are the ones you should focus on for the QAQC chec. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
+
+2. A time series of the historical and the current data just the qaqced values. 
+
+The next two plots are just fun to see trends over time with the data. 
+
+3. Density plots are like a histogram and a grouped by color so you can see where the data are relative to other years. 
+
+4. The box plots look at the spread of the data within the year and we can look at the median and see how that is changing or not. 
+
+Do not over think the last 2 plots. 
+
+There are additional plots for depths that have more than one sensor such as at position 13 that has a thermistor and a pressure transducer which both measure temperature. In this case, we plot them on top of each other to make sure they are within the ballpark. For chal and the bluegreen algae sensor on the EXO2 we plot the daily observations on top of the 10 minute observations to make sure that the daily captures the same trend as the 10 minute data. 
 
 ### Temperature
 
@@ -282,6 +429,7 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
+##### All of the temperature plots
 
 ```{r All Temperature, echo=FALSE, warning = FALSE, results='hide'}
 
@@ -330,7 +478,7 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
   
 ```
 
-### Depth
+### Depth QAQC Plots
 
 ```{r Pressure Sensor, echo=FALSE, results='asis'}
 ### Plotting depth from pressure sensor 
@@ -365,7 +513,7 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Dissolved Oxygen
+### Dissolved Oxygen QAQC Plots
 
 ```{r DO, echo=FALSE, results='asis'}
 
@@ -401,7 +549,7 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Chlorophyll and Phycocanin
+### Chlorophyll and Phycocanin QAQC Plots
 
 ```{r Check the EXO Chla and Blue Greens, echo=FALSE, results='asis'}
 
@@ -435,7 +583,7 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### fDOM
+### fDOM QAQC Plots
 
 ```{r fdom EXO sensor, echo=FALSE, results='asis'}
 
@@ -469,7 +617,7 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Conductivity, Specific Conductivity, TDS
+### Conductivity, Specific Conductivity, TDS QAQC Plots
 
 ```{r Cond Spcond and TDS, echo=FALSE, results='asis'}
 
@@ -505,7 +653,7 @@ output <- unlist(outputs, recursive = F)
 ```
 
 
-### Wiper, Battery, and CablePower
+### Wiper, Battery, and CablePower QAQC Plots
 
 ```{r Wiper, echo=FALSE, results='asis'}
 
@@ -537,7 +685,6 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Write to CSV
 
 ```{r Make new CSV with current and historic files, include=FALSE}
 
@@ -551,15 +698,14 @@ write_csv(current_df, "CCRCatwalk_2021_2023.csv")
 
 ```
 
-### Download and save Maintenance Log, Plotting function, and QAQC function
 
 ```{r Download and save Maintenance Log, include=FALSE}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", "CCRCatwalk_MaintenanceLog_2021_2023.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", "CCRCatwalk_maintenancelog_2021_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R", "CCRCatwalk_qaqc_2021_2023.R")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R", "CCRCatwalk_qaqc_2023.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")

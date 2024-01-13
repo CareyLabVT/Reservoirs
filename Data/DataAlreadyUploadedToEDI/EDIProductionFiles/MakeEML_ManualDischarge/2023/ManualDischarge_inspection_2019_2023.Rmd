@@ -7,7 +7,7 @@ output: html_document
 
 The script binds 2023 manual discharge to 2019-2022 EDI publication and provides final QAQC steps and generated site description csv.
 
-Start at line 168 for EDI review
+For EDI review run chunk 'r setup packages' then start at section 'Start here to read in EDI data' on line 171
 
 ## R Markdown Guide
 
@@ -171,7 +171,8 @@ for(f in 1:(ncol(Flags))){
 ## Start here to read in EDI data 
 
 ```{r}
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1017/7/702d3b355854211a8dbb587094cfccb7" 
+#update link
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/1017/8/702d3b355854211a8dbb587094cfccb7" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -184,28 +185,64 @@ staged_edi <- read_csv(infile1)
 ```{r Plots}
 ##change these back to current_df if not testing EDI staged data
 
+
+### Check flags 
+Flags=staged_edi%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=staged_edi%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+
+### Look at data
+
 staged_edi %>% 
-  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
+  ggtitle("All data")+
+  scale_x_datetime(date_labels = "%b %y")+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'BVR') %>% 
-  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
+  ggtitle("BVR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'FCR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("FCR")+
+  scale_x_datetime(date_labels = "%b %y")+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'FCR',
          Site ==200) %>% 
-  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
+  ggtitle("FCR 200")+
+  scale_x_datetime(date_labels = "%b %y")+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'CCR') %>% 
-  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site))) + 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
+  ggtitle("CCR")+
+  scale_x_datetime(date_labels = "%b %y")+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 

@@ -30,7 +30,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('FCRMet_2015_2023.csv', "FCRMet_MaintenanceLog_2015_2023.csv", "FCRMet_Infrad_DOY_Avg_2018.csv"))
+ data.table = c('FCRMet_2015_2023.csv', "FCRMet_maintenanceog_2015_2023.csv", "FCRMet_Infrad_DOY_Avg_2018.csv"))
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -158,7 +158,7 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.26") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
+         package.id = "edi.143.27") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

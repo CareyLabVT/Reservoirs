@@ -17,7 +17,7 @@ ThermistorTemp_C_12	water temperature measured by thermistor at position 12 (15 
 ThermistorTemp_C_13	water temperature measured by thermistor at position 13 (19 meters below thermistor 1)	numeric	celsius		NA	value is missing
 EXOTemp_C_1	water temperature at 1.5 m as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
 EXOCond_uScm_1	Conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOSpCond_uScm_1	Specific conductivity at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_1	Specific conductance at 1.5 m as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
 EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.5 m as measured by the EXO Sonde as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
 EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.5 m as measured by the EXO2 Sonde	numeric	dimensionless		NA	value is missing
 EXODO_mgL_1	Dissolved Oxygen at 1.5 m as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
@@ -34,7 +34,7 @@ EXOCablepower_V_1	Measure of power being used by the cable connected to the CR30
 EXOWiper_V_1	Wiper brush cleaning system activation signal as measured by the EXO sonde at 1.5 m	numeric	volt		NA	value is missing
 EXOTemp_C_9	water temperature at 9 m as measured by the EXO3 Sonde	numeric	celsius		NA	value is missing
 EXOCond_uScm_9	Conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOSpCond_uScm_9	Specific conductivity at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_9	Specific conductance at 9 m as measured by the EXO3 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
 EXOTDS_mgL_9	Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter		NA	value is missing
 EXODOsat_percent_9	Dissolved Oxygen percent saturation at 9 m as measured by the EXO3 Sonde	numeric	dimensionless		NA	value is missing
 EXODO_mgL_9	Dissolved Oxygen at 9 m as measured by the EXO3 Sonde	numeric	milligramsPerLiter		NA	value is missing

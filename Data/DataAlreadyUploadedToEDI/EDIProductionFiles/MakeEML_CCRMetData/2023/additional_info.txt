@@ -1,4 +1,6 @@
-Authorship Statement-CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP installed all of the sensors and is the point person for the data set for 2023. She also led the maintenance, data management, wrote the QAQC scripts, and QAQC for 2022 and 2023. DWH is a co-point person, he led the field sampling at CCR, and has done substantial field work at that reservoir in 2022. ADD implimented a new QAQC workflow and maintained those workflows in 2023. 
+Authorship Statement-
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP installed the sensors and was the point person for the dataset; she led the maintenance, data management, and QAQC. DWH led the field sampling at Carvins Cove Reservoir and assisted with QAQC. ADD implemented a new QAQC workflow and maintained those workflows in 2023. 
 
-Acknowledgments and historical contributions:This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork.
+Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and ABC and CDE for helpful reviews of this data package.
+
 

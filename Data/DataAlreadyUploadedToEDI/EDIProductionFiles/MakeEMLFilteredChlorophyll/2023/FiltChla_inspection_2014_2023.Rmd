@@ -8,8 +8,6 @@ output: html_document
 This is the visual inspection script for Filtered Chlorophyll. 
 If running for EDI Dayz, start at line 43 and update the pasta with the most recent staged version.
 
-From ABP: This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
-
 ## R Markdown Guide
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
@@ -82,6 +80,7 @@ chla_YMD <- all_chla %>%
 head(chla_YMD)
 ```
 **Time Series for entire data set - Chlorophyll a**
+ENTIRE DATASETS WILL LIKELY DISPAY A MISSING DATA WARNING
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +

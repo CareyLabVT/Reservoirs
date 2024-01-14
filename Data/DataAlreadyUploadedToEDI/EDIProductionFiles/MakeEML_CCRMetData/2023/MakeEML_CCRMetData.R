@@ -144,9 +144,9 @@ make_eml(path = folder,
          data.table.name = c('CCRMet_2021_2023', 'CCRMet_maintenancelog_2021_2023'),
          data.table.description = c('All meteorological parameters measured at Carvins Cove Reservoir during 2021-2023',
                                     'Log for maintenance and outliers for the Met station at Carvins Cove from 2021-2023'),
-         other.entity = c('CCRMet_qaqc_2023.R', 
+         other.entity = c('CCRMet_qaqc_2023_2023.R', 
                           'CCRMet_inspection_2021_2023.Rmd', 'Plotting_function.R'),
-         other.entity.name = c('CCRMet_qaqc_2023', 
+         other.entity.name = c('CCRMet_qaqc_2023_2023', 
                                'CCRMet_inspection_2021_2023',
                                'Plotting_function'),
          other.entity.description = c('QAQC function used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
@@ -158,7 +158,7 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.779.24") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
+         package.id = "edi.779.27") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
          #package.id = "edi.1105.1") # edi.1105.1 for final product
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

@@ -18,9 +18,9 @@ There were no major gaps lasting longer than 1 day in the record. Sub-daily gaps
 
 
 Maintenance Log and QAQC:
-The Maintenance Log, CCRMet_maintenancelog_2021_2023.csv, is a file where we record any maintenance on the senor which needs to be removed from the data file. We also include dates for which observations need to be changed or modified because of human error. The maintenance log then updates the data using the qaqc_fcrmet function in the CCRMet_qaqc_2023.R script. In addition to removing observation during maintenance, the script also flags and removes values that are outliers. Below, we describe those thresholds and situations. The years on the QAQC function indicate which years are run through the function. So only 2023 was run through the function and then we merged it with the previous years' file on EDI for this data packgae. 
+The Maintenance Log, CCRMet_maintenancelog_2021_2023.csv, is a file where we record any maintenance on the senor which needs to be removed from the data file. We also include dates for which observations need to be changed or modified because of human error. The maintenance log then updates the data using the qaqc_fcrmet function in the CCRMet_qaqc_2023_2023.R script. In addition to removing observation during maintenance, the script also flags and removes values that are outliers. Below, we describe those thresholds and situations. The years on the QAQC function indicate which years are run through the function. So only 2023 was run through the function and then we merged it with the previous years' file on EDI for this data packgae. 
 
-All QAQC code used for the dataset is archived with this dataset (see CCRMet_qaqc_2023.R). In addition to the QAQC script, we have included a visual inspection script which uses the current files, checks for NAs in the flag columns, visually checks to make sure the maintenance log worked properly, creates QAQC plots for inspections, creates the newest data file by combining the past files and the most recent files we added this year, and downloads files and scripts to be uploaded with the data package. 
+All QAQC code used for the dataset is archived with this dataset (see CCRMet_qaqc_2023_2023.R). In addition to the QAQC script, we have included a visual inspection script which uses the current files, checks for NAs in the flag columns, visually checks to make sure the maintenance log worked properly, creates QAQC plots for inspections, creates the newest data file by combining the past files and the most recent files we added this year, and downloads files and scripts to be uploaded with the data package. 
 
 
 Flag Descriptions:
@@ -45,7 +45,7 @@ The outlier thresholds were developed by comparison with the NOAA Roanoke Airpor
 
 QAQC scripts:
 
-We used a QAQC function to remove maintenance times and outliers from the data before publishing. The function is included in the data package as an R script, CCRMet_qaqc_2021_2023.R. In this function, we flag and remove observations that took place during sensor maintenance or when a  sensor malfunctioned and when there were outliers. 
+We used a QAQC function to remove maintenance times and outliers from the data before publishing. The function is included in the data package as an R script, CCRMet_qaqc_2023_2023.R. In this function, we flag and remove observations that took place during sensor maintenance or when a  sensor malfunctioned and when there were outliers. 
 
 For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (CCRMet_maintenancelog_2021_2023.csv). This file is used in the QAQC function to identify dates and times during recorded events (e.g., maintenance), change the observations affected and add a flag to indicate the issues. See Maintenance Log and QAQC section above for more information on the maintenance log. In addition to recorded maintenance issues, we identify and remove issues and outliers as described above.
 

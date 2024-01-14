@@ -1,5 +1,5 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir	categorical	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Depth_m	Depth the logger was deployed at	numeric	meter		NA	value is missing

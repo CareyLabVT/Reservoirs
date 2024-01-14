@@ -1,6 +1,6 @@
 ---
 title: "CCR Catwalk Plots for EDI"
-author: "Adrienne Breef-Pilz"
+author: Adrienne Breef-Pilz
 output: html_document
 theme: null
 date: "`r Sys.Date()`"
@@ -30,7 +30,7 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermor
 # Source scripts from GitHub
 # QAQC script
 devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
-# Script to add depths and take out observations that are out of the water
+# Function to make the QAQC . This is called CCRCatwalk_qaqc_2023_2023.R in the EDI data package. 
 devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
 
@@ -64,17 +64,9 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
 ```{r Read in current L1 file, include=FALSE}
 
-# Use the qaqc script to get the qaqc file for the year with notes because the L1 file has the notes column removed
-L1 <- qaqc_ccr(
-          data_file = 
-          data2_file = 
-         output_file = NULL, 
-         start_date = force_tz(as.POSIXct(), tzone = "EST"), 
-         end_date = Sys.Date())
+# Read in the current L1 file from GitHub
 
  L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/ccre-waterquality_L1.csv")
-
-
 
 # Force historical file timestamp to EST
   L1$DateTime <- force_tz(as.POSIXct(L1$DateTime), tzone = "EST")
@@ -90,7 +82,8 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   current_df <- dplyr::bind_rows(historic, L1)%>%
   filter(DateTime<(current_time_end))
 
-# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
  # current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/21/b7e4a95bf842e24c77cfd23dfee543cd")
  # 
@@ -102,7 +95,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 ## Information for EDI methods text
 This is information that is included in the methods file for EDI 
 
-The minimum water level for BVR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
+The minimum water level for CCR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
 
 The median water level was `r median(current_df$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(current_df$LvlDepth_m_13, na.rm=T)`.
 
@@ -126,7 +119,7 @@ CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp
   
  
   # read catwalk data and maintenance log
-  # NOTE: date-times throughout this script are processed as UTC
+  # NOTE: date-times throughout this script are not specified but they are all processed in the same timezone 
   raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality.csv", skip = 1, col_names = CATPRES_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
@@ -241,7 +234,7 @@ for(f in 1:ncol(Flags)){
 ```
 
 
-### Check to make sure that what is in the maintenance log  was actually removed
+### Check to make sure that what is in the maintenance log was actually removed
 
 ### Look at the last rows of the maintenance log 
 
@@ -401,9 +394,11 @@ There are additional plots for depths that have more than one sensor such as at 
 dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C")
+outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly =F)
 
 output <- unlist(outputs, recursive = F)
+
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
 
 #output[[1]]
 
@@ -486,9 +481,11 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
 dx <- colnames(current%>%select(grep("Depth_m",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Water= T, Raw_file=T, Use_plotly=F)
+outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Water= T, Raw_file=T, Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
+
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
 
 #output[[1]]
 
@@ -521,9 +518,11 @@ output <- unlist(outputs, recursive = F)
 dx <- colnames(current%>%select(grep("DO_mgL|sat_percent",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Water= T, Raw_file=T, Use_plotly=F)
+outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Water= T, Raw_file=T, Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
+
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
 
 #output[[1]]
 
@@ -560,7 +559,10 @@ outputs <- lapply("EXOChla_RFU_1", all_plot, y_lab = "RFU or ug/L", y_lab2 = "RF
 
 output <- unlist(outputs, recursive = F)
 
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
 ```
 
 ```{r Print plotly algae, echo=FALSE, warning=FALSE, messages=FALSE}
@@ -594,7 +596,9 @@ outputs <- lapply(dx, all_plot, y_lab = "RFU or QSU", y_lab2 = "RFU or QSU",Wate
 
 output <- unlist(outputs, recursive = F)
 
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
 
+#output[[1]]
 ```
 
 ```{r Print plotly fdom, echo=FALSE, messages=FALSE, warning=FALSE}
@@ -628,7 +632,10 @@ outputs <- lapply(dx, all_plot, y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L",
 
 output <- unlist(outputs, recursive = F)
 
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
 
 ```
 
@@ -663,6 +670,11 @@ dx <- colnames(current%>%select(grep("Wiper_V|EXOBattery_V|power_V",colnames(cur
 outputs <- lapply(dx, all_plot, y_lab="Volts", y_lab2="Volts")
 
 output <- unlist(outputs, recursive = F)
+
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. The only plotly function for this chunk is the Wiper. We don't need to have interactive plots for the others. 
+
+#output[[1]]
+
 ```
 
 ```{r Print plotly power, echo=FALSE, messages=FALSE, warning=FALSE}
@@ -699,13 +711,13 @@ write_csv(current_df, "CCRCatwalk_2021_2023.csv")
 ```
 
 
-```{r Download and save Maintenance Log, include=FALSE}
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", "CCRCatwalk_maintenancelog_2021_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R", "CCRCatwalk_qaqc_2023.R")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R", "CCRCatwalk_qaqc_2023_2023.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
@@ -715,8 +727,13 @@ download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-d
               "CCR_Depth_offsets_2021_2023.csv")
 
 # Finding depth function
-download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R",
-              "find_depths.R")
+download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R","find_depths.R")
+
+# Download HOBO files from GitHub
+download.file("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CCR_manual_downloads/CCR_Hobos/CCR_hobos_20_21.csv", "CCR_hobos_2020_2021.csv")
+
+# Download the HOBO compilation script from GitHub
+download.file("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CCR_manual_downloads/CCR_Hobos/CCR_hobo_compilation.R", "CCR_hobo_compilation.R")
 
 ```
 

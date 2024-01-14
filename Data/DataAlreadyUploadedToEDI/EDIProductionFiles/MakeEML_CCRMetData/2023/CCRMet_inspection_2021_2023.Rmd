@@ -398,7 +398,7 @@ write_csv(current_df, "CCRMet_2021_2023.csv")
 ```{r Download and save Maintenance Log, include=FALSE}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRM_Maintenancelog_new.csv", "CCRMet_maintenanceog_2021_2023.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRM_Maintenancelog_new.csv", "CCRMet_maintenancelog_2021_2023.csv")
 
 # qaqc function
 download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/met_qaqc_function.R", "CCRMet_qaqc_2021_2023.R")

@@ -1,7 +1,7 @@
 # Title: QAQC Function for Falling Creek Met Sensors
 # This QAQC cleaning script was applied to create the data files included in this data package.
 # Author: Adrienne Breef-Pilz
-# First Developled Jan. 2023
+# First Developed Jan. 2023
 # Last edited: 12 Jan. 2024
 
 #Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 

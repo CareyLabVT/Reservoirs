@@ -25,7 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
 #install.packages('pacman')
-pacman::p_load(tidyverse, lubridate, gsheet, plotly)
+pacman::p_load(tidyverse, lubridate, akima, reshape2, 
+               gridExtra, grid, colorRamps, RColorBrewer, cowplot)
 ```
 
 
@@ -139,7 +140,7 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
 }
 ```
 
-```{r Heatmap function}
+```{r Heatmap function; the interpolation here could be improved I think}
 flora_heatmap <- function(fp_data, reservoir, year, site, z){
   
   #subset to relevant data
@@ -228,44 +229,42 @@ df.final = bind_rows(df.final, fp_layer)
   # Round each extracted depth to the nearest 10th. 
   fp_new$Depth_m <- round(as.numeric(fp_new$Depth_m), digits = 0.5)
   
+  # Convert to DOY
+  fp_new$DOY <- yday(fp_new$DateTime)
+  
   fig_title <- paste(reservoir, year, "Site", site, z, sep = " ")
   
-  fig <- plot_ly(
-  x = fp_new$DateTime, 
-  y = fp_new$Depth_m, 
-  z = fp_new$TotalConc_ugL, 
-  type = "contour",
-  contours = list(
-    coloring = 'heatmap'
-  ),
-  line = list(width = 0)) %>%
-  layout(title = fig_title)
+  interp <- interp(x=fp_new$DOY, y = fp_new$Depth_m, z = unlist(fp_new[z]),
+                      xo = seq(min(fp_new$DOY), max(fp_new$DOY), by = .1), 
+                      yo = seq(min(fp_new$Depth_m), max(fp_new$Depth_m), by = 0.01),
+                      extrap = T, linear = T, duplicate = "strip")
+interp <- interp2xyz(interp, data.frame=T)
+  
+  p1 <- ggplot(interp, aes(x=x, y=y))+
+  geom_raster(aes(fill=z))+
+  scale_y_reverse(expand = c(0,0))+
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray")+
+  labs(x = "Day of year", y = "Depth (m)", title = fig_title,fill=expression(paste(mu,g/L)))+
+  theme_bw()
 
-return(fig)
+print(p1)
 
 }
 ```
 
 ```{r visualization of current year at a glance}
-fig1 <- flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2023, site = 50, z = "TotalConc_ugL")
-fig1
-fig2 <- flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2023, site = 50, z = "TotalConc_ugL")
-fig2
-fig3 <- flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2023, site = 50, z = "TotalConc_ugL")
-fig3
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2023, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2023, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2023, site = 50, z = "TotalConc_ugL")
 ```
 
 ```{r visualization of an historic year at a glance}
-fig4 <- flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
-fig4
-fig5 <- flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
-fig5
-fig6 <- flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
-fig6
-fig7 <- flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
-fig7
-fig8 <- flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
-fig8
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
 ```
 
 ## Check to make sure that what is in the maintenance log  was actually removed

@@ -25,6 +25,6 @@ Carvins Cove Reservoir	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Virginia Reservoirs 	carey lab controlled vocabulary
 LTREB 	carey lab controlled vocabulary
-Virginia Reservoirs LTREB carey lab controlled vocabulary	carey lab controlled vocabulary
+Virginia Reservoirs LTREB 	carey lab controlled vocabulary
 CCR 	carey lab controlled vocabulary
 CCRmet 	carey lab controlled vocabulary

@@ -149,9 +149,9 @@ make_eml(path = folder,
          other.entity.name = c('CCRMet_qaqc_2023', 
                                'CCRMet_inspection_2021_2023',
                                'Plotting_function'),
-         other.entity.description = c('QAQC function used to take out observations from the dataset based on the maintenance log and other outliers.Also known as the L1 function.',
+         other.entity.description = c('QAQC function used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
                                       'Script that creates QAQC plots for visual inspection and downloads files.',
-                                      'A function used to create the QAQC plots in the CCRMet_inspection_2021_2023.Rmd script'),   
+                                      'A function used to create the QAQC plots in the CCRMet_inspection_2021_2023.Rmd script.'),   
          temporal.coverage = c("2021-03-29", "2023-12-31"),
          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W

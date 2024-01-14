@@ -1,6 +1,6 @@
 Authorship Statement-
 CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP installed the sensors and was the point person for the dataset; she led the maintenance, data management, and QAQC. DWH led the field sampling at Carvins Cove Reservoir and assisted with QAQC. ADD implemented a new QAQC workflow and maintained those workflows in 2023. 
 
-Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and ABC and CDE for helpful reviews of this data package.
+Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and ADD and Carly Bauer for helpful reviews of this data package.
 
 

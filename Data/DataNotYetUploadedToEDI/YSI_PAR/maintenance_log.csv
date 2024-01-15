@@ -1,34 +1,34 @@
 Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
-FCR,100,0.1, YSI,2016-08-15 00:00:00 EST,2016-08-16 00:00:00 EST, DOsat_percent, NA,6, NA, value is suspect and should be changed to NA
-FCR,50,2.4, YSI,2020-08-17 00:00:00 EST,2020-08-18 00:00:00 EST, DO_mgL, NA,6,5.82,fix digitizing error
-FCR,50,4, YSI,2020-05-25 00:00:00 EST,2020-05-26 00:00:00 EST, DO_mgL, NA,6,5.05, fix digitizing error
-FCR,50,4, YSI,2020-05-25 00:00:00 EST,2020-05-26 00:00:00 EST, DOsat_percent, NA,6,46.6, fix digitizing error
-FCR,100,0.1, YSI,2023-07-03 12:00:00 EST,2023-07-03 12:00:00 EST, DO_mgL, NA,6,8.76, fix digitizing error
-FCR,100,0.1, YSI,2023-07-03 12:00:00 EST,2023-07-03 12:00:00 EST, DOsat_percent, NA,6,96.8, fix digitizing error
-FCR,100,0.1, YSI,2023-07-10 15:40:00 EST,2023-07-10 15:40:00 EST, DO_mgL, NA,6,8.3, fix digitizing error
-FCR,100,0.1, YSI,2023-07-10 15:40:00 EST,2023-07-10 15:40:00 EST, DOsat_percent, NA,6,94.5, fix digitizing error  
-BVR,51,0.1, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,1, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,2, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,3, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,4, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,5, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,5.2, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,5.3, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,6, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,7, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,8, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,9, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,10, YSI,2021-07-07 11:31:00 EST,2021-07-07 11:31:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,0.1, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,1, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,2, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,3, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,4, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,5, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,5.3, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,6, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,7, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,8, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,9, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
-BVR,51,10, YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50, fix digitizing error  
+FCR,100,0.1,YSI,2016-08-15 12:00:00 EST,2016-08-15 12:00:00 EST,DOsat_percent,NA,6, NA,value is suspect and should be changed to NA
+FCR,50,2.4,YSI,2020-08-17 12:21:00 EST,2020-08-17 12:21:00 EST,DO_mgL,NA,6,5.82,fix digitizing error
+FCR,50,4,YSI,2020-05-25 11:05:00 EST,2020-05-25 11:05:00 EST,DO_mgL,NA,6,5.05,fix digitizing error
+FCR,50,4,YSI,2020-05-25 00:00:00 EST,2020-05-26 00:00:00 EST,DOsat_percent,NA,6,46.6,fix digitizing error
+FCR,100,0.1,YSI,2023-07-03 12:00:00 EST,2023-07-03 12:00:00 EST,DO_mgL,NA,6,8.76,fix digitizing error
+FCR,100,0.1,YSI,2023-07-03 12:00:00 EST,2023-07-03 12:00:00 EST,DOsat_percent,NA,6,96.8,fix digitizing error
+FCR,100,0.1,YSI,2023-07-10 15:40:00 EST,2023-07-10 15:40:00 EST,DO_mgL,NA,6,8.3,fix digitizing error
+FCR,100,0.1,YSI,2023-07-10 15:40:00 EST,2023-07-10 15:40:00 EST,DOsat_percent,NA,6,94.5,fix digitizing error
+BVR,51,0.1,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,1,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,2,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,3,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,4,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,5,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,5.2,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,5.3,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,6,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,7,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,8,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,9,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,10,YSI,2021-07-07 11:37:00 EST,2021-07-07 11:37:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,0.1,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,1,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,2,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,3,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,4,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,5,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,5.3,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,6,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,7,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,8,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,9,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error
+BVR,51,10,YSI,2021-07-08 11:45:00 EST,2021-07-08 11:45:00 EST,Site,NA,6,50,fix digitizing error

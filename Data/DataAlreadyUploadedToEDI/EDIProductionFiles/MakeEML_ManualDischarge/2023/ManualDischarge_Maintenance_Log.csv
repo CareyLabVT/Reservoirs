@@ -1,7 +1,0 @@
-"Reservoir","Site","DataStream","TIMESTAMP_start","TIMESTAMP_end","start_parameter","end_parameter","flag","update_value","notes"
-"FCR",200,"manual_Discharge",2019-05-13 12:00:00,2019-05-13 12:00:00,"Flow_cms","Flow_cms",3,NA,"Value suspect conditions not well captured by flowmeter method"
-"FCR",200,"manual_Discharge",2019-08-22 12:00:00,2019-08-22 12:00:00,"Flow_cms","Flow_cms",5,NA,"Value suspect conditions not well captured by velocity float method"
-"FCR",200,"manual_Discharge",2019-09-02 12:00:00,2019-09-02 12:00:00,"Flow_cms","Flow_cms",5,NA,"Value suspect conditions not well captured by velocity float method"
-"FCR",200,"manual_Discharge",2019-10-04 12:00:00,2019-10-04 12:00:00,"Flow_cms","Flow_cms",5,NA,"Value suspect conditions not well captured by velocity float method"
-"FCR",200,"manual_Discharge",2019-10-30 12:00:00,2019-10-30 12:00:00,"Flow_cms","Flow_cms",3,NA,"Value suspect conditions not well captured by flowmeter method"
-"CCR",500,"manual_Discharge",2021-09-23 12:00:00,2021-09-23 12:00:00,"Flow_cms","Flow_cms",5,NA,"Value suspect conditions not well captured by velocity float method"

@@ -1,17 +1,21 @@
 # Chla Processing L1 script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
-# Edited 10 Jan 24 by KKH to start adding in exact times for chla measurements,
-# will finish after EDI days
+
+# READ ME ####
+
+#This QAQC cleaning script was applied to create the data files included in this data package
+#Additional notes: This script is included with this EDI package to show which QAQC has already 
+#been applied to generate these data <and includes additional R scripts available with this package>. 
+#This script is only for internal use by the data creator team and is provided as a reference; it will not 
+#run as-is. 
 
 # Things the script does: 
 # 1. Read in Maintenance log and read in raw chla file from the spec
-#   Put in the right format for processing
 # 2. Read in the filtering log and rack map
-# 2a. Read in the actual times for chla sample collection 
 # 3. Merge everything together
 # 4. Maintenance log to flag or remove issues
-# 5. Process with a script based on BNN Excel script
+# 5. Process with a script based on BRN Excel script
 # 6. Further QAQC processing
 # 7. Save files
 
@@ -20,14 +24,14 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(lubridate,tidyverse, gsheet)
 
 
-filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/", 
-                           rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk/edit#gid=0",
-                           filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv/edit#gid=614471881",
-                           Year = "2023",
+filt_chla_qaqc <- function(directory, 
+                           rack_map,
+                           filtering_log,
+                           Year,
                            final_vol_extract = 6, 
                            blank_vol_filt = 500, 
-                           maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.txt",
-                           outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
+                           maintenance_file,
+                           outfile)
 {
   
   #### 1. Read in Maintenance file and the Raw files from the spec ####
@@ -485,28 +489,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
   
   #all_chla <- all_chla[all_chla$DateTime<ymd_hms(end_date),]
   
-  # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-  package_ID <- 'edi.555.3'
-  eml <- read_metadata(package_ID)
-  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
-  
-  ec_all <- ec_all |> filter(DateTime > last_edi_date)
-  
-  
   ### 7. Save L1 File ####
   
   write.csv(chla_new, outfile, row.names=F)
   
 }
-
-filt_chla_qaqc(
-  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
-  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk/edit#gid=0",
-  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv/edit#gid=614471881",
-  Year = "2023",
-  blank_vol_filt = 500,
-  final_vol_extract = 6,
-  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
-  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
-)

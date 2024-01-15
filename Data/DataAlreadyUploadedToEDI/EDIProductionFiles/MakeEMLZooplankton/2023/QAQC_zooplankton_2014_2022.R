@@ -156,7 +156,7 @@ zoops_final <- zoops_final[!is.na(zoops_final$Density_IndPerL),]
 zoops_final <- zoops_final |> filter(!(Density_IndPerL==0 & is.na(MeanLength_mm)))
 
 #make sure all taxa are uppercase
-zoops_final$Taxon <- str_to_title(zoops_final$Taxon)
+zoops_final$Taxon <- str_to_sentence(zoops_final$Taxon)
 
 #drop GWR schindler data that has a start depth of 12m and end depth of 9m (2016-10-17 09:00:00)
 zoops_final <- zoops_final |> filter(!(StartDepth_m==12 & EndDepth_m==9))

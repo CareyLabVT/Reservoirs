@@ -24,3 +24,11 @@ physical properties	lter controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Carvins Cove Reservoir	carey lab controlled vocabulary
 fluorescence	lter controlled vocabulary
+Virginia Reservoirs 	carey lab controlled vocabulary
+Virginia Reservoirs LTREB 	carey lab controlled vocabulary
+LTREB 	carey lab controlled vocabulary
+CCR	carey lab controlled vocabulary
+CCRCatwalk	carey lab controlled vocabulary
+Catwalk	carey lab controlled vocabulary
+sensors	carey lab controlled vocabulary
+HOBOs	carey lab controlled vocabulary

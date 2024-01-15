@@ -1,11 +1,11 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir	categorical	dimensionless		NA	value is missing
 Site	Sampling site within each reservoir, 50=Deep hole or site nearest to dam at Falling Creek Reservoir 	numeric	dimensionless		NA	value is missing
-DataStream	Code corresponding to data set nickname;MET= meteorology sensors deployed near the catwalk 	categorical	dimensionless		NA	value is missing
+DataStream	Code corresponding to data set nickname; MET= meteorology sensors deployed near the met 	categorical	dimensionless		NA	value is missing
 TIMESTAMP_start	Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.	Date		YYYY-MM-DD hh:mm:ss	NA	Maintenance started before the sensors were out
 TIMESTAMP_end	Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.	Date		YYYY-MM-DD hh:mm:ss	NA	Maintenance is on going and has no current end date
-start_parameter	Name of start variable in the sequence corresponding to catwalk sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
-end_parameter	Name of end variable in the sequence corresponding to catwalk sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
+start_parameter	Name of start variable in the sequence corresponding to met sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
+end_parameter	Name of end variable in the sequence corresponding to met sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
 flag	Data flag applied to associated variable	categorical	dimensionless		NA	value is missing
 update_value	New value to update the data to in the QAQC process	character			NA	No updated value used
 adjustment_code	Chunks of code or a numeric offset to change the data to in the QAQC process	character			NA	No adjustment code used

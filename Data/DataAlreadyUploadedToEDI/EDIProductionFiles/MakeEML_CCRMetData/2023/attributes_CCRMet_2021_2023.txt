@@ -7,16 +7,16 @@ CR3000Battery_V	The battery voltage of the CR3000 datalogger	numeric	volt		NA	va
 CR3000Panel_Temp_C	Panel temperature of the CR3000 data logger.	numeric	celsius		NA	value is missing
 PAR_umolm2s_Average	Photosynthetic active radiation averaged over measurement interval.	numeric	micromolesPerSecondPerSquareMeter		NA	value is missing or outlier (see metatdata)
 PAR_Total_mmol_m2	Total photosynthetic active radiation over measurement interval.	numeric	millimolesPerSquareMeter		NA	value is missing or outlier (see metatdata)
-BP_Average_kPa	Barometric Pressure averaged over measurement interval.	numeric	kilopascal		NA	value is missing or outlier (see metatdata)
-AirTemp_C_Average	Air Temperature averaged over measurement interval. See metadata for QA/QC applied to this variable.	numeric	celsius		NA	value is missing or outlier (see metatdata)
-RH_percent	Relative Humidity at time of measurement.	numeric	percent		NA	value is missing or outlier (see metatdata)
+BP_Average_kPa	Barometric pressure averaged over measurement interval.	numeric	kilopascal		NA	value is missing or outlier (see metatdata)
+AirTemp_C_Average	Air temperature averaged over measurement interval. See metadata for QA/QC applied to this variable.	numeric	celsius		NA	value is missing or outlier (see metatdata)
+RH_percent	Relative humidity at time of measurement.	numeric	percent		NA	value is missing or outlier (see metatdata)
 Rain_Total_mm	Total rainfall over measurement interval.	numeric	millimeter		NA	value is missing or outlier (see metatdata)
 WindSpeed_Average_m_s	Wind speed averaged over measurement interval.	numeric	metersPerSecond		NA	value is missing or outlier (see metatdata)
 WindDir_degrees	Direction of wind at time of measurement.	numeric	degree		NA	value is missing or outlier (see metatdata)
-ShortwaveRadiationUp_Average_W_m2	Short wave radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-ShortwaveRadiationDown_Average_W_m2	Short wave radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-InfraredRadiationUp_Average_W_m2	Infrared wave radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
-InfraredRadiationDown_Average_W_m2	Infrared wave radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationUp_Average_W_m2	Shortwave radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+ShortwaveRadiationDown_Average_W_m2	Shortwave radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfraredRadiationUp_Average_W_m2	Infrared radiation facing the sky averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
+InfraredRadiationDown_Average_W_m2	Infrared radiation facing the reservoir averaged over measurement interval.	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
 Albedo_Average_W_m2	Calculated from ShortwaveRadiationDown_Average_W_m2 divided by ShortwaveRadiationUp_Average_W_m2	numeric	wattsPerSquareMeter		NA	value is missing or outlier (see metatdata)
 Flag_PAR_umolm2s_Average	Data flag applying to associated variable. 	categorical	dimensionless		NA	no flag for value
 Note_PAR_umolm2s_Average	Additional information describing Flag for associated variable	character			NA	no note for value

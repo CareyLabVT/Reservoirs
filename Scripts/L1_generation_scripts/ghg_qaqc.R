@@ -1,6 +1,11 @@
-# Title: GHG L1 creation Script
+# Title: GHG L1 generation (QA/QC) script
 # By: Adrienne Breef-Pilz
-# Written: 24 Nov 23
+# Written: 24 Nov 23, 
+# Last updated: 11 Jan 24 (FEO)
+
+# Additional notes: This script is included with this EDI package to show which QAQC has already
+# been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
+# This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
 
 # This function:
 # 1. Read in the Maintenance Log and then Raw files 
@@ -19,20 +24,33 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(lubridate,tidyverse, googledrive, readxl, gsheet)
 
 # The place of the functions used in the function
-source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+# source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
 
+##### Function to qaqc Fluoroprobe data
+#'@param directory filepath to raw files 
+#'@param maintenance_file filepath to maintenance log
+#'@param gdrive Are the files on Google Drive. True or False
+#'@param gshared_drive filepath to GOogle Drive
+#'@param current_year  Current Year. Must be numeric
+#'@param Air_Pressure GS location of headspace preparation conditions
+#'@param vial_digitized_sheet GS location of digitiized field sheet with vial numbers
+#'@param Rolling_MDL GS location of MDL Serum Vial CH4 CO2 2016 style + Rolling 18dec23
+#'@param output_file filepath for output file
+#'@param MDL_file filepath for MDL output file
+#'@param Vial_Number_Check filepath for vial number output file
 
-ghg_qaqc<-function(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
-                   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
-                   gdrive = F, # Are the files on Google Drive. True or False
-                   gshared_drive = as_id("1YD8QyV4AsaMMzn974jPY8lhb2pcr2ql2"),
-                   current_year = 2023, # Current Year. Must be numeric
-                   Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
-                   vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-                   Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=446223791",
-                   output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
-                   MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
-                   Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"){
+ghg_qaqc<-function(directory,
+                   maintenance_file,
+                   gdrive = F,
+                   gshared_drive,
+                   current_year,
+                   Air_Pressure,
+                   vial_digitized_sheet,
+                   Rolling_MDL,
+                   output_file,
+                   MDL_file,
+                   Vial_Number_Check){
   
   #### 1. Read in the Maintenance Log and then Raw files ####
   

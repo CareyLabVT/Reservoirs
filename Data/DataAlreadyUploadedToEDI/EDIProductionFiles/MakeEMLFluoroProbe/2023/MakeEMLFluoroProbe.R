@@ -189,12 +189,12 @@ make_eml(
   data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
   data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("fluoroprobe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
-  other.entity.name = c("fluoroprobe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
+  other.entity = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
+  other.entity.name = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
   other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
   user.id = 'melofton',
   user.domain = 'EDI',
-  package.id = 'edi.1101.3')
+  package.id = 'edi.1101.4')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

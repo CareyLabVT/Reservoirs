@@ -139,7 +139,7 @@ make_eml(path = folder,
                                       'Script used to collate 2019-2023 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.10", #### this is the one that I need to change!!!
+         package.id = "edi.1017.11", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 # make_eml(path = folder,

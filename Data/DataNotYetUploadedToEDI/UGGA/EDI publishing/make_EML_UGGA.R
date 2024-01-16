@@ -8,6 +8,7 @@ setwd("./Data/DataNotYetUploadedToEDI/UGGA/EDI publishing/")
 # Install and load EMLassemblyline
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+library(tidyverse)
 
 ## load historical data 
 historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
@@ -52,7 +53,7 @@ make_eml(path = getwd(),
                                     "Descriptions of sampling sites, including lat/long"),
          other.entity = c('RawData.zip', 
                           "UGGA_inspection_2018_2023.Rmd", 
-                          "UGGA_qaqc_2018_2023.R", 
+                          "UGGA_qaqc_2023.R", 
                           "UGGA_FluxCalR_2023.R"),
          other.entity.name = c('Raw UGGA files', 
                                "Data visualization script", 
@@ -66,4 +67,4 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.2")
+         package.id = "edi.1102.4")

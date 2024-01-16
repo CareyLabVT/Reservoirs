@@ -2,7 +2,7 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
 Site	Sampling site within each reservoir	numeric	dimensionless			
 Date	Date of sampling	Date		YYYY-MM-DD		
-Rep	"Replicate sample number. Samples are coded as either 1 or 2 for the first and second sampling period, respectively."	numeric	dimensionless			
+Rep	"Replicate sample number. Samples are coded as either 1 or 2 for the first and second sampling period, respectively. Occasionally a third replicate was also collected and coded as 3."	numeric	dimensionless			
 Start_time	"Start time for diffusive flux calculations, typically defined as 4 minutes before the visually identified end time using FluxCalR. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		hh:mm:ss		
 End_time	"End time for diffusive flux calculations as visually identified using the FluxCalR package. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		hh:mm:ss		
 Temp_C	Averaged ambient temperature from the measurement time period used to calculate diffusive fluxes in FluxCalR.	numeric	celsius			

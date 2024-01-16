@@ -1,20 +1,28 @@
 ---
 title: "FCR Met Plots for EDI"
+author: "Adrienne Breef-Pilz"
 output: html_document
 theme: null
 original date made: 04 Jan 2024
 date: "`r Sys.Date()`"
-Author: Adrienne Breef-Pilz
 ---
 
-This script is the visual inspection scripts. 
-1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
+This script is the visual inspection scripts:
+
+1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. IF YOU ARE QAQCING ALL FILES IT WILL TAKE OVER 20 MINUTES FOR THE SCRIPT TO RUN. 
+
 2. Then the script checks for daily and subdaily gaps in the current file. 
+
 3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+
 4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+
 5. If necessary can QAQC data already on EDI using the QAQC function
+
 6. Creates plots
+
 7. Writes data to new csv
+
 8. Downloads necessary files for EDI publishing
 
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
@@ -22,7 +30,7 @@ For the plots, they use a function called "all_plot". In all_plot you can specif
 
 All files are from GitHub or EDI and the source scripts are from GitHub as well. 
 
-If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and uncomment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Get raw files", "QAQC all files", "Write CSV" and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together and save you LOTTTS of time. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
 
 ```{r Set Up, include=FALSE}
@@ -44,53 +52,85 @@ current_time_start=force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST")
 current_time_end= force_tz(as.POSIXct("2024-01-01 00:00:00"), tzone = "EST")
 ```
 
-```{r Read in Historical EDI Files, include=FALSE}
+```{r Get raw files, eval=FALSE, include=FALSE}
 
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+# This section creates a list of the raw files and the manual files 
 
-                   
- historic <-read_csv(infile1) 
- 
- # Force historical file timestamp to EST
-  historic$DateTime <- force_tz(as.POSIXct(historic$DateTime), tzone = "EST")
+ds <- c(
+  'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',
+  'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2018.csv',
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2019.csv',
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2020.csv',
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2021.csv',
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2022.csv',
+        # THE CURRENT YEARS FILE
+        'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv'
+        )
 
+
+# Read in and make a data frame of the manual downloaded files 
+
+man_files <- c(
+'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2015_2016.csv','https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2017.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2018.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2019.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2020.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2021.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2022.csv',
+   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2023.csv'
+  )
+
+ # Make a tibble of the arguments going into the function. Each row are the arguments that will go into the function. Make sure you have the correct raw files that go with the manual files. If you want the same argument just repeat it each time. 
+state_met <- tibble(data_file = ds, 
+       data2_file = man_files,
+       maintenance_file = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/MET_maintenancelog_new.csv',each=8),
+       met_infrad = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCR_Met_Infrad_DOY_Avg_2018.csv', each=8),
+       output_file = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
+       start_date = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
+       end_date = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
+       notes = rep(TRUE, each=8))
 ```
 
-```{r Read in current L1 file, include=FALSE}
+```{r QAQC all files, include=FALSE}
 
+# Use the tibble above to use pmap and run each row through the qaqc_fcrmet function.
+# This creates a data frame for each or the raw files. Then we bind everything together below. 
 
-# Use the qaqc script to get the qaqc file for the current year with notes. We turn this off when we make the L1 file for GitHub because it adds a lot of bytes. 
-L1 <- qaqc_fcrmet(
-         output_file = NULL, 
-         start_date = current_time_start, 
-         end_date = Sys.Date(), 
-         notes = TRUE)
-
-# Not need to set the time because Done in the qaqc_fcrmet function
- #L1$DateTime <- force_tz(as.POSIXct(L1$DateTime), tzone = "EST")
-
-#L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv")
+fcrmet_files <- state_met%>% 
+  pmap(qaqc_fcrmet)
 
 ```
 
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
 
-```{r Bind historic and L1 files together, include=FALSE}
+```{r Bind files together or READ IN EDI FOR REVIEWER, include=FALSE}
   
-# If No EDI file exists with all the years you want to look at
-  current_df <- dplyr::bind_rows(historic, L1)%>%
+# Bind all the QAQC files from above
+  current_df <- dplyr::bind_rows(fcrmet_files)
+
+# Filter for the end of the current publishing year in the set up chunk. 
+current_df <- current_df%>%
+  dplyr::distinct()%>%
   filter(DateTime<(current_time_end))
+
+# make sure no time duplicates. 
+ current_df <-  current_df[!duplicated(current_df$DateTime), ]
+
+#reorder. Just to be certain everything is in order
+  current_df<-current_df[order(current_df$DateTime),]
+  
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data
 
- # current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/21/b7e4a95bf842e24c77cfd23dfee543cd")
+  #current_df2 <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/27/d4c74bbb3b86ea293e5c52136347fbb0")
+  
  # 
  # # Force files from EDI to have an EST timestamp
  #  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
+ 
+
 
 ```
 
@@ -119,9 +159,19 @@ CATPRES_COL_NAMES =  c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp
 
 ## Check for gaps in the data frame
 
-This identifies if there are any daily data gaps in the long-term record
+This first checks if there are any date duplicates and then identifies if there are any daily data gaps in the long-term record. 
 
 ```{r Check for daily gaps, echo=FALSE}
+
+ # Make sure there are no duplicated dates. Do this here because the file is too large for Data Explore.
+# Print them if there are
+ dups<- current_df[duplicated(current_df$DateTime), ]
+
+dups <- dups%>%
+  select(DateTime, Record, CR3000Battery_V, CR3000Panel_Temp_C, 
+         PAR_Total_mmol_m2, BP_Average_kPa, AirTemp_C_Average)
+
+knitr::kable((dups))
 
 # Get DOY
 catwalk <- current_df
@@ -142,52 +192,37 @@ The first row is the time for the first observation and then the subsequent obse
 
 # Because we can't have NAs for this for loop let's make a new df
  cat2 <- current_df%>%
-  filter(!is.na(Record))%>%
-  filter(DateTime>current_time_start)
+  filter(!is.na(Record))
+  #%>%filter(DateTime>current_time_start)
 
   for(i in 2:length(cat2$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if( abs(cat2$Record[i]-cat2$Record[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>10){
+    if(abs(cat2$Record[i]-cat2$Record[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>1){
       print(c(cat2$DateTime[i-1], cat2$DateTime[i]))
       print(c(cat2$Record[i-1], cat2$Record[i]))
     }
   }
-```
-
-QAQC Historical Files: If you need to QAQC the historical file then run it through the qaqc function without start_date and end_date as NULL
-
-```{r Run the QAQC function again if we need to, eval=FALSE, include=FALSE}
-
-# Run the QAQC function
-qaqc_fcrmet(data_file= current_df,
-         data2_file = NULL,
-         maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/MET_maintenancelog_new.csv", 
-         output_file =NULL, 
-         start_date = NULL, 
-         end_date = NULL)
 
 ```
+
 
 ### Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
 
-Flag values
+Let's look at the flag Frequency for each variable. 
 
-0: no flag
+As a reminder here are the flag codes Flag values 
 
-1: value removed due to maintenance and set to NA
+0: no flag; 
 
-2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+1: value removed due to maintenance and set to NA; 
 
-3: negative values set to 0
+2: sample not collected; 
 
-4: value removed due to fouling and set to NA
+3: negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA; 
 
-5: questionable value due to potential fouling
+4: potentially questionable value and changed or set to NA, see note; 
 
-6: very questionable value due to potential fouling. Values adjusted using a linear or square root function to match high-resolution CTD profiles are given in RDO_mgL_5 and RDO_sat_percent_5
+5: questionable value but left in the dataset.
 
-7: missing data
-
-8: Value corrected using a constant offset due to two thermistor malfunctions in Fall 2020
 
 ```{r Check out the flags, echo=FALSE}
 
@@ -203,7 +238,7 @@ Flags <- current_df%>%
 
 # Make a table with the number of times a flag was used
 for(f in 1:ncol(Flags)){
-  #print(colnames(Flags[f]))
+  print(colnames(Flags[f]))
   print(table(Flags[,f], useNA = "always"))
 }
 ```
@@ -393,7 +428,7 @@ output <- unlist(outputs, recursive = F)
 
 ### Write to CSV
 
-```{r Make new CSV with current and historic files, include=FALSE}
+```{r Write CSV, eval=FALSE, include=FALSE}
 
 # make date time a character so no confusion with timezones
 current_df$DateTime <- as.character(current_df$DateTime)
@@ -406,19 +441,19 @@ write_csv(current_df, "FCRMet_2015_2023.csv")
 
 ### Download and save Maintenance Log, Plotting function, and QAQC function
 
-```{r Download and save Maintenance Log, include=FALSE}
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/MET_maintenancelog_new.csv", "FCRMet_maintenancelog_2015_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/R/edi_qaqc_function.R", "FCRMet_qaqc_2023_2023.R")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/R/edi_qaqc_function.R", "FCRMet_qaqc_2015_2023.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plotting_function.R")
 
 # Infrad_DOY_average
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCR_Met_Infrad_DOY_Avg_2018.csv", "FCRMet_Infrad_DOY_Avg_2018.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCR_Met_Infrad_DOY_Avg_2018.csv", "FCRMet_Infrad_DOY_Avg_2015_2017.csv")
 
 
 ```

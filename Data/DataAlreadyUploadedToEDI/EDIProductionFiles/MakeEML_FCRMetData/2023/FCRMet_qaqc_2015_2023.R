@@ -2,38 +2,65 @@
 # This QAQC cleaning script was applied to create the data files included in this data package.
 # Author: Adrienne Breef-Pilz
 # First Developed Jan. 2023
-# Last edited: 12 Jan. 2024
+# Last edited: 16 Jan. 2024
 
 #Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 
-# generate data from 2023 in the FCRMet_2015_2023. 
+# generate data in the FCRMet_2015_2023.csv. 
 
 # This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
 
+
 qaqc_fcrmet <- function(data_file,
                         data2_file, 
-                        maintenance_file, 
-                        met_infrad, 
-                        output_file, 
+                        maintenance_file , 
+                        met_infrad , 
+                        output_file = NULL, 
                         start_date = NULL, 
                         end_date = NULL, 
                         notes = FALSE){
   
   #### Name the data file #### 
-  # This section either uses the compiled data from FCR_MET_QAQC_Plots_2015_2022.Rmd which is already labeled Met
-  # or it reads in and formats the current file off the data logger
-  
+  # This section reads in and formats the raw file off the data logger.
   
   if (is.character(data_file)==T) {
-    Met<-read_csv(data_file, skip = 4, col_names=F, show_col_types = F)
-    Met[,17]<-NULL #remove column
-    names(Met) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C",
-                   "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average",
-                   "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                   "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                   "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+    # Read in the file so we can see how many columns it has 
+    check_Met <- read_csv(data_file, skip = 4, col_names=F, show_col_types = F)
+    if(length(check_Met)==18){
+      # Take out the temp from the net radiometer sensors if it hasn't happened already. 
+      Met<-read_csv(data_file, skip = 4, col_names=F, show_col_types = F)
+      Met[,17]<-NULL #remove column
+      names(Met) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C",
+                     "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average",
+                     "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                     "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                     "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      
+      # # Get the start and the end date of data because we want to subset the manual downloads file
+      # df_year <- c(year(Met$DateTime[[1]]), year(Met$DateTime[[nrow(Met)]]))%>%
+      #   unique()
+      
+      
+    }else{
+      # If the temp from the net radiometer has already been removed then just rename header names so they are consistent
+      Met<-read_csv(data_file, skip = 1, col_names=F, show_col_types = F)
+      #Met[,17]<-NULL #remove column
+      names(Met) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C",
+                     "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average",
+                     "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                     "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                     "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      
+      # # Get the start and the end date of data because we want to subset the manual downloads file
+      # df_year <- c(year(Met$DateTime[[1]]), year(Met$DateTime[[nrow(Met)]]))%>%
+      #   unique()
+    }
     
   }else {
     Met <- data_file
+    
+    # Get the start and the end date of data because we want to subset the manual downloads file
+    # df_year <- c(year(Met$DateTime[[1]]), year(Met$DateTime[[nrow(Met)]]))%>%
+    #   unique()
   }
   
   # Read in the manual downloads file to fill missing streaming observations
@@ -43,24 +70,53 @@ qaqc_fcrmet <- function(data_file,
     # If there is no manual files then set data2_file to NULL
     Met2 <- NULL
     
-  } else{
-    
+  } else if (is.character(data2_file)==T){
     Met2<-read_csv(data2_file, skip = 1, col_names=F, show_col_types = F)
-    Met2[,17]<-NULL #remove column
-    names(Met2) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
-                    "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
-                    "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
-                    "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
-                    "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+    if(length(Met2)==18){
+      Met2[,17]<-NULL #remove column
+      names(Met2) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+                      "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+                      "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                      "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                      "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      
+      # # Make a Year column for subsetting
+      # Met2$Year <- year(Met2$DateTime)
+    }else{
+      # Make sure the names match
+      names(Met2) = c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp_C", 
+                      "PAR_umolm2s_Average", "PAR_Total_mmol_m2", "BP_Average_kPa", "AirTemp_C_Average", 
+                      "RH_percent", "Rain_Total_mm", "WindSpeed_Average_m_s", "WindDir_degrees", "ShortwaveRadiationUp_Average_W_m2",
+                      "ShortwaveRadiationDown_Average_W_m2", "InfraredRadiationUp_Average_W_m2",
+                      "InfraredRadiationDown_Average_W_m2", "Albedo_Average_W_m2")
+      
+      # # Make a Year column for subsetting
+      # Met2$Year <- year(Met2$DateTime)
+    }
+    # Filter the manual downloads file so it is only the year of the data file
+    # Met2 <- Met2%>%
+    #   filter(Year==df_year)%>%
+    #   select(-Year) # take it out after we filter
+    
+  }else{
+    Met2 <- data2_file
+    
+    # # Make a Year column for subsetting
+    # Met2$Year <- year(Met2$DateTime)
+    # 
+    # # Filter the manual downloads file so it is only the year of the data file
+    # Met2 <- Met2%>%
+    #   filter(Year==df_year)%>%
+    #   select(-Year)
+    
   }
   
   
   # Bind the streaming data with the manual downloads to fill in missing observations
   Met <-bind_rows(Met,Met2)%>%
-    distinct()
+    distinct()%>%
+    drop_na(DateTime)
   
-  # Set timezone as EST. Streaming sensors don't observe daylight savings
-  Met$DateTime <- force_tz(as.POSIXct(Met$DateTime), tzone = "EST")
   
   #reorder 
   Met<-Met[order(Met$DateTime),]
@@ -68,7 +124,26 @@ qaqc_fcrmet <- function(data_file,
   # convert NaN to NAs in the dataframe
   Met[sapply(Met, is.nan)] <- NA
   
+  #Change DateTime when it was changed from EDT to EST
+  # Set everything to Etc/GMT+5 
+  Met$DateTime <- force_tz(as.POSIXct(Met$DateTime), tzone = "Etc/GMT+5")
   
+  if("2019-04-15 10:19:00" %in% Met$DateTime){
+    met_timechange=max(which(Met$DateTime=="2019-04-15 10:19:00")) #shows time point when met station was switched from GMT -4(EDT) to GMT -5(EST)
+    #Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
+    Met$DateTime[c(1:met_timechange-1)]<-with_tz(force_tz(Met$DateTime[c(1:met_timechange-1)],"Etc/GMT+4"), "Etc/GMT+5") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+  }else if (min(Met$DateTime, na.rm = TRUE)<"2019-04-15 10:19:00"){
+    #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+    Met$DateTime<-with_tz(force_tz(Met$DateTime,"Etc/GMT+4"), "Etc/GMT+5")
+  }else if(min(Met$DateTime, na.rm = TRUE)>"2019-04-15 10:19:00"){
+    # Do nothing because already in EST
+  }
+  
+  
+  # Set timezone as EST. Streaming sensors don't observe daylight savings
+  Met$DateTime <- force_tz(as.POSIXct(Met$DateTime), tzone = "EST")
+  
+
   ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
   #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR_Secchi/maintenance_log.txt'
   log_read <- read_csv2(maintenance_file, col_types = cols(
@@ -84,15 +159,16 @@ qaqc_fcrmet <- function(data_file,
   log$TIMESTAMP_start <- force_tz(as.POSIXct(log$TIMESTAMP_start), tzone = "EST")
   log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end), tzone = "EST")
   
-  
-  
-  
-  ### identify the date subsetting for the data
+  ### identify the date subsetting for the data. If no date given then use the date of the first and last rows of the data frame
   if (!is.null(start_date)){
     Met <- Met %>% 
       filter(DateTime >= start_date)
     log <- log %>%
       filter(TIMESTAMP_start <= end_date)
+  }else{
+    
+    log <- log %>%
+      filter(TIMESTAMP_start <= Met$DateTime[nrow(Met)])
   }
   
   if(!is.null(end_date)){
@@ -100,12 +176,16 @@ qaqc_fcrmet <- function(data_file,
       filter(DateTime <= end_date)
     log <- log %>%
       filter(TIMESTAMP_end >= start_date)
+  }else{
+    log <- log %>%
+      filter(TIMESTAMP_end>= Met$DateTime[1])
   }
   
-  if (nrow(log) == 0){
-    log <- log_read
-  }
-  
+   if(length(log)==0){
+     log <- log_read
+   }
+     
+     
   ## START NEW MAINT LOG CODE
   
   # MET FLAGS 
@@ -127,6 +207,7 @@ qaqc_fcrmet <- function(data_file,
   
   Met$Reservoir <- "FCR"
   Met$Site <- 50
+  
   
   for(i in 1:nrow(log)){
     ### Assign variables based on lines in the maintenance log. 
@@ -565,7 +646,8 @@ qaqc_fcrmet <- function(data_file,
   }
 }
 
-# qaqc_fcrmet(output_file = "FCRMET_L1.csv", 
-#             start_date = force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST"), 
-#             end_date = force_tz(as.POSIXct("2024-01-01 00:00:00"), tzone = "EST"), 
-#             notes = TRUE)
+# qaqc_fcrmet(
+#            output_file = 'FCRmet_L1.csv',
+#            start_date = "2023-01-01 00:00:00",
+#            end_date = Sys.Date() + lubridate::days(1),
+#            notes = FALSE)

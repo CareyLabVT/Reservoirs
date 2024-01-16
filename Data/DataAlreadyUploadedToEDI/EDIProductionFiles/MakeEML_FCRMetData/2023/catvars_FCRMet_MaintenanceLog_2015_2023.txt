@@ -8,7 +8,7 @@ end_parameter	RH_percent	Relative humidity at time of measurement
 end_parameter	WindDir_degrees	Direction of wind at time of measurement
 end_parameter	WindSpeed_Average_m_s	Wind speed averaged over measurement interval
 flag	1	value removed due to maintenance and set to NA
-flag	4	"potentially questionable value and changed or set to NA, see note"
+flag	4	potentially questionable value and changed or set to NA, see note
 flag	5	questionable value but left in dataset
 start_parameter	AirTemp_C_Average	Air temperature averaged over measurement interval
 start_parameter	DateTime	Date and Time of Recorded observation

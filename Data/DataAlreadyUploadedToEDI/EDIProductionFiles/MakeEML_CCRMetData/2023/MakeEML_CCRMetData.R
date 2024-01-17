@@ -158,8 +158,10 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.779.27") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
-         #package.id = "edi.1105.1") # edi.1105.1 for final product
+         #STAGGING
+         #package.id = "edi.779.27") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
+         # FINAL ID FOR THE PRODUCTION ENVIRONMENT 
+         package.id = "edi.1105.2") # edi.1105.1 for final product
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK

@@ -15,7 +15,7 @@ zoop_biom <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEM
                       na.strings = "")
 
 #get zoop date into correct format
-zoop$DateTime <- as.POSIXct(zoop$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
+zoop$DateTime <- lubridate::as_datetime(zoop$DateTime, tz="EST")
 
 #hypo tows
 ggplot(data=subset(zoop, CollectionMethod %in% c("Tow") & StartDepth_m %in% c(7, 8, 9,10) & 
@@ -165,14 +165,16 @@ zoops_final <- zoops_final |> filter(!(StartDepth_m==12 & EndDepth_m==9))
 zoop_dens <- zoop_dens |> 
   mutate(Zooplankton_No. = as.numeric(Zooplankton_No.)) |> 
   filter(!is.na(Zooplankton_No.)) |> 
-  mutate(DateTime = as.POSIXct(DateTime, 
-                               format="%Y-%m-%d %H:%M:%S", tz="EST"))
-
+  mutate(DateTime = lubridate::as_datetime(DateTime, tz="EST"))
+                               
 #biomass
 zoop_biom <- zoop_biom |>   
-  mutate(DateTime = as.POSIXct(DateTime, 
-                               format="%Y-%m-%d %H:%M:%S", tz="EST"))
+  mutate(DateTime = lubridate::as_datetime(DateTime, tz="EST"))
   
+#convert datetimes to character for EDI upload
+zoops_final$DateTime <- format(zoops_final$DateTime, "%Y-%m-%d %H:%M:%S")
+zoop_dens$DateTime <- format(zoop_dens$DateTime, "%Y-%m-%d %H:%M:%S")
+zoop_biom$DateTime <- format(zoop_biom$DateTime, "%Y-%m-%d %H:%M:%S")
 
 #export final dfs
 write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zooplankton_summary_2014_2022.csv", row.names=F)

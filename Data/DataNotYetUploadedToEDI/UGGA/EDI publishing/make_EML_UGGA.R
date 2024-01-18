@@ -30,7 +30,7 @@ write.csv(flux_all, "UGGA_2018_2023.csv", row.names = F)
 #Load the library 
 library(googlesheets4)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
-data <- flux_all #This is the line you need to modify!
+data <- flux_all 
 trim_sites = function(data,sites){
   data_res_site=data%>% #Create a Reservoir/Site combo column
     mutate(res_site = trimws(paste0(Reservoir,Site)))
@@ -67,4 +67,4 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.4")
+         package.id = "edi.1082.3") #edi.1082.2 is the most recent published version

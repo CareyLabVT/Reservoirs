@@ -105,3 +105,11 @@ vars_to_plot %>%
 
 vars_to_plot %>%
   map(plot_var, year = 2018)
+
+qaqc %>%
+  select(DateTime, SN) %>%
+  unique() %>%
+  filter(year(DateTime) == 2023) %>%
+  ggplot(aes(x = hour(DateTime))) +
+  geom_histogram()+
+  facet_wrap(~SN)

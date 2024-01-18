@@ -1,10 +1,14 @@
-FIELD SAMPLE COLLECTION
+SAMPLING TIMES
+"Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately November to March in 2014-2023. All date times are reported in local time."
 
-"At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the sediments using a YSI ProPlus with Quatro cable (pH, ORP, conductivity) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature). Specific conductance was measured in 2021-2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021 and 2022, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The dissolved oxygen probe cap was replaced on June 30th, 2021, at which point a two-point calibration was performed. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution."
+FIELD SAMPLE COLLECTION
+"At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the sediments using a YSI ProPlus with Quatro cable (pH, ORP, conductivity)(2014-2017) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature)(2017-2023). Specific conductance was measured in 2021-2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021 - 2023, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The dissolved oxygen probe cap was replaced on June 30th, 2021, at which point a two-point calibration was performed. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution."
+
+"Specific conductance was measured spoadically for a check on the streaming sensors, or in streams at Carvins Cove Reservoir. Therefore there are not a lot of observations compared to the other variables. "
 
 "Photosynthetic active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m."
 
-"ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2022 are from the handheld pH meter described above."
+"ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2023 are from the handheld pH meter described above."
 
 "Secchi disk depth was measured using a standard 20 cm diameter circular Secchi disk attached to a calibrated rope. Secchi depth measurements were made without the aid of a plexiglass viewer. The disk was lowered from the shaded side of the boat or dock, and the water depths at which the disk disappeared while being lowered and reappeared while being raised were averaged to determine Secchi depth."
 
@@ -12,6 +16,14 @@ FIELD SAMPLE COLLECTION
 
 "The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) located near site 50 was also sampled at Beaverdam Reservoir in 2021. See site_descriptions.csv for coordinates and site descriptions of all sampling sites."
 
+DATA PACKAGE SUMMARY
 "This data package includes 2 data files (Secchi_depth_2013-2023 and YSI_PAR_profiles_2013-2023), QAQC R scripts (secchi_qaqc.R and ysi_qaqc.R), maintenance logs (secchi_maintenance_log.csv and ysi_maintenance_log.csv), visual inspection R scripts (Secchi_inspection_2013_2023.Rmd and YSI_inspection_2013_2023.Rmd), and sampling sites (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files."
 
+QUALITY ASSURANCE AND QUALITY CONTROL OVERVIEW
+"The ysi_qaqc.R script reads in the maintenance log to automatically assign flags to data that 1) were not collected or not reliable due to instrument malfunction (flag = 2), 2) are identified to be suspect (flag = 5), or 3) were digitized incorrectly (flag=6). The remaning flags are defined as follows: flag =1 if data were not collected for a particular day/variable, flag = 3 if the data are below the detection limits specified in the QAQC script, and flag = 4 if any variable (besides temeprature) has a negative value. The secchi_qaqc.R script reads in the maintenance log to automatically assign flags to data that 1) were digitized incorrectly (flag = 2) or 2) are identified to be suspect (flag = 3). Data flag = 1 indicates that the Secchi depth was not taken on a particular day."
+
+SITE DESCRIPTIONS
+"The site_descriptions.csv provides details about each sampling site where YSI, PAR, and Secchi data were collected."
+
+WHOLE-ECOSYSTEM EXPERIMENTS
 "Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information."

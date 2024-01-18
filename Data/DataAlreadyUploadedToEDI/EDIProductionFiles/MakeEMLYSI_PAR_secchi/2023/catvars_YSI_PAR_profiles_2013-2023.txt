@@ -4,3 +4,44 @@ Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
 Reservoir	GWR	Gatewood Reservoir
 Reservoir	SHR	Spring Hollow Reservoir
+Flag_DateTime	1	"No time recorded, generalized to noon"
+Flag_Temp_C	1	Sample not taken
+Flag_Temp_C	2	Instrument malfunction
+Flag_Temp_C	3	Sample below detection
+Flag_Temp_C	4	Negative value set to 0
+Flag_Temp_C	5	Suspect sample
+Flag_DO_mgL	1	Sample not taken
+Flag_DO_mgL	2	Instrument malfunction
+Flag_DO_mgL	3	Sample below detection
+Flag_DO_mgL	4	Negative value set to 0
+Flag_DO_mgL	5	Suspect sample
+Flag_DOsat_percent	1	Sample not taken
+Flag_DOsat_percent	2	Instrument malfunction
+Flag_DOsat_percent	3	Sample below detection
+Flag_DOsat_percent	4	Negative value set to 0
+Flag_DOsat_percent	5	Suspect sample
+Flag_Cond_uScm	1	Sample not taken
+Flag_Cond_uScm	2	Instrument malfunction
+Flag_Cond_uScm	3	Sample below detection
+Flag_Cond_uScm	4	Negative value set to 0
+Flag_Cond_uScm	5	Suspect sample
+Flag_SpCond_uScm	1	Sample not taken
+Flag_SpCond_uScm	2	Instrument malfunction
+Flag_SpCond_uScm	3	Sample below detection
+Flag_SpCond_uScm	4	Negative value set to 0
+Flag_SpCond_uScm	5	Suspect sample
+Flag_PAR_umolm2s	1	Sample not taken
+Flag_PAR_umolm2s	2	Instrument malfunction
+Flag_PAR_umolm2s	3	Sample below detection
+Flag_PAR_umolm2s	4	Negative value set to 0
+Flag_PAR_umolm2s	5	Suspect sample
+Flag_ORP_mV	1	Sample not taken
+Flag_ORP_mV	2	Instrument malfunction
+Flag_ORP_mV	3	Sample below detection
+Flag_ORP_mV	4	Negative value set to 0
+Flag_ORP_mV	5	Suspect sample
+Flag_pH	1	Sample not taken
+Flag_pH	2	Instrument malfunction
+Flag_pH	3	Sample below detection
+Flag_pH	4	Negative value set to 0
+Flag_pH	5	Suspect sample

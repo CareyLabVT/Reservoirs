@@ -34,9 +34,6 @@ process_CTD_file <- function(file,
   
   #trim ctd
   ctdTrimmed <- trim_ctd(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloads)
-  if(DATE_TEXT == "20-Apr-2022" & grepl("bvr|BVR", location)){
-    write.csv(file, "found_it.txt")
-  }
   #do the rest of the processing. This does NOT add SN to file
   epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
                     REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 

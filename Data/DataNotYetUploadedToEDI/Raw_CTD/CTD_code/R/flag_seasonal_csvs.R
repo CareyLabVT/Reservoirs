@@ -131,8 +131,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     ctd_flagged$DateTime[lubridate::year(ctd_flagged$DateTime) == 2018] - lubridate::hours(4) #to align with published data
   
   final = ctd_flagged%>%
-    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S")) %>%
-    filter(!(Reservoir == "BVR" & DateTime == "2022-04-20 09:05:48")) #This cast was mislabeled as BVR (both are present, and I can't find the csv to delete)
+    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
     
   #Fix for CTD when conductivity and specific conductivity columns were switched
   #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is

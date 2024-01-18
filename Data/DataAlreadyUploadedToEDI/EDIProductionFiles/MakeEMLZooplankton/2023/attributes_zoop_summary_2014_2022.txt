@@ -11,6 +11,6 @@ Density_IndPerL	Zooplankton density for each sample	numeric	numberPerLiter		NA	N
 MeanLength_mm	Mean length of zooplankton in each sample	numeric	millimeter		NA	No data
 MeanWeight_ug	Mean weight of zooplankton in each sample	numeric	microgram		NA	No data
 Biomass_ugL	Zooplankton biomass for each sample	numeric	microgramsPerLiter		NA	No data
-Flag_Length	Data flag for missing length measurements	categorical			NA	No data
-Flag_Weight	Data flag for missing weight calculations	categorical			NA	No data
-Flag_Biomass	Data flag for missing biomass calculations	categorical			NA	No data
+Flag_MeanLength_mm	Data flag for missing length measurements	categorical			NA	No data
+Flag_MeanWeight_ug	Data flag for missing weight calculations	categorical			NA	No data
+Flag_Biomass_ugL	Data flag for missing biomass calculations	categorical			NA	No data

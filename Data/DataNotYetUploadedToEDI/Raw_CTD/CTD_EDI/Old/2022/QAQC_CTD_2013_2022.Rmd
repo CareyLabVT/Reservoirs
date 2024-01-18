@@ -174,7 +174,9 @@ dt1 = dt1%>%
 # This reads all the files into the R environment
 files = list.files("../csv_outputs/",pattern = ".*\\d+.*.csv") #Get all csv files
 files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-omit <- c("100719_bvr_sedtrap.csv","072121_fcr50_sit_1.6m.csv", "072621_fcr_50_sit_anoxic.csv")#fill in with any files you need to omit
+omit <- c("100719_bvr_sedtrap.csv",
+          "072121_fcr50_sit_1.6m.csv", 
+          "072621_fcr_50_sit_anoxic.csv")#fill in with any files you need to omit
 files <- files[!files %in% omit]
 files <- files[!grepl("8188",files)]
 files <- files[file.mtime(paste0("../csv_outputs/",files))>as.Date("2022-01-01")] #Only read files that have been modified this year

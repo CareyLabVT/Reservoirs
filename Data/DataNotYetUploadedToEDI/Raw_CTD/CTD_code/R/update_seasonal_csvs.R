@@ -18,7 +18,9 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
   # This reads all the files into the R environment
   files = list.files(ctd_cast_csvs, pattern = ".*\\d+.*.csv") #Get all csv files
   files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-  omit <- c("") #fill in with any files you need to omit
+  omit <- c("100719_bvr_sedtrap.csv",
+            "072121_fcr50_sit_1.6m.csv", 
+            "072621_fcr_50_sit_anoxic.csv") #fill in with any files you need to omit
   files <- files[!files %in% omit]
   files <- files[!grepl("test", files)] # take out files that were labeled test
   
@@ -30,13 +32,6 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
   
   # list of column headers that need to be changed if they are still in the data frame
   
-  lookup <- c(PAR_umolm2s  = "PAR",
-              DescRate_ms  = 'Descent Rate (m/s)',
-              DateTime = "Date",
-              DOsat_percent = "DO_pSat",
-              SpCond_uScm = "Spec_Cond_uScm",
-              Turbidity_NTU = "Turb_NTU")
-  
   ctd <- map(files_to_load, load_file) %>% #see function below. Using map() makes loading files faster
     dplyr::bind_rows()
   
@@ -45,6 +40,12 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
 
 #Function to load files
 load_file <- function(file){
+  lookup <- c(PAR_umolm2s  = "PAR",
+              DescRate_ms  = 'Descent Rate (m/s)',
+              DateTime = "Date",
+              DOsat_percent = "DO_pSat",
+              SpCond_uScm = "Spec_Cond_uScm",
+              Turbidity_NTU = "Turb_NTU")
   ctd = read_csv(paste0(ctd_cast_csvs, "/", file), show_col_types = F) 
   location <- sub("^[0-9]*_","",sub("\\.csv","",file))
   sn <- as.numeric(str_extract(location, "\\d{4}"))

@@ -1,0 +1,34 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+lakes	lter controlled vocabulary
+lake	cuahsi controlled vocabulary
+reservoir	cuahsi controlled vocabulary
+reservoirs	cuahsi controlled vocabulary
+high-frequency sensors	cuahsi controlled vocabulary
+water quality	lter controlled vocabulary
+water temperature	lter controlled vocabulary
+dissolved oxygen	lter controlled vocabulary
+conductivity	lter controlled vocabulary
+specific conductance	lter controlled vocabulary
+chlorophyll a	lter controlled vocabulary
+chlorophyll	lter controlled vocabulary
+pressure	lter controlled vocabulary
+fDOM	carey lab controlled vocabulary
+dissolved organic matter	carey lab controlled vocabulary
+total dissolved organic solids	carey lab controlled vocabulary
+phycocyanin	carey lab controlled vocabulary
+lake physics	carey lab controlled vocabulary
+water chemistry	lter controlled vocabulary
+physical properties	lter controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
+fluorescence	lter controlled vocabulary
+Virginia Reservoirs 	carey lab controlled vocabulary
+Virginia Reservoirs LTREB 	carey lab controlled vocabulary
+LTREB 	carey lab controlled vocabulary
+CCR	carey lab controlled vocabulary
+CCRCatwalk	carey lab controlled vocabulary
+Catwalk	carey lab controlled vocabulary
+sensors	carey lab controlled vocabulary
+HOBOs	carey lab controlled vocabulary

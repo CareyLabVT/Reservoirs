@@ -1,0 +1,6 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
+Site	Sampling site within each reservoir; 51=Deep hole or site nearest to the dam in the reservoir, attached to the platform.	numeric	dimensionless		NA	value is missing
+Position	The position number of the sensor as described in the metadata	numeric	number		NA	value is missing
+Depth_from_surface	The depth of the sensors when the reservoir is at full pond	numeric	meter		NA	value is missing
+Offset	The offset to determine the depth of the sensor from the surface of the water	numeric	meter		NA	value is missing

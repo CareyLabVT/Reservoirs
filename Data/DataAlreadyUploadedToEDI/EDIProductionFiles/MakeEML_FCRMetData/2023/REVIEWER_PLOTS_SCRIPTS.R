@@ -1,4 +1,4 @@
-# This script is used by the EDI data pacakge reviewer to visualize a few plots for QAQC purposes
+# This script is used by the EDI data package reviewer to visualize a few plots for QAQC purposes
 # By: Adrienne Breef-Pilz
 
 #### Load Packages ####
@@ -10,12 +10,12 @@ pacman::p_load(tidyverse, lubridate, scattermore)
 
 # SECTION YOU NEED TO CHANGE
 # Need to update the URL each time from EDI
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/143/23/02d36541de9088f2dd99d79dc3a7a853" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/143/27/d4c74bbb3b86ea293e5c52136347fbb0" 
 
 # CHANGE HERE Current Start and ends times
 
-current_time_start="2022-01-01 00:00:00, tz=UTC"
-current_time_end="2022-12-31 23:59:00, tz=UTC"
+current_time_start="2023-01-01 00:00:00, tz=UTC"
+current_time_end="2023-12-31 23:59:00, tz=UTC"
 
 # DON'T NEED TO CHANGE ANYTHING BELOW HERE
 
@@ -58,7 +58,7 @@ all_plot<-function(Var){
 # Use the function and pick a variable to plot. Put variable in quotes
 # Below these are examples. Choose variables you think are worth looking at
 
-all_plot(Var="ThermistorTemp_C_1")
+all_plot(Var="PAR_Total_mmol_m2")
 
 all_plot(Var="RDO_mgL_6")
                

@@ -1,4 +1,4 @@
-keyword	keyword Thesaurus
+keyword	keywordThesaurus
 Carey Lab	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
 Smart Reservoir	carey lab controlled vocabulary
@@ -23,3 +23,11 @@ wind speed	cuahsi controlled vocabulary
 wind velocity	cuahsi controlled vocabulary
 barometric pressure	cuahsi controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
+LTREB 	carey lab controlled vocabulary
+Virginia Reservoirs LTREB 	carey lab controlled vocabulary
+Virginia Reservoirs  	carey lab controlled vocabulary
+Met 	carey lab controlled vocabulary
+sensors 	carey lab controlled vocabulary
+met data  	carey lab controlled vocabulary
+FCR 	carey lab controlled vocabulary
+FCRMet  	carey lab controlled vocabulary

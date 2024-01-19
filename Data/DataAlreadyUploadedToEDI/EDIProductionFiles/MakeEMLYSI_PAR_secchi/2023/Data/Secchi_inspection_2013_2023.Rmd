@@ -1,0 +1,109 @@
+---
+title: "Secchi_inspection_2013_2023"
+author: "Austin Delany"
+date: "2023-12-08"
+output: html_document
+---
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate)
+```
+
+
+```{r read in current and historic data}
+current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv', col_types = cols())
+#note that this file path doesn't not work for HLW - need to replace "~/Reservoirs" with "."
+#and make sure knit directory is set to project directory
+
+historic_file <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052', col_types = cols())
+
+secchi <- bind_rows(current_file, historic_file)
+```
+
+```{r}
+#source L1 functin to run all data through QAQC process
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
+
+secchi_cleaned <- secchi_qaqc(data_file = secchi,
+            gsheet_data = FALSE,
+            maintenance_file = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv',
+            outfile = NULL)
+
+```
+
+
+```{r make df longer}
+#------------------------------------------------------------------------------#
+#### Secchi diagnostic plots #### 
+secchi_long <- secchi_cleaned %>%
+  mutate(year = as.factor(year(DateTime)), day = yday(DateTime))
+```
+
+
+```{r}
+# Plot range of values per year for each reservoir; 
+# annual mean value indicated with large black dot
+ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
+  geom_point(size=1) +
+  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
+  facet_grid(. ~ Reservoir, scales= 'free_x') +
+  scale_x_discrete("Date", breaks=seq(2013,2019,1)) +
+  scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+```
+
+```{r}
+# All reservoirs time series 
+ggplot(secchi_long, aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
+  geom_point(size=1) +
+  facet_grid(. ~ Reservoir, scales= 'free_x') +
+  scale_x_datetime("Date", date_breaks= "6 months", date_labels = "%b %Y") +
+  scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+#ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Figures/Secchi_months.jpg"),width=3.5, height=4)
+```
+
+```{r}
+# Time series for each reservoir by julian day (see interannual varaibility)
+#jpeg("Secchi_JulianDay.jpg", width = 6, height = 5, units = "in",res = 300)
+ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
+  geom_point(size=2) + 
+  facet_grid(Reservoir ~ ., scales= 'free_y') +
+  scale_x_continuous("Julian day", limits=c(10,315), breaks=seq(50,300,50))+
+  scale_y_reverse("Secchi depth (m)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='bottom')
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2022/Figures/Secchi_JulianDay.jpg"),width=3.5, height=4)
+```
+
+```{r}
+#find duplicate rows
+secchi_dup <- secchi_cleaned |> 
+  group_by(Reservoir, Site, DateTime) |> 
+  mutate(n = n()) |> 
+  filter(n > 1)
+
+#catch a couple of manual errors from previous years (should be able to delete this when we read in gsheets from each year)
+secchi_cleaned$Site[secchi_cleaned$DateTime == "2022-05-09 11:03:00" &
+                 secchi_cleaned$Secchi_m == 1.50] <- 40
+
+secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" & Secchi_m == 1.35))
+
+```
+
+
+```{r save the data}
+write.csv(secchi_cleaned,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
+#replace "~/Reservoirs" with "."
+```
+
+```{r}
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/Secchi_MaintenanceLog_2013_2023.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/Secchi_qaqc_2013_2023.R")
+```
+

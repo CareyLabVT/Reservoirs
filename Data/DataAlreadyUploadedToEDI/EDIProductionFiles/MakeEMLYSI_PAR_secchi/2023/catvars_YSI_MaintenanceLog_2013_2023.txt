@@ -1,0 +1,10 @@
+attributeName	code	definition
+DataStream	YSI	data stream
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+notes	fix digitizing error	notes
+notes	value is suspect and should be changed to NA	notes
+start_parameter	DO_mgL	start parameter
+start_parameter	DOsat_percent	start parameter
+start_parameter	Site	start parameter
+flag	6	digitizing error

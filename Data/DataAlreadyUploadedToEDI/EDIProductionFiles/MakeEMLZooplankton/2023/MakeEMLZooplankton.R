@@ -52,7 +52,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
-                          data.table = c("zooplankton_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                          data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
                                          "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
                           write.file = TRUE)
 
@@ -60,7 +60,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                              data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
-                             data.table = c("zooplankton_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+                             data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
                                             "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
                              empty = TRUE,
                              write.file = TRUE)
@@ -77,19 +77,19 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
-  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
-  data.table = c("zooplankton_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+  data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
                  "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "QAQC_zooplankton_2014_2022.R",
+  other.entity = "zoop_qaqc_2014_2022.R",
   other.entity.description = "Zooplankton QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.16') #reserve new staging environment package id each year
+  package.id = 'edi.1090.23') #reserve new staging environment package id each year
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment
@@ -98,17 +98,17 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
-  dataset.title = "Crustacean zooplankton density and biomass and rotifer density for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
-  data.table = c("zooplankton_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
+  data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
                  "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "QAQC_zooplankton_2014_2022.R",
+  other.entity = "zoop_qaqc_2014_2022.R",
   other.entity.description = "Zooplankton QAQC script",
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.197.2') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
-  # 197.3 for 2023 pub
+  # 197.3 for 2024 pub

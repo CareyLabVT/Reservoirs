@@ -6,13 +6,10 @@ output: html_document
 ---
 
 This is the visual inspection script for Filtered Chlorophyll. 
-
-From ABP: This is a template to make your visual inspection script. It does not have to be an R Markdown but I like then especially the knit function so I can send the plots to coauthors. Make sure all of the columns get plotted even ones you think might not be that relevant. 
+If running for EDI Dayz, start at line 43 and update the pasta with the most recent staged version.
 
 ## R Markdown Guide
-
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
 ```{r setup packages, include=FALSE}
@@ -20,7 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet)
 ```
-
 
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI}
@@ -31,8 +27,6 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
  historic <-read_csv(infile1)
 ```
-
-
 **Read in L1 file**
 Set L1 file to NULL if not yet made.
 Need to change this to the GITHUB Link!!!
@@ -43,7 +37,14 @@ L1 <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI
 ```{r Bind historic and L1 files together}
 all_chla <- dplyr::bind_rows(historic, L1)
 ```
-
+START HERE FOR EDI DAYZ
+```{r Read in data from EDI: START HERE}
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/20/4d92727343445ad28046d57ac852b45f" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+all_chla <- read_csv(infile1)
+```
 **Check there are no NAs in Flag columns**
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
 There should be no NAs.
@@ -79,6 +80,7 @@ chla_YMD <- all_chla %>%
 head(chla_YMD)
 ```
 **Time Series for entire data set - Chlorophyll a**
+ENTIRE DATASETS WILL LIKELY DISPAY A MISSING DATA WARNING
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
@@ -94,6 +96,17 @@ ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Entire Dataset Timeseries - Pheophyton")
 ```
+**VALUES BELOW 0 FOR PHAEOPHYTIN**
+DOUBLE CHECK THAT THEY ARE ALL FLAGGED WITH A 1
+```{r PHAEOPHYTIN VALS BELOW 0}
+#check the flag column
+pheo_below0 <- subset(all_chla, Pheo_ugL <= 0)
+#these are all flagged as 4 or 45, "pigment in extract below detection"
+#Do we want to change these negative values to 0 in the future?
+pheo_below0
+```
+
+
 **All Sites, All Years, Monthly Mean - Chlorophyll a**
 ```{r All Sites, All Years, Monthly Mean - Chlorophyll a}
 # Facetted plot of the range of each reservoir for each year and the mean of the range
@@ -201,7 +214,7 @@ Flag_Pheo_ugL	1	    Sample below detection
 Flag_Pheo_ugL	2	    Sample not taken  
 Flag_Pheo_ugL	3	    Duplicate check failed  
 Flag_Pheo_ugL	4	    Pigment in extract below detection (<34 ug/L)  
-Flag_Pheo_ugL	45	    Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
+Flag_Pheo_ugL	45	  Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
 Flag_Pheo_ugL	5	    Duplicate values were averaged  
 ```{r Subset to Current Year Only (2023) - Pheophyton}
 #subset data to FCR and BVR
@@ -219,15 +232,20 @@ ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Phe
 
 ```
 
+```{r Remove duplicate row}
+all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+```
+
 **Make new CSV with current and historic files**
 ```{r Make new CSV with current and historic files}
 # Need to decide on a naming convention for this file
+# Variable_startyear_endyear.csv
 write.csv(all_chla, "FiltChla_2014_2023.csv", row.names = F)
 ```
  Make site description file
 ```{r, eval = FALSE}
- # These lines of code make the csv of the site descriptions with lat and long
-  # Use Gsheet because you don't need to authenticate it.
+# These lines of code make the csv of the site descriptions with lat and long
+# Use Gsheet because you don't need to authenticate it.
  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
  #data <- current_df #This is the line you need to modify!

@@ -3,5 +3,5 @@
 "CTD_type"	"SBE"
 "Institute"	"Carey Lab, Virginia Tech"
 "Sampling_event"	"Sampling on 11-Jun-2021"
-"Cast_location"	"fcr50"
+"Cast_location"	"fcr50_0001"
 "User"	""

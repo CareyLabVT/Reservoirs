@@ -8,15 +8,16 @@ setwd("./Data/DataNotYetUploadedToEDI/UGGA/EDI publishing/")
 # Install and load EMLassemblyline
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+library(tidyverse)
 
 ## load historical data 
 historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
 
 #Load current data
-current_data <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_L1.csv')
+current_data <- read_csv('UGGA_L1.csv')
 
 ## combine all data
-flux_all <- bind_rows(current_data, historical_data)
+flux_all <- bind_rows(historical_data, current_data)
 min(flux_all$Date)
 max(flux_all$Date)
 
@@ -29,7 +30,7 @@ write.csv(flux_all, "UGGA_2018_2023.csv", row.names = F)
 #Load the library 
 library(googlesheets4)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
-data <- flux_all #This is the line you need to modify!
+data <- flux_all 
 trim_sites = function(data,sites){
   data_res_site=data%>% #Create a Reservoir/Site combo column
     mutate(res_site = trimws(paste0(Reservoir,Site)))
@@ -52,7 +53,7 @@ make_eml(path = getwd(),
                                     "Descriptions of sampling sites, including lat/long"),
          other.entity = c('RawData.zip', 
                           "UGGA_inspection_2018_2023.Rmd", 
-                          "UGGA_qaqc_2018_2023.R", 
+                          "UGGA_qaqc_2023.R", 
                           "UGGA_FluxCalR_2023.R"),
          other.entity.name = c('Raw UGGA files', 
                                "Data visualization script", 
@@ -66,4 +67,4 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.1")
+         package.id = "edi.1082.3") #edi.1082.2 is the most recent published version

@@ -1,4 +1,4 @@
-Date,Depth_m,Temp_C,CDOM_ugL,Chla_ugL,Phycoerythrin,Phycocyanin,Turb_NTU,Cond_uScm,Spec_Cond_uScm,DO_mgL,DO_pSat,PAR,Salinity,Descent Rate (m/s),Flag
+DateTime,Depth_m,Temp_C,CDOM_ugL,Chla_ugL,Phycoerythrin_ugL,Phycocyanin_ugL,Turbidity_NTU,Cond_uScm,SpCond_uScm,DO_mgL,DOsat_percent,PAR,Salinity,DescRate_ms ,Flag
 2023-09-12T11:03:39Z,-0.101,24.8803,2.43,4.7064,0,0.846,1.1848,32.182185,32.258,5.4937,66.621,1132.5,1.6873589958226205,0.023,0
 2023-09-12T11:03:39Z,-0.095,24.8792,2.43,4.6797,0,0.846,1.2299,32.177163,32.253,5.4976,66.664,1096.6,1.6871222642051662,0.024,0
 2023-09-12T11:03:39Z,-0.089,24.8785,2.34,4.714,0.0426,0.7614,1.2299,32.168661,32.246,5.5035,66.676,1086.2,1.6867603004671592,0.025,0

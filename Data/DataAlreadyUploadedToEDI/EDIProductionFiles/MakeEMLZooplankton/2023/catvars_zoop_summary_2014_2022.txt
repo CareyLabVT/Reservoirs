@@ -53,6 +53,6 @@ Taxon	Trichotria	Zooplankton Taxon
 Taxon	Tylotrocha	Zooplankton Taxon
 Taxon	bipalpus	Zooplankton Taxon
 Taxon	nauplius	Zooplankton Taxon
-Flag_Length	1	not measured/calculated
-Flag_Weight	1	not measured/calculated
-Flag_Biomass	1	not measured/calculated
+Flag_MeanLength_mm	1	not measured/calculated
+Flag_MeanWeight_ug	1	not measured/calculated
+Flag_Biomass_ugL	1	not measured/calculated

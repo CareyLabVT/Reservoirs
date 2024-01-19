@@ -3,5 +3,5 @@ Reservoir	Three-letter code corresponding to sampled reservoir	categorical	dimen
 Site	Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Secchi_m	Secchi disk depth	numeric	meter		NA	value is missing
-Flag_DateTime	"Data flag for DateTime; 0=time recorded, 1=no time recorded, generalized to noon"	numeric	dimensionless		NA	value is missing
-Flag_Secchi_m	"Data flag for Secchi depths; 0=not suspect, 1=sample not taken, 2=value corrected due to digitizing error, 3=value suspect"	numeric	dimensionless		NA	value is missing
+Flag_DateTime	Data flag for DateTime	categorical	dimensionless		NA	value is missing
+Flag_Secchi_m	Data flag for Secchi depths	categorical	dimensionless		NA	value is missing

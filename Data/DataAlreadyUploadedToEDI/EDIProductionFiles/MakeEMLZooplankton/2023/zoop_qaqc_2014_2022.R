@@ -1,4 +1,4 @@
-#Zooplankton QAQC script for visualizing and merging files
+#Zooplankton QAQC script for visualizing data and merging files
 #Created 5 Jul 2023
 
 #read in libraries
@@ -161,6 +161,9 @@ zoops_final$Taxon <- str_to_sentence(zoops_final$Taxon)
 #drop GWR schindler data that has a start depth of 12m and end depth of 9m (2016-10-17 09:00:00)
 zoops_final <- zoops_final |> filter(!(StartDepth_m==12 & EndDepth_m==9))
 
+#change end depth of 0 --> 0.1
+zoops_final$EndDepth_m[zoops_final$EndDepth_m==0] <- 0.1
+
 #make sure zoop # is numeric and remove rows that are NA
 zoop_dens <- zoop_dens |> 
   mutate(Zooplankton_No. = as.numeric(Zooplankton_No.)) |> 
@@ -176,7 +179,12 @@ zoops_final$DateTime <- format(zoops_final$DateTime, "%Y-%m-%d %H:%M:%S")
 zoop_dens$DateTime <- format(zoop_dens$DateTime, "%Y-%m-%d %H:%M:%S")
 zoop_biom$DateTime <- format(zoop_biom$DateTime, "%Y-%m-%d %H:%M:%S")
 
+#rename flags
+zoops_final <- zoops_final |> rename(Flag_MeanLength_mm = Flag_Length,
+                                     Flag_MeanWeight_ug = Flag_Weight,
+                                     Flag_Biomass_ugL = Flag_Biomass)
+
 #export final dfs
-write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zooplankton_summary_2014_2022.csv", row.names=F)
+write.csv(zoops_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zoop_summary_2014_2022.csv", row.names=F)
 write.csv(zoop_dens, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zoop_raw_dens_2019_2022.csv", row.names=F)
 write.csv(zoop_biom, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/zoop_raw_biom_2019_2022.csv", row.names=F)

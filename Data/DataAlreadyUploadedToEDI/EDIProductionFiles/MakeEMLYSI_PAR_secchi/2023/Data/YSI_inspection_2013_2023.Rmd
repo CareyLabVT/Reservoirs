@@ -36,14 +36,12 @@ profiles_cleaned <- ysi_qaqc(data_file = profiles,
 ```
 
 ```{r add additional columns}
-#add column for year
-profiles_cleaned_temp$year <- year(profiles$DateTime)
-
 #### YSI diagnostic plots #### 
-profiles_long <- profiles_cleaned_temp %>%
-  ungroup(.) %>%
-  select(-c(PAR_umolm2s:Flag_pH, Cond_uScm)) %>%
-  gather(metric, value, c(Temp_C:DOsat_percent,SpCond_uScm)) 
+profiles_long <- profiles_cleaned |>
+  ungroup() |>
+  mutate(year = year(DateTime)) |> 
+  select(-c(ORP_mV:Flag_pH)) |>
+  gather(metric, value, c(Temp_C:PAR_umolm2s)) 
 
 #value as numeric
 profiles_long$value<- as.numeric(profiles_long$value)
@@ -61,7 +59,7 @@ ggplot(subset(profiles, Reservoir == "BVR" | Reservoir=="FCR"), aes(x = DO_mgL, 
 # Plot all values
 ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
   geom_point(size=1) +
-  stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
+  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
   facet_grid(metric ~ Reservoir, scales= 'free_y') +
   scale_x_datetime("Date", date_breaks="2 months", date_labels = "%b %Y") +
   scale_y_continuous("") +
@@ -69,7 +67,7 @@ ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
 ```
 
 ```{r}
-# Deep hole time series for each reservoir
+# Deep hole time series for BVR
 ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
   facet_grid(metric ~ Reservoir, scales='free') +
@@ -77,7 +75,30 @@ ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
-ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023.jpg"),width=3.5, height=4)
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_bvr.jpg"),width=3.5, height=4)
+```
+```{r}
+# Deep hole time series for FCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="FCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Reservoir, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+```{r}
+# Deep hole time series for CCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Reservoir, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_ccr.jpg"),width=3.5, height=4)
 ```
 
 ```{r}
@@ -90,6 +111,51 @@ ggplot(subset(profiles_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
 ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+```{r}
+#just look at current year - fcr
+ggplot(subset(profiles_long, Reservoir=="FCR" & year(DateTime) %in% c(2023)), 
+       aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+```{r}
+#just look at current year - bvr (just temp)
+ggplot(subset(profiles_long,Reservoir=="BVR" & year(DateTime) %in% c(2023)), 
+       aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/BVR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+```{r}
+#just look at current year - ccr
+ggplot(subset(profiles_long, Reservoir=="CCR" & year(DateTime) %in% c(2023)), 
+       aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/CCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+```{r}
+#drop rows with NAs across all variables
+profiles_cleaned <- profiles_cleaned |> 
+  filter(!if_all(c(Temp_C:pH), is.na))
 ```
 
 

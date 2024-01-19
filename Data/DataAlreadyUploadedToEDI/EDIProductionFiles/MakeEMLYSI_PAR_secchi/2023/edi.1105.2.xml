@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1105.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1105.2" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -74,7 +74,7 @@
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>etipper@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2024-01-12</pubDate>
+    <pubDate>2024-01-18</pubDate>
     <abstract>
       <para>Discrete depth profiles of temperature, dissolved oxygen, oxidation-reduction potential, conductivity, specific conductance, and pH were collected with various handheld YSI water quality probes and discrete depth profiles of photosynthetic active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2023 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam and other in-reservoir transects. YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek, other inflows and outflows at Falling Creek, inflows and outflows at Beaverdam, and inflows at Carvins Cove. In 2021, YSI profiles were also collected from a littoral site in Beaverdam. Data were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February) in Falling Creek and Beaverdam Reservoirs; data coverage in the other three reservoirs varies among years. </para>
     </abstract>
@@ -83,7 +83,14 @@
       <keyword>Virginia Tech</keyword>
       <keyword>Western Virginia Water Authority</keyword>
       <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keyword>Carvins Cove Reservoir</keyword>
+      <keyword>Gatewood Reservoir</keyword>
+      <keyword>Spring Hollow Reservoir</keyword>
       <keyword>oxidation-reduction potential</keyword>
+      <keyword>LTREB</keyword>
+      <keyword>Virginia Reservoirs</keyword>
+      <keyword>Virginia Reservoirs LTREB</keyword>
       <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
@@ -103,9 +110,9 @@
     </keywordSet>
     <additionalInfo>
       <para>Authorship Contribution Statement: </para>
-      <para>CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2023. HLW led data publication and QAQC in 2023. ABP led the field crew and contributed substantially to sampling. ADD automated the datastream and developed the QAQC and visual inspection scripts.</para>
+      <para>"CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2023. HLW led data publication and QAQC in 2023. ABP led the field crew and contributed substantially to sampling. ADD automated the datastream and developed the QAQC and visual inspection scripts. MK, ET, and RK contributed to fieldwork, data digitization, and field monitoring preparations in 2023."</para>
       <para>Acknowledgments and historical contributions:</para>
-      <para>This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Mary Lofton and Katie Hoffman for providing helpful reviews of these data and metadata, and Quinn Thomas for inspiring and leading the new workflow in 2023.</para>
+      <para>"This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Mary Lofton and Katie Hoffman for providing helpful reviews of these data and metadata, and Quinn Thomas for inspiring and leading the new workflow in 2023."</para>
     </additionalInfo>
     <intellectualRights>
       <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.&#13;
@@ -184,15 +191,24 @@
     <methods>
       <methodStep>
         <description>
-          <para>FIELD SAMPLE COLLECTION</para>
-          <para>"At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the sediments using a YSI ProPlus with Quatro cable (pH, ORP, conductivity) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature). Specific conductance was measured in 2021-2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021 and 2022, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The dissolved oxygen probe cap was replaced on June 30th, 2021, at which point a two-point calibration was performed. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution."</para>
+          <para>SAMPLING TIMES&#13;
+"Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately November to March in 2014-2023. All date times are reported in local time."</para>
+          <para>FIELD SAMPLE COLLECTION&#13;
+"At each sampling site in each reservoir, temperature, dissolved oxygen (DO), conductivity, pH, and oxidation-reduction potential (ORP) were collected at discrete, approximately 1 m increments from the water surface to the sediments using a YSI ProPlus with Quatro cable (pH, ORP, conductivity)(2014-2017) and YSI ProODO optical dissolved oxygen meter (dissolved oxygen, temperature)(2017-2023). Specific conductance was measured in 2021-2022 using the EcoSense EC300A Conductivity Meter (conductivity, salinity, TDS, temperature). Additionally, in 2021 - 2023, we measured pH using an Ohaus Starter 300 pH meter. Dissolved oxygen was calibrated approximately weekly using the water-saturated air technique. The dissolved oxygen probe cap was replaced on June 30th, 2021, at which point a two-point calibration was performed. The pH sensor was calibrated approximately weekly using a series of three standardized pH solutions (pH 4, 7, 10) and the ORP sensor was calibrated approximately weekly using Zobell solution."</para>
+          <para>"Specific conductance was measured spoadically for a check on the streaming sensors, or in streams at Carvins Cove Reservoir. Therefore there are not a lot of observations compared to the other variables. "</para>
           <para>"Photosynthetic active radiation (PAR) was collected at discrete, approximately 1 m increments from the water surface to the depth of light extinction (~ 0 micromole m-2 s-1) using a LiCor LI-192 underwater quantum sensor. PAR was also measured in air approximately 0.1 m above the water surface; these depths are recorded as -0.1m."</para>
-          <para>"ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2022 are from the handheld pH meter described above."</para>
+          <para>"ORP was only collected in 2016 and 2017, while pH was only collected from 2014-2017 before these probes were removed from the YSI. Subsequent pH measurements included in this data package in 2021 and 2023 are from the handheld pH meter described above."</para>
           <para>"Secchi disk depth was measured using a standard 20 cm diameter circular Secchi disk attached to a calibrated rope. Secchi depth measurements were made without the aid of a plexiglass viewer. The disk was lowered from the shaded side of the boat or dock, and the water depths at which the disk disappeared while being lowered and reappeared while being raised were averaged to determine Secchi depth."</para>
           <para>"YSI and PAR profiles and Secchi depths were collected approximately fortnightly in the spring months (Mar. - May), weekly in the summer and early autumn (Jun. - Sept.), and monthly in the late autumn and winter (Oct. - Feb.) in Falling Creek and Beaverdam Reservoirs; data coverage in the other three reservoirs varies among years. Starting in 2018, times were included in this data product. Prior to 2018 or if the Flag_DateTime column is 1, the time recorded in the DateTime column is 12:00, as most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. For more information about nighttime sampling, see Doubek et al. 2018."</para>
           <para>"The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam (Site 50), a gauged weir on the primary inflow tributary at Falling Creek (Site 100), inflows and outflows to Falling Creek (Sites 01, 99, 101, 102, 200) and Beaverdam (Sites 40, 100, 200), inflows at Carvins Cove (Sites 100, 101, 200, 300, 301, 400, 500), and other in-reservoir transects in all reservoirs (Sites 10, 20, 30, 40, 45). A littoral site (Site 51) located near site 50 was also sampled at Beaverdam Reservoir in 2021. See site_descriptions.csv for coordinates and site descriptions of all sampling sites."</para>
-          <para>"This data package includes 2 data files (Secchi_depth_2013-2023 and YSI_PAR_profiles_2013-2023), QAQC R scripts (secchi_qaqc.R and ysi_qaqc.R), maintenance logs (secchi_maintenance_log.csv and ysi_maintenance_log.csv), visual inspection R scripts (Secchi_inspection_2013_2023.Rmd and YSI_inspection_2013_2023.Rmd), and sampling sites (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files."</para>
-          <para>"Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information."</para>
+          <para>DATA PACKAGE SUMMARY&#13;
+"This data package includes 2 data files (Secchi_depth_2013-2023 and YSI_PAR_profiles_2013-2023), QAQC R scripts (secchi_qaqc.R and ysi_qaqc.R), maintenance logs (secchi_maintenance_log.csv and ysi_maintenance_log.csv), visual inspection R scripts (Secchi_inspection_2013_2023.Rmd and YSI_inspection_2013_2023.Rmd), and sampling sites (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files."</para>
+          <para>QUALITY ASSURANCE AND QUALITY CONTROL OVERVIEW&#13;
+"The ysi_qaqc.R script reads in the maintenance log to automatically assign flags to data that 1) were not collected or not reliable due to instrument malfunction (flag = 2), 2) are identified to be suspect (flag = 5), or 3) were digitized incorrectly (flag=6). The remaning flags are defined as follows: flag =1 if data were not collected for a particular day/variable, flag = 3 if the data are below the detection limits specified in the QAQC script, and flag = 4 if any variable (besides temeprature) has a negative value. The secchi_qaqc.R script reads in the maintenance log to automatically assign flags to data that 1) were digitized incorrectly (flag = 2) or 2) are identified to be suspect (flag = 3). Data flag = 1 indicates that the Secchi depth was not taken on a particular day."</para>
+          <para>SITE DESCRIPTIONS&#13;
+"The site_descriptions.csv provides details about each sampling site where YSI, PAR, and Secchi data were collected."</para>
+          <para>WHOLE-ECOSYSTEM EXPERIMENTS&#13;
+"Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information."</para>
         </description>
       </methodStep>
     </methods>
@@ -405,21 +421,19 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DateTime</attributeName>
-          <attributeDefinition>Data flag for DateTime; 0=time recorded, 1=no time recorded, generalized to noon</attributeDefinition>
-          <storageType>float</storageType>
+          <attributeDefinition>Data flag for DateTime</attributeDefinition>
+          <storageType>string</storageType>
           <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>whole</numberType>
-                <bounds>
-                  <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">1</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>no time recorded, generalized to noon</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
           </measurementScale>
           <missingValueCode>
             <code>NA</code>
@@ -428,21 +442,27 @@
         </attribute>
         <attribute>
           <attributeName>Flag_Secchi_m</attributeName>
-          <attributeDefinition>Data flag for Secchi depths; 0=not suspect, 1=sample not taken, 2=value corrected due to digitizing error, 3=value suspect</attributeDefinition>
-          <storageType>float</storageType>
+          <attributeDefinition>Data flag for Secchi depths</attributeDefinition>
+          <storageType>string</storageType>
           <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>whole</numberType>
-                <bounds>
-                  <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">3</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>sample not taken</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>value corrected due to digitizing error</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>value suspect</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
           </measurementScale>
           <missingValueCode>
             <code>NA</code>
@@ -457,8 +477,8 @@
       <entityDescription>Discrete depths of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs</entityDescription>
       <physical>
         <objectName>YSI_PAR_profiles_2013-2023.csv</objectName>
-        <size unit="bytes">645232</size>
-        <authentication method="MD5">485fea3c03df990bc15d37575a0aa367</authentication>
+        <size unit="bytes">629870</size>
+        <authentication method="MD5">b936a9f731443fb0e0cc17449487d6e0</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -520,7 +540,7 @@
               <numericDomain>
                 <numberType>natural</numberType>
                 <bounds>
-                  <minimum exclusive="false">1</minimum>
+                  <minimum exclusive="false">10</minimum>
                   <maximum exclusive="false">500</maximum>
                 </bounds>
               </numericDomain>
@@ -755,7 +775,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DateTime</attributeName>
-          <attributeDefinition>Data flag for datetime; 0=Time recorded, 1= No time recorded, generalized to noon</attributeDefinition>
+          <attributeDefinition>Data flag for datetime</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -778,7 +798,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_Temp_C</attributeName>
-          <attributeDefinition>Data flag for temperature; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for water temperature</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -801,7 +821,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DO_mgL</attributeName>
-          <attributeDefinition>Data flag for dissolved oxygen (DO) concentration; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for dissolved oxygen (DO) concentration</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -824,7 +844,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_DOsat_percent</attributeName>
-          <attributeDefinition>Data flag for dissolved oxygen (DO) percent saturation; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for dissolved oxygen (DO) percent saturation</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -847,7 +867,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_Cond_uScm</attributeName>
-          <attributeDefinition>Data flag for conductivity; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for conductivity</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -870,7 +890,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_SpCond_uScm</attributeName>
-          <attributeDefinition>Data flag for specific conductance; 0=Not suspect, 1=Sample not taken, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for specific conductance</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -893,7 +913,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_PAR_umolm2s</attributeName>
-          <attributeDefinition>Data flag for photosynthetic active radiation (PAR); 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for photosynthetic active radiation (PAR)</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -916,7 +936,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_ORP_mV</attributeName>
-          <attributeDefinition>Data flag for ORP; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for ORP</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -939,7 +959,7 @@
         </attribute>
         <attribute>
           <attributeName>Flag_pH</attributeName>
-          <attributeDefinition>Data flag for pH; 0=Not suspect, 1=Sample not taken, 2=Instrument malfunction, 3=Sample below detection, 4=Negative value set to 0, 5=Suspect sample</attributeDefinition>
+          <attributeDefinition>Data flag for pH</attributeDefinition>
           <storageType>float</storageType>
           <measurementScale>
             <ratio>
@@ -961,7 +981,7 @@
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>8094</numberOfRecords>
+      <numberOfRecords>7889</numberOfRecords>
     </dataTable>
     <dataTable>
       <entityName>Secchi_MaintenanceLog_2013_2023.csv</entityName>
@@ -1608,6 +1628,36 @@
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>YSI_inspection_2013_2023.Rmd</entityName>
+      <entityDescription>YSI and PAR visualization script for full dataset</entityDescription>
+      <physical>
+        <objectName>YSI_inspection_2013_2023.Rmd</objectName>
+        <size unit="bytes">7556</size>
+        <authentication method="MD5">37bd5ed234e89bff03ed7f461d5e761a</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Secchi_inspection_2013_2023.Rmd</entityName>
+      <entityDescription>Secchi visualization script for full dataset</entityDescription>
+      <physical>
+        <objectName>Secchi_inspection_2013_2023.Rmd</objectName>
+        <size unit="bytes">4461</size>
+        <authentication method="MD5">b1545831b15d967cfb7e4dfd94e210ad</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
           </externallyDefinedFormat>
         </dataFormat>
       </physical>

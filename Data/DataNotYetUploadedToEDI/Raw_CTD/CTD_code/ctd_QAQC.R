@@ -66,5 +66,3 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                      intermediate_file_name = intermediate_file_name,
                      output_file_name = output_file_name)
 }
-
-ctd_QAQC(start_date = "2023-01-01") #run function using default values

@@ -452,7 +452,8 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL),
             Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
             Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL),
-            Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL))%>%
+            Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL),
+            Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL))%>%
      # Average the dups
      group_by(Reservoir, Site, Date, Depth_m)%>%
      mutate(count = n())%>%

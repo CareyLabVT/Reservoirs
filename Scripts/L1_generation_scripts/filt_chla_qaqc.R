@@ -27,7 +27,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
   {
   
-  #### 1. Read in Maintenance file and the Raw files from the spec ####
+  #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
   log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
@@ -38,7 +38,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
   
   log <- log_read
   
-  ### 1.2 Select files from current year ####
+  ### 1.2 Select files from current year 
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
   
@@ -73,7 +73,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    }
  }
 
- #### 1.3 Read in files ####
+ #### 1.3 Read in files 
  
 # Create a blank data frame to use in the for loop below
  out.file<-NULL
@@ -105,7 +105,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  }
  
  
- ### 1.4  Label observations ####
+ ### 1.4  Label observations 
  
  
  
@@ -165,7 +165,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Sample_date = as.Date(Sample_date2) # put date in format
    )
    
- ### 2.2 read in filtering log ####
+ ### 2.2 read in filtering log 
  
  filtering_log <- gsheet::gsheet2tbl(filtering_log)
  
@@ -178,7 +178,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    )%>%
    select(ResSite, Depth,Sample_date, Rep, Vol_filt_mL, Final_vol_extract_mL, Comments)
  
- ### 3. Combine with the filtering log ####
+ ### 3. Combine with the filtering log 
  comb <- left_join(res_samp2, filtering_log2, 
                    by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep"))
  
@@ -191,7 +191,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Final_vol_extract_mL = ifelse(samp_type=="eth_blank",final_vol_extract, Final_vol_extract_mL)
    )
  
- ### 4. Take out values based on the Maintenance Log ####
+ ### 4. Take out values based on the Maintenance Log 
  
  ## Define Maintenance Flags HERE:
  
@@ -203,7 +203,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      Flag_Pheo_ugL  = 0
    )
  
- ### 4.1 Set up the Values to be used ####
+ ### 4.1 Set up the Values to be used 
  # modify raw_df based on the information in the log   
  
  for(i in 1:nrow(log)){
@@ -260,7 +260,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                   "Flag_Pheo_ugL")
    
    
-   ### 4.2 Actually remove values in the maintenance log from the data frame ####
+   ### 4.2 Actually remove values in the maintenance log from the data frame 
    ## This is where information in the maintenance log gets removed. 
    # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
    
@@ -289,7 +289,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
  
  
- ### 5. Get the Chla concentration from wavelengths from Spec ####
+ ### 5. Get the Chla concentration from wavelengths from Spec 
  
  # Re run this because we changed some of Sample.IDs in the maintenance log 
  # because before and after were mixed up
@@ -309,7 +309,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
  # The calculations are from BNN Chla processing excel sheet
 
- ### 5.1 Separate the wavelength by before acid and after and then merge together wider ####
+ ### 5.1 Separate the wavelength by before acid and after and then merge together wider 
  
  before_comb2 <- raw_df2%>%
    filter(Flag_Chla_ugL!=2)%>%
@@ -349,7 +349,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
                       by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth","Rep", "Sample_date",
                             "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes"))
  
-### 5.2 Claculate the concentration of Chla in ugL #### 
+### 5.2 Claculate the concentration of Chla in ugL 
  
  comb3_calc <- comb3%>%
    mutate(
@@ -365,7 +365,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
  
   diff_be_af = before_acid-after_acid)
  
- ### 5.21 Get the average blanks for each processing date ####
+ ### 5.21 Get the average blanks for each processing date 
 
  avg_e_blank <- comb3_calc%>%
    filter(samp_type=="eth_blank")%>%
@@ -379,7 +379,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
    
    comb4_calc <- left_join(comb3_calc, avg_e_blank, by="Date_processed")
    
-   ### 5.22 Now finish the calculations ####
+   ### 5.22 Now finish the calculations 
    
    comb5_calc <- comb4_calc%>%
      
@@ -439,7 +439,7 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
        Pheo_ugL = pheo_in_water
      )
 
-   ### 6. Further QAQC ####
+   ### 6. Further QAQC 
    
    chla_new<-chla_df%>%
      #filter(Sample_ID!="")%>%
@@ -481,16 +481,16 @@ filt_chla_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/
      
      #all_chla <- all_chla[all_chla$DateTime<ymd_hms(end_date),]
      
-     # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-     package_ID <- 'edi.555.3'
-     eml <- read_metadata(package_ID)
-     date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-     last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+     # # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+     # package_ID <- 'edi.555.3'
+     # eml <- read_metadata(package_ID)
+     # date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+     # last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+     # 
+     # ec_all <- ec_all |> filter(DateTime > last_edi_date)
      
-     ec_all <- ec_all |> filter(DateTime > last_edi_date)
      
-     
-  ### 7. Save L1 File ####
+  ### 7. Save L1 File 
    
      write.csv(chla_new, outfile, row.names=F)
   

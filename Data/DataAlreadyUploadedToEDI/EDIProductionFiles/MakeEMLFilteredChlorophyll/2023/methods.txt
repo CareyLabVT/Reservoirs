@@ -1,6 +1,6 @@
 SAMPLING TIMES AND LOCATION
 
-Sampling occurred between the hours of 9:00 and 15:00 EST and are denoted in the DateTime column as 12:00. Since 2021, we usually only sample from 1.6 m in BVR and FCR regularly, with occasional sampling in CCR and SNP. FCR and BVR were not sampled in 2017.
+Sampling occurred between the hours of 9:00 and 15:00 EST and are denoted in the DateTime column as 12:00. In 2014-2016, water column samples were collected approximately fortnightly from March-April and weekly from May-October at Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR), approximately fortnightly from May-August at Carvins Cove Reservoir, and approximately fortnightly from May-August in Gatewood and Spring Hollow Reservoirs. In 2014, samples were also collected approximately fortnightly from May-August in Smith Mountain Lake and sporadically from May-August in Claytor Lake. In 2018-2023, routine monitoring focused on 1.6 m at BVR and FCR, with sporadic sampling in CCR and SNP in June-August. In 2019, additional chlorophyll a samples were collected at multiple upstream and inflow sites along tributaries to FCR and BVR. 
 
 SAMPLE COLLECTION AND EQUIPMENT
 
@@ -12,11 +12,11 @@ Samples were extracted using a 96% ethanol solution at room temperature for 3-24
 
 FLAGGED DATA
 
-Data are flagged in the maintenance log, and flags are applied to the data using the QAQC script. Starting in 2023, all phaeophytin values that were below zero were set to zero. Prior to 2022, duplicated field and method replicate values were not flagged. In 2022-current, duplicate values were averaged and flagged with 5. If the values were averaged and the pigment in the extract of the averaged sample was below detection then these columns were flagged as 45, for a flag of 4 for pigment below detection and a flag of 5 for averaged duplicate value. For both chlorophyll and phaeophytin: 0=Value acceptable. No flag; 1 = Sample below detection; 2 = Sample not taken; 3 = Duplicate check failed; 4 = Pigment in extract below detection (<34 ug/L); 5  = Duplicate values were averaged. For phaeophytin only: 45 = Values were averaged and the pigment in the extract of the averaged sample was below detection
+Data are flagged in the maintenance log, and flags are applied to the data using the QAQC script. Starting in 2023, all phaeophytin values that were below zero were set to zero throughout the dataset. Prior to 2022, duplicated field and method replicate values were not flagged. In 2022-current, duplicate values were averaged and flagged with 5. If the values were averaged and the pigment in the extract of the averaged sample was below detection then these columns were flagged as 45, for a flag of 4 for pigment below detection and a flag of 5 for averaged duplicate value. For both chlorophyll and phaeophytin: 0=Value acceptable. No flag; 1 = Sample below detection; 2 = Sample not taken; 3 = Duplicate check failed; 4 = Pigment in extract below detection (<34 ug/L); 5  = Duplicate values were averaged. For phaeophytin only: 45 = Values were averaged and the pigment in the extract of the averaged sample was below detection
 
 SCRIPTS AND DATA
 
-This data package includes 1 data file (FiltChla_2014_2023), QAQC R script (filt_chla_qaqc_2023), maintenance log (Filt_Chla_Maintenance_Log), visual inspection R script (FiltChla_inspection_2014_2023), and sampling sites (site_descriptions). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files.
+This data package includes 1 data file (FiltChla_2014_2023), QAQC R script (FiltChla_qaqc_2023_2023), maintenance log (FiltChla_maintenancelog_2014_2023), visual inspection R script (FiltChla_inspection_2014_2023), and sampling sites (site_descriptions). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package in 2023 only; the visual inspection script provides code for plotting the data files.
 
 ADDITIONAL INFO
 

@@ -17,7 +17,7 @@
 
 pacman::p_load(oce, ocedata, tidyverse, lubridate)
 
-setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/") # Here
+#setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/") # Here
 # Load Carey Lab ctd functions
 source("./R/ctd_functions_automated.R") 
 source("./R/flag_seasonal_csvs.R")
@@ -43,8 +43,8 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   #If no new files, end QAQC
   if(length(file_names)==0){
     message("No new files could be processed")
-    #return()
-  }
+    return()
+  } 
   
   ## Generate csv versions of these files (stored in csv_outputs folder)
   for(file in file_names) {
@@ -66,5 +66,3 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                      intermediate_file_name = intermediate_file_name,
                      output_file_name = output_file_name)
 }
-
-ctd_QAQC(start_date = "2023-01-01") #run function using default values

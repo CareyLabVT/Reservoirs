@@ -42,7 +42,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   secchi_df <- secchi_df %>%
     mutate(Time = format(DateTime,"%H:%M:%S"),
            Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-           Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
+           Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
            Date = as.Date(DateTime),
            DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
            Hours = hour(DateTime),

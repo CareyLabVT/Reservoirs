@@ -1,14 +1,27 @@
+# Title: QAQC Function for Beaverdam Reservoir In Situ Water Sensors
+# This QAQC cleaning script was applied to create the data files included in this data package.
+# Author: Adrienne Breef-Pilz
+# First Developed Jan. 2023
+# Last edited: 19 Jan. 2024
+
+# This text is for EDI:
+#Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 
+# generate data from 2023 in the BVRPlatform_2020_2023.csv. This function uses an additional function find_depths.R
+# that is available with this package. 
+# This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
+
+
 qaqc_bvr <- function(
-            data_file = 'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',
-            data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/BVRplatform_L1.csv',
-            maintenance_file = './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/BVR_maintenance_log.csv',  
+            data_file,
+            data2_file,
+            maintenance_file,  
             output_file, 
             start_date = NULL, 
             end_date = NULL)
 {
   
   # Call the source function to get the depths
-  #source("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2023/find_depths.R")
+ 
   source_url("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R")
   
   #change column names
@@ -72,7 +85,9 @@ qaqc_bvr <- function(
   
   # convert NaN to NAs in the dataframe
   bvrdata[sapply(bvrdata, is.nan)] <- NA
-  
+
+  # tz check
+  bvrdata$DateTime <- force_tz(as.POSIXct(bvrdata$DateTime), tzone = "EST")
   
   ## read in maintenance file 
   log <- read_csv2(maintenance_file, col_types = cols(
@@ -81,6 +96,10 @@ qaqc_bvr <- function(
     TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
+
+# Set timezone as EST. Streaming sensors don't observe daylight savings
+  log$TIMESTAMP_start <- force_tz(as.POSIXct(log$TIMESTAMP_start), tzone = "EST")
+  log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end), tzone = "EST")
   
   ### identify the date subsetting for the data
   if (!is.null(start_date)){
@@ -372,7 +391,7 @@ qaqc_bvr <- function(
   ### Remove observations when sensors are out of the water ###
   
   #create depth column
-  bvrdata=bvrdata%>%mutate(Depth_m_13=LvlPressure_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
+  bvrdata=bvrdata%>%mutate(LvlDepth_m_13=LvlPressure_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
   
   
   # Using the find_depths function
@@ -404,7 +423,7 @@ qaqc_bvr <- function(
                                 EXOTemp_C_1.5, EXOCond_uScm_1.5, EXOSpCond_uScm_1.5, EXOTDS_mgL_1.5, EXODOsat_percent_1.5,
                                 EXODO_mgL_1.5, EXOChla_RFU_1.5, EXOChla_ugL_1.5, EXOBGAPC_RFU_1.5, EXOBGAPC_ugL_1.5,
                                 EXOfDOM_RFU_1.5, EXOfDOM_QSU_1.5,EXOTurbidity_FNU_1.5, EXOPressure_psi, EXODepth_m, EXOBattery_V, EXOCablepower_V,
-                                EXOWiper_V, LvlPressure_psi_13, Depth_m_13, LvlTemp_C_13, RECORD, CR6Battery_V, CR6Panel_Temp_C,
+                                EXOWiper_V, LvlPressure_psi_13, LvlDepth_m_13, LvlTemp_C_13, RECORD, CR6Battery_V, CR6Panel_Temp_C,
                                 Flag_ThermistorTemp_C_1:Flag_ThermistorTemp_C_13,Flag_RDO_mgL_6, Flag_RDOsat_percent_6, Flag_RDOTemp_C_6,
                                 Flag_RDO_mgL_13, Flag_RDOsat_percent_13, Flag_RDOTemp_C_13,Flag_EXOTemp_C_1.5, Flag_EXOCond_uScm_1.5, Flag_EXOSpCond_uScm_1.5,Flag_EXOTDS_mgL_1.5,
                                 Flag_EXODOsat_percent_1.5, Flag_EXODO_mgL_1.5, Flag_EXOChla_RFU_1.5,Flag_EXOChla_ugL_1.5, Flag_EXOBGAPC_RFU_1.5,Flag_EXOBGAPC_ugL_1.5,
@@ -415,17 +434,15 @@ qaqc_bvr <- function(
   bvrdata2 <- bvrdata2[order(bvrdata2$DateTime),]
   
   
-  # convert datetimes to characters so that they are properly formatted in the output file
-  bvrdata2$DateTime <- as.character(bvrdata2$DateTime)
-  
-  # subset to only the current year when using for EDI publishing
-  # current_time_end is set in Chunk 1 Set Up in Inflow_QAQC_Plots_2013_2022.Rmd
-  # if(is.null(start_date)){
-  #   bvrdata <- bvrdata[bvrdata$DateTime<ymd_hms(current_time_end),]
-  # }
-  
-  # write to output file
-  write_csv(bvrdata2, output_file)
+ # write_csv was giving the wrong times. Let's see if this is better. 
+  # If the output file is NULL then we are using it in a function and want the file returned and not saved. 
+  if (is.null(output_file)){
+    return(bvrdata2)
+  }else{
+    # convert datetimes to characters so that they are properly formatted in the output file
+    bvrdata2$DateTime <- as.character(bvrdata2$DateTime)
+    write_csv(bvrdata2, output_file)
+  }
   
 } 
 

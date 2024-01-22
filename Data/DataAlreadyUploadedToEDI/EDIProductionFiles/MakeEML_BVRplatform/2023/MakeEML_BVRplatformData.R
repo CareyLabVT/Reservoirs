@@ -26,8 +26,8 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('BVR_platform_data_2020_2023.csv','BVR_MaintenanceLog_2020_2023.csv',
-                'BVR_sensor_string_2016_2020.csv') ,
+ data.table = c('BVRPlatform_data_2020_2023.csv','BVRPlatform_maintenancelog_2020_2023.csv',
+                'BVR_sensor_string_2016_2020.csv', "BVR_Daily_WaterLevel_Vol_2015_2022.csv") ,
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -138,28 +138,33 @@ template_categorical_variables(path = folder,
 # package.id: enter the ID you obtained in Step 6
 
 make_eml(path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2016-2022",
-         data.table = c('BVR_platform_data_2020_2022.csv', 'BVR_sensor_string_2016_2020.csv', 'BVR_MaintenanceLog_2020_2022.csv'),
-         data.table.name = c('BVR_platform_data_2020_2022', 'BVR_sensor_string_2016_2020', 'BVR_MaintenanceLog_2020_2022'), 
-         data.table.description = c('Water quality parameters measured at Beaverdam Reservoir during 2020-2022',
-                                    'Water quality parameters measured at Beaverdam Reservoir during 2016-2020',
-                                    'Maintenance Log for BVR_platform_data_2020_2022 to record maintenance or outliers in the data set. Used in QAQC_BVR_platform_2020_2022.Rmd'),
-         other.entity = c('BVR_platform_function_2020_2022.R', 'QAQC_BVR_platform_2020_2022.Rmd', 'BVR_Depth_offsets_2020_2022.csv',
-                           'BVR_sort_by_depth_2020_2022.R', 'BVR_sensorstring_Collate_QAQC_2016_2020.R'),
-         other.entity.name = c('BVR_platform_function_2020_2022', 'QAQC_BVR_platform_2020_2022', 'BVR_Depth_offsets_2020_2022',
-                               'BVR_sort_by_depth_2020_2022', 'BVR_sensorstring_Collate_QAQC_2016_2020'),
-         other.entity.description = c('QAQC function used in QAQC_BVR_platform_2020_2022.Rmd to collate the data and take out observations from the maintenance log and other outliers.',
-                                      'Script that uses the function in BVR_platform_function_2020_2022.R and creates QAQC plots and final csv for data publication',
-                                      'The offsets for sensors in BVR_platform_data_2020_2022 to determine the depth of the observations as the water level changes. Use with BVR_sort_by_depth_2020_2022.R', 
-                                      'Script that gives a depth to each observation which uses the offsets from BVR_Depth_offsets_2020_2022.csv',
-                                      'Script that collates and QAQCs the files for BVR_sensor_string_2016_2020.R'),
-         temporal.coverage = c("2016-07-21", "2022-12-31"),
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2015-2023",
+         data.table = c('BVRPlatform_2020_2023.csv', 'BVRPlatform_maintenancelog_2020_2023.csv', 'BVRPlatform_Depth_offsets_2020_2023.csv',
+                        'BVR_sensor_string_2016_2020.csv', 'BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv'),
+         data.table.name = c('BVRPlatform_2020_2023', 'BVRPlatform_maintenancelog_2020_2023', 'BVRPlatform_Depth_offsets_2020_2023',
+                             'BVR_sensor_string_2016_2020', 'BVR_Daily_WaterLevel_Vol_2015_2022_interp'), 
+         data.table.description = c("Water quality parameters measured at Beaverdam Reservoir during 2020-2023",
+                                    "BVR sensor maintenace log for waterquality sensors",
+                                    "BVR offsets for sensor depths",
+                                    "Water quality parameters measured at Beaverdam Reservoir during 2016-2020",
+                                    "Data file with interperted BVR water level and volume from 2015-2022, based on observations from the staff gauge and pressure transducer when it was installed"),
+         other.entity = c('BVRPlatform_qaqc_2020_2023.R', 'BVRPlatform_inspection_2020_2023.Rmd',
+                           'find_depths.R', 'Plot_function.R', 'BVR_sensorstring_Collate_QAQC_2016_2020.R', "WaterLevel_BVR_2015_2022.Rmd"),
+         other.entity.name = c('BVRPlatform_qaqc_2020_2023', 'BVRPlatform_inspection_2020_2023',
+                               'find_depths', 'Plot_function', 'BVR_sensorstring_Collate_QAQC_2016_2020', "WaterLevel_BVR_2015_2022"),
+         other.entity.description = c('Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
+                                      'Inspection script creates QAQC plots and downloads the necessary files for publication.', 
+                                      'Applying the depth offset and sorting by sensor depth',
+                                      'A function used to create the QAQC plots in the inspection script',
+                                      'Script that collates and QAQCs the files for BVR_sensor_string_2016_2020.csv',
+                                      'Script to make the BVR_Daily_WaterLevel_2015_2022_interp.csv file'),
+         temporal.coverage = c("2015-07-07", "2023-12-31"),
          #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.26") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         package.id = "edi.157.27") # Put your package.id here, followed by .1 (for 1st version). This is for staging
          #package.id = "edi.725.3") # This is for the final version
 
 

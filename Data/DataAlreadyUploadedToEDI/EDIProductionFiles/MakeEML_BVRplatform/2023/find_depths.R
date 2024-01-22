@@ -1,3 +1,12 @@
+# Title: Find depths based on the depth of the pressure transducer
+# This function assigns depths for each observation based on the depth of the pressure sensor at the bottom of 
+# the temperature string of sensors. It is based on how far sensors are from each other and the depth of the pressure
+# sensor when other sensors in the string are out of the water. 
+# Author: Adrienne Breef-Pilz wrote the original script and Austin Delany made edits
+# First developed: September 2023
+# Last Edit: 5 Jan. 2024
+
+
 find_depths <- function(data_file, # data_file = the file of most recent data either from EDI or GitHub. Currently reads in the L1 file
                         depth_offset,  # depth_offset = the file of depth of each sensor relative to each other. This file for BVR is on GitHub
                         output, # output = the path where you would like the data saved
@@ -76,8 +85,6 @@ find_depths <- function(data_file, # data_file = the file of most recent data ei
       long_depth <- long_depth |>
         dplyr::filter(!is.na(observation)) |> # take out readings that are NA
         dplyr::filter(!is.na(sensor_depth)) # remove observations if there is no depth associated with it
-    }else{
-      long_depth <- long_depth2 # rename the data frame
     }
 
   }else{
@@ -126,8 +133,7 @@ find_depths <- function(data_file, # data_file = the file of most recent data ei
       tidyr::pivot_wider(id_cols =  c(Reservoir, Site, DateTime), names_from = c("variable", "units", "Position"),
                          names_sep = "_",
                          values_from = "observation",
-                         values_fill = NA) |>
-      select(Reservoir:ThermistorTemp_C_10, ThermistorTemp_C_11:ThermistorTemp_C_13, RDO_mgL_6:LvlTemp_C_13)
+                         values_fill = NA)
 
     # Add the columns that were cut
 
@@ -137,12 +143,13 @@ find_depths <- function(data_file, # data_file = the file of most recent data ei
              starts_with("Flag"),
              contains("Depth"),
              starts_with("RECORD"),
-             starts_with("CR6"))
+             starts_with("CR"))
 
     # merge the two files together to get a file that looks like the one you started with except the observations above the
     # water are removed
 
-    final_depths <- merge(final_Temp,oth_sensors, by=(c("Reservoir", "Site", "DateTime")))
+    final_depths <- merge(final_Temp,oth_sensors, by=(c("Reservoir", "Site", "DateTime"))) |>
+      select(colnames(data))
 
 
   } else{

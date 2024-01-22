@@ -1,5 +1,8 @@
-# Functions for Sensors Visual Inspection 
+# Title: Functions for Sensors Visual Inspection 
 # Use in the markdown to create plots and for plotly to work
+# Author: Adrienne Breef-Pilz
+# First developed: 28 December 24
+# Last edited: 06 Jan 24
 
 all_plot<-function(Var, 
                    y_lab,  # This label can take an expression aka have the proper degrees C, 

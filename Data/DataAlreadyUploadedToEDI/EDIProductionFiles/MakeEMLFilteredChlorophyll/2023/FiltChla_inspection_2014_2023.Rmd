@@ -81,6 +81,7 @@ head(chla_YMD)
 ```
 **Time Series for entire data set - Chlorophyll a**
 ENTIRE DATASETS WILL LIKELY DISPAY A MISSING DATA WARNING
+Samples were not collected in 2017
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
@@ -100,12 +101,15 @@ ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
 DOUBLE CHECK THAT THEY ARE ALL FLAGGED WITH A 1
 ```{r PHAEOPHYTIN VALS BELOW 0}
 #check the flag column
-pheo_below0 <- subset(all_chla, Pheo_ugL <= 0)
+pheo_below0 <- subset(all_chla, Pheo_ugL < 0)
+pheo_below0
 #these are all flagged as 4 or 45, "pigment in extract below detection"
 #Do we want to change these negative values to 0 in the future?
-pheo_below0
-```
+#Yes, as of 2023
 
+#{r Set all Phaeophytin values that are below 0 to 0}
+all_chla <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
+```
 
 **All Sites, All Years, Monthly Mean - Chlorophyll a**
 ```{r All Sites, All Years, Monthly Mean - Chlorophyll a}
@@ -234,6 +238,14 @@ ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Phe
 
 ```{r Remove duplicate row}
 all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+```
+
+Set all Phaeophytin values that are below 0 to 0
+This should only affect old (prior to 2023) values that are below 0. Values below 0 should be addressed in the qaqc script from 2023 on. 
+This should have been done previously, but doublecheck here
+```{r Set all Phaeophytin values that are below 0 to 0}
+pheo_below01 <- subset(all_chla, Pheo_ugL < 0)
+# all_chla2 <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
 ```
 
 **Make new CSV with current and historic files**

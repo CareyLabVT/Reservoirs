@@ -5,7 +5,10 @@ Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	NA	Western 
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933016
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales	National Science Foundation	2327030
-Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management	National Science Foundation	2327030
+Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management	National Science Foundation	2318861
 Renato	J.	Figueiredo	University of Florida	renato@acis.ufl.edu	0000-0001-9841-6060	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933102
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Austin	D. 	Delany	Virginia Tech	addelany@vt.edu	0000-0002-2266-6300	creator			
+Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
+Abigail	S.L.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
+Heather	L.	Wander	Virginia Tech	hwander@vt.edu	0000-0002-3762-6045	creator			

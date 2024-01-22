@@ -1,6 +1,6 @@
 ## Script to *try* FluxCalR for calculating fluxes from UGGA data
 ## A Hounshell, 25 Jan 2021
-## Modified by ASL 19 Dec 2023
+## Modified by A. Lewis 12 Jan 2024
 
 # Script following: https://github.com/junbinzhao/FluxCalR
 
@@ -107,25 +107,33 @@ for (file in one_peak) {
 flux_output <- read_csv(paste0("processed_csvs/", list.files("processed_csvs")))
 
 #Fix time issues
-flux_output <- flux_output %>%
+flux_output2 <- flux_output %>%
   group_by(Date_real, Reservoir, Site) %>%
   mutate(Start = as_datetime(paste0(Date_real, Start)),
          End = as_datetime(paste0(Date_real, End)),
-         Time = as_datetime(paste0(Date_real, Time)),
+         Time2 = as_datetime(paste0(Date_real, Time)),
          Min_start = min(Start),
-         Start = Start - Min_start + Time,
-         End = End - Min_start + Time,
-         Date = Date_real) %>%
+         Start = Start - Min_start + Time2,
+         End = End - Min_start + Time2,
+         Date = Date_real,
+         Start = format(Start, format = "%H:%M"),
+         End = format(End, format = "%H:%M")) %>%
   ungroup() %>%
-  select(-Time, -Min_start, -Date_real)
+  select(-Min_start, -Date_real, -Time2) %>%
+  mutate(End_dif = as.POSIXct(End, format = "%H:%M")-as.POSIXct(Start, format = "%H:%M"),
+         End = ifelse(is.na(Time),
+                           format(as.POSIXct("12:00", format = "%H:%M")+End_dif,"%H:%M"),
+                           End),
+         Start = ifelse(is.na(Time),"12:00", Start))%>%
+dplyr::select(-End_dif, -Time)
 
 # Get together for publication to EDI
-flux_co2 <- flux_output %>% 
+flux_co2 <- flux_output2 %>% 
   filter(Gas == "CO2") %>% 
   rename(co2_slope_ppmS = Slope, co2_R2 = R2, co2_flux_umolCm2s = Flux) %>% 
   select(-Gas)
 
-flux_ch4 <- flux_output %>% 
+flux_ch4 <- flux_output2 %>% 
   filter(Gas == "CH4") %>% 
   rename(ch4_slope_ppmS = Slope, ch4_R2 = R2, ch4_flux_umolCm2s = Flux) %>% 
   select(-Gas)
@@ -140,7 +148,9 @@ flux_all <- left_join(flux_co2,flux_ch4,by=c("Num",
 
 flux_all <- flux_all %>% 
   rename(Rep = Num, Temp_C = Ta) %>% 
-  mutate(co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0)
+  mutate(co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0,
+         Start = format(Start, format = "%H:%M"),
+         End = format(End, format = "%H:%M"))
 
 # Export out fluxes
-write_csv(flux_all,"./2023_season_Flux_Output.csv", row.names = F)
+write.csv(flux_all,"./2023_season_Flux_Output.csv", row.names = F)

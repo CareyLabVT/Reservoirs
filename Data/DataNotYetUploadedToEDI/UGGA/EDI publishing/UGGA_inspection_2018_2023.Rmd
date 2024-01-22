@@ -1,5 +1,5 @@
 ---
-title: "Flux calc collation for EDI"
+title: "Visual inspection for EDI"
 author: "Abby Lewis"
 date: "1/6/2022"
 output: html_document
@@ -11,21 +11,20 @@ library(tidyverse)
 library(lubridate)
 ```
 
-QAQC
-```{r}
-## Script to visualize seasonal UGGA data
-## Abigail Lewis
-## created: 20 December 2023
-## last edit: 03 January 2024 (ADD)
+Script to visualize seasonal UGGA data
+Author: Abigail Lewis
+Created: 20 December 2023
+Last edit: 12 January 2024 (ASL)
 
+```{r}
 ## load historical data 
 historical_data  <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1082/2/dd66453fae01815ee574bd69bb9fb213") 
 
 #Load current data
-current_data <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_L1.csv')
+current_data <- read_csv('UGGA_L1.csv')
 
 ## combine all data
-flux_all <- bind_rows(current_data, historical_data)
+flux_all <- bind_rows(historical_data, current_data)
 
 #Plot all CH4
 flux_all%>%
@@ -66,4 +65,6 @@ flux_all%>%
   geom_point()+
   ylab("CO2 flux (µumol/m2/s)")+
   facet_wrap(~Reservoir)
+
+flux_all
 ```

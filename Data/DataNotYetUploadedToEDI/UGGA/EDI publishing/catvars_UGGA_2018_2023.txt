@@ -1,3 +1,11 @@
 attributeName	code	definition
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	FCR	Falling Creek Reservoir
+Flag_CO2Flux_umolCm2s	0	No issues
+Flag_CO2Flux_umolCm2s	1	R2 of slope is under 0.9 
+Flag_CH4Flux_umolCm2s	0	No issues
+Flag_CH4Flux_umolCm2s	1	R2 of slope is under 0.9 
+Flag_Start_time	0	No issues
+Flag_Start_time	1	"Issue with internal clock, time set to 12:00"
+Flag_End_time	0	No issues
+Flag_End_time	1	"Issue with internal clock, time set to 12:00"

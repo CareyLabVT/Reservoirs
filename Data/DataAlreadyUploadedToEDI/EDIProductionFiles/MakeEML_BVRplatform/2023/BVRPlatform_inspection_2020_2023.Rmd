@@ -54,7 +54,7 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
 #L1 <- read_csv("BVR_L1.csv")
 
-L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv")%>%rename("LvlDepth_m_13" = Depth_m_13)
+L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv")%>%rename(Depth_m_13 = LvlDepth_m_13)
 
 ```
 
@@ -138,7 +138,8 @@ QAQC Historical Files: If you need to QAQC the historical file then run it throu
 
 ```{r Run the QAQC function again if we need to, eval=FALSE, include=FALSE}
 
-# Run the QAQC function
+# Run the QAQC function 
+#crashes here! - says that Depth_m doesn't exist so issue with col names?
 qaqc_bvr(data_file= current_df,
          data2_file = NULL,
          maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", 

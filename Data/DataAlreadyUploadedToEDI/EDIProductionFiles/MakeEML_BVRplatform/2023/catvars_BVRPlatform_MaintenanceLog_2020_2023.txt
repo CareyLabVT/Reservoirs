@@ -10,7 +10,7 @@ end_parameter	RDOsat_percent_13	Dissolved Oxygen (DO) percent saturation at posi
 end_parameter	RDOsat_percent_6	Dissolved Oxygen (DO) percent saturation at position 6 as measured by the RDO Sensor
 end_parameter	ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (located about 0.5 m above sediments)
 flag	1	value removed due to maintenance and set to NA
-flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+flag	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
 flag	4	value removed due to fouling and set to NA
 flag	5	questionable value but left in the dataset
 flag	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor

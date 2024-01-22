@@ -75,9 +75,6 @@ current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
 
-<<<<<<< HEAD
-L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv")%>%rename(Depth_m_13 = LvlDepth_m_13)
-=======
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
   
 # # If No EDI file exists with all the years you want to look at
@@ -90,7 +87,6 @@ L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-
 # 
 # #reorder. Just to be certain everything is in order
 #   current_df<-current_df[order(current_df$DateTime),]
->>>>>>> 632578c1e3a2ca18b8f2029aef820caed80e0138
 
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
@@ -98,7 +94,7 @@ L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-
 
                                                                 ### CHANGE THIS NUMBER BELOW 
                                                                              ##      
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/27/c467263033e8e2bbc60410567f2531c2")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/27/6b78ab905a142b5dcc29044b83bae676")
 
  # Force files from EDI to have an EST timestamp
   current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
@@ -162,7 +158,7 @@ This section identifies if there are any duplicates, daily data, and sub daily g
 
 dups <- dups%>%
   select(DateTime, RECORD, ThermistorTemp_C_7,  
-         EXOTemp_C_1.5, EXOTemp_C_9, LvlPressure_psi_13)
+         EXOTemp_C_1.5, EXOTemp_C_9, LvlPressure_psi_13) #there is no EXOTemp_C_9 col????
 
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
@@ -205,24 +201,6 @@ The first row is the time for the first observation and then the subsequent obse
     }
   }
 ```
-
-<<<<<<< HEAD
-QAQC Historical Files: If you need to QAQC the historical file then run it through the qaqc function without start_date and end_date as NULL
-
-```{r Run the QAQC function again if we need to, eval=FALSE, include=FALSE}
-
-# Run the QAQC function 
-#crashes here! - says that Depth_m doesn't exist so issue with col names?
-qaqc_bvr(data_file= current_df,
-         data2_file = NULL,
-         maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", 
-         output_file = "new_df", 
-         start_date = NULL, 
-         end_date = NULL)
-
-```
-=======
->>>>>>> 632578c1e3a2ca18b8f2029aef820caed80e0138
 
 ## Read in the QAQC File and Check it out
 This section reads in the QAQC file and then you can look at the head, tail and structure. 
@@ -406,7 +384,7 @@ The arguments with = followed by a True means that they are the defaults and you
 ##### Plot Description:
 
 The plots below are:
-The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
 1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
 
 2. A time series of the historical and the current data just the qaqced values. 

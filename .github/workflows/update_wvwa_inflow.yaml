@@ -1,8 +1,8 @@
-name: Manual File QAQC
+name: WVWA Inflow QAQC
 on:
   workflow_dispatch:
   schedule:
-  - cron: "0 2 * * *"
+  - cron: "0 7 * * *"
   
 jobs:
   wvwa_manual_inflow:

@@ -1,8 +1,8 @@
-name: Manual File QAQC
+name: Eddy FLux QAQC
 on:
   workflow_dispatch:
   schedule:
-  - cron: "0 2 * * *"
+  - cron: "0 3 * * *"
   
 jobs:
   eddy_flux:

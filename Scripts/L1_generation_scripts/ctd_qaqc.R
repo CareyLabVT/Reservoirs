@@ -234,3 +234,7 @@ ctd_QAQC <- function(raw_downloads = "../../RawDownloads",
 ctd_QAQC(maintenance_file = '../../CTD_Maintenance_Log.csv',
          start_date = '2023-01-01', 
          end_date = '2023-12-31')
+
+## Call healthcheck
+RCurl::url.exists("https://hc-ping.com/8b6cfbb6-d9f0-4ab6-a22b-c1ee1e0ac184", timeout = 5)
+

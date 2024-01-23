@@ -388,3 +388,8 @@ eddypro_cleaning_function(
   gdrive = F, # Are the files on Google Drive. True or False
   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
   current_year = 2023)
+
+
+## Call healthcheck
+RCurl::url.exists("https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3", timeout = 5)
+

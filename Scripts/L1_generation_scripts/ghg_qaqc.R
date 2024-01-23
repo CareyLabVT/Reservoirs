@@ -681,3 +681,6 @@ ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
                 output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
                 MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
                 Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")
+
+## Call healthcheck
+RCurl::url.exists("https://hc-ping.com/46cfa878-1fd4-4ebb-abcc-87f84071c9ab", timeout = 5)

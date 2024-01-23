@@ -505,3 +505,6 @@ filt_chla_qaqc(
   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
 )
+
+## Call healthcheck
+RCurl::url.exists("https://hc-ping.com/1c65db49-72f3-42b7-8bab-9a675a376ba8", timeout = 5)

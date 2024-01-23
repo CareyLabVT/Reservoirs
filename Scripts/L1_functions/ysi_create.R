@@ -37,7 +37,7 @@ raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders
 raw_profiles <- raw_profiles %>%
   mutate(Time = format(DateTime,"%H:%M:%S"),
          Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-         Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
+         Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
          Date = as.Date(DateTime),
          DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
          Hours = hour(DateTime),

@@ -1,0 +1,35 @@
+name: WVWA Inflow QAQC
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 7 * * *"
+  
+jobs:
+  wvwa_manual_inflow:
+    needs: ctd
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    container:
+      image: rocker/tidyverse:4.2
+    steps:
+      - run: git config --system --add safe.directory '*'
+      
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Run automated target files
+        run: |
+          R -e 'remotes::install_version("pacman", version = "0.5.1")'
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/WVWA_inflow_collate.R
+      
+      - name: Commit and Push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull
+          git add Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1.csv    
+          git commit -m "Updating Manual Files" || echo "No changes to commit"
+          git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 

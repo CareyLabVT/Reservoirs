@@ -30,7 +30,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('FCRMet_2015_2023.csv', "FCRMet_MaintenanceLog_2015_2023.csv", "FCRMet_Infrad_DOY_Avg_2018.csv"))
+ data.table = c('FCRMet_2015_2023.csv', "FCRMet_maintenancelog_2015_2023.csv", "FCRMet_Infrad_DOY_Avg_2015_2017.csv"))
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -142,14 +142,14 @@ make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2023",
-         data.table = c('FCRMet_2015_2023.csv','FCRMet_maintenancelog_2015_2023.csv', 'FCRMet_Infrad_DOY_Avg_2018.csv'),
-         data.table.name = c('FCRMet_2015_2023','FCRMet_maintenancelog_2015_2023', 'FCRMet_Infrad_DOY_Avg_2018'),
+         data.table = c('FCRMet_2015_2023.csv','FCRMet_maintenancelog_2015_2023.csv', 'FCRMet_Infrad_DOY_Avg_2015_2017.csv'),
+         data.table.name = c('FCRMet_2015_2023','FCRMet_maintenancelog_2015_2023', 'FCRMet_Infrad_DOY_Avg_2015_2017'),
          data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2023',
                             'The log for all maintenance and outliers for the Met station that go into the QAQC script for 2015-2023',
-                            'Infrared average and standard deviation for day of year in 2018. The file is used in FCRMet_qaqc_2023 in the met_infrad argument.'),
-         other.entity = c('FCRMet_qaqc_2023.R', 'FCRMet_inspection_2015_2023.Rmd', 'Plotting_function.R'),
-         other.entity.name = c('FCRMet_qaqc_2023', 'FCRMet_inspection_2015_2023', 'Plotting_function'),
-         other.entity.description = c('Script used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.This script was used on observations in 2023.',
+                            'Infrared average and standard deviation for day of year from 2015-2017. The file is used in FCRMet_qaqc_2023 in the met_infrad argument.'),
+         other.entity = c('FCRMet_qaqc_2015_2023.R', 'FCRMet_inspection_2015_2023.Rmd', 'Plotting_function.R'),
+         other.entity.name = c('FCRMet_qaqc_2015_2023', 'FCRMet_inspection_2015_2023', 'Plotting_function'),
+         other.entity.description = c('Script used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function. This script was used on all observations from 2015-2023.',
                                       'Inspection script creates QAQC plots and downloads the necessary files for publication.',
                                       'A function used to create the QAQC plots in the FCRMet_inspection_2015_2023.Rmd script'),
          temporal.coverage = c("2015-07-07", "2023-12-31"),
@@ -158,7 +158,8 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.26") # Put your package.id here, for staging use "edi.143.#",for the final version package id for 2021 was "edi.389.6"
+         #package.id = "edi.143.29") # FOR STAGING ENVIORNMENT THE PACKAGE ID IS "edi.143.#"
+         package.id = 'edi.389.8') #FOR THE PRODUCTION ENVIORNMET THE PACKAGE ID IS "edi.389.#"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

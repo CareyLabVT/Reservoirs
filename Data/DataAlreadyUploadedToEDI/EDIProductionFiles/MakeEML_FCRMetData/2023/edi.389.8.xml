@@ -1,0 +1,1810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.389.8" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2023</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Austin</givenName>
+        <givenName>D.</givenName>
+        <surName>Delany</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>addelany@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-2266-6300</userId>
+    </creator>
+    <pubDate>2024-01-18</pubDate>
+    <abstract>
+      <para>This dataset consists of meteorological variables measured by a research-grade Campbell Scientific meteorological station deployed on the dam of Falling Creek Reservoir (37.3025, -79.83667). Falling Creek Reservoir (Vinton, Virginia, USA), is owned and operated by the Western Virginia Water Authority as a primary water source. The meteorological variables include photosynthetic active radiation, barometric pressure, ambient air temperature, relative humidity, rainfall, wind speed and direction, shortwave radiation, infrared radiation, and albedo. All variables were measured every 5 minutes from 2015-07-07 15:45:00 to 2015-07-13 11:28:00 (YYYY-MM-DD hh:mm:ss) and every minute thereafter to the end of the dataset at 2023-12-31 23:59:00. We applied substantial quality assurance/quality control protocols to the raw observations, as described in the methods.&#13;
+</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Smart Reservoir</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>LTREB</keyword>
+      <keyword>Virginia Reservoirs LTREB</keyword>
+      <keyword>Virginia Reservoirs</keyword>
+      <keyword>Met</keyword>
+      <keyword>sensors</keyword>
+      <keyword>met data</keyword>
+      <keyword>FCR</keyword>
+      <keyword>FCRMet</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Lake</keyword>
+      <keyword>reservoir</keyword>
+      <keyword>lakes</keyword>
+      <keyword>reservoirs</keyword>
+      <keyword>meteorology</keyword>
+      <keyword>high-frequency sensors</keyword>
+      <keyword>air temperature</keyword>
+      <keyword>relative humidity</keyword>
+      <keyword>PAR</keyword>
+      <keyword>photosynthetically active radiation</keyword>
+      <keyword>infared radiation</keyword>
+      <keyword>shortwave radiation</keyword>
+      <keyword>meteorological data</keyword>
+      <keyword>albedo</keyword>
+      <keyword>precipitation</keyword>
+      <keyword>rainfall</keyword>
+      <keyword>wind speed</keyword>
+      <keyword>wind velocity</keyword>
+      <keyword>barometric pressure</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Author Contribution Statement-&#13;
+CCC is the PI of the project and set up the FCR water quality monitoring program from 2013-present. ABP is the point person for the dataset and led sensor maintenance, sensor connectivity, and data management. The new data workflow in 2023 was implemented by ABP and ADD. ADD and ABP wrote QAQC workflow scripts. </para>
+      <para>Acknowledgements: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Quinn Thomas for initiating the new data workflow, Vahid Daneshmand for sensor connectivity, and Freya Olsson and Katie Hoffman for helpful reviews of this data package.</para>
+      <para>&#13;
+</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2015-07-07</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2023-12-31</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Data Collection Frequency:&#13;
+Meteorological data were collected from 2015 through 2023 using a research-grade meteorological (Met) station from Campbell Scientific (Logan, UT, USA) on the dam of Falling Creek Reservoir. Data were collected at 1-minute intervals, except for a brief period at the beginning of the dataset from 2015-07-07 16:45:00 to 2015-07-13 11:28:00 (YYYY-MM-DD hh:mm:ss), when data were recorded at 5-minute intervals. To correct for the difference in time interval of data collection, we divided the Rain_Total_mm variable by 5 minutes to get a rate of precipitation in millimeters per minute so that the precipitation data is comparable throughout the dataset; values that were changed in July 2015 were given a “flag 4” in the dataset. The time was changed on 2019-04-15 10:19 so all observations are recorded in the GMT -5 time zone (Eastern Standard time) without any time zone changes in the data record. Time was corrected in the FCRMet_qaqc_2015_2023.R script so all observations in the FCRMet_2015_2023.csv file are in Eastern Standard Time. </para>
+          <para>Site and Power Descriptions:&#13;
+The Met station is deployed on the dam of Falling Creek Reservoir (37.3025, -79.83667). The meteorological station is powered with a solar panel and lead acid battery. Using a regulator, the solar panel charges the battery, and the battery powers the CR3000 datalogger.</para>
+          <para>Data Quality Assurance/Quality Control (QA/QC) procedures: </para>
+          <para>Missing Data: &#13;
+Major gaps lasting longer than 1 day in the record occurred during these intervals: 2016-10-14 16:08:00 to 2016-12-19 15:21:00, 2017-02-06 10:05:00 to 2017-04-24 14:48:00, and 2018-03-19 11:05:00 to 2018-04-05 12:25:00. Sub-daily gaps occurred on 2015-07-13, 2016-07-25, 2016-10-14, 2017-10-09, 2018-05-21, 2018-09-24, 2019-02-08, 2019-04-22, 2021-02-08, 2021-08-17, 2022-04-05, 2022-06-27, 2022-07-05, 2022-07-15, 2023-01-24, 2023-06-26, and 2023-07-19.</para>
+          <para>Maintenance Log and QAQC:&#13;
+The Maintenance Log, FCRMet_maintenancelog_2015_2023.csv, is a file in which we record any maintenance on the Met station which needs to be removed from the data file. We also include dates when observations need to be changed or modified because of human error. The maintenance log then removes or flags problematic data using the qaqc_fcrmet function in the FCRMet_qaqc_2015_2023.R script. In addition to removing observations during maintenance, the script also flags and removes values that are outliers. Below, we describe those thresholds and situations. The years in the name of qaqc function indicate which years are run through the function. All raw files were run through the function from 2015 through 2023. </para>
+          <para>All QA/QC code used for the dataset is archived with this dataset (see FCRMet_qaqc_2015_2023.R). In addition to the qaqc script, we have included a visual inspection script which qaqcs all raw files, checks for duplicates and gaps in the file, checks for NAs in the flag columns, runs visual checks to make sure the maintenance log worked properly, creates qaqc plots for visual inspection of the data, writes the most recent data file to a csv, and downloads files and scripts to be uploaded with this data package. </para>
+          <para>&#13;
+Flag Descriptions:&#13;
+We set erroneous values due to maintenance as NA (flag 1) in the dataset. For all flag descriptions, see the data table metadata below. There is only one flag per an observation in some cases; flag 1 for maintenance overwrote other existing flags. All previously existing NAs due to missing observations other than maintenance were flagged as 2. Negative values were set to 0 for all meteorological variable columns, except AirTemp_C_Average and variables inside the data logger (Record, CR3000Battery_V,and CR3000Panel_Temp_C), and flagged as 3. Two other variables were flagged as 3: if the relative humidity was over 100%, it was set to 100% and if infrared radiation was recorded as an infinite value, it was set to NA. Outliers or obvious problems with the sensor were changed to NA and flagged as 4, while potentially questionable values that were left in the dataset were flagged as 5. </para>
+          <para/>
+          <para>Air Temperature and Relative Humidity:&#13;
+The AirTemp_Average_C variable received intensive QA/QC due to fouling of the sensor filter. After the first year of deployment and before replacement of the sensor filter in February 2019, the air temperature sensor exhibited more outliers than expected. We used the data from the initial year of deployment prior to fouling (2015) to develop a linear relationship to predict AirTemp_Average_C from CR3000Panel_temp_C, the Campbell logger panel temperature sensor, which did not exhibit any outliers or evidence of fouling. The 2015 relationship can be described by the following equation: AirTemp_Average_C = 1.627758(±0.004510, 1 SE) + 0.900781(±0.000252)×CR3000Panel_temp_C. This relationship’s adjusted R-squared value was 0.98. The residuals from this equation were: minimum: -7.3922, 1st quartile: -0.6315, median: 0.0244, 3rd quartile: 0.5602, and maximum: 11.0234. If any air temperature values were more than 3 standard deviations above the predictions from the linear model, we removed that value (flag 4) and substituted it with a new value calculated from the panel temperature and the linear equation. Any missing air temperature values were also estimated using this equation. Given that air temperature and relative humidity are measured with the same sensor, we flagged the time period from 2016-01-01 to 2018-09-18 (when the sensor was cleaned) for potentially higher humidity values, but left the observed values in the dataset flagged as 5.</para>
+          <para>Solar Radiation- Infrared and Shortwave:&#13;
+Infrared Radiation Up and Down variables were recorded in volts from 2015-07-07 16:45:00 to 2016-07-25 10:12:00. These values were corrected using equations from the manufacturer's manual: </para>
+          <para>InfraredRadiationUp_Average_W_m2 = InfraredRadiationUp_Average_W_m2 + 5.67*10^(-8) times (AirTemp_Average_C+273.15) to the 4th power </para>
+          <para>InfraredRadiationDown_Average_W_m2 = 5.67*10^(-8) times(AirTemp_Average_C + 273.15) to the 4th power</para>
+          <para>The InfraredRadiationDown_Average_W_m2 variable also received intensive QA/QC due to potential fouling of the sensor in 2018, 2019, 2020 and 2021. From 2018-08-02 to 2018-09-10, the sensor exhibited atypically low values which were alleviated after the sensor was cleaned on 2018-09-10 12:32:00. We used the data from the years before the fouling in 2018 (2015-2017) to calculate the mean and standard deviation of the variable by day of the year (1-366), as 2016 was a leap year. This file is FCRMet_Infrad_DOY_Avg_2015_2017.csv, which is saved with the data package. If values were not within 2 standard deviations of the mean on the given day of the year, they were corrected to the equation above (5.67*10^-8(AirTemp_Average_C+273.15)^4) and flagged with “flag 4”. We also used that equation to replace missing values when no data were recorded, and flagged those data with a 4. This happens in the FCRMet_qaqc_2015_2023.R script, which is saved with this package. </para>
+          <para>The ShortwaveRadiationUp_Average_W_m2 variable had higher than expected readings in 2018-09-05 12:00 to 2018-09-07 20:00, and 2020-05-31 00:00 to 2020-07-10 23:59. The higher-than-expected values in 2018 were due to sensor error and fouling that occurred before a cleaning on 2018-09-10 11:30. All values during that time were flagged and changed to NA. For the summer values in 2020, outliers were removed according to the outlier thresholds listed below (see Outlier Values section) and values between 1300-1499 W_m2 were flagged for questionable high values with flag 5.</para>
+          <para>PAR:&#13;
+PAR data greater than 5 umolm2s (average) and 1 mmol_m2 (total) during the night were changed to NA and flagged as 4. Daytime hours were determined using the getSunlightTimes function in the Suncalc package in R (Thieurmel, B., Elmarhraoui, A. (2019). suncalc: Compute Sun Position, Sunlight Phases, Moon Position and Lunar Phase. R package version 0.5.0.). We removed PAR values from the period when the Met station was recording observations every 5 minutes from 2015-07-07 15:45 - 2015-07-13 11:28 due to a programming error. From 2019-08-04 to 2019-08-05, 2019-08-15 to 2019-12-13, 2022-03-15 to 2022-04-04, and 2022-05-21 to 2022-07-15, PAR observations were set to NA due to probable sensor failure or fouling as the sensor recorded values near 0 for this period. This was also done in 2020 from 2020-07-03 11:56 to 2020-07-21 13:38 from 2020-11-01 12:37 to 2020-11-24 12:32, from 2020-12-01 09:54 to 2020-12-31 23:59. During the summer of 2021, PAR values were higher than normal. From 2021-05-01 00:00 to 2021-07-01 23:59, if PAR_Average_umolm2s was greater than 2500 or PAR _Total_mmol_m2 was greater than 200, the observation was set to NA and flagged with a 4. In the spring of 2022, the PAR sensor was malfunctioning and we removed the sensor on 2022-07-15 13:25:00 and replaced it with the one from Carvins Cove Met station (sensor ID number SN Q112618). After changing sensors, we observed much higher PAR_Total_mmol_m2 values than we normally see. After re-examining the program, we realized we had used the wrong multiplier. We flagged these observations in the FCRMet_maintenancelog_2015_2023.csv with flag 4 for a corrected value and corrected the values in FCRMet_qaqc_2015_2023.R. </para>
+          <para>Outlier Values: </para>
+          <para>The outlier thresholds were developed by comparison with the NOAA Roanoke Airport dataset. The Roanoke Airport is located ~10 km away from Falling Creek Reservoir. After previously described adjustments, outliers were set to NA and received a ‘flag 4’ in the dataset, following these outlier thresholds:</para>
+          <para>AirTemp_C_Average &gt; 40.6; &#13;
+InfaredRadiationUp_Average_W_m2 &lt; 150; &#13;
+InfaredRadiationDown_Average_W_m2 &lt;200 &amp; &gt;540; &#13;
+BP_Average_kPa &lt; 98.5; &#13;
+PAR_Total_mmol_m2 &gt; 200; &#13;
+ShortwaveRadiationUp_Average_W_m2 &gt; 1500; &#13;
+ShortwaveRadiationDown_Average_W_m2 &gt; 300; &#13;
+Albedo_Average_W_m2 &gt; 1000; &#13;
+Rain_Total_mm&gt;5</para>
+          <para>&#13;
+Instruments, manual, and serial numbers used between 2015 - current: </para>
+          <para>Campbell Scientific CR3000 Micrologger SERIAL NO. 10344 https://s.campbellsci.com/documents/us/manuals/cr3000.pdf;</para>
+          <para>Campbell Scientific PS84 84Ah Power Supply https://www.campbellsci.com/ps84;</para>
+          <para>RM Young 05103-L Wind Monitor SERIAL NO. WM138670 https://s.campbellsci.com/documents/us/manuals/05103.pdf;</para>
+          <para>Texas Electronics TE525WS-L Rain Gauge 0.01 in (0.254 mm) SERIAL NO. 63948-215 https://s.campbellsci.com/documents/us/manuals/te525.pdf;</para>
+          <para>Rotronic Hydroclip2 HC2S3-L Temperature and Relative Humidity Probe with RM Young 10 plate Solar Radiation Shield SERIAL NO. 0020017778 https://s.campbellsci.com/documents/us/manuals/hc2s3.pdf;</para>
+          <para>CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. L1130362 https://s.campbellsci.com/documents/us/manuals/cs106.pdf;</para>
+          <para>LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q52912 (2015- July 2022) LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q112618 (July 2022- current) https://s.campbellsci.com/documents/us/manuals/li190sb.pdf;</para>
+          <para>Hukseflux NR01 4-Component Net Radiometer SERIAL NO. 2383 https://s.campbellsci.com/documents/us/manuals/nr01.pdf.&#13;
+</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 2327030</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 2318861</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>University of Florida</organizationName>
+          <electronicMailAddress>renato@acis.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>FCRMet_2015_2023</entityName>
+      <entityDescription>All meteorological parameters measured at Falling Creek Reservoir during 2015-2023</entityDescription>
+      <physical>
+        <objectName>FCRMet_2015_2023.csv</objectName>
+        <size unit="bytes">1109835014</size>
+        <authentication method="MD5">43e50ab0fa02932170100f323776814b</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 50=Deep hole or site nearest to dam at Falling Creek Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Record</attributeName>
+          <attributeDefinition>The nth record collected since the instrument was turned on or the program on the CR3000 was altered (see maintenance log file)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">860882</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CR3000Battery_V</attributeName>
+          <attributeDefinition>The battery voltage of the CR3000 datalogger</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">12.08</minimum>
+                  <maximum exclusive="false">14.05</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CR3000Panel_Temp_C</attributeName>
+          <attributeDefinition>Panel temperature of the CR3000 data logger</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-17.53</minimum>
+                  <maximum exclusive="false">39.29</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>PAR_umolm2s_Average</attributeName>
+          <attributeDefinition>Photosynthetic active radiation averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>micromolesPerSecondPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2905</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>PAR_Total_mmol_m2</attributeName>
+          <attributeDefinition>Total photosynthetically active radiation over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>millimolesPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">174.3272</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>BP_Average_kPa</attributeName>
+          <attributeDefinition>Barometric pressure averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kilopascal</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">98.5</minimum>
+                  <maximum exclusive="false">104</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>AirTemp_C_Average</attributeName>
+          <attributeDefinition>Air temperature averaged over measurement interval. See metadata for QA/QC applied to this variable.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-18.02</minimum>
+                  <maximum exclusive="false">38.08</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>RH_percent</attributeName>
+          <attributeDefinition>Relative humidity at time of measurement</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>percent</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">4.118</minimum>
+                  <maximum exclusive="false">100</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rain_Total_mm</attributeName>
+          <attributeDefinition>Total rainfall over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>millimeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">3.556</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WindSpeed_Average_m_s</attributeName>
+          <attributeDefinition>Wind speed averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>metersPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">16.51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>WindDir_degrees</attributeName>
+          <attributeDefinition>Direction of wind at time of measurement</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">354.6</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ShortwaveRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Shortwave radiation facing the sky averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1497</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ShortwaveRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Shortwave radiation facing the reservoir averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">277.3</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>InfraredRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Infrared radiation facing the sky averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">163.9</minimum>
+                  <maximum exclusive="false">530.2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>InfraredRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Infrared radiation facing the reservoir averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">230.7</minimum>
+                  <maximum exclusive="false">531.996616060154</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Albedo_Average_W_m2</attributeName>
+          <attributeDefinition>Calculated from ShortwaveRadiationDown_Average_W_m2 divided by ShortwaveRadiationUp_Average_W_m2</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">115.5</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing or outlier (see metatdata)</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_PAR_umolm2s_Average</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sample not collected</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_PAR_umolm2s_Average</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_PAR_Total_mmol_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sample not collected</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_PAR_Total_mmol_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_BP_Average_kPa</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_BP_Average_kPa</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_AirTemp_C_Average</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_AirTemp_C_Average</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_RH_percent</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sample not collected</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>questionable value but left in dataset</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_RH_percent</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Rain_Total_mm</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_Rain_Total_mm</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WindSpeed_Average_m_s</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_WindSpeed_Average_m_s</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_WindDir_degrees</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_WindDir_degrees</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ShortwaveRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sample not collected</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>questionable value but left in dataset</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_ShortwaveRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ShortwaveRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_ShortwaveRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_InfraredRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_InfraredRadiationUp_Average_W_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_InfraredRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_InfraredRadiationDown_Average_W_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Albedo_Average_W_m2</attributeName>
+          <attributeDefinition>Data flag applying to associated variable.</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag applied</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>sample not collected</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0, percent greater than 100 and set to 100, or infinite values set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>missing flag</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Note_Albedo_Average_W_m2</attributeName>
+          <attributeDefinition>Additional information describing Flag for associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Additional information describing Flag for associated variable</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>no note for value</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>4224995</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>FCRMet_maintenancelog_2015_2023</entityName>
+      <entityDescription>The log for all maintenance and outliers for the Met station that go into the QAQC script for 2015-2023</entityDescription>
+      <physical>
+        <objectName>FCRMet_maintenancelog_2015_2023.csv</objectName>
+        <size unit="bytes">9156</size>
+        <authentication method="MD5">bc2fd1e98c970e1bcb992dccc4d1121c</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>;</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, FCR=Falling Creek Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 50=Deep hole or site nearest to dam at Falling Creek Reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DataStream</attributeName>
+          <attributeDefinition>Code corresponding to data set nickname; MET= meteorology sensors deployed near the met</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>MET</code>
+                    <definition>Meteorological sensors</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_start</attributeName>
+          <attributeDefinition>Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance started before the sensors were out</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_end</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance is on going and has no current end date</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>start_parameter</attributeName>
+          <attributeDefinition>Name of start variable in the sequence corresponding to met sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>AirTemp_C_Average</code>
+                    <definition>Air temperature averaged over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>DateTime</code>
+                    <definition>Date and Time of Recorded observation</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>PAR_Total_mmol_m2</code>
+                    <definition>Total photosynthetically active radiation over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>PAR_umolm2s_Average</code>
+                    <definition>Photosynthetically active radiation averaged over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>RH_percent</code>
+                    <definition>Relative humidity at time of measurement</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>Rain_Total_mm</code>
+                    <definition>Total rainfall over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>ShortwaveRadiationDown_Average_W_m2</code>
+                    <definition>Shortwave radiation facing the reservoir averaged over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>ShortwaveRadiationUp_Average_W_m2</code>
+                    <definition>Shortwave radiation facing the sky averaged over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WindDir_degrees</code>
+                    <definition>Direction of wind at time of measurement</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WindSpeed_Average_m_s</code>
+                    <definition>Wind speed averaged over measurement interval</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>end_parameter</attributeName>
+          <attributeDefinition>Name of end variable in the sequence corresponding to met sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Albedo_Average_W_m2</code>
+                    <definition>Calculated from ShortwaveRadiationDown_Average_W_m2 divided by ShortwaveRadiationUp_Average_W_m2</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>InfraredRadiationUp_Average_W_m2</code>
+                    <definition>Infrared radiation facing the sky averaged over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>PAR_Total_mmol_m2</code>
+                    <definition>Total photosynthetically active radiation over measurement interval</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>RH_percent</code>
+                    <definition>Relative humidity at time of measurement</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WindDir_degrees</code>
+                    <definition>Direction of wind at time of measurement</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>WindSpeed_Average_m_s</code>
+                    <definition>Wind speed averaged over measurement interval</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag</attributeName>
+          <attributeDefinition>Data flag applied to associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>potentially questionable value and changed or set to NA, see note</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>questionable value but left in dataset</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>update_value</attributeName>
+          <attributeDefinition>New value to update the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>New value to update the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No updated value used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>adjustment_code</attributeName>
+          <attributeDefinition>Chunks of code or a numeric offset to change the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Chunks of code or a numeric offset to change the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No adjustment code used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>notes</attributeName>
+          <attributeDefinition>Notes from the field crew on the maintenance or reason for changing the data</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Notes from the field crew on the maintenance or reason for changing the data</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No Note recorded</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>60</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>FCRMet_Infrad_DOY_Avg_2015_2017</entityName>
+      <entityDescription>Infrared average and standard deviation for day of year from 2015-2017. The file is used in FCRMet_qaqc_2023 in the met_infrad argument.</entityDescription>
+      <physical>
+        <objectName>FCRMet_Infrad_DOY_Avg_2015_2017.csv</objectName>
+        <size unit="bytes">14470</size>
+        <authentication method="MD5">6d50623db65f08ac41a9c1d7387ec0b7</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>DOY</attributeName>
+          <attributeDefinition>Day of year</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">366</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No value found</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>infradavg</attributeName>
+          <attributeDefinition>average infrared radiation down measurment on that day of year</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">274.407230561214</minimum>
+                  <maximum exclusive="false">456.481828860231</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No value found</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>infradsd</attributeName>
+          <attributeDefinition>Standard deviation of infrared radiation down measurments on that day of year</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>wattsPerSquareMeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">3.26595153429841</minimum>
+                  <maximum exclusive="false">107.615216822081</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No value found</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>366</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>FCRMet_qaqc_2015_2023</entityName>
+      <entityDescription>Script used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function. This script was used on all observations from 2015-2023.</entityDescription>
+      <physical>
+        <objectName>FCRMet_qaqc_2015_2023.R</objectName>
+        <size unit="bytes">30703</size>
+        <authentication method="MD5">ebcc4140088fa74a3d29537eedfc788a</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>FCRMet_inspection_2015_2023</entityName>
+      <entityDescription>Inspection script creates QAQC plots and downloads the necessary files for publication.</entityDescription>
+      <physical>
+        <objectName>FCRMet_inspection_2015_2023.Rmd</objectName>
+        <size unit="bytes">19116</size>
+        <authentication method="MD5">c0b124382ce40ba5dad399855cec4c92</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Plotting_function</entityName>
+      <entityDescription>A function used to create the QAQC plots in the FCRMet_inspection_2015_2023.Rmd script</entityDescription>
+      <physical>
+        <objectName>Plotting_function.R</objectName>
+        <size unit="bytes">7388</size>
+        <authentication method="MD5">5aa4dadb80671ffde2540e748bc13f3f</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <unitList>
+        <unit id="micromolesPerSecondPerSquareMeter" multiplierToSI="0.000001" name="micromolesPerSecondPerSquareMeter" parentSI="mole" unitType="light">
+          <description>micromolesPerSecondPerSquareMeter</description>
+        </unit>
+        <unit id="millimolesPerSquareMeter" multiplierToSI="0.001" name="millimolesPerSquareMeter" parentSI="mole" unitType="light">
+          <description>millimolesPerSquareMeter</description>
+        </unit>
+        <unit id="percent" multiplierToSI="" name="percent" parentSI="" unitType="humidity">
+          <description>percent</description>
+        </unit>
+        <unit id="wattsPerSquareMeter" multiplierToSI="1" name="wattsPerSquareMeter" parentSI="watt" unitType="light">
+          <description>wattsPerSquareMeter</description>
+        </unit>
+      </unitList>
+    </metadata>
+  </additionalMetadata>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

@@ -26,7 +26,7 @@ library(tidyverse)
 #Load the library 
 library(googlesheets4)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
-data<- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/Dissolved_GHG_2015_2022.csv") #This is the line you need to modify!
+data<- read_csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/GHG_2015_2023.csv") #This is the line you need to modify!
 trim_sites = function(data,sites){
   data_res_site=data%>% #Create a Reservoir/Site combo column
     mutate(res_site = trimws(paste0(Reservoir,Site)))
@@ -80,9 +80,9 @@ library(EMLassemblyline)
 #                       file.type = ".txt",
 #                       write.file = TRUE)
 #
-#template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+# template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
 #                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
-#                          data.table = c("GHG_2015_2023.csv"),
+#                          data.table = c("GHG_Maintenance_Log.csv"),
 #                          write.file = TRUE)
 #
 #
@@ -133,7 +133,7 @@ library(EMLassemblyline)
 #Step 14: Categorical variables
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-#template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
+# template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
 #                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
 #                               write.file = TRUE)
 
@@ -167,20 +167,29 @@ make_eml(
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG",
   dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2023",
-  temporal.coverage = c("2015-03-31", "2023-12-31"),
+  temporal.coverage = c("2015-03-31", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c('GHG_2015_2023.csv','site_descriptions.csv'),
-  data.table.description = c("GHG Dataset","Descriptions of sites in this dataset with lat/long coordinates"),
-  data.table.name = c("GHG Dataset","Site Descriptions"),
-  other.entity= c('GHG_qaqc_2023_2023.R', 'GHG_functions_for_L1.R',
-                  'GHG_inspection_2015_2023.Rmd', "GHG_Maintenance_Log.csv"),
-  other.entity.name = c("L1 generation script", 'L1 generation functions',
-                        "Visual inspection script", "Maintenance log"),
-  other.entity.description = c("R script for GHG QA/QC to generate L1 in 2023", 'functions used in the L1 generation script for QA/QC in 2923',
-                               'script to generate plots and combine L1 and EDI products', 'Maintenance log used in L1 generation'),
+  data.table = c('GHG_2015_2023.csv',
+                 'site_descriptions.csv',
+                 "GHG_maintenance_2023_2023.csv" ),
+  data.table.description = c("GHG Dataset",
+                             "Descriptions of sites in this dataset with lat/long coordinates",
+                             'Maintenance log used in L1 generation'),
+  data.table.name = c("GHG_2015_2023",
+                      "site_descriptions",
+                      "GHG_maintenance_2023_2023"),
+  other.entity= c('GHG_qaqc_2023_2023.R',
+                  'GHG_functions_for_L1.R',
+                  'GHG_inspection_2015_2023.Rmd'),
+  other.entity.name = c("GHG_qaqc_2023_2023", 
+                        'GHG_functions_for_L1',
+                        "GHG_inspection_2015_2023"),
+  other.entity.description = c("R script for GHG QA/QC to generate L1 in 2023", 
+                               'functions used in the L1 generation script for QA/QC in 2923',
+                               'script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.7')
+  package.id = 'edi.997.11')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

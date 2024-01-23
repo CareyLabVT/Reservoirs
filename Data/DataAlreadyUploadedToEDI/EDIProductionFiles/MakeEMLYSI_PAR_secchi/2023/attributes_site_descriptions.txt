@@ -1,5 +1,5 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	character			NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical	dimensionless		NA	value is missing
 Site	Sampling site at each reservoir	numeric	dimensionless		NA	value is missing
 Site_description	Description of where the reservoir site is located	character	dimensionless		NA	value is missing
 Latitude	Latitude of the reservoir site	numeric	degree		NA	value is missing

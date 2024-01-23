@@ -97,8 +97,8 @@ library(EMLassemblyline)
 #grab attribute names and definitions from your metadata word document
 #for units....
 # View and search the standard units dictionary
-view_unit_dictionary()
-#put flag codes and site codes in the definitions cell
+#view_unit_dictionary()
+##put flag codes and site codes in the definitions cell
 #force reservoir to categorical
 #view_unit_dictionary()
 # ??template_categorical_variables
@@ -123,14 +123,14 @@ make_eml(path = folder,
          data.table = c("ManualDischarge_2019_2023.csv",
                         "site_descriptions.csv",
                          # "../../../../../Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"),
-                        "ManualDischarge_Maintenance_Log.csv"),
+                        "ManualDischarge_maintenancelog_2019_2023.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
-                                    'Manual Discharge Maintenace Log'),
+                                    'Manual Discharge Maintenance Log'),
          temporal.coverage = c("2019-02-08", "2023-12-04"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('ManualDischarge_qaqc.R',
+         other.entity = c('ManualDischarge_qaqc_2023_2023.R',
                           #'../../../../../Scripts/L1_generation_scripts/ManualDischarge_qaqc.R',
                           'ManualDischarge_inspection_2019_2023.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
@@ -139,7 +139,7 @@ make_eml(path = folder,
                                       'Script used to collate 2019-2023 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.9", #### this is the one that I need to change!!!
+         package.id = "edi.1017.11", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 # make_eml(path = folder,
@@ -199,18 +199,28 @@ make_eml(path = folder,
 # Then click 'Upload': if everything works, there will be no errors and the dataset will be uploaded!
 # Check to make sure everything looks okay on EDI Website
 make_eml(path = folder,
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2022",
-         data.table = c("ManualDischarge_2019_2022.csv", "site_descriptions.csv"),
-         data.table.description = c("Manual Discharge Data",  'Descriptions of sampling sites'),
-         temporal.coverage = c("2019-02-08", "2022-12-12"),
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2023",
+         data.table = c("ManualDischarge_2019_2023.csv",
+                        "site_descriptions.csv",
+                        # "../../../../../Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"),
+                        "ManualDischarge_maintenancelog_2019_2023.csv"),
+         data.table.description = c("Manual Discharge Data",
+                                    'Descriptions of sampling sites',
+                                    'Manual Discharge Maintenance Log'),
+         temporal.coverage = c("2019-02-08", "2023-12-04"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('Collate_QAQC_ManualDischarge_2022.R', 
+         other.entity = c('ManualDischarge_qaqc_2023_2023.R',
+                          #'../../../../../Scripts/L1_generation_scripts/ManualDischarge_qaqc.R',
+                          'ManualDischarge_inspection_2019_2023.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-         other.entity.description = c('Script used to collate and QAQC data for publication', 
+         other.entity.description = c('Script used to QAQC 2023 data',
+                                      'Script used to collate 2019-2023 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.454.6", #### this is the one that I need to change!!!
+         package.id = "edi.454.7", #### this is the one that I need to change!!!
          user.domain = 'EDI')
+
+
 

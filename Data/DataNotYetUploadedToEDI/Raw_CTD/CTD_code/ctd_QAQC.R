@@ -17,7 +17,6 @@
 
 pacman::p_load(oce, ocedata, tidyverse, lubridate)
 
-#setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/") # Here
 # Load Carey Lab ctd functions
 source("./R/ctd_functions_automated.R") 
 source("./R/flag_seasonal_csvs.R")

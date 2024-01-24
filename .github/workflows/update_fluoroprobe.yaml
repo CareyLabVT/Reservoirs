@@ -21,8 +21,9 @@ jobs:
           
       - name: Run automated target files
         run: |
-          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/fluoroprobe_qaqc.R
           R -e 'remotes::install_version("gsheet", version = "0.4.5")'
+          R -e 'remotes::install_version("RCurl", version = "1.98-1.14")'
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/fluoroprobe_qaqc.R
       
       - name: Commit and Push
         run: |

@@ -6,7 +6,6 @@ on:
   
 jobs:
   ghg:
-    needs: wvwa_manual_inflow
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

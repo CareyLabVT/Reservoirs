@@ -23,6 +23,7 @@ jobs:
       - name: Run automated target files
         run: |
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
+          R -e 'remotes::install_version("RCurl", version = "1.98-1.14")'
           Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/ctd_qaqc.R
       
       - name: Commit and Push

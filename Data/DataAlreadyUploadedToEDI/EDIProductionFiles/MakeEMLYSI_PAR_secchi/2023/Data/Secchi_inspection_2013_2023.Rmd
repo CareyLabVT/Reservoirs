@@ -117,7 +117,7 @@ secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" &
 
 
 ```{r save the data}
-write.csv(secchi_cleaned,file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
+write.csv(secchi_cleaned,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/Secchi_depth_2013-2023.csv"), row.names=FALSE)
 #replace "~/Reservoirs" with "."
 ```
 

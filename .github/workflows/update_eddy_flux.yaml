@@ -24,7 +24,7 @@ jobs:
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
           R -e 'remotes::install_version("EDIutils", version = "1.0.2")'
           R -e 'remotes::install_version("xml2", version = "1.3.3")'
-          R -e 'remotes::install_version("RCurl", version = "1.98-1.14")'
+          R -e 'utils::install.packages("RCurl")'
           Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/eddy_flux_qaqc.R
 
       - name: Commit and Push

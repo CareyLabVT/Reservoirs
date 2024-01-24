@@ -82,5 +82,5 @@ Flag_EXODepth_m	Data flag for EXO2 depth sensor in meters (EXODepth_m)	categoric
 Flag_EXOBattery_V	Data flag for EXO2 battery in volts (EXOBattery_V)	categorical 			NA	value is missing
 Flag_EXOCablepower_V	Data flag for EXO2 cable power in volts (EXOCablepower_V)	categorical 			NA	value is missing
 Flag_EXOWiper_V	Data flag for EXO2 wiper in volts (EXOWiper_V)	categorical 			NA	value is missing
-Flag_LvlPressure_psi_13	Data flag for pressure sensor (LvlPressure_psi_13,)	categorical 			NA	value is missing
+Flag_LvlPressure_psi_13	Data flag for pressure sensor (LvlPressure_psi_13)	categorical 			NA	value is missing
 Flag_LvlTemp_C_13	Data flag for pressure sensor (LvlTemp_C_13)	categorical 			NA	value is missing

@@ -1,29 +1,48 @@
 ---
 title: "BVR Platform Plots for EDI"
+author: "Adrienne Breef-Pilz"
 output: html_document
 theme: null
+original date: Jan. 2023
 date: "`r Sys.Date()`"
 ---
 
+
 This script is the visual inspection scripts. 
-1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
-2. Then the script checks for daily and subdaily gaps in the current file. 
+
+1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
+
+2. Then the script checks for duplicates, daily, and subdaily gaps in the current file. 
+
 3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
-4. If necessary can QAQC data already on EDI using the QAQC function
-5. Creates plots
-6. Writes data to new csv
+
+4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+
+5. If necessary can QAQC data already on EDI using the QAQC function
+
+6. Creates plots
+
+7. Writes data to new csv
+
+8. Downloads necessary files for EDI publishing
+
 
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
 
 
-All files are from the link to GitHub and the source scripts are from GitHub as well. 
+All files are from GitHub or EDI and the source scripts are from GitHub as well. 
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
 ```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
 
 # Source scripts from GitHub
+# This is the qaqc script. In the data package it is saved as BVRPlatform_qaqc_2023_2023.R
 devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
+
+# This is the plotting function used below to make the plots. In the data package it is saved as Plot_function.R
 devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
 
@@ -33,37 +52,62 @@ devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/ma
 # Set up the current time end time of the file and the current year for QAQC plots
 
 #current time of QAQC for graphing
-current_time_start="2023-01-01 00:00:00"
-current_time_end="2023-12-31 23:59:00"
+
+current_time_start=force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST")
+current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 ```
 
-```{r Read in EDI Files, include=FALSE}
+```{r QAQC all Files, eval=FALSE, include=FALSE}
 
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/725/3/a9a7ff6fe8dc20f7a8f89447d4dc2038" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
-                   
- historic <-read_csv(infile1)%>%
-   rename("LvlDepth_m_13" = Depth_m_13)
-
-```
-
-```{r Read in current L1 file, include=FALSE}
-
-#L1 <- read_csv("BVR_L1.csv")
-
-L1 <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv")%>%rename("LvlDepth_m_13" = Depth_m_13)
+# # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data file for EDI. 
+# current_df <- qaqc_bvr(
+#   data_file= 'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',
+#   data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2020_2023.csv',
+#   maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv",
+#          output_file = NULL, 
+#          start_date = ymd_hms("2020-06-18 17:55:00", tz="EST"),  # this is when we want the file to start
+#          end_date = Sys.Date()
+#   )
 
 ```
 
-```{r Bind historic and L1 files together, include=FALSE}
 
-current_df <- dplyr::bind_rows(historic, L1)%>%
-  filter(DateTime<ymd_hms(current_time_end))
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+
+```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+  
+# # If No EDI file exists with all the years you want to look at
+#   current_df <- current_df%>%
+#   dplyr::distinct(.)%>% # get rid of dups if they snuck in
+#   filter(DateTime<(current_time_end))
+# 
+# # make sure no time duplicates.
+#  current_df<-  current_df[!duplicated(current_df$DateTime), ]
+# 
+# #reorder. Just to be certain everything is in order
+#   current_df<-current_df[order(current_df$DateTime),]
+
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+                                                                ### CHANGE THIS NUMBER BELOW 
+                                                                             ##      
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/27/c467263033e8e2bbc60410567f2531c2")
+
+ # Force files from EDI to have an EST timestamp
+  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
 
 ```
+
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for BVR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(current_df$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(current_df$LvlDepth_m_13, na.rm=T)`.
+
 
 ```{r Download Raw data for plotting, include=FALSE}
 
@@ -94,13 +138,37 @@ BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "
   # convert NaN to NAs in the dataframe
   raw[sapply(raw, is.nan)] <- NA
   
- 
+ # Force historical file timestamp to EST
+  raw$DateTime <- force_tz(as.POSIXct(raw$DateTime), tzone = "EST")
 
 ```
+## Check for duplicates and  gaps in the data frame
 
-## Check for gaps in the data frame
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. 
 
-This identifies if there are any daily data gaps in the long-term record
+
+### Are there any duplicates?
+
+
+```{r Check for dups , echo=FALSE}
+
+# Make sure there are no duplicated dates. Do this here because the file is too large for Data Explore.
+# Print them if there are
+ dups<- current_df[duplicated(current_df$DateTime), ]
+
+dups <- dups%>%
+  select(DateTime, RECORD, ThermistorTemp_C_7,  
+         EXOTemp_C_1.5, EXOTemp_C_9, LvlPressure_psi_13)
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((dups))
+```
+
+
+### Are there any gaps in the data file?
+
+
+When gaps are found in the data file, check that you do not have new gaps in the previous years' publication. For the current year, if you find gaps check that you have all of the manually downloaded files. If the data are truly missing then record the dates and times in the methods section. 
 
 ```{r Check for daily gaps, echo=FALSE}
 
@@ -134,31 +202,11 @@ The first row is the time for the first observation and then the subsequent obse
   }
 ```
 
-QAQC Historical Files: If you need to QAQC the historical file then run it through the qaqc function without start_date and end_date as NULL
-
-```{r Run the QAQC function again if we need to, eval=FALSE, include=FALSE}
-
-# Run the QAQC function
-qaqc_bvr(data_file= current_df,
-         data2_file = NULL,
-         maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", 
-         output_file = "new_df", 
-         start_date = NULL, 
-         end_date = NULL)
-
-```
 
 ## Read in the QAQC File and Check it out
 This section reads in the QAQC file and then you can look at the head, tail and structure. 
 Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 85 columns unless a new one has been added. 
 
-
-## Information for EDI methods text
-This is information that is included in the methods file for EDI 
-
-The minimum water level for BVR was `r min(bvrdata$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(bvrdata$LvlDepth_m_13, na.rm=T)`.
-
-The median water level was `r median(bvrdata$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(bvrdata$LvlDepth_m_13, na.rm=T)`.
 
 ### Flag Frequency
 Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
@@ -179,6 +227,7 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  6: Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
  
  7: missing data
+ 
 ```{r Check out the flags, echo=FALSE}
 
 #make sure no NAS in the Flag columns
@@ -198,15 +247,98 @@ for(f in 1:ncol(Flags)){
 }
 ```
 
+
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+# The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
+ maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv",
+                    show_col_types = FALSE)
+
+
+# name the data file for just the tail of the maintenance log
+# you want to filter out 7 because that is if the observation is missing and there are other ways that is flagged in the data besides the maintenance log, so it is not a good check.
+sd <- tail(maint)%>%
+  filter(flag!=7)
+
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "EST")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "EST")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+
+### Subset and rename the files
+This section will subset the files so you can make plots of the whole time series and the current year. 
+Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
+
 ```{r Filter for current year and daily average, include=FALSE}
 
 # Raw files
 current_raw <- raw%>%
-  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
   mutate(type = "raw")
 
 current <- current_df%>%
-  filter(DateTime>=ymd_hms(current_time_start) & DateTime<ymd_hms(current_time_end))%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
   mutate(type = "qaqc")%>%
   select(DateTime:CR6Panel_Temp_C,type, -contains("adjusted"))
 
@@ -234,11 +366,39 @@ colors <- c("raw" = "red", "qaqc" = "black")
 colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
 ```
 
-
-
 ## QAQC Plots
 
+##### QAQC plot information and all_plot function information
+
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The arguments are:
+Var # The column you want to plot. Make sure it is in quotes
+y_lab,  # This label can take an expression aka have the proper degrees C, 
+y_lab2, # This label is for the plotly function which can not handle expression argument. 
+Water=T, # Are these plots for in water streaming sensors?
+Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+
+The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
+  
+##### Plot Description:
+
+The plots below are:
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
+
+2. A time series of the historical and the current data just the qaqced values. 
+
+The next two plots are just fun to see trends over time with the data. 
+
+3. Density plots are like a histogram and a grouped by color so you can see where the data are relative to other years. 
+
+4. The box plots look at the spread of the data within the year and we can look at the median and see how that is changing or not. 
+
+Do not over think the last 2 plots. 
+
+There are additional plots for depths that have more than one sensor such as at position 13 that has a thermistor and a pressure transducer which both measure temperature. In this case, we plot them on top of each other to make sure they are within the ballpark. For chal and the bluegreen algae sensor on the EXO2 we plot the daily observations on top of the 10 minute observations to make sure that the daily captures the same trend as the 10 minute data. 
 
 ### Temperature
 
@@ -251,7 +411,7 @@ outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "De
 
 output <- unlist(outputs, recursive = F)
 
-#output[[1]]
+output[[1]]
 
 ```
 
@@ -286,14 +446,14 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
 # Take out Temperature values 
 
   All_temp<-current_df%>%
-    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"))%>%
+    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"), starts_with("RDOTem"), starts_with("LvlTemp"))%>%
     pivot_longer(-c(DateTime), names_to="Sensor", values_to="Reading", values_drop_na=TRUE)%>%
     mutate(DateTime=ymd_hms(DateTime))
   
   
   ggplot(All_temp)+
     geom_scattermore(aes(x=DateTime, y=Reading))+
-    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_1", "ThermistorTemp_C_2", "EXOTemp_C_1.5", "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9","EXOTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13")))+
+    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_1", "ThermistorTemp_C_2", "EXOTemp_C_1.5", "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","RDOTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9","EXOTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13", "RDOTemp_C_13", "LvlTemp_C_13")))+
     theme_bw()
   
   
@@ -329,7 +489,7 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
 dx <- colnames(current%>%select(grep("Depth_m",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Use_plotly=F)
+outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -364,7 +524,7 @@ output <- unlist(outputs, recursive = F)
 dx <- colnames(current%>%select(grep("DO_mgL|sat_percent",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Use_plotly=F)
+outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -564,7 +724,7 @@ output <- unlist(outputs, recursive = F)
 
 ### Write to CSV
 
-```{r Make new CSV with current and historic files, include=FALSE}
+```{r Make current csv, eval=FALSE, include=FALSE}
 
 # Double Check naming convention
 # Variable_StartYear_EndYear
@@ -572,30 +732,33 @@ output <- unlist(outputs, recursive = F)
 # convert datetimes to characters so that they are properly formatted in the output file
  current_df$DateTime <- as.character(current_df$DateTime)
 
-write_csv(current_df, "BVRPlatform_2018_2023.csv")
+write_csv(current_df, "BVRPlatform_2020_2023.csv")
 
 ```
 
 ### Download and save Maintenance Log, Plotting function, and QAQC function
 
-```{r Download and save Maintenance Log, include=FALSE}
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", "BVRPlatform_MaintenanceLog_2020_2023.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", "BVRPlatform_maintenancelog_2020_2023.csv")
 
 # qaqc function
 download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R", "BVRPlatform_qaqc_2020_2023.R")
 
 # streaming plots function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Streaming_Plot_function.R", "Streaming_Plot_function.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
 
 # Depth offsets
 download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_Depth_offsets.csv",
-              "BVR_Depth_offsets_2020_2023.csv")
+              "BVRPlatform_Depth_offsets_2020_2023.csv")
 
 # Finding depth function
 download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R",
               "find_depths.R")
+
+# Download Heather's code to make BVR water level and then need to run it. 
+download.file("https://raw.githubusercontent.com/hlwander/bvr_glm/master/inputs/water_level/WaterLevel_BVR.Rmd", "BVRPlatform_WaterLevel_BVR_2015_2022.Rmd")
 
 ```
 

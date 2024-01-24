@@ -6,7 +6,6 @@ on:
   
 jobs:
   wvwa_manual_inflow:
-    needs: ctd
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

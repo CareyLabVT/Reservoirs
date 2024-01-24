@@ -183,15 +183,15 @@ make_eml(path = folder,
                               'CCR_hobo_compilation_2020_2021'),
          other.entity.description = c('Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
                                       'Inspection script creates QAQC plots and downloads the necessary files for publication.', 
-                                      'Applying the depth offset and sorting by sensor depth',
-                                      'A function used to create the QAQC plots in the inspection script',
+                                      'Function to get a depth for each observation',
+                                      'Function used to create the QAQC plots in the inspection script',
                                       'Script used to collate the HOBO files from 2020-2021'),          
          temporal.coverage = c("2020-07-29", "2023-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.24", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.25", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
          #package.id = "edi.1069.1", #### THIS IS USED FOR PUBLISHING
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####

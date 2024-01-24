@@ -1,0 +1,337 @@
+---
+title: "Compare the Old CTD vs. New CTD"
+author: "Adrienne, modified by Abby"
+date: "2023-09-06"
+output: html_document
+---
+
+This document:
+
+1. Reads in the CTD files
+
+2. Does QAQC if necessary, 
+
+3. Finds casts taken at the same reservoir on the same day for comparisons, 
+
+4. Plot comparison casts for each date, variable, and reservoir
+
+5. Make a regression plot for each variable
+
+6. Run t-tests for each variable
+
+7. Plot and run Bland Altman Test
+
+8. Plot and run Passin Bablok Test
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+# the MCR package is archived 
+if (! "mcr" %in% installed.packages()) devtools::install_version('mcr', version = '1.3.2')
+
+# Load packages
+pacman::p_load("lubridate", "tidyverse", "mcr", "BlandAltmanLeh")
+
+```
+
+
+```{r Read CTD files, include=FALSE}
+old_CTD<- read_csv("../CTD_2018_2023.csv")%>%
+  select(-starts_with("Flag_"))%>%
+  filter(SN=="7809")
+
+new_CTD<-read_csv("../CTD_2018_2023.csv")%>%
+  select(-starts_with("Flag_"))%>%
+  filter(SN=="8188")
+```
+
+```{r Find casts for comparisons, echo=FALSE}
+# Select casts that we only have one for each
+
+CTD_dates_new<-new_CTD%>%
+  select(DateTime,Reservoir,Site)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  select(-DateTime)%>%
+  unique()
+
+CTD_dates_old<-old_CTD%>%
+  select(DateTime,Reservoir,Site)%>%
+  mutate(Date=as.Date(DateTime))%>%
+  select(-DateTime)%>%
+  unique()
+
+com_date<-merge(CTD_dates_new,CTD_dates_old, by=c('Reservoir','Site','Date'))
+
+```
+
+```{r Make big data frame, echo=FALSE}
+
+# Make a huge data frame of old and new CTD
+
+all_CTD<-old_CTD%>%
+  bind_rows(.,new_CTD)%>%
+  mutate(Date=as.Date(DateTime))
+
+# Select only dates that we have casts for both
+
+all_CTD2<-left_join(com_date,all_CTD, by=c('Reservoir','Site','Date'))
+
+# Now pivot longer for plotting
+
+dfg<-all_CTD2%>%
+  select(Reservoir, Site, SN, DateTime, Date, Depth_m,DescRate_ms, everything())%>%
+  pivot_longer(cols=c(Temp_C:Phycocyanin_ugL), 
+                 names_to='variable',
+                 values_to='observation')%>%
+  filter(Depth_m>0)
+
+
+# create list of variables
+
+vari<-unique(dfg[['variable']])
+
+```
+
+## Comparison Plots from both CTDs split by date, variable, and reservoir
+
+```{r Plots of each variable for each Reservoir, echo=FALSE}
+
+for(i in 1:length(vari)){
+  print(dfg %>%
+          filter(variable==vari[i]) %>%
+          #filter(observation<100)%>%
+          filter(Site==50)%>%
+          filter(Reservoir=="FCR")%>%
+          ggplot(., aes(x=observation, y=Depth_m, color=as.factor(SN)))+
+          geom_point()+
+          facet_wrap(~Date, scales="free")+ 
+          scale_y_reverse()+
+          ggtitle(paste0(vari[i]," in FCR"))+
+          theme_bw()+
+          theme(plot.title = element_text(hjust = 0.5)))
+  
+}
+
+# Let's do it for BVR 
+
+for(i in 1:length(vari)){
+print(dfg%>%
+  filter(variable==vari[i])%>%
+  #filter(observation<100)%>%
+  filter(Site==50)%>%
+  filter(Reservoir=="BVR")%>%
+  ggplot(., aes(x=observation, y=Depth_m, color=as.factor(SN)))+
+  geom_point()+
+  facet_wrap(~Date, scales="free")+ 
+  scale_y_reverse()+
+    ggtitle(paste0(vari[i]," in BVR"))+
+    theme_bw()+
+    theme(plot.title = element_text(hjust = 0.5)))
+  
+}
+
+# And CCR
+
+for(i in 1:length(vari)){
+print(dfg%>%
+  filter(variable==vari[i])%>%
+  #filter(observation<100)%>%
+  filter(Site==50)%>%
+  filter(Reservoir=="CCR")%>%
+  ggplot(., aes(x=observation, y=Depth_m, color=as.factor(SN)))+
+  geom_point()+
+  facet_wrap(~Date, scales="free")+ 
+  scale_y_reverse()+
+    ggtitle(paste0(vari[i]," in CCR"))+
+    theme_bw()+
+    theme(plot.title = element_text(hjust = 0.5)))
+  
+}
+```
+
+### Scatterplots of the old CTD vs. new CTD
+
+```{r Scatterplots, echo=FALSE}
+
+# Now let's do a scatterplot for each variable
+# Will will color code by site
+
+#Round the depth column to the hundredths columns and then average over that depth
+dfg$round_depth=round(dfg$Depth_m, digits=2)
+
+sum_CTD<-dfg%>%
+  filter(variable == c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm",
+                       "Chla_ugL", "Turbidity_NTU", "PAR_umolm2s"))%>%
+  group_by(Reservoir, Site, Date, SN, variable, round_depth)%>%
+  dplyr::summarise(mean_obs = mean(observation, na.rm=T))%>%
+  ungroup()
+
+# Separate by serial numbers to create 2 columns
+
+sum_CTD_S8188<-sum_CTD%>%
+  filter(SN=="8188")%>%
+  select(-SN)%>%
+  dplyr::rename("obs_S8188" = "mean_obs")
+
+sum_CTD_S7809<-sum_CTD%>%
+  filter(SN=="7809")%>%
+  select(-SN)%>%
+  dplyr::rename("obs_S7809" = "mean_obs")
+
+# merge the two data frames to get two columns of observations
+
+round_CTD <- merge(sum_CTD_S7809, sum_CTD_S8188, by=c("Reservoir", "Site", "Date","variable", "round_depth"))
+
+# We have 2608 points of comparison
+
+# Make a plot of the observations from the new CTD and the Old CTD
+ggplot(round_CTD, aes(x=obs_S7809, y=obs_S8188, col=Reservoir))+
+  geom_point()+
+  geom_abline(slope=1, intercept=0) +
+  facet_wrap(~variable, scales="free")+
+  ggtitle("One to One Comparison of Old CTD vs. New CTD")+
+    theme_bw()+
+    theme(plot.title = element_text(hjust = 0.5))
+  
+
+```
+
+### Notes from Bobbie's R Script comparing methods in the Analytical Lab
+
+ R Script to compare methods in the Analytical Lab
+ Authors: Bobbie Niederlehner
+ Last Edited: 06/07/2022
+
+ Steps
+     1) load the libraries and the data
+     2) remove lines with missing values for either analysis
+     3) OPTIONAL: restrict the concentration range being analyzed
+     4) Paired T-Test- Test differences = 0 with paired T (NOT a preferred way to look at these data but magnitude of difference is interesting)
+     5) Bland Altman - Visualize differences over concentration (difference over mean concentration)
+     6) Passing Bablok - Test coincidence across concentrations - regression of new vs reference method.  Does it have a slope of 1 and an intercept of 0
+
+
+ BACKGROUND INFO: Some web resources explaining method comparison regressions
+ https://www.r-bloggers.com/deming-and-passing-bablok-regression-in-r/
+ https://www.r-bloggers.com/2015/09/deming-and-passing-bablok-regression-in-r/
+ http://labrtorian.com/tag/passing-bablok/
+ https://www.r-bloggers.com/2016/08/a-shiny-app-for-passing-bablok-and-deming-regression/
+ https://bahar.shinyapps.io/method_compare/
+
+
+ Notes
+  NOTE: the order of the variables in each analysis can matter
+     FOR paired T-test it doesn't matter.  Just pay attention to sign for difference.  Difference is calculated as 1st specified (x) minus 2nd specified (y) 
+     FOR Bland Altman it doesn't matter,  Default difference is 1st specified (x) minus 2nd specified (y) 
+     FOR Passing Bablok first listed is reference method (x, Method1, or current),  second listed is is test method (y, Method2, or new)
+    The intercept is often smean difference, but will have the reverse sign.  
+
+### Output from t-tests
+
+```{r Comparison stats, echo=FALSE}
+
+# Make a list of variables for for loops
+
+# create list of variables
+
+var<-unique(round_CTD[['variable']])
+
+
+# Paired T Test
+#sink (file = "results/mcr_results.txt", append=TRUE)
+
+for(b in 1:length(var)){
+  a <-round_CTD%>%
+    filter(variable==var[b])
+  
+  print(var[b])
+  
+    print(t.test(a$obs_S7809, a$obs_S8188, paired=TRUE,
+            conf.level=0.95))
+}
+
+```
+
+### Plots and outputs from Bland Altman
+
+```{r Bland Altman, echo=TRUE}
+ 
+#  Bland Altman Plots (difference over mean)
+#      Estimates an agreement interval, within which 95% of the differences fall. 
+#      BUT criterion for agreement should be decided on apriori and is completely based on judgement - what can you tolerate?
+
+for(b in 1:length(var)){
+  a <-round_CTD%>%
+    filter(variable==var[b])
+  
+  print(var[b])
+  
+   ba<-bland.altman.stats(a$obs_S7809,a$obs_S8188, conf.int = 0.95)
+#}
+
+print (c("mean difference", "lower limit", "upper limit","sample size"))
+print (c(ba$mean.diffs, ba$lower.limit, ba$upper.limit, ba$based.on))
+
+#     IF you prefer GGPLOT2 specify that graph.sys  
+#         geom_count = TRUE handles overlapping points by making the plot symbol larger
+ba2 <- bland.altman.plot(a$obs_S7809,a$obs_S8188, graph.sys = "ggplot2", conf.int=.95, geom_count = F)
+print (ba2 +
+         xlab("Average of Two Measurments") + 
+         ylab ("Difference of Two Measurments") +
+         ggtitle(paste0(var[b]," Bland Altman plot")) +
+         theme_bw()+
+          theme(plot.title = element_text(hjust = 0.5)))
+}
+```
+
+### Passin Bablok Test and Output
+
+ Method Comparison Regression using nonparametric Passing Bablok (MORE RESISTANT TO OUTLIERS) 
+     The first listed variable definitely ends up on the X axis and documentation says it is the "reference" method
+     The second listed variable ends up on the y axis and documentation says it is the "test" method
+
+
+```{r Passin Bablok, echo=FALSE}
+
+for(b in 1:length(var)){
+  a <-round_CTD%>%
+    filter(variable==var[b],
+           !is.na(obs_S7809),
+           !is.na(obs_S8188))
+  
+  print(var[b])
+
+  PB.reg <- mcreg(a$obs_S7809, a$obs_S8188, method.reg = "PaBa",
+                  mref.name = 'obs_S7809', mtest.name = 'obs_S8188')
+  
+  print ("Passing Bablok")
+  printSummary (PB.reg)
+  print ("pearson correlation coefficient")
+  cor.test(a$obs_S7809,a$obs_S8188,
+           method = "pearson")
+  
+  ## Custom plots
+  MCResult.plot(PB.reg, alpha=0.05,equal.axis = TRUE, x.lab = "Reference Method - S7809", y.lab = "Test Method - S8188", 
+                points.col = "black", points.pch = 1, 
+                ci.area = TRUE, ci.area.col = "gray", 
+                identity.col="red3",
+                main = paste0(var[b]," CTD Method Switch - Passing Bablok"), sub = "", add.grid = FALSE, points.cex = 1) 
+  #dev.off()
+  
+  
+  # a residuals plot
+  MCResult.plotResiduals (PB.reg, 
+                          ref.line = TRUE, ref.line.col = "gray", 
+                          main = paste0(var[b], " CTD Method Switch - Passing Bablok Residuals")) 
+  #dev.off()
+  
+  # a bias plot
+  MCResult.plotBias (PB.reg, 
+                     ci.area = TRUE, ci.area.col = "gray", 
+                     main = paste0(var[b], " CTD Method Switch - Passing Bablok Bias")) 
+  #dev.off()
+  
+
+
+}
+```

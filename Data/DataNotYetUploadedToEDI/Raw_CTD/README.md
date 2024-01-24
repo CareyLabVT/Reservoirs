@@ -34,15 +34,13 @@ Confused about something in this folder? Here's the comprehensive reference with
 
 -   `CTD_Maintenance_Log.csv`: maintenance log with all maintenance/QAQC dates
 
--   `CTD_Notes.txt`: Additional notes about CTD maintenance/QAQC. **NOTE: To be removed?**
+-   `CTD_Notes.txt`: Additional notes about CTD maintenance/cleaning
 
 -   `CTD_season_csvs`: .csv files that combine all data for this year. The only file here that currently gets updated regularly is ctd_L0.csv, which is all data for the current season *before* QAQC and flags.
 
 -   `metadata_files`: Automatically generated metadata for each cast. Note that I (Abby) don't really think these metadata files are useful...
 
 -   `Old_XMLCON_files`: .xml configuration affects the initial data processing when getting data off of the CTD. We archive these configuration files here for reproducibility
-
--   `PAR_files`: Visualizations (.pdf) and data (.csv) for PAR data from each cast. This was originally done for Mary many years ago, but we could probably stop generating these.
 
 -   `PDF_outputs`: Visualizations of individual profiles as a quality control gut-check.
 

@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	character			NA	value is missing
-Site	Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform	categorical			NA	value is missing
-DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir	character			NA	value is missing
+Site	"Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform"	categorical			NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (highest elevation above sediments)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	Water temperature measured by thermistor at position 2	numeric	celsius		NA	value is missing
 ThermistorTemp_C_3	Water temperature measured by thermistor at position 3	numeric	celsius		NA	value is missing

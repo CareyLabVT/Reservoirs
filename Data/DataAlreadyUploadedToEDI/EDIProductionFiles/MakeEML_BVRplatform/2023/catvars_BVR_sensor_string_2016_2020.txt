@@ -93,3 +93,4 @@ Flag_MiniDotTemp_C_5	0	no flag
 Flag_MiniDotTemp_C_5	1	missing data
 Flag_MiniDotTemp_C_5	2	Changed to NA because it is an outlier. See methods
 Site	50	"Deep Hole site 37.31288, -79.8159"
+Reservoir	BVR	Beaverdam Reservoir

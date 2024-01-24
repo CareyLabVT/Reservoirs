@@ -157,8 +157,8 @@ This section identifies if there are any duplicates, daily data, and sub daily g
  dups<- current_df[duplicated(current_df$DateTime), ]
 
 dups <- dups%>%
-  select(DateTime, RECORD, ThermistorTemp_C_7,  
-         EXOTemp_C_1.5, EXOTemp_C_9, LvlPressure_psi_13) #there is no EXOTemp_C_9 col????
+  select(DateTime, RECORD, ThermistorTemp_C_7,  RDO_mgL_6,
+         EXOTemp_C_1.5, LvlPressure_psi_13) 
 
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))

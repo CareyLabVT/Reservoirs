@@ -26,8 +26,8 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('BVRPlatform_data_2020_2023.csv','BVRPlatform_maintenancelog_2020_2023.csv',
-                'BVR_sensor_string_2016_2020.csv', "BVR_Daily_WaterLevel_Vol_2015_2022.csv") ,
+ data.table = c('BVRPlatform_2020_2023.csv','BVRPlatform_maintenancelog_2020_2023.csv',
+                'BVR_sensor_string_2016_2020.csv', "BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv") ,
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -147,14 +147,14 @@ make_eml(path = folder,
                                     "BVR sensor maintenace log for waterquality sensors",
                                     "BVR offsets for sensor depths",
                                     "Water quality parameters measured at Beaverdam Reservoir during 2016-2020",
-                                    "Data file with interperted BVR water level and volume from 2015-2022, based on observations from the staff gauge and pressure transducer when it was installed"),
+                                    "Data file with interpolated BVR water level and volume from 2015-2022, based on observations from the staff gauge and pressure transducer when it was installed"),
          other.entity = c('BVRPlatform_qaqc_2020_2023.R', 'BVRPlatform_inspection_2020_2023.Rmd',
                            'find_depths.R', 'Plot_function.R', 'BVR_sensorstring_Collate_QAQC_2016_2020.R', "WaterLevel_BVR_2015_2022.Rmd"),
          other.entity.name = c('BVRPlatform_qaqc_2020_2023', 'BVRPlatform_inspection_2020_2023',
                                'find_depths', 'Plot_function', 'BVR_sensorstring_Collate_QAQC_2016_2020', "WaterLevel_BVR_2015_2022"),
          other.entity.description = c('Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
                                       'Inspection script creates QAQC plots and downloads the necessary files for publication.', 
-                                      'Applying the depth offset and sorting by sensor depth',
+                                      'Function that applies a depth to each observation',
                                       'A function used to create the QAQC plots in the inspection script',
                                       'Script that collates and QAQCs the files for BVR_sensor_string_2016_2020.csv',
                                       'Script to make the BVR_Daily_WaterLevel_2015_2022_interp.csv file'),
@@ -164,7 +164,7 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.27") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         package.id = "edi.157.28") # Put your package.id here, followed by .1 (for 1st version). This is for staging
          #package.id = "edi.725.3") # This is for the final version
 
 

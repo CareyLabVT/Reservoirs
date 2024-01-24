@@ -6,7 +6,6 @@ on:
   
 jobs:
   ctd:
-    needs: eddy_flux
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,8 @@
-#Zooplankton QAQC script for visualizing data and merging files
-#Created 5 Jul 2023
+# zoop_qaqc_2014_2022.R
+# Zooplankton QAQC script for visualizing data and merging files
+# Created by HLW
+# First developed: 05 Jul 2023
+# Last edited: 25 Jan 2024
 
 #read in libraries
 #if (!require("pacman"))install.packages("pacman")

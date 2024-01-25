@@ -77,7 +77,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
 # # If No EDI file exists with all the years you want to look at
 #   current_df <- current_df%>%
-#   dplyr::distinct()%>% # get rid of dups if they snuck in 
+#   dplyr::distinct(.)%>% # get rid of dups if they snuck in 
 #   filter(DateTime<(current_time_end))
 # 
 # 
@@ -93,7 +93,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
                                                                    ### CHANGE THIS NUMBER BELOW 
                                                                                ##      
-   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/24/b7e4a95bf842e24c77cfd23dfee543cd")
+   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/25/b7e4a95bf842e24c77cfd23dfee543cd")
  # 
  # # Force files from EDI to have an EST timestamp
    current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
@@ -388,7 +388,7 @@ The arguments with = followed by a True means that they are the defaults and you
 ##### Plot Description:
 
 The plots below are:
-The first 2 plots are the ones you should focus on for the QAQC chec. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
 1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
 
 2. A time series of the historical and the current data just the qaqced values. 

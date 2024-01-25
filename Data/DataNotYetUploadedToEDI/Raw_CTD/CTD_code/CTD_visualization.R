@@ -73,12 +73,7 @@ write.csv(ctd_comb, paste0("../CTD_2013_", THIS_YEAR,".csv"), row.names = F)
 
 # Begin visualization
 qaqc = ctd_comb %>%
-  mutate(Date = as_datetime(DateTime)) %>%
-  filter(!(Reservoir == "BVR" & as.Date(DateTime) == "2022-10-11"))
-
-qaqc %>%
-  ggplot(aes(x = Temp_C, y = Depth_m))+
-  geom_point(aes(color = SN, shape = as.factor(DateTime)))
+  mutate(Date = as_datetime(DateTime))
 
 # Basic checks
 unique(qaqc$Site)

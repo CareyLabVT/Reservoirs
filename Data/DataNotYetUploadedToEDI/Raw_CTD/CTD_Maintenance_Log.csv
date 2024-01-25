@@ -1,24 +1,28 @@
 Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter, flag, update_value, SN, notes
-NA,NA,NA,CTD,2019-09-04 11:33:00 EST,2019-09-04 11:33:00 EST,DO_mgL,DOsat_percent,2,NA,7809,DO pump wasn't working for this cast
-NA,NA,NA,CTD,2019-09-04 10:12:00 EST,2019-09-04 10:12:00 EST,DO_mgL,DOsat_percent,2,NA,7809,DO pump wasn't working for this cast
-NA,NA,NA,CTD,2021-06-21 00:00:00 EST,2021-12-01 00:00:00 EST,DO_mgL,DOsat_percent,2,NO CHANGE,7809,
-NA,NA,NA,CTD,2020-08-04 00:00:00 EST,2021-12-01 00:00:00 EST,pH,ORP_mV,2,NA,7809,pH sensor broke in summer 2020
-NA,NA,NA,CTD,2019-07-08 00:00:00 EST, 2019-07-08 23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
-NA,NA,NA,CTD,2018-06-18 00:00:00 EST, 2018-06-18 23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
-NA,NA,NA,CTD,2019-06-01 00:00:00 EST, 2019-06-01 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
-NA,NA,NA,CTD,2019-11-20 00:00:00 EST, 2019-11-20 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
-NA,NA,NA,CTD,2017-07-01 00:00:00 EST, 2019-07-31 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
-NA,NA,NA,CTD,2019-02-01 00:00:00 EST, 2019-02-28 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
-FCR,NA,NA,CTD, 2017-12-17 12:00:00 EST,2017-12-17 12:00:00 EST,Cond_uScm,Cond_uScm,2,NA,7809,crazy high conductivity
-NA,NA,NA,CTD,2022-05-17 10:17:00 EST,2022-05-17 10:17:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Issues with cond/temp/DO on these casts
-NA,NA,NA,CTD,2022-05-17 6:59:00 EST, 2022-05-17 6:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,SSS manipulation messed with cond/temp/do on this cast
-BVR,NA,NA,CTD,2023-07-24 00:00:00 EST,2023-07-24 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Not totally sure what the issue is - issues with temp/cond/DO on this cast
-FCR,NA,NA,CTD,2018-12-06  00:00:00 EST,2018-12-06  23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
-FCR,NA,NA,CTD,2018-05-24  00:00:00 EST,2018-05-24  23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Not totally sure what the issue is - issues with temp/cond/DO on this cast
-FCR,NA,NA,CTD,2019-07-03  00:00:00 EST,2019-07-03  23:59:00 EST,Turbidity_NTU,Turbidity_NTU,2,NA,7809,Crazy high turbidity
 NA,NA,NA,CTD,NA,NA,pH,ORP_mV,5,NO CHANGE,8188,Sensors not on new CTD
 NA,NA,NA,CTD,NA,NA,CDOM_ugL,Phycocyanin_ugL,5,NO CHANGE,7809,Sensors not on old CTD
-NA,NA,NA,CTD,2022-10-17  00:00:00 EST,2022-10-17  11:59:00 EST,Temp_C,DescRate_ms,2,NA,8188,Issues with this cast compared to old CTD
-NA,NA,NA,CTD,2022-10-24  00:00:00 EST,2022-10-24  11:59:00 EST,DO_mgL,DOsat_percent,2,NA,8188,DO issues
-NA,NA,NA,CTD,2022-05-01 00:00:00 EST,2022-08-01  11:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,8188,Miscalibrated
+FCR,NA,NA,CTD, 2017-12-17 12:00:00 EST,2017-12-17 12:00:00 EST,Cond_uScm,Cond_uScm,2,NA,7809,crazy high conductivity
+NA,NA,NA,CTD,2017-07-01 00:00:00 EST, 2019-07-31 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
+FCR,NA,NA,CTD,2018-05-24  00:00:00 EST,2018-05-24  23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Not totally sure what the issue is - issues with temp/cond/DO on this cast
+NA,NA,NA,CTD,2018-06-18 00:00:00 EST, 2018-06-18 23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
+FCR,NA,NA,CTD,2018-12-06  00:00:00 EST,2018-12-06  23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
+NA,NA,NA,CTD,2019-02-01 00:00:00 EST, 2019-02-28 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
+NA,NA,NA,CTD,2019-06-01 00:00:00 EST, 2019-06-01 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
+FCR,NA,NA,CTD,2019-07-03  00:00:00 EST,2019-07-03  23:59:00 EST,Turbidity_NTU,Turbidity_NTU,2,NA,7809,Crazy high turbidity
+NA,NA,NA,CTD,2019-07-08 00:00:00 EST, 2019-07-08 23:59:00 EST,pH,pH,2,NA,7809,pH outside of reasonable range
+NA,NA,NA,CTD,2019-09-04 10:12:00 EST,2019-09-04 10:12:00 EST,DO_mgL,DOsat_percent,2,NA,7809,DO pump wasn't working for this cast
+NA,NA,NA,CTD,2019-09-04 11:33:00 EST,2019-09-04 11:33:00 EST,DO_mgL,DOsat_percent,2,NA,7809,DO pump wasn't working for this cast
+NA,NA,NA,CTD,2019-11-20 00:00:00 EST, 2019-11-20 00:00:00 EST,pH,pH,8,NO CHANGE,7809,
+NA,NA,NA,CTD,2020-08-04 00:00:00 EST,2021-12-01 00:00:00 EST,pH,ORP_mV,2,NA,7809,pH sensor broke in summer 2020
+NA,NA,NA,CTD,2021-06-21 00:00:00 EST,2021-12-01 00:00:00 EST,DO_mgL,DOsat_percent,2,NO CHANGE,7809,
+NA,NA,NA,CTD,2022-05-01 00:00:00 EST,2022-08-01  23:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,8188,Miscalibrated
+NA,NA,NA,CTD,2022-04-12 08:59:17 EST,2022-04-12 08:59:17 EST,Temp_C,SpCond_uScm,2,NA,7809,Issues with cond/temp/DO on these casts
+NA,NA,NA,CTD,2022-05-17 00:00:00 EST,2022-05-17 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Issues with cond/temp/DO on these casts
+FCR,NA,NA,CTD,2022-10-11 12:14:03 EST,2022-10-11 14:09:38 EST,Temp_C,SpCond_uScm,2,NA,8188,
+NA,NA,NA,CTD,2022-10-17  00:00:00 EST,2022-10-17  23:59:00 EST,Temp_C,DescRate_ms,2,NA,8188,Issues with this cast compared to old CTD
+NA,NA,NA,CTD,2022-10-24  00:00:00 EST,2022-10-24  23:59:00 EST,DO_mgL,DOsat_percent,2,NA,8188,DO issues
+NA,NA,NA,CTD,2022-11-01 00:00:00 EST,2022-11-01 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,"Temp issue. Downcast is very different from upcast, and differs substantially from the other CTD"
+BVR,NA,NA,CTD,2023-07-24 00:00:00 EST,2023-07-24 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Not totally sure what the issue is - issues with temp/cond/DO on this cast
 NA,NA,NA,CTD,2023-08-29 00:00:00 EST,NA,DO_mgL,DOsat_percent,2,NA,8188,DO issues
+NA,NA,NA,CTD,2023-10-17 00:00:00 EST,2023-10-17 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,"Temp issue. Downcast is very different from upcast, and differs substantially from the other CTD"
+NA,NA,NA,CTD,2023-12-04 00:00:00 EST,2023-12-04 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,"Temp issue. Downcast is very different from upcast, and differs substantially from the other CTD"

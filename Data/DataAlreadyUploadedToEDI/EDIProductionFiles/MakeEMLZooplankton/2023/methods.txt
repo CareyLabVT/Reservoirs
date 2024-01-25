@@ -10,7 +10,7 @@ Zooplankton enumeration: Zooplankton were identified using a Meiji RZ dissecting
 
 Biomass calculations: Length-weight regression estimates used to calculate biomass, using ln(a) as the y-intercept and b as the slope. Estimates are summarized in Downing and Rigler (1984). Bosmina: ln(a)=2.7116, b=2.5294; Ceriodaphnia: ln(a)=2.5623, b = 3.3380; Chydorus: ln(a) = 4.543, b = 3.636; Daphnia: ln(a) = 1.54, b = 2.29; Diaphanosoma: ln(a) = 1.2894, b = 3.039; Cyclopoids: ln(a) = 2.2266, b = 3.230; Diaptomus: ln(a) = 1.05, b = 2.46; Leptodora: ln(a) = -0.8220, b = 2.670; Chaoborus: ln(a) = -2.183, b = 3.2345.
 
-Data QAQC: We removed data that had been included in a previous release for 17 October 2016 that had been erroneously labeled for Schindler trap collection (see Doubek et al. 2018).
+Data QAQC: We removed data that had been included in a previous release for 17 October 2016 that had been erroneously labeled as Schindler trap collection (see Doubek et al. 2018).
 
 2019-2022
 
@@ -22,7 +22,11 @@ Zooplankton enumeration: Zooplankton were identified using a Meiji RZ dissecting
 
 Biomass calculations: Length-weight regression estimates used to calculate biomass, using ln(a) as the y-intercept and b as the slope. Estimates are summarized in Downing and Rigler (1984).
 
-Note that data flags are only present in the summary file, not the raw data files.
+Data package summary: This package includes three data files: 1) zoop_summary_2014_2022.csv contains density, biomass, length, and weight of different zooplankton taxa, 2) zoop_raw_dens_2019_2022.csv contains raw zooplankton counts used to calculate density, and 3) zoop_raw_biom_2019_2022.csv contains micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass. The zoop_qaqc_2014_2022.R script contains code for quality assurance and quality control of zooplankton data, as well as code to visualize data. The site_descriptions.csv file describes the location of each sampling site in this data package.
+
+Data flags: The zoop_qaqc_2014_2022.R assigns data flags (1) to MeanLength_mm, MeanWeight_ug, and Biomass_ugL if those data were not measured or calculated (i.e., columns contain NA values). Note that data flags are only present in the summary file, not the raw data files.
+
+Additional notes: Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
 
 References: 
 

@@ -30,7 +30,7 @@ min(ctd_reprocessed$DateTime) #Gut check: we've re-processed files since 2018
 
 #Add SN to historical EDI data
 ctd_edi <- ctd_edi %>%
-  mutate(SN = 7809)
+  mutate(SN = ifelse(year(DateTime) %in% c(2013:2016),4397,7809))
 
 #Check that all files have gotten re-processed
 check = ctd_edi %>% #Join new data with published dataset

@@ -42,7 +42,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   #If no new files, end QAQC
   if(length(file_names)==0){
     message("No new files could be processed")
-    return()
+    #return()
   } 
   
   ## Generate csv versions of these files (stored in csv_outputs folder)

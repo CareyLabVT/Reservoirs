@@ -30,7 +30,7 @@ min(ctd_reprocessed$DateTime) #Gut check: we've re-processed files since 2018
 
 #Add SN to historical EDI data
 ctd_edi <- ctd_edi %>%
-  mutate(SN = 7809)
+  mutate(SN = ifelse(year(DateTime) %in% c(2013:2016),4397,7809))
 
 #Check that all files have gotten re-processed
 check = ctd_edi %>% #Join new data with published dataset
@@ -56,15 +56,24 @@ unique(check2$Name)
 
 #Combine with historical
 ctd_comb <- ctd_edi %>%
+  mutate(Flag_CDOM_ugL = 5,
+         Flag_Phycoerythrin_ugL = 5,
+         Flag_Phycocyanin_ugL = 5) %>%
   filter(!DateTime %in% ctd_reprocessed$DateTime) %>% #Remove files that have been re-processed
   filter(!DateTime == "2021-12-14 10:45:36") %>% #Fix the time issue identified above
-  full_join(ctd_reprocessed)
+  full_join(ctd_reprocessed) %>%
+  select(Reservoir, Site, DateTime, Depth_m, SN, Temp_C, DO_mgL, DOsat_percent,
+         Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s,
+         CDOM_ugL, Phycoerythrin_ugL, Phycocyanin_ugL, DescRate_ms, Flag_DateTime, 
+         Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, 
+         Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, 
+         Flag_ORP_mV, Flag_PAR_umolm2s, Flag_CDOM_ugL, Flag_Phycoerythrin_ugL, 
+         Flag_Phycocyanin_ugL, Flag_DescRate_ms)
 write.csv(ctd_comb, paste0("../CTD_2013_", THIS_YEAR,".csv"), row.names = F)
 
 # Begin visualization
 qaqc = ctd_comb %>%
-  mutate(Date = as_datetime(DateTime)) %>%
-  filter(!(Reservoir == "BVR" & DateTime == "2022-04-20 09:05:48"))
+  mutate(Date = as_datetime(DateTime))
 
 # Basic checks
 unique(qaqc$Site)

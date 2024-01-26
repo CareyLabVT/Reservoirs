@@ -24,7 +24,8 @@ library(xml2)
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
                                     gdrive, # Are the files on Google Drive. True or False
                                     gshared_drive, # Name of the shared drive where the files are held or use as_id()and the ID of the folder
-                                    current_year )# Current Year. Must be numeric
+                                    current_year, # Current Year. Must be numeric
+                                    output_file)
 {
   
   # Name the directory where the full output files are found. Ours are on GitHub 
@@ -378,7 +379,17 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
  # ec_all <- ec_all |> filter(date> last_edi_date)
   
   # Output data
-  write.csv(ec_all, paste0(mydir,"/EddyPro_Cleaned_L1",".csv"), row.names = FALSE)
+ #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
+  # save data if there is an output)file path. If not then the file is returned. 
+  if (is.null(output_file)){
+    return(ec_all)
+  }else{
+    # convert datetimes to characters so that they are properly formatted in the output file
+    ec_all$date <- as.character(ec_all$date)
+    ec_all$time <- as.character(ec_all$time)
+    
+    write_csv(ec_all, paste0(mydir,output_file))
+  }
   
 }
 
@@ -387,7 +398,8 @@ eddypro_cleaning_function(
   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
   gdrive = F, # Are the files on Google Drive. True or False
   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-  current_year = 2023)
+  current_year = 2023,
+  output_file = "/EddyPro_Cleaned_L1.csv")
 
 
 ## Call healthcheck

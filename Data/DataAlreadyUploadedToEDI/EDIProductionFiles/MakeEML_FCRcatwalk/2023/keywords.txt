@@ -22,3 +22,7 @@ fluorescence	lter controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
+FCR	carey lab controlled vocabulary
+FCRCatwalk	carey lab controlled vocabulary
+Catwalk	carey lab controlled vocabulary
+sensors	carey lab controlled vocabulary

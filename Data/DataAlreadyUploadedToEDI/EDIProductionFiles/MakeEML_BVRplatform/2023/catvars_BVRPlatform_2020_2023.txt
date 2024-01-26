@@ -1,163 +1,164 @@
 attributeName	code	definition
 Flag_EXOBattery_V	0	no flag
 Flag_EXOBattery_V	1	value removed due to maintenance and set to NA
-Flag_EXOBattery_V	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOBattery_V	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOBattery_V	5	questionable value but left in the dataset
 Flag_EXOBattery_V	7	missing data
 Flag_EXOBGAPC_RFU_1.5	0	no flag
 Flag_EXOBGAPC_RFU_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOBGAPC_RFU_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOBGAPC_RFU_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOBGAPC_RFU_1.5	3	negative values set to 0 except for temperature
 Flag_EXOBGAPC_RFU_1.5	5	questionable value but left in the dataset
 Flag_EXOBGAPC_RFU_1.5	7	missing data
 Flag_EXOBGAPC_ugL_1.5	0	no flag
 Flag_EXOBGAPC_ugL_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOBGAPC_ugL_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOBGAPC_ugL_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOBGAPC_ugL_1.5	3	negative values set to 0 except for temperature
 Flag_EXOBGAPC_ugL_1.5	5	questionable value but left in the dataset
 Flag_EXOBGAPC_ugL_1.5	7	missing data
 Flag_EXOCablepower_V	0	no flag
 Flag_EXOCablepower_V	1	value removed due to maintenance and set to NA
-Flag_EXOCablepower_V	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOCablepower_V	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOCablepower_V	5	questionable value but left in the dataset
 Flag_EXOCablepower_V	7	missing data
 Flag_EXOChla_RFU_1.5	0	no flag
 Flag_EXOChla_RFU_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOChla_RFU_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOChla_RFU_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOChla_RFU_1.5	3	negative values set to 0 except for temperature
 Flag_EXOChla_RFU_1.5	5	questionable value but left in the dataset
 Flag_EXOChla_RFU_1.5	7	missing data
 Flag_EXOChla_ugL_1.5	0	no flag
 Flag_EXOChla_ugL_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOChla_ugL_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOChla_ugL_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOChla_ugL_1.5	3	negative values set to 0 except for temperature
 Flag_EXOChla_ugL_1.5	5	questionable value but left in the dataset
 Flag_EXOChla_ugL_1.5	7	missing data
 Flag_EXOCond_uScm_1.5	0	no flag
 Flag_EXOCond_uScm_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOCond_uScm_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOCond_uScm_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOCond_uScm_1.5	5	questionable value but left in the dataset
 Flag_EXOCond_uScm_1.5	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
 Flag_EXOCond_uScm_1.5	7	missing data
 Flag_EXODepth_m	0	no flag
 Flag_EXODepth_m	1	value removed due to maintenance and set to NA
-Flag_EXODepth_m	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXODepth_m	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXODepth_m	5	questionable value but left in the dataset
 Flag_EXODepth_m	7	missing data
 Flag_EXODO_mgL_1.5	0	no flag
 Flag_EXODO_mgL_1.5	1	value removed due to maintenance and set to NA
-Flag_EXODO_mgL_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXODO_mgL_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXODO_mgL_1.5	5	questionable value but left in the dataset
 Flag_EXODO_mgL_1.5	7	missing data
 Flag_EXODOsat_percent_1.5	0	no flag
 Flag_EXODOsat_percent_1.5	1	value removed due to maintenance and set to NA
-Flag_EXODOsat_percent_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXODOsat_percent_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXODOsat_percent_1.5	5	questionable value but left in the dataset
 Flag_EXODOsat_percent_1.5	7	missing data
 Flag_EXOfDOM_QSU_1.5	0	no flag
 Flag_EXOfDOM_QSU_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOfDOM_QSU_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOfDOM_QSU_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOfDOM_QSU_1.5	3	negative values set to 0 except for temperature
 Flag_EXOfDOM_QSU_1.5	5	questionable value but left in the dataset
 Flag_EXOfDOM_QSU_1.5	7	missing data
 Flag_EXOfDOM_RFU_1.5	0	no flag
 Flag_EXOfDOM_RFU_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOfDOM_RFU_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOfDOM_RFU_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOfDOM_RFU_1.5	3	negative values set to 0 except for temperature
 Flag_EXOfDOM_RFU_1.5	5	questionable value but left in the dataset
 Flag_EXOfDOM_RFU_1.5	7	missing data
 Flag_EXOPressure_psi	0	no flag
 Flag_EXOPressure_psi	1	value removed due to maintenance and set to NA
-Flag_EXOPressure_psi	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOPressure_psi	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOPressure_psi	5	questionable value but left in the dataset
 Flag_EXOPressure_psi	7	missing data
 Flag_EXOSpCond_uScm_1.5	0	no flag
 Flag_EXOSpCond_uScm_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOSpCond_uScm_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOSpCond_uScm_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOSpCond_uScm_1.5	5	questionable value but left in the dataset
 Flag_EXOSpCond_uScm_1.5	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
 Flag_EXOSpCond_uScm_1.5	7	missing data
 Flag_EXOTDS_mgL_1.5	0	no flag
 Flag_EXOTDS_mgL_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOTDS_mgL_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOTDS_mgL_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOTDS_mgL_1.5	5	questionable value but left in the dataset
 Flag_EXOTDS_mgL_1.5	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
 Flag_EXOTDS_mgL_1.5	7	missing data
 Flag_EXOTemp_C_1.5	0	no flag
 Flag_EXOTemp_C_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOTemp_C_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOTemp_C_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOTemp_C_1.5	5	questionable value but left in the dataset
 Flag_EXOTemp_C_1.5	7	missing data
 Flag_EXOTurbidity_FNU_1.5	0	no flag
 Flag_EXOTurbidity_FNU_1.5	1	value removed due to maintenance and set to NA
-Flag_EXOTurbidity_FNU_1.5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOTurbidity_FNU_1.5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOTurbidity_FNU_1.5	4	value removed due to fouling and set to NA
 Flag_EXOTurbidity_FNU_1.5	5	questionable value but left in the dataset
 Flag_EXOTurbidity_FNU_1.5	7	missing data
 Flag_EXOWiper_V	0	no flag
 Flag_EXOWiper_V	1	value removed due to maintenance and set to NA
-Flag_EXOWiper_V	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_EXOWiper_V	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_EXOWiper_V	5	questionable value but left in the dataset
 Flag_EXOWiper_V	7	missing data
 Flag_LvlPressure_psi_13	0	no flag
-Flag_LvlPressure_psi_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_LvlPressure_psi_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_LvlPressure_psi_13	5	questionable value but left in the dataset
 Flag_LvlTemp_C_13	0	no flag
-Flag_LvlTemp_C_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_LvlTemp_C_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_LvlTemp_C_13	7	missing data
 Flag_RDO_mgL_13	0	no flag
 Flag_RDO_mgL_13	1	value removed due to maintenance and set to NA
-Flag_RDO_mgL_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDO_mgL_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_RDO_mgL_13	3	negative values set to 0 except for temperature
 Flag_RDO_mgL_13	7	missing data
 Flag_RDO_mgL_6	0	no flag
-Flag_RDO_mgL_6	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDO_mgL_6	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_RDO_mgL_6	3	negative values set to 0 except for temperature
 Flag_RDO_mgL_6	5	questionable value but left in the dataset
 Flag_RDOsat_percent_13	0	no flag
 Flag_RDOsat_percent_13	1	value removed due to maintenance and set to NA
-Flag_RDOsat_percent_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDOsat_percent_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_RDOsat_percent_13	3	negative values set to 0 except for temperature
 Flag_RDOsat_percent_13	7	missing data
 Flag_RDOsat_percent_6	0	no flag
-Flag_RDOsat_percent_6	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDOsat_percent_6	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_RDOsat_percent_6	3	negative values set to 0 except for temperature
 Flag_RDOsat_percent_6	5	questionable value but left in the dataset
 Flag_RDOTemp_C_13	0	no flag
-Flag_RDOTemp_C_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDOTemp_C_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_RDOTemp_C_13	7	missing data
 Flag_RDOTemp_C_6	0	no flag
-Flag_RDOTemp_C_6	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_RDOTemp_C_6	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_1	0	no flag
-Flag_ThermistorTemp_C_1	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_1	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_1	7	missing data
 Flag_ThermistorTemp_C_10	0	no flag
-Flag_ThermistorTemp_C_10	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_10	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_11	0	no flag
 Flag_ThermistorTemp_C_11	1	value removed due to maintenance and set to NA
-Flag_ThermistorTemp_C_11	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_11	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_12	0	no flag
 Flag_ThermistorTemp_C_12	1	value removed due to maintenance and set to NA
-Flag_ThermistorTemp_C_12	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_12	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_13	0	no flag
 Flag_ThermistorTemp_C_13	1	value removed due to maintenance and set to NA
-Flag_ThermistorTemp_C_13	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_13	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_2	0	no flag
-Flag_ThermistorTemp_C_2	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_2	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_2	7	missing data
 Flag_ThermistorTemp_C_3	0	no flag
-Flag_ThermistorTemp_C_3	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_3	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_4	0	no flag
-Flag_ThermistorTemp_C_4	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_4	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_5	0	no flag
-Flag_ThermistorTemp_C_5	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_5	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_5	5	questionable value but left in the dataset
 Flag_ThermistorTemp_C_6	0	no flag
-Flag_ThermistorTemp_C_6	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_6	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_7	0	no flag
-Flag_ThermistorTemp_C_7	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_7	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_8	0	no flag
-Flag_ThermistorTemp_C_8	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+Flag_ThermistorTemp_C_8	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 Flag_ThermistorTemp_C_9	0	no flag
-Flag_ThermistorTemp_C_9	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
-Site	50	Deep Hole site 37.31288, -79.8159
+Flag_ThermistorTemp_C_9	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Reservoir	BVR	Beaverdam Reservoir
+Site	50	"Deep hole or site nearest to dam in the reservoir, attached to the platform. 37.31288, -79.8159"

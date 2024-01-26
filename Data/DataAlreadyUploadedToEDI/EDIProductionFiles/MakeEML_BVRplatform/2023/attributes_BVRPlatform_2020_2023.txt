@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	character			NA	value is missing
-Site	"Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform"	categorical			NA	value is missing
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir 	categorical			NA	value is missing
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (highest elevation above sediments)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	Water temperature measured by thermistor at position 2	numeric	celsius		NA	value is missing
 ThermistorTemp_C_3	Water temperature measured by thermistor at position 3	numeric	celsius		NA	value is missing
@@ -30,16 +30,16 @@ EXODO_mgL_1.5	Dissolved Oxygen (DO) at 1.5 meter depth as measured by the EXO2 S
 EXOChla_RFU_1.5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOChla_ugL_1.5	Total Chlorophyll a in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOBGAPC_RFU_1.5	Blue-Green Algae phycocyanin in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOfDOM_QSU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in QSU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
 EXOTurbidity_FNU_1.5	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
-EXOPressure_psi	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
+EXOPressure_psi	Gauge pressure of EXO2 sonde at 1.5 m	numeric	poundsPerSquareInch		NA	value is missing
 EXODepth_m	Depth of the EXO2 sonde 	numeric	meter		NA	value is missing
 EXOBattery_V	Voltage of the EXO2 sonde internal batteries	numeric	volt		NA	value is missing
 EXOCablepower_V	Measure of power being used by the cable connected to the CR6 datalogger as measured by the EXO2 sonde	numeric	volt		NA	value is missing
 EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde	numeric	volt		NA	value is missing
-LvlPressure_psi_13	Pressure from pressure sensor at position 13 as measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
+LvlPressure_psi_13	Pressure from pressure sensor at position 13 as measured relative to ambient atmospheric pressure	numeric	poundsPerSquareInch		NA	value is missing
 LvlDepth_m_13	Depth of the pressure sensor at position 13 in meters derived from LvlPressure_psi_13 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
 LvlTemp_C_13	Water temperature at position 13 as measured by the water level logger	numeric	celsius		NA	value is missing
 RECORD	The nth record collected since the instrument was turned on or the program was altered	numeric	number		NA	value is missing

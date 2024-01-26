@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three letter code name for the reservoir BVR= Beaverdam Reservoir	categorical			NA	value is missing
-Site	"Sampling site within each reservoir, 50=Deepest part of the reservoir"	categorical	dimensionless		NA	value is missing
+Site	Sampling site within each reservoir	categorical	dimensionless		NA	value is missing
 Position	Position of the sensor on the string with one being at the top and thirteen being at the bottom next to the pressure transducer	numeric	dimensionless		NA	value is missing
 Offset_before_05APR21	Distance of the sensor from the pressure transducer before 05 APR 21	numeric	meter		NA	value is missing
 Current_offset	Current distance of the sensor from the pressure transducer	numeric	meter		NA	value is missing

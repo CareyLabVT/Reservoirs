@@ -264,7 +264,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                           `T.`,x_peak,x_offset,`x_10.`,`x_30.`,`x_50.`,`x_70.`,`x_90.`,un_Tau,
                           Tau_scf,un_H,H_scf,un_LE,LE_scf,un_co2_flux,co2_scf,un_h2o_flux,
                           h2o_scf,un_ch4_flux,ch4_scf,u_var,v_var,w_var,rssi_77_mean, flowrate_mean)
-    out.file=rbind(data3, out.file)
+    out.file=bind_rows(data3, out.file)
   }
   
   # Get rid of rows with no date

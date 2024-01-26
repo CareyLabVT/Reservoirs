@@ -1,13 +1,14 @@
 ---
 title: "BVR WaterLevel"
-author: Heather Wander
+author: "Heather Wander"
 output: html_document
 theme: null
 original date: May 14, 2023
 date: "`r Sys.Date()`"
 ---
 
-Heather can you add a description of what this script does. 
+This script is used to create BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv, which contains daily water level and volume associated with each date from 7 July 2015 - 4 May 2022 in Beaverdam Reservoir. 
+This script uses EDI-published BVR sensor data from 2020-2022 to calculate daily water level using the pressure sensor, and water level observations from both the Western Virginia Water Authority and the Reservoir Group field crew from 2015-2020 (before high-frequency sensors were deployed) to interpolate water level and obtain daily values. We then use bathymetry data from EDI to associate a volume to the variable water level observations for each day.
 
 
 ```{r setup, include=FALSE}
@@ -247,7 +248,7 @@ total_bathy%>%
 ```{r}
 #combine the approx vol column with daily water level
 bvr_wl_final <- wl_final %>% select(Date, WaterLevel_m)
-bvr_wl_final$vol_m3 <- total_bathy$approx_volume / 1000
+bvr_wl_final$Vol_m3 <- total_bathy$approx_volume / 1000
 
 #get into date format
 bvr_wl_final$Date <- as.Date(bvr_wl_final$Date)
@@ -265,9 +266,9 @@ write.csv(bvr_wl_final, out_file, row.names = F)
 ```{r}
 #compare AGH vs above wl 
 
-#read in AGH's 2009-2019 water level file
-old_wl <- read.csv("/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/09Apr20_BVR_WaterLevelDailyVol.csv") %>% mutate(Date = as.Date(Date, format="%m/%d/%Y")) %>% 
-  filter(Date < as.Date("2020-01-01") & Date > as.Date("2015-07-06"))
+#read in AGH's 2009-2019 water level file. 
+# old_wl <- read.csv("/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/09Apr20_BVR_WaterLevelDailyVol.csv") %>% mutate(Date = as.Date(Date, format="%m/%d/%Y")) %>% 
+#   filter(Date < as.Date("2020-01-01") & Date > as.Date("2015-07-06"))
 
 #drop one row because 01 nov has 2 different values
 old_wl <- old_wl[-c(118),]

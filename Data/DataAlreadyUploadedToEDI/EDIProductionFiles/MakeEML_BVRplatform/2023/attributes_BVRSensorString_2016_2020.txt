@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	categorical			NA	value is missing
-Site	"Sampling site within each reservoir; 50=Deep hole or site nearest to dam in the reservoir, attached to the platform"	categorical			NA	value is missing
-DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir	categorical			NA	value is missing
+DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 HoboTemp_C_0.1	Water temperature measured by HOBO loggers at 0.1m	numeric	celsius		NA	value is missing
 HoboTemp_C_1	Water temperature measured by HOBO loggers at 1m	numeric	celsius		NA	value is missing
 HoboTemp_C_2	Water temperature measured by HOBO loggers at 2m	numeric	celsius		NA	value is missing
@@ -29,11 +29,11 @@ EXODO_mgL_1.5	Dissolved Oxygen (DO) at 1.5 meter depth as measured by the EXO2 S
 EXOChla_RFU_1.5	Total Chlorophyll a in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOChla_ugL_1.5	Total Chlorophyll a in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOBGAPC_RFU_1.5	Blue-Green Algae phycocyanin in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in RFU at 1.5 meter depth as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOfDOM_QSU_1.5	Fluorescent Dissolved Organic Matter (FDOM) in QSU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
 EXOTurbidity_FNU_1.5	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
-EXOPressure_psi	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
+EXOPressure_psi	Gauge pressure of EXO2 sonde at 1.5 m	numeric	poundsPerSquareInch		NA	value is missing
 EXODepth_m	Depth of the EXO2 sonde 	numeric	meter		NA	value is missing
 EXOBattery_V	Voltage of the EXO2 sonde internal batteries	numeric	volt		NA	value is missing
 EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde	numeric	volt		NA	value is missing

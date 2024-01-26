@@ -1,6 +1,7 @@
 # Title: QAQC function for the FCR Catwalk
 # Author: Adrienne Breef-Pilz
-# Edited: 17 Dec 2023
+# Created: Jan. 2023
+# Edited: 25 Jan 2024
 
 # This function:
 # 1. Read in the files and maintenance log
@@ -15,16 +16,23 @@
 # 10. Put everything in the right place
 # 11. Write csv
 
+# Additional notes: This script is included with this EDI package to show which QAQC 
+# has already been applied to generate these data <and includes additional R scripts 
+# available with this package. 
+# This script is only for internal use by the data creator team and is provided as a reference; 
+# it will not run as-is. 
 
-qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv",
-                     data2_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", 
-                     maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv", 
-                     output_file = 'fcre-waterquality_L1.csv', 
+
+
+qaqc_fcr <- function(data_file,
+                     data2_file, 
+                     maintenance_file, 
+                     output_file, 
                      start_date = NULL, 
                      end_date = NULL)
 {
- 
-### 1. Read in files and maintenance log ####
+  
+  ### 1. Read in files and maintenance log ####
   # These are the column names for EDI 
   CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
@@ -43,10 +51,10 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   # to qaqc historical data files from EDI
   
   if(is.character(data_file)){
-  # read catwalk data and maintenance log
-  # NOTE: date-times throughout this script are processed as UTC
-  catdata <- read_csv(data_file, skip = 1, col_names = CATPRES_COL_NAMES,
-                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+    # read catwalk data and maintenance log
+    # NOTE: date-times throughout this script are processed as UTC
+    catdata <- read_csv(data_file, skip = 1, col_names = CATPRES_COL_NAMES,
+                        col_types = cols(.default = col_double(), DateTime = col_datetime()))
   } else {
     
     catdata <- data_file
@@ -60,9 +68,9 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     catdata2 <- NULL
     
   } else{
-  
-  catdata2 <- read_csv(data2_file, skip = 1, col_names = CATPRES_COL_NAMES,
-                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
+    
+    catdata2 <- read_csv(data2_file, skip = 1, col_names = CATPRES_COL_NAMES,
+                         col_types = cols(.default = col_double(), DateTime = col_datetime()))
   }
   
   # Bind the streaming data and the manual downloads together so we can get any missing observations 
@@ -74,12 +82,15 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   #reorder 
   catdata <- catdata[order(catdata$DateTime),]
   
+  #force tz check 
+  catdata$DateTime <- force_tz(as.POSIXct(catdata$DateTime), tzone = "EST")
+  
   # Take out the EXO_Date and EXO_Time column because we don't publish them 
   
   if("EXO_Date" %in% colnames(catdata)){
     catdata <- catdata%>%select(-c(EXO_Date, EXO_Time))
   }
-    
+  
   # convert NaN to NAs in the dataframe
   catdata[sapply(catdata, is.nan)] <- NA
   
@@ -92,8 +103,15 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     flag = col_integer()
   ))
   
+  #force tz check 
+  log$TIMESTAMP_start <- force_tz(as.POSIXct(log$TIMESTAMP_start), tzone = "EST")
+  log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end), tzone = "EST")
+  
   ### identify the date subsetting for the data
   if (!is.null(start_date)){
+    #force tz check 
+    start_date <- force_tz(as.POSIXct(start_date), tzone = "EST")
+    
     catdata <- catdata %>% 
       filter(DateTime >= start_date)
     catdata2 <- catdata2 %>% 
@@ -103,6 +121,9 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   }
   
   if(!is.null(end_date)){
+    #force tz check 
+    end_date <- force_tz(as.POSIXct(end_date), tzone = "EST")
+    
     catdata <- catdata %>% 
       filter(DateTime <= end_date)
     catdata2 <- catdata2 %>% 
@@ -110,8 +131,8 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     log <- log %>% 
       filter(TIMESTAMP_end >= start_date)
   }
-
- 
+  
+  
   
   ### This was needed for the EDI publishing in 2021 and 
   # if you start with the all the raw files you will will need to run this section
@@ -148,7 +169,7 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   # catdata=catdata[!duplicated(catdata$DateTime), ]
   # 
   # catdata$DateTime<-as.POSIXct(strptime(catdata$DateTime, "%Y-%m-%d %H:%M:%S"), tz = "UTC")
- 
+  
   ##### 3. Create Flag columns and flag missing values and ones less than 0 #####
   
   # remove NaN data at beginning when data when no sensors were connected to the data logger
@@ -203,9 +224,9 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     ### Get the Maintenance Flag 
     
     flag <- log$flag[i]
-
+    
     ### Get the Value or text that will be replaced
-
+    
     update_value <- as.numeric(log$update_value[i])
     
     ### Get the code for fixing values. If it is not an NA
@@ -286,19 +307,19 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
         
         # for loop to loop through the columns from the algae sensor
         for(b in 1:length(Algae)){
-        
-        # get means and thresholds for using to find outliers
+          
+          # get means and thresholds for using to find outliers
           
           mean <-mean(catdata[[Algae[b]]], na.rm=T)  
           
           threshold <- 4 * sd(catdata[[Algae[b]]], na.rm=T)
-        
-        # Set flag and take out files obs that are 4 sd above the mean
-        
-        catdata[c(which(Time & abs(catdata[[Algae[b]]] - mean) > threshold)),Algae[b]] <- NA
-        
-        # Add the flag 
-        catdata[c(which(Time & abs(catdata[[Algae[b]]] - mean) > threshold)),paste0("Flag_",Algae[b])] <- flag
+          
+          # Set flag and take out files obs that are 4 sd above the mean
+          
+          catdata[c(which(Time & abs(catdata[[Algae[b]]] - mean) > threshold)),Algae[b]] <- NA
+          
+          # Add the flag 
+          catdata[c(which(Time & abs(catdata[[Algae[b]]] - mean) > threshold)),paste0("Flag_",Algae[b])] <- flag
         }
       }else {
         # Set the values to NA and flag
@@ -322,8 +343,8 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
           catdata[c(which(Time & catdata[,"EXOCond_uScm_1"]>37 & catdata[,paste0("Flag_",Cond[s])]==0)),Cond[s]] <- flag
         }
       }else{
-      # Values are flagged but left in the dataset
-      catdata[Time, flag_cols] <- flag
+        # Values are flagged but left in the dataset
+        catdata[Time, flag_cols] <- flag
       }
     } else if (flag==6){ #adjusting the RDO_5_mgL
       
@@ -372,17 +393,17 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     Time_adj_Temp <- catdata$DateTime>start&catdata$DateTime<end+ADJ_PERIOD_Temp
     
     # Change values to NA after any maintenance for up to 2 hours for DO sensors
+    
+    if (flag ==1){
       
-      if (flag ==1){
-        
-        # This is for DO add a 2 hour buffer after the DO sensor was out of the water
-        catdata[Time_adj_DO,  maintenance_cols[maintenance_cols%in%DO]] <- NA
-        catdata[Time_adj_DO, flag_cols[flag_cols%in%DO]] <- flag
-        
-        # Add a 30 minute buffer for when the temp string was out of the water
-        catdata[Time_adj_Temp,  maintenance_cols[maintenance_cols%in%Temp]] <- NA
-        catdata[Time_adj_Temp, flag_cols[flag_cols%in%Temp]] <- flag
-      }
+      # This is for DO add a 2 hour buffer after the DO sensor was out of the water
+      catdata[Time_adj_DO,  maintenance_cols[maintenance_cols%in%DO]] <- NA
+      catdata[Time_adj_DO, flag_cols[flag_cols%in%DO]] <- flag
+      
+      # Add a 30 minute buffer for when the temp string was out of the water
+      catdata[Time_adj_Temp,  maintenance_cols[maintenance_cols%in%Temp]] <- NA
+      catdata[Time_adj_Temp, flag_cols[flag_cols%in%Temp]] <- flag
+    }
   }
   #### 5. Fill in non adjusted DO values ######
   # Fill in adjusted DO values that didn't get changed. If the value didn't get changed then it is the same as values from the 
@@ -405,13 +426,13 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   
   #create list of the Flag columns that need to be changed to 2
-  exo_flag <- grep("^Flag_EXO.*_1$",colnames(catdata))
+  exo_flag <- grep("^Flag_EXO",colnames(catdata))
   
   # Change the EXO data to NAs when the EXO is above 0.5m and not due to maintenance
-   #Flag the data that was removed with 2 for outliers
+  #Flag the data that was removed with 2 for outliers
   catdata[which(catdata$EXODepth_m < 0.55 & !is.na(catdata$EXODepth_m)),exo_flag]<- 2
   catdata[which(catdata$EXODepth_m < 0.55 & !is.na(catdata$EXODepth_m)), exo_idx] <- NA
- 
+  
   
   # Flag the EXO data when the wiper isn't parked in the right position because it could be on the sensor when taking a reading
   #Flag the data that was removed with 2 for outliers
@@ -430,10 +451,10 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   temp_flag <- grep("^Flag_Ther*|^Flag_RDO*|^Flag_Lvl*",colnames(catdata))
   
   #Change the EXO data to NAs when the pressure sensor is less than 9.94 psi which is roughly 7m and not due to maintenance
-   #Flag the data that was removed with 2 for outliers
+  #Flag the data that was removed with 2 for outliers
   catdata[which(catdata$LvlPressure_psi_9 < 9.94 & !is.na(catdata$LvlPressure_psi_9)),temp_flag]<- 2
   catdata[which(catdata$LvlPressure_psi_9 < 9.94 & !is.na(catdata$LvlPressure_psi_9)), temp_idx] <- NA
- 
+  
   
   ##### 7. Leading and Lagging QAQC #####
   # This finds the point that is way out of range from the leading and lagging point 
@@ -493,7 +514,7 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
     threshold <- 4 * sd(catdata[[Algae[b]]], na.rm=T)
     
     # Flag with a 5 that the values are questionable but leave in dataset
-   
+    
     catdata[c(which(!is.na(catdata[[Algae[b]]]) & abs(catdata[[Algae[b]]] - mean) > threshold)),
             paste0("Flag_",Algae[b])] <- 5
   }
@@ -501,7 +522,7 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   #create depth column
   catdata <- catdata%>%mutate(LvlDepth_m_9=LvlPressure_psi_9*0.70455)#1psi=2.31ft, 1ft=0.305m
-
+  
   #### 10. Put everything in the right place ####
   
   # add Reservoir and Site columns
@@ -521,8 +542,6 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   #order by date and time
   catdata <- catdata[order(catdata$DateTime),]
   
-  # convert datetimes to characters so that they are properly formatted in the output file
-  catdata$DateTime <- as.character(catdata$DateTime)
   
   ## convert any data types that don't match EDI
   #catdata$DateTime <- as.Date(catdata$DateTime)
@@ -531,36 +550,28 @@ qaqc_fcr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   catdata <- catdata %>%
     mutate(across(starts_with("Flag"),
                   ~ as.factor(as.character(.))))
-
+  
   #### 11. Write csv ####
   
-  # write the csv. If the start date is NULL then using the function in the 
-  # visual inspection script and we want the output returned and not saved
-  
-  if(is.null(start_date)){
-    
-    assign(output_file, catdata, envir=.GlobalEnv)
-    
-    #return(catdata)
-    
-  } else {
-    
-    # write to output file
+  # write_csv was giving the wrong times. Let's see if this is better. 
+  # If the output file is NULL then we are using it in a function and want the file returned and not saved. 
+  if (is.null(output_file)){
+    return(catdata)
+  }else{
+    # convert datetimes to characters so that they are properly formatted in the output file
+   catdata$DateTime <- as.character(catdata$DateTime)
     write_csv(catdata, output_file)
-    
   }
-  
   print('QAQC output saved successfully')
 }
 
 
 # example usage
-#qaqc_fcr()
 
 # qaqc_fcr(data_file= "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv",
-#     data2_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", 
-#     maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/CAT_MaintenanceLog.txt", 
-#     output_file = 'fcre-waterquality_L1.csv', 
-#     start_date = NULL, 
-#     end_date = NULL)
+#     data2_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv",
+#     maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv",
+#     output_file = 'fcre-waterquality_L1.csv',
+#     start_date = "2023-01-01 00:00:00",
+#     end_date = Sys.Date())
 

@@ -93,7 +93,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
                                                                    ### CHANGE THIS NUMBER BELOW 
                                                                                ##      
-   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/25/b7e4a95bf842e24c77cfd23dfee543cd")
+   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/26/b7e4a95bf842e24c77cfd23dfee543cd")
  # 
  # # Force files from EDI to have an EST timestamp
    current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")

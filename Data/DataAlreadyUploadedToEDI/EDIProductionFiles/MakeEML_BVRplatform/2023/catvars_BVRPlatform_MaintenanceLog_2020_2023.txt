@@ -1,6 +1,7 @@
 attributeName	code	definition
 DataStream	BVRplatform	Nickname for the sensor string and other sensors at the platform
 Reservoir	BVR	Three letter code for the Reservoir Beaverdam
+Site    	50	"Deep hole or site nearest to dam in the reservoir, attached to the platform. 37.31288, -79.8159"
 end_parameter	EXOBGAPC_ugL_1.5	Blue-Green Algae phycocyanin in ug/L at 1.5 meter depth as measured by the EXO2 Sonde
 end_parameter	EXOTDS_mgL_1.5	Total Dissolved Solids (TDS) at 1.5 meter depth as measured by the EXO2 Sonde
 end_parameter	EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde
@@ -10,7 +11,7 @@ end_parameter	RDOsat_percent_13	Dissolved Oxygen (DO) percent saturation at posi
 end_parameter	RDOsat_percent_6	Dissolved Oxygen (DO) percent saturation at position 6 as measured by the RDO Sensor
 end_parameter	ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (located about 0.5 m above sediments)
 flag	1	value removed due to maintenance and set to NA
-flag	2	negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+flag	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
 flag	4	value removed due to fouling and set to NA
 flag	5	questionable value but left in the dataset
 flag	6	Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor

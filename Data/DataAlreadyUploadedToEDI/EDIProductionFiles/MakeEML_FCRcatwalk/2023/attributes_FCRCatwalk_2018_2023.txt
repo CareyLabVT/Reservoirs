@@ -31,16 +31,16 @@ EXODO_mgL_1	Dissolved Oxygen at 1.6 meter depth as measured by the EXO Sonde	num
 EXOChla_RFU_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOChla_ugL_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
 EXOBGAPC_RFU_1	Blue-Green Algae Phyocycanin at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOBGAPC_ugL_1	Blue-Green Algae Phycoycanin at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	milligramsPerLiter		NA	value is missing
+EXOBGAPC_ugL_1	Blue-Green Algae Phycoycanin at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1	Fluorecent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sondein QSU	numeric	QuinineSulfateUnits		NA	value is missing
 EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
-EXOPressure_psi	Gauge pressure of EXO sonde at 1.6m; measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
+EXOPressure_psi	Gauge pressure of EXO sonde at 1.6m; measured relative to ambient atmospheric pressure	numeric	poundsPerSquareInch		NA	value is missing
 EXODepth_m	Depth of the EXO sonde as measured by the EXO sonde	numeric	meter		NA	value is missing
 EXOBattery_V	Voltage of the EXO sonde internal batteries	numeric	volt		NA	value is missing
 EXOCablepower_V	Measure of power being used by the cable connected to the CR6 datalogger as measured by the EXO sonde	numeric	volt		NA	value is missing
 EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO sonde	numeric	volt		NA	value is missing
-LvlPressure_psi_9	Measure of the pressure from the bottom sensor in the string which is about 9m	numeric	psig		NA	value is missing
+LvlPressure_psi_9	Measure of the pressure from the bottom sensor in the string which is about 9m	numeric	poundsPerSquareInch		NA	value is missing
 LvlTemp_C_9	Water temperature at the last sensor in the string (about 9m) as measured by the pressure transducer	numeric	celsius		NA	value is missing
 LvlDepth_m_9	Depth of the pressure sensor at 9m derived from Lvl_psi_9 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
 RECORD	The nth record collected since the instrument was turned on or the program was altered	numeric	number		NA	value is missing

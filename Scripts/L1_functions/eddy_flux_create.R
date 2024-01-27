@@ -87,7 +87,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   #create an out.file for the combined data
   
-  out.file<-""
+  out.file <- NULL
   
   # read in header from an early file will all the columns we want
   #  columns <- colnames(read.csv(myfiles[1], skip=1, as.is=T))%>%

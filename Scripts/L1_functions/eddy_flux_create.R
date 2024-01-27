@@ -101,8 +101,11 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     data2<-read.csv(myfiles[k], skip=3, header=F) #get data minus wonky Campbell rows
     names(data2)<-names(header2) #combine the names to deal with Campbell logger formatting
     
-    # Bind the headers with the data so if there are missing columns in the data frame they are added with NAs
-    #    data2<-plyr::rbind.fill(columns,data2)
+    if(colnames(header2)[1]!="filename"){
+      data2<-read.csv(myfiles[k], header=T)
+      data2$date <- as.Date(data2$date, tryFormats = "%m/%d/%Y") # convert date 
+      data2$date <- as.character(data2$date) # make it character so can bind files together
+    }
     
     # Clean up and make it useable for plotting
     data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs
@@ -239,8 +242,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
       
       dev.off()
       
-    }else{
-      # Do  nothing
     }
     
     # Now that you have created the QAQC plots only pick the variables you want for EDI and for 
@@ -267,8 +268,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     out.file=bind_rows(data3, out.file)
   }
   
-  # Get rid of rows with no date
-  out.file2 <- subset(out.file, out.file$date != "")
+  # # Get rid of rows with no date
+  # out.file2 <- subset(out.file, out.file$date != "")
   
   # change columns to numeric instead of character
   out.file2[, c(3:80)] <- sapply(out.file2[, c(3:80)], as.numeric)

@@ -272,10 +272,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # out.file2 <- subset(out.file, out.file$date != "")
   
   # change columns to numeric instead of character
-  out.file2[, c(3:80)] <- sapply(out.file2[, c(3:80)], as.numeric)
+  out.file[, c(3:80)] <- sapply(out.file[, c(3:80)], as.numeric)
   
   
-  current.ec<-out.file2%>%
+  current.ec<-out.file%>%
     mutate(date=ymd(date), #converts date to correct format
            time=strptime(time, format = "%H:%M"), #converts time to postix
            time=as_hms(time), #takes out the date and just leaves the time

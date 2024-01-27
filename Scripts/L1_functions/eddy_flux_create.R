@@ -358,15 +358,17 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),
            qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
            qc_h2o_flux = ifelse(is.na(h2o_flux_umolm2s), 3, qc_h2o_flux),
-           qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux), 
-           qc_co2_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
-           co2_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-           qc_h2o_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
-           h2o_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-           qc_ch4_flux = ifelse(ch4_flux_umolm2s> 1 | ch4_flux_umolm2s< -0.25, 4, qc_ch4_flux),
-           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s> 1 | ch4_flux_umolm2s< -0.25, NA, ch4_flux_umolm2s), # take out very high and low fluxes
-           qc_co2_flux = ifelse(co2_flux_umolm2s > 300 | co2_flux_umolm2s < -300, 4, qc_co2_flux),
-           co2_flux_umolm2s = ifelse(co2_flux_umolm2s > 300 | co2_flux_umolm2s < -300, NA, co2_flux_umolm2s))%>% # take out very high and low fluxes
+           qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux),
+           qc_co2_flux = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean), 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
+           co2_flux_umolm2s = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean),NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+           qc_h2o_flux = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean), 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
+           h2o_flux_umolm2s = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean),NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+           qc_ch4_flux = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s) | ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), 4, qc_ch4_flux),
+           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s)| ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), NA, ch4_flux_umolm2s), # take out very high and low fluxes
+           qc_co2_flux = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), 4, qc_co2_flux),
+           co2_flux_umolm2s = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), NA, co2_flux_umolm2s), # take out very high and low fluxes
+           qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),
+           h2o_flux_umolm2s = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), NA, h2o_flux_umolm2s))%>% # take out very high and low fluxes
     distinct()%>% # take out duplicates
     select(-Year, -flowrate_mean, -datetime) # take out the columns not in EDI
   

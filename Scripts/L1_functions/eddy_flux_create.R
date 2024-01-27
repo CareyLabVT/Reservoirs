@@ -363,8 +363,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            co2_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
            qc_h2o_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
            h2o_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-           qc_ch4_flux = ifelse(ch4_flux_umolm2s>200 | ch4_flux_umolm2s< -200, 4, qc_ch4_flux),
-           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s>200|ch4_flux_umolm2s< -200, 4, ch4_flux_umolm2s))%>%
+           qc_ch4_flux = ifelse(ch4_flux_umolm2s> 0.25 | ch4_flux_umolm2s< -0.25, 4, qc_ch4_flux),
+           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s> 0.25|ch4_flux_umolm2s< -0.25, NA, ch4_flux_umolm2s), # take out very high and low fluxes
+           qc_co2_flux = ifelse(co2_flux_umolm2s<-100 & co2_flux_umolm2s>100, 4, qc_co2_flux),
+           co2_flux_umolm2s = ifelse(co2_flux_umolm2s<-100 & co2_flux_umolm2s>100, NA, qc_co2_flux))%>% # take out very high and low fluxes
     distinct()%>% # take out duplicates
     select(-Year, -flowrate_mean, -datetime) # take out the columns not in EDI
   

@@ -389,6 +389,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   #  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
   # ec_all <- ec_all |> filter(date> last_edi_date)
+
+   # convert datetimes to characters so that they are properly formatted in the output file
+    ec_all$date <- as.character(ec_all$date)
+    ec_all$time <- as.character(ec_all$time)
   
   # Output data
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
@@ -396,10 +400,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   if (is.null(output_file)){
     return(ec_all)
   }else{
-    # convert datetimes to characters so that they are properly formatted in the output file
-    ec_all$date <- as.character(ec_all$date)
-    ec_all$time <- as.character(ec_all$time)
-    
     write_csv(ec_all, paste0(mydir,output_file))
   }
   

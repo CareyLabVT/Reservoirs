@@ -341,12 +341,18 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # Make a datetime column
   current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
+
+  # Filter for just the year
+  
+  if(!is.null(current_year)){
+    current.ec <- current.ec%>%
+      filter(Year %in% current_year)
+  }
   
   
   ## Add flag for missing data: 3 = missing data, 4= instrument malfunction 
   # For: qc_tau, qc_H, qc_LE, qc_co2_flux, qc_h2o_flux, qc_ch4_flux
   ec_all <- current.ec %>% 
-    filter(Year %in% current_year)%>% # filter so only the current year
     mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
            qc_H = ifelse(is.na(H_wm2), 3, qc_H),
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),

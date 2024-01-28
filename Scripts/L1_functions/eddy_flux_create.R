@@ -3,6 +3,7 @@
 
 ## Originally from Alex Hounshell's EddyPro_CleanUp script from 8 October 2021, A. Hounshell
 
+# Edits: 
 ## A. Breef-Pilz updated on 26 Oct. 2022 to included a for loop to
 ## read in the EddyPro output, create QAQC plots and bind all the files together into on large data frame.
 ## A. Breef-Pilz modified the script to create a function that reads in the current EddyFlux files
@@ -10,6 +11,11 @@
 ## then binds current files from the year,
 ## does a quick QAQC check and then creates an L1 file with all of the current fluxes
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
+
+# Additional notes: This script is included with this EDI package to show which QAQC has already been 
+# applied to generate these data <and includes additional R scripts available with this package>. 
+# This script is only for internal use by the data creator team and is provided as a reference; 
+# it will not run as-is. 
 
 
 #####################################################
@@ -87,7 +93,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   #create an out.file for the combined data
   
-  out.file<-""
+  out.file <- NULL
   
   # read in header from an early file will all the columns we want
   #  columns <- colnames(read.csv(myfiles[1], skip=1, as.is=T))%>%
@@ -101,8 +107,11 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     data2<-read.csv(myfiles[k], skip=3, header=F) #get data minus wonky Campbell rows
     names(data2)<-names(header2) #combine the names to deal with Campbell logger formatting
     
-    # Bind the headers with the data so if there are missing columns in the data frame they are added with NAs
-    #    data2<-plyr::rbind.fill(columns,data2)
+    if(colnames(header2)[1]!="filename"){
+      data2<-read.csv(myfiles[k], header=T)
+      data2$date <- as.Date(data2$date, tryFormats = "%m/%d/%Y") # convert date 
+      data2$date <- as.character(data2$date) # make it character so can bind files together
+    }
     
     # Clean up and make it useable for plotting
     data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs
@@ -239,8 +248,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
       
       dev.off()
       
-    }else{
-      # Do  nothing
     }
     
     # Now that you have created the QAQC plots only pick the variables you want for EDI and for 
@@ -264,17 +271,17 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                           `T.`,x_peak,x_offset,`x_10.`,`x_30.`,`x_50.`,`x_70.`,`x_90.`,un_Tau,
                           Tau_scf,un_H,H_scf,un_LE,LE_scf,un_co2_flux,co2_scf,un_h2o_flux,
                           h2o_scf,un_ch4_flux,ch4_scf,u_var,v_var,w_var,rssi_77_mean, flowrate_mean)
-    out.file=rbind(data3, out.file)
+    out.file=bind_rows(data3, out.file)
   }
   
-  # Get rid of rows with no date
-  out.file2 <- subset(out.file, out.file$date != "")
+  # # Get rid of rows with no date
+  # out.file2 <- subset(out.file, out.file$date != "")
   
   # change columns to numeric instead of character
-  out.file2[, c(3:80)] <- sapply(out.file2[, c(3:80)], as.numeric)
+  out.file[, c(3:80)] <- sapply(out.file[, c(3:80)], as.numeric)
   
   
-  current.ec<-out.file2%>%
+  current.ec<-out.file%>%
     mutate(date=ymd(date), #converts date to correct format
            time=strptime(time, format = "%H:%M"), #converts time to postix
            time=as_hms(time), #takes out the date and just leaves the time
@@ -340,24 +347,60 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # Make a datetime column
   current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
+
+# Fix DateTime issues. From 2020-04-04 to 2020-09-02 17:30 the system was in Est/GMT +5. 
+  # System is in US/Eastern with daylight savings observed from 2020-09-02 12:00 to current.
+  
+  # We want to convert the time in Est/GMT +5 to GMT+4  so we need to add an hour. 
+#Change DateTime when it was changed from EDT to EST
+  # Set everything to Etc/GMT+4
+  # Make a datetime column
+  
+  current.ec$datetime <- ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
+  
+  if("2020-09-02 17:30:00" %in% current.ec$datetime){
+    # shows time point when met station was switched from GMT -4(EST) to GMT -5(EDT) then -2 to get the row number right
+    flux_timechange=max(which(current.ec$datetime=="2020-09-02 17:30:00")-2) 
+    #Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
+    current.ec$datetime[c(0:flux_timechange+1)]<-with_tz(force_tz(current.ec$datetime[c(0:flux_timechange+1)],"Etc/GMT+5"), "Etc/GMT+4") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+  }else if (min(current.ec$datetime, na.rm = TRUE)<"2020-09-02 17:30:00"){
+    #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+    current.ec$datetime<-with_tz(force_tz(current.ec$datetime,"Etc/GMT+5"), "Etc/GMT+4")
+  }else if(min(current.ec$datetime, na.rm = TRUE)>"2020-09-02 17:30:00"){
+    # Do nothing because already in EST
+  }
+  
+  # Set timezone as America/New_York because 
+  current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
+  
+  
+  # Filter for just the year
+  
+  if(!is.null(current_year)){
+    current.ec <- current.ec%>%
+      filter(Year %in% current_year)
+  }
   
   
   ## Add flag for missing data: 3 = missing data, 4= instrument malfunction 
   # For: qc_tau, qc_H, qc_LE, qc_co2_flux, qc_h2o_flux, qc_ch4_flux
   ec_all <- current.ec %>% 
-    filter(Year==current_year)%>% # filter so only the current year
     mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
            qc_H = ifelse(is.na(H_wm2), 3, qc_H),
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),
            qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
            qc_h2o_flux = ifelse(is.na(h2o_flux_umolm2s), 3, qc_h2o_flux),
-           qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux), 
-           qc_co2_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
-           co2_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-           qc_h2o_flux = ifelse(flowrate_mean<10 & flowrate_mean>20, 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
-           h2o_flux_umolm2s = ifelse(flowrate_mean<10 & flowrate_mean>20,NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
-           qc_ch4_flux = ifelse(ch4_flux_umolm2s>200 | ch4_flux_umolm2s< -200, 4, qc_ch4_flux),
-           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s>200|ch4_flux_umolm2s< -200, 4, ch4_flux_umolm2s))%>%
+           qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux),
+           qc_co2_flux = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean), 4, qc_co2_flux), # take out fluxes when the blower motor malfunction
+           co2_flux_umolm2s = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean),NA, co2_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+           qc_h2o_flux = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean), 4, qc_h2o_flux),  # take out fluxes when the blower motor malfunction
+           h2o_flux_umolm2s = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean),NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
+           qc_ch4_flux = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s) | ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), 4, qc_ch4_flux),
+           ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s)| ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), NA, ch4_flux_umolm2s), # take out very high and low fluxes
+           qc_co2_flux = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), 4, qc_co2_flux),
+           co2_flux_umolm2s = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), NA, co2_flux_umolm2s), # take out very high and low fluxes
+           qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),
+           h2o_flux_umolm2s = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), NA, h2o_flux_umolm2s))%>% # take out very high and low fluxes
     distinct()%>% # take out duplicates
     select(-Year, -flowrate_mean, -datetime) # take out the columns not in EDI
   
@@ -378,6 +421,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   #  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
   # ec_all <- ec_all |> filter(date> last_edi_date)
+
+   # convert datetimes to characters so that they are properly formatted in the output file
+    ec_all$date <- as.character(ec_all$date)
+    ec_all$time <- as.character(ec_all$time)
   
   # Output data
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
@@ -385,10 +432,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   if (is.null(output_file)){
     return(ec_all)
   }else{
-    # convert datetimes to characters so that they are properly formatted in the output file
-    ec_all$date <- as.character(ec_all$date)
-    ec_all$time <- as.character(ec_all$time)
-    
     write_csv(ec_all, paste0(mydir,output_file))
   }
   

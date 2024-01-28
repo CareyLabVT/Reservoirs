@@ -371,7 +371,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   }
   
   # Set timezone as America/New_York because 
-  current.ec$datetime2 <- force_tz(current.ec$datetime, tzone = "America/New_York")
+  current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
   
   
   # Filter for just the year

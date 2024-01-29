@@ -175,9 +175,20 @@ zoop_biom <- zoop_biom |>
   mutate(DateTime = lubridate::as_datetime(DateTime, tz="EST"))
   
 #convert datetimes to character for EDI upload
-zoops_final$DateTime <- format(zoops_final$DateTime, "%Y-%m-%d %H:%M:%S")
-zoop_dens$DateTime <- format(zoop_dens$DateTime, "%Y-%m-%d %H:%M:%S")
-zoop_biom$DateTime <- format(zoop_biom$DateTime, "%Y-%m-%d %H:%M:%S")
+#zoops_final$DateTime <- format(zoops_final$DateTime, "%Y-%m-%d %H:%M:%S")
+#zoop_dens$DateTime <- format(zoop_dens$DateTime, "%Y-%m-%d %H:%M:%S")
+#zoop_biom$DateTime <- format(zoop_biom$DateTime, "%Y-%m-%d %H:%M:%S")
+
+#if time is midnight, at 1 s
+zoops_final$DateTime[substr(zoops_final$DateTime,12,13) == ""] <-  
+  zoops_final$DateTime[substr(zoops_final$DateTime,12,13) == ""] + 1
+
+zoop_dens$DateTime[substr(zoop_dens$DateTime,12,13) == ""] <-  
+  zoop_dens$DateTime[substr(zoop_dens$DateTime,12,13) == ""] + 1
+
+zoop_biom$DateTime[substr(zoop_biom$DateTime,12,13) == ""] <-  
+  zoop_biom$DateTime[substr(zoop_biom$DateTime,12,13) == ""] + 1
+                        
 
 #rename flags
 zoops_final <- zoops_final |> rename(Flag_MeanLength_mm = Flag_Length,

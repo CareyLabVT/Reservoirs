@@ -42,7 +42,8 @@ if(is.null(raw_profiles$Flag_DateTime)){
 raw_profiles <- raw_profiles %>%
   mutate(Time = format(DateTime,"%H:%M:%S"),
          Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-         Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
+         Flag_DateTime = ifelse(Time == "12:00:00" & year(DateTime)<2023, 1, Flag_DateTime), # Flag if set time to noon
+         #just need to catch some of the old data that didn't properly get flagged
          Date = as.Date(DateTime),
          DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
          Hours = hour(DateTime),
@@ -112,8 +113,8 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
-  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+  TIMESTAMP_start = col_datetime("%m/%d/%y %H:%M"),
+  TIMESTAMP_end = col_datetime("%m/%d/%y %H:%M"),
   flag = col_integer()
 ))
 

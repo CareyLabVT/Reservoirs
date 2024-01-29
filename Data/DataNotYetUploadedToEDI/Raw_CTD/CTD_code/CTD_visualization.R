@@ -4,11 +4,12 @@ library(colorRamps)
 library(plotly)
 library(tidyverse)
 library(lubridate)
-source("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
+setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/")
+source("ctd_QAQC.R")
 
 THIS_YEAR <- 2023 #Latest year of data
 # EDI publication that we are using for historical data
-# NOTE: I THINK we do NOT want to change this, given our decision in 2024 to 
+# NOTE: I THINK we do NOT want to change this link in future revisions, given our decision in 2024 to 
 # Re-process all casts 2018-present rather than pulling the most recent data on EDI
 ctd_edi <- read.csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
 
@@ -20,16 +21,16 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
                             CTD_FOLDER = "../",
                             start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
                             force_reprocessing = F, #Re-process all files
-                            output_file_name = paste0("CTD_2013_", THIS_YEAR,".csv"),
-                            intermediate_file_name = paste0("CTD_L0_2013_", THIS_YEAR,".csv"))
+                            output_file_name = paste0("CTD_2018_", THIS_YEAR,".csv"),
+                            intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
 
 #Load data
-ctd_reprocessed <- read.csv(paste0("../CTD_2013_", THIS_YEAR,".csv"))
+ctd_reprocessed <- read.csv(paste0("../CTD_2018_", THIS_YEAR,".csv"))
 min(ctd_reprocessed$DateTime) #Gut check: we've re-processed files since 2018
 
 #Add SN to historical EDI data
 ctd_edi <- ctd_edi %>%
-  mutate(SN = 7809)
+  mutate(SN = ifelse(year(DateTime) %in% c(2013:2016),4397,7809))
 
 #Check that all files have gotten re-processed
 check = ctd_edi %>% #Join new data with published dataset
@@ -46,7 +47,8 @@ unique(check$DateTime)
 check2 <- ctd_reprocessed %>%
   arrange(desc(DateTime)) %>%
   filter(year(DateTime) <= 2022, #Since we are using the 2022 data publication
-         !DateTime %in% unique(ctd_edi$DateTime)) %>%
+         !DateTime %in% unique(ctd_edi$DateTime), 
+         SN == "7809") %>%
   mutate(Name = paste0(Reservoir, Site, " ", SN, " ", DateTime))
 unique(check2$Name) 
 # 53 new files. In 2022, many of these are the new CTD, which didn't get published
@@ -54,12 +56,24 @@ unique(check2$Name)
 
 #Combine with historical
 ctd_comb <- ctd_edi %>%
+  mutate(Flag_CDOM_ugL = 5,
+         Flag_Phycoerythrin_ugL = 5,
+         Flag_Phycocyanin_ugL = 5) %>%
   filter(!DateTime %in% ctd_reprocessed$DateTime) %>% #Remove files that have been re-processed
   filter(!DateTime == "2021-12-14 10:45:36") %>% #Fix the time issue identified above
-  full_join(ctd_reprocessed)
+  full_join(ctd_reprocessed) %>%
+  select(Reservoir, Site, DateTime, Depth_m, SN, Temp_C, DO_mgL, DOsat_percent,
+         Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s,
+         CDOM_ugL, Phycoerythrin_ugL, Phycocyanin_ugL, DescRate_ms, Flag_DateTime, 
+         Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, Flag_Cond_uScm, 
+         Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, Flag_pH, 
+         Flag_ORP_mV, Flag_PAR_umolm2s, Flag_CDOM_ugL, Flag_Phycoerythrin_ugL, 
+         Flag_Phycocyanin_ugL, Flag_DescRate_ms)
+write.csv(ctd_comb, paste0("../CTD_2013_", THIS_YEAR,".csv"), row.names = F)
+
+# Begin visualization
 qaqc = ctd_comb %>%
-  mutate(Date = as_datetime(DateTime)) %>%
-  filter(!(Reservoir == "BVR" & DateTime == "2022-04-20 09:05:48"))
+  mutate(Date = as_datetime(DateTime))
 
 # Basic checks
 unique(qaqc$Site)

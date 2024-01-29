@@ -2,90 +2,52 @@
 
 Methods for BVRPlatform_2020_2023.csv: This is the methods section for observations in the data set from 2020-2023. The data set is ongoing and will be appended to each year.
 
-Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir (37.31288, -79.8159) in 2020-2023 using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 18 June 2020 to 31 December 2023. We deployed the 13 thermistors on a chain from a fixed platform, with the deepest located about 0.5 m above the sediments. Because the water level in Beaverdam Reservoir varied from 8.19-12.48 m (mean=10.54 m, median=11.00 m) during the monitoring period, we refer to the thermistors, dissolved oxygen, and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth, which roughly corresponds to the depth of the sensors at full pond in Beaverdam Reservoir (13.4 m). The thermistor closest to the top is labeled 1 and the deepest is labeled 13, with the intervening thermistors located at approximately ~1 m intervals. The dissolved oxygen sensors were deployed at positions 6 and 13, and the pressure sensor at position 13. 
+Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir (37.31288, -79.8159) in 2020-2023 using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 18 June 2020 to 31 December 2023. All observations were collected in Eastern Standard Time with daylight savings not observed. We deployed the 13 thermistors on a chain from a fixed platform, with the deepest located about 0.5 m above the sediments. Because the water level in Beaverdam Reservoir varied from 8.19-12.48 m (mean=10.16 m, median=10.2 m) during the monitoring period, we refer to the thermistors, dissolved oxygen, and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth, which roughly corresponds to the depth of the sensors at full pond in Beaverdam Reservoir (13.4 m). The thermistor closest to the top is labeled 1 and the deepest is labeled 13, with the intervening thermistors located at approximately ~1 m intervals. The dissolved oxygen sensors were deployed at positions 6 and 13, and the pressure sensor at position 13. 
 
-Water Level: This reservoir experiences substantial water level changes due to its position at the headwaters of its catchment as well as management, and reservoir maximum depth ranged from 8.19 to 12.48 m (mean=10.46 m, median=10.53 m) during the monitoring period. Depth profiles of water temperature were measured by thermistors on ~1-meter intervals at the surface of the reservoir to 0.5 m above the sediments, complemented by dissolved oxygen and pressure sensors deployed at depth. These sensors (thermistor temperature, dissolved oxygen, and pressure) were held stationary as the water depth fluctuated from 8.19-12.48m. A YSI EXO2 sonde measuring temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, fluorescent dissolved organic matter, and turbidity was attached to a buoy that moved with the changing water level and thus was kept at a constant ~1.5 m depth. Dissolved oxygen was monitored at three different positions: 1.5 m from the EXO2, in the mid-water column at 0.361-4.65 m depth, and bottom waters at 7.69-11.92 m depth. In 2022, the Western Virginia Water Authority lowered the water level for management purposes from May 19, 2022-July 1, 2022, which resulted in a decrease of about ~2 m.
-
-Determining Sensor Depths:
-
-To determine the depths of each sensor over time, we used the pressure sensor at position 13 (which was fixed at about 0.5 m above the sediments) to get the actual depth of the sensor when it is at the surface of the water. To do this, we converted the pressure readings from psi to depth in meters using the conversion 1 psi=0.70544 m, which is found in the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). We then determined the date and time when the thermistor was at the surface of the water and recorded the depth reading in the offset table (BVR_Depth_offsets_2020_2022.csv). For those positions that were never out of the water, we assumed they were equidistant from each other and divided the length of the temp string when the deepest thermistor was at the surface by the number of postions still under the water. This number was the distance between the thermistors underwater. We took the depth of the deepest thermistor when it was at the surface and subtracted the distance between the positions to get the rest of the offsets. The offset is used to get depth of the sensor below the water. In 2020, for thermistor 1, the sensor was at the surface on 2 July 2020 12:40, whereas thermistor 2 was out of the water on 14 July 20:00. For the other sensors that were never out of the water in 2020, we subtracted the offset of position 2 (the deepest thermistor that was at the surface) from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (6 cm). We then divided that number by the number of sensors below position 2 (11), which was equal to 1.038 m, the distance between the sensors at position 3-13. This number (1.038) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (11.478) and subtracted 1.038 to get 10.44, which is the distance of the sensor at position 3 from the pressure sensor. 
-
-On 05 April 2021 at 13:30, we secured the pressure sensor so it was in line with the thermistor at position 13, therefore the offset at position 13 is 0. At the end of the year in 2021 we recalculated the depth offsets for sensors at positions 3-13 because we moved the pressure sensor and the thermistor at position 3 was out of the water. The thermistor at position 3 was at the surface on 10 September 2021 11:10. Because no other sensors below position 3 were out of the water we assume they were equidistant from each other and calculate the distance between sensors to be 1.047 m. When or if other sensors are at the surface of the water, we can confirm the depth of the sensors at more positions. In 2022, the Western Virginia Water Authority lowered the water so the thermistor in position 4 was out of the water on 2022-06-06 18:00:00 and thermistor in position 5 was out of the water on 2022-06-25 11:20:00. The EXO2 is currently deployed on a buoy at 1.5m regardless of the depth reading and usually sits at this depth unless there were issues with the buoy. Thus, to calculate the depth from the surface of the other sensors, first subtract the unique offset for each sensor from column Depth_m_13, which is the depth of the pressure transducer at position 13 in meters. Below is a table with the position of the sensor, the offset before and after the pressure sensor was moved in April 2021, and the distance above the sediments.  
- 
-
-Offset Table:
-
-The table below is the position of the sensor, offset to find the depth of the position from the surface of the water at a given time, and the distance above the sediments when the sensors were deployed. The function find_depths in the find_depths.R script attached to this package will calculate a depth for each sensor reading. If you would like the observations returned in the wide format, use the argument wide_depth =T.
-
-Offset Table 2020_2023
-
-Position; Offset_before_05APR21; Current_Offset; Distance from sediments.
-
-Position_1; 11.82m; 11.82m; 12.5m.
-
-Position_2; 11.478m; 11.478m; 11.5m.
-
-Position_3; 10.44m; 10.47m; 10.5m.
-
-Position_4; 9.402m; 9.423m; 9.5m.
-
-Position_5; 8.364m; 8.376m; 8.5m.
-
-Position_6; 7.326m; 7.329m; 7.5m.
-
-Position_7; 6.288m; 6.282m; 6.5m.
-
-Position_8; 5.25m; 5.235m; 5.5m.
-
-Position_9; 4.212m; 4.188m; 4.5m.
-
-Position_10; 3.174m; 3.141m; 3.5m.
-
-Position_11; 2.136m; 2.094m; 2.5m.
-
-Position_12; 1.098m; 1.047m; 1.5m.
-
-Position_13; 0.06m; 0m; 0.5m.
+This reservoir experiences substantial water level changes due to its position at the headwaters of its catchment as well as management, and reservoir maximum depth ranged from 8.19-12.48 m (mean=10.46 m, median=10.5 m) during the monitoring period. Depth profiles of water temperature were measured by thermistors on ~1-meter intervals at the surface of the reservoir to 0.5 m above the sediments, complemented by dissolved oxygen and pressure sensors deployed at depth. These sensors (thermistor temperature, dissolved oxygen, and pressure) were held stationary as the water depth fluctuated from 8.19-12.48 m. A YSI EXO2 sonde measuring temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, fluorescent dissolved organic matter, and turbidity was attached to a buoy that moved with the changing water level and thus was kept at a constant ~1.5 m depth. Dissolved oxygen was monitored at three different positions: 1.5 m from the EXO2, in the mid-water column at 0.361-4.65 m depth, and bottom waters at 8.19-12.48 m depth. In 2022, the Western Virginia Water Authority lowered the water level for management purposes from May 19, 2022-July 1, 2022, which resulted in a decrease of about ~2 m.
 
 
-Missing Data: The CR6 program on the datalogger underwent maintenance on 13 August 2020, 5 October 2020, 7 December 2020, 5 April 2021, 31 May 2021, and 24 August 2021 so no data were recorded during these times: 2020-08-13 05:20-05:50, 2020-10-05 09:20-12:00, 2020-12-07 10:10-10:40, 2021-04-05 13:20:00-14:40:00, 2021-05-31 08:50:00-09:10:00, and 2021-08-24 07:30:00- 07:50:00, 2023-06-27 08:00 - 09:50. 
+Missing Data: Gaps due to maintenance on the data logger program on 13 August 2020, 5 October 2020, 7 December 2020, 5 April 2021, 31 May 2021, and 24 August 2021 so no data were recorded during these times: 2020-08-13 05:20-05:50, 2020-10-05 09:20-12:00, 2020-12-07 10:10-10:40, 2021-04-05 13:20:00-14:40:00, 2021-05-31 08:50:00-09:10:00, and 2021-08-24 07:30:00- 07:50:00, 2023-06-27 08:00 - 09:50. 
 
 Calibration:
 
 EXO Depth: On 13 August 2020 at 11:30, the EXO2 was redeployed 0.41m lower than before and stayed at this lower position for the rest of the year. On 05 April 2021 at 13:40, the EXO2 was redeployed because the original floating buoy had filled with water and sunk just below the surface. We recalibrated the depth sensor on the EXO2 and deployed the buoy at 1.5m using a boat fender and multipurpose clothesline wire. On 09 November 2021 the water level had dropped so the EXO2 cable was taut and not supported by the buoy, more cable was let out until the buoy was floating again. Because the EXO2 was vented but the cable was not, changes in barometric pressure were not accounted for. The EXO2 was deployed on a buoy at 1.5m regardless of the depth reading and sat at this depth unless there were issues with the buoy. See  BVRPlatform_maintenancelog_2020_2023.csv for times and descriptions when there were issues with the depth of the EOX2 sensor.
    
 
-DO Maintenance: In-situ RDO Pro-X Dissolved Oxygen Sensors were calibrated on 16 September 2020, 26 October 2020, 8 March 2021, 3 March 2022, 5 September 2022, and checked on 26 October 2021.  The caps to the DO sensors were replaced on 26 October 2021 with the calibration checked but not calibrated. The antifouling guard was removed on 26 October 2021 due to concerns of lack of water exchange with the sensor. 
+DO Maintenance: In-situ RDO Pro-X Dissolved Oxygen Sensors were calibrated on 16 September 2020, 26 October 2020, 8 March 2021, 3 March 2022, 5 September 2022, and checked on 26 October 2021.  The caps to the DO sensors were replaced on 26 October 2021 with the calibration checked but not calibrated. The antifouling guard was removed on 26 October 2021 due to concerns of lack of water exchange with the sensor. The sensors were not calibrated in 2023 but they were checked periodically throughout the season.   
 
 EXO2 DO sensor was calibrated on 16 September 2020, 26 October 2020, 8 March 2021, 12 July 2021, and 17 December 2022 with air saturated water. The DO cap was changed on 12 July 2021. We did see an increase in DO saturation when the cap was changed.
 
 
-Turbidity Sensor: The turbidity sensor on the EXO2 was added to the data frame on 5 April 2021.
+Turbidity Sensor: The turbidity sensor was added to the EXO2 on 5 April 2021.
 
 QAQC Methods:
 
-All QAQC is done in the BVRPlatform_qaqc_2020_2023.R script. This script uses the BVRPlatform_maintenancelog_2020_2023.csv to remove maintenance times, outliers, and other events. The script also checks for extreme outlier and removes observations when the sensors are out of the water. To ensure we have removed all erroneous data, before publishing the data are plotted and outliers are identified and put in the maintenance log. If any corrections need to be made they are also added to the maintenance log.
+All QAQC was done in the BVRPlatform_qaqc_2020_2023.R script. This script used the BVRPlatform_maintenancelog_2020_2023.csv to remove maintenance times, outliers, and other events. The script also checked for extreme outlier and removed observations when the sensors were out of the water. To ensure we have removed all erroneous data, before publishing the data are plotted and outliers are identified and put in the maintenance log. If any corrections were made, they are added to the maintenance log.
 
-In addition to recorded maintenance issues, we also removed all observations from the EXOs when they are out of position. For example, the EXO2 normally is positioned at 1.5 m, so when the depth of the sensor was above 0.2 m, we set all of those EXO2 observations to NA and flagged those times with a 2 (for outlier set to NA). We also remove EXO2 values when the wiper is malfunctioning. We have set this as when the wiper voltage is greater than 0 but less than 0.7, or if the voltage is greater than 1.6. We did this because we can not be certain that the wiper was not over a sensor during a reading.  
+In addition to recorded maintenance issues, we also removed all observations from the EXOs when it was out of position. For example, the EXO2 normally is positioned at 1.5 m, so when the depth of the sensor was above 0.2 m, we set all of those EXO2 observations to NA and flagged those times with a 2 (for outlier set to NA). We also remove EXO2 values when the wiper was malfunctioning. This occured when the wiper voltage was greater than 0 but less than 0.7, or if the voltage was greater than 1.6. We did this because we could not be certain that the wiper was not covering a sensor during the reading.  
 
-Lastly, we identified and removed extreme outliers by using what we call the leading and lagging method. For each observations, we look at the previous observations, taken 10 minutes before, and the lagging observation, taken 10 minutes after the focal observation. If the observation was 2 standard deviations above or below either of those two points, then the observation was flagged and set to NA.  For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL, we defined outliers as values 4 standard deviations as opposed to 2 stand deviations for the other sensors, given there is lots of variablility in the observations. 
+Lastly, we identified and removed extreme outliers by using what we call the leading and lagging method. For each observations, we looked at the previous observations, taken 10 minutes before, and the lagging observation, taken 10 minutes after the focal observation. If the observation was 2 standard deviations above or below either of those two points, then the observation was flagged and set to NA.  For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL, we defined outliers as values 4 standard deviations above or below the focal observation, as opposed to 2 standard deviations for the other sensors, given there is lots of variablility in the observations. 
 
-As part of the QAQC process, we plotted all of the observation in the BVRPlatform_inspection_2020_2023.Rmd. In the R markdown, the user downloads data, identifies duplicates and  gaps in the data, checks that the maintenanc log flagged values, produces plots to visually check for outliers, saves the current data file, and downloads the maintenance log, qaqc function, and other functions needed for publishing. 
+
+As part of the QAQC process, we plotted all of the observation in the BVRPlatform_inspection_2020_2023.Rmd. In the R markdown, the user downloaded data, identified duplicates and  gaps in the data, checked that the maintenanc log flagged values, produced plots to visually check for outliers, saved the current data file, and downloaded the maintenance log, qaqc function, and other functions needed for publishing. 
 
 
 EXO Maintenance and QAQC:
 
-In 2023, the CCR EXO2 was reading higher BGAPC (Blue Green Algae) especially the RFUs. These observations were put in the maintenance log and flagged as 5 for questionable. The wiper voltage was erratic until it was replaced so we flagged all EXO2 sensors with a 5 when it was very erratic. We also conditionally removed observations for fDOM, conductivity, and turbidity when the sensor could have been covering the sensors during a reading. See BVRPlatform_maintenancelog_2020_2023.csv. The wiper was removed so it could replace the one at FCR, so from June 19 - September 26 there was no wiper on the EXO2. The field crew cleaned the sensor every week and we did not see major changes after cleaning. The wiper was replaced on September 26th with SN:23J101214. From December 11- December 18th, the EXO2 broke away from the float and was deeper than normal. We flagged observations as 5, but the reservoir was fully mixed so measuring at a different depth should not be that different to the normal shallower position.
-
-In December 2022, the EXO was brought into the lab for maintenance and calibration and then deployed at FCR while that EXO2 went back for maintenance. The EXO2 from CCR was put out in its place after being calibrated. See BVRPlatform_MaintenanceLog_2020_2023.csv for more information.
-
 The EXO2 was removed from the reservoir on 06 December 2021 11:00 and sent back to YSI (Yellow Springs, OH) for winter maintenance. It was returned to the reservoir on 2022-01-26 15:10:00 after a factory calibration.
+
+In December 2022, the EXO2 was brought into the lab for maintenance and calibration and then deployed at Falling Creek Reservoir (FCR) while that EXO2 went back for maintenance. The EXO2 from Carvins Cove Reservoir (CCR) was put out in its place after being calibrated. See BVRPlatform_MaintenanceLog_2020_2023.csv for more information.
+
+In 2023, the CCR EXO2 was reading higher BGAPC (Blue Green Algae phycocyanin) especially the RFUs. These observations were put in the maintenance log and flagged as 5 for questionable. Also during the year, the wiper voltage was erratic until it was replaced, so we flagged all EXO2 sensors observations with a 5 because we could not be sure the wiper did not interfere with the reading. We also removed higher than normal observations for fDOM, specific conductivity, and turbidity when the wiper could have been covering the sensors during a reading. For fDOM this was for observations less than 3 RFU, specific conductivity less than 29.5 uScm, and turbidity greater than 5 FNU. See BVRPlatform_maintenancelog_2020_2023.csv. The wiper was removed so it could replace the one at FCR, so from June 19 - September 26 there was no wiper on the EXO2. The field crew cleaned the sensor every week and we did not see major changes after cleaning. The wiper was replaced on September 26th with SN:23J101214. From December 11- December 18th, the EXO2 broke away from the float and was deeper than normal. We flagged observations as 5, but the reservoir was fully mixed so measuring at a different depth should not be that different to the normal shallower position.
+
 
 QAQC Dissolved Oxygen values:
 
-After the sensors are pulled up DO values are changed to NA and flagged up to 2 hours after the sensors are back in the water. This ensures the sensors equilibrate after a cleaning and being in air.
+After the sensors are pulled up, DO values are changed to NA and flagged up to 2 hours after the sensors are back in the water. This ensures the sensors equilibrate after a cleaning and being in air.
 
-Thermistors: On 6 October 2023, we removed the top 2 thermistors because they have not been in the water for the past 2 years. After the thermistors were removed, the temperature string was deployed at the same depth. Thermistors 11, 12, and 13 were not programmed until 5 October 2020, so all readings prior to that time are NA and given a “flag 1” for maintenance. In Flag_ThermistorTemp_C_11, Flag_ThermistorTemp_C_12, and Flag_ThermistorTemp_C_13. When the water level was lower than thermistors at position 1 through 3 and they were reading the temperature of the air, their readings were changed to NA and given a “flag 2”.
+Thermistors: 
+When thermistors were out of the water, their readings were changed to NA and given a “flag 2”. When the temperature string was first deployed, Thermistors 11, 12, and 13 were not programmed until 5 October 2020, so all readings prior to that time are NA and given a “flag 1” for maintenance issues.  On 6 October 2023, we removed the top 2 thermistors because they have not been in the water for the past 2 years. After the thermistors were removed, the temperature string was deployed at the same depth.
 
 EXO conductivity, Specific Conductance and Total Dissolved Solids:
 
@@ -167,10 +129,54 @@ Calibration from December 17, 2022 to current; DO gain=1.16; pre: 1.3% Sat,92.5%
 
 Campbell Scientific Stainless-Steel Pressure Transducer CS451 (June 2020-current); https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf Serial No. 29010796
 
+######################################################################################
+
+Determining Sensor Depths:
+
+To determine the depths of each sensor over time, we used the pressure sensor at position 13 (which was fixed at about 0.5 m above the sediments) to get the actual depth of the sensor when it is at the surface of the water. To do this, we converted the pressure readings from psi to depth in meters using the conversion 1 psi=0.70544 m, which is found in the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). We then determined the date and time when the thermistor was at the surface of the water and recorded the depth reading in the offset table (BVRPlatform_Depth_offsets_2020_2023.csv). For those positions that were never out of the water, we assumed they were equidistant from each other and divided the length of the temp string when the deepest thermistor was at the surface by the number of postions still under the water. This number was the distance between the thermistors underwater. We took the depth of the deepest thermistor when it was at the surface and subtracted the distance between the positions to get the rest of the offsets. The offset is used to get depth of the sensor below the water. In 2020, for thermistor 1, the sensor was at the surface on 2 July 2020 12:40, whereas thermistor 2 was out of the water on 14 July 20:00. For the other sensors that were never out of the water in 2020, we subtracted the offset of position 2 (the deepest thermistor that was at the surface) from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (6 cm). We then divided that number by the number of sensors below position 2 (11), which was equal to 1.038 m, the distance between the sensors at position 3-13. This number (1.038) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (11.478) and subtracted 1.038 to get 10.44, which is the distance of the sensor at position 3 from the pressure sensor. 
+
+On 05 April 2021 at 13:30, we secured the pressure sensor so it was in line with the thermistor at position 13, therefore the offset at position 13 is 0. At the end of the year in 2021 we recalculated the depth offsets for sensors at positions 3-13 because we moved the pressure sensor and the thermistor at position 3 was out of the water. The thermistor at position 3 was at the surface on 10 September 2021 11:10. Because no other sensors below position 3 were out of the water we assume they were equidistant from each other and calculate the distance between sensors to be 1.047 m. When or if other sensors are at the surface of the water, we can confirm the depth of the sensors at more positions. In 2022, the Western Virginia Water Authority lowered the water so the thermistor in position 4 was out of the water on 2022-06-06 18:00:00 and thermistor in position 5 was out of the water on 2022-06-25 11:20:00. The EXO2 is currently deployed on a buoy at 1.5m regardless of the depth reading and usually sits at this depth unless there were issues with the buoy. Thus, to calculate the depth from the surface of the other sensors, first subtract the unique offset for each sensor from column LvlDepth_m_13, which is the depth of the pressure transducer at position 13 in meters. Below is a table with the position of the sensor, the offset before and after the pressure sensor was moved in April 2021, and the distance above the sediments.  
+ 
+
+Offset Table:
+
+The table below is the position of the sensor, offset to find the depth of the position from the surface of the water at a given time, and the distance above the sediments when the sensors were deployed. The function find_depths in the find_depths.R script attached to this package will calculate a depth for each sensor reading. If you would like the observations returned in the wide format, use the argument wide_depth =T.
+
+Offset Table 2020_2023
+
+Position; Offset_before_05APR21; Current_Offset; Distance from sediments.
+
+Position_1; 11.82m; 11.82m; 12.5m.
+
+Position_2; 11.478m; 11.478m; 11.5m.
+
+Position_3; 10.44m; 10.47m; 10.5m.
+
+Position_4; 9.402m; 9.423m; 9.5m.
+
+Position_5; 8.364m; 8.376m; 8.5m.
+
+Position_6; 7.326m; 7.329m; 7.5m.
+
+Position_7; 6.288m; 6.282m; 6.5m.
+
+Position_8; 5.25m; 5.235m; 5.5m.
+
+Position_9; 4.212m; 4.188m; 4.5m.
+
+Position_10; 3.174m; 3.141m; 3.5m.
+
+Position_11; 2.136m; 2.094m; 2.5m.
+
+Position_12; 1.098m; 1.047m; 1.5m.
+
+Position_13; 0.06m; 0m; 0.5m.
+
+
 
 ######################################################################################
 
-Methods for BVR_sensor_string_2016_2020: This is the methods section for observations in the data set from 2016-2020. This data set is complete and will not be added to beyond 2020. 
+Methods for BVRSensorString_2016_2020: This is the methods section for observations in the data set from 2016-2020. This data set is complete and will not be added to beyond 2020. 
 
 Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir in 2016-2020 using water temperature HOBO pendent loggers, dissolved oxygen sensor (MiniDot Logger), and a YSI EXO2 sonde. Various sensor data were collected every fifteen minutes from 21 July 2016 11:00 EST-7 November 2017 15:30 EST, and every ten minutes from 12 June 2018 13:40 EST-9 July 2020 11:50 EST. We deployed the HOBOs on a chain with sensors about 1 m apart from 0.1 m to 10.5 m. Because the water level in Beaverdam Reservoir varied the HOBOS were approximately at the assigned depth. All measurements when the sensors were out of the water were not included in the data set or if the values were in the data set, they were changed to NA and flagged with a “flag 2", for outlier set to NA. According to the QAQC plots, the HOBO at 0.1 m was out of the water after 30 August 2019 10:00 EST and changed to NA and flagged with a 2, for outlier set to NA. The dissolved oxygen sensor was deployed at 10 m until dissolved oxygen was 0 mg/L and then moved to 5 m. It was moved back to 10 m when the reservoir started to mix, and then when the dissolved oxygen was at 0 mg/L it was moved back to 5 m. The YSI sonde was deployed at 1.5 m.
 
@@ -218,13 +224,13 @@ All dates and times were changed to EST. Times were rounded to every 15 minutes 
 
 Negative values besides water temperature were changed to 0 and flagged with a 3 for negative value set to 0.
 
-EXO Chlorophyll-a and Phycocyanin: The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see chla and phyco qaqc section of BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOChla_ugL_1.5, Flag_EXOChla_RFU_1.5, EXOBGAPC_RFU_1.5, or EXOBGAPC_ugL_1.5 column as a value of 2.
+EXO Chlorophyll-a and Phycocyanin: The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see chla and phyco qaqc section of BVRSensorString_qaqc_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOChla_ugL_1.5, Flag_EXOChla_RFU_1.5, EXOBGAPC_RFU_1.5, or EXOBGAPC_ugL_1.5 column as a value of 2.
 
 EXO fDOM: The fDOM sensor data underwent a QAQC process to remove extreme outliers (see fdom qaqc section of BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2, for outlier set to NA.
 
-EXO conductivity, Specific Conductivity and Total Dissolved Solids: These sensors underwent a QAQC process to remove extreme outliers (see cond, spcond and TDS qaqc sensor of BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols originally for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2.
+EXO conductivity, Specific Conductivity and Total Dissolved Solids: These sensors underwent a QAQC process to remove extreme outliers (see cond, spcond and TDS qaqc sensor of BVRSensorString_qaqc_2016_2020.R script) following established protocols originally for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2.
 
-EXO Turbidity: These sensors underwent a QAQC process to remove extreme outliers (see turbidity qaqc sensor of BVR_sensorstring_Collate_QAQC_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2, for outlier set to NA.
+EXO Turbidity: These sensors underwent a QAQC process to remove extreme outliers (see turbidity qaqc sensor of BVRSensorString_qaqc_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2, for outlier set to NA.
 
 Instruments, manual, and serial numbers used in 2016-2020: Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
 
@@ -302,5 +308,8 @@ YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (October 2019- 
 
 ###############################################################################################
 
-Methods and description of BVR_Daily_WaterLevel_Vol_2015_2022.csv:
-The BVR_WaterLevel_2015_2022.Rmd is used to create BVR_Daily_WaterLevel_Vol_2015_2022.csv, which contains daily water level and volume associated with each date from 7 July 2015 - 4 May 2022 in Beaverdam Reservoir. This script uses EDI-published BVR sensor data from 2020-2022 to calculate daily water level using the pressure sensor, and water level observations from both the Western Virginia Water Authority and the Reservoir Group field crew from 2015-2020 (before high-frequency sensors were deployed) to interpolate water level and obtain daily values. We then use bathymetry data from EDI to associate a volume to the variable water level observations for each day.
+Methods and description of BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv:
+This is the methods section for observations in the data set from 2015-2022. This data set is complete and will not be added to beyond 2022. 
+
+
+The BVR_Daily_WaterLevel_Vol_2015_2022_interp.Rmd is used to create BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv, which contains daily water level and volume associated with each date from 7 July 2015 - 4 May 2022 in Beaverdam Reservoir. This script uses EDI-published BVR sensor data from 2020-2022 to calculate daily water level using the pressure sensor, and water level observations from both the Western Virginia Water Authority and the Reservoir Group field crew from 2015-2020 (before high-frequency sensors were deployed) to interpolate water level and obtain daily values. We then use bathymetry data from EDI to associate a volume to the variable water level observations for each day.

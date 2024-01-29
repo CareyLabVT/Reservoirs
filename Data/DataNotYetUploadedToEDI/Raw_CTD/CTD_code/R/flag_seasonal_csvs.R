@@ -48,6 +48,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
            Flag_pH = 0,
            Flag_ORP_mV = 0,
            Flag_PAR_umolm2s = 0,
+           Flag_CDOM_ugL = 0,
+           Flag_Phycoerythrin_ugL = 0,
+           Flag_Phycocyanin_ugL = 0,
            Flag_DescRate_ms = 0) %>%
     mutate(
       #TEMP
@@ -96,6 +99,25 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
       Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR_umolm2s), #Flag PAR < 0, set to 0
       PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, 0, PAR_umolm2s), 
       
+      #CDOM
+      Flag_CDOM_ugL = ifelse(is.na(CDOM_ugL), 2, Flag_CDOM_ugL), #Flag NA
+      Flag_CDOM_ugL = ifelse(!is.na(CDOM_ugL) & CDOM_ugL < 0, 4, Flag_CDOM_ugL), #Flag CDOM < 0, set to 0
+      CDOM_ugL = ifelse(!is.na(CDOM_ugL) & CDOM_ugL < 0, NA, CDOM_ugL), 
+      
+      #Phycoerythrin
+      Flag_Phycoerythrin_ugL = ifelse(is.na(Phycoerythrin_ugL), 2, Flag_Phycoerythrin_ugL),
+      Flag_Phycoerythrin_ugL = ifelse(!is.na(Phycoerythrin_ugL) & Phycoerythrin_ugL < 0, 
+                                      4, Flag_Phycoerythrin_ugL), #Flag CDOM < 0, set to 0
+      Phycoerythrin_ugL = ifelse(!is.na(Phycoerythrin_ugL) & Phycoerythrin_ugL < 0, 
+                                 NA, Phycoerythrin_ugL), 
+      
+      #Phycocyanin
+      Flag_Phycocyanin_ugL = ifelse(is.na(Phycocyanin_ugL), 2, Flag_Phycocyanin_ugL),
+      Flag_Phycocyanin_ugL = ifelse(!is.na(Phycocyanin_ugL) & Phycocyanin_ugL < 0, 
+                                    4, Flag_Phycocyanin_ugL), #Flag CDOM < 0, set to 0
+      Phycocyanin_ugL = ifelse(!is.na(Phycocyanin_ugL) & Phycocyanin_ugL < 0, 
+                               NA, Phycocyanin_ugL), 
+      
       #DESC RATE
       Flag_DescRate_ms = ifelse(is.na(DescRate_ms),2,Flag_DescRate_ms), #Flag NA
       
@@ -109,7 +131,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   #Not all variables are meaningful out of the water
   Above_surface_flag = 6
-  water_vars <- c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL","DOsat_percent","pH","ORP_mV")
+  water_vars <- c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL",
+                  "DOsat_percent","pH","ORP_mV", "CDOM_ugL", "Phycoerythrin_ugL",
+                  "Phycocyanin_ugL")
   ctd_flagged[ctd_flagged$Depth_m<0, water_vars]<-NA
   ctd_flagged[ctd_flagged$Depth_m<0, paste0("Flag_", water_vars)] <- Above_surface_flag
   
@@ -162,9 +186,11 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   CTD_fix_renamed = CTD_fix%>% 
     select(Reservoir, Site, SN, DateTime, Depth_m, Temp_C, DO_mgL, DOsat_percent, 
            Cond_uScm, SpCond_uScm, Chla_ugL, Turbidity_NTU, pH, ORP_mV, PAR_umolm2s, 
-           DescRate_ms, Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, 
+           CDOM_ugL, Phycoerythrin_ugL, Phycocyanin_ugL, DescRate_ms, 
+           Flag_DateTime, Flag_Temp_C, Flag_DO_mgL, Flag_DOsat_percent, 
            Flag_Cond_uScm, Flag_SpCond_uScm, Flag_Chla_ugL, Flag_Turbidity_NTU, 
-           Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_DescRate_ms)
+           Flag_pH, Flag_ORP_mV, Flag_PAR_umolm2s, Flag_CDOM_ugL, 
+           Flag_Phycoerythrin_ugL, Flag_Phycocyanin_ugL, Flag_DescRate_ms)
   
   
   # ## ADD MAINTENANCE LOG FLAGS 
@@ -220,7 +246,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     }
     
     ### Get the DateTimes
-    if(is.na(end)){
+    if(is.na(start) & is.na(end)){
+      Time <- CTD_fix_renamed |> select(DateTime)
+    }else if(is.na(end)){
       # If there the maintenance is on going then the columns will be removed until
       # an end date is added
       Time <- CTD_fix_renamed |> filter(DateTime >= start) |> select(DateTime)
@@ -245,7 +273,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     #7=Datetime missing time (date is meaningful but not time)
     #8=Measurement outside of expected range but retained in dataset
     
-    if(flag %in% c(2, 8)){ ## UPDATE THIS WITH ANY NEW FLAGS
+    if(flag %in% c(2, 8, 5)){ ## UPDATE THIS WITH ANY NEW FLAGS
       # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
       if(is.na(log$update_value[i]) || !log$update_value[i] == "NO CHANGE"){
         CTD_fix_renamed[CTD_fix_renamed$DateTime %in% times &

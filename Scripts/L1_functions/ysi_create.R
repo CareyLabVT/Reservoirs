@@ -72,7 +72,7 @@ update_profiles <- raw_profiles
 # 6 - HUMAN ERROR
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
-for(j in colnames(update_profiles%>%select(DateTime, Temp_C:pH))) {
+for(j in colnames(update_profiles%>%select(Temp_C:pH))) { #removing DateTime bc this loop replaces all 1s with 0s
 
   #create new flag column in data frame and set to zero
   update_profiles[,paste0("Flag_",colnames(update_profiles[j]))] <- 0 #creates flag column + name of variable
@@ -128,7 +128,7 @@ for(i in 1:nrow(log)){
   Site <- as.numeric(log$Site[i])
 
   ### Get the depth value
-  Depth <- as.numeric(log$Depth[i]) ## IS THERE SUPPOSED TO BE A COLUMN ADDED TO MAINT LOG CALLED NEW_VALUE?
+  Depth <- as.numeric(log$Depth[i]) 
 
   ### Get the Maintenance Flag
   flag <- log$flag[i]
@@ -189,12 +189,12 @@ for(i in 1:nrow(log)){
     # Suspect sample
     update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
-  }else if(flag %in% c(6) & colname_start != 'Site'){
+  }else if(flag %in% c(6) & (colname_start != 'Site' | colname_start != 'Depth_m')){
     ## human error
     update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
     update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
-  }else if(flag %in% c(6) & colname_start == 'Site'){
+  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start != 'Depth_m')){
     print(start)
     print(update_value)
     ## human error for site, which we don't indicate in final dataset

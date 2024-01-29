@@ -1,6 +1,6 @@
 Authorship Contribution Statement:
 CCC is PI of the project and set up the meteorological station. ABP is the point person for the dataset and led sensor maintenance, data management, and QAQC for 2023. ADD helped with QAQC, implemented new workflows, and maintained workflows in 2023. AGH, HLW, ABP, and ASL co-led the collation and analysis of the BVR historical water level dataset. 
 
-Acknowledgements: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Katie Hoffman, Mary Lofton, and HLW for helpful reviews of this data package.
+Acknowledgements: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Katie Hoffman, Freya Olsson, and HLW for helpful reviews of this data package.
 
 

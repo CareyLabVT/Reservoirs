@@ -72,7 +72,7 @@ update_profiles <- raw_profiles
 # 6 - HUMAN ERROR
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
-for(j in colnames(update_profiles%>%select(DateTime, Temp_C:pH))) {
+for(j in colnames(update_profiles%>%select(Temp_C:pH))) { #removing DateTime bc this loop replaces all 1s with 0s
 
   #create new flag column in data frame and set to zero
   update_profiles[,paste0("Flag_",colnames(update_profiles[j]))] <- 0 #creates flag column + name of variable

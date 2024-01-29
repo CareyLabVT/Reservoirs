@@ -31,6 +31,11 @@ ysi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile){
 #date format
 raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'), tz = "America/New_York")
 
+#add a Flag_DateTime col if not already there
+if(is.null(raw_profiles$Flag_DateTime)){
+  raw_profiles$Flag_DateTime <- 0
+}
+
 # ### Create a DateTime Flag for non-recorded times ####
 # # (i.e., 12:00) and set to noon
 # # Convert time that are in 12 hours to 24 hours

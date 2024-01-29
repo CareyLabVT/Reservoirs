@@ -3,6 +3,7 @@
 
 ## Originally from Alex Hounshell's EddyPro_CleanUp script from 8 October 2021, A. Hounshell
 
+# Edits: 
 ## A. Breef-Pilz updated on 26 Oct. 2022 to included a for loop to
 ## read in the EddyPro output, create QAQC plots and bind all the files together into on large data frame.
 ## A. Breef-Pilz modified the script to create a function that reads in the current EddyFlux files
@@ -10,6 +11,11 @@
 ## then binds current files from the year,
 ## does a quick QAQC check and then creates an L1 file with all of the current fluxes
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
+
+# Additional notes: This script is included with this EDI package to show which QAQC has already been 
+# applied to generate these data <and includes additional R scripts available with this package>. 
+# This script is only for internal use by the data creator team and is provided as a reference; 
+# it will not run as-is. 
 
 
 #####################################################
@@ -342,6 +348,32 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # Make a datetime column
   current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
 
+# Fix DateTime issues. From 2020-04-04 to 2020-09-02 17:30 the system was in Est/GMT +5. 
+  # System is in US/Eastern with daylight savings observed from 2020-09-02 12:00 to current.
+  
+  # We want to convert the time in Est/GMT +5 to GMT+4  so we need to add an hour. 
+#Change DateTime when it was changed from EDT to EST
+  # Set everything to Etc/GMT+4
+  # Make a datetime column
+  
+  current.ec$datetime <- ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
+  
+  if("2020-09-02 17:30:00" %in% current.ec$datetime){
+    # shows time point when met station was switched from GMT -4(EST) to GMT -5(EDT) then -2 to get the row number right
+    flux_timechange=max(which(current.ec$datetime=="2020-09-02 17:30:00")-2) 
+    #Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
+    current.ec$datetime[c(0:flux_timechange+1)]<-with_tz(force_tz(current.ec$datetime[c(0:flux_timechange+1)],"Etc/GMT+5"), "Etc/GMT+4") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+  }else if (min(current.ec$datetime, na.rm = TRUE)<"2020-09-02 17:30:00"){
+    #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+    current.ec$datetime<-with_tz(force_tz(current.ec$datetime,"Etc/GMT+5"), "Etc/GMT+4")
+  }else if(min(current.ec$datetime, na.rm = TRUE)>"2020-09-02 17:30:00"){
+    # Do nothing because already in EST
+  }
+  
+  # Set timezone as America/New_York because 
+  current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
+  
+  
   # Filter for just the year
   
   if(!is.null(current_year)){

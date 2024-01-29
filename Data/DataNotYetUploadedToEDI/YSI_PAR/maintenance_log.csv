@@ -63,15 +63,7 @@ BVR,50,0.1,YSI,10/31/23 10:30,10/31/23 10:30,pH,NA,2,NA,pH probe broken
 BVR,50,3,YSI,10/31/23 10:47,10/31/23 10:47,pH,NA,2,NA,pH probe broken
 BVR,50,6,YSI,10/31/23 11:07,10/31/23 11:07,pH,NA,2,NA,pH probe broken
 BVR,50,9,YSI,10/31/23 11:18,10/31/23 11:18,pH,NA,2,NA,pH probe broken
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
+FCR,100,0.1,YSI,11/22/21 13:32,11/22/21 13:32,SpCond_uScm,NA,6,25,fix digitizing error
+FCR,200,0.1,YSI,11/22/21 13:32,11/22/21 13:32,DOsat_percent,NA,5,73.3,DO probe not calibrated
+FCR,200,0.1,YSI,11/22/21 13:32,11/22/21 13:32,SpCond_uScm,NA,6,46.3,fix digitizing error
+FCR,100,0.1,YSI,11/22/21 13:32,11/22/21 13:32,DO_mgL,NA,5,10.05,DO probe not calibrated

@@ -1,7 +1,7 @@
 Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
-BVR,40,NA,Secchi,2022-05-31 12:56:00 EST,2022-05-31 12:56:00 EST,Secchi_m,NA,2,1.25,fix digitizing error
-BVR,40,NA,Secchi,2022-06-07 11:53:00 EST,2022-06-07 11:53:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,40,NA,Secchi,2022-07-18 10:30:00 EST,2022-07-18 10:30:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,50,NA,Secchi,2022-05-09 09:58:00 EST,2022-05-09 09:58:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,50,NA,Secchi,2014-04-30 08:00:00 EST,2014-04-30 08:00:00 EST,Secchi_m,NA,3,NA,suspect value
-BVR,50,NA,Secchi,2014-07-23 08:00:00 EST,2014-07-23 08:00:00 EST,Secchi_m,NA,3,NA,suspect value
+BVR,40,NA,Secchi,5/31/22 12:56,5/31/22 12:56,Secchi_m,NA,2,1.25,fix digitizing error
+BVR,40,NA,Secchi,6/7/22 11:53,6/7/22 11:53,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
+BVR,40,NA,Secchi,7/18/22 10:30,7/18/22 10:30,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
+BVR,50,NA,Secchi,5/9/22 9:58,5/9/22 9:58,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
+BVR,50,NA,Secchi,4/30/14 8:00,4/30/14 8:00,Secchi_m,NA,3,NA,suspect value
+BVR,50,NA,Secchi,7/23/14 8:00,7/23/14 8:00,Secchi_m,NA,3,NA,suspect value

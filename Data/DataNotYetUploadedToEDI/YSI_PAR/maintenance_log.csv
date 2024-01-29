@@ -36,3 +36,42 @@ BVR,50,9.7,YSI,8/6/20 11:42,8/6/20 11:42,Temp_C,NA,6,9.7,fix digitizing error
 BVR,50,9.7,YSI,8/6/20 11:42,8/6/20 11:42,DO_mgL,NA,6,0.52,fix digitizing error
 BVR,50,9.7,YSI,8/6/20 11:42,8/6/20 11:42,DOsat_percent,NA,6,4.5,fix digitizing error
 BVR,50,9.7,YSI,8/6/20 11:42,8/6/20 11:42,Depth_m,NA,6,11,fix digitizing error
+CCR,301,0.1,YSI,11/19/21 12:00,11/19/21 12:00,DO_mgL,NA,6,80,fix digitizing error
+CCR,301,0.1,YSI,11/19/21 12:00,11/19/21 12:00,SpCond_uScm,NA,6,21.6,fix digitizing error
+CCR,400,0.1,YSI,11/19/21 12:00,11/19/21 12:00,DO_mgL,NA,6,80.3,fix digitizing error
+CCR,400,0.1,YSI,11/19/21 12:00,11/19/21 12:00,SpCond_uScm,NA,6,297,fix digitizing error
+CCR,500,0.1,YSI,11/19/21 12:00,11/19/21 12:00,DO_mgL,NA,6,88.8,fix digitizing error
+CCR,500,0.1,YSI,11/19/21 12:00,11/19/21 12:00,SpCond_uScm,NA,6,367.1,fix digitizing error
+CCR,101,0.1,YSI,6/9/22 12:11,6/9/22 12:11,SpCond_uScm,NA,6,34.3,fix digitizing error
+CCR,301,0,YSI,6/9/22 11:34,6/9/22 11:34,Depth_m,NA,6,0.1,fix digitizing error
+CCR,500,0.1,YSI,6/9/22 12:20,6/9/22 12:20,Temp_C,NA,6,90.9,fix digitizing error
+FCR,100,0.1,YSI,6/22/20 13:07,6/22/20 13:07,DO_mgL,NA,6,8.44,fix digitizing error
+FCR,100,0.1,YSI,6/22/20 13:07,6/22/20 13:07,DOsat_percent,NA,6,94.2,fix digitizing error
+FCR,200,0.1,YSI,6/22/20 13:29,6/22/20 13:29,DO_mgL,NA,6,8.5,fix digitizing error
+FCR,200,0.1,YSI,6/22/20 13:29,6/22/20 13:29,DOsat_percent,NA,6,87.7,fix digitizing error
+BVR,50,0.1,YSI,9/26/22 10:08,9/26/22 10:08,SpCond_uScm,NA,6,30.3,fix digitizing error
+BVR,50,0.5,YSI,9/26/22 10:09,9/26/22 10:09,SpCond_uScm,NA,6,30.4,fix digitizing error
+BVR,50,1,YSI,9/26/22 10:10,9/26/22 10:10,SpCond_uScm,NA,6,30.3,fix digitizing error
+BVR,50,1.5,YSI,9/26/22 10:11,9/26/22 10:11,SpCond_uScm,NA,6,30.3,fix digitizing error
+BVR,50,2,YSI,9/26/22 10:12,9/26/22 10:12,SpCond_uScm,NA,6,30.4,fix digitizing error
+FCR,50,1.6,YSI,12/12/22 10:30,12/12/22 10:30,pH,NA,6,6.7,fix digitizing error
+FCR,50,6.2,YSI,12/12/22 11:03,12/12/22 11:03,pH,NA,6,6.68,fix digitizing error
+FCR,50,8,YSI,12/12/22 11:15,12/12/22 11:15,pH,NA,6,6.55,fix digitizing error
+FCR,50,9,YSI,12/12/22 11:20,12/12/22 11:20,pH,NA,6,6.54,fix digitizing error
+BVR,50,0.1,YSI,12/16/22 10:50,12/16/22 10:50,pH,NA,6,7.04,fix digitizing error
+BVR,50,0.1,YSI,10/31/23 10:30,10/31/23 10:30,pH,NA,2,NA,pH probe broken
+BVR,50,3,YSI,10/31/23 10:47,10/31/23 10:47,pH,NA,2,NA,pH probe broken
+BVR,50,6,YSI,10/31/23 11:07,10/31/23 11:07,pH,NA,2,NA,pH probe broken
+BVR,50,9,YSI,10/31/23 11:18,10/31/23 11:18,pH,NA,2,NA,pH probe broken
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,

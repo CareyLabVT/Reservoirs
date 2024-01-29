@@ -78,12 +78,12 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   if(!is.null(maintenance_file)){ # only run this file if the maint file arugment is non-null
 
   # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
-  log_read <- read_csv(maintenance_file, col_types = cols(
-    .default = col_character(),
-    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-    flag = col_integer()
-  ))
+    log_read <- read_csv(maintenance_file, col_types = cols(
+      .default = col_character(),
+      TIMESTAMP_start = col_datetime("%m/%d/%y %H:%M"),
+      TIMESTAMP_end = col_datetime("%m/%d/%y %H:%M"),
+      flag = col_integer()
+    ))
 
   log <- log_read
 

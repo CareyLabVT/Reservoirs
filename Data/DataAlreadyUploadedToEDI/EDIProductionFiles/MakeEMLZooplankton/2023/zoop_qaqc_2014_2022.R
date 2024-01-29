@@ -155,9 +155,6 @@ zoop_biom$MarksInOcularMicrometer_No. <- as.numeric(zoop_biom$MarksInOcularMicro
 #if density is NA, drop the row
 zoops_final <- zoops_final[!is.na(zoops_final$Density_IndPerL),]
 
-#also drop rows if density is 0 and mean length is NA
-zoops_final <- zoops_final |> filter(!(Density_IndPerL==0 & is.na(MeanLength_mm)))
-
 #make sure all taxa are uppercase
 zoops_final$Taxon <- str_to_sentence(zoops_final$Taxon)
 

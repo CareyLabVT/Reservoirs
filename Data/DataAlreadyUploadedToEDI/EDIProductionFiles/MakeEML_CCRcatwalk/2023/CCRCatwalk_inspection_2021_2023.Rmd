@@ -30,7 +30,7 @@ For the plots, they use a function called "all_plot". In all_plot you can specif
 
 All files are from GitHub or EDI and the source scripts are from GitHub as well. 
 
-If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind files together or READ IN EDI FOR REVIEWER". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "QAQC all Files", "Make csv" chunk and "Download files". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
 ```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
@@ -92,8 +92,8 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
   
                                                                    ### CHANGE THIS NUMBER BELOW 
-                                                                               ##      
-   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/26/b7e4a95bf842e24c77cfd23dfee543cd")
+                                                                              ##      
+   current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/57267535da5ab0687d2fee52083699f8")
  # 
  # # Force files from EDI to have an EST timestamp
    current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
@@ -714,7 +714,7 @@ output <- unlist(outputs, recursive = F)
 ```
 
 
-```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
+```{r Make csv, eval=FALSE, include=FALSE}
 
 # Double Check naming convention
 # Variable_StartYear_EndYear
@@ -727,7 +727,7 @@ write_csv(current_df, "CCRCatwalk_2021_2023.csv")
 ```
 
 
-```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
+```{r Download files, eval=FALSE, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", "CCRCatwalk_maintenancelog_2021_2023.csv")

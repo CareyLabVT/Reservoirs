@@ -54,18 +54,24 @@ current_time_end=ymd_hms("2023-12-31 23:59:00", tz= "America/New_York")
 
 
 
-```{r QAQC raw files, include=FALSE}
+```{r QAQC raw files, eval=FALSE, include=FALSE}
 # QAQC the files we have
 
-current_df <- eddypro_cleaning_function(
-  directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/",
-  gdrive = F, # Are the files on Google Drive. True or False
-  gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-  current_year = NULL,
-  output_file = NULL)
-
-# Make a DateTime column but remove it before saving the file
- current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time), tz="America/New_York")
+# current_df <- eddypro_cleaning_function(
+#   directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/",
+#   gdrive = F, # Are the files on Google Drive. True or False
+#   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
+#   current_year = NULL,
+#   output_file = NULL)
+# 
+# # Make a DateTime column but remove it before saving the file
+#  current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
+#  
+#  # force the timezone to Eastern/New_York
+#  
+#  # Set timezone as EST. Streaming sensors don't observe daylight savings
+#   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
+#  
 
 ```
 
@@ -73,29 +79,33 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
   
-# If No EDI file exists with all the years you want to look at
-  current_df <- current_df%>%
-  dplyr::distinct(.)%>% # get rid of dups if they snuck in
-  filter(DateTime<(current_time_end))
-
-# make sure no time duplicates.
- current_df<-  current_df[!duplicated(current_df$DateTime), ]
-
-#reorder. Just to be certain everything is in order
-  current_df<-current_df[order(current_df$DateTime),]
+# # If No EDI file exists with all the years you want to look at
+#   current_df <- current_df%>%
+#   dplyr::distinct(.)%>% # get rid of dups if they snuck in
+#   filter(DateTime<(current_time_end))
+# 
+# # make sure no time duplicates.
+#  current_df<-  current_df[!duplicated(current_df$DateTime), ]
+# 
+# #reorder. Just to be certain everything is in order
+#   current_df<-current_df[order(current_df$DateTime),]
 
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
-                                                                ### CHANGE THIS NUMBER BELOW 
-                                                                             ##      
- # current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/29/6b78ab905a142b5dcc29044b83bae676")
- # 
+                                                                  ### CHANGE THIS NUMBER BELOW 
+                                                                               ##      
+  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/9/f837d12dc12ab37a6772598578875e00")
+ #
  # # Force files from EDI to have an EST timestamp
-  
+
  # Make a DateTime column but remove it before saving the file
- # current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time), tz="America/New_York")
+  current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
+  
+  # Set timezone as EST. Streaming sensors don't observe daylight savings
+   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
+  
 ```
 
 
@@ -362,7 +372,7 @@ output <- unlist(outputs, recursive = F)
 
 #### Write the file to csv
 
-```{r Make new CSV with current and historic files, include=FALSE}
+```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
 
 # Take out the DateTime column and make date and time column characters
 current_df2 <- current_df%>%

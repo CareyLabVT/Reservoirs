@@ -116,8 +116,8 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
   log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
-    TIMESTAMP_start = col_datetime("%m/%d/%y %H:%M"),
-    TIMESTAMP_end = col_datetime("%m/%d/%y %H:%M"),
+    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S"),
+    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S"),
     flag = col_integer()
   ))
 
@@ -181,18 +181,22 @@ for(i in 1:nrow(log)){
   if(flag %in% c(1,2)){
     # The observations are changed to NA for maintenance or other issues found in the maintenance log
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- NA
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   }else if (flag %in% c(3)){
     ## BDL
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- NA
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
@@ -200,24 +204,29 @@ for(i in 1:nrow(log)){
     ## change negative values are changed to 0
 
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- 0
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   } else if(flag %in% c(5)){
     # Suspect sample
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   }else if(flag %in% c(6) & (colname_start != 'Site' | colname_start != 'Depth_m')){
     ## human error
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- update_value
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
@@ -226,6 +235,7 @@ for(i in 1:nrow(log)){
     print(update_value)
     ## human error for site, which we don't indicate in final dataset
     update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
                       update_profiles$Site %in% c(Site_temp) & 
                       update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- update_value
 

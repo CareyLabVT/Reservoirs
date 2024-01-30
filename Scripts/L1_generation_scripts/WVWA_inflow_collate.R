@@ -1,6 +1,8 @@
 # Combine old WVWA sensor data into one file so can read it into the weir QAQC function. 
 # By: Adrienne Breef-Pilz
 
+# Edited: 30 Jan 2024
+
 #' @author Adrienne BP
 #' @title WVWA_inflow_collate
 #' @description This function reads in all of the raw files for the current year and binds them together 
@@ -20,10 +22,13 @@ pacman::p_load("tidyverse","lubridate")
 
 ### Read in current WVWA sensor files ####
 
+# If you want to to compile all files set year= NULL for your outfile "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_2013_ENDYEAR"
+
 WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Inflow_CSV",
                                 raw_baro_files = "./Data/DataNotYetUploadedToEDI/Raw_inflow/Barometric_CSV",
                                 year = format(Sys.Date(), "%Y"),
                                 outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1"){
+  
   
   # Function used to read in the files from the WVWA sensors and convert all times to EST
   EST_convert<-function(data) {
@@ -88,14 +93,55 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
   diff <- left_join(pressure_a4d, inflow_pressure, by = "DateTime")%>% 
     mutate(WVWA_Pressure_psia = WVWA_Pressure_psi-WVWA_Baro_pressure_psi)%>%
     drop_na(WVWA_Pressure_psia)%>% # Take out NAs when there is only one observation
-    select(DateTime, WVWA_Temp_C, WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia)%>%
-    mutate(Year=year(DateTime))%>%
-    filter(Year==year)%>%
-    select(-Year)
+    select(DateTime, WVWA_Temp_C, WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia)
+  
+  diff$DateTime <- force_tz(diff$DateTime, tzone="EST")
+    
+  
+  # Filter by Year and remove if not NULL
+  if(!is.null(year)){
+    diff <- diff%>%
+      mutate(Year=year(DateTime))  
+      filter(Year==year)%>%
+      select(-Year)
+  }
+  
+  # if Year is Null then read in large collated sheet because some baro values missing
+  
+  if(is.null(year)){
+    
+    comp <- read_csv("./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_pressure_readings_2013_current.csv")
+    
+    comp$DateTime <- force_tz(comp$DateTime, tzone="EST")
+    
+    diff2 <- diff%>%
+      bind_rows(., comp)%>%
+      distinct()
+    
+    # take out the duplicated rows
+    dups<-  diff2[!duplicated(diff2$DateTime), ]
+    
+    #reorder. Just to be certain everything is in order
+       dups<-dups[order(dups$DateTime),]
+      
+  }
+  
   
   # Write current file to an L1 file
-  write.csv(diff, paste0(outfile, ".csv"), row.names = F)
   
+  if(is.null(year)){
+    
+    dups$DateTime <- as.character(dups$DateTime)
+    
+    write_csv(dups, paste0(outfile, ".csv"))
+    
+  }else{
+  
+  # Change datetime to character
+  diff$DateTime <- as.character(diff$DateTime)
+  
+  write_csv(diff, paste0(outfile, ".csv"))
+  }
 }
 
 # How to use the function with the files even though they are the default

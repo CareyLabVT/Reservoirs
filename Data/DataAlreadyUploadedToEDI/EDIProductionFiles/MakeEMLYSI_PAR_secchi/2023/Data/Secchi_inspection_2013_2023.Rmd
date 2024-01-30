@@ -29,7 +29,11 @@ current_file <- read_csv('~/Reservoirs/Data/DataNotYetUploadedToEDI/Secchi/secch
 
 historic_file <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/198/11/81f396b3e910d3359907b7264e689052', col_types = cols())
 
-secchi <- bind_rows(current_file, historic_file)
+secchi <- bind_rows(current_file, historic_file) 
+
+#catch some weird datetime issue that affects 2013-2020 secchi data (not 2021 - present) #30Jan24 HLW
+secchi$DateTime[year(secchi$DateTime) <= 2020] <- 
+  secchi$DateTime[year(secchi$DateTime) <= 2020] + 4*60*60 #4 hrs
 ```
 
 ```{r}
@@ -109,9 +113,11 @@ secchi_dup <- secchi_cleaned |>
 
 #catch a couple of manual errors from previous years (should be able to delete this when we read in gsheets from each year)
 secchi_cleaned$Site[secchi_cleaned$DateTime == "2022-05-09 11:03:00" &
-                 secchi_cleaned$Secchi_m == 1.50] <- 40
+                 secchi_cleaned$Secchi_m == 1.50] <- 40 
+#site was digitized incorrectly once and correctly another time
 
 secchi_cleaned <- secchi_cleaned |> filter(!(DateTime == "2022-07-25 12:20:00" & Secchi_m == 1.35))
+#secchi depth was digitized incorrectly once and correctly another time
 
 ```
 

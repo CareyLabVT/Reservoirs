@@ -98,7 +98,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
       Reservoir <- log$Reservoir[i]
 
       ### Get the Site Number
-      Site <- as.numeric(log$Site[i])
+      Site_temp <- as.numeric(log$Site[i])
 
       ### Get the Maintenance Flag
       flag <- log$flag[i]
@@ -141,25 +141,39 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
       if(flag %in% c(1) & colname_start != 'Site'){ ## UPDATE THIS WITH ANY NEW FLAGS
         # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- NA
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime  &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), maintenance_cols] <- NA
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
 
       } else if (flag %in% c(2) & colname_start == 'Site'){
         ## this fixes site issues for now -- no flag shown in data
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), maintenance_cols] <- update_value
 
       } else if (flag %in% c(2) & colname_start != 'Site'){
         ## this fixes digitizing issues and adds a flag
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), maintenance_cols] <- update_value
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
 
       }else if (flag %in% c(3)){
         # value is suspect
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          update_profiles$Site %in% c(Site_temp) & 
+                          update_profiles$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
 
       }else if (flag %in% c(4)){
         # to be deleted
-        secchi_reformat <- secchi_reformat[!(secchi_reformat$DateTime %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
+        secchi_reformat <- secchi_reformat[!(secchi_reformat$DateTime &
+                                               update_profiles$Site %in% c(Site_temp) & 
+                                               update_profiles$Reservoir %in% c(Reservoir) %in% Time$DateTime & (secchi_reformat$Reservoir == Reservoir)),]
       }else{
         warning("Flag not coded in the L1 script. See Austin or Adrienne")
       }

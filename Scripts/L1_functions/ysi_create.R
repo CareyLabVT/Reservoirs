@@ -76,6 +76,7 @@ update_profiles <- raw_profiles
 # 4 - NEGATIVE VALUE SET TO ZERO
 # 5 - SUSPECT SAMPLE
 # 6 - HUMAN ERROR
+# 7 - TEMP MEASURED USING PH PROBE
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
 for(j in colnames(update_profiles%>%select(Temp_C:pH))) { #removing DateTime bc this loop replaces all 1s with 0s
@@ -99,7 +100,9 @@ update_profiles <- update_profiles |>
   mutate(Flag_pH = ifelse((!is.na(pH) & (pH > 14 | pH < 4)), 2, Flag_pH),
          Flag_ORP_mV = ifelse((!is.na(ORP_mV) & (ORP_mV > 750)), 2, Flag_ORP_mV),
          #Flag_PAR_umolm2s = No bounds given,
-         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, Flag_Temp_C),
+         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, 
+                              !is.na(Temp_C) & is.na(DO_mgL) & is.na(Cond_uScm),7,
+                              Flag_Temp_C), # 7 flag for temp measured with ph probe
          Flag_DO_mgL = ifelse((!is.na(DO_mgL) & (DO_mgL > 70)), 2, Flag_DO_mgL),
          Flag_DOsat_percent = ifelse((!is.na(DOsat_percent) & (DOsat_percent > 200)), 2,Flag_DOsat_percent),
          Flag_Cond_uScm = ifelse((!is.na(Cond_uScm) & ((Cond_uScm < 10 | Cond_uScm > 250))), 2, Flag_Cond_uScm),

@@ -68,7 +68,7 @@ raw_profiles$pH <- as.numeric(raw_profiles$pH)
 ## update raw data into new table to make rerunnig easier
 update_profiles <- raw_profiles
 
-## ADD FLAGS (note that only flags 5 and 6 can come from the maintenance file)
+## ADD FLAGS (note that only flags 2, 5, and 6 can come from the maintenance file)
 # 0 - NOT SUSPECT
 # 1 - SAMPLE NOT TAKEN
 # 2 - INSTRUMENT MALFUNCTION
@@ -200,7 +200,7 @@ for(i in 1:nrow(log)){
     update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
     update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
-  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start != 'Depth_m')){
+  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start == 'Depth_m')){
     print(start)
     print(update_value)
     ## human error for site, which we don't indicate in final dataset

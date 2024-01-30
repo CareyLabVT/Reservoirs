@@ -1,37 +1,37 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-date	Date sample was collected in GMT	Date		YYYY-MM-DD	NA	Value is missing
-time	Time sample was collected in GMT	Date		hh:mm:ss	NA	Value is missing
-DOY	Day of Julian year	Date		D	NA	Value is missing
+date	Date sample was collected in Eastern standard time with daylight savings obseved	Date		YYYY-MM-DD	NA	Value is missing
+time	Time sample was collected in Eastern standard time with daylight savings observed 	Date		hh:mm:ss	NA	Value is missing
+DOY	Day of Julian year	Date		DDD	NA	Value is missing
 Tau_kgms2	Corrected momentum flux	numeric	kilogramPerMeterPerSecondSquared		NA	Value is missing
-qc_Tau	Quality Flag for momentum flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_Tau	Quality Flag for momentum flux	categorical	dimensionless		NA	Value is missing
 H_wm2	Corrected sensible heat flux	numeric	wattPerMeterSquared		NA	Value is missing
-qc_H	Quality flag for sensible heat flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_H	Quality flag for sensible heat flux	categorical	dimensionless		NA	Value is missing
 LE_wm2	Corrected latent heat flux	numeric	wattPerMeterSquared		NA	Value is missing
-qc_LE	Quality flag for latent heat flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_LE	Quality flag for latent heat flux	categorical	dimensionless		NA	Value is missing
 co2_flux_umolm2s	Corrected carbon dioxide flux	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
-qc_co2_flux	Quality flag for carbon dioxide flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_co2_flux	Quality flag for carbon dioxide flux	categorical	dimensionless		NA	Value is missing
 h2o_flux_umolm2s	Corrected water vapor flux	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
-qc_h2o_flux	Quality flag for water vapor flux; 00 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_h2o_flux	Quality flag for water vapor flux	categorical	dimensionless		NA	Value is missing
 ch4_flux_umolm2s	Corrected methane flux	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
-qc_ch4_flux	Quality flag for methane flux; 0 = Best quality fluxes; 1 = fluxes suitable for general analysis; 2 = remove fluxes; 3 = no data collected	numeric	dimensionless		NA	Value is missing
+qc_ch4_flux	Quality flag for methane flux	categorical	dimensionless		NA	Value is missing
 co2_v_adv_umolm2s	Estimate of vertical advection flux for carbon dioxide	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
 h2o_v_adv_umolm2s	Estimate of vertical advection flux for water vapor	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
 ch4_v_adv_umolm2s	Estimate of vertical advection flux for methane	numeric	micromolePerMeterSquaredPerSecond		NA	Value is missing
 co2_molar_density_mmolm3	Measured or estimated molar density of carbon dioxide	numeric	millimolePerMeterCubed		NA	Value is missing
 co2_mole_fraction_umolmol	Measured or estimated mole fraction of carbon dioxide	numeric	micromolePerMole		NA	Value is missing
 co2_mixing_ratio_umolmol	Measured or estimated mixing ratio of carbon dioxide	numeric	micromolePerMole		NA	Value is missing
-co2_time_lag_s	Time lag used to synchronize carbon dioxide time series	Date		SS	NA	Value is missing
-co2_def_timelag	Quality Flag for carbon dioxide time lag: 1 = Default; 0 = Calculated	numeric	dimensionless		NA	Value is missing
+co2_time_lag_s	Time lag used to synchronize carbon dioxide time series	Date		ss	NA	Value is missing
+co2_def_timelag	Quality Flag for carbon dioxide time lag	categorical	dimensionless		NA	Value is missing
 h2o_molar_density_mmolm3	Measured or estimated molar density of water vapor	numeric	millimolePerMeterCubed		NA	Value is missing
 h2o_mole_fraction_umolmol	Measured or estimated mole fraction of water vapor	numeric	micromolePerMole		NA	Value is missing
 h2o_mixing_ratio_umolmol	Measured or estimated mixing ratio of water vapor	numeric	micromolePerMole		NA	Value is missing
-h2o_time_lag_s	Time lag used to synchronize water vapor time series	Date		SS	NA	Value is missing
-h2o_def_timelag	Quality Flag for water vapor time lag: 1 = Default; 0 = Calculated	numeric	dimensionless		NA	Value is missing
+h2o_time_lag_s	Time lag used to synchronize water vapor time series	Date		ss	NA	Value is missing
+h2o_def_timelag	Quality Flag for water vapor time lag	categorical	dimensionless		NA	Value is missing
 ch4_molar_density_mmolm3	Measured or estimated molar density of methane	numeric	millimolePerMeterCubed		NA	Value is missing
 ch4_mole_fraction_umolmol	Measured or estimated mole fraction of methane	numeric	micromolePerMole		NA	Value is missing
 ch4_mixing_ratio_umolmol	Measured or estimated mixing ratio of methane	numeric	micromolePerMole		NA	Value is missing
-ch4_time_lag_s	Time lag used to synchronize methane time series	Date		SS	NA	Value is missing
-ch4_def_timelag	Quality Flag for methane time lag: 1 = Default; 0 = Calculated	numeric	dimensionless		NA	Value is missing
+ch4_time_lag_s	Time lag used to synchronize methane time series	Date		ss	NA	Value is missing
+ch4_def_timelag	Quality Flag for methane time lag	categorical	dimensionless		NA	Value is missing
 sonic_temperature_k	Mean air temperature measured by the anemometer	numeric	kelvin		NA	Value is missing
 air_temperature_k	Mean air temperature measured by the LiCor sensor or estimated by the sonic anemometer	numeric	kelvin		NA	Value is missing
 air_pressure_pa	Mean air pressure calculated from high frequency air pressure readings or estimated based on site altitude	numeric	pascal		NA	Value is missing

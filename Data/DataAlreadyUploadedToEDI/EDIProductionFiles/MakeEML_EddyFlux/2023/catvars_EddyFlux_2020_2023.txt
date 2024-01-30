@@ -1,0 +1,34 @@
+attributeName	code	definition
+ch4_def_timelag	0	Calculated
+ch4_def_timelag	1	Default
+co2_def_timelag	0	Calculated
+co2_def_timelag	1	Default
+h2o_def_timelag	0	Calculated
+h2o_def_timelag	1	Default
+qc_H	0	Best quality fluxes
+qc_H	1	Fluxes suitable for general analysis
+qc_H	2	Remove fluxes
+qc_H	3	No data collected
+qc_LE	0	Best quality fluxes
+qc_LE	1	Fluxes suitable for general analysis
+qc_LE	2	Remove fluxes
+qc_LE	3	No data collected
+qc_Tau	0	Best quality fluxes
+qc_Tau	1	Fluxes suitable for general analysis
+qc_Tau	2	Remove fluxes
+qc_Tau	3	No data collected
+qc_ch4_flux	0	Best quality fluxes
+qc_ch4_flux	1	Fluxes suitable for general analysis
+qc_ch4_flux	2	Remove fluxes
+qc_ch4_flux	3	No data collected
+qc_ch4_flux	4	Instrument malfunction
+qc_co2_flux	0	Best quality fluxes
+qc_co2_flux	1	Fluxes suitable for general analysis
+qc_co2_flux	2	Remove fluxes
+qc_co2_flux	3	No data collected
+qc_co2_flux	4	Instrument malfunction
+qc_h2o_flux	0	Best quality fluxes
+qc_h2o_flux	1	Fluxes suitable for general analysis
+qc_h2o_flux	2	Remove fluxes
+qc_h2o_flux	3	No data collected
+qc_h2o_flux	4	Instrument malfunction

@@ -68,7 +68,7 @@ raw_profiles$pH <- as.numeric(raw_profiles$pH)
 ## update raw data into new table to make rerunnig easier
 update_profiles <- raw_profiles
 
-## ADD FLAGS (note that only flags 5 and 6 can come from the maintenance file)
+## ADD FLAGS (note that only flags 2, 5, and 6 can come from the maintenance file)
 # 0 - NOT SUSPECT
 # 1 - SAMPLE NOT TAKEN
 # 2 - INSTRUMENT MALFUNCTION
@@ -76,6 +76,7 @@ update_profiles <- raw_profiles
 # 4 - NEGATIVE VALUE SET TO ZERO
 # 5 - SUSPECT SAMPLE
 # 6 - HUMAN ERROR
+# 7 - TEMP MEASURED USING PH PROBE
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
 for(j in colnames(update_profiles%>%select(Temp_C:pH))) { #removing DateTime bc this loop replaces all 1s with 0s
@@ -99,7 +100,9 @@ update_profiles <- update_profiles |>
   mutate(Flag_pH = ifelse((!is.na(pH) & (pH > 14 | pH < 4)), 2, Flag_pH),
          Flag_ORP_mV = ifelse((!is.na(ORP_mV) & (ORP_mV > 750)), 2, Flag_ORP_mV),
          #Flag_PAR_umolm2s = No bounds given,
-         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, Flag_Temp_C),
+         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, 
+                              !is.na(Temp_C) & is.na(DO_mgL) & is.na(Cond_uScm),7,
+                              Flag_Temp_C), # 7 flag for temp measured with ph probe
          Flag_DO_mgL = ifelse((!is.na(DO_mgL) & (DO_mgL > 70)), 2, Flag_DO_mgL),
          Flag_DOsat_percent = ifelse((!is.na(DOsat_percent) & (DOsat_percent > 200)), 2,Flag_DOsat_percent),
          Flag_Cond_uScm = ifelse((!is.na(Cond_uScm) & ((Cond_uScm < 10 | Cond_uScm > 250))), 2, Flag_Cond_uScm),
@@ -200,7 +203,7 @@ for(i in 1:nrow(log)){
     update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
     update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
 
-  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start != 'Depth_m')){
+  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start == 'Depth_m')){
     print(start)
     print(update_value)
     ## human error for site, which we don't indicate in final dataset

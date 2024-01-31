@@ -178,23 +178,28 @@ template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Res
 # View documentation for this function
 ?make_eml
 
+# taking your file path out
+# /Users/MaryLofton/RProjects/Reservoirs
+
 # Run this function
 make_eml(
-  path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-  data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-  eml.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2023",
   temporal.coverage = c("2014-05-04", "2023-11-14"),
   maintenance.description = 'ongoing',
-  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
-  data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2023.csv"),
+  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
+  data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
   other.entity = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
   other.entity.name = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
   other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
-  user.id = 'melofton',
+  #user.id = 'melofton',
+  user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1101.4')
+  package.id = edi.1101.5)
+  #package.id = 'edi.1112.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -37,3 +37,7 @@ jobs:
           git add Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv
           git commit -m "Updating Manual Files" || echo "No changes to commit"
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 
+          
+      - name: Healthcheck
+        run: |
+          curl -m 10 --retry 5 https://hc-ping.com/0d45fa1c-5110-4aa6-ac67-a53174541516

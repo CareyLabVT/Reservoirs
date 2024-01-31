@@ -347,12 +347,12 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # Make a datetime column
   current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
-
-# Fix DateTime issues. From 2020-04-04 to 2020-09-02 17:30 the system was in Est/GMT +5. 
+  
+  # Fix DateTime issues. From 2020-04-04 to 2020-09-02 17:30 the system was in Est/GMT +5. 
   # System is in US/Eastern with daylight savings observed from 2020-09-02 12:00 to current.
   
   # We want to convert the time in Est/GMT +5 to GMT+4  so we need to add an hour. 
-#Change DateTime when it was changed from EDT to EST
+  #Change DateTime when it was changed from EDT to EST
   # Set everything to Etc/GMT+4
   # Make a datetime column
   
@@ -421,10 +421,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   #  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
   # ec_all <- ec_all |> filter(date> last_edi_date)
-
-   # convert datetimes to characters so that they are properly formatted in the output file
-    ec_all$date <- as.character(ec_all$date)
-    ec_all$time <- as.character(ec_all$time)
+  
+  # convert datetimes to characters so that they are properly formatted in the output file
+  ec_all$date <- as.character(ec_all$date)
+  ec_all$time <- as.character(ec_all$time)
   
   # Output data
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)

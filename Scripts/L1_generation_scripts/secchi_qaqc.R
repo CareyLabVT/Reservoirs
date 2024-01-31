@@ -18,7 +18,3 @@ secchi_qaqc(data_file = data_file,
             gsheet_data = TRUE,
             maintenance_file = maintenance_file,
             outfile = outfile)
-
-## Call healthcheck
-RCurl::url.exists("https://hc-ping.com/0d45fa1c-5110-4aa6-ac67-a53174541516", timeout = 5)
-

@@ -1,0 +1,3815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1069.2" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
+         total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2023</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Dexter</givenName>
+        <givenName>W.</givenName>
+        <surName>Howard</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dwh1998@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6118-2149</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Austin</givenName>
+        <givenName>D.</givenName>
+        <surName>Delany</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>addelany@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-2266-6300</userId>
+    </creator>
+    <pubDate>2024-01-30</pubDate>
+    <abstract>
+      <para>We monitored water quality in Carvins Cove Reservoir (Roanoke, Virginia, USA) with high-frequency (10-minute) sensors in 2020-2023. Carvins Cove Reservoir is owned and managed by the Western Virginia Water Authority as a primary drinking water source. This data package consists of datasets from two separate deployments. First, from July 2020 - August 2021, depth profiles of water temperature were measured on 1-meter intervals using HOBO temperature pendant loggers deployed from 0.1 m below the surface of the reservoir to 10 m depth, and also at 15 and 20 m depth. Additionally, water temperature was measured in the Sawmill Branch inflow at 0.5 m depth using HOBO temperature pendant loggers. Second, from 9 April 2021 - 31 December 2023, depth profiles of water temperature were measured on 1-meter intervals from 0.1 m below the surface of the reservoir to 11 m depth and additionally at 15 and 19 m. A YSI EXO2 sonde measured water temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, and fluorescent dissolved organic matter at ~1.5 m depth. A YSI EXO3 sonde measured water temperature, conductivity, specific conductance, total dissolved solids, dissolved oxygen, and fluorescent dissolved organic matter at 9 m depth, which corresponds to the depth of a water outtake valve. The thermistors, EXO3 sonde, and pressure sensor were deployed at stationary, fixed elevations (referred to as positions) deployed off of the dam near the water outtake valves. Due to variable water levels in the reservoir, the depths of these sensors varied over time. In contrast, the EXO2 was deployed on a buoy from 2021-2022 and remained at 1.5 m depth as the water level fluctuated. However, in 2023, the buoy disappeared in a storm, after that the EOX2 was deployed at a stationary elevation as the water level fluctuated around the sensor. At the monitoring site, the reservoir is approximately 19 m deep (reservoir maximum depth is 23 m).&#13;
+</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>fDOM</keyword>
+      <keyword>dissolved organic matter</keyword>
+      <keyword>total dissolved organic solids</keyword>
+      <keyword>phycocyanin</keyword>
+      <keyword>lake physics</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Carvins Cove Reservoir</keyword>
+      <keyword>Virginia Reservoirs</keyword>
+      <keyword>Virginia Reservoirs LTREB</keyword>
+      <keyword>LTREB</keyword>
+      <keyword>CCR</keyword>
+      <keyword>CCRCatwalk</keyword>
+      <keyword>Catwalk</keyword>
+      <keyword>sensors</keyword>
+      <keyword>HOBOs</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lakes</keyword>
+      <keyword>water quality</keyword>
+      <keyword>water temperature</keyword>
+      <keyword>dissolved oxygen</keyword>
+      <keyword>conductivity</keyword>
+      <keyword>specific conductance</keyword>
+      <keyword>chlorophyll a</keyword>
+      <keyword>chlorophyll</keyword>
+      <keyword>pressure</keyword>
+      <keyword>water chemistry</keyword>
+      <keyword>physical properties</keyword>
+      <keyword>fluorescence</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lake</keyword>
+      <keyword>reservoir</keyword>
+      <keyword>reservoirs</keyword>
+      <keyword>high-frequency sensors</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Author Contribution Statement-&#13;
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP is the point person for the dataset and led sensor maintenance, data management, and QAQC, and helped with field sampling. DWH led field sampling at CCR and helped with sensor maintenance. ADD helped to set up new QAQC workflows for 2023 and maintained the workflows.  </para>
+      <para>Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and DWH and Freya Olsson for helpful reviews of this data package.</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.409127</northBoundingCoordinate>
+          <southBoundingCoordinate>37.365345</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2020-07-29</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2023-12-31</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>This data package contains five different data tables: CCRCatwalk_2021_2023.csv, CCRCatwalk_maintenancelog_2021_2023.csv, CCRCatwalk_Depth_offsets_2021_2023.csv, CCR_hobos_2020_2021.csv, reservoir_site_descriptions.csv. They are described below in the order they appear on EDI. </para>
+          <para>First, in data file CCRCatwalk_2021_2023.csv, we measured depth profiles of multiple water quality variables off of the dam at Carvins Cove Reservoir (37.3697	-79.958) in 2021-2023 using water temperature thermistors, a pressure transducer, a YSI EXO2 sonde, and a YSI EXO3 sonde. Profiles were collected every ten minutes from the initial sensor deployment to 31 December 2023. The YSI EXO3 sonde was deployed at 9 m on 9 April 2021 at 14:00. The temperature string and pressure transducer were first deployed on 11 May 2021. There were 13 NexSens thermistors on a chain and when the reservoir was at full pond the deepest thermistor was at 19 meters. Because the water level in Carvins Cove Reservoir has varied from 15.7-19.6 m (mean=18.6 m, median=18.5 m) during the monitoring period, we refer to the thermistors and the pressure transducer by their position on the fixed thermistor chain as opposed to a specific depth. These positions were selected based on the depth when the reservoir was at full pond. The thermistor closest to the surface (when at full pond) was labeled 1, the 8 m thermistor (when at full pond) was labeled 9, with the intervening thermistors located approximately 1 m apart. Thermistors 10 and 11 were deployed to represent 10 m and 11 m when at full pond, respectively. Thermistors 12 and 13 were deployed to represent 15 m and 19 m when at full pond, respectively. The pressure transducer was deployed 0.15 m below the thermistor at position 13. To access the depth associated with each observation, use the 'find_depths' function in the find_depths.R file (see the CCR_Depth_offsets_2021_2023 section below for more information on how to use the function). The EXO2 was deployed on a buoy from 2021-2022 and remained at 1.5 m depth as the water level fluctuated. However, in 2023, we lost the buoy in a storm and the EOX2 was deployed at a stationary, fixed elevation as the water level fluctuated around the sensor. </para>
+          <para>In 2023, the Western Virginia Water Authority lowered the water in the reservoir to do maintenance on the dam. Because of this, the sensors were at different depths than they would be normally. All sensors have a depth reading associated with them (See CCR_Depth_offsets_2021_2023.csv). On 18 September 2023, the water level was so low due to the reservoir's management that the EXO2 sonde was almost completely out of the water so we redeployed the sensor at ~1.5 m. When sensors were too far out of position (defined as less than 0.75 m for the EXO2 near the surface and less than 6 m for the EXO3, which sits at 9 m when the reservoir is at full pond), we flagged observations as 2 and values were set to NA. See the CCRCatwalk_maintenancelog_2021_2023.csv for exact times. </para>
+          <para>Data Gaps: </para>
+          <para>The following dates and times listed below are gaps in the dataset when no observations were recorded. When there were missing observations for all the sensors, the data time stamp was missing from the file. During the data gaps for EXO2 and the EXO3 sondes listed below, the sensors were removed or not recording for more than 20 minutes. </para>
+          <para>For all sensors (these times are not listed in the data frame): 2021-07-02 14:00:00 - 2021-07-02 14:50:00; 2022-04-05 12:00:00 - 2022-04-05 14:00:00; 2022-04-20 13:00:00 - 2022-04-20 13:40:00; 2022-04-20 14:00:00 - 2022-04-20 15:00:00; 2022-05-12 10:00:00 - 2022-05-12 10:30:00; 2022-09-29 14:00:00 - 2022-09-29 15:00:00; 2022-10-17 17:30:00 - 2022-10-17 18:10:00; 2023-08-08 12:20:00 - 2023-08-14 11:30:00; 2023-08-19 04:20:00 - 2023-08-21 09:30:00.  </para>
+          <para>The EXO2 data at ~1.5m (these times are most likely in the data file but are NAs and flagged as a 7 for observation not recorded): 2021-07-02 13:40:00 - 2021-07-14 10:10:00; 2021-07-28 11:50:00 - 2021-08-19 09:00:00; 2021-11-18 23:10:00 - 2021-11-23 09:20:00; 2022-12-12 13:20:00 – 2023-03-13 14:55:00.</para>
+          <para>The EXO3 data at 9m (these times are most likely in the data file but are NAs and flagged as a 7 for observation not recorded): 2021-09-23 10:30:00 - 2021-09-27 8:30:00; 2022-01-14 00:00:00 - 2022-01-26 17:00:00; 2022-01-26 17:10:00 - 2022-04-20 15:10:00; 2022-12-12 13:20:00 - 2022-12-16 14:20:00; 2023-11-20 12:05:00 - current. </para>
+          <para>Sensor Maintenance Issues: </para>
+          <para>Thermistor Issues:</para>
+          <para>The data from the thermistors and other sensors were influenced by nightly management interventions between 3 am (EST) - 4:30 am (EST). On most nights, there were slight changes in water temperature values caused by blow-offs of air from water intake valves used to clear debris from intake pipes. This release of air can lead to short-term changes in thermal stratification patterns. These events seem to only affect the temperature values around 3:00 am to 4:30 am and occur predominantly in the summer months. </para>
+          <para>EXO Sonde Issues:</para>
+          <para>In 2023, the 1.5 m EXO2 was returned to the reservoir after maintenance on 2023-03-13 14:50:00. The EXO2 experienced issues with the battery compartment and was not streaming data from 2023-07-14 10:10:00 - 2023-10-16 14:00:00. During the times data were not streaming, they were downloaded periodically and added to the file using the CCRCatwalk_qaqc_2021_2023.R. The EXO2 was removed on 16 October 2023 and sent back for maintenance and replaced with a backup EXO2 (SN: 23J102731, other sensors listed below). The 9 m EXO3 sonde experienced wiper issues, so when data were impacted by the wiper they were removed using the CCRCatwalk_maintenancelog_2021_2023.csv. The EXO3 was removed and sent back for major repairs on 20 November 2023 12:05:00 after the battery compartment flooded. </para>
+          <para>In 2022, both of the EXOs were removed for cleaning and calibration on 12 December 2022. The EXO3 was returned on 16 December 2022 while the EXO2 was moved and placed at Beaverdam Reservoir for the winter.  &#13;
+The central wiper (SN: 21A100323) on the EXO3 malfunctioned during September 2021, thus we removed all observations from 7 September 2021 15:30 to 27 September 2021 8:30. While the central wiper was sent back for maintenance, we took the central wiper (SN: 21A100324) from the EXO2 at 1.5 m and installed it on the EXO3 at 9 m. This left the EXO2 at 1.5 m without a central wiper, so we cleaned and downloaded data fortnightly to monthly until we installed a new wiper (SN: 21M102801) on the EXO2 on 9 February 2022 10:30.  The central wiper (21A100324) on the EXO3 failed again, so we removed data from 14 January - 26 January 2022 due to interference in the readings from the wiper. We returned the EXO3 and the sonde for maintenance since this was the second wiper that failed. On 20 April 2022, we redeployed the EXO3 with a new wiper (SN: 22B106313). These wiper issues were all documented in the maintenance log CCRCatwalk_maintenancelog_2021_2022.csv.</para>
+          <para>EXO Chlorophyll-a and Phycocyanin Issues: &#13;
+When the EXO2 was not streaming data, it only recorded chlorophyll-a and phycocyanin in RFU and not micrograms per liter (µg/L). Once the EXO2 data were streaming again, there were observations in both RFU and micrograms per liter. To fill in the gaps for µg/L data, we back-calculated the missing observations for micrograms per liter using a linear relationship of RFU to micrograms per liter. For chlorophyll, the relationship was µg/L = 4*RFU -0.63 and for phycocyanin it was µg/L=1*RFU-0.59. These calculated values were flagged with a 6 (corrected with a linear relationship).</para>
+          <para>QAQC scripts:</para>
+          <para>We used a QAQC function to remove maintenance times and outliers from the data before publishing this EDI data package. The function is included in the data package as an R script, CCRCatwalk_qaqc_2021_2023.R. In this function, we flag and remove observations that took place during sensor maintenance or when a sensor malfunctioned, when the sensors were out of place, and when there were extreme outliers. &#13;
+For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (CCRCatwalk_maintenancelog_2021_2023.csv). This file is used in the QAQC function to identify dates and times during recorded events, change the observations affected, and add a flag to indicate the issues. See CCRCatwalk_maintenancelog_2021_2023.csv section below for more information on the maintenance log. </para>
+          <para>In addition to recorded maintenance issues, we also removed all observations from the EXOs when they are out of position. For example, the EXO2 normally is positioned at 1.5 m, so when the depth of the sensor was above 0.75 m, we set all of those EXO2 observations to NA and flagged those times with a 2 (for outlier set to NA). This routinely happened for one observation per day, when the Water Authority purged their intake pipes. This also happened in Aug - Sept. 2023 because the water level was lowered due to maintenance at the reservoir. The EXO3 normally sits at 9 m, so when it is above 6 m, the data are changed to NA and flagged with a 2 (for outlier set to NA). In the past, this happened when the sensor was tangled on debris (especially floating logs). </para>
+          <para>Lastly, we identified and removed extreme outliers by using what we call the 'leading and lagging method.' For each individual observation in the time series, we looked at the previous observation taken 10 minutes before, and the lagging observation, taken 10 minutes after the focal observation. If the observation was 2 standard deviations above or below either of those two points, then the observation was flagged and set to NA.  For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL, we defined outliers as values 4 standard deviations above or below the focal observation, as opposed to 2 standard deviations for the other sensors, given there is lots of variablility in the observations of those variables. </para>
+          <para>As part of the QAQC process, we plotted all of the observations in the CCRCatwalk_inspection_2021_2023.Rmd. In the R markdown, the user downloaded data, identified duplicates and  gaps in the data, checked that the maintenanc log flagged values, produced plots to visually check for outliers, saved the current data file, and downloaded the maintenance log, qaqc function, and other functions needed for publishing. </para>
+          <para>Instruments, manuals, calibration, and serial numbers used 2021-2023: </para>
+          <para>Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.</para>
+          <para>NexSens T-Node FR Thermistors (May 2021 - current):&#13;
+https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf&#13;
+Serial No. 03882; 1. &#13;
+Serial No. 03884; 2.&#13;
+Serial No. 03893; 3.&#13;
+Serial No. 03979; 4.&#13;
+Serial No. 03989; 5.&#13;
+Serial No. 03998; 6.&#13;
+Serial No. 04002; 7.&#13;
+Serial No. 04014; 8.&#13;
+Serial No. 04028; 9.&#13;
+Serial No. 04031; 10.&#13;
+Serial No. 04039; 11.&#13;
+Serial No. 04086; 12.&#13;
+Serial No. 04151; 13.</para>
+          <para>Calibration:&#13;
+The thermistor string was factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 and EXO3 Sonde sensors were factory-calibrated before being deployed on 1 July 2021 and 9 April 2021, respectively. Below are dates of calibration with pre- and post-calibration values. </para>
+          <para>YSI EXO2 Sonde Serial No. 21A102475 (1 July 2021 - 16 October 2023 13:55)&#13;
+Serial No. 23J102731 (16 October 2023 13:55 - current)&#13;
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf 	&#13;
+Wiped Conductivity/Temperature Sensor Serial No. 20M101642 (1 July 2021 - 16 October 2023 13:55)&#13;
+Serial No. 23H106207 (16 October 2023 13:55 - current)&#13;
+Calibrated on December 15, 2022; pre: 98.0 uScm; post: 100 uScm&#13;
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324 (1 July 2021 - 23 September 2021)&#13;
+Central Wiper for Conductivity/Temperature Sensor Serial No.21M102801 (9 February 2022 - current)&#13;
+Total Algae Sensor Serial No. 21A100782 (1 July 2021 - 16 October 2023 13:55)&#13;
+Serial No. 23H100548 (16 October 2023 13:55 - current)&#13;
+Chlorophyll:&#13;
+Calibrated on July 1, 2021; pre: -0.18 RFU, post: 0.00 RFU&#13;
+Calibrated on November 21, 2021; pre: -0.16 RFU, post: 0.00 RFU&#13;
+Calibrated on December 15, 2022; pre: -0.21 RFU, post: 0.00 RFU; pre: 13.93 RFU, post: 16.40 RFU&#13;
+Phycocyanin: &#13;
+Calibrated on July 1, 2022; pre:-0.8 RFU , post: 0.00 RFU&#13;
+Calibrated on November 21, 2021; pre: -0.57 RFU, post: 0.00 RFU&#13;
+Calibrated on December 15, 2022; pre: -1.30 RFU, post: 0.00 RFU; pre: 16.31 RFU, post: 16.00 RFU&#13;
+fDOM Sensor Serial No. 21A100961 &#13;
+Calibration on December 15, 2022; pre: -0.26 RFU, -0.67 QSU; post: 0.00 RFU, 0.00 QSU &#13;
+Dissolved Oxygen Sensor Serial No.21A100459 (1 July 2021 - 16 October 2023 13:55)&#13;
+Serial No. 23G100708 (16 October 2023 13:55 - current)&#13;
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103493&#13;
+Calibrated on July 1, 2021; pre: 93.2% Sat, post: 102.0% Sat; DO Gain: 1.09&#13;
+Calibrated on November 23, 2021; pre: 96.6% Sat, post: 96.6% Sat; DO Gain: 1.00&#13;
+Calibrated on December 14, 2022; pre: -1.0% Sat, post: -0.2% Sat; pre: 94.4% Sat, post: 100.1% Sat, DO Gain= 1.01</para>
+          <para>YSI EXO3 Sonde Serial No. 21A102218(April 2021 - November 20, 2023)&#13;
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100323(April - 23 September 2021)&#13;
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324(23 September 2021-20 April 2022)&#13;
+Central Wiper for Conductivity/Temperature Sensor Serial No.22B106313(20 April 2022-current)&#13;
+Wiped Conductivity/Temperature Sensor Serial No. 20M101641&#13;
+Calibrated on December 15, 2022; pre: 97.8 uScm; post: 100 uScm&#13;
+fDOM Sensor Serial No. 21A100960&#13;
+Calibration on December 15, 2022; pre: 0.17 RFU, 0.07 QSU; post: 0.00 RFU, 0.00 QSU&#13;
+Pressure Transducer Serial No. 20M102610&#13;
+Dissolved Oxygen Sensor Serial No. 21A100458&#13;
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103492&#13;
+Calibrated on April 9, 2021; pre: 94.9% Sat, post: 96.3% Sat; DO Gain: 1.01&#13;
+Calibrated on July 2, 2021; pre: 96.4% Sat, post: 95.6% Sat, DO Gain: 0.99&#13;
+Calibrated on April 20, 2022; pre: 93.7% Sat, post: 100% Sat, DO Gain: 1.07&#13;
+Calibrated on December 14, 2022; pre: -0.1% Sat, Post: -0.2% Sat, pre: 92.1% Sat, post : 99.3% Sat, DO Gain: 1.08</para>
+          <para>&#13;
+Campbell Scientific Stainless-Steel Pressure Transducer CS451 (May 2021-current)&#13;
+https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf&#13;
+Serial No. 29010839</para>
+          <para>##############################################################</para>
+          <para>The data file CCRCatwalk_maintenancelog_2021_2023.csv contains dates and times when the sensors were above the water's surface for maintenance. Here, we recorded when sensors were cleaned, removed for maintenance, or other issues that should be noted. This file is used in the QAQC function which indexes the dates and times recorded in the maintenance log to set the affected data to NA and/or set the appropriate flags (CCRCatwalk_qaqc_2021_2023.R).  A description of the columns is in the Detailed Metadata under Data Entries. A description of how to use the function is at the top of the CCRCatwalk_qaqc_2021_2023.R script. </para>
+          <para>###############################################################</para>
+          <para>CCR_Depth_offsets_2021_2023.csv</para>
+          <para>The data file CCR_Depth_offsets_2021_2023.csv contains the depth offsets for each position on the temperature string. These offsets are used to calculate the depth of the sensors below the surface of the water. We used this method to ensure we removed observations when the sensors were out of the water or properly removed/flagged observations when sensors moved positions. To do this, we created a function find_depths which can be found in find_depths.R script. This function uses the CCR_Depth_offsets_2021_2023 file and the depth of the pressure sensor to determine the depth of an observation. </para>
+          <para>To determine the variable depths of each sensor over time, we converted the pressure readings to depth readings, in meters, using the relationship 1 psi=0.70544 m from the pressure gauge manual (Campbell Scientific CS451, https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). The offset values for positions 1 and 2 were determined to be the depth of the pressure transducer when each thermistor was first at the surface of the water. For thermistor 1, the offset was equal to the depth of the pressure transducer on 25 May 2021 16:50, whereas the offset for thermistor 2 was equal to the depth of the pressure transducer on 30 November 2021 16:20. Since the other sensors were equidistant from each other and the water level was never low enough to expose them out of the water, we subtracted the offset of position 2 from the offset of position 13, which is 17.915 m. We divided that number (17.915) by the number of whole meters below position 2 (18 m), which was equal to 0.995 m. This means sensors we assumed were 1 meter apart are 0.995 meters apart. This number (0.995) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (18.065) and subtracted 0.995 to get 17.07 m, which is the depth reading from the pressure transducer when position 3 is out of the water. The offset for position 13 is the distance of the thermistor from the pressure transducer. </para>
+          <para>To calculate the depth below the water for each sensor’s position, first subtract the unique offset for each sensor from column LvlDepth_m_13, which is the depth of the pressure transducer. Below is a table with the position of the sensor, the offset, and the distance above the sediments. </para>
+          <para>This only needs to happen for sensors deployed on the temperature sting. The EXO2 at ~1.5 m and the EXO3 at ~9 m have their own pressure transducer/depth sensors, so each of these instruments have their own individually-determined depths associated with each measurement. </para>
+          <para>&#13;
+Offset Table:&#13;
+The offset table is the same as CCR_Depth_offsets_2021_2023.csv.  The table below is the position of the sensor, offset to find the depth of the position from the top of the water at a given time, and the depth of the sensors when the reservoir depth is at full pond. To determine the depth of each position at a given time, you find the depth of the pressure transducer in column LvlDepth_m_13, and subtract the offset for that position. The R function, find_depths.R, attached to this package, will do this for you and sort the depths into columns by the 0.5 meter and variable (Temperature, Dissolved Oxygen, Dissolved oxygen saturation, and Pressure). </para>
+          <para>Offset Table: &#13;
+Position;	Offset;		Depth of the Sensor when full pond</para>
+          <para>Position 1;	18.94;		0.1m</para>
+          <para>Postion_2;	18.065;		1m</para>
+          <para>Position_3;	17.07;		2m</para>
+          <para>Position_4;	16.075;		3m</para>
+          <para>Position_5;	15.08;		4m</para>
+          <para>Position_6;	14.084;		5m</para>
+          <para>Position_7;	13.09;		6m</para>
+          <para>Position_8;	12.095;		7m</para>
+          <para>Position_9;	11.1;		8m</para>
+          <para>Position_10;	9.11;		10m</para>
+          <para>Position_11;	8.115;		11m</para>
+          <para>Position_12;	4.135;		15m</para>
+          <para>Position_13;	0.15;		19m</para>
+          <para>Data file CCR_hobos_2020_2021.csv contains measurements of depth profiles of water temperature at Carvins Cove Reservoir from July 2020 - August 2021 using HOBO temperature pendant loggers (HOBO Pendant Temperature/Light Data Logger, Onset, Bourne, MA, USA) at site 50 and site 300 (see reservoir_site_description.csv). We deployed the loggers from a buoy at 1-meter intervals from just below the surface to 10 m depth and additionally at 15 and 20 m depth. After the streaming sensors from CCR_Catwalk_EDI_2021_2022.csv were installed, we removed the Hobo pendants from the reservoir.  We also deployed a HOBO temperature pendant in the Sawmill Branch inflow (site 300) from July 2020 - April 2021 at approximately 0.5 m depth. There were no maintenance or other issues flagged in this data file. The HOBO files were compiled for publication in CCR_hobo_compilation_2020_2021.R. &#13;
+The HOBO temperature pendant manual from the manufacturer can be found here: https://www.onsetcomp.com/sites/default/files/resources-documents/9556-M%20UA-002%20Manual.pdf.</para>
+          <para>&#13;
+#############################################################</para>
+          <para>The data file reservoir_site_descriptions.csv contains the site number and the coordinates for each sampling site in this data package. </para>
+          <para>&#13;
+</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 2327030</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 2318861</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>University of Florida</organizationName>
+          <electronicMailAddress>renato@acis.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>CCRCatwalk_2021_2023.csv</entityName>
+      <entityDescription>CCR Catwalk data for 2021 to 2023</entityDescription>
+      <physical>
+        <objectName>CCRCatwalk_2021_2023.csv</objectName>
+        <size unit="bytes">59619033</size>
+        <authentication method="MD5">c5c6133dcfe0be14428338f273b5d22d</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">51</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_1</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.276148</minimum>
+                  <maximum exclusive="false">32.11993</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_2</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 2 (1 meter below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.01738892</minimum>
+                  <maximum exclusive="false">32.26128</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_3</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 3 (2 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.727289</minimum>
+                  <maximum exclusive="false">30.20278</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_4</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 4 (3 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.780511</minimum>
+                  <maximum exclusive="false">30.00585</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_5</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 5 (4 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.771997</minimum>
+                  <maximum exclusive="false">29.26324</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_6</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 6 (5 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.698083</minimum>
+                  <maximum exclusive="false">29.20138</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_7</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 7 (6 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.69848</minimum>
+                  <maximum exclusive="false">28.82177</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_8</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 8 (7 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.750177</minimum>
+                  <maximum exclusive="false">27.11276</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_9</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 9 (8 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.8406</minimum>
+                  <maximum exclusive="false">26.31838</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_10</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 10 (10 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.83172</minimum>
+                  <maximum exclusive="false">22.84277</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_11</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 11 (11 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.843805</minimum>
+                  <maximum exclusive="false">20.10964</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_12</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 12 (15 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.896478</minimum>
+                  <maximum exclusive="false">15.5863</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>ThermistorTemp_C_13</attributeName>
+          <attributeDefinition>Water temperature measured by thermistor at position 13 (19 meters below thermistor 1)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">3.033868</minimum>
+                  <maximum exclusive="false">14.0791</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOTemp_C_1</attributeName>
+          <attributeDefinition>Water temperature at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.804</minimum>
+                  <maximum exclusive="false">30.349</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOCond_uScm_1</attributeName>
+          <attributeDefinition>Conductivity at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>microSiemensPerCentimeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">47.13</minimum>
+                  <maximum exclusive="false">95.95</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOSpCond_uScm_1</attributeName>
+          <attributeDefinition>Specific conductance at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>microSiemensPerCentimeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">53</minimum>
+                  <maximum exclusive="false">106</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOTDS_mgL_1</attributeName>
+          <attributeDefinition>Total Dissolved Solids (TDS) at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">34</minimum>
+                  <maximum exclusive="false">68.9</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODOsat_percent_1</attributeName>
+          <attributeDefinition>Dissolved oxygen percent saturation at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">69.21</minimum>
+                  <maximum exclusive="false">122.7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODO_mgL_1</attributeName>
+          <attributeDefinition>Dissolved oxygen at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">7.2</minimum>
+                  <maximum exclusive="false">13.41</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOChla_RFU_1</attributeName>
+          <attributeDefinition>Total chlorophyll a at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>RelativeFluorescenceUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">3.46</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOChla_ugL_1</attributeName>
+          <attributeDefinition>Total chlorophyll a at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">11.28</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOBGAPC_RFU_1</attributeName>
+          <attributeDefinition>Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>RelativeFluorescenceUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">3.37</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOBGAPC_ugL_1</attributeName>
+          <attributeDefinition>Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>microgramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2.78</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOfDOM_RFU_1</attributeName>
+          <attributeDefinition>Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>RelativeFluorescenceUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.18</minimum>
+                  <maximum exclusive="false">8.08</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOfDOM_QSU_1</attributeName>
+          <attributeDefinition>Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>QuinineSulfateUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">3.53</minimum>
+                  <maximum exclusive="false">24.26</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOPressure_psi_1</attributeName>
+          <attributeDefinition>Gauge pressure of EXO2 sonde at 1.5 m</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>psig</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.11</minimum>
+                  <maximum exclusive="false">3.429</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODepth_m_1</attributeName>
+          <attributeDefinition>Depth of the EXO2 sonde at 1.5 m measured by the EXO2 sonde.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.785</minimum>
+                  <maximum exclusive="false">2.42</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOBattery_V_1</attributeName>
+          <attributeDefinition>Voltage of the EXO2 sonde at 1.5 m internal batteries.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">3.3</minimum>
+                  <maximum exclusive="false">6.43</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOCablepower_V_1</attributeName>
+          <attributeDefinition>Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO2 sonde at 1.5 m.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">12.7</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOWiper_V_1</attributeName>
+          <attributeDefinition>Wiper brush cleaning system activation signal as measured by the EXO2 sonde at 1.5 m</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1.6</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOTemp_C_9</attributeName>
+          <attributeDefinition>Water temperature at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">5.018</minimum>
+                  <maximum exclusive="false">24.265</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOCond_uScm_9</attributeName>
+          <attributeDefinition>Conductivity at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>microSiemensPerCentimeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">35.14</minimum>
+                  <maximum exclusive="false">104.92</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOSpCond_uScm_9</attributeName>
+          <attributeDefinition>Specific conductance at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>microSiemensPerCentimeter</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">49.49</minimum>
+                  <maximum exclusive="false">125.66</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOTDS_mgL_9</attributeName>
+          <attributeDefinition>Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">32.17</minimum>
+                  <maximum exclusive="false">81.68</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODOsat_percent_9</attributeName>
+          <attributeDefinition>Dissolved oxygen percent saturation at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.35</minimum>
+                  <maximum exclusive="false">118.61</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODO_mgL_9</attributeName>
+          <attributeDefinition>Dissolved oxygen at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligramsPerLiter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.03</minimum>
+                  <maximum exclusive="false">12.53</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOfDOM_RFU_9</attributeName>
+          <attributeDefinition>Fluorescent dissolved organic matter in RFU at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>RelativeFluorescenceUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">1.93</minimum>
+                  <maximum exclusive="false">11.12</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOfDOM_QSU_9</attributeName>
+          <attributeDefinition>Fluorescent dissolved organic matter in QSU at 9 m as measured by the EXO3 Sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>QuinineSulfateUnits</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">6.24</minimum>
+                  <maximum exclusive="false">33.56</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOPressure_psi_9</attributeName>
+          <attributeDefinition>Gauge pressure of EXO3 sonde at 9 m</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>psig</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">8.520001</minimum>
+                  <maximum exclusive="false">13.44</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXODepth_m_9</attributeName>
+          <attributeDefinition>Depth of the EXO3 sonde at 9 m measured by the EXO3 sonde</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">6</minimum>
+                  <maximum exclusive="false">9.448</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOBattery_V_9</attributeName>
+          <attributeDefinition>Voltage of the EXO3 sonde at 9 m internal batteries</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.78</minimum>
+                  <maximum exclusive="false">3.13</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOCablepower_V_9</attributeName>
+          <attributeDefinition>Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO3 sonde at 9 m.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">10.65</minimum>
+                  <maximum exclusive="false">13.01</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>EXOWiper_V_9</attributeName>
+          <attributeDefinition>Wiper brush cleaning system activation signal as measured by the EXO3 sonde at 9 m</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1.58</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>LvlPressure_psi_13</attributeName>
+          <attributeDefinition>Gauge pressure CS-451 at position 13, measured relative to ambient atmospheric pressure</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>psig</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">21.81208</minimum>
+                  <maximum exclusive="false">27.87</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>LvlDepth_m_13</attributeName>
+          <attributeDefinition>Depth of the pressure sensor at position 13 in meters calculated by LvlPressure_psi_13 * 0.70455</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">15.367700964</minimum>
+                  <maximum exclusive="false">19.6358085</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>LvlTemp_C_13</attributeName>
+          <attributeDefinition>Water temperature at position 13 as measured by the water level logger</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.99402</minimum>
+                  <maximum exclusive="false">14.21691</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>RECORD</attributeName>
+          <attributeDefinition>Number of observations that changes when the program is restarted</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>number</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">39873</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CR3000Battery_V</attributeName>
+          <attributeDefinition>The volts in the rechargeable battery for the CR3000 datalogger</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>volt</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">12.05</minimum>
+                  <maximum exclusive="false">13.92</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>CR3000Panel_Temp_C</attributeName>
+          <attributeDefinition>Temperature measured from the sensor inside the CR3000 datalogger</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-11.92</minimum>
+                  <maximum exclusive="false">41.62</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_1</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 1 (ThermistorTemp_C_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_2</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 2 (ThermistorTemp_C_2)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_3</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 3 (ThermistorTemp_C_3)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_4</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 4 (ThermistorTemp_C_4)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_5</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 5 (ThermistorTemp_C_5)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_6</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 6 (ThermistorTemp_C_6)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_7</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 7 (ThermistorTemp_C_7)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_8</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 8 (ThermistorTemp_C_8)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_9</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 9 (ThermistorTemp_C_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_10</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 10 (ThermistorTemp_C_10)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_11</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 11 (ThermistorTemp_C_11)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_12</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 12 (ThermistorTemp_C_12)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ThermistorTemp_C_13</attributeName>
+          <attributeDefinition>Data flag for temperature data at position 13 (ThermistorTemp_C_13)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOTemp_C_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 Temp data at 1.5 m (EXOTemp_C_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOCond_uScm_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 conductivity data at 1.5 m (EXOCond_uScm_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOSpCond_uScm_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 specific conductivity data (EXOSpCond_uScm_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOTDS_mgL_1</attributeName>
+          <attributeDefinition>Data flag for EOX2 total dissolved solids data at 1.5 m (EXOTDS_mgL_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODOsat_percent_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 dissolved oxygen saturation data at 1.5 m (EXODOsat_percent_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODO_mgL_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 dissolved oxygen observed data at 1.5 m (EXODO_mgL_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOChla_RFU_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 chlorophyll data measured in RFU at 1.5 m (EXOChla_RFU_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0 except for temperature</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOChla_ugL_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 chlorophyll data measured in micrograms per liter at 1.5 m (EXOChla_ugL_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0 except for temperature</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>6</code>
+                    <definition>Values adjusted using a linear or square root function to match high-resolution CTD profiles or corrected other affected observations on the same sensor</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOBGAPC_RFU_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 phycocyanin data measured in RFU at 1.5 m (EXOBGAPC_RFU_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0 except for temperature</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOBGAPC_ugL_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 phycocyanin data measured in micrograms per liter at 1.5 m (EXOBGAPC _ugL_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>negative values set to 0 except for temperature</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>6</code>
+                    <definition>Values adjusted using a linear or square root function to match high-resolution CTD profiles or corrected other affected observations on the same sensor</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOfDOM_RFU_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data measured in RFU at 1.5 m (EXOfDOM_RFU_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOfDOM_QSU_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 fluorescent dissolved organic matter data measured in QSU at 1.5 m (EXOfDOM_QSU_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOPressure_psi_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODepth_m_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 depth sensor at 1.5 m (EXODepth_m_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOBattery_V_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 internal battery at 1.5 m (EXOBattery_V_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOCablepower_V_1</attributeName>
+          <attributeDefinition>Data flag for EXO2 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOWiper_V_1</attributeName>
+          <attributeDefinition>Data flag for the EXO2 wiper at 1.5 m (EXOWiper_V_1)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOTemp_C_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 Temp data at 9 m (EXOTemp_C_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOCond_uScm_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 conductivity data at 9 m (EXOCond_uScm_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOSpCond_uScm_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 specific conductivity data at 9 m (EXOSpCond_uScm_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOTDS_mgL_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 total dissolved solids data at 9 m (EXOTDS_mgL_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODOsat_percent_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 dissolved oxygen saturation data at 9 m (EXODOsat_percent_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODO_mgL_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 dissolved oxygen observed data at 9 m (EXODO_mgL_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOfDOM_RFU_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 fluorescent dissolved organic matter data in RFU at 9 m (EXOfDOM_RFU_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOfDOM_QSU_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 fluorescent dissolved organic matter data in QSU at 9 m (EXOfDOM_QSU_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOPressure_psi_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 pressure sensor at 9 m (EXOPressure_psi_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXODepth_m_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 depth sensor at 9 m (EXODepth_m_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOBattery_V_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 internal battery at 9 m (EXOBattery_V_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOCablepower_V_9</attributeName>
+          <attributeDefinition>Data flag for EXO3 power cable attached from the sonde to the CR3000 datalogger (EXOCablepower_V_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_EXOWiper_V_9</attributeName>
+          <attributeDefinition>Data flag for the EXO3 wiper at 9 m (EXOWiper_V_9)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_LvlPressure_psi_13</attributeName>
+          <attributeDefinition>Data flag for CS-451 pressure sensors at position 13 (LvlPressure_psi_13)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_LvlTemp_C_13</attributeName>
+          <attributeDefinition>Data flag for CS-451 water temperature collected by water level logger at position 13 (LvlTemp_C_13)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>142264</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>CCRCatwalk_maintenancelog_2021_2023.csv</entityName>
+      <entityDescription>CCR sensor maintenace log for waterquality sensors</entityDescription>
+      <physical>
+        <objectName>CCRCatwalk_maintenancelog_2021_2023.csv</objectName>
+        <size unit="bytes">11782</size>
+        <authentication method="MD5">195ee8a3577ae2ca3c7be035a83dcd12</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>;</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir, CCR=Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir, 51=Site off the dam where the sensors are deployed</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">51</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DataStream</attributeName>
+          <attributeDefinition>Code corresponding to data set nickname;CCRW=CCR water quality sensors deployed off the dam</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>CCRW</code>
+                    <definition>Nickname of the water quality sensors off of the dam at Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_start</attributeName>
+          <attributeDefinition>Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance started before the sensors were out</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_end</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance is on going and has no current end date</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>start_parameter</attributeName>
+          <attributeDefinition>Name of start variable in the sequence corresponding to sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>EXOCond_uScm_9</code>
+                    <definition>Conductivity at 9 m as measured by the EXO3 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOTemp_C_1</code>
+                    <definition>water temperature at 1.5 m as measured by the EXO2 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOTemp_C_9</code>
+                    <definition>water temperature at 9 m as measured by the EXO3 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOfDOM_RFU_9</code>
+                    <definition>Fluorescent Dissolved Organic Matter in RFU at 9 m as measured by the EXO3 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>LvlPressure_psi_13</code>
+                    <definition>Gauge pressure of EXO sonde at position 13, measured relative to ambient atmospheric pressure</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>ThermistorTemp_C_1</code>
+                    <definition>water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>end_parameter</attributeName>
+          <attributeDefinition>Name of end variable in the sequence corresponding to sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>EXOTDS_mgL_9</code>
+                    <definition>Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOWiper_V_1</code>
+                    <definition>Wiper brush cleaning system activation signal as measured by the EXO2 sonde at 1.5 m</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOWiper_V_9</code>
+                    <definition>Wiper brush cleaning system activation signal as measured by the EXO3 sonde at 9 m</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>EXOfDOM_QSU_9</code>
+                    <definition>Fluorescent Dissolved Organic Matter in QSU at 9 m as measured by the EXO3 Sonde</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>LvlTemp_C_13</code>
+                    <definition>water temperature at position 13 as measured by the water level logger</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>ThermistorTemp_C_13</code>
+                    <definition>water temperature measured by thermistor at position 13 (19 meters below thermistor 1)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag</attributeName>
+          <attributeDefinition>Data flag applied to associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>value removed due to maintenance and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>value removed due to fouling and set to NA</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7</code>
+                    <definition>missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>update_value</attributeName>
+          <attributeDefinition>New value to update the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>New value to update the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No updated value used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>adjustment_code</attributeName>
+          <attributeDefinition>Chunks of code or a numeric offset to change the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Chunks of code or a numeric offset to change the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No adjustment code used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>notes</attributeName>
+          <attributeDefinition>Notes from the field crew on the maintenance or reason for changing the data</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Notes from the field crew on the maintenance or reason for changing the data</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No Note recorded</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>82</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>CCRCatwalk_Depth_offsets_2021_2023.csv</entityName>
+      <entityDescription>CCR offsets for sensor depths</entityDescription>
+      <physical>
+        <objectName>CCRCatwalk_Depth_offsets_2021_2023.csv</objectName>
+        <size unit="bytes">310</size>
+        <authentication method="MD5">a2e8fda64b3aa5dcd440a246fdc9ba6a</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir; 51=Deep hole or site nearest to the dam in the reservoir, attached to the platform.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">51</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Position</attributeName>
+          <attributeDefinition>The position number of the sensor as described in the metadata</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>number</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">13</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_from_surface</attributeName>
+          <attributeDefinition>The depth of the sensors when the reservoir is at full pond</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">19</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Offset</attributeName>
+          <attributeDefinition>The offset to determine the depth of the sensor from the surface of the water</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.15</minimum>
+                  <maximum exclusive="false">18.94</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>13</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>CCR_hobos_2020_2021.csv</entityName>
+      <entityDescription>CCR HOBO Temperature String 2020-2021</entityDescription>
+      <physical>
+        <objectName>CCR_hobos_2020_2021.csv</objectName>
+        <size unit="bytes">30510976</size>
+        <authentication method="MD5">addfaf71d621c8d797809ee8196a5b70</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>300</code>
+                    <definition>Sawmill Branch Inflow to CCR</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>50</code>
+                    <definition>Deep hole or site nearest to the dam in the reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Depth at which the logger was deployed</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">21</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Temp_C</attributeName>
+          <attributeDefinition>Water temperature measured by HOBO pendant loggers</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.784</minimum>
+                  <maximum exclusive="false">33.326</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag</attributeName>
+          <attributeDefinition>Data flag for (Temp_C)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>no flag</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>739938</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>reservoir_site_descriptions.csv</entityName>
+      <entityDescription>Sampling site descriptions</entityDescription>
+      <physical>
+        <objectName>reservoir_site_descriptions.csv</objectName>
+        <size unit="bytes">511</size>
+        <authentication method="MD5">802f0d6034af059b8ef91d4b50c6d460</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site at each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">300</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site_description</attributeName>
+          <attributeDefinition>Description of where the reservoir site is located</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Description of where the reservoir site is located</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Latitude of the reservoir site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">37.3697</minimum>
+                  <maximum exclusive="false">37.4094</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Longitude of the reservoir site</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-79.9699</minimum>
+                  <maximum exclusive="false">-79.958</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>3</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>CCRCatwalk_qaqc_2021_2023.R</entityName>
+      <entityDescription>Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.</entityDescription>
+      <physical>
+        <objectName>CCRCatwalk_qaqc_2021_2023.R</objectName>
+        <size unit="bytes">20766</size>
+        <authentication method="MD5">94f139139b52916948383c49060af77d</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>CCRCatwalk_inspection_2021_2023.Rmd</entityName>
+      <entityDescription>Inspection script creates QAQC plots and downloads the necessary files for publication.</entityDescription>
+      <physical>
+        <objectName>CCRCatwalk_inspection_2021_2023.Rmd</objectName>
+        <size unit="bytes">30115</size>
+        <authentication method="MD5">3005446564af3da7a46faba9d22fbfc8</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>find_depths.R</entityName>
+      <entityDescription>Function to get a depth for each observation</entityDescription>
+      <physical>
+        <objectName>find_depths.R</objectName>
+        <size unit="bytes">8445</size>
+        <authentication method="MD5">b7b834f5159acd0b093da9d356694101</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Plot_function.R</entityName>
+      <entityDescription>Function used to create the QAQC plots in the inspection script</entityDescription>
+      <physical>
+        <objectName>Plot_function.R</objectName>
+        <size unit="bytes">7487</size>
+        <authentication method="MD5">2b095600901478678d884b6899546b37</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>CCR_hobo_compilation_2020_2021.R</entityName>
+      <entityDescription>Script used to collate the HOBO files from 2020-2021</entityDescription>
+      <physical>
+        <objectName>CCR_hobo_compilation_2020_2021.R</objectName>
+        <size unit="bytes">14756</size>
+        <authentication method="MD5">6f36768d0e5796ec6f48364abcadf60e</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <unitList>
+        <unit id="microSiemensPerCentimeter" multiplierToSI="1.00E-04" name="microSiemensPerCentimeter" parentSI="siemenPerMeter" unitType="conductance">
+          <description>microSiemenPerCentimeter</description>
+        </unit>
+        <unit id="RelativeFluorescenceUnits" multiplierToSI="" name="RelativeFluorescenceUnits" parentSI="" unitType="dimensionless">
+          <description>measurement of the relative amount of fluorescence excitation detected in response to particular wavelength of light</description>
+        </unit>
+        <unit id="QuinineSulfateUnits" multiplierToSI="" name="QuinineSulfateUnits" parentSI="" unitType="dimensionless">
+          <description>measurement of the relative amount of fluorescence excitation detected in response to fluorescent dissolved organic matter</description>
+        </unit>
+        <unit id="psig" multiplierToSI="17.85" name="psig" parentSI="kilogramsPerSquareMeter" unitType="arealMassDensity">
+          <description>pounds per square inch guage</description>
+        </unit>
+      </unitList>
+    </metadata>
+  </additionalMetadata>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

@@ -33,7 +33,7 @@ EXOChla_ugL_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sond
 EXOBGAPC_RFU_1	Blue-Green Algae Phyocycanin at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOBGAPC_ugL_1	Blue-Green Algae Phycoycanin at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1	Fluorecent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sondein QSU	numeric	QuinineSulfateUnits		NA	value is missing
+EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sonde in QSU	numeric	QuinineSulfateUnits		NA	value is missing
 EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
 EXOPressure_psi	Gauge pressure of EXO sonde at 1.6m; measured relative to ambient atmospheric pressure	numeric	poundsPerSquareInch		NA	value is missing
 EXODepth_m	Depth of the EXO sonde as measured by the EXO sonde	numeric	meter		NA	value is missing

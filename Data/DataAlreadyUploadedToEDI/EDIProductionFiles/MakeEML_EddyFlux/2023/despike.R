@@ -1,7 +1,15 @@
 ############################################################
-# spike detection function
+# Title: spike detection function
+# Author: Brenda D'Achuna
+# Created: 2020- Not sure the exact date
+# Edited: 28 Jan 2024
+
+# This function creates low,medium, and high flux flags
 ############################################################
-library(univOutl)
+
+# load packages
+pacman::p_load(univOutl)
+
 spike_flag <- function (NEE, block = 30, z = 5){
   flag <- rep(0,length(NEE))
   # 1. divide period

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1105.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1105.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -75,7 +75,7 @@
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>etipper@vt.edu</electronicMailAddress>
     </creator>
-    <pubDate>2024-01-30</pubDate>
+    <pubDate>2024-01-31</pubDate>
     <abstract>
       <para>Discrete depth profiles of water temperature, dissolved oxygen, oxidation-reduction potential, conductivity, specific conductance, and pH were collected with various handheld YSI water quality probes and discrete depth profiles of photosynthetic active radiation (PAR) were collected with a LI-COR underwater light meter from 2013 to 2023 in five drinking water reservoirs in southwestern Virginia, USA. Secchi disk depth data complement the PAR data to estimate water transparency. All YSI and PAR depth profiles were collected on approximately 1-meter intervals. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the Town of Pulaski, Virginia. The data package consists of two datasets: 1) YSI and PAR profiles; and 2) Secchi depth data. The YSI and PAR depth profiles and Secchi depths were measured at the deepest site of each reservoir adjacent to the dam and other in-reservoir transects. YSI measurements were also collected at a gauged weir on the primary inflow tributary at Falling Creek, other inflows and outflows at Falling Creek, inflows and outflows at Beaverdam, and inflows at Carvins Cove. In 2021, YSI profiles were also collected from a littoral site in Beaverdam. Data were collected approximately fortnightly in the spring months (March - May), weekly in the summer and early autumn (June - September), and monthly in the late autumn and winter (October - February) in Falling Creek and Beaverdam Reservoirs; data coverage in the other three reservoirs varies among years. </para>
     </abstract>
@@ -1143,8 +1143,8 @@ Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McCl
       <entityDescription>Secchi_maintenancelog_2013_2023.csv</entityDescription>
       <physical>
         <objectName>Secchi_maintenancelog_2013_2023.csv</objectName>
-        <size unit="bytes">723</size>
-        <authentication method="MD5">01b19554d734c907595dd5617a179bd0</authentication>
+        <size unit="bytes">849</size>
+        <authentication method="MD5">0b9b3e3aab072e3c0fcc596471314df7</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1380,8 +1380,8 @@ Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McCl
       <entityDescription>YSI_maintenancelog_2013_2023.csv</entityDescription>
       <physical>
         <objectName>YSI_maintenancelog_2013_2023.csv</objectName>
-        <size unit="bytes">5603</size>
-        <authentication method="MD5">c6866717223a674b67232a956fcef6c7</authentication>
+        <size unit="bytes">6993</size>
+        <authentication method="MD5">7d6323d1feee639d572049fd77fc0864</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1771,8 +1771,8 @@ Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McCl
       <entityDescription>YSI and PAR QAQC script for most recent year of data publication</entityDescription>
       <physical>
         <objectName>YSI_qaqc_2023_2023.R</objectName>
-        <size unit="bytes">12582</size>
-        <authentication method="MD5">f5f976e541bd67a6d530164fd63eb093</authentication>
+        <size unit="bytes">13272</size>
+        <authentication method="MD5">8a8e943cfc3a9e03474dd7239e9dbbbc</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
@@ -1786,8 +1786,8 @@ Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McCl
       <entityDescription>Secchi QAQC script for most recent year of data publication</entityDescription>
       <physical>
         <objectName>Secchi_qaqc_2023_2023.R</objectName>
-        <size unit="bytes">9599</size>
-        <authentication method="MD5">27a57b53c801f505ef98b58e3f95c8df</authentication>
+        <size unit="bytes">9609</size>
+        <authentication method="MD5">832901ae58be498b4c537b767651c999</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
@@ -1816,8 +1816,8 @@ Doubek, J. P., Campbell, K. L., Doubek, K. M., Hamre, K. D., Lofton, M. E., McCl
       <entityDescription>Secchi visualization script for full dataset</entityDescription>
       <physical>
         <objectName>Secchi_inspection_2013_2023.Rmd</objectName>
-        <size unit="bytes">5867</size>
-        <authentication method="MD5">4558ad9bcc8610c345a0a0bde48ff88c</authentication>
+        <size unit="bytes">5866</size>
+        <authentication method="MD5">1b39a40cc93359d8056c13c680c95fe3</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/x-markdown</formatName>

@@ -85,7 +85,7 @@ make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1105.5") 
+         package.id = "edi.1105.6") 
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 

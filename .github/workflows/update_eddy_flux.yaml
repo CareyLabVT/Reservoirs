@@ -36,4 +36,9 @@ jobs:
           git add "Data/DataNotYetUploadedToEDI/EddyFlux_Processing/QAQC plots/eddypro*.pdf"          
           git commit -m "Updating Manual Files" || echo "No changes to commit"
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 
- 
+          
+      - name: Healthchecks
+        run: |
+          curl -m 10 --retry 5 https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3
+          
+          

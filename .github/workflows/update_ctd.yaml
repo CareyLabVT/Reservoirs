@@ -33,3 +33,7 @@ jobs:
           git add Data/DataNotYetUploadedToEDI/Raw_CTD/*          
           git commit -m "Updating Manual Files" || echo "No changes to commit"
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 
+          
+      - name: Healthcheck
+        run: |
+          curl -m 10 --retry 5 https://hc-ping.com/8b6cfbb6-d9f0-4ab6-a22b-c1ee1e0ac184

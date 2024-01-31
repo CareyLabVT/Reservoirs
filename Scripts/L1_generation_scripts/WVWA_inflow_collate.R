@@ -151,6 +151,3 @@ WVWA_inflow_collate(
   year = 2023,
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_L1"
 )
-
-## Call healthcheck
-RCurl::url.exists("https://hc-ping.com/03ca4e3d-55bf-4d80-9199-62a12381426d", timeout = 5)

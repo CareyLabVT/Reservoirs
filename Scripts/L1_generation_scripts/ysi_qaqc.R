@@ -18,6 +18,3 @@ ysi_qaqc(data_file = data_file,
          maintenance_file = maintenance_file,
          gsheet_data = TRUE,
          outfile = outfile)
-
-## Call healthcheck
-RCurl::url.exists("https://hc-ping.com/6175c372-eb30-4450-a985-65bd7b82dbb3", timeout = 5)

@@ -31,9 +31,10 @@ historic_file <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/198/11
 
 secchi <- bind_rows(current_file, historic_file) 
 
-#catch some weird datetime issue that affects 2013-2020 secchi data (not 2021 - present) #30Jan24 HLW
+#catch some weird datetime issue that affects 2013-2020 secchi data (not 2021 - present) 
 secchi$DateTime[year(secchi$DateTime) <= 2020] <- 
   secchi$DateTime[year(secchi$DateTime) <= 2020] + 4*60*60 #4 hrs
+#note - added on 20Jan24 - make sure to DELETE this code during 2025 EDI dayz!!! ~HLW
 ```
 
 ```{r}

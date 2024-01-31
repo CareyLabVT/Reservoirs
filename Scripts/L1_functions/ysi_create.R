@@ -116,8 +116,8 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
   log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
-    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S"),
-    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S"),
+    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
     flag = col_integer()
   ))
 

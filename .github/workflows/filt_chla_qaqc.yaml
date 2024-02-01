@@ -40,6 +40,4 @@ jobs:
           
       - name: Healthcheck
         run: |
-          R -e 'remotes::install_version("curl", version = "5.2.0")'
-          curl -m 10 --retry 5 https://hc-ping.com/1c65db49-72f3-42b7-8bab-9a675a376ba8
-          
+          curl -v -m 10 --retry 5 https://hc-ping.com/1c65db49-72f3-42b7-8bab-9a675a376ba8

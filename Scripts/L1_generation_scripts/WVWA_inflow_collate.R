@@ -101,7 +101,7 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
   # Filter by Year and remove if not NULL
   if(!is.null(year)){
     diff <- diff%>%
-      mutate(Year=year(DateTime))  
+      mutate(Year=year(DateTime)) %>% 
       filter(Year==year)%>%
       select(-Year)
   }

@@ -40,5 +40,7 @@ jobs:
           
       - name: Healthcheck
         run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
           curl -m 10 --retry 5 https://hc-ping.com/cf13e6af-a8f2-4cde-adc0-f86cdba22f8d
           

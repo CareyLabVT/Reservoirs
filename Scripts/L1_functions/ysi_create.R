@@ -31,13 +31,19 @@ ysi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile){
 #date format
 raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'), tz = "America/New_York")
 
+#add a Flag_DateTime col if not already there
+if(is.null(raw_profiles$Flag_DateTime)){
+  raw_profiles$Flag_DateTime <- 0
+}
+
 # ### Create a DateTime Flag for non-recorded times ####
 # # (i.e., 12:00) and set to noon
 # # Convert time that are in 12 hours to 24 hours
 raw_profiles <- raw_profiles %>%
   mutate(Time = format(DateTime,"%H:%M:%S"),
          Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-         Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
+         Flag_DateTime = ifelse(Time == "12:00:00" & year(DateTime)<2023, 1, Flag_DateTime), # Flag if set time to noon
+         #just need to catch some of the old data that didn't properly get flagged
          Date = as.Date(DateTime),
          DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
          Hours = hour(DateTime),
@@ -62,7 +68,7 @@ raw_profiles$pH <- as.numeric(raw_profiles$pH)
 ## update raw data into new table to make rerunnig easier
 update_profiles <- raw_profiles
 
-## ADD FLAGS (note that only flags 5 and 6 can come from the maintenance file)
+## ADD FLAGS (note that only flags 2, 5, and 6 can come from the maintenance file)
 # 0 - NOT SUSPECT
 # 1 - SAMPLE NOT TAKEN
 # 2 - INSTRUMENT MALFUNCTION
@@ -70,6 +76,7 @@ update_profiles <- raw_profiles
 # 4 - NEGATIVE VALUE SET TO ZERO
 # 5 - SUSPECT SAMPLE
 # 6 - HUMAN ERROR
+# 7 - TEMP MEASURED USING PH PROBE
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
 for(j in colnames(update_profiles%>%select(Temp_C:pH))) { #removing DateTime bc this loop replaces all 1s with 0s
@@ -93,7 +100,9 @@ update_profiles <- update_profiles |>
   mutate(Flag_pH = ifelse((!is.na(pH) & (pH > 14 | pH < 4)), 2, Flag_pH),
          Flag_ORP_mV = ifelse((!is.na(ORP_mV) & (ORP_mV > 750)), 2, Flag_ORP_mV),
          #Flag_PAR_umolm2s = No bounds given,
-         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, Flag_Temp_C),
+         Flag_Temp_C = ifelse((!is.na(Temp_C) & (Temp_C > 35)), 2, 
+                              ifelse(!is.na(Temp_C) & is.na(DO_mgL) & is.na(Cond_uScm), 7,
+                              Flag_Temp_C)), # 7 flag for temp measured with ph probe
          Flag_DO_mgL = ifelse((!is.na(DO_mgL) & (DO_mgL > 70)), 2, Flag_DO_mgL),
          Flag_DOsat_percent = ifelse((!is.na(DOsat_percent) & (DOsat_percent > 200)), 2,Flag_DOsat_percent),
          Flag_Cond_uScm = ifelse((!is.na(Cond_uScm) & ((Cond_uScm < 10 | Cond_uScm > 250))), 2, Flag_Cond_uScm),
@@ -105,12 +114,12 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
 
 ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-log_read <- read_csv(maintenance_file, col_types = cols(
-  .default = col_character(),
-  TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-  TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-  flag = col_integer()
-))
+  log_read <- read_csv(maintenance_file, col_types = cols(
+    .default = col_character(),
+    TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+    TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+    flag = col_integer()
+  ))
 
 log <- log_read
 
@@ -125,7 +134,7 @@ for(i in 1:nrow(log)){
   Reservoir <- log$Reservoir[i]
 
   ### Get the Site Number
-  Site <- as.numeric(log$Site[i])
+  Site_temp <- as.numeric(log$Site[i])
 
   ### Get the depth value
   Depth <- as.numeric(log$Depth[i]) 
@@ -171,34 +180,64 @@ for(i in 1:nrow(log)){
 
   if(flag %in% c(1,2)){
     # The observations are changed to NA for maintenance or other issues found in the maintenance log
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   }else if (flag %in% c(3)){
     ## BDL
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- NA
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- NA
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   }else if (flag %in% c(4)){
     ## change negative values are changed to 0
 
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- 0
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- 0
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   } else if(flag %in% c(5)){
     # Suspect sample
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
   }else if(flag %in% c(6) & (colname_start != 'Site' | colname_start != 'Depth_m')){
     ## human error
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, paste0("Flag_",maintenance_cols)] <- flag
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- update_value
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), paste0("Flag_",maintenance_cols)] <- flag
 
-  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start != 'Depth_m')){
+  }else if(flag %in% c(6) & (colname_start == 'Site' | colname_start == 'Depth_m')){
     print(start)
     print(update_value)
     ## human error for site, which we don't indicate in final dataset
-    update_profiles[update_profiles$DateTime %in% Time$DateTime, maintenance_cols] <- update_value
+    update_profiles[update_profiles$DateTime %in% Time$DateTime &
+                      update_profiles$Reservoir %in% c(Reservoir) &
+                      update_profiles$Site %in% c(Site_temp) & 
+                      update_profiles$Depth_m %in% c(Depth), maintenance_cols] <- update_value
 
   }else{
     warning("Flag not coded in the L1 script. See Austin or Adrienne")

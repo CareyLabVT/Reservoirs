@@ -144,17 +144,17 @@ make_eml(
   temporal.coverage = c("2020-04-04", "2023-12-31"),
   maintenance.description = 'ongoing',
   data.table = c("EddyFlux_2020_2023.csv"),
-  data.table.description = c("EC Data cleaned but not further post-processed with processing script"),
+  data.table.description = c("EC data processed with EddyPro and cleaned with EddyFlux_qaqc_2020_2023.R, but not further post-processed with EddyFlux_post_processing.Rmd"),
   #data.table.name = "EC Data for 2020 to 2022",
-  other.entity= c("EddyFlux_qaqc_2020_2023.R","EddyFlux_inspection_2020_2023.Rmd","EddyFlux_processing_2020_2023.Rmd","despike.R"),
+  other.entity= c("EddyFlux_qaqc_2020_2023.R","EddyFlux_inspection_2020_2023.Rmd","EddyFlux_post_processing.Rmd","despike.R"),
   other.entity.description = c("R script to clean-up Eddy Pro output",
                                "R Markdown script for using the qaqc script and making qaqc plots",
-                               "R Markdown script for post-processing of EC data",
+                               "R Markdown script for post-processing of EC data and not used in EddyFlux_2020_2023.csv",
                                "Depsike function for post-processing"),
   #other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.692.9') # FOR STAGING
+  package.id = 'edi.692.11') # FOR STAGING
   #package.id = 'edi.1061.2') # FOR FINAL PRODUCTION
 
 ## Step 8: Check your data product! ####

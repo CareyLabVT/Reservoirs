@@ -96,7 +96,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                   ### CHANGE THIS NUMBER BELOW 
                                                                                ##      
-  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/9/f837d12dc12ab37a6772598578875e00")
+  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/10/e0976e7a6543fada4cbf5a1bb168713b")
  #
  # # Force files from EDI to have an EST timestamp
 
@@ -124,7 +124,7 @@ This section identifies if there are any duplicates, daily data, and sub daily g
  dups<- current_df[duplicated(current_df$DateTime), ]
 
 dups <- dups%>%
-  select(date, time, co2_flux_umolm2s,  specific_humidity_kgkg, u_star_ms) 
+  select(DateTime, co2_flux_umolm2s,  specific_humidity_kgkg, u_star_ms) 
 
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
@@ -139,12 +139,12 @@ When gaps are found in the data file, check that you do not have new gaps in the
 ```{r Check for daily gaps, echo=FALSE}
 
 # Get DOY
-bvrdata <- current_df
- bvrdata$DOY=yday(bvrdata$DateTime)
+df2 <- current_df
+ df2$DOY=yday(df2$DateTime)
 
- for(i in 2:nrow(bvrdata)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if(bvrdata$DOY[i]-bvrdata$DOY[i-1]>1){
-      print(c(bvrdata$DateTime[i-1],bvrdata$DateTime[i]))
+ for(i in 2:nrow(df2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(df2$DOY[i]-df2$DOY[i-1]>1){
+      print(c(df2$DateTime[i-1],df2$DateTime[i]))
     }
  }
 ```

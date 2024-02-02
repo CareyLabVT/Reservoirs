@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 date	Date sample was collected in Eastern standard time with daylight savings obseved	Date		YYYY-MM-DD	NA	Value is missing
 time	Time sample was collected in Eastern standard time with daylight savings observed 	Date		hh:mm:ss	NA	Value is missing
-DOY	Day of Julian year	Date		DDD	NA	Value is missing
+DOY	Day of Julian year	Date		D	NA	Value is missing
 Tau_kgms2	Corrected momentum flux	numeric	kilogramPerMeterPerSecondSquared		NA	Value is missing
 qc_Tau	Quality Flag for momentum flux	categorical	dimensionless		NA	Value is missing
 H_wm2	Corrected sensible heat flux	numeric	wattPerMeterSquared		NA	Value is missing

@@ -179,7 +179,7 @@ The first row is the time for the first observation and then the subsequent obse
 # Because we can't have NAs for this for loop let's make a new df
  bvr2 <- current_df%>%
   filter(!is.na(RECORD)) %>%
-  filter(DateTime>curren%>%t_time_start)
+  filter(DateTime>current_time_start)
 
   for(i in 2:length(bvr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
     if( abs(bvr2$RECORD[i]-bvr2$RECORD[i-1])>1 & difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>10){

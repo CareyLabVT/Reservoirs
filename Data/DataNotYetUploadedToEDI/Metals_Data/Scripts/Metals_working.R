@@ -39,7 +39,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
   
   # Read in Maintenance Log
   
-  log_read <- read_csv(maintenance_file, skip=38, col_types = cols(
+  log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     Sample_Date = col_date("%Y-%m-%d"),
     flag = col_integer(),
@@ -95,6 +95,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
 #set up final data frame with correct formatting!
  frame1 <- left_join(ICP, metals_key, by = c('Sample_ID'))%>% 
    select(-Sample_ID)%>%
+   distinct(DateTime, Reservoir, Depth_m, Site, Filter, .keep_all = TRUE) |> 
    group_by(DateTime, Reservoir, Depth_m, Site)%>% 
    pivot_wider(names_from = 'Filter', 
                               values_from = c('Li_mgL':'Ba_mgL'),

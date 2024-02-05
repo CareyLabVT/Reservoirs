@@ -47,6 +47,10 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 
 dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
 
+# Check here on EDI an make sure you are using the most up to date file.
+# https://portal.edirepository.org/nis/mapbrowse?packageid=edi.1061.2 
+# if not pulll in the file path from EDI
+
 
 # read in the data file downloaded from EDI
 dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/2/f837d12dc12ab37a6772598578875e00") 
@@ -58,10 +62,16 @@ ec <- dt2%>%
 ```{r format time, echo=FALSE}
 # Format time
 # make a datetime column and read in with original timezone
-ec$datetime <- ymd_hms(paste0(ec$date, " ",ec$time), tz="America/New_York")
+ec$datetime <- paste0(ec$date, " ",ec$time)
 
-# convert from Eastern/US ehick observs daylight savings to EST which does not. 
+# Set timezone as America/New_York because that's what it is in and then conver to EST
+  ec$datetime <- force_tz(ymd_hms(ec$datetime), tzone = "America/New_York")
+
+# convert from Eastern/US with daylight savings observed to EST which does not. 
 ec$datetime <- with_tz(ec$datetime, tzone = "EST")
+
+# get the late date in the dataframe
+last <- tail(ec, n = 1) 
 
 
 # Set new dataframe with list of dates+times:
@@ -69,14 +79,12 @@ ec$datetime <- with_tz(ec$datetime, tzone = "EST")
 # Constrain to study time period: 2020-04-05 (time series start date) to
 # last 30 minute period - UPDATE WITH EACH NEW SET OF DATA!
 ts <- seq.POSIXt(as.POSIXct("2020-04-05 00:00:00",'%Y-%m-%d %H:%M:%S', tz="EST"), 
-                 as.POSIXct("2023-10-24 13:00:00",'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
+                 as.POSIXct(last$datetime,'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
 ts2 <- data.frame(datetime = ts)
 
 # Join Eddy Flux data with list of dates+time
 ec2 <- merge(ts2, ec, by = 'datetime', all.x=T)
 
-# Take out duplicated data points
-ec2<-ec2[!duplicated(ec2$datetime),]
 
 # Make sure time stamps are okay!
 ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)], levels = c("Apr", "May", "Jun",
@@ -147,13 +155,14 @@ met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/8/d4c74b
 
 # Bind files together if need to use current file
 
-met_all <- met_curr<-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv",
+met_curr <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv",
                    col_select=c("DateTime","BP_Average_kPa","AirTemp_C_Average","RH_percent",
                                  "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
                                   "InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2",
                                   "Albedo_Average_W_m2","WindSpeed_Average_m_s","WindDir_degrees"))%>%
-  mutate(DateTime = force_tz(DateTime, tzone="EST"))%>%
-  dplyr::bind_rows(.,met_all) # bind everything together
+  mutate(DateTime = force_tz(DateTime, tzone="EST"))
+
+ met_all <- dplyr::bind_rows(met_curr, met_all) # bind everything together
   
   
 # Start timeseries on the 00:15:00 to facilitate 30-min averages

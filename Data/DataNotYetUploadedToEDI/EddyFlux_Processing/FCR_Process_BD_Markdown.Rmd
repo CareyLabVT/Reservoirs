@@ -62,10 +62,10 @@ ec <- dt2%>%
 ```{r format time, echo=FALSE}
 # Format time
 # make a datetime column and read in with original timezone
-ec$datetime <- ymd_hms(paste0(ec$date, " ",ec$time), tz="UTC")
+ec$datetime <- paste0(ec$date, " ",ec$time)
 
 # Set timezone as America/New_York because that's what it is in and then conver to EST
-  ec$datetime <- force_tz(ec$datetime, tzone = "America/New_York")
+  ec$datetime <- force_tz(ymd_hms(ec$datetime), tzone = "America/New_York")
 
 # convert from Eastern/US with daylight savings observed to EST which does not. 
 ec$datetime <- with_tz(ec$datetime, tzone = "EST")
@@ -85,8 +85,6 @@ ts2 <- data.frame(datetime = ts)
 # Join Eddy Flux data with list of dates+time
 ec2 <- merge(ts2, ec, by = 'datetime', all.x=T)
 
-# Take out duplicated data points
-ec2<-ec2[!duplicated(ec2$datetime),]
 
 # Make sure time stamps are okay!
 ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)], levels = c("Apr", "May", "Jun",

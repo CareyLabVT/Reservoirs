@@ -289,7 +289,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     mutate(date=ymd(date), #converts date to correct format
            time=strptime(time, format = "%H:%M"), #converts time to postix
            time=as_hms(time), #takes out the date and just leaves the time
-           Year = year(date),
+           #Year = year(date),
            flowrate_mean = flowrate_mean *60000)%>% # convert the flowrate to L min-1
     dplyr::rename(Tau_kgms2 = Tau,
                   H_wm2 = H,
@@ -362,6 +362,9 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   current.ec$datetime <- ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
   
+  sed <- current.ec%>%
+    select(date,time,datetime)
+  
   # order the datetime column
   # reorder 
   current.ec <-  current.ec[order(current.ec$datetime),]
@@ -380,14 +383,13 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # }
   
   # Set timezone as America/New_York because 
-  current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
+  #current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
   
   # Because we changed times in the datetime column, we need to make sure we get the new time
   # convert to character 
   current.ec$datetime2 <-as.character(format(current.ec$datetime))
   # split into 2 columns   
   current.ec <- current.ec %>% separate(datetime2, c('date', 'time'), sep = " ")  
-  
   
   
   # Filter for just the unprocessed files
@@ -423,7 +425,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),
            h2o_flux_umolm2s = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), NA, h2o_flux_umolm2s))%>% # take out very high and low fluxes
     distinct()%>% # take out duplicates
-    select(-Year, -flowrate_mean, -datetime,)%>% # take out the columns not in EDI
+    select(-flowrate_mean)%>% # take out the columns not in EDI
     select(date, time, everything())
   
   
@@ -434,6 +436,20 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # order the observations
   ec_all<-ec_all[order(ec_all$date),]
+  
+  # Clean up when a date and time was processed on 2 occasions
+  # found observations where there was no info and other observations for the same time that
+  # had some columns filled. This was 2022-08-18 15:00 - 2022-08-19 23:00. I decided to take the
+  # observation that had values. 
+  
+  # this code groups by datetime where there should be one value. If there is more than one value then 
+  # take the value with the highest Tau_kg2 because the other one is an NA.  
+  
+  ec_all <- ec_all %>% 
+    group_by(datetime) %>% 
+    slice_max(Tau_kgms2, n = 1) %>%
+    ungroup()%>%
+    select(-datetime)
   
   
   # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
@@ -467,7 +483,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
 #   current_year = 2023,
 #   output_file = "/EddyPro_Cleaned_L1.csv",
 #   start_date = as.Date("2022-12-31") + lubridate::days(1),
-#   end_date = sys.Date() + lubridate::days(1))
+#   end_date = Sys.Date() + lubridate::days(1))
 # 
 # 
 # ## Call healthcheck

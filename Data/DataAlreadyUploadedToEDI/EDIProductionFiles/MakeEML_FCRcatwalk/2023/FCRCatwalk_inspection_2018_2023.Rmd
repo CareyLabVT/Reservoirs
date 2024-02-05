@@ -63,8 +63,8 @@ current_time_end=ymd_hms("2023-12-31 23:59:00", tz="EST")
 # current_df <- qaqc_fcr(
 #   data_file= "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv",
 #   data2_file = "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2018_2023.csv",
-#   maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv", 
-#          output_file = NULL, 
+#   maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv",
+#          output_file = NULL,
 #          start_date = ymd_hms("2018-07-05 14:45:00", tz="EST"), # This is when we want to start the file
 #          end_date = Sys.Date())
 
@@ -74,7 +74,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
   
-# If No EDI file exists with all the years you want to look at
+# # If No EDI file exists with all the years you want to look at
 #   current_df <- current_df%>%
 #   dplyr::distinct(.)%>% # get rid of dups if they snuck in
 #   filter(DateTime<(current_time_end))
@@ -91,7 +91,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                 ### CHANGE THIS NUMBER BELOW
                                                                              ##
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/518/26/fbb8c7a0230f4587f1c6e11417fe9dce")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/518/26/bf3c9cf333f25dc600c115dc8a46d40c")
 
  # Force files from EDI to have an EST timestamp
   current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
@@ -224,7 +224,7 @@ Flags <- current_df%>%
 
 # Make a table with the number of times a flag was used
 for(f in 1:ncol(Flags)){
-  #print(colnames(Flags[f]))
+  print(colnames(Flags[f]))
   print(table(Flags[,f], useNA = "always"))
 }
 ```
@@ -696,7 +696,7 @@ output <- unlist(outputs, recursive = F)
 # Variable_StartYear_EndYear
 
 # convert datetimes to characters so that they are properly formatted in the output file
- current_df$DateTime <- as.character(current_df$DateTime)
+ current_df$DateTime <- as.character(format(current_df$DateTime))
 
 write_csv(current_df, "FCRCatwalk_2018_2023.csv")
 

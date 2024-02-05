@@ -22,7 +22,7 @@
 
 
 # Download/load libraries
-# pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
+#  pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
 # 
 # library(EDIutils)
 # library(xml2)
@@ -32,8 +32,11 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                                     gdrive, # Are the files on Google Drive. True or False
                                     gshared_drive, # Name of the shared drive where the files are held or use as_id()and the ID of the folder
                                     current_year, # Current Year. Must be numeric
-                                    output_file)
+                                    output_file,
+                                    start_date, # date the EDI file ends
+                                    end_date)  # sys.Date plus 1
 {
+  
   
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
@@ -77,7 +80,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   ## Now for the QAQC Plots Section
   
   
-  # Make a list of files on GitHub but only for the current year
+  # Make a list of files on GitHub but only for the current year. Might need to think about transition time. 
   
   myfiles = list.files(path=paste0(mydir,"data/"),pattern=as.character(current_year), recursive = TRUE,full.names=TRUE)
   
@@ -374,11 +377,16 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
   
   
-  # Filter for just the year
+  # Filter for just the unprocessed files
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    current.ec <- current.ec %>% 
+      filter(datetime >= start_date)
+  }
   
-  if(!is.null(current_year)){
-    current.ec <- current.ec%>%
-      filter(Year %in% current_year)
+  if(!is.null(end_date)){
+    current.ec <- current.ec %>% 
+      filter(datetime <= end_date)
   }
   
   
@@ -423,8 +431,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # ec_all <- ec_all |> filter(date> last_edi_date)
   
   # convert datetimes to characters so that they are properly formatted in the output file
-  ec_all$date <- as.character(ec_all$date)
-  ec_all$time <- as.character(ec_all$time)
+  ec_all$date <- as.character(format(ec_all$date))
+  ec_all$time <- as.character(format(ec_all$time))
   
   # Output data
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
@@ -443,7 +451,9 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
 #   gdrive = F, # Are the files on Google Drive. True or False
 #   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
 #   current_year = 2023,
-#   output_file = "/EddyPro_Cleaned_L1.csv")
+#   output_file = "/EddyPro_Cleaned_L1.csv",
+#   start_date = as.Date("2022-12-31") + lubridate::days(1),
+#   end_date = sys.Date() + lubridate::days(1))
 # 
 # 
 # ## Call healthcheck

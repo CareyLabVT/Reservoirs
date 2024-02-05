@@ -1,7 +1,7 @@
 # Title: Metals data wrangling script
 # Author: Cece Wood
 # Date: 18JUL23
-# Edit: 05 Dec 23 A. Breef-Pilz
+# Edit: 05 Jan 24 A. Delany
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -25,15 +25,15 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
                         outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv",
                         ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"){
   
-  # These are so I can run the function one step at a time and figure everything out. 
-  # Leave for now while still in figuring out mode
-  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
-  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-  sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056"
-  MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
-  outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
-  ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
+  # # These are so I can run the function one step at a time and figure everything out. 
+  # # Leave for now while still in figuring out mode
+  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
+  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+  # sample_time = "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps/edit#gid=344320056"
+  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
+  # outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+  # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
   
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -104,6 +104,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    summarise(across(everything(), list(z = ~mean(.x, na.rm = TRUE), n = ~ sum(!is.na(.))), .names ="{.fn}_{.col}"))%>%
    rename_all(~ str_remove(., "^z_"))%>% #named the mean column z but then remove the z
    mutate(across(everything(), ~ifelse(is.nan(.), NA, .))) %>%  #gets rid of NaNs created by taking mean during summarize step
+   drop_na(DateTime) |> 
    ungroup()
    
    
@@ -267,7 +268,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      
      ### 5.2 Actually remove values in the maintenance log from the data frame 
      ## This is where information in the maintenance log gets removed. 
-     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
+     # UPDatetime THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
     
      # replace relevant data with NAs and set flags while maintenance was in effect
      if(flag==1){ 
@@ -276,35 +277,35 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      }
      else if (flag==2){
        # Instrument Malfunction. How is this one removed?
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               maintenance_cols] <- NA
        
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               flag_cols] <- flag
      } 
      else if (flag ==6){
        # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
       
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               maintenance_cols] <- 
-         raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+         raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                                                   & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
                                           maintenance_cols] * 2.2
        # Flag the sample here
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               flag_cols] <- flag
      }
      else if (flag==10){
        # improper procedure, set all data columns to NA and all flag columns to 10
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               maintenance_cols] <- NA
        
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
+       raw_df[c(which(raw_df[,"DateTime"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
                       & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
               flag_cols] <- flag
      } 
@@ -335,24 +336,51 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    # switched. 
    # Cece is this what you want it to be? It looks like some of the observations are very close.
     #we want to do 3 MRL for Fe, Al, and Si, give it a flag of 9, and then see what it looks like
-   for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) { 
-     #for loop to create new columns in data frame
-     raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable
-     
-     MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",j)]) # get the minimum detection level
-     
-     # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus the MRL
-     raw_df[c(which(raw_df[,l]+MRL_value<raw_df[,gsub("T_", "S_", l)])),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED" 
-     
-     # Swap the observations from the totals and solubles if the Check column is labeled "SWITCHED" 
-     
-     raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(l,gsub("T_", "S_", l)) ] <- 
-       raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(gsub("T_", "S_", l), l)]
-   }
+    
+  for(l in c('T_Fe_mgL', 'T_Al_mgL', 'T_Si_mgL')){
+    raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0  #creates Check column + name of variable
+    MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
+    switch_threshold <- MRL_value*3
+    
+    # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus three times the MRLA;s
+    raw_df[which(raw_df[,l]+switch_threshold < raw_df[,gsub("T_", "S_", l)]),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED"
+  }  
+  
+    
+  ## assign rows where all three variables were switched  
+  raw_df$switch_all <- 0  
+  for (i in 1:nrow(raw_df)){
+  if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
+      raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
+      raw_df[i,'Check_T_Si_mgL'] == 'SWITCHED'){
+    raw_df[i,'switch_all'] <- 1
+  }
+}
+  
+  for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) {
+    raw_df[which(raw_df[,'switch_all'] == 1), c(l,gsub("T_", "S_", l)) ] <- 
+      raw_df[which(raw_df[,'switch_all'] == 1), c(gsub("T_", "S_", l), l)]
+  }
+
+    
+   # for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) { 
+   #   #for loop to create new columns in data frame
+   #   raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable
+   #   
+   #   MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",j)]) # get the minimum detection level
+   #   
+   #   # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus the MRL
+   #   raw_df[T_Al_mgLc(which(raw_df[,l]+MRL_value<raw_df[,gsub("T_", "S_", l)])),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED" 
+   #   
+   #   # Swap the observations from the totals and solubles if the Check column is labeled "SWITCHED" 
+   #   
+   #   raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(l,gsub("T_", "S_", l)) ] <- 
+   #     raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(gsub("T_", "S_", l), l)]
+   # }
    
    # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the 
   
-   frame4 <- raw_df%>%
+   frame4 <- raw_df %>%
      rename_with(~gsub("T_", "T", gsub("S_", "S",.)), -1)
    
 #let's write the final csv

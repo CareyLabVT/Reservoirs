@@ -27,9 +27,9 @@ eddypro_cleaning_function(
   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
   gdrive = F, # Are the files on Google Drive. True or False
   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-  current_year = 2024,
+  #current_year = 2024,
   output_file = "/EddyPro_Cleaned_L1.csv",
-  start_date = as.Date("2023-01-01") + lubridate::days(1), # change when we update to read date from EDI
+  start_date = as.Date("2022-12-31") + lubridate::days(1), # change when we update to read date from EDI
   end_date = Sys.Date() + lubridate::days(1))
 
 

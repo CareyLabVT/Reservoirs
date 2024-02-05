@@ -11,7 +11,7 @@
 ## then binds current files from the year,
 ## does a quick QAQC check and then creates an L1 file with all of the current fluxes
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
-## A.Breef-Pilz edits to filter by EDi package and make time conversion section work
+## A.Breef-Pilz edits to filter by EDi package and make time conversion section work. 05 Feb 2024
 
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already been 

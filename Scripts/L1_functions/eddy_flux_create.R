@@ -11,6 +11,8 @@
 ## then binds current files from the year,
 ## does a quick QAQC check and then creates an L1 file with all of the current fluxes
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
+## A.Breef-Pilz edits to filter by EDi package and make time conversion section work. 05 Feb 2024
+
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already been 
 # applied to generate these data <and includes additional R scripts available with this package>. 
@@ -31,12 +33,11 @@
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
                                     gdrive, # Are the files on Google Drive. True or False
                                     gshared_drive, # Name of the shared drive where the files are held or use as_id()and the ID of the folder
-                                    current_year, # Current Year. Must be numeric
+                                    #current_year, # Current Year. Must be numeric
                                     output_file,
                                     start_date, # date the EDI file ends
                                     end_date)  # sys.Date plus 1
 {
-  
   
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
@@ -82,7 +83,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # Make a list of files on GitHub but only for the current year. Might need to think about transition time. 
   
-  myfiles = list.files(path=paste0(mydir,"data/"),pattern=as.character(current_year), recursive = TRUE,full.names=TRUE)
+  myfiles = list.files(path=paste0(mydir,"data/"),pattern= "", recursive = TRUE,full.names=TRUE)
   
   # Check this directory to see if there are plots of the data
   qaqc_files <- list.files(path=paste0(mydir, "QAQC plots/"),pattern="", full.names=TRUE)
@@ -349,7 +350,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                   w_var_ms = w_var)
   
   # Make a datetime column
-  current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
+  #current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
   
   # Fix DateTime issues. From 2020-04-04 to 2020-09-02 17:30 the system was in Est/GMT +5. 
   # System is in US/Eastern with daylight savings observed from 2020-09-02 12:00 to current.
@@ -361,20 +362,32 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   current.ec$datetime <- ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
   
+  # order the datetime column
+  # reorder 
+  current.ec <-  current.ec[order(current.ec$datetime),]
+  
   if("2020-09-02 17:30:00" %in% current.ec$datetime){
     # shows time point when met station was switched from GMT -4(EST) to GMT -5(EDT) then -2 to get the row number right
     flux_timechange=max(which(current.ec$datetime=="2020-09-02 17:30:00")-2) 
     #Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
     current.ec$datetime[c(0:flux_timechange+1)]<-with_tz(force_tz(current.ec$datetime[c(0:flux_timechange+1)],"Etc/GMT+5"), "Etc/GMT+4") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
-  }else if (min(current.ec$datetime, na.rm = TRUE)<"2020-09-02 17:30:00"){
-    #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
-    current.ec$datetime<-with_tz(force_tz(current.ec$datetime,"Etc/GMT+5"), "Etc/GMT+4")
-  }else if(min(current.ec$datetime, na.rm = TRUE)>"2020-09-02 17:30:00"){
-    # Do nothing because already in EST
   }
+  # else if (min(current.ec$datetime, na.rm = TRUE)<"2020-09-02 17:30:00"){
+  #   #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+  #   current.ec$datetime<-with_tz(force_tz(current.ec$datetime,"Etc/GMT+5"), "Etc/GMT+4")
+  # }else if(min(current.ec$datetime, na.rm = TRUE)>"2020-09-02 17:30:00"){
+  #   # Do nothing because already in EST
+  # }
   
   # Set timezone as America/New_York because 
   current.ec$datetime <- force_tz(current.ec$datetime, tzone = "America/New_York")
+  
+  # Because we changed times in the datetime column, we need to make sure we get the new time
+  # convert to character 
+  current.ec$datetime2 <-as.character(format(current.ec$datetime))
+  # split into 2 columns   
+  current.ec <- current.ec %>% separate(datetime2, c('date', 'time'), sep = " ")  
+  
   
   
   # Filter for just the unprocessed files
@@ -410,7 +423,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),
            h2o_flux_umolm2s = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), NA, h2o_flux_umolm2s))%>% # take out very high and low fluxes
     distinct()%>% # take out duplicates
-    select(-Year, -flowrate_mean, -datetime) # take out the columns not in EDI
+    select(-Year, -flowrate_mean, -datetime,)%>% # take out the columns not in EDI
+    select(date, time, everything())
   
   
   

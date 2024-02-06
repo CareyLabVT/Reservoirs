@@ -383,5 +383,5 @@ fluoroprobe_qaqc(example_file_for_colnames = example_file_for_colnames,
                  end_date = end_date) 
 
 ## Call healthcheck
-RCurl::url.exists("https://hc-ping.com/0b350365-b5cc-43ae-bbac-1ad5f2086354", timeout = 5)
+#RCurl::url.exists("https://hc-ping.com/0b350365-b5cc-43ae-bbac-1ad5f2086354", timeout = 5)
 

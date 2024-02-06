@@ -34,5 +34,5 @@ eddypro_cleaning_function(
 
 
 ## Call healthcheck
-RCurl::url.exists("https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3", timeout = 5)
+#RCurl::url.exists("https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3", timeout = 5)
 

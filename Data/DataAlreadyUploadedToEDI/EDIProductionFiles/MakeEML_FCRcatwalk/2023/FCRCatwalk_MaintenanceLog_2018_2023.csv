@@ -181,6 +181,9 @@ FCR;50; CAT; 2022-12-29 03:10:00 EST; 2023-01-02 16:20:00 EST; EXOTemp_C_1; EXOW
 FCR;50; CAT; 2023-01-02 16:25:00 EST; 2023-01-02 16:35:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for toubleshooting connection issues
 FCR;50; CAT; 2023-01-02 17:35:00 EST; 2023-01-02 17:45:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for toubleshooting connection issues
 FCR;50; CAT; 2023-01-02 18:45:00 EST; 2023-01-02 18:55:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for toubleshooting connection issues
+FCR;50; CAT; 2023-01-02 22:05:00 EST; 2023-01-02 22:15:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; EXO2 out of postion
+FCR;50; CAT; 2023-01-05 18:45:00 EST; 2023-01-05 18:55:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; EXO2 out of postion
+FCR;50; CAT; 2023-01-18 05:15:00 EST; 2023-01-18 05:25:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; EXO2 out of postion
 FCR;50; CAT; 2023-03-07 11:30:00 EST; 2023-03-07 12:20:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for cleaning
 FCR;50; CAT; 2023-03-07 11:30:00 EST; 2023-03-07 14:20:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for cleaning
 FCR;50; CAT; 2023-03-13 11:50:00 EST; 2023-03-13 12:10:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for cleaning and replaced with FCR EXO after service mainentance
@@ -199,16 +202,17 @@ FCR;50; CAT; 2023-05-08 09:25:00 EST; 2023-05-08 09:35:00 EST; EXOTemp_C_1; EXOW
 FCR;50; CAT; 2023-05-21 10:45:00 EST; 2023-05-21 10:55:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; wiper out of position
 FCR;50; CAT; 2023-06-03 14:15:00 EST; 2023-06-03 14:25:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; wiper out of position
 FCR;50; CAT; 2023-06-27 13:00:00 EST; 2023-06-27 13:10:00 EST; EXOTemp_C_1; EXOWiper_V;1; NA; NA; EXO up for cleaning
-FCR;50; CAT; 2023-07-06 08:30:00 EST; 2023-07-06 14:30:00 EST; EXOTemp_C_1; EXOWiper_V;7; NA; NA; EXO disconnected and used for surface measurments
-FCR;50; CAT; 2023-07-10 09:30:00 EST; 2023-07-10 11:10:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for cleaning
-FCR;50; CAT; 2023-07-10 09:30:00 EST; 2022-07-13 14:00:00 EST; LvlPressure_psi_9;  LvlTemp_C_9;7; NA; NA; sensor moved to weir
+FCR;50; CAT; 2023-07-06 08:30:00 EST; 2023-07-06 14:35:00 EST; EXOTemp_C_1; EXOWiper_V;7; NA; NA; EXO disconnected and used for surface measurments
+FCR;50; CAT; 2023-07-10 09:30:00 EST; 2023-07-10 11:15:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for cleaning
+FCR;50; CAT; 2023-07-10 09:30:00 EST; 2023-07-13 14:00:00 EST; LvlPressure_psi_9;  LvlTemp_C_9;7; NA; NA; sensor moved to weir
 FCR;50; CAT; 2023-07-13 09:25:00 EST; 2023-07-13 09:35:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for cleaning
 FCR;50; CAT; 2023-07-13 13:25:00 EST; 2023-07-13 14:25:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for cleaning and taking EXO
 FCR;50; CAT; 2023-07-13 09:40:00 EST; 2023-07-13 14:00:00 EST; EXOTemp_C_1; EXOWiper_V;7; NA; NA; EXO used taken and used with surface ADCP sampling
 FCR;50; CAT; 2023-07-13 20:50:00 EST; 2023-07-13 22:20:00 EST; EXOTemp_C_1; EXOWiper_V;2; NA; NA; EXO a bit higher in the water column and DO was ~100% sat. Probably because of the rain. Remove all EXO obs
 FCR;50; CAT; 2023-07-17 11:20:00 EST; 2023-07-17 11:40:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for maintenance
-FCR;50; CAT; 2023-07-17 13:40:00 EST; 2023-07-17 13:50:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for maintenance
+FCR;50; CAT; 2023-07-17 13:40:00 EST; 2023-07-17 14:05:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for maintenance
 FCR;50; CAT; 2023-07-23 01:40:00 EST; 2023-07-24 14:30:00 EST; RDO_mgL_5; RDOsat_percent_5;7; NA; NA; DO sensor malfunctioning 
+FCR;50; CAT; 2023-07-24 12:05:00 EST; 2023-07-24 12:45:00 EST; ThermistorTemp_C_surface; RDOTemp_C_5; 1; NA; NA; DO sensors malfunctioning and temp string up for troubleshooting
 FCR;50; CAT; 2022-07-23 01:40:00 EST; 2023-07-28 12:20:00 EST; RDO_mgL_9; RDOsat_percent_9;7; NA; NA; DO sensor malfunctioning 
 FCR;50; CAT; 2023-07-24 11:10:00 EST; 2023-07-24 11:40:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for maintenance and check DO sensors
 FCR;50; CAT; 2023-07-24 12:50:00 EST; 2023-07-24 14:40:00 EST; ThermistorTemp_C_surface; LvlTemp_C_9;1; NA; NA; sensor string up for maintenance and check DO sensors

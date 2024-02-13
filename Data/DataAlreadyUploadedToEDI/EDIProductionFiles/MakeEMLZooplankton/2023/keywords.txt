@@ -26,3 +26,6 @@ Invertebrates	lter controlled vocabulary
 Rotifer	carey lab controlled vocabulary
 Schindler trap	carey lab controlled vocabulary
 Vertical net tow	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary

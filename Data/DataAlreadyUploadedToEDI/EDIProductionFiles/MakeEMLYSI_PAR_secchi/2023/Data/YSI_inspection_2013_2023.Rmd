@@ -5,6 +5,14 @@ date: "2023-12-08"
 output: html_document
 ---
 
+This script is the data visualization script that:
+1) reads in YSI data from the most recent year (current_file)
+2) reads in YSI data from the most recent EDI data publication (historic_file)
+3) combines the current and historic data
+4) reprocesses historic data using the L1 qaqc script
+5) generates figures to visualize both this past year and all combined years of data
+
+
 ```{r setup packages, include=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -61,7 +69,7 @@ ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
   geom_point(size=1) +
   stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
   facet_grid(metric ~ Reservoir, scales= 'free_y') +
-  scale_x_datetime("Date", date_breaks="2 months", date_labels = "%b %Y") +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
 ```
@@ -70,8 +78,8 @@ ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
 # Deep hole time series for BVR
 ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
-  facet_grid(metric ~ Reservoir, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
@@ -81,8 +89,8 @@ ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/
 # Deep hole time series for FCR
 ggplot(subset(profiles_long, Site=="50" & Reservoir=="FCR"), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
-  facet_grid(metric ~ Reservoir, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
@@ -93,8 +101,8 @@ ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/
 # Deep hole time series for CCR
 ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
-  facet_grid(metric ~ Reservoir, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
@@ -106,7 +114,7 @@ ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/
 ggplot(subset(profiles_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col=Depth_m)) +
   geom_point(cex=2) +
   facet_grid(metric ~ Site, scales='free') +
-  scale_x_datetime("Date", date_breaks="2 months", date_labels = "%d %b") +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
   scale_y_continuous("Concentration") +
   theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
@@ -166,8 +174,8 @@ write.csv(profiles_cleaned,file.path("./Data/DataAlreadyUploadedToEDI/EDIProduct
 
 ```{r}
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_MaintenanceLog_2013_2023.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_maintenancelog_2013_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_qaqc_2013_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/YSI_qaqc_2023_2023.R")
 ```

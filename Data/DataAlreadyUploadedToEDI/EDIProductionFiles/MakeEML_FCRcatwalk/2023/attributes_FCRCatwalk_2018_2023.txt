@@ -22,29 +22,29 @@ RDOsat_percent_9	Dissolved Oxygen (DO) percent saturation at 9 meter depth as me
 RDO_mgL_9_adjusted	Two periods in summer 2019 and four periods in 2020 appears to have had extensive fouling on the 9 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profiler. This column gives the adjusted values. Added in the 2019 and 2020 revision. Values not adjusted are the same as values from RDO_mgL_9.	numeric	milligramsPerLiter		NA	value is missing
 RDOsat_percent_9_adjusted	Two periods in summer 2019 and four periods in 2020 appears to have had extensive fouling on the 9 meter oxygen sonde, as evidenced by inexplicably low oxygen readings. We adjusted these values using linear or square root functions to best match simultaneous readings from a high-resolution CTD profiler. This column gives the adjusted values. Added in the 2019 and 2020 revision. Values not adjusted are the same as values from RDOsat_percent_9.	numeric	dimensionless		NA	value is missing
 RDOTemp_C_9	Water temperature as measured by the RDO sonde at 9 meter depth 	numeric	celsius		NA	value is missing
-EXOTemp_C_1	Water temperature at 1.6 meter depth as measured by the EXO Sonde	numeric	celsius		NA	value is missing
-EXOCond_uScm_1	Conductivity at 1.6 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOSpCond_uScm_1	Specific conductance at 1.6 meter depth as measured by the EXO Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
-EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.6 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.6 meter depth as measured by the EXO Sonde	numeric	dimensionless		NA	value is missing
-EXODO_mgL_1	Dissolved Oxygen at 1.6 meter depth as measured by the EXO Sonde	numeric	milligramsPerLiter		NA	value is missing
-EXOChla_RFU_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOChla_ugL_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
-EXOBGAPC_RFU_1	Blue-Green Algae Phyocycanin at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOBGAPC_ugL_1	Blue-Green Algae Phycoycanin at 1.6 meter depth as measured by the EXO Sonde in ugL	numeric	milligramsPerLiter		NA	value is missing
-EXOfDOM_RFU_1	Fluorecent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
-EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO Sondein QSU	numeric	QuinineSulfateUnits		NA	value is missing
+EXOTemp_C_1	Water temperature at 1.6 meter depth as measured by the EXO2 Sonde	numeric	celsius		NA	value is missing
+EXOCond_uScm_1	Conductivity at 1.6 meter depth as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOSpCond_uScm_1	Specific conductance at 1.6 meter depth as measured by the EXO2 Sonde	numeric	microSiemensPerCentimeter		NA	value is missing
+EXOTDS_mgL_1	Total Dissolved Solids (TDS) at 1.6 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXODOsat_percent_1	Dissolved Oxygen percent saturation at 1.6 meter depth as measured by the EXO2 Sonde	numeric	dimensionless		NA	value is missing
+EXODO_mgL_1	Dissolved Oxygen at 1.6 meter depth as measured by the EXO2 Sonde	numeric	milligramsPerLiter		NA	value is missing
+EXOChla_RFU_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO2 Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOChla_ugL_1	Total Chlorophyll a at 1.6 meter depth as measured by the EXO2 Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
+EXOBGAPC_RFU_1	Blue-Green Algae Phycocyanin at 1.6 meter depth as measured by the EXO2 Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOBGAPC_ugL_1	Blue-Green Algae Phycocyanin at 1.6 meter depth as measured by the EXO2 Sonde in ugL	numeric	microgramsPerLiter		NA	value is missing
+EXOfDOM_RFU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO2 Sonde in RFU	numeric	RelativeFluorescenceUnits		NA	value is missing
+EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter at 1.6 meter depth as measured by the EXO2 Sonde in QSU	numeric	QuinineSulfateUnits		NA	value is missing
 EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
-EXOPressure_psi	Gauge pressure of EXO sonde at 1.6m; measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
-EXODepth_m	Depth of the EXO sonde as measured by the EXO sonde	numeric	meter		NA	value is missing
-EXOBattery_V	Voltage of the EXO sonde internal batteries	numeric	volt		NA	value is missing
+EXOPressure_psi	Gauge pressure of EXO2 sonde at 1.6m; measured relative to ambient atmospheric pressure	numeric	poundsPerSquareInch		NA	value is missing
+EXODepth_m	Depth of the EXO2 sonde as measured by the EXO sonde	numeric	meter		NA	value is missing
+EXOBattery_V	Voltage of the EXO2 sonde internal batteries	numeric	volt		NA	value is missing
 EXOCablepower_V	Measure of power being used by the cable connected to the CR6 datalogger as measured by the EXO sonde	numeric	volt		NA	value is missing
-EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO sonde	numeric	volt		NA	value is missing
-LvlPressure_psi_9	Measure of the pressure from the bottom sensor in the string which is about 9m	numeric	psig		NA	value is missing
-LvlTemp_C_9	Water temperature at the last sensor in the string (about 9m) as measured by the pressure transducer	numeric	celsius		NA	value is missing
-LvlDepth_m_9	Depth of the pressure sensor at 9m derived from Lvl_psi_9 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
+EXOWiper_V	Wiper brush cleaning system activation signal as measured by the EXO2 sonde	numeric	volt		NA	value is missing
+LvlPressure_psi_9	Pressure from CS-451 pressure sensor at about ~9 m as measured relative to ambient atmospheric pressure	numeric	poundsPerSquareInch		NA	value is missing
+LvlTemp_C_9	Water temperature from CS-451pressure sensor at the last sensor in the string (about 9m) 	numeric	celsius		NA	value is missing
+LvlDepth_m_9	Depth of the pressure sensor at 9m derived from Lvl_Pressure_psi_9 where 1psi=0.70455m (See Methods)   	numeric	meter		NA	value is missing
 RECORD	The nth record collected since the instrument was turned on or the program was altered	numeric	number		NA	value is missing
-CR6Battery_V	The battery voltage of the CR6 at that time	numeric	volt		NA	value is missing
+CR6Battery_V	The battery voltage of the CR6 	numeric	volt		NA	value is missing
 CR6Panel_Temp_C	Panel temperature of the CR6 data logger	numeric	celsius		NA	value is missing
 Flag_ThermistorTemp_C_surface	Data flag for temperature data at 0.1m (ThermistorTemp_C_surface)	categorical			NA	value is missing
 Flag_ThermistorTemp_C_1	Data flag for temperature data at 1m (ThermistorTemp_C_1)	categorical			NA	value is missing

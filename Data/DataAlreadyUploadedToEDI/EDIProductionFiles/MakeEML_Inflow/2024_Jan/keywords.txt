@@ -1,0 +1,25 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+lakes	lter controlled vocabulary
+lake	cuahsi controlled vocabulary
+reservoir	cuahsi controlled vocabulary
+reservoirs	cuahsi controlled vocabulary
+high-frequency sensors	cuahsi controlled vocabulary
+water temperature	lter controlled vocabulary
+pressure	lter controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+weir	carey lab controlled vocabulary
+streamflow	lter controlled vocabulary
+water balance	lter controlled vocabulary
+time series	carey lab controlled vocabulary
+discharge	lter controlled vocabulary
+atmospheric pressure	lter controlled vocabulary
+FCR	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+Tunnel Branch	carey lab controlled vocabulary
+sensors	carey lab controlled vocabulary
+FCRweir	carey lab controlled vocabulary

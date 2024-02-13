@@ -20,7 +20,7 @@ library(devtools)
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2022")
+folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2023")
 folder
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -113,13 +113,13 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "FCR_Catwalk_EDI_2018_2022.csv",
+                          data.table = "FCRCatwalk_2018_2023.csv",
                           write.file = TRUE)
 
 # adding the maintenance file as a csv + attributes
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "FCR_CAT_MaintenanceLog_2018_2022.csv",
+                          data.table = "FCRCatwalk_maintenancelog_2018_2023.csv",
                           write.file = TRUE)
 
 # edit this file in excel
@@ -167,17 +167,23 @@ make_eml(path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths 
-         in Falling Creek Reservoir, Virginia, USA in 2018-2022",
-         data.table = c("FCR_Catwalk_EDI_2018_2022.csv", 'FCR_CAT_MaintenanceLog_2018_2022.csv'),
-         data.table.description = c("FCR Catwalk Sensor String", "Maintenance log for catwalk sensors"),
-         other.entity = c('FCR_catwalk_QAQC_function_2018_2022.R', 'QAQC_catwalk_2018_2022.Rmd' ),
-         other.entity.description = c('automated function to do QAQC which is sourced in final QAQC script', 'Final script to run QAQC'),
-         temporal.coverage = c("2018-07-05", "2022-12-31"),
+         in Falling Creek Reservoir, Virginia, USA in 2018-2023",
+         data.table = c("FCRCatwalk_2018_2023.csv", 
+                        'FCRCatwalk_maintenancelog_2018_2023.csv'),
+         data.table.description = c("Data file of sensor observations from FCR Catwalk", 
+                                    "Maintenance log for FCR catwalk sensors"),
+         other.entity = c('FCRCatwalk_qaqc_2018_2023.R', 
+                          'FCRCatwalk_inspection_2018_2023.Rmd',
+                          'Plot_function.R'),
+         other.entity.description = c('Automated function for QAQC. Also known as L1 function', 
+                                      'Visual inspection script to check the data before writing to CSV',
+                                      'Function to create plots for streaming sensors'),
+         temporal.coverage = c("2018-07-05", "2023-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.16", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.518.26", #### this is the one that I need to change and the one for staging!!!
          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####

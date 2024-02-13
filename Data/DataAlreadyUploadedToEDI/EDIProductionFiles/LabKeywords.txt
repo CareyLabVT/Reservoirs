@@ -24,3 +24,17 @@ Sunapee	carey lab controlled vocabulary
 Toolik	carey lab controlled vocabulary
 macroscale feedbacks	carey lab controlled vocabulary
 greenhouse gases	carey lab controlled vocabulary
+FCR  carey lab controlled vocabulary
+BVR  carey lab controlled vocabulary
+CCR  carey lab controlled vocabulary
+sensors  carey lab controlled vocabulary
+Virginia Reservoirs LTREB  carey lab controlled vocabulary
+Virginia Reservoirs  carey lab controlled vocabulary
+GHGs  carey lab controlled vocabulary
+SNP  carey lab controlled vocabulary
+GWR  carey lab controlled vocabulary
+CLY  carey lab controlled vocabulary
+SHR  carey lab controlled vocabulary
+FCRMet  carey lab controlled vocabulary
+FCRCatwalk  carey lab controlled vocabulary
+met  carey lab controlled vocabulary

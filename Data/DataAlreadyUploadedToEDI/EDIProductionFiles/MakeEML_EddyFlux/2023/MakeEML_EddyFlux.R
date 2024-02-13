@@ -20,7 +20,7 @@ library(devtools)
 library(EMLassemblyline)
 
 # All the files you need are found in this folder
-  folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/2022/"
+  folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/2023/"
 
 
 
@@ -51,24 +51,24 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/Users/ahoun/Desktop/EddyFlux/EDI",
-                       license = "CCBY",
-                       file.type = ".txt",
-                       write.file = TRUE)
+# template_core_metadata(path = "C:/Users/ahoun/Desktop/EddyFlux/EDI",
+#                        license = "CCBY",
+#                        file.type = ".txt",
+#                        write.file = TRUE)
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "EddyPro_Cleaned_2020_2022.csv",
+                          data.table = "EddyFlux_2020_2023.csv",
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = folder,
-                             data.path = folder,
-                             data.table = c("20211008_EddyPro_Cleaned.csv"),
-                             empty = TRUE,
-                             write.file = TRUE)
+# template_geographic_coverage(path = folder,
+#                              data.path = folder,
+#                              data.table = c("20211008_EddyPro_Cleaned.csv"),
+#                              empty = TRUE,
+#                              write.file = TRUE)
 
 #Step 6: Script your workflow
 #that's what this is, silly!
@@ -140,21 +140,22 @@ make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  #data.path = "C:/Users/ahoun/Desktop/EddyFlux/EDI",
-  #eml.path = "C:/Users/ahoun/Desktop/EddyFlux/EDI",
-  dataset.title = "Time series of carbon dioxide and methane fluxes measured with eddy covariance for Falling Creek Reservoir in southwestern Virginia, USA during 2020-2022",
-  temporal.coverage = c("2020-04-04", "2022-12-31"),
+  dataset.title = "Time series of carbon dioxide and methane fluxes measured with eddy covariance for Falling Creek Reservoir in southwestern Virginia, USA during 2020-2023",
+  temporal.coverage = c("2020-04-04", "2023-12-31"),
   maintenance.description = 'ongoing',
-  data.table = c("EddyPro_Cleaned_2020_2022.csv"),
-  data.table.description = c("EC Data cleaned but not further post-processed with processing script"),
-  data.table.name = "EC Data for 2020 to 2022",
-  other.entity= c("EddyPro_CleanUp_2020_2022.R","FCR_Process_BD.R","despike.R"),
-  other.entity.description = c("R script to clean-up Eddy Pro output","R script for post-processing of EC data","Depsike function for post-processing"),
-  other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
+  data.table = c("EddyFlux_2020_2023.csv"),
+  data.table.description = c("EC data processed with EddyPro and cleaned with EddyFlux_qaqc_2020_2023.R, but not further post-processed with EddyFlux_post_processing.Rmd"),
+  #data.table.name = "EC Data for 2020 to 2022",
+  other.entity= c("EddyFlux_qaqc_2020_2023.R","EddyFlux_inspection_2020_2023.Rmd","EddyFlux_post_processing.Rmd","despike.R"),
+  other.entity.description = c("R script to clean-up Eddy Pro output",
+                               "R Markdown script for using the qaqc script and making qaqc plots",
+                               "R Markdown script for post-processing of EC data and not used in EddyFlux_2020_2023.csv",
+                               "Depsike function for post-processing"),
+  #other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  #package.id = 'edi.692.8') # FOR STAGING
-  package.id = 'edi.1061.2') # FOR FINAL PRODUCTION
+  package.id = 'edi.692.11') # FOR STAGING
+  #package.id = 'edi.1061.2') # FOR FINAL PRODUCTION
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

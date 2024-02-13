@@ -1,0 +1,520 @@
+---
+title: "Weir Inflow Data collation and Plots for EDI"
+author: "Adrienne Breef-Pilz"
+output: html_document
+created: "2023-02-15"
+date: "`r Sys.Date()`"
+---
+
+This script is the visual inspection scripts. 
+
+1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
+
+2. Then the script checks for duplicates, daily, and subdaily gaps in the current file. 
+
+3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+
+4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+
+5. If necessary can QAQC data already on EDI using the QAQC function
+
+6. Creates plots
+
+7. Writes data to new csv
+
+8. Downloads necessary files for EDI publishing
+
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+
+All files are from GitHub or EDI and the source scripts are from GitHub as well. 
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+```{r Set Up, include=FALSE}
+pacman::p_load(tidyverse, knitr, scattermore, htmltools, pander, devtools, plotly, ggpubr)
+# Source scripts from GitHub
+
+# Function to make the QAQC . This is called CCRCatwalk_qaqc_2023_2023.R in the EDI data package. 
+source('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/R/qaqc_function.R')
+
+
+# Function to make the plots below
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+
+
+ #turn off pander auto asis. Used for making the ploty functions show up in the knitted markdown HTML
+        pander::panderOptions('knitr.auto.asis', FALSE)
+        
+  # set theme for the background of the plots
+    theme_set(theme_bw())    
+
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start = ymd_hms("2023-01-01 00:00:00", tz="EST")
+current_time_end = ymd_hms("2023-12-31 23:59:00", tz="EST")
+```
+
+```{r QAQC raw files, eval=FALSE, include=FALSE}
+# QAQC the files we have
+
+# current_df <- qaqc_fcrweir (
+# VT_data_file = 'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data/FCRweir.csv',
+# VT_manual_data_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/WeirData/WeirData_2019_2023.csv', 
+# WVWA_data_file = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_2013_2023.csv', 
+# maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Weir_MaintenanceLog.csv', 
+# Staff_gauge_readings = 'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Inflow_Gauge_Height_at_Weir.csv', 
+# output_file = NULL, 
+# output_file_rating_curve = "Inflow_ratingcurve_2013_2023.csv",
+# start_date = NULL, 
+# end_date = NULL)
+
+```
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+
+```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+  
+# If No EDI file exists with all the years you want to look at
+#   current_df <- current_df%>%
+#   dplyr::distinct(DateTime, .keep_all= TRUE)%>% # get rid of dups if they snuck in
+#   filter(DateTime<(current_time_end))
+# 
+# # make sure no time duplicates.
+#  #current_df<-  current_df[!duplicated(current_df$DateTime), ]
+# 
+# #reorder. Just to be certain everything is in order
+#   current_df<-current_df[order(current_df$DateTime),]
+
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+                                                                  ### CHANGE THIS NUMBER BELOW 
+                                                                               ##      
+  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/923/12/c065ff822e73c747f378efe47f5af12b")
+ #
+ # # Force files from EDI to have an EST timestamp
+
+
+  # Set timezone as EST. Streaming sensors don't observe daylight savings
+   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "EST")
+  
+```
+## Check for duplicates and  gaps in the data frame
+
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. 
+
+
+### Are there any duplicates?
+
+
+```{r Check for dups , echo=FALSE}
+
+# Make sure there are no duplicated dates. Do this here because the file is too large for Data Explore.
+# Print them if there are
+ dups<- current_df[duplicated(current_df$DateTime), ]
+
+dups <- dups%>%
+  select(DateTime, WVWA_Pressure_psi,  WVWA_Flow_cms,
+         VT_Pressure_psia, VT_Flow_cms) 
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((dups))
+```
+
+
+### Are there any gaps in the data file?
+
+
+When gaps are found in the data file, check that you do not have new gaps in the previous years' publication. For the current year, if you find gaps check that you have all of the manually downloaded files. If the data are truly missing then record the dates and times in the methods section. 
+
+```{r Check for daily gaps, echo=FALSE}
+
+# Get DOY
+df2 <- current_df
+ df2$DOY=yday(df2$DateTime)
+
+ for(i in 2:nrow(df2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(df2$DOY[i]-df2$DOY[i-1]>1){
+      print(c(df2$DateTime[i-1],df2$DateTime[i]))
+    }
+ }
+```
+
+#### Check Gaps in WVWA files
+
+```{r Check gaps in WVWA files, echo=FALSE}
+
+df2 <- current_df%>%
+  select(DateTime, starts_with("WVWA"))%>%
+  mutate(DOY = yday(DateTime))%>%
+  drop_na(WVWA_Flow_cms)
+
+for(i in 2:nrow(df2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(df2$DOY[i]-df2$DOY[i-1]>1){
+      print(c(df2$DateTime[i-1],df2$DateTime[i]))
+    }
+ }
+
+```
+
+#### Check for gaps in the VT files
+
+```{r Check gaps in VT files, echo=FALSE}
+
+df2 <- current_df%>%
+  select(DateTime, starts_with("VT"))%>%
+  mutate(DOY = yday(DateTime))%>%
+  drop_na(VT_Flow_cms)
+
+for(i in 2:nrow(df2)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(df2$DOY[i]-df2$DOY[i-1]>1){
+      print(c(df2$DateTime[i-1],df2$DateTime[i]))
+    }
+ }
+
+```
+
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+# The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
+ maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Weir_MaintenanceLog.csv",
+                    show_col_types = FALSE)
+
+
+# name the data file for just the tail of the maintenance log
+# you want to filter out 7 because that is if the observation is missing and there are other ways that is flagged in the data besides the maintenance log, so it is not a good check.
+sd <- tail(maint)%>%
+  filter(DataStream =="WEIR")%>%
+  filter(flag!=7)
+
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "EST")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "EST")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+## Check out the Flag frequency
+
+Let's look at the Flag frequency for each variable. 
+
+As a reminder here are the Flag codes: 
+
+0: no flag; 
+
+1: value corrected to account for artificial increase in pressure after sensor maintenance; 
+
+2: sensor malfunction; 
+
+3: value of NA due to extremely low flows that are not well captured by rectangular or v-notch weir; 
+
+4: demonic intrusion; 
+
+5: value of NA due to leaking at weir;
+
+6: flow topping the v-notch weir;
+
+7: missing observation/not recorded;
+
+8: values removed because of maintenance; 
+
+13: value downcorrected due to low flows on the rectangular weir;
+
+16: value downcorrected due to flow overtopping the rectangular weir;
+
+24: weir damaged due to weather.
+
+
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+### Subset and rename the files
+This section will subset the files so you can make plots of the whole time series and the current year. 
+Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
+
+```{r Filter for current year and daily average, include=FALSE}
+
+
+current <- current_df%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+  mutate(type = "qaqc")
+ # %>%select(DateTime:CR6Panel_Temp_C,type, -contains("adjusted"))
+
+
+daily <- current_df%>% 
+  group_by( Date = as.Date(DateTime)) %>% 
+  summarise_if(is.numeric, mean, na.rm=T)%>%
+  mutate(Year = as.factor(year(Date)),
+         Month = month(Date),
+         Time = "12:00:00")%>%
+  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
+  mutate(DateTime=ymd_hms(DateTime))
+
+  
+# catdata <- current_df%>%
+#   mutate(Year=year(DateTime))
+
+colors <- c("raw" = "red", "qaqc" = "black")
+# colors for comparing Thermistor, RDO and Pressure sensor
+#colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
+```
+
+## QAQC Plots
+
+##### QAQC plot information and all_plot function information
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The arguments are:
+Var # The column you want to plot. Make sure it is in quotes
+y_lab,  # This label can take an expression aka have the proper degrees C, 
+y_lab2, # This label is for the plotly function which can not handle expression argument. 
+Water=T, # Are these plots for in water streaming sensors?
+Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+
+The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
+  
+##### Plot Description:
+
+The plots below are:
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+
+1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
+
+2. A time series of the historical and the current data just the qaqced values. 
+
+The next two plots are just fun to see trends over time with the data. 
+
+3. Density plots are like a histogram and a grouped by color so you can see where the data are relative to other years. 
+
+4. The box plots look at the spread of the data within the year and we can look at the median and see how that is changing or not. 
+
+Do not over think the last 2 plots. 
+
+### Plots of WVWA Data
+
+```{r WVWA plots, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab="var", y_lab2="var", Water=F, Raw_file=F, Use_plotly=T)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+```
+
+```{r Print plotly WVWA, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Plots of VT Data
+
+```{r VT sensors, echo=FALSE, results='asis'}
+
+dx <- colnames(current%>%select(VT_Pressure_psia, VT_Flow_cms, VT_Temp_C))
+
+# make the plots
+outputs <- lapply(dx, all_plot, y_lab="var", y_lab2="var", Water=F, Raw_file=F, Use_plotly=T)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+```
+
+```{r Print plotly VT, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+#### Compare WVWA and VT Sensors
+
+Look at the WVWA calculated flow and VT calculated flow on the same plots
+
+```{r Compare WVWA and VT sensors, echo=FALSE}
+
+weirdata<-current_df%>%
+  mutate(Year=year(DateTime))
+
+# weirdata<-All_Inflow%>%
+#   mutate(Year=year(DateTime))
+
+colors <- c("WVWA" = "blue", "VT" = "red")
+
+
+weirdata%>%
+  ggplot(., aes(x=DateTime))+
+  geom_scattermore(aes(y=WVWA_Flow_cms, color="WVWA"), pointsize = 2)+
+  geom_scattermore(aes(y=VT_Flow_cms, color="VT"), pointsize = 2) +
+  ggtitle("All Flow Rates") +
+    labs(y = "cms",
+         color = "Legend") +
+    scale_color_manual(values = colors)
+
+# Just the current year
+
+current%>%
+  ggplot(., aes(x=DateTime))+
+  geom_point(aes(y=WVWA_Flow_cms, color="WVWA"))+
+  geom_point(aes(y=VT_Flow_cms, color="VT")) +
+  ggtitle("All Flow Rates") +
+    labs(y = "cms",
+         color = "Legend") +
+    scale_color_manual(values = colors) 
+
+
+# Plot one to one of flow 
+weirdata%>%
+  drop_na(VT_Flow_cms)%>%
+  ggplot(.,aes(x=WVWA_Flow_cms, y=VT_Flow_cms, color=as.factor(Year)))+
+  geom_point()+
+  #stat_smooth(method = "lm", col = "red")+
+  # ggpubr::stat_regline_equation(
+  #   aes(label =  paste(..eq.label.., ..adj.rr.label.., sep = "~~~~"))
+  # )+
+  ggtitle("Compare WVWA flow and VT flow") 
+  
+```
+### Write to CSV
+
+```{r Make current csv, eval=FALSE, include=FALSE}
+# Double Check naming convention
+# Variable_StartYear_EndYear
+
+# convert datetimes to characters so that they are properly formatted in the output file
+ current_df$DateTime <- as.character(format(current_df$DateTime))
+
+write_csv(current_df, "Inflow_2013_2023.csv")
+
+```
+
+
+
+```{r Download and save Maintenance Log, include=FALSE, eval=FALSE}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Weir_MaintenanceLog.csv", "Inflow_maintenancelog_2013_2023.csv")
+
+# Gauge Height
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Inflow_Gauge_Height_at_Weir.csv","Inflow_gaugeheight_2019_2023.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/R/qaqc_function.R", "Inflow_qaqc_2013_2023.R")
+
+# streaming plots function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
+
+
+```

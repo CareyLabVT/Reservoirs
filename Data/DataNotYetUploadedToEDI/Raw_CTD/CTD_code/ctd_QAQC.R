@@ -43,7 +43,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   if(length(file_names)==0){
     message("No new files could be processed")
     #return()
-  } 
+  } else{
   
   ## Generate csv versions of these files (stored in csv_outputs folder)
   for(file in file_names) {
@@ -64,4 +64,6 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                      intermediate_file_name = intermediate_file_name,
                      output_file_name = output_file_name)
+}
+
 }

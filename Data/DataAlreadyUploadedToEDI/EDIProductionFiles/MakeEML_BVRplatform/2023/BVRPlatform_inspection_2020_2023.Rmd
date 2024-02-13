@@ -94,7 +94,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                 ### CHANGE THIS NUMBER BELOW 
                                                                              ##      
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/27/c467263033e8e2bbc60410567f2531c2")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/29/6b78ab905a142b5dcc29044b83bae676")
 
  # Force files from EDI to have an EST timestamp
   current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
@@ -157,8 +157,8 @@ This section identifies if there are any duplicates, daily data, and sub daily g
  dups<- current_df[duplicated(current_df$DateTime), ]
 
 dups <- dups%>%
-  select(DateTime, RECORD, ThermistorTemp_C_7,  
-         EXOTemp_C_1.5, EXOTemp_C_9, LvlPressure_psi_13)
+  select(DateTime, RECORD, ThermistorTemp_C_7,  RDO_mgL_6,
+         EXOTemp_C_1.5, LvlPressure_psi_13) 
 
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
@@ -201,11 +201,6 @@ The first row is the time for the first observation and then the subsequent obse
     }
   }
 ```
-
-
-## Read in the QAQC File and Check it out
-This section reads in the QAQC file and then you can look at the head, tail and structure. 
-Make sure the last row is Dec. 31 23:50 of the publishing year. There should be 85 columns unless a new one has been added. 
 
 
 ### Flag Frequency
@@ -385,7 +380,8 @@ The arguments with = followed by a True means that they are the defaults and you
 ##### Plot Description:
 
 The plots below are:
-The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+
 1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
 
 2. A time series of the historical and the current data just the qaqced values. 
@@ -754,11 +750,10 @@ download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-p
               "BVRPlatform_Depth_offsets_2020_2023.csv")
 
 # Finding depth function
-download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R",
-              "find_depths.R")
+download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R", "find_depths.R")
 
 # Download Heather's code to make BVR water level and then need to run it. 
-download.file("https://raw.githubusercontent.com/hlwander/bvr_glm/master/inputs/water_level/WaterLevel_BVR.Rmd", "BVRPlatform_WaterLevel_BVR_2015_2022.Rmd")
+download.file("https://raw.githubusercontent.com/hlwander/bvr_glm/master/inputs/water_level/WaterLevel_BVR.Rmd", "BVR_Daily_WaterLevel_Vol_2015_2022.Rmd")
 
 ```
 

@@ -1,5 +1,8 @@
-#Zooplankton QAQC script for visualizing data and merging files
-#Created 5 Jul 2023
+# zoop_qaqc_2014_2022.R
+# Zooplankton QAQC script for visualizing data and merging files
+# Created by HLW
+# First developed: 05 Jul 2023
+# Last edited: 25 Jan 2024
 
 #read in libraries
 #if (!require("pacman"))install.packages("pacman")
@@ -152,9 +155,6 @@ zoop_biom$MarksInOcularMicrometer_No. <- as.numeric(zoop_biom$MarksInOcularMicro
 #if density is NA, drop the row
 zoops_final <- zoops_final[!is.na(zoops_final$Density_IndPerL),]
 
-#also drop rows if density is 0 and mean length is NA
-zoops_final <- zoops_final |> filter(!(Density_IndPerL==0 & is.na(MeanLength_mm)))
-
 #make sure all taxa are uppercase
 zoops_final$Taxon <- str_to_sentence(zoops_final$Taxon)
 
@@ -173,11 +173,19 @@ zoop_dens <- zoop_dens |>
 #biomass
 zoop_biom <- zoop_biom |>   
   mutate(DateTime = lubridate::as_datetime(DateTime, tz="EST"))
-  
-#convert datetimes to character for EDI upload
-zoops_final$DateTime <- format(zoops_final$DateTime, "%Y-%m-%d %H:%M:%S")
-zoop_dens$DateTime <- format(zoop_dens$DateTime, "%Y-%m-%d %H:%M:%S")
-zoop_biom$DateTime <- format(zoop_biom$DateTime, "%Y-%m-%d %H:%M:%S")
+
+#if time is midnight, at 1 s
+zoops_final$DateTime[substr(zoops_final$DateTime,12,13) == ""] <-  
+  zoops_final$DateTime[substr(zoops_final$DateTime,12,13) == ""] + 1
+
+zoop_dens$DateTime[substr(zoop_dens$DateTime,12,13) == ""] <-  
+  zoop_dens$DateTime[substr(zoop_dens$DateTime,12,13) == ""] + 1
+
+zoop_biom$DateTime[substr(zoop_biom$DateTime,12,13) == ""] <-  
+  zoop_biom$DateTime[substr(zoop_biom$DateTime,12,13) == ""] + 1
+                        
+#drop the one duplicate chaoborus sample on 2014-06-02
+zoops_final <- zoops_final |> distinct()
 
 #rename flags
 zoops_final <- zoops_final |> rename(Flag_MeanLength_mm = Flag_Length,

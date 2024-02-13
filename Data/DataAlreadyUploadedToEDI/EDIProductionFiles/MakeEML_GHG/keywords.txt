@@ -15,3 +15,6 @@ Carey Lab	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary
+FCR	carey lab controlled vocabulary
+BVR	carey lab controlled vocabulary
+GHGs	carey lab controlled vocabulary

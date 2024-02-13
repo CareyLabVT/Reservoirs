@@ -1,67 +1,90 @@
 ---
 title: "FCR_Process_BD"
-author: "Adrienne"
-date: "2023-09-19"
+author: "Brenda D'Achuna, Alex Hounshell, Adrienne Breef-Pilz"
+date: "`r sys.Date()`"
 output: html_document
 ---
 
-### Processing Eddy Flux data from FCR
-### Following initial data corrections in Eddy Pro (using standard processing) 
-### and light data cleaning via EddyPro_CleanUp.R
-
-### Original code from Brenda D'Achuna, 21 May 2021
-### Modified by Alex Hounshell on 21 May 2021
+ This script: Following initial data corrections in Eddy Pro (using standard processing) 
+ and light data cleaning via EddyPro_CleanUp.R
+ 
+ Original code from Brenda D'Achuna, 21 May 2021
+ Modified by Alex Hounshell on 21 May 2021
+ 
+ 1. Compile data
+ 
+ 2. Read in Met files from EDI
+ 
+ 3. Adjust values and do additional QAQC
+ 
+ 4. Use de spike function to remove values
+ 
+ 5. Add Met values as needed
+ 
+ 6. Gaps fill. Beware this takes HOURS!!!!!
+ 
+ 7. Save files
+ 
+ 8. Plots for checks
+ 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# Clear workspace
-rm(list = ls())
 
 # Download/load libraries
-pacman::p_load(tidyverse,lubridate,readr,ggpubr,openair,REddyProc,ggplot2,dplyr)
+pacman::p_load(tidyverse,lubridate,readr,ggpubr,openair,REddyProc)
+
+# functions we need
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/despike.R")
 ```
 
 
-```{r Compile data}
+```{r Compile data, include=FALSE}
 # Read compiled file: From Eddy Pro using basic processing
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
 
 dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
 
-# read in historical data file 
-# EDI
-inUrl1 <- "https://pasta.lternet.edu/package/data/eml/edi/1061/2/f837d12dc12ab37a6772598578875e00"
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+# Check here on EDI an make sure you are using the most up to date file.
+# https://portal.edirepository.org/nis/mapbrowse?packageid=edi.1061.2 
+# if not pulll in the file path from EDI
+
 
 # read in the data file downloaded from EDI
-dt2 <-read_csv(infile1) 
+dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/2/f837d12dc12ab37a6772598578875e00") 
 
 ec <- dt2%>%
   bind_rows(.,dt1)
 ```
 
-```{r}
+```{r format time, echo=FALSE}
 # Format time
-ec$datetime <- as.POSIXct(paste(ec$date, ec$time), format="%Y-%m-%d %H:%M", tz="EST")
-ec$datetime <- as_datetime(ec$datetime)
+# make a datetime column and read in with original timezone
+ec$datetime <- paste0(ec$date, " ",ec$time)
+
+# Set timezone as America/New_York because that's what it is in and then conver to EST
+  ec$datetime <- force_tz(ymd_hms(ec$datetime), tzone = "America/New_York")
+
+# convert from Eastern/US with daylight savings observed to EST which does not. 
+ec$datetime <- with_tz(ec$datetime, tzone = "EST")
+
+# get the late date in the dataframe
+last <- tail(ec, n = 1) 
+
 
 # Set new dataframe with list of dates+times:
 # every 30 minutes
 # Constrain to study time period: 2020-04-05 (time series start date) to
 # last 30 minute period - UPDATE WITH EACH NEW SET OF DATA!
 ts <- seq.POSIXt(as.POSIXct("2020-04-05 00:00:00",'%Y-%m-%d %H:%M:%S', tz="EST"), 
-                 as.POSIXct("2023-10-24 13:00:00",'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
+                 as.POSIXct(last$datetime,'%Y-%m-%d %H:%M:%S', tz="EST"), by = "30 min")
 ts2 <- data.frame(datetime = ts)
 
 # Join Eddy Flux data with list of dates+time
 ec2 <- merge(ts2, ec, by = 'datetime', all.x=T)
 
-# Take out duplicated data points
-ec2<-ec2[!duplicated(ec2$datetime),]
 
 # Make sure time stamps are okay!
 ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)], levels = c("Apr", "May", "Jun",
@@ -74,7 +97,7 @@ ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)
   scale_color_brewer(palette = "Dark2")
 ```
 
-```{r Percent of NAs}
+```{r Percent of NAs, echo=FALSE}
 #################################################################
 # Count how many initial NAs are in CO2 and CH4 data
 # Without any data processing!
@@ -119,27 +142,30 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 # Reading in data from the Met Station for gap-filling purposes
 # Load data Meteorological data from EDI
 
-# Downloaded from EDI staging: 09 December 2021
-#inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/389/7/02d36541de9088f2dd99d79dc3a7a853"  
-#infile2 <- ("Met_final_2015_2022.csv")
 
-#options(timeout=500)
-#download.file(inUrl2,infile2,method="auto")
+# Read in Met file from EDI
+met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/8/d4c74bbb3b86ea293e5c52136347fbb0",
+                    col_select=c("DateTime","BP_Average_kPa","AirTemp_C_Average","RH_percent",
+                                 "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
+                                  "InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2",
+                                  "Albedo_Average_W_m2","WindSpeed_Average_m_s","WindDir_degrees"))%>%
+  mutate(DateTime = force_tz(DateTime, tzone="EST"))%>% 
+  # Start timeseries on the 00:15:00 to facilitate 30-min averages
+  filter(DateTime >= ymd_hms("2020-04-04 00:15:00"))
 
-# Add in current L1 file from github
+# Bind files together if need to use current file
 
-met_curr<-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv")%>%
-  mutate(DateTime = as.POSIXct(strptime(DateTime, "%Y-%m-%d %H:%M:%S", tz="EST")))
+met_curr <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv",
+                   col_select=c("DateTime","BP_Average_kPa","AirTemp_C_Average","RH_percent",
+                                 "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
+                                  "InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2",
+                                  "Albedo_Average_W_m2","WindSpeed_Average_m_s","WindDir_degrees"))%>%
+  mutate(DateTime = force_tz(DateTime, tzone="EST"))
 
-met_all <- read.csv("Met_final_2015_2022.csv")%>%
-  mutate(DateTime = as.POSIXct(strptime(DateTime, "%Y-%m-%d %H:%M:%S", tz="EST"))) %>% 
-  filter(DateTime > as.POSIXct("2020-04-04"))%>%
-  dplyr::bind_rows(.,met_curr)
+ met_all <- dplyr::bind_rows(met_curr, met_all) # bind everything together
   
   
 # Start timeseries on the 00:15:00 to facilitate 30-min averages
-met_all <- met_all %>% 
-  filter(DateTime >= as.POSIXct("2020-04-04 00:15:00"))
 
 # Select data every 30 minutes from Jan 2020 to end of met data
 met_all$Breaks <- cut(met_all$DateTime,breaks = "30 mins",right=FALSE)
@@ -147,13 +173,11 @@ met_all$Breaks <- ymd_hms(as.character(met_all$Breaks))
 
 # Average met data to the 30 min mark (excluding Total Rain and Total PAR)
 met_30 <- met_all %>% 
-  select(DateTime,BP_Average_kPa,AirTemp_C_Average,RH_percent,ShortwaveRadiationUp_Average_W_m2,ShortwaveRadiationDown_Average_W_m2,
-         InfraredRadiationUp_Average_W_m2,InfraredRadiationDown_Average_W_m2,Albedo_Average_W_m2,WindSpeed_Average_m_s,WindDir_degrees,Breaks) %>% 
   group_by(Breaks) %>% 
   summarise_all(mean,na.rm=TRUE)
 ```
 
-```{r Adjust Met values for EddyFlux timing}
+```{r Adjust Met values for EddyFlux timing, include=FALSE}
 # Sum met data to the 30 min mark (for Total Rain and Total PAR)
 met_30_rain <- met_all %>% 
   select(Rain_Total_mm,PAR_Total_mmol_m2,Breaks) %>% 
@@ -381,7 +405,7 @@ eddy_fcr %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_
 # Despike data using dspike.R function
 
 # Despike NEE (CO2 flux)
-source("despike.R")
+
 
 # Calculate low, medium, and high data flags
 flag <- spike_flag(eddy_fcr$co2_flux_umolm2s,z = 7)

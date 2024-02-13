@@ -159,5 +159,3 @@ gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0
 maintenance_file <- "./Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
 
 ManualDischarge_qaqc(gsheet_url = gsheet_url, maintenance_file = maintenance_file)
-
-

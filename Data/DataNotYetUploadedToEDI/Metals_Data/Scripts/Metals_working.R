@@ -1,7 +1,7 @@
 # Title: Metals data wrangling script
 # Author: Cece Wood
 # Date: 18JUL23
-# Edit: 05 Dec 23 A. Breef-Pilz
+# Edit: 07 Feb. 24 A. Breef-Pilz
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -25,8 +25,8 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
                         outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv",
                         ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"){
   
-  # These are so I can run the function one step at a time and figure everything out. 
-  # Leave for now while still in figuring out mode
+  # # These are so I can run the function one step at a time and figure everything out. 
+  # # Leave for now while still in figuring out mode
   directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/"
   sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
@@ -39,13 +39,13 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
   
   # Read in Maintenance Log
   
-  log_read <- read_csv(maintenance_file, skip=38, col_types = cols(
+  log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     Sample_Date = col_date("%Y-%m-%d"),
     flag = col_integer(),
     Sample_ID = col_integer(),
-    Site = col_integer(),
-    Depth_m = col_integer()
+    Site = col_number(),
+    Depth_m = col_number()
   ))
   
   # Read in Sample ID Key 
@@ -56,15 +56,15 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
                   Sample_ID = Sample)
   
   # Combine to add Reservoir, Site and Depth to the Log for files that are identified with sample ID
-  log <- left_join(log_read, metals_key, by = c('Sample_ID'))%>%
-        mutate(
-          Reservoir = coalesce(Reservoir.x, Reservoir.y),
-          Site = coalesce(Site.x, Site.y),
-          Depth_m = coalesce(Depth_m.x, Depth_m.y)
-               )%>%
-    # Select the columns we want
-    select(Reservoir, Site, Depth_m, Filter, DataStream, Sample_ID,
-           Sample_Date, start_parameter, end_parameter, flag, notes)
+  # log <- left_join(log, metals_key, by = c('Sample_ID'))%>%
+  #       mutate(
+  #         Reservoir = coalesce(Reservoir.x, Reservoir.y),
+  #         Site = coalesce(Site.x, Site.y),
+  #         Depth_m = coalesce(Depth_m.x, Depth_m.y)
+  #              )%>%
+  #   # Select the columns we want
+  #   select(Reservoir, Site, Depth_m, Filter, DataStream, Sample_ID,
+  #          Sample_Date, start_parameter, end_parameter, flag, notes)
     
   
   ### 2. Read in and combine all metals files ####
@@ -86,28 +86,233 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
     return(al)
  
   }
-  # use purr to read in all the files using the function above
+  # use map to read in all the files using the function above
   ICP<-list.files(path=directory, pattern="", full.names=TRUE)%>%
-    map_df(~ read_metals_files(.x))
+    map_df(~ read_metals_files(.x))%>%
+    drop_na(DateTime) # when NA in DateTime column. Maybe a warning?
   
  
  
-#set up final data frame with correct formatting!
+#set up data frame with Reservoir, Site, Depth, and filter
+  # then pivot longer so we can get the mean of any samples that had to be rerun
  frame1 <- left_join(ICP, metals_key, by = c('Sample_ID'))%>% 
-   select(-Sample_ID)%>%
-   group_by(DateTime, Reservoir, Depth_m, Site)%>% 
-   pivot_wider(names_from = 'Filter', 
-                              values_from = c('Li_mgL':'Ba_mgL'),
-                               names_glue = "{Filter}_{.value}")%>%  # names the columns as we want
-   # sum obs is for a tabulator for duplicates and average in case there are duplicates
-   summarise(across(everything(), list(z = ~mean(.x, na.rm = TRUE), n = ~ sum(!is.na(.))), .names ="{.fn}_{.col}"))%>%
-   rename_all(~ str_remove(., "^z_"))%>% #named the mean column z but then remove the z
-   mutate(across(everything(), ~ifelse(is.nan(.), NA, .))) %>%  #gets rid of NaNs created by taking mean during summarize step
+   select(-Sample_ID)|>
+   distinct(DateTime, Reservoir, Depth_m, Site, Filter, .keep_all = TRUE) |>
+   select(Reservoir, Site, Depth_m, Filter, DateTime, everything()) |>
+   pivot_longer(cols=c(Li_mgL:Ba_mgL), names_to="element", values_to="obs")|>
+   group_by(Reservoir, Site, Depth_m, Filter, DateTime, element)%>%
+    summarize(
+     count = n(), # get the number of samples
+     mean = mean(obs, na.rm = TRUE))|> # take the mean. Most if not all are one so is the same value
    ungroup()
+ 
+ # now pivot wider so we can make the flag columns
+ frame <- frame1%>%
+   pivot_wider(names_from = "element", values_from = c("mean", "count"))
+ 
+ # take out mean from column header
+ names(frame) = gsub(pattern = "mean_", replacement = "", x = names(frame))
+ 
+ # reorder the columns
+ frame2 <- frame%>%
+   select(Reservoir, Site, Depth_m, Filter, DateTime, Li_mgL, Na_mgL, Mg_mgL,
+          Al_mgL, Si_mgL, K_mgL, Ca_mgL, Fe_mgL, Mn_mgL, Cu_mgL, Sr_mgL, Ba_mgL, everything())
+
+ 
+ 
+ # Establish flag columns and add ones for missing values
+ for(j in colnames(frame2%>%select(Li_mgL:Ba_mgL))) { 
+   
+   #for loop to create new columns in data frame
+   #creates flag column + name of variable
+   frame2[,paste0("Flag_",j)] <- 0 
+ 
+   # puts in flag 1 if value not collected
+   frame2[c(which(is.na(frame2[,j]))),paste0("Flag_",j)] <- 1 
+   
+   # puts in flag 7 for sample run twice and we report the mean. Use the count columns made above
+   frame2[c(which(frame2[,paste0("count_",colnames(frame2[j]))]>1)),paste0("Flag_",j)] <- 7 
+ }
+ 
+ # Now we can remove the number of observation columns
+ raw_df <- frame2%>%
+   select(-starts_with("count_"))
+ 
+   
+   ### 5. Use Maintenance Log to flag or change observations ####
+   
+   # Filter the Maintenance Log based on observations in the data frame
+   raw_df <- raw_df%>%
+     arrange(DateTime)%>%
+     mutate(DateTime = as.Date(DateTime))
+   
+   # Get the date the data starts
+   start_date <- head(raw_df, n=1)$DateTime
+   
+   # Get the date the data ends
+   end_date <- tail(raw_df, n=1)$DateTime
+   
+   # Filter out the maintenance log
+   log <- log%>%
+     filter(Sample_Date>=start_date & Sample_Date<= end_date)
+     
    
    
+   ### 5.1 Get the information in each row of the Maintenance Log ####
+   # modify raw_df based on the information in the log  
    
-   # read in the timesheet with the date and time the samples were taken
+   # only run if there are observations in the maintenance log  
+   if(nrow(log)>0){
+     
+     for(i in 1:nrow(log)){
+       
+       ### Get the date the samples was taken
+       Sample_Date <- as.Date(log$Sample_Date[i])
+       
+       ### Get the Reservoir
+       
+       Reservoir <- log$Reservoir[i]
+       
+       ### Get the Site
+       
+       Site <- log$Site[i]
+       
+       ### Get the Depth
+       
+       Depth <- log$Depth_m[i]
+       
+       ### Get the Filter status
+       
+       Filt <- log$Filter[i]
+       
+       
+       ### Get the Maintenance Flag 
+       
+       flag <- log$flag[i]
+       
+       
+       ### Get the names of the columns affected by maintenance
+       
+       colname_start <- log$start_parameter[i]
+       colname_end <- log$end_parameter[i]
+       
+       ### if it is only one parameter parameter then only one column will be selected
+       
+       if(is.na(colname_start)){
+         
+         maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
+         
+       }else if(is.na(colname_end)){
+         
+         maintenance_cols <- colnames(raw_df%>%select(colname_start))
+         
+       }else{
+         maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
+       }
+       
+       ### Get the name of the flag column
+       
+       flag_cols <- paste0("Flag_", maintenance_cols)
+       
+       
+       #### find the row where all of these match
+       #### The first part is the list of columns in the data frame then after %in% is the value we want 
+       #### to find in the data frame. 
+       #### All give us the rows that everything is true
+       
+     All <-  which(raw_df$DateTime %in% Sample_Date & raw_df$Reservoir %in% Reservoir & 
+                     raw_df$Site %in% Site & raw_df$Depth_m %in% Depth & raw_df$Filter %in% Filt)
+       
+       
+       
+       ### 5.2 Actually remove values in the maintenance log from the data frame 
+       ## This is where information in the maintenance log gets removed. 
+       # UPDatetime THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
+       
+       # replace relevant data with NAs and set flags while maintenance was in effect
+       if(flag==1){ 
+         # Sample not collected. Not used in the maintenance log
+         
+       }
+       else if (flag==2){
+         # Instrument Malfunction. How is this one removed?
+         raw_df[All, maintenance_cols] <- NA
+         
+         raw_df[All, flag_cols] <- flag
+       } 
+       else if (flag ==6){
+         # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
+         
+         raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 2.2
+         # Flag the sample here
+         raw_df[All, flag_cols] <- flag
+       }
+       else if (flag==10){
+         # improper procedure, set all data columns to NA and all flag columns to 10
+         raw_df[All, maintenance_cols] <- NA
+         
+         raw_df[All, flag_cols] <- flag
+       } 
+       else {
+         warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
+       }
+       
+       next
+     }
+   }
+   
+   ### 4. Read in the Minimum Reporting Limits and add flags ####
+   
+   MRL <- read_csv(MRL_file)%>%
+     pivot_wider(names_from = 'Symbol', 
+                 values_from = "MRL_mgL")
+   
+   # flag minimum reporting level
+   for(j in colnames(raw_df%>%select(Li_mgL:Ba_mgL))) { 
+   
+   # If value negative set to minimum reporting level
+     raw_df[c(which(raw_df[,j]<0)),paste0("Flag_",j)] <- 4 
+   
+   # get the minimum detection level
+   MRL_value <- as.numeric(MRL[1,j]) 
+   
+   # If value is less than MRL then flag and will set to MRL later
+   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==0)),paste0("Flag_",j)] <- 3 
+   
+   # replace the negative values or below MRL with the MRL
+   raw_df[c(which(raw_df[,j]<=MRL_value)),j] <- MRL_value 
+   
+   # Get the sd and the mean for flagging
+   sd_value <- sd(as.numeric(unlist(raw_df[j])), na.rm = TRUE) # get the minimum detection level
+   
+   mean_value <- mean(as.numeric(unlist(raw_df[j])), na.rm = TRUE)
+   
+   # Flag values over 3 standard deviations above the mean for the year. 
+   # This will change each time we add more observations.
+   # This is why we should qaqc all raw files
+   
+   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3))),paste0("Flag_",colnames(raw_df[j]))] <- 8 
+   
+   print(j)
+   print(MRL_value)
+   
+   }  
+   
+   # Pivot the data wider so that there is a T_element and and S_element
+   
+  wed <- raw_df %>%   
+   #group_by(DateTime, Reservoir, Depth_m, Site) |>
+   pivot_wider(names_from = 'Filter',
+                              values_from = Li_mgL:Flag_Ba_mgL,
+                               names_glue = "{Filter}_{.value}")
+  
+  # rename the Flag column 
+  # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the 
+  
+  frame3 <- wed %>%
+    rename_with(~gsub("T_Flag", "Flag_T", gsub("S_Flag", "Flag_S",.)), -1)
+   
+   # read in the timesheet with the date and time the samples were taken. Has to happen after the maintenance log
    
    time_sheet <- gsheet::gsheet2tbl(sample_time)%>%
      select(Reservoir, Site,DateTime,Depth_m,VT_Metals)%>%
@@ -121,9 +326,9 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    
    # add the time the sample was collected
    
-   frame2 <- 
-     merge(frame1,time_sheet, by.x=c("DateTime", "Reservoir", "Site", "Depth_m"), 
-                                by.y=c("Date", "Reservoir", "Site", "Depth_m"), all.x=T)%>%
+   raw_df <- 
+     merge(frame3,time_sheet, by.x=c("DateTime", "Reservoir", "Site", "Depth_m"), 
+           by.y=c("Date", "Reservoir", "Site", "Depth_m"), all.x=T)%>%
      mutate(
        DateTime.y = ifelse(is.na(DateTime.y), as_datetime(DateTime), DateTime.y),
        DateTime.y = as_datetime(DateTime.y) # time is in seconds put it in ymd_hms
@@ -142,191 +347,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      select(-c(Time, Date, Hours))%>%
      relocate(DateTime, .before = Depth_m) 
    
-   ### 4. Read in the Minimum Reporting Limits and add flags ####
    
-   MRL <- read_csv(MRL_file)%>%
-     pivot_wider(names_from = 'Symbol', 
-                 values_from = "MRL_mgL")
-   
-   
-   # Establish flag columns and add ones for missing values
-   for(j in colnames(frame2%>%select(starts_with(c("T_","S_"))))) { 
-     
-     #for loop to create new columns in data frame
-     #creates flag column + name of variable
-     frame2[,paste0("Flag_",colnames(frame2[j]))] <- 0 
-     
-     # puts in flag 1 if value not collected
-     frame2[c(which(is.na(frame2[,j]))),paste0("Flag_",colnames(frame2[j]))] <- 1 
-     
-     # puts in flag 7 for sample run twice and we report the mean
-     frame2[c(which(frame2[,paste0("n_",colnames(frame2[j]))]>1)),paste0("Flag_",colnames(frame2[j]))] <- 7 
-     
-     # If value negative set to minimum reporting level
-     frame2[c(which(frame2[,j]<0)),paste0("Flag_",colnames(frame2[j]))] <- 4 
-     
-     # get the minimum detection level
-     MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",j)]) 
-     
-     # If value is less than MRL then flag and will set to MRL later
-     frame2[c(which(frame2[,j]<=MRL_value & frame2[,paste0("Flag_",colnames(frame2[j]))]==0)),paste0("Flag_",colnames(frame2[j]))] <- 3 
-     
-     # replace the negative values or below MRL with the MRL
-     frame2[c(which(frame2[,j]<=MRL_value)),j] <- MRL_value 
-     
-     # Get the sd and the mean for flagging
-     sd_value <- sd(frame2[,j], na.rm = TRUE) # get the minimum detection level
-     
-     mean_value <- mean(frame2[,j], na.rm = TRUE)
-     
-     # Flag values over 3 standard deviations above the mean for the year. 
-     #This will change each time we add more observations
-     
-     frame2[c(which(frame2[,j]>=mean_value + (sd_value*3))),paste0("Flag_",colnames(frame2[j]))] <- 8 
-     
-   }
-   
-   # Now we can remove the number of observation columns
-   raw_df <- frame2%>%
-     select(-starts_with("n_"))
-  
-   
-   ### 5. Use Maintenance Log to flag or change observations ####
-   
-   # Filter the Maintenance Log based on observations in the data frame
-   raw_df <- raw_df%>%
-      arrange(DateTime)
-   
-   # Get the date the data starts
-    start_date <- raw_df[1,"DateTime"]
-     
-   # Get the date the data ends
-    end_date <- tail(raw_df, n=1)$DateTime
-    
-    # Filter out the maintenance log
-    log <- log%>%
-      filter(Sample_Date>=start_date & Sample_Date<= end_date)
-   
-   
-   ### 5.1 Get the information in each row of the Maintenance Log ####
-   # modify raw_df based on the information in the log  
-    
-  # only run if there are observations in the maintenance log  
-  if(nrow(log)>0){
-   
-   for(i in 1:nrow(log)){
-     
-     ### Get the date the samples was taken
-     Sample_Date <- log$Sample_Date[i]
-     
-     
-     
-     ### Get the Reservoir
-     
-     Reservoir <- log$Reservoir[i]
-     
-     ### Get the Site
-     
-    Site <- log$Site[i]
-     
-     ### Get the Depth
-     
-    Depth <- log$Depth_m[i]
-
-
-     ### Get the Maintenance Flag 
-     
-     flag <- log$flag[i]
-     
-     
-     ### Get the names of the columns affected by maintenance
-     
-     colname_start <- log$start_parameter[i]
-     colname_end <- log$end_parameter[i]
-     
-     ### if it is only one parameter parameter then only one column will be selected
-     
-     if(is.na(colname_start)){
-       
-       maintenance_cols <- colnames(raw_df%>%select(colname_end)) 
-       
-     }else if(is.na(colname_end)){
-       
-       maintenance_cols <- colnames(raw_df%>%select(colname_start))
-       
-     }else{
-       maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
-     }
-     
-     ### Get the name of the flag column
-     
-     flag_cols <- paste0("Flag_", maintenance_cols)
-  
-     
-     
-     ### 5.2 Actually remove values in the maintenance log from the data frame 
-     ## This is where information in the maintenance log gets removed. 
-     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
-    
-     # replace relevant data with NAs and set flags while maintenance was in effect
-     if(flag==1){ 
-       # Sample not collected. Not used in the maintenance log
-       
-     }
-     else if (flag==2){
-       # Instrument Malfunction. How is this one removed?
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              maintenance_cols] <- NA
-       
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              flag_cols] <- flag
-     } 
-     else if (flag ==6){
-       # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
-      
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              maintenance_cols] <- 
-         raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                                                  & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-                                          maintenance_cols] * 2.2
-       # Flag the sample here
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              flag_cols] <- flag
-     }
-     else if (flag==10){
-       # improper procedure, set all data columns to NA and all flag columns to 10
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              maintenance_cols] <- NA
-       
-       raw_df[c(which(raw_df[,"Date"] == Sample_Date & raw_df[,"Reservoir"] == Reservoir 
-                      & raw_df[,"Site"] == Site & raw_df[,"Depth_m"] == Depth)), 
-              flag_cols] <- flag
-     } 
-     else {
-       warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
-     }
-    
-     next
-   }
-  }
-    
-    
-    
-    
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
    #### 6. Switch observations if total and soluble samples were mixed up ####
    
    # Determine if totals and soluble samples were switched. 
@@ -334,24 +355,58 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    # switched. 
    # Cece is this what you want it to be? It looks like some of the observations are very close.
     #we want to do 3 MRL for Fe, Al, and Si, give it a flag of 9, and then see what it looks like
-   for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) { 
-     #for loop to create new columns in data frame
-     raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable
-     
-     MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",j)]) # get the minimum detection level
-     
-     # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus the MRL
-     raw_df[c(which(raw_df[,l]+MRL_value<raw_df[,gsub("T_", "S_", l)])),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED" 
-     
-     # Swap the observations from the totals and solubles if the Check column is labeled "SWITCHED" 
-     
-     raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(l,gsub("T_", "S_", l)) ] <- 
-       raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(gsub("T_", "S_", l), l)]
-   }
+    
+  for(l in c('T_Fe_mgL', 'T_Al_mgL', 'T_Si_mgL')){
+    raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0  #creates Check column + name of variable
+    MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
+    switch_threshold <- MRL_value*3
+    
+    # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus three times the MRLA;s
+    raw_df[which(raw_df[,l]+switch_threshold < raw_df[,gsub("T_", "S_", l)]),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED"
+  }  
+  
+    
+  ## assign rows where all three variables were switched  
+  raw_df$switch_all <- 0  
+  for (i in 1:nrow(raw_df)){
+  if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
+      raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
+      raw_df[i,'Check_T_Si_mgL'] == 'SWITCHED'){
+    raw_df[i,'switch_all'] <- 1
+  }
+}
+  
+  for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) {
+    raw_df[which(raw_df[,'switch_all'] == 1), c(l,gsub("T_", "S_", l)) ] <- 
+      raw_df[which(raw_df[,'switch_all'] == 1), c(gsub("T_", "S_", l), l)]
+  }
+
+    
+   # for(l in colnames(raw_df%>%select(starts_with(c("T_"))))) { 
+   #   #for loop to create new columns in data frame
+   #   raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable
+   #   
+   #   MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",j)]) # get the minimum detection level
+   #   
+   #   # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus the MRL
+   #   raw_df[T_Al_mgLc(which(raw_df[,l]+MRL_value<raw_df[,gsub("T_", "S_", l)])),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED" 
+   #   
+   #   # Swap the observations from the totals and solubles if the Check column is labeled "SWITCHED" 
+   #   
+   #   raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(l,gsub("T_", "S_", l)) ] <- 
+   #     raw_df[c(which(raw_df[,paste0("Check_",l)]=="SWITCHED")), c(gsub("T_", "S_", l), l)]
+   # }
    
+  # Establish flag columns and add ones for missing values
+  for(j in colnames(raw_df%>%select(S_Li_mgL:T_Ba_mgL))) { 
+    
+    # puts in flag 1 if value not collected
+    raw_df[c(which(is.na(raw_df[,j]))),paste0("Flag_",j)] <- 1 
+  
+  }  
    # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the 
   
-   frame4 <- raw_df%>%
+   frame4 <- raw_df %>%
      rename_with(~gsub("T_", "T", gsub("S_", "S",.)), -1)
    
 #let's write the final csv
@@ -374,14 +429,25 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
  final <- frame4%>%
    filter(Site != 100.1)
  
- # Write the L1 file 
- write.csv(final, outfile, row.names = F)
+ if(is.null(outfile)){
+   return(outfile)
+   
+ }else{
+   final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
+   
+    # Write the L1 file 
+ write_csv(final, outfile)
+   
+ }
+
  
  # Save the ISCO observations
  ISCO <- frame4%>%
    filter(Site == 100.1)
  
- write.csv(ISCO, ISCO_outfile, row.names = F)
+ ISCO_outfile$DateTime <- as.character(format(ISCO_outfile$DateTime)) # convert DateTime to character
+ 
+ write_csv(ISCO, ISCO_outfile)
  
 
 }

@@ -31,7 +31,7 @@ trim_sites = function(data,sites){
 sites_trimmed = trim_sites(data,sites) 
 
 #save as a csv
-write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/reservoir_site_descriptions.csv", row.names = FALSE)
+write.csv(sites_trimmed,"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023/site_descriptions.csv", row.names = FALSE)
 
 # Install devtools
 #install.packages("devtools")
@@ -53,7 +53,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                           data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
-                                         "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                                         "zoop_raw_biom_2019_2022.csv", "site_descriptions.csv"),
                           write.file = TRUE)
 
 #we want empty to be true for this because we don't include lat/long
@@ -61,7 +61,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                              data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
                              data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
-                                            "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                                            "zoop_raw_biom_2019_2022.csv", "site_descriptions.csv"),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -81,34 +81,38 @@ make_eml(
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
   data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
-                 "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                 "zoop_raw_biom_2019_2022.csv", "site_descriptions.csv"),
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "zoop_qaqc_2014_2022.R",
-  other.entity.description = "Zooplankton QAQC script",
+  other.entity = c("zoop_qaqc_2014_2022.R",
+                   "zoop_length_weight_conversions_2019_2022.zip"),
+  other.entity.description = c("Zooplankton QAQC and visualization script",
+                               "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.23') #reserve new staging environment package id each year
+  package.id = 'edi.1090.33') #reserve new staging environment package id each year
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment
 #https://portal.edirepository.org/nis/logout
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2022",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
   dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
   data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
-                 "zoop_raw_biom_2019_2022.csv", "reservoir_site_descriptions.csv"),
+                 "zoop_raw_biom_2019_2022.csv", "site_descriptions.csv"),
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "zoop_qaqc_2014_2022.R",
-  other.entity.description = "Zooplankton QAQC script",
+  other.entity = c("zoop_qaqc_2014_2022.R",
+                   "zoop_length_weight_conversions_2019_2022.zip"),
+  other.entity.description = c("Zooplankton QAQC and visualization script",
+                               "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.197.2') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.197.3') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
   # 197.3 for 2024 pub

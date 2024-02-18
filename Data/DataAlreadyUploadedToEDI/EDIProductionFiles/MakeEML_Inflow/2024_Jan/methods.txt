@@ -22,11 +22,7 @@ A rating curve was developed for the time period from 24 Aug 2020 to 02 Sep 2020
 
 5. 09 May 2022 to 05 Jun 2023: Subsequent rating curves were made for the VT sensor from 09 May 2022 to 16 Nov 2022 VT (gauge height = 71.6103 x pressure + 2.413) and 16 Nov 2022 to 01 Apr 2023 (gauge height = 76.02339 x pressure + 1.032). The VT sensor malfunctioned on 01 April 2023. The sensors were moved to inspect the VT sensor on 05 Jun 2023. For the WVWA senor a rating curve was developed from 09 May 2022 to 05 Jun 2023 (gauge height = 72.8922 x pressure -5.220). 
 
-<<<<<<< HEAD
-6. 05 Jun 2023 to 10 Jul 2023: On 05 Jun 2023 and again on 10 Jul 2023 the sensors were moved. First to inspect the VT sensor and then to replace it (SN: 29010799). For the VT sensor there were no observations during this time. For the WVWA sensor a rating curve was developed (gauge height = 10.5263 x pressure + 7.453).
-=======
 6. 05 Jun 2023 to 10 Jul 2023: The sensors were moved on 05 Jun 2023 and again on 10 Jul 2023 to inspect the VT sensor and then to replace it (SN: 29010799). For the VT sensor there were no observations during this time. For the WVWA sensor a rating curve was developed (gauge height = 10.5263 x pressure + 7.453).
->>>>>>> 26288bf591f2cab4fc644eed050b093b30dd2325
 
 7. 10 Jul 2023 to 13 Jul 2023: On 13 Jul 2023 the sensors were moved to put the VT sensor at another site to get water level. New rating curves were made: VT (gauge height = 83.333 x pressure -13.833) and WVWA (gauge height = 125.00000 x pressure -25.500)
 
@@ -36,52 +32,9 @@ A rating curve was developed for the time period from 24 Aug 2020 to 02 Sep 2020
 
 The rating curve is calculated in the Inflow_qaqc_2013_2023.R script and the time period for each rating curve is in the Inflow_maintenancelog_2013_2023.csv under RATING.  As new observations from the gauge height (see Inflow_GaugeHeight_2019_2023.csv) are added the current rating curve will be updated each year. 
 
-<<<<<<< HEAD
-From 08 Nov 2021 to 16 Nov 2022 the VT sensor was about 2.3 cm higher than the WVWA senor which resulted in lower estimated flow. We converted cm to psi using the relationship 1psi = 2.31 ft. from the Campbell Scientific CS451 Manual. So, we added 0.033 psi to all observations from the VT_Pressure_psia observations and flagged with a 1 for value corrected to account for artificial increase in pressure after sensor maintenance.
-
-
-### Other Maintenance
-
-Missing Data Gaps: 
-
-This section includes data gaps greater than 15 minutes between observations. 
-
-WVWA sensors:
-20 Mar 2014 08:45 - 28 Apr 2014 06:00,
-31 Oct 2016 16:00 - 02 Nov 2016 10:45, 
-22 Nov 2016 20:00 - 24 Nov 2016 09:30,
-29 Nov 2016 20:00 - 01 De 2016 09:45,
-03 Dec 2016 14:00 - 05 Dec 2016 10:45,
-05 Dec 2016 23:00 - 07 Dec 2016 09:30,
-07 Dec 2016 21:45 - 09 Dec 2016 09:45,
-17 Dec 2016 19:30 - 19 Dec 2016 13:45,
-23 Dec 2016 14:45 - 27 Dec 2016 13:15,
-01 Jan 2017 15:45 - 04 Jan 2017 12:45,
-05 Jan 2017 14:45 - 07 Jan 2017 14:00,
-21 Jan 2017 12:00 - 24 Jan 2017 10:30,
-07 Nov 2017 18:00 - 10 Nov 2017 11:00,
-14 May 2020 16:45 - 24 Aug 2020 15:15,
-21 Jul 2021 14:14 - 25 Oct 2021 14:00,
-26 Oct 2021 14:45 - 08 Nov 2021 14:15,
-07 Dec 2021 13:00 - 14 Dec 2021 12:00,
-05 Jun 2022 22:15 - 27 Jun 2022 09:45,
-27 Jun 2022 01:30 - 16 Aug 2022 13:30,
-07 Aug 2023 08:45 - 21 Aug 2023 13:30
-
-
-VT sensor: 
-20 Jul 2020 09:45 - 24 Aug 2020 15:00,
-06 Nov 2022 09:00 - 19 Nov 2022 06:15,
-01 Apr 2023 00:00 - 10 Jul 2023 15:30- sensor broken, 
-13 Jul 2023 08:45 - 17 Jul 2023 13:15,
-07 Aug 2023 08:45 - 14 Aug 2023 13:00,
-05 Sep 2023 15:00 - 12 Sep 2023 13:45
-=======
 From 08 Nov 2021 to 16 Nov 2022 the VT sensor was about 2.3 cm higher than the WVWA senor which resulted in lower estimated flow. We converted cm to psi using the relationship 1psi = 2.31 ft. from the Campbell Scientific CS451 Manual. So, we added 0.033 psi to all observations from the VT_Pressure_psia observations and flagged with a 1 for "value corrected to account for artificial increase in pressure after sensor maintenance".
 
-
 ### Other Maintenance
->>>>>>> 26288bf591f2cab4fc644eed050b093b30dd2325
 
 Missing Data Gaps:
 
@@ -112,21 +65,9 @@ Please note: When pulling the file via EDI's API, we recommend using the functio
 
 ### Sensors:
 
-<<<<<<< HEAD
-Campbell Scientific CS451 (Campbell Scientific, Logan, Utah, USA)
-manual: https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf
-SN: 5318 (22 Apr 2019 - 10 Jul 2023)
-SN: 29010799 (10 Jul 2023 - current)
-
-INW Aquistar PT2X pressure sensor (INW, Kirkland, Washington, USA)
-mnaual: https://www.seametrics.com/wp-content/uploads/LT-14310r25-20220822-PT2X-Instr-1.pdf
-Barometric pressure sensor: SN: 21204020 (2013-current)
-In water pressure sensor: SN: 21309003 (2013-current)
-=======
 Campbell Scientific CS451 (Campbell Scientific, Logan, Utah, USA) manual: https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf SN: 5318 (22 Apr 2019 - 10 Jul 2023) SN: 29010799 (10 Jul 2023 - current)
 
 INW Aquistar PT2X pressure sensor (INW, Kirkland, Washington, USA) mnaual: https://www.seametrics.com/wp-content/uploads/LT-14310r25-20220822-PT2X-Instr-1.pdf Barometric pressure sensor: SN: 21204020 (2013-current) In water pressure sensor: SN: 21309003 (2013-current)
->>>>>>> 26288bf591f2cab4fc644eed050b093b30dd2325
 
 ### References:
 

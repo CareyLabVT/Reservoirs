@@ -175,6 +175,7 @@ met_all$Breaks <- ymd_hms(as.character(met_all$Breaks))
 
 # Average met data to the 30 min mark (excluding Total Rain and Total PAR)
 met_30 <- met_all %>% 
+ select(-c(Rain_Total_mm,PAR_Total_mmol_m2))%>%
   group_by(Breaks) %>% 
   summarise_all(mean,na.rm=TRUE)
 ```

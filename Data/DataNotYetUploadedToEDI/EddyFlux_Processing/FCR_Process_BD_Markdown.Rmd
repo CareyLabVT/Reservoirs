@@ -145,7 +145,7 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 
 # Read in Met file from EDI
 met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/8/d4c74bbb3b86ea293e5c52136347fbb0",
-                    col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2,BP_Average_kPa",
+                    col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",
                                  "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
                                   "InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2",
@@ -157,7 +157,7 @@ met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/8/d4c74b
 # Bind files together if need to use current file
 
 met_curr <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv",
-                   col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2,BP_Average_kPa",
+                   col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",
                                  "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
                                   "InfraredRadiationUp_Average_W_m2","InfraredRadiationDown_Average_W_m2",

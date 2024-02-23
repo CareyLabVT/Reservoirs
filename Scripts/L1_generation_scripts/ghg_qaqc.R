@@ -400,11 +400,11 @@ ghg_qaqc<-function(directory,
 
     if(is.na(colname_start)){
 
-      maintenance_cols <- colnames(raw_df%>%select(colname_end))
+      maintenance_cols <- colnames(raw_df%>%select(all_of(colname_end)))
 
     }else if(is.na(colname_end)){
 
-      maintenance_cols <- colnames(raw_df%>%select(colname_start))
+      maintenance_cols <- colnames(raw_df%>%select(all_of(colname_start)))
 
     }else{
       maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))

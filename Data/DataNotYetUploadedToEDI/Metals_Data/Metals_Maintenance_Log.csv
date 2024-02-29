@@ -46,18 +46,18 @@ FCR,100,0.1,T,Metals,15,2022-06-13,Li_mgL,Ba_mgL,6,sample had particulates and w
 FCR,200,0.1,T,Metals,17,2022-06-13,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-06-20,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2022-06-20,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-BVR,50,3.0,T,Metals,21,2022-06-20,,,,
-BVR,50,8.0,T,Metals,69,2022-06-20,,,,
+BVR,50,3.0,T,Metals,21,2022-06-20,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+BVR,50,8.0,T,Metals,69,2022-06-20,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 CCR,50,21,T,Metals,15,2022-06-27,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,200,0.1,T,Metals,17,2022-06-27,,,,
-CCR,50,21.0,T,Metals,57,2022-06-30,,,,
-FCR,200,0.1,T,Metals,17,2022-07-18,,,,
-FCR,100,0.1,T,Metals,15,2022-08-01,,,,
-FCR,100,0.1,T,Metals,15,2022-08-18,,,,
-FCR,200,0.1,T,Metals,17,2022-08-18,,,,
-FCR,50,9.0,T,Metals,13,2022-08-29,,,,
+FCR,200,0.1,T,Metals,17,2022-06-27,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+CCR,50,21.0,T,Metals,57,2022-06-30,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,200,0.1,T,Metals,17,2022-07-18,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,T,Metals,15,2022-08-01,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,T,Metals,15,2022-08-18,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,200,0.1,T,Metals,17,2022-08-18,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,50,9.0,T,Metals,13,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,S,Metals,16,2022-08-29,,,,
+FCR,100,0.1,S,Metals,16,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-09-13,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-09-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2022-09-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -76,7 +76,7 @@ FCR,200,0.1,T,Metals,17,2023-05-22,Li_mgL,Ba_mgL,6,sample had particulates and w
 FCR,200,0.1,T,Metals,17,2023-05-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-06-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-06-14,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,T,Metals,15,2023-06-19,,,,
+FCR,100,0.1,T,Metals,15,2023-06-19,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-06-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-07-03,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,1.6,T,Metals,3,2023-07-10,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -108,7 +108,7 @@ FCR,50,1.6,T,Metals,3,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was
 FCR,50,3.8,T,Metals,5,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,3.8,S,Metals,6,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,50,8,T,Metals,11,2023-09-12,,,,
+FCR,50,8,T,Metals,11,2023-09-12,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-09-12,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 BVR,50,9,T,Metals,25,2023-09-12,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 BVR,50,6,T,Metals,23,2023-09-25,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook

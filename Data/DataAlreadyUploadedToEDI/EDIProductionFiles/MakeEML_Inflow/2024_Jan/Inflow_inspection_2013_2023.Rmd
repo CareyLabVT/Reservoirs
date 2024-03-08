@@ -95,7 +95,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                   ### CHANGE THIS NUMBER BELOW 
                                                                                ##      
-  current_df <-read_csv("https://portal-s.edirepository.org/nis/dataviewer?packageid=edi.923.14&entityid=aae7888d68753b276d1623680f81d5de")
+  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/923/14/aae7888d68753b276d1623680f81d5de")
  #
  # # Force files from EDI to have an EST timestamp
 

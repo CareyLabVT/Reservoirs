@@ -407,7 +407,7 @@ ghg_qaqc<-function(directory,
       maintenance_cols <- colnames(raw_df%>%select(all_of(colname_start)))
 
     }else{
-      maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
+      maintenance_cols <- colnames(raw_df%>%select(all_of(colname_start:colname_end)))
     }
 
     ### Get the name of the flag column

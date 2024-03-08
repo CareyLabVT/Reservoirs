@@ -11,7 +11,7 @@ all_plot<-function(
          Depth=F,  # Do you want depth as a factor
          Water=T, # Are these plots for inwater streaming sensors?
          Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
-         Use_plotly = F){# Do you want to produce plotly interactive plots? 
+         Use_plotly = F)# Do you want to produce plotly interactive plots? 
  { 
   # Start off with the extra plot as false and it will change to true if there are extra plots
   Extra_plot=FALSE

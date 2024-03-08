@@ -181,7 +181,7 @@ Some of the flags are added to in the script so the value was flagged with 6 in 
 but in the script it was added to because the value was lower than the Minimum reporting level. 
 Just make sure that one of the values is in the mainteance log.
 
-#### Look at the first 5 rows for that time
+#### Look at the last row of the maintenance log. Are the columns flagged?
 
 ```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
 # get the last row of the data file
@@ -226,7 +226,7 @@ last_row <- tail(sd, n=1)
 
 ```
 
-#### Look at the last 6 rows for the maintenance time
+#### Look at the first row in the maintenance time. Is the correct observation flagged?
 
 Make sure the observations are flagged
 

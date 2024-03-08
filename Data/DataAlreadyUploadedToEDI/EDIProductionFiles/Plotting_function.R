@@ -5,14 +5,15 @@
 # Last edited: 7 March 24
 
 all_plot<-function(
-         Var, 
-         y_lab,  # This label can take an expression aka have the proper degrees C, 
-         y_lab2, # This label is for the plotly function which can not handle expression argument. 
-         Depth=F,  # Do you want depth as a factor
-         Water=T, # Are these plots for inwater streaming sensors?
-         Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
-         Use_plotly = F)# Do you want to produce plotly interactive plots? 
- { 
+    Var, 
+    y_lab,  # This label can take an expression aka have the proper degrees C, 
+    y_lab2, # This label is for the plotly function which can not handle expression argument. 
+    Depth=F,  # Do you want depth as a factor
+    Water=T, # Are these plots for inwater streaming sensors?
+    Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+    Use_plotly = F)  # Do you want to produce plotly interactive plots?
+{ 
+  
   # Start off with the extra plot as false and it will change to true if there are extra plots
   Extra_plot=FALSE
   
@@ -101,14 +102,14 @@ all_plot<-function(
   
   # Plot all of the observations
   if (Depth==T){
-  
-  all<- ggplot() +
-    geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)),pointsize = 2)+
-    ggtitle("All QAQCd",Var) +
-    labs(y = y_lab,
-         color = "Legend") +
-    #scale_color_manual(values = colors)+
-    theme_bw()
+    
+    all<- ggplot() +
+      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 2)+
+      ggtitle("All QAQCd",Var) +
+      labs(y = y_lab,
+           color = "Legend") +
+      #scale_color_manual(values = colors)+
+      theme_bw()
     
   }else {
     geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"))+
@@ -128,16 +129,16 @@ all_plot<-function(
   if(grepl("Battery_V|power_V", Var)|Use_plotly==FALSE){
     
     if(Depth==T){
-    cur <- ggplot()+
-      {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
-                                                             color=as.factor(Depth_m),shape=type), pointsize = 3)}+
-      geom_scattermore(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
-                                               color=as.factor(Depth_m), shape=type), pointsize = 3)+
-      ggtitle(paste0("Current: ",Var)) +
-      labs(y = y_lab2,
-           color = "Legend") +
-      #scale_color_manual(values = colors)+
-      theme_bw()
+      cur <- ggplot()+
+        {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
+                                                               color=as.factor(Depth_m),shape=type), pointsize = 3)}+
+        geom_scattermore(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
+                                                 color=as.factor(Depth_m), shape=type), pointsize = 3)+
+        ggtitle(paste0("Current: ",Var)) +
+        labs(y = y_lab2,
+             color = "Legend") +
+        #scale_color_manual(values = colors)+
+        theme_bw()
     }else{
       cur <- ggplot()+
         {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -153,16 +154,16 @@ all_plot<-function(
   }else{
     
     if(Depth==T){
-    cur <- {ggplot()+
-        {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
-                                                          color=as.factor(Depth_m),shape=type))}+
-        geom_point(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
-                                           color=as.factor(Depth_m),shape=type))+
-        ggtitle(paste0("Current: ",Var)) +
-        labs(y = y_lab2,
-             color = "Legend") +
-        #scale_color_manual(values = colors)+
-        theme_bw()}%>% ggplotly%>% as_widget
+      cur <- {ggplot()+
+          {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
+                                                            color=as.factor(Depth_m),shape=type))}+
+          geom_point(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
+                                             color=as.factor(Depth_m),shape=type))+
+          ggtitle(paste0("Current: ",Var)) +
+          labs(y = y_lab2,
+               color = "Legend") +
+          #scale_color_manual(values = colors)+
+          theme_bw()}%>% ggplotly%>% as_widget
     }else{
       cur <- {ggplot()+
           {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -188,22 +189,22 @@ all_plot<-function(
       facet_wrap(~ as.factor(Depth_m), scale="free")
     
   }else{
-  den <-ggplot(data = daily, aes(x = .data[[Var]], group = Year, fill = Year))+
-    geom_density(alpha=0.5)+
-    xlab("Daily avg.")+
-    ggtitle("All",Var) +
-    theme_bw()
+    den <-ggplot(data = daily, aes(x = .data[[Var]], group = Year, fill = Year))+
+      geom_density(alpha=0.5)+
+      xlab("Daily avg.")+
+      ggtitle("All",Var) +
+      theme_bw()
   }
   
   
   # box plot
   if(Depth==T){
-  box <-ggplot(data = daily, aes(x = Year, y = .data[[Var]], group = Year, fill = Year))+
-    geom_boxplot()+
-    ylab(y_lab)+
-    ggtitle("Boxplot",Var) +
-    theme_bw()+
-    facet_wrap(~ as.factor(Depth_m), scales="free")
+    box <-ggplot(data = daily, aes(x = Year, y = .data[[Var]], group = Year, fill = Year))+
+      geom_boxplot()+
+      ylab(y_lab)+
+      ggtitle("Boxplot",Var) +
+      theme_bw()+
+      facet_wrap(~ as.factor(Depth_m), scales="free")
   }else{
     box <-ggplot(data = daily, aes(x = Year, y = .data[[Var]], group = Year, fill = Year))+
       geom_boxplot()+

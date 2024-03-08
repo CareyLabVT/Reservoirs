@@ -625,7 +625,7 @@ Run this if there is not site description file or we have added or updated the s
   # Use Gsheet because you don't need to authenticate it. 
   sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
   #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
-  data <- current_df #This is the line you need to modify!
+  data <- final_df #This is the line you need to modify!
   trim_sites = function(data,sites){
     data_res_site=data%>% #Create a Reservoir/Site combo column
       mutate(res_site = trimws(paste0(Reservoir,Site)))

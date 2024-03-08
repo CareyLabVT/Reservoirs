@@ -103,7 +103,7 @@ all_plot<-function(
   if (Depth==T){
   
   all<- ggplot() +
-    geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)))+
+    geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)),pointsize = 2)+
     ggtitle("All QAQCd",Var) +
     labs(y = y_lab,
          color = "Legend") +

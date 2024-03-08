@@ -531,7 +531,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
 
  if(!is.null(end_date)){
    #force tz check
-   end_date <- force_tz(as.POSIXct(end_date), tzone = "EST")
+   end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
 
    final <- final %>%
      filter(DateTime <= end_date)

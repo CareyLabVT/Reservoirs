@@ -17,7 +17,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                CTD_FOLDER = "../",
                                maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")) {
   
-  Print("now in flag_seaonal_csvs")
+  print("now in flag_seaonal_csvs")
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   ctd = ctd1 %>%

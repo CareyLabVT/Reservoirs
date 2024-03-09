@@ -29,11 +29,15 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
                           substr(files,3,4)))
   
   files_to_load <- files[dates >= as.Date(start_date)]
+
+  print("loaded files in update_seasonal_csv.R")
   
   # list of column headers that need to be changed if they are still in the data frame
   
   ctd <- map(files_to_load, load_file) %>% #see function below. Using map() makes loading files faster
     dplyr::bind_rows()
+
+  print("Function load_file worked in update_seaonal_csv.R")
   
   write_csv(ctd, paste0(ctd_season_csvs, "/", intermediate_file_name))
 }

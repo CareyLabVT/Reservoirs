@@ -17,11 +17,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                CTD_FOLDER = "../",
                                maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")) {
   
-  ctd_season_csvs = "../CTD_season_csvs"
-  intermediate_file_name = "ctd_L0.csv"
-  output_file_name = "ctd_L1.csv"
-  CTD_FOLDER = "../"
-  maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")
+  Print("now in flag_seaonal_csvs")
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   ctd = ctd1 %>%
@@ -89,6 +85,8 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     ctd[c(which(ctd$Depth_m<0 & (j %in% water_vars))), paste0("Flag_",j)] <- 6
     
   }  
+
+  print("flaged in flag_seasonal_csvs")
   
   # fix the time and flag it 
   ctd_flagged = ctd %>% 

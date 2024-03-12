@@ -14,7 +14,9 @@ pacman::p_load(tidyverse, lubridate, scales, viridis)
 
 ```{r read in current + historic combined file}
 
-new_chem <- read.csv("./Data/DataNotYetUpdloadedToEDI/NutrientData/chem_L1.csv")
+# new_chem <- read.csv("./Data/DataNotYetUpdloadedToEDI/NutrientData/chem_L1.csv")
+new_chem <- read_csv("./2023_chemistry_collation_final_nocommas_OLDMDL.csv") |> 
+  select(-1)
 
 old_chem <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/199/11/509f39850b6f95628d10889d66885b76", col_types = cols())
 
@@ -40,7 +42,10 @@ chemistry_long$value <- as.numeric(chemistry_long$value)
 
 # Plot range of values per constituent for each reservoir; 
 #mean value per sampling day indicated with large black dot
-ggplot(subset(chemistry_long, Site == 50), aes(x = DateTime, y = value, col=Reservoir)) +
+chemistry_long |> 
+  filter(Site == 50, 
+         DateTime > ymd("2023-01-01")) |> 
+ggplot(aes(x = DateTime, y = value, col=Reservoir)) +
   geom_point(size=1) +
   stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
   facet_grid(metric ~ Reservoir, scales= 'free_y') +
@@ -143,7 +148,7 @@ ggsave("./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2023/CCR_50_all_nutr
 ```{r 2023 diagnostic plots}
 
 # CCR other sites nutrient time series
-p1 <- ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
+ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
   geom_point(cex=2) + theme_bw() +
   facet_grid(metric ~ ., scales='free') +
   scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
@@ -162,7 +167,7 @@ ggsave("./Data/DataNotYetUploadedToEDI/NutrientData/Figures/2023/CCR_sites_all_n
 #add column for year
 all_chem$year <- year(all_chem$DateTime)
 
-#### YSI diagnostic plots #### 
+#### chem diagnostic plots #### 
 all_chem_long <- all_chem %>%
   gather(metric, value, TP_ugL:DOC_mgL) %>% 
   mutate(month = strftime(DateTime, "%b"))
@@ -214,5 +219,32 @@ ggsave("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChe
 ```
 
 ```{r save the data}
-write.csv(ysi,file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023/Data/Chemistry_2013-2023.csv"), row.names=FALSE)
+write.csv(all_chem, file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023/Data/Chemistry_2013-2023.csv"), row.names=FALSE)
 ```
+
+
+
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+
+  data <- all_chem #This is the line you need to modify!
+  
+  trim_sites = function(data,sites){
+    data_res_site = data %>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  
+sites_trimmed = trim_sites(data,sites) 
+  
+write.csv(sites_trimmed, "reservoir_site_descriptions.csv", row.names=F)# Write to file
+
+```
+

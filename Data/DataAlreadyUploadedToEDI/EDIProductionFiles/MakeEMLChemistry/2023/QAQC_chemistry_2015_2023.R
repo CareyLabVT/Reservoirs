@@ -2,17 +2,22 @@
 #includes TNTP, DOC, and np
 #Note: flags are aggregated without commas for final EDI upload
 
-#####throught row 13 are notes from last year, can prob cut
-#figure out what to do when dups are super different
-#NOTE: samples were rerun and need to integrate/average/select values appropriately
-  #B21Sep 10m NH4, B15Jun 11m SRP, F08Feb 0.1 NO3, F26Jul 1.6m NO3,  C19Aug 21m NH4+NO3, 
-                 # B08Mar 11m, TN+TP, (cant find reason for repeat, averaging both )
-                 #B09Aug 10m DOC (cant find reason for repeat, averaging both )
-#NOTE for 2022 field sample publication - we removed n=9 samples w/ suspect data (sampleIDs in the 2021 MakeEMLChemistry script) so reran them after 2021 data was published - need to bring that data in (average/replace 2021 runs)
-#too bad that these samples got tossed from the 2021-2022 field season transition, so these data are lost :(
-
+#packages
 library(tidyverse)
 library(gsheet)
+
+#list of all data flags
+# 0 - NOT SUSPECT
+# 1 - SAMPLE NOT TAKEN
+# 2 - INSTRUMENT MALFUNCTION
+# 3 - SAMPLE BELOW DETECTION
+# 4 - NEGATIVE VALUE SET TO ZERO
+# 5 - DEMONIC INTRUSION
+# 6 - NON-STANDARD METHOD
+# 7 - SAMPLE RUN MULTIPLE TIMES AND VALUES AVERAGED
+# 8 - SAMPLE RUN USING NPOC METHOD DUE TO HIGH IC VALUES
+# 9 - SUSPECT SAMPLE
+
 
 #### Read in compiled data and add time to datetime
 chem2023_raw <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/collation/2023/joined_tntp_doc_solubles_v1.csv") |> 
@@ -127,17 +132,17 @@ TNTP <- TNTP |>
 #   averaged across all runs for most recent field season  #
 #                "rolling spiked blank 250"                #
 #                      TP      TN                          #  
-#                     3.5      56                          #
+#                     7.7      78.4                        #
 ############################################################  
-## MDL's come from TNTP MDL 2016 +... 24mar23 excel sheet.
-##Using rolling spike blanks for runs in 2023: 22 Feb - 22 March were the runs that went into this years data 
+## MDL's come from Summary TNTP 6mar24 Batch 4 excel sheet.
+##Using rolling spike blanks for runs in 2023: 8 Feb - 6 March were the runs that went into this years data 
 
 ##################################
 #        Historical MDL's:       #
 #    2020: TP = 6.8; TN = 72.2   #
 #    2021: TP = 10; TN = 76.4    #
 #    2022: TP = 3.5; TN = 56     #
-#    2023: TP = ; TN =      #
+#    2023: TP = 7.7; TN = 78.4   #
 ##################################
 
 TNTP <- TNTP |> 
@@ -145,17 +150,17 @@ TNTP <- TNTP |>
          TN_ugL = as.numeric(TN_ugL))
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TP_ugL[i] < 3.5 & TNTP$Flag_TP[i]==7,
+  ifelse(TNTP$TP_ugL[i] < 7.7 & TNTP$Flag_TP[i]==7,
     TNTP$Flag_TP[i] <- "73",
-  ifelse(TNTP$TP_ugL[i] < 3.5,
+  ifelse(TNTP$TP_ugL[i] < 7.7,
     TNTP$Flag_TP[i] <- 3, TNTP$Flag_TP[i]))
   }
 
 
 for (i in 1:nrow(TNTP)) {
-  ifelse(TNTP$TN_ugL[i] < 56 & TNTP$Flag_TN[i]==7,
+  ifelse(TNTP$TN_ugL[i] < 78.4 & TNTP$Flag_TN[i]==7,
     TNTP$Flag_TN[i] <- "73",
-  ifelse(TNTP$TN_ugL[i] < 56,
+  ifelse(TNTP$TN_ugL[i] < 78.4,
     TNTP$Flag_TN[i] <- 3, TNTP$Flag_TN[i]))
 }
 
@@ -369,22 +374,24 @@ doc <- doc %>% select(-c(DOC_mgLAVG, DIC_mgLAVG, DC_mgLAVG, DN_mgLAVG))
 
 #################################################################
 #      rolling spiked blank for most recent field season        #
-#                (TIC TC TNb rolling 06oct22.xlsx)              #
+#                (Summary TIC TC Batch 5 26jan24.xlsx)          #
+#              use runs from 8aug23 to 2feb24                   #
+#                 see rolling spike blank tab                   #
 #                 if below detection, flag = 3                  #
-#     2022 MDLS (in mg/L) from 'rolling spiked blank' tab:      # 
+#     2023 MDLS (in mg/L) from 'rolling spiked blank' tab:      # 
 #                    DIC     DOC     DC    DN                   #
-#                    0.67   0.76   0.98   0.05                  #
+#                    0.41   0.68   0.72   0.06                  #
 #################################################################
 #    Historical MDL's:                                     #
 #    2020: DIC = 0.97; DOC = 0.76 ; DC = 0.63; DN = 0.05   #
 #    2021: DIC = 0.47; DOC = 0.45; DC = 0.69; DN = 0.11    #
 #    2022: DIC = 0.67; DOC = 0.76; DC = 0.98; DN = 0.05    #
-#    2023: DIC = ; DOC = ; DC = ; DN =     #
+#    2023: DIC = 0.41; DOC = 0.68; DC = 0.72; DN = 0.06    #
 ############################################################
 
 # DIC
 for (i in 1:nrow(doc)) {
-  if(doc$DIC_mgL[i] <0.67 & !is.na(doc$DIC_mgL[i])){
+  if(doc$DIC_mgL[i] <0.41 & !is.na(doc$DIC_mgL[i])){
     if(doc$Flag_DIC[i]>0){
       doc$Flag_DIC[i] <- paste0(doc$Flag_DIC[i], 3)
       
@@ -394,7 +401,7 @@ for (i in 1:nrow(doc)) {
 
 # DOC
 for (i in 1:nrow(doc)) {
-  if(doc$DOC_mgL[i] <0.76){
+  if(doc$DOC_mgL[i] <0.68){
     if(doc$Flag_DOC[i]>0){
       doc$Flag_DOC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -405,7 +412,7 @@ for (i in 1:nrow(doc)) {
 
 # DC
 for (i in 1:nrow(doc)) {
-  if(doc$DC_mgL[i] < 0.98 & !is.na(doc$DC_mgL[i])){
+  if(doc$DC_mgL[i] < 0.72 & !is.na(doc$DC_mgL[i])){
     if(doc$Flag_DC[i]>0){
       doc$Flag_DC[i] <- paste0(doc$Flag_DOC[i], 3)
       
@@ -415,7 +422,7 @@ for (i in 1:nrow(doc)) {
 
 # DN
 for (i in 1:nrow(doc)) {
-  if(doc$DN_mgL[i] <0.05){
+  if(doc$DN_mgL[i] <0.06){
     if(doc$Flag_DN[i]>0){
       doc$Flag_DN[i] <- paste0(doc$Flag_DN[i], 3)
       
@@ -556,21 +563,21 @@ np$Flag_NO3NO2[np$Flag_NO3NO2=="70"] <- "7"
 # np$Rep <- ifelse(np$Rep=="R2" & !is.na(np$Rep),2,1)
 
 ##################################################################
-#    2022 field season average: if below detection, flag as 3    #
-#    using the following New Style MDL's from last batch csv.    #          
-#   (Summary solubles batch 6 24mar23) - n=18 for 2022 samples   #
+#    2023 field season average: if below detection, flag as 3    #
+#    using the following rollin spike blank from last batch csv  #          
+#   (Summary solubles batch 5 26jan24) - using 2023 runs         #
 #                      NH4   PO4   NO3                           # 
-#                      4.3   3.0   3.8                           #                        
+#                      4.7   3.8   4.4                           #                        
 ##################################################################
 #    Historical MDL's:                        #
 #    2020: NH4 = 9.6; PO4 = 3.0; NO3 =  4.5   #
 #    2021: NH4 = 7.3; PO4 = 3.1; NO3 =  3.7   # 
 #    2022: NH4 = 4.3; PO4 = 3.0; NO3 =  3.8   #
-#    2023: NH4 = ; PO4 = ; NO3 =     #
+#    2023: NH4 = 4.7; PO4 = 3.8; NO3 =  4.4   #
 ###############################################
 
 for (i in 1:nrow(np)) {
-  if(np$NH4_ugL[i] <4.3){
+  if(np$NH4_ugL[i] <4.7){
     if(np$Flag_NH4[i]>0){
       np$Flag_NH4[i] <- paste0(np$Flag_NH4[i], 3)
       
@@ -579,7 +586,7 @@ for (i in 1:nrow(np)) {
 }
 
 for (i in 1:nrow(np)) {
-  if(np$PO4_ugL[i] <3.0){
+  if(np$PO4_ugL[i] <3.8){
     if(np$Flag_PO4[i]>0){
       np$Flag_PO4[i] <- paste0(np$Flag_PO4[i], 3)
       
@@ -588,7 +595,7 @@ for (i in 1:nrow(np)) {
 }
 
 for (i in 1:nrow(np)) {
-  if(np$NO3NO2_ugL[i] < 3.8){
+  if(np$NO3NO2_ugL[i] < 4.4){
     if(np$Flag_NO3NO2[i]>0){
       np$Flag_NO3NO2[i] <- paste0(np$Flag_NO3NO2[i], 3)
       

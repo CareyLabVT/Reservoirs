@@ -43,24 +43,11 @@ chem2023_forQAQC <- left_join(chem2023_raw, datetimes, by = c("Reservoir", "Site
 
 
 #### TNTP 
-# TNTP <- read.csv("./Data/DataNotYetUploadedToEDI/NutrientData/collation/2022/2022_TNTP_collation.csv")
-
 TNTP <- chem2023_forQAQC |> 
   select(Reservoir, Site, DateTime, Depth_m, Rep, TP_ugL, TN_ugL, Flag_DateTime)
 
-# #drop samplID col 
-# TNTP <- TNTP [,!(names(TNTP) %in% c("SampleID_lachat"))]
-# 
-# #drop defrost tag column
-# TNTP <- TNTP [,!(names(TNTP) %in% c("Notes_defrost.tag"))]
-
 #drop rows with NA values
 TNTP <- TNTP[!is.na(TNTP$TP_ugL) | !is.na(TNTP$TN_ugL) ,]
-
-#add DateTime flag
-# TNTP$DateTime <- as.POSIXct(TNTP$DateTime, format="%m/%d/%y %H:%M")
-# #TNTP$DateTime <- mdy_hm(TNTP$DateTime)
-# TNTP$Flag_DateTime <- ifelse(TNTP$Notes_lachat=="Flag_DateTime", TNTP$Flag_DateTime<- 1, TNTP$Flag_DateTime <- 0)
 
 #back to character date
 TNTP$DateTime <- as.character(TNTP$DateTime)
@@ -123,8 +110,6 @@ for (i in 1:nrow(TNTP)) {
 TNTP <- TNTP |> 
   select(-c(TP_ugL_AVG, TN_ugL_AVG))
 
-#keep/format rep col
-# TNTP$Rep <- ifelse(TNTP$Rep=="R2",2,1)
 
 ############################################################
 #            if below detection, flag as 3                 #
@@ -216,29 +201,12 @@ doc$Flag_DIC <- 0
 doc$Flag_DOC <- 0
 doc$Flag_DN <- 0
 
-## Flag rows where we used NPOC for CCR tunnel sites (400, 500, 501)
-#using Flag 8 for NPOC denotation 
-# doc <- doc %>% 
-#   mutate(Flag_DOC = ifelse(Notes_DOC == "run_NPOC", 8, Flag_DOC ) )
-
 ##remove doc data from site 400 and 500 (tunnels) that should have been run with NPOC method (hopefully will get this data for next year )
 doc <- doc |> 
   filter(Site < 400)
 
 #order doc df
 doc <- doc %>% arrange(Reservoir, DateTime, Site, Depth_m)
-
-#deleting CCR 14Oct22 site 400 bc is being rerun at a later date (hopefully!)
-# doc <- doc[!(doc$Notes_DOC=="rerun so delete"),]
-# 
-# doc$DateTime <- as.POSIXct(doc$DateTime, format="%m/%d/%y %H:%M")
-# 
-# #add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
-# doc$Flag_DateTime <- 0
-# doc$Flag_DateTime[grep("Flag_DateTime", doc$Notes_DOC)] <- 1
-# 
-# #get rid of notes col
-# doc<- doc %>% select(-Notes_DOC, Date.NOTES)
 
 #remove ISCO rows that don't have C data
 doc <- doc %>% filter(doc$Site!=100.1) 
@@ -369,9 +337,6 @@ for (i in 1:nrow(doc)) {
 # and get rid of the average column since that is now in the normal data column
 doc <- doc %>% select(-c(DOC_mgLAVG, DIC_mgLAVG, DC_mgLAVG, DN_mgLAVG))
 
-#keep/format rep col
-# doc$Rep <- ifelse(!is.na(doc$Rep) & doc$Rep=="R2",2,1)
-
 #################################################################
 #      rolling spiked blank for most recent field season        #
 #                (Summary TIC TC Batch 5 26jan24.xlsx)          #
@@ -437,21 +402,11 @@ for (i in 1:nrow(doc)) {
 np <- chem2023_forQAQC |> 
   select(Reservoir, Site, DateTime, Depth_m, Rep, NO3NO2_ugL, NH4_ugL, PO4_ugL, Flag_DateTime) 
 
-#convert to character string for subsetting below
-# np$SampleID_lachat <- as.character(np$SampleID_lachat)
-# doc$SampleID_DOC <- as.character(doc$SampleID_DOC)
-
 #order np df
 np <- np %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
 #drop rows with NA values
 np <- np[!is.na(np$NH4_ugL) | !is.na(np$PO4_ugL) | !is.na(np$NO3NO2_ugL),]
-# 
-# np$DateTime <- as.POSIXct(np$DateTime, format="%m/%d/%y %H:%M")
-# 
-# #add DateTime flag (also need to count from end bc one sample has average and datetime flag!)
-# np$Flag_DateTime <- 0
-# np$Flag_DateTime[grep("Flag_DateTime", np$Notes_lachat)] <- 1
 
 #remove empty isco rows
 np <- np[np$Site!=100.1,]
@@ -559,8 +514,6 @@ np$Flag_NH4[np$Flag_NH4=="70"] <- "7"
 np$Flag_PO4[np$Flag_PO4=="70"] <- "7"
 np$Flag_NO3NO2[np$Flag_NO3NO2=="70"] <- "7"
 
-#add rep col
-# np$Rep <- ifelse(np$Rep=="R2" & !is.na(np$Rep),2,1)
 
 ##################################################################
 #    2023 field season average: if below detection, flag as 3    #
@@ -697,7 +650,7 @@ chem_final$Flag_SRP_ugL <- ifelse(is.na(chem_final$Flag_SRP_ugL), 0, chem_final$
 chem_final<- chem_final %>% arrange(Reservoir, DateTime, Site, Depth_m)
 
 #drop sun samples
-chem_final <- chem_final[chem_final$Reservoir!="SUNP",]
+# chem_final <- chem_final[chem_final$Reservoir!="SUNP",]
 
 #remove NA rows
 chem_final <- chem_final[!is.na(chem_final$Reservoir),]

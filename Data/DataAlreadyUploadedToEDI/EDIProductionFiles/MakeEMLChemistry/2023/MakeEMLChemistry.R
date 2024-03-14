@@ -44,24 +44,24 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                 license = "CCBY",
-                 file.type = ".txt",
-                 write.file = TRUE)
-
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                       data.table = c("chemistry_2013_2022.csv", "reservoir_site_descriptions.csv"),
-                       write.file = TRUE)
+# template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                  license = "CCBY",
+#                  file.type = ".txt",
+#                  write.file = TRUE)
+# 
+# template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                        data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                        data.table = c("chemistry_2013_2022.csv", "reservoir_site_descriptions.csv"),
+#                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                          data.table = c("chemistry_2013_2022.csv","reservoir_site_descriptions.csv"),
-                          empty = TRUE,
-                          write.file = TRUE)
+# template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                           data.table = c("chemistry_2013_2022.csv","reservoir_site_descriptions.csv"),
+#                           empty = TRUE,
+#                           write.file = TRUE)
 
 #Step 6: Script your workflow
 #that's what this is, silly!
@@ -108,9 +108,9 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-                               write.file = TRUE)
+# template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                                data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
+#                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
@@ -133,21 +133,21 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-  temporal.coverage = c("2013-04-04", "2023-03-21"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
+  temporal.coverage = c("2013-04-04", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2022.csv", 
+  data.table = c("chemistry_2013_2023.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "QAQC_chemistry_2015_2022.R",
-  other.entity.description = "Nutrient QAQC script",
+  other.entity = c("QAQC_chemistry_2015_2023.R", "Chem_inspection_2013_2023.Rmd"),
+  other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.6') #reserve new staging environment package id each year
+  package.id = 'edi.1025.8') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

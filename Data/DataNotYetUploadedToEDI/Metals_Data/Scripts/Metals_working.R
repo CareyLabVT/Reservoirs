@@ -15,7 +15,7 @@
 # 7. Save files
 
 # Read in packages
-pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable")
+pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable", "hms")
 
 metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/",
                         historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
@@ -422,7 +422,7 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
      dplyr::rename(Site=clean_site)|>
      select(Reservoir, Site, Date, Time, Depth_m, starts_with("T"), starts_with("S"), starts_with("Flag"))|>
     mutate(
-      Time = as.character(as_hms(Time)), # convert time and flag if time is NA
+      Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
       Flag_DateTime = ifelse(is.na(Time), 1, 0),
       Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
       DateTime = ymd_hms(paste0(Date," ",Time))

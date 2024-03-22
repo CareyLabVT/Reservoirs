@@ -53,7 +53,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # list of EddyPro full output files on Github
   rfiles <- list.files(path=mydir,pattern="", full.names=TRUE)
   
-  
+  print(rfiles)
   # Are the files on Google Drive? If so then download missing EddyPro Full Output files
   
   if(gdrive==T){

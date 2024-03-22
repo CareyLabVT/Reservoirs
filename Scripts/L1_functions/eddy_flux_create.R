@@ -104,7 +104,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     
     b2 <- myfiles%>%
       purrr::map_df(~read_csv(.x, skip=1,show_col_types = F))
-    
+    }
     # read in the compiled old file
     
     oldfiles <- list.files(path=mydir, pattern="FCR_Eddy_up_to", recursive = T, full.names = T)
@@ -125,7 +125,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     # combine the old file with the new one
     
     b <- dplyr::bind_rows(c, b2)
-  }
+  
 
   print(colnames(b))
   # Clean up the files 

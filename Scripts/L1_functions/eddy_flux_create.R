@@ -95,7 +95,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     
     # Let's use map to combine the files together
     b <- myfiles%>%
-      map_df(~ read.delim(.x, header = TRUE, sep = "\t"))
+      purrr::map_df(~ read.delim(.x, header = TRUE, sep = "\t"))
     
   } else{
     # They are .csv and were processed in EddyPro
@@ -103,7 +103,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     myfiles = list.files(path=mydir,pattern= "full_output", recursive = TRUE,full.names=TRUE)
     
     b2 <- myfiles%>%
-      map_df(~read_csv(.x, skip=1,show_col_types = F))
+      purrr::map_df(~read_csv(.x, skip=1,show_col_types = F))
     
     # read in the compiled old file
     
@@ -115,7 +115,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     }else{
       
       # read in the old file 
-      c <- read_csv(oldfiles)
+      c <- readr::read_csv(oldfiles)
       
       # change columns to numeric instead of character
       c[, c(1:166)] <- sapply(c[, c(1:166)], as.character)
@@ -129,7 +129,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # Clean up the files 
   data2 <-b|>
-    filter(filename!="")
+    dplyr::filter(filename!="")
   
   # Clean up and make it useable for plotting
   data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs
@@ -142,7 +142,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   # select the columns we want 
   
-  data3<-data2%>%select(date,time,DOY,Tau,qc_Tau,H,qc_H,LE,qc_LE,co2_flux,qc_co2_flux,h2o_flux,
+  data3<-data2%>%
+    dplyr::select(date,time,DOY,Tau,qc_Tau,H,qc_H,LE,qc_LE,co2_flux,qc_co2_flux,h2o_flux,
                         qc_h2o_flux,ch4_flux,qc_ch4_flux,`co2_v.adv`,`h2o_v.adv`,`ch4_v.adv`,
                         co2_molar_density,co2_mole_fraction,co2_mixing_ratio,co2_time_lag,
                         co2_def_timelag,h2o_molar_density,h2o_mole_fraction,h2o_mixing_ratio,
@@ -161,7 +162,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   
   current.ec<-data3%>%
-    mutate(
+    dplyr::mutate(
       date=lubridate::parse_date_time(date, orders = c('ymd','mdy')),#converts date to correct format
       time=strptime(time, format = "%H:%M"), #converts time to postix
       time=as_hms(time), #takes out the date and just leaves the time
@@ -236,10 +237,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # Set everything to Etc/GMT+4
   # Make a datetime column
   
-  current.ec$datetime <- ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
+  current.ec$datetime <- lubridate::ymd_hms(paste0(as.character(current.ec$date), " " , as.character(current.ec$time)), tz="Etc/GMT+4")
   
   sed <- current.ec%>%
-    select(date,time,datetime)
+    dplyr::select(date,time,datetime)
   
   # order the datetime column
   # reorder 
@@ -249,7 +250,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     # shows time point when met station was switched from GMT -4(EST) to GMT -5(EDT) then -2 to get the row number right
     flux_timechange=max(which(current.ec$datetime=="2020-09-02 17:30:00")-2) 
     #Met$DateTime<-as.POSIXct(strptime(Met$DateTime, "%Y-%m-%d %H:%M"), tz = "Etc/GMT+5") #get dates aligned
-    current.ec$datetime[c(0:flux_timechange+1)]<-with_tz(force_tz(current.ec$datetime[c(0:flux_timechange+1)],"Etc/GMT+5"), "Etc/GMT+4") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
+    current.ec$datetime[c(0:flux_timechange+1)]<-lubridate::with_tz(force_tz(current.ec$datetime[c(0:flux_timechange+1)],"Etc/GMT+5"), "Etc/GMT+4") #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
   }
   # else if (min(current.ec$datetime, na.rm = TRUE)<"2020-09-02 17:30:00"){
   #   #pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
@@ -272,19 +273,19 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   ### identify the date subsetting for the data
   if (!is.null(start_date)){
     current.ec <- current.ec %>% 
-      filter(datetime >= start_date)
+      dplyr::filter(datetime >= start_date)
   }
   
   if(!is.null(end_date)){
     current.ec <- current.ec %>% 
-      filter(datetime <= end_date)
+      dplyr::filter(datetime <= end_date)
   }
   
   
   ## Add flag for missing data: 3 = missing data, 4= instrument malfunction 
   # For: qc_tau, qc_H, qc_LE, qc_co2_flux, qc_h2o_flux, qc_ch4_flux
   ec_all <- current.ec %>% 
-    mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
+    dplyr::mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
            qc_H = ifelse(is.na(H_wm2), 3, qc_H),
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),
            qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
@@ -300,9 +301,9 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            co2_flux_umolm2s = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), NA, co2_flux_umolm2s), # take out very high and low fluxes
            qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),
            h2o_flux_umolm2s = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), NA, h2o_flux_umolm2s))%>% # take out very high and low fluxes
-    distinct()%>% # take out duplicates
-    select(-flowrate_mean)%>% # take out the columns not in EDI
-    select(date, time, everything())
+    dplyr::distinct()%>% # take out duplicates
+    dplyr::select(-flowrate_mean)%>% # take out the columns not in EDI
+    dplyr::select(date, time, everything())
   
   
   
@@ -322,10 +323,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   # take the value with the highest Tau_kg2 because the other one is an NA.  
   
   ec_all <- ec_all %>% 
-    group_by(datetime) %>% 
-    slice_max(Tau_kgms2, n = 1) %>%
-    ungroup()%>%
-    select(-datetime)
+    dplyr::group_by(datetime) %>% 
+    dplyr::slice_max(Tau_kgms2, n = 1) %>%
+    dplyr::ungroup()%>%
+    dplyr::select(-datetime)
   
   
   # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
@@ -334,7 +335,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   #  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
   #  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
   
-  # ec_all <- ec_all |> filter(date> last_edi_date)
+  # ec_all <- ec_all |> dplyr::filter(date> last_edi_date)
   
   # convert datetimes to characters so that they are properly formatted in the output file
   ec_all$date <- as.character(format(ec_all$date))
@@ -346,7 +347,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   if (is.null(output_file)){
     return(ec_all)
   }else{
-    write_csv(ec_all, output_file)
+    readr::write_csv(ec_all, output_file)
   }
   
 }

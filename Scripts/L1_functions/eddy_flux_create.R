@@ -126,7 +126,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     
     b <- dplyr::bind_rows(c, b2)
   }
-  
+
+  print(colnames(b))
   # Clean up the files 
   data2 <-b|>
     dplyr::filter(filename!="")

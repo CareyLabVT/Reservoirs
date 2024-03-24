@@ -45,6 +45,15 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                                     end_date)  # sys.Date plus 1
 {
   
+     directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/"
+     text_file = F
+     gdrive = F # Are the files on Google Drive. True or False
+     gshared_drive = as_id("0ACybYKbCwLRPUk9PVA")
+     #current_year = 2023,
+     output_file = "/EddyPro_Cleaned_L1.csv"
+     start_date = as.Date("2022-12-31") + lubridate::days(1)
+     end_date = Sys.Date() + lubridate::days(1)
+  
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
   
@@ -107,7 +116,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     
     # read in the compiled old file
     
-    oldfiles <- list.files(path=mydir, pattern="FCR_Eddy_up_to", recursive = T, full.names = T)
+    oldfiles <- list.files(path=paste0(mydir,"/data/"), pattern="FCR_Eddy_up_to", recursive = T, full.names = T)
     
     if(identical(oldfiles, character(0))==T){
       
@@ -224,6 +233,16 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                   u_var_ms = u_var,
                   v_var_ms = v_var,
                   w_var_ms = w_var)
+  
+  # round columns
+  # Columns to round
+  columns_dont_round <- c("date","time","DOY","qc_Tau","qc_H","qc_LE","qc_co2_flux","qc_h2o_flux",
+                          "co2_def_timelag", "ch4_def_timelag")
+  
+  # Round everything but certain columns
+  current.ec <- current.ec %>%
+    mutate_at(vars(-one_of(columns_dont_round)), ~ round(., digits = 4))
+  
   
   # Make a datetime column
   #current.ec$datetime <- as.POSIXct(paste(current.ec$date , paste(current.ec$time), sep=" "))
@@ -356,11 +375,11 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
 #   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
 #   gdrive = F, # Are the files on Google Drive. True or False
 #   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-#   current_year = 2023,
+#   #current_year = 2023,
 #   output_file = "/EddyPro_Cleaned_L1.csv",
 #   start_date = as.Date("2022-12-31") + lubridate::days(1),
 #   end_date = Sys.Date() + lubridate::days(1))
-# 
+
 # 
 # ## Call healthcheck
 # RCurl::url.exists("https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3", timeout = 5)

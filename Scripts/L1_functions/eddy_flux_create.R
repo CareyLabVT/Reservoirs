@@ -45,15 +45,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                                     end_date)  # sys.Date plus 1
 {
   
-     directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/"
-     text_file = F
-     gdrive = F # Are the files on Google Drive. True or False
-     gshared_drive = as_id("0ACybYKbCwLRPUk9PVA")
-     #current_year = 2023,
-     output_file = "/EddyPro_Cleaned_L1.csv"
-     start_date = as.Date("2022-12-31") + lubridate::days(1)
-     end_date = Sys.Date() + lubridate::days(1)
-  
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
   

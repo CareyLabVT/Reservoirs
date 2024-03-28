@@ -12,9 +12,9 @@ Soluble reactive phosphorus (SRP), nitrate (NO3), ammonium (NH4), dissolved orga
 CHEMICAL ANALYSES AND EQUIPMENT
 
 
-TN and TP samples were digested with alkaline persulfate (Patton and Kryskalla 2003) and then analyzed colorimetrically using flow injection analysis (APHA 2005). TN was analyzed using the cadmium reduction method (APHA 1998) and TP was analyzed using the ascorbic acid method (Murphy and Riley 1962) on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
+TN and TP samples were digested with alkaline persulfate (Patton and Kryskalla 2003) and then analyzed colorimetrically using flow injection analysis (APHA 2012). TN was analyzed using the cadmium reduction method (APHA 2012) and TP was analyzed using the ascorbic acid method (Murphy and Riley 1962) on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
 
-SRP, NO3, and NH4 samples were analyzed colorimetrically using flow injection analysis (APHA 2005). SRP was analyzed using the ascorbic acid method (Murphy and Riley 1962), NO3 was analyzed using the cadmium reduction method, where nitrate is reduced to nitrite (APHA 1998), and NH4 was analyzed using the Berthelot Reaction method (Solorzano 1969, APHA 2005) with a common modification as to the source of the hypochlorite ion as described in Zhang et al. 1997 on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
+SRP, NO3, and NH4 samples were analyzed colorimetrically using flow injection analysis (APHA 2012). SRP was analyzed using the ascorbic acid method (Murphy and Riley 1962), NO3 was analyzed using the cadmium reduction method, where nitrate is reduced to nitrite (APHA 2012), and NH4 was analyzed using the Berthelot Reaction method (Solorzano 1969, APHA 2012) with a common modification as to the source of the hypochlorite ion as described in Zhang et al. 1997 on a Lachat Instruments XYZ Autosampler ASX 520 Series and QuikChem Series 8500 (Lachat ASX 520 Series, Lachat Instruments, Loveland, Colorado, USA).
 
 DOC was analyzed using the persulfate catalytic method (Brenton and Arnett 1993) on a TOCA 1010 from OI Analytical from 2013-2016 (OI Analytical 1010 Total Organic Carbon Analyzer with 1051 autosampler, College Station, TX USA) and on a Vario TOC Cube from Elementar from 2016-2023 (vario TOC cube, Elementar Analysensysteme GmbH, Hanau, Germany). Carbon in samples is oxidized to carbon dioxide (CO2) either by reaction with acid or by catalyzed combustion at 850 C. The resulting carbon dioxide is detected by nondispersive infrared (NDIR) spectrometry. This method allowed for the measurement of total dissolved carbon, dissolved organic carbon, and dissolved inorganic carbon. A modified version of this method was used to measure dissolved organic carbon through the measurement of non-purgeable organic carbon (NPOC) in streams that had high inorganic carbon (IC) values. Organic carbon was still measured following the method above but the sample was first acidified and purged with air zero gas to remove inorganic carbon fractions. Samples measured with this method were flagged with an 8 in the Flag_DOC column.
 
@@ -28,6 +28,10 @@ METHOD DETECTION LIMITS
 
 
 Starting in 2020, we changed our Method Detection Limit (MDL) calculations and adopted those which are described in the USEPA second revision (USEPA 2020). The new analytical MDL calculations rely on data obtained from independent digestions over multiple runs, rather than that from a single day's run, to more accurately capture instrument performance and variability throughout the year.
+
+QAQC SCRIPTS
+
+Two scripts are use to QAQC and compile published data. 'QAQC_chemistry_2015_2023.R' is used to QAQC samples collected in 2023 that were analyzed between summer 2023 and winter 2024. This script applies data flags for MDLs and sets negative values to zero. 'Chem_inspection_2013_2023.Rmd' is used to compine 2023 data with the previous years publication and review all data via visual inspections and apply any additonal QAQC needed for previous years data.
 
 
 DATA FLAGS
@@ -51,7 +55,7 @@ APHA. 2012. Standard methods for the examination of water and wastewater. 22nd e
 
 Brenton R, Arnett T. 1993. Method of analysis by the U.S. Geological Survey National Water Quality Laboratory - Determination of dissolved organic carbon by UV-promoted persulfate oxidation and infrared spectrometry. Denver, CO: U.S. Geological Survey.
 
-Carey, C. C., Hanson, P. C., Thomas, R. Q., Gerling, A. B., Hounshell, A. G., Lewis, A. S., ... & Schreiber, M. E. (2022). Anoxia decreases the magnitude of the carbon, nitrogen, and phosphorus sink in freshwaters.¬†Global Change Biology, 28(16), 4861-4881.
+Carey, C. C., Hanson, P. C., Thomas, R. Q., Gerling, A. B., Hounshell, A. G., Lewis, A. S., ... & Schreiber, M. E. 2022. Anoxia decreases the magnitude of the carbon, nitrogen, and phosphorus sink in freshwaters.¬†Global Change Biology, 28(16), 4861-4881.
 
 Patton CJ, Kryskalla JR. 2003. Methods of Analysis by the U.S. Geological Survey National Water Quality Laboratory--Evaluation of Alkaline Persulfate Digestion as an Alternative to Kjeldahl Digestion for Determination of Total and Dissolved Nitrogen and Phosphorus in Water. Denver, CO: U.S. Geological Survey.
 
@@ -61,6 +65,6 @@ Solorzano, L. 1969. Determination of ammonia in natural water by the phenolhypoc
 
 USEPA. 2004. RSKSOP-175 STANDARD OPERATING PROCEDURE Sample Preparation and Calculations for Dissolved Gas Analysis in Water Samples Using a GC Headspace Equilibration Technique, Revision No.2  http://www.epa.gov/region1/info/testmethods/pdfs/RSKsop175v2.pdf Retrieved 20APR2015.
 
-USEPA, E. (2020). Definition and procedure for the determination of the method detection limit, revision 2. Washington DC, USA: EPA; 2016.
+USEPA, E. 2020. Definition and procedure for the determination of the method detection limit, revision 2. Washington DC, USA: EPA; 2016.
 
 Zhang, J.Z., Orter, P., Fisher, Ch. J. and Moore, L.D. 1997. Determination of ammonia in estuarine and coastal waters by gas segmented flow colorimetric analysis.  Methods for determination of chemical substances in marine and estuarine environmental matrices. 2nd ed. EPA/7664-41-7.

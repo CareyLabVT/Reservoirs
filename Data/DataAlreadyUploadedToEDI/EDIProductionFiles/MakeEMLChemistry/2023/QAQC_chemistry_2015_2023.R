@@ -1,5 +1,8 @@
-# 2023 nutrient chemistry collation
-#includes TNTP, DOC, and np
+# 2023 QAQC for TNTP, DOC, lachat solubles
+#performs QAQC for 2023 chemistry variables measured in the Stream Team analystical lab
+#WMW, edited by HLW and DWH
+#developed 2019
+#last modified March 2024
 #Note: flags are aggregated without commas for final EDI upload
 
 #packages

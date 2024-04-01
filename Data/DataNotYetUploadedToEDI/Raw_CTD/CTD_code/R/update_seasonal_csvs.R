@@ -52,11 +52,11 @@ load_file <- function(file){
   if(is.na(sn)|sn < 6000){
     sn <- 7809
   }
-  ctd = ctd%>%
+  ctd = ctd %>%
     mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
            Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))),
-           SN =  as.numeric(sn))%>%
-    dplyr::rename(any_of(lookup))%>%
+           SN =  as.numeric(sn)) %>%
+    dplyr::rename(any_of(lookup)) %>%
     select(-Salinity)
   return(ctd)
 }

@@ -28,15 +28,15 @@ library(googlesheets4)
 sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
 data <- read_csv("CTD_2013_2023.csv") #This is the line you need to modify!
 trim_sites = function(data,sites){
-  data_res_site=data%>% #Create a Reservoir/Site combo column
+  data_res_site=data %>% #Create a Reservoir/Site combo column
     mutate(res_site = trimws(paste0(Reservoir,Site)))
-  sites_merged = sites%>% #Filter to Sites that are in the dataframe
-    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-    filter(res_site%in%data_res_site$res_site)%>%
+  sites_merged = sites %>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site))) %>%
+    filter(res_site %in% data_res_site$res_site) %>%
     select(-res_site)
 }
 sites_trimmed = trim_sites(data,sites) 
-write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F) #Write to file
 
 
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

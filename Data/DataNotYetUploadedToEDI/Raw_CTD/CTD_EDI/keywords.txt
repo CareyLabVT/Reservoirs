@@ -8,10 +8,14 @@ water temperature	lter
 Dissolved Oxygen	lter
 Conductivity	lter
 Specific conductance	lter
-Photosynthetic active radiation	lter
 Chlorophyll a	lter
 Turbidity	lter
 pH	lter
+Oxidation-reduction potential	carey lab
+Photosynthetic active radiation	lter
+Colored dissolved organic matter	cuahsi
+phycocyanin	carey lab
+phycoerythrin	carey lab
 Descent rate	carey lab
 Western Virginia Water Authority	carey lab
 Falling Creek Reservoir	carey lab
@@ -19,4 +23,11 @@ Beaverdam Reservoir	carey lab
 Carvins Cove Reservoir	carey lab
 Spring Hollow Reservoir	carey lab
 Gatewood Reservoir	carey lab
-Oxidation-reduction potential	carey lab
+FCR	carey lab
+CCR	carey lab
+BVR	carey lab
+GWR	carey lab
+SHR	carey lab
+Virginia Reservoirs LTREB	carey lab
+LTREB	carey lab
+Virginia Reservoirs	carey lab

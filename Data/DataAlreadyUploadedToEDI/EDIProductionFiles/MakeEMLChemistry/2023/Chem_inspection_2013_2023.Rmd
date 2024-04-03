@@ -234,7 +234,7 @@ write.csv(allchem, "chemistry_2013_2023.csv", row.names = FALSE)
 
 
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots - all sites}
 #date format
 allchem$DateTime <- as.Date(allchem$DateTime, "%Y-%m-%d %H:%M:%S")
 
@@ -270,7 +270,7 @@ ggsave("./Figures/FCR_BVR_CCR_all_nutrients_summer2023.jpg", width=4, height=4)
 ```
 
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots - FCR 50}
 
 # FCR deep hole data time series
 ggplot(subset(chemistry_long, Reservoir=='FCR' & Site=="50"), aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
@@ -290,7 +290,7 @@ ggsave("./Figures/FCR_all_nutrients_summer2023.jpg", width=4, height=4)
 
 ```
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots FCR 100 and 200}
 
 # FCR other sites nutrient data time series
 ggplot(subset(chemistry_long, Reservoir=='FCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
@@ -308,7 +308,7 @@ ggsave("./Figures/FCR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
 
 ```
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots - BVR 50}
 
 # BVR deep hole data time series
 ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
@@ -326,7 +326,7 @@ ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4)
 
 ```
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots BVR inflows}
 
  #BVR other sites nutrient time series #no 2023 inflow samples so no figure :)
 ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
@@ -340,7 +340,7 @@ ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = DateTime, 
 
 ```
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots - CCR 50}
 
 # CCR site 50 nutrient time series
 ggplot(subset(chemistry_long, Reservoir=='CCR' & Site=="50"), aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
@@ -358,7 +358,7 @@ ggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, height=4)
 
 ```
 
-```{r 2023 diagnostic plots}
+```{r 2023 diagnostic plots- CCR inflows}
 
 # CCR other sites nutrient time series
 ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +

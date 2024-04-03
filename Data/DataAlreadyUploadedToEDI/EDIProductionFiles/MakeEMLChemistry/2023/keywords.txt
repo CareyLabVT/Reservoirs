@@ -14,7 +14,7 @@ Carvins Cove Reservoir	carey lab controlled vocabulary
 Gatewood Reservoir	carey lab controlled vocabulary
 Spring Hollow Reservoir	carey lab controlled vocabulary
 Reservoir 	cuahsi controlled vocabulary
-Lake	cushy controlled vocabulary
+Lake	cuahsi controlled vocabulary
 Lakes	lter controlled vocabulary
 Stream Team	carey lab controlled vocabulary
 nitrate	lter controlled vocabulary

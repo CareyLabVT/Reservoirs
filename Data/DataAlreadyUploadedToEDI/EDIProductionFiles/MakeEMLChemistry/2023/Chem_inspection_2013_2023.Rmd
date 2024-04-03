@@ -192,6 +192,8 @@ allchem$Flag_DN_mgL[as.Date(allchem$DateTime)=="2022-06-09" & allchem$Reservoir=
 
 ### suspect 2023 data 
 # B50 2023-10-31 3m DOC and SRP; F100 2023-05-29 0.1m DOC; B50 2023-10-03 0.1m TP; B50 2023-07-31 6m TP
+#other weird timeframes: early 2023 BVR NO3 and FCR high surface TN and overal high NO3
+#FCR high TP on 31oct23 in surface waters
 
 
 #manually remove XX samples from 2023 data pub to be published at a later date after reruns

@@ -143,11 +143,11 @@ make_eml(
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("QAQC_chemistry_2015_2023.R", "Chem_inspection_2013_2023.Rmd"),
+  other.entity = c("QAQC_Chemistry_2023_2023.R", "Chem_inspection_2013_2023.Rmd"),
   other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.9') #reserve new staging environment package id each year
+  package.id = 'edi.1025.11') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

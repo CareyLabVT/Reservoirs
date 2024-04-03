@@ -20,7 +20,7 @@ Data/metadata upload
 
 ## Comprehensive file structure overview
 
-Confused about something in this folder? Here's the comprehensive reference with everything I know:
+Confused about something in this folder? Here's the comprehensive file structure reference:
 
 -   `csv_outputs`: .csv files for all processed CTD casts (individually). Automatic data processing will check whether a given cast has been processed and exported here. If not, it will convert the .cnv file for a given cast to a .csv and store it here
 
@@ -67,7 +67,7 @@ For data publication, first we want to re-process all historical files. We made 
 
 Here's the approximate workflow:
 
-1.  Run CTD_visualization.R. This will first re-process ALL raw files (2018-present) with the current QAQC script (this takes a long time) then visualize the combined dataset. If you see issues, you can update maintenance logs as necessary
+1.  Run `CTD_visualization.R`. This will first re-process ALL raw files (2018-present) with the current QAQC script (this takes a long time) then visualize the combined dataset. If you see issues, you can update maintenance logs as necessary
 
 2.  Update metadata for the data publication in the EDI folder (`CTD_EDI`). First, archive all files from the previous year if they are not already in the `old` subdirectory
 

@@ -1,4 +1,7 @@
-In the methods,  we describe collections methods, chemical analysis included equipment, QAQC methods, and additional references. 
+We monitored water chemistry at 5 freshwater reservoirs and their tributatries from 2013 - 2023 at varying frequencies. The five drinking water reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the town of Pulaski, Virginia. The dataset consists of depth profiles of water chemistry samples measured at the deepest site of each reservoir adjacent to the dam. Additional water chemistry samples were collected at a gauged weir on Falling Creek Reservoir's primary inflow tributary, as well as surface samples at multiple upstream and inflow sites in Falling Creek Reservoir 2014-2022 and Beaverdam Reservoir in 2019 and 2020. One upstream site at BVR was sampled at depth in 2022. Inflow sites at Carvins Cove Reservoir were sampled from 2020 - 2022. The water column samples were collected approximately fortnightly from March-April, weekly from May-October, and monthly from November-February at Falling Creek Reservoir and Beaverdam Reservoir, approximately fortnightly from May-August in most years at Carvins Cove Reservoir, and approximately fortnightly from 2014-2016 in Gatewood and Spring Hollow Reservoirs, though sampling frequency and duration varied among reservoirs and years. Water chemistry variables measured include: Total nitrogen and phosphorus, nitrate, ammonium, soluble reactive phosphorus, dissolved carbon, dissolved organic carbon, dissolved inorganic carbon, and total dissolved nitrogen. 
+
+In the methods, we describe collection methods, chemical analysis including equipment, QAQC methods, and additional references. 
+
 
 SAMPLE COLLECTION AND EQUIPMENT
 
@@ -26,12 +29,17 @@ METHOD DETECTION LIMITS
 
 Starting in 2020, we changed our Method Detection Limit (MDL) calculations and adopted those which are described in the USEPA second revision (USEPA 2020). The new analytical MDL calculations rely on data obtained from independent digestions over multiple runs, rather than that from a single day's run, to more accurately capture instrument performance and variability throughout the year.
 
+
 QAQC SCRIPTS
 
-Two scripts are use to QAQC and compile published data. 'QAQC_chemistry_2015_2023.R' is used to QAQC samples collected in 2023 that were analyzed between summer 2023 and winter 2024. This script applies data flags for MDLs and sets negative values to zero. 'Chem_inspection_2013_2023.Rmd' is used to combine 2023 data with the previous years publication, review all data via visual inspections, and apply any additonal QAQC needed for previous years data.
+Two scripts are used to QAQC and compile published data. 'QAQC_chemistry_2015_2023.R' is used to QAQC samples collected in 2023 that were analyzed between summer 2023 and winter 2024. This script applies data flags for MDLs and sets negative values to zero. 'Chem_inspection_2013_2023.Rmd' is used to combine 2023 data with the previous years' publication, review all data via visual inspections, and apply any additonal QAQC needed for previous years' data.
 
 
 DATA FLAGS
+
+Flags for date time values were: 0 = exact time, 1 = no time recorded and set to noon
+
+Flags for all chemsitry values were the following with the exception of flag 8, which was only applied to DOC values: 1 = sample not taken, 2 = instrument malfunction, 3 = sample below detection, 4 = negative value set to zero, 5 = demonic intrusion, 6 = non-standard method, 7 = sample run multiple times and values averaged, 8 = sample run using NPOC method due to high IC values, 9 = suspect sample
 
 We note that measurements with multiple flags are coded as a multiple-digit number (e.g., a flag of '43' indicates there was 4 = negative value set to zero and 3 = sample below detection). No delimiter was added to separate flag codes in those columns. For data with a '74' flag, data were set to 0 before averaging to get the final sample value.
 
@@ -46,8 +54,8 @@ ADDITIONAL NOTES
 Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
 
 
+REFERENCES
 
-References
 APHA. 2012. Standard methods for the examination of water and wastewater. 22nd edn. Washington, DC: American Public Health Association, American Water Works Association, Water Environment Federation.
 
 Brenton R, Arnett T. 1993. Method of analysis by the U.S. Geological Survey National Water Quality Laboratory - Determination of dissolved organic carbon by UV-promoted persulfate oxidation and infrared spectrometry. Denver, CO: U.S. Geological Survey.

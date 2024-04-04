@@ -1,6 +1,6 @@
-## Script to *try* FluxCalR for calculating fluxes from UGGA data
-## A Hounshell, 25 Jan 2021
-## Modified by A. Lewis 12 Jan 2024
+## Script to use FluxCalR for calculating fluxes from UGGA data
+## A. Hounshell, 25 Jan 2021
+## Substantially modified by A. Lewis in January and April of 2024
 
 # Script following: https://github.com/junbinzhao/FluxCalR
 
@@ -17,13 +17,10 @@ wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/202
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
 
-#files <- list.files()
-#files_to_process <- files[!files %in% c("FluxCalR_2023.R", 
-#                                        "UGGA_log_2018_2023.pdf",
-#                                        "processed_csvs",
-#                                        "UGGA_log_2023.csv")]
 field_sheet <- read.csv("UGGA_log_2023.csv")
 
+# Here, we create a function that will be used for processing each file. 
+# You don't need to modify this
 process_txt <- function(file,
                         file_name = sub(".txt","",file),
                         reservoir = field_sheet$Reservoir[field_sheet$file == file_name],
@@ -38,11 +35,7 @@ process_txt <- function(file,
   flux_lgr <- LoadLGR(file = file,
                       time_format = "mdy_HMS")
   
-  # Select times when the UGGA was on/off the water
-  # Select the time point BEFORE the peak for both reps
-  # Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
-  # the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
-  # This generates a list of 'end' times for each peak saved as time_cue_x
+  # Ask user to select times when the UGGA was on/off the water
   time_cue <- SelCue(flux_lgr,flux="CH4", cue="End", save=F) %>%
     mutate(Reservoir = reservoir, 
            Site = site, 
@@ -64,6 +57,8 @@ process_txt <- function(file,
   write.csv(flux_output, save_name, row.names = F)
 }
 
+#Manual notes about files from this year:
+
 #FILES NOT ON FIELD SHEET
 #"gga_2001-12-31_f0021.txt" --> should not use, was Carla
 #"gga_2001-12-31_f0016.txt" --> should not use, not totally sure what this is
@@ -78,9 +73,13 @@ process_txt <- function(file,
 #64, 65, 66 one usable peak
 #74, 82, 29 are unusable
 
+#Identify all files we SHOULD have (from field sheet)
 files <- paste0(field_sheet$file,".txt")
+#Identify all files that have already been processed (in the processed_csvs folder)
 processed_files <- sub(".csv", ".txt", list.files("processed_csvs"))
+#Compare these two to figure out which files still need to be processed
 files_to_process <- files[!files %in% processed_files]
+#Exclude any files that we have decided not to process (see notes above)
 files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0013.txt", #leaky tube
                                                               "gga_2001-12-31_f0055.txt", # missing
                                                               "gga_2001-12-31_f0057.txt",
@@ -90,20 +89,29 @@ files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0
                                                               "gga_2001-12-31_f0082.txt"
                                                               )] 
 
+## RUN THE PROCESSING!!
+# Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
+# the second peak. When finished, click on 'Stop' in the upper left-hand corner and then click 'Stop locator'
+# This generates a list of 'end' times for each peak saved as time_cue_x
 for (file in files_to_process) {
   process_txt(file)
 }
+#As you go, this saves each output file as a csv for later use
 
-#Remove arbitrary second peak
-one_peak <- c("processed_csvs/gga_2001-12-31_f0064.csv",
+# QAQC: there were a few times that there was only one peak but we still had to click twice. 
+# Here, we manually remove the second peak from these files
+one_peak <- c("processed_csvs/gga_2001-12-31_f0064.csv", #Specify file names with one peak
               "processed_csvs/gga_2001-12-31_f0065.csv",
               "processed_csvs/gga_2001-12-31_f0066.csv")
+#Filter to only the first peak in these files
 for (file in one_peak) {
   data <- read.csv(file) %>%
     filter(Num == 1)
   write.csv(data, file, row.names = F)
 }
 
+### Compile all data and prepare for output
+# Combine all csvs in the processed_csvs folder
 flux_output <- read_csv(paste0("processed_csvs/", list.files("processed_csvs")))
 
 #Fix time issues

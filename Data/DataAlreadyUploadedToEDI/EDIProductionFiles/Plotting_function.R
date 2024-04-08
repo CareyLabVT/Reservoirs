@@ -29,6 +29,9 @@ all_plot<-function(
   # Use_plotly=T
   # Heatmap = T
 
+   # source the heat map function
+    source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R")
+
   # Make a list of the names of all the possible plots
   
   cur<-cur_grid<-cur_heat<-all<-all_grid<-all_heat<-den<-box<-com_curr<-com_all<-daily_plot <- NULL

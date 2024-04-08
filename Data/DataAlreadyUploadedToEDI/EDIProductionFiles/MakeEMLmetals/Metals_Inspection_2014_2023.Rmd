@@ -282,8 +282,6 @@ last_row <- tail(sd, n=1)
 
 ### QAQC Plots
 
-## QAQC Plots
-
 ##### QAQC plot information and all_plot function information
 
 For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
@@ -513,7 +511,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, eval=FALSE, include=TRUE}
+```{r Make new CSV with current and historic files, eval=TRUE, include=TRUE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
@@ -526,7 +524,7 @@ write_csv(current_df, "Metals_2014_2023.csv")
 
 
 
-```{r Download and save Maintenance Log, eval=FALSE, include=TRUE}
+```{r Download and save Maintenance Log, eval=TRUE, include=TRUE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2023.csv")
@@ -550,7 +548,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 ### Make a site desctiption file
 
-Run this if there is not site description file or we have added or updated the sites. 
+Run this if there is not site description file or we have added or updated the sites. Change eval=TRUE to run this chunk. 
 
 ```{r Make site description file, eval=FALSE, include=FALSE}
  # These lines of code make the csv of the site descriptions with lat and long

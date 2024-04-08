@@ -6,45 +6,49 @@ output: html_document
 date:  "`r Sys.Date()`"
 ---
 
-This script is the visual inspection scripts. 
+This script is the visual inspection scripts. It is meant to be combined or "knitted" to create a html file with all of the graphs on one page. Read the description below to make sure you have the right data file. 
 
+If you are REVIEWING this data package, add the pasta URL from EDI in the "QAQC all files" or "READ IN EDI FOR REVIEWER". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "QAQC all files", "Make current csv" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+If you are running this file to make the data frame for EDI, then make sure that "QAQC all files" section is uncommented and eval=TRUE. Also make sure the line to read in the file from EDI is commented out. It starts with current_df <- read_csv("https://pasta.lternet.edu/package/...
+
+Description of what is happening in the markdown:
 1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
 
-2. Then the script checks for duplicates, daily, and subdaily gaps in the current file. 
+2. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
 
-3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+3. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
 
-4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+4. If necessary can QAQC data already on EDI using the QAQC function
 
-5. If necessary can QAQC data already on EDI using the QAQC function
+5. Creates plots
 
-6. Creates plots
+6. Writes data to new csv
 
-7. Writes data to new csv
-
-8. Downloads necessary files for EDI publishing
+7. Downloads necessary files for EDI publishing
 
 
-For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data.  You can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. Plotly plots are interactive and you can place your curser over the point to get the date of the observation and the value. For plots with a depth, you can click on the depth in the legend to remove observations from the plot and look at one depth at a time. If you do not knit the markdown file you can look at the plots in the markdown script by running each chunk indivually. This takes less time and let's you specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
 
 
 All files are from GitHub or EDI and the source scripts are from GitHub as well. 
 
-If you are REVIEWING this data package, add the pasta URL from EDI in the "QAQC file or READ IN EDI FOR REVIEWER". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "QAQC all files", "Make current csv" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
-
 
 ```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, plotly, magrittr, scattermore, knitr, htmltools, pander)
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, plotly, magrittr, future.apply, scattermore, knitr, htmltools, pander, akima, reshape2, gridExtra, grid, colorRamps, RColorBrewer, cowplot)
 
 # Source scripts from GitHub
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
-devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R")
 
 
 # Plotting script
-devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+#source("../Plotting_function.R")
+# Source the Heatmap function from GitHub
+#  source("../Heatmap_EDI_function.R")
 
 
  #turn off pander auto asis
@@ -132,7 +136,7 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  
  64: non-standard method and negative value set to zero
 
-```{r Check there are no NAs in Flag columns}
+```{r Check there are no NAs in Flag columns, echo=FALSE}
 
 #make sure no NAS in the Flag columns
 Flags=current_df%>%
@@ -151,7 +155,6 @@ for(f in 1:(ncol(Flags))){
 }
 
 ```
-
 
 ### Check to make sure that what is in the maintenance log was actually removed
 
@@ -174,57 +177,13 @@ sd <- tail(maint)
 knitr::kable((tail(sd)))
 
 ```
+
 #### Check the that the columns have flags 
 
 Look at the first few rows of the data frame and check that the observations after are flagged.
 Some of the flags are added to in the script so the value was flagged with 6 in the maintenance log 
 but in the script it was added to because the value was lower than the Minimum reporting level. 
 Just make sure that one of the values is in the mainteance log.
-
-#### Look at the last row of the maintenance log. Are the columns flagged?
-
-```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
-# get the last row of the data file
-last_row <- tail(sd, n=1)
-
-# Get parameters for subsetting
-### get start and end time of one maintenance event
-    start <- as.Date(last_row$Sample_Date)
-    
-    # Reservoir 
-    Res <- last_row$Reservoir
-    
-    # Site 
-    Sit <- as.numeric(last_row$Site)
-    
-    # Depth
-    Dep <- as.numeric(last_row$Depth_m)
-    
-    # Filter
-    Filt <- last_row$Filter
-
-
-### Get the names of the columns affected by maintenance
-    colname_start <- last_row$start_parameter
-    colname_end <- last_row$end_parameter
-    
-    
-    # What we want to filter from 
-    
-    check <- (as.Date(current_df$DateTime) %in% start & 
-            current_df$Reservoir %in% Res & 
-              current_df$Site %in% Sit &
-              current_df$Depth_m %in% Dep) 
-    
-    # Make list of just the columns we want 
-    
-    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
-    
-    # Print the head of the table to make sure that data are flagged
-    
-    knitr::kable((head(current_df[check, test]))) 
-
-```
 
 #### Look at the first row in the maintenance time. Is the correct observation flagged?
 
@@ -276,37 +235,48 @@ last_row <- head(sd, n=1)
 
 ```
 
-### Subset and rename the files
-This section will subset the files so you can make plots of the whole time series and the current year. 
-Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
+#### Look at the last row of the maintenance log. Are the columns flagged?
 
-```{r Filter for current year and daily average, include=FALSE}
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
 
-# rename the current data and keep it to save at the end
-final_df <- current_df
+# Get parameters for subsetting
+### get start and end time of one maintenance event
+    start <- as.Date(last_row$Sample_Date)
+    
+    # Reservoir 
+    Res <- last_row$Reservoir
+    
+    # Site 
+    Sit <- as.numeric(last_row$Site)
+    
+    # Depth
+    Dep <- as.numeric(last_row$Depth_m)
+    
+    # Filter
+    Filt <- last_row$Filter
 
-# just the current year
-current2 <- current_df%>%
-  filter(DateTime>= current_time_start & DateTime<current_time_end)%>%
-  select(-contains("Flag"))|>
-    mutate(type = "qaqc")
 
-# daily average
-daily2 <- current_df%>% 
-  group_by(Date = as.Date(DateTime), Reservoir, Site, Depth_m) %>% # change group by
-  summarise_if(is.numeric, mean, na.rm=T)%>%
-  mutate(Year = as.factor(year(Date)),
-         Month = month(Date),
-         Time = "12:00:00")%>%
-  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
-  mutate(DateTime=ymd_hms(DateTime))
-
-  
-current_df2 <- current_df%>%
-  mutate(Year=year(DateTime))
-
-# colors 
-colors <- c("raw" = "red", "qaqc" = "black")
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+    
+    # What we want to filter from 
+    
+    check <- (as.Date(current_df$DateTime) %in% start & 
+            current_df$Reservoir %in% Res & 
+              current_df$Site %in% Sit &
+              current_df$Depth_m %in% Dep) 
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[check, test]))) 
 
 ```
 
@@ -316,27 +286,33 @@ colors <- c("raw" = "red", "qaqc" = "black")
 
 ##### QAQC plot information and all_plot function information
 
-For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
 
 The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The arguments are:
-Var # The column you want to plot. Make sure it is in quotes
-y_lab,  # This label can take an expression aka have the proper degrees C, 
-y_lab2, # This label is for the plotly function which can not handle expression argument. 
-Depth=F, # Do you want to put depth on the same plot. Use for profiles with discreet samples
-Water=T, # Are these plots for in water streaming sensors?
-Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
-Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+    Var, #  The column you want to plot. Make sure it is in quotes
+    data, # The data frame. Make sure it is in the wide format
+    raw_data=NULL, # the data frame of the raw file to compare to the qaqc obs. This is for the streaming sensors
+    reservoir, # the three letter code of the reservoir for filtering
+    res_site, # the number of the site for filtering
+    y_lab,  # This label can take an expression aka have the proper degrees C, 
+    y_lab2, # This label is for the plotly function which can not handle expression argument. 
+    Depth=F,  # Do you want depth as a factor
+    Water=T, # Are these plots for inwater streaming sensors?
+    Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+    Use_plotly = F, # Do you want to produce plotly interactive plots?
+    Heatmap = F) # Do you want to make a heat maps?
 
-The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
+
+The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must change the argument. 
   
 ##### Plot Description:
 
 The plots below are:
-The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. There is an option to include heatmaps. Once note with heat
 
-1. A time series of the current years' data that has been qaqced. Make sure noting was missed in the script or that need to be added to the maintenance log. 
+1. A time series of the current years' data that has been qaqced. Make sure noting was missed in the script or that need to be added to the maintenance log. In addition to the timeseries, there is a timeseries but each depth is on its own plot. This is only if there are more than one depth in the data frame. There is also an option for a heatmap. Make sure you have multiple depths in your data and that Heatmap=T is an argument in the function. Heat maps observations are interpolated so I would use this plots caution. If you find something off in the heatmap then look at the actual observation in the timeseries. 
 
-2. A time series of the historical and the current data just the qaqced values. 
+2. A time series of the historical and the current data just the qaqced values. Just as the current years' data there is also a timeseries split by depth and an option for a heatmap. 
 
 The next two plots are just fun to see trends over time with the data. 
 
@@ -351,23 +327,12 @@ The plots are broken down by reservoir and site
 
 ### FCR 50 - samples from the catwalk 
 
-```{r QAQC FCR 50 Plots, echo=FALSE, warning=TRUE, results='asis'}
+```{r QAQC FCR 50 Plots, echo=FALSE, warning=FALSE, results='asis'}
 
-# Filter for just FCR 50 
-current_df <- current_df2%>%
-  filter(Reservoir=="FCR" & Site ==50)
-  
-current <- current2%>%
-  filter(Reservoir=="FCR" & Site ==50)
-
-daily <- daily2%>%
-  filter(Reservoir=="FCR" & Site ==50)
-
-
-dx <- colnames(current%>%select(TLi_mgL:SBa_mgL))
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Raw_file = F, Use_plotly=T)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -380,7 +345,7 @@ output <- unlist(outputs, recursive = F)
  # Used to print the plotly plots
   # attach the Dependencies
   # since the do not get included with renderTags(...)$html
-  deps <- lapply(
+  deps <-  lapply(
     Filter(function(x){inherits(x,"htmlwidget")},output),
     function(hw){
       renderTags(hw)$dependencies
@@ -395,25 +360,17 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
+
+
 ### FCR 100-samples from the weir
 
-```{r QAQC FCR 100 Plots, echo=FALSE, warning=TRUE, results='asis'}
+```{r QAQC FCR 100 Plots, echo=FALSE, warning=FALSE, results='asis'}
 
-# Filter for just FCR 50 
-current_df <- current_df2%>%
-  filter(Reservoir=="FCR" & Site ==100)
-  
-current <- current2%>%
-  filter(Reservoir=="FCR" & Site ==100)
-
-daily <- daily2%>%
-  filter(Reservoir=="FCR" & Site ==100)
-
-
-dx <- colnames(current%>%select(TLi_mgL:SBa_mgL))
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Raw_file = F, Use_plotly=T)
+
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=100, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -443,23 +400,14 @@ output <- unlist(outputs, recursive = F)
 
 ### BVR 50 - samples from the platform at BVR
 
-```{r QAQC BVR 50 Plots, echo=FALSE, warning=TRUE, results='asis'}
-
-# Filter for just BVR 50 
-current_df <- current_df2%>%
-  filter(Reservoir=="BVR" & Site ==50)
-  
-current <- current2%>%
-  filter(Reservoir=="BVR" & Site ==50)
-
-daily <- daily2%>%
-  filter(Reservoir=="BVR" & Site ==50)
+```{r QAQC BVR 50 Plots, echo=FALSE, warning=FALSE, results='asis'}
 
 
-dx <- colnames(current%>%select(TLi_mgL:SBa_mgL))
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Raw_file = F, Use_plotly=T)
+
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -491,23 +439,13 @@ output <- unlist(outputs, recursive = F)
 
 These samples were taken in 2022 and it might not be necessary to plot this each time. 
 
-```{r QAQC BVR 40 Plots, echo=FALSE, warning=TRUE, results='asis'}
+```{r QAQC BVR 40 Plots, echo=FALSE, warning=FALSE, results='asis'}
 
-# Filter for just FCR 50 
-current_df <- current_df2%>%
-  filter(Reservoir=="BVR" & Site ==40)
-  
-current <- current2%>%
-  filter(Reservoir=="BVR" & Site ==40)
-
-daily <- daily2%>%
-  filter(Reservoir=="BVR" & Site ==40)
-
-
-dx <- colnames(current%>%select(TLi_mgL:SBa_mgL))
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Raw_file = F, Use_plotly=F)
+
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=40, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -539,23 +477,13 @@ output <- unlist(outputs, recursive = F)
 
 These samples were taken in 2022 and might not need to be plotted each year. 
 
-```{r QAQC CCR 50 Plots, echo=FALSE, warning=TRUE, results='asis'}
+```{r QAQC CCR 50 Plots, echo=FALSE, warning=FALSE, results='asis'}
 
-# Filter for just FCR 50 
-current_df <- current_df2%>%
-  filter(Reservoir=="CCR" & Site ==50)
-  
-current <- current2%>%
-  filter(Reservoir=="CCR" & Site ==50)
-
-daily <- daily2%>%
-  filter(Reservoir=="CCR" & Site ==50)
-
-
-dx <- colnames(current%>%select(TLi_mgL:SBa_mgL))
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Raw_file = F, Use_plotly=F)
+
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -585,30 +513,35 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, include=FALSE, eval=TRUE}
+```{r Make new CSV with current and historic files, eval=FALSE, include=TRUE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
- final_df$DateTime <- as.character(format(final_df$DateTime))
+ current_df$DateTime <- as.character(format(current_df$DateTime))
 
 # Need to decide on a naming convention for this file
-write_csv(final_df, "Metals_2014_2023.csv")
+write_csv(current_df, "Metals_2014_2023.csv")
 
 ```
 
-### Download and save Maintenance Log, Plotting function, and QAQC function
 
-```{r Download and save Maintenance Log, include=FALSE, eval=TRUE}
+
+```{r Download and save Maintenance Log, eval=FALSE, include=TRUE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2023.csv")
 
 # qaqc function
 # update link when change the location of the script
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R", "Metals_qaqc_2018_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R", "Metals_qaqc_2020_2023.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
+
+# Heat map code
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R", "Heatmap_EDI_function.R")
+
+# 
 
 # Anything else that needs to be added? MDL file?
 

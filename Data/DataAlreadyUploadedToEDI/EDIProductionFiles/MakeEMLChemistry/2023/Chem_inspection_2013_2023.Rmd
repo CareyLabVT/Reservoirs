@@ -1,10 +1,13 @@
 ---
-author: "Heather Wander"
+author: "Heather Wander and Dexter Howard"
 date: "2023-12-20"
 output: html_document
 ---
 Script to inspect QAQCd 2023 chemistry data and combine with previous EDI publication. 
 Script developed by HLW in 2023, edited by DWH in 2024.
+
+NOTE! This script does not knit because it incorporates many steps of QAQC that will be
+moved in subsequent years to the maintenance log/Level 1 generation script
 
 
 ```{r setup, include=FALSE}
@@ -226,28 +229,32 @@ allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
 
 allchem$DateTime <- as.character(allchem$DateTime)
 
-write.csv(allchem, "chemistry_2013_2023.csv", row.names = FALSE)
+#write.csv(allchem, "chemistry_2013_2023.csv", row.names = FALSE)
 
 
 ```
 
-
+```{r}
+#read in the most recent version on EDI staging to work with this version to check on data
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/12/938278c17e8c8c3d7351d85b8121ea90", col_types = cols())
+```
 
 
 ```{r 2023 diagnostic plots - all sites}
 #date format
-allchem$DateTime <- as.Date(allchem$DateTime, "%Y-%m-%d %H:%M:%S")
+allchem$DateTime <- as.POSIXct(strptime(allchem$DateTime, "%Y-%m-%d %H:%M:%S"), tz = 'America/New_York')
+allchem$DateTime <- as.Date(allchem$DateTime, "%y-%m-%d %H:%M:%S")
 
 new_chem <- allchem |> 
   filter(year(DateTime) == 2023 )
 
 #select columns for plotting
 new_chem <- new_chem [,(names(new_chem) %in% c("Reservoir","Site","DateTime",
-  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL"))]
+  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL", "DIC_mgL"))]
 
   #### Chemistry diagnostic plots ####
 chemistry_long <- new_chem %>% 
-  gather(metric, value, TN_ugL:DOC_mgL) %>% 
+  gather(metric, value, TN_ugL:DIC_mgL) %>% 
   mutate(month = strftime(DateTime, "%b"))
 
 chemistry_long$value <- as.numeric(chemistry_long$value)
@@ -329,7 +336,7 @@ ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4)
 ```{r 2023 diagnostic plots BVR inflows}
 
  #BVR other sites nutrient time series #no 2023 inflow samples so no figure :)
-ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
+ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = DateTime, y = value, col=as.factor(Site))) +
   geom_point(cex=2) + theme_bw() +
   facet_grid(metric ~ ., scales='free') +
   scale_x_date("Date", date_labels = "%d %b") +

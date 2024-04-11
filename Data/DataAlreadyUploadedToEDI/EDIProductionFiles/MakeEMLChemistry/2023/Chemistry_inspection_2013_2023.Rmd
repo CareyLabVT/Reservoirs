@@ -261,7 +261,7 @@ allchem$DateTime <- as.character(allchem$DateTime)
 
 ```{r}
 #read in the most recent version on EDI staging to work with this version to check on data
-allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/12/938278c17e8c8c3d7351d85b8121ea90", col_types = cols())
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/13/938278c17e8c8c3d7351d85b8121ea90" , col_types = cols())
 ```
 
 

@@ -300,7 +300,7 @@ allchem$DateTime <- as.character(allchem$DateTime)
 
 ```{r}
 #read in the most recent version on EDI staging to work with this version to check on data
-allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/13/938278c17e8c8c3d7351d85b8121ea90" , col_types = cols())
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/15/8cd729706327d142934758219537dbdc" , col_types = cols())
 ```
 
 
@@ -472,6 +472,8 @@ ggplot(all_chem_long, aes(x = DateTime, y = value, col=Reservoir)) +
   scale_x_date("Date", date_breaks="2 months", date_labels = "%b %Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+ggsave("./Figures/All_reservoirs_2013_2023.jpg", width=4, height=4)
+
 ```
 
 ```{r all data plots}
@@ -502,7 +504,19 @@ ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
 
 ```
 
+```{r all data plots}
 
+# CCR only; site 50
+ggplot(subset(all_chem_long, Reservoir=='CCR' & Site =='50'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_date("Date", date_labels = "%b %y") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave("./Figures/CCR_Site50_2013_2023.jpg",width=3.5, height=4)
+
+```
 
 
 ```{r Make site description file}

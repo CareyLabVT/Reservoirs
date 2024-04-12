@@ -291,9 +291,7 @@ allchem <- allchem |>
 
 allchem$DateTime <- as.character(allchem$DateTime)
 
-write.csv(allchem, "Chemistry_2013_2023z.csv", row.names = FALSE)
-
-z <- read_csv("Chemistry_2013_2023.csv")
+write.csv(allchem, "Chemistry_2013_2023_final.csv", row.names = FALSE)
 
 ```
 

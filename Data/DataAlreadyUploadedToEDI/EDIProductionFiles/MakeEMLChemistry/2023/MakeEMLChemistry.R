@@ -139,15 +139,15 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
   temporal.coverage = c("2013-04-04", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2023.csv", 
+  data.table = c("Chemistry_2013_2023_final.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("QAQC_Chemistry_2023_2023.R", "Chemistry_inspection_2013_2023.Rmd"),
+  other.entity = c("Chemistry_QAQC_2023_2023.R", "Chemistry_inspection_2013_2023.Rmd"),
   other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.13') #reserve new staging environment package id each year
+  package.id = 'edi.1025.15') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

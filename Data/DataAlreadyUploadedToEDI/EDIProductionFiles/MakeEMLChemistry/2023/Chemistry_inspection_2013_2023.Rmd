@@ -252,16 +252,55 @@ allchem$Flag_DIC_mgL[is.na(allchem$DIC_mgL)] <- 1
 allchem$Flag_DC_mgL[is.na(allchem$DC_mgL)] <- 1
 allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
 
-allchem$DateTime <- as.character(allchem$DateTime)
+```
 
-#write.csv(allchem, "chemistry_2013_2023.csv", row.names = FALSE)
 
+```{r add flagging for DC and DIC}
+
+#### Hypolimnetic DIC values from the TIC/TOC analyzer are suspect given chances in hydrostatic pressure change on the water once collected
+#### We are flagging all values in FCR, BVR, and CCR, (these are the only reservoirs w/ DIC data) below 5m depth between 1 April and 15 November every year as suspect (flag 9).
+
+allchem <- allchem |> 
+  #add columns that will be used to assign date and year and are latter droped
+  mutate(SampleDate = as.Date(DateTime),
+         year = year(SampleDate)) |> 
+  #initial flag for DIC
+  mutate(Flag_DIC_mgL = ifelse(
+        SampleDate >= as.Date(paste(year, 04, 01, sep = "-")) & SampleDate <=as.Date(paste(year, 11, 15, sep = "-")) & Depth_m >= 5,
+     paste(Flag_DIC_mgL, 9, sep = ""),  Flag_DIC_mgL                  
+  )) |> 
+  #fix flag values that should just be a 9 or 1
+  mutate(Flag_DIC_mgL = ifelse(Flag_DIC_mgL == "09", "9", Flag_DIC_mgL)) |> 
+  mutate(Flag_DIC_mgL = ifelse(Flag_DIC_mgL == "19", "1", Flag_DIC_mgL)) |> 
+ #initial flag for DC
+    mutate(Flag_DC_mgL = ifelse(
+    SampleDate >= as.Date(paste(year, 04, 01, sep = "-")) & SampleDate <=as.Date(paste(year, 11, 15, sep = "-")) & Depth_m >= 5,
+     paste(Flag_DC_mgL, 9, sep = ""),  Flag_DC_mgL                               
+  )) |> 
+  #fix flag values that should just be a 9 or 1
+  mutate(Flag_DC_mgL = ifelse(Flag_DC_mgL == "09", "9", Flag_DC_mgL)) |> 
+  mutate(Flag_DC_mgL = ifelse(Flag_DC_mgL == "19", "1", Flag_DC_mgL)) |> 
+  #remove grouping variables from above
+  select(-c(SampleDate, year))
+  
 
 ```
 
+
+```{r write csv for EDI}
+
+allchem$DateTime <- as.character(allchem$DateTime)
+
+#write.csv(allchem, "Chemistry_2013_2023_final.csv", row.names = FALSE)
+
+```
+
+
+
+
 ```{r}
 #read in the most recent version on EDI staging to work with this version to check on data
-allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/13/938278c17e8c8c3d7351d85b8121ea90" , col_types = cols())
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/15/8cd729706327d142934758219537dbdc" , col_types = cols())
 ```
 
 
@@ -433,6 +472,8 @@ ggplot(all_chem_long, aes(x = DateTime, y = value, col=Reservoir)) +
   scale_x_date("Date", date_breaks="2 months", date_labels = "%b %Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+ggsave("./Figures/All_reservoirs_2013_2023.jpg", width=4, height=4)
+
 ```
 
 ```{r all data plots}
@@ -463,7 +504,19 @@ ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
 
 ```
 
+```{r all data plots}
 
+# CCR only; site 50
+ggplot(subset(all_chem_long, Reservoir=='CCR' & Site =='50'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_date("Date", date_labels = "%b %y") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave("./Figures/CCR_Site50_2013_2023.jpg",width=3.5, height=4)
+
+```
 
 
 ```{r Make site description file}

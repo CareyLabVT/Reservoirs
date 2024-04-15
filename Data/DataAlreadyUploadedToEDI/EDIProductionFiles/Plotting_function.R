@@ -2,7 +2,7 @@
 # Use in the markdown to create plots and for plotly to work
 # Author: Adrienne Breef-Pilz
 # First developed: 28 December 24
-# Last edited: 7 April 24 - add in heat map options
+# Last edited: 15 April 24 - added if statements if all obs at the same depth 
 
 all_plot<-function(
     Var,
@@ -14,7 +14,7 @@ all_plot<-function(
     y_lab2, # This label is for the plotly function which can not handle expression argument. 
     Depth=F,  # Do you want depth as a factor
     Water=T, # Are these plots for inwater streaming sensors?
-    Use_plotly = F, # Do you want to produce plotly interactive plots?
+    Use_plotly = F, # Do you want to produce interactive plots for observations of the current year?
     Heatmap = F) # Do you want to make a heat maps?
 { 
   
@@ -51,8 +51,9 @@ all_plot<-function(
     mutate(type = "qaqc")
   
   # daily average
+  
   daily <- current_df%>% 
-    group_by(Date = as.Date(DateTime), Reservoir, Site, Depth_m) %>% # change group by
+    group_by(Date = as.Date(DateTime), across(any_of(c("Reservoir", "Site", "Depth_m")))) %>% # change group by
     summarise_if(is.numeric, mean, na.rm=T)%>%
     mutate(Year = as.factor(year(Date)),
            Month = month(Date),
@@ -66,16 +67,21 @@ all_plot<-function(
   colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
   
   ## Make a list of depths and year to see if facet plots are needed
-  all_depth <- current_df%>%
+  if(Depth==T){
+    
+    # For all years
+    all_depth <- current_df%>%
     select(Depth_m)%>%
     dplyr::distinct()%>%
     as.list()
-  
+    
   # Just the current year
   cur_depth <- current%>%
     select(Depth_m)%>%
     dplyr::distinct()%>%
     as.list()
+  }
+  
   
   # If there is just one year then don't make the density and box plots
   all_year <- current_df%>%
@@ -98,8 +104,8 @@ all_plot<-function(
 
 # Let's only keep values that are different instead of plotting the raw and the qaqc value
 current_plot_df <- bind_rows(current, current_raw)%>%
-  select(-contains(c("Flags", "RECORD")))
-  dplyr::distinct(across(everything(), .keep_all = T))
+  select(-contains(c("Flags", "RECORD")))%>%
+  dplyr::distinct(across(everything()))
     
     # If there are raw files to compare to then we only want to keep both observations if they are different.
     # It makes the file smaller. 
@@ -191,6 +197,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       #scale_color_manual(values = colors)+
       theme_bw()
     
+  if(Depth==T){  
     if(length(all_depth[["Depth_m"]])>1){
     
     all_grid <- current_df%>%
@@ -203,10 +210,11 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       theme_bw()+
       facet_wrap(~ as.factor(Depth_m), scale="free")+
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    }
-    
+      }
+    } 
   }else {
-    all <- geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"))+
+    all <- ggplot()+
+      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"))+
       ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
       labs(y = y_lab,
            color = "Legend") +
@@ -247,7 +255,8 @@ if(length(qaqc_current$Reservoir)>0){
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")
-      }
+        }
+      
     }else{
       cur <- ggplot()+
         {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -347,7 +356,8 @@ if(length(qaqc_current$Reservoir)>0){
   } 
   # Create Heat maps
   
-  if(Heatmap==T & length(all_depth[["Depth_m"]])>1){
+  if(Heatmap==T & Depth==T){ 
+    
     
     if(length(qaqc_current$Reservoir)>0){
     # Use this heatmap function 
@@ -355,9 +365,10 @@ if(length(qaqc_current$Reservoir)>0){
     cur_heat <- heatmap_EDI(data= qaqc_current, reservoir=reservoir, site=res_site, z=Var)
     }
     
+    if(length(all_depth[["Depth_m"]])>1){
     # heat map for all the observations
     all_heat <- heatmap_EDI(data=current_df, reservoir = reservoir, site = res_site, z=Var)
-    
+    } 
   }
   # Add extra plots for chla and blue greens
   # Might need to Take out NA

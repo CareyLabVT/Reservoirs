@@ -83,8 +83,10 @@ all_plot<-function(
   }
   
   
-  # If there is just one year then don't make the density and box plots
+ # If there is just one year then don't make the density and box plots
   all_year <- current_df%>%
+    select(Var, Year) %>%
+    drop_na(Var) %>%
     select(Year)%>%
     dplyr::distinct()%>%
     as.list()

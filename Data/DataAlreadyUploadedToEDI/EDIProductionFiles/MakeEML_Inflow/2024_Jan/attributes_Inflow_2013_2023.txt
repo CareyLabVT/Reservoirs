@@ -1,5 +1,5 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoi	categorical			NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir	categorical	dimensionless		NA	value is missing
 DateTime	Date and time of sampling. All data were collected in the Eastern Standard Time zone of the U.S.A.	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 WVWA_Pressure_psi	Uncorrected pressure measured by the WVWA INW sensor at the weir	numeric	poundsPerSquareInch		NA	value is missing

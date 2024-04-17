@@ -30,3 +30,5 @@ ammonium	lter controlled vocabulary
 total nitrogen	lter controlled vocabulary
 total dissolved nitrogen	lter controlled vocabulary
 total phosphorus	lter controlled vocabulary
+chemistry	lter controlled vocabulary
+water chemistry	lter controlled vocabulary

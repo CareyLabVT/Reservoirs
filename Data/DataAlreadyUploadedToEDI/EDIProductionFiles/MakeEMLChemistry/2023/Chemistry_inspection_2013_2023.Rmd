@@ -1,10 +1,13 @@
 ---
-author: "Heather Wander"
+author: "Heather Wander and Dexter Howard"
 date: "2023-12-20"
 output: html_document
 ---
 Script to inspect QAQCd 2023 chemistry data and combine with previous EDI publication. 
 Script developed by HLW in 2023, edited by DWH in 2024.
+
+NOTE! This script does not knit because it incorporates many steps of QAQC that will be
+moved in subsequent years to the maintenance log/Level 1 generation script
 
 
 ```{r setup, include=FALSE}
@@ -190,17 +193,42 @@ allchem$Flag_DIC_mgL[as.Date(allchem$DateTime)=="2022-06-09" & allchem$Reservoir
 allchem$Flag_DC_mgL[as.Date(allchem$DateTime)=="2022-06-09" & allchem$Reservoir=="CCR" & allchem$Depth_m==0.1 & allchem$Site==400] <- 1
 allchem$Flag_DN_mgL[as.Date(allchem$DateTime)=="2022-06-09" & allchem$Reservoir=="CCR" & allchem$Depth_m==0.1 & allchem$Site==400] <- 1
 
-### suspect 2023 data 
-# B50 2023-10-31 3m DOC and SRP; F100 2023-05-29 0.1m DOC; B50 2023-10-03 0.1m TP; B50 2023-07-31 6m TP
-#other weird timeframes: early 2023 BVR NO3 and FCR high surface TN and overal high NO3
+
+### manually remove 2 samples from 2023 data pub to be published at a later date after reruns
+#B50 2023-10-31 3m DOC and SRP #### these need to be rurn in the next DOC batch
+allchem$DOC_mgL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="BVR" & allchem$Depth_m==3 & allchem$Site==50] <- NA
+
+allchem$Flag_DOC_mgL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="BVR" & allchem$Depth_m==3 & allchem$Site==50] <- 1
+
+allchem$SRP_ugL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="BVR" & allchem$Depth_m==3 & allchem$Site==50] <- NA
+
+allchem$Flag_SRP_ugL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="BVR" & allchem$Depth_m==3 & allchem$Site==50] <- 1
+
+### manually flag suspect values from 2023 data 
+
+#F100 2023-05-29 0.1m DOC
+allchem$Flag_DOC_mgL[as.Date(allchem$DateTime)=="2023-05-29" & allchem$Reservoir=="FCR" & allchem$Depth_m==0.1 & allchem$Site==100] <- 9
+
+#F200 2023-08-14 0.1m TP
+allchem$Flag_TP_ugL[as.Date(allchem$DateTime)=="2023-08-14" & allchem$Reservoir=="FCR" & allchem$Depth_m==0.1 & allchem$Site==200] <- 9
+
 #FCR high TP on 31oct23 in surface waters
+#F50 2023-10-31 0.1 TP
+allchem$Flag_TP_ugL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="FCR" & allchem$Depth_m==0.1 & allchem$Site==50] <- 9
+
+#F50 2023-10-31 1.6 TP
+allchem$Flag_TP_ugL[as.Date(allchem$DateTime)=="2023-10-31" & allchem$Reservoir=="FCR" & allchem$Depth_m==1.6 & allchem$Site==50] <- 9
+
+# B50 2023-10-03 0.1m TP
+allchem$Flag_TP_ugL[as.Date(allchem$DateTime)=="2023-10-03" & allchem$Reservoir=="BVR" & allchem$Depth_m==0.1 & allchem$Site==50] <- 9
+
+# B50 2023-07-31 6m TP
+allchem$Flag_TP_ugL[as.Date(allchem$DateTime)=="2023-07-31" & allchem$Reservoir=="BVR" & allchem$Depth_m==6 & allchem$Site==50] <- 9
 
 
-#manually remove XX samples from 2023 data pub to be published at a later date after reruns
-# new$NO3NO2_ugL[new$Reservoir=="FCR" & as.Date(new$DateTime)=="2022-07-05" & new$Depth_m==0.1 & new$Site==100] <- NA
 
 
-#replace NA flags with 0
+####replace NA flags with 0
 allchem$Flag_DateTime[is.na(allchem$Flag_DateTime)] <- 0
 allchem$Flag_TN_ugL[is.na(allchem$Flag_TN_ugL)] <- 0
 allchem$Flag_TP_ugL[is.na(allchem$Flag_TP_ugL)] <- 0
@@ -224,30 +252,73 @@ allchem$Flag_DIC_mgL[is.na(allchem$DIC_mgL)] <- 1
 allchem$Flag_DC_mgL[is.na(allchem$DC_mgL)] <- 1
 allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
 
+```
+
+
+```{r add flagging for DC and DIC}
+
+#### Hypolimnetic DIC values from the TIC/TOC analyzer are suspect given chances in hydrostatic pressure change on the water once collected
+#### We are flagging all values in FCR, BVR, and CCR, (these are the only reservoirs w/ DIC data) below 5m depth between 1 April and 15 November every year as suspect (flag 9).
+
+allchem <- allchem |> 
+  #add columns that will be used to assign date and year and are latter droped
+  mutate(SampleDate = as.Date(DateTime),
+         year = year(SampleDate)) |> 
+  #initial flag for DIC
+  mutate(Flag_DIC_mgL = ifelse(
+        SampleDate >= as.Date(paste(year, 04, 01, sep = "-")) & SampleDate <=as.Date(paste(year, 11, 15, sep = "-")) & Depth_m >= 5,
+     paste(Flag_DIC_mgL, 9, sep = ""),  Flag_DIC_mgL                  
+  )) |> 
+  #fix flag values that should just be a 9 or 1
+  mutate(Flag_DIC_mgL = ifelse(Flag_DIC_mgL == "09", "9", Flag_DIC_mgL)) |> 
+  mutate(Flag_DIC_mgL = ifelse(Flag_DIC_mgL == "19", "1", Flag_DIC_mgL)) |> 
+ #initial flag for DC
+    mutate(Flag_DC_mgL = ifelse(
+    SampleDate >= as.Date(paste(year, 04, 01, sep = "-")) & SampleDate <=as.Date(paste(year, 11, 15, sep = "-")) & Depth_m >= 5,
+     paste(Flag_DC_mgL, 9, sep = ""),  Flag_DC_mgL                               
+  )) |> 
+  #fix flag values that should just be a 9 or 1
+  mutate(Flag_DC_mgL = ifelse(Flag_DC_mgL == "09", "9", Flag_DC_mgL)) |> 
+  mutate(Flag_DC_mgL = ifelse(Flag_DC_mgL == "19", "1", Flag_DC_mgL)) |> 
+  #remove grouping variables from above
+  select(-c(SampleDate, year))
+  
+
+```
+
+
+```{r write csv for EDI}
+
 allchem$DateTime <- as.character(allchem$DateTime)
 
-write.csv(allchem, "chemistry_2013_2023.csv", row.names = FALSE)
-
+#write.csv(allchem, "Chemistry_2013_2023_final.csv", row.names = FALSE)
 
 ```
 
 
 
 
+```{r}
+#read in the most recent version on EDI staging to work with this version to check on data
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/15/8cd729706327d142934758219537dbdc" , col_types = cols())
+```
+
+
 ```{r 2023 diagnostic plots - all sites}
 #date format
-allchem$DateTime <- as.Date(allchem$DateTime, "%Y-%m-%d %H:%M:%S")
+allchem$DateTime <- as.POSIXct(strptime(allchem$DateTime, "%Y-%m-%d %H:%M:%S"), tz = 'America/New_York')
+allchem$DateTime <- as.Date(allchem$DateTime, "%y-%m-%d %H:%M:%S")
 
 new_chem <- allchem |> 
   filter(year(DateTime) == 2023 )
 
 #select columns for plotting
 new_chem <- new_chem [,(names(new_chem) %in% c("Reservoir","Site","DateTime",
-  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL"))]
+  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL", "DIC_mgL"))]
 
   #### Chemistry diagnostic plots ####
 chemistry_long <- new_chem %>% 
-  gather(metric, value, TN_ugL:DOC_mgL) %>% 
+  gather(metric, value, TN_ugL:DIC_mgL) %>% 
   mutate(month = strftime(DateTime, "%b"))
 
 chemistry_long$value <- as.numeric(chemistry_long$value)
@@ -382,7 +453,7 @@ allchem$year <- year(allchem$DateTime)
 
 #### chem diagnostic plots #### 
 all_chem_long <- allchem %>%
-  gather(metric, value, TN_ugL:DOC_mgL) %>% 
+  gather(metric, value, TN_ugL:DIC_mgL) %>% 
   mutate(month = strftime(DateTime, "%b"))
 
 #value as numeric
@@ -401,6 +472,8 @@ ggplot(all_chem_long, aes(x = DateTime, y = value, col=Reservoir)) +
   scale_x_date("Date", date_breaks="2 months", date_labels = "%b %Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+ggsave("./Figures/All_reservoirs_2013_2023.jpg", width=4, height=4)
+
 ```
 
 ```{r all data plots}
@@ -431,7 +504,19 @@ ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
 
 ```
 
+```{r all data plots}
 
+# CCR only; site 50
+ggplot(subset(all_chem_long, Reservoir=='CCR' & Site =='50'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_date("Date", date_labels = "%b %y") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+ggsave("./Figures/CCR_Site50_2013_2023.jpg",width=3.5, height=4)
+
+```
 
 
 ```{r Make site description file}
@@ -440,7 +525,7 @@ ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
   # Use Gsheet because you don't need to authenticate it. 
 sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
 
-  data <- all_chem #This is the line you need to modify!
+  data <- allchem #This is the line you need to modify!
   
   trim_sites = function(data,sites){
     data_res_site = data %>% #Create a Reservoir/Site combo column

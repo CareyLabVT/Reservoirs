@@ -18,6 +18,7 @@ discharge	lter controlled vocabulary
 atmospheric pressure	lter controlled vocabulary
 FCR	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
+inflow	carey lab controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
 Tunnel Branch	carey lab controlled vocabulary

@@ -1,4 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Date	Date of the estimated water level and volume 	Date		YYYY-MM-DD	NA	value is missing
-WaterLevel_m	Estimated daily water level in the reservoir 	numeric	meter		NA	value is missing
-Vol_m3	Estimated daily water volume in the the reservoir based on water level	numeric	cubicMeter		NA	value is missing

@@ -27,7 +27,7 @@ template_table_attributes(
  path = folder,
  data.path = folder,
  data.table = c('BVRPlatform_2020_2023.csv','BVRPlatform_maintenancelog_2020_2023.csv',
-                'BVRSensorString_2016_2020.csv', "BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv") ,
+                'BVRSensorString_2016_2020.csv', "BVR_WaterLevel_2009_2023.csv") ,
  write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
@@ -138,19 +138,20 @@ template_categorical_variables(path = folder,
 # package.id: enter the ID you obtained in Step 6
 
 make_eml(path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths in Beaverdam Reservoir, Virginia, USA in 2015-2023",
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, turbidity at discrete depths, and water level in Beaverdam Reservoir, Virginia, USA in 2009-2023",
          data.table = c('BVRPlatform_2020_2023.csv', 'BVRPlatform_maintenancelog_2020_2023.csv', 'BVRPlatform_Depth_offsets_2020_2023.csv',
-                        'BVRSensorString_2016_2020.csv', 'BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv'),
+                        'BVRSensorString_2016_2020.csv', 'BVR_WaterLevel_2009_2023.csv'),
          # data.table.name = c('BVRPlatform_2020_2023', 'BVRPlatform_maintenancelog_2020_2023', 'BVRPlatform_Depth_offsets_2020_2023',
-         #                     'BVR_sensor_string_2016_2020', 'BVR_Daily_WaterLevel_Vol_2015_2022_interp'), 
+         #                     'BVR_sensor_string_2016_2020', 'BVR_WaterLevel_2009_2023'), 
          data.table.description = c("Water quality parameters measured at Beaverdam Reservoir during 2020-2023",
                                     "BVR sensor maintenance log for water quality sensors",
                                     "BVR offsets for sensor depths. Used in the find_depths.R function.",
                                     "Water quality parameters measured at Beaverdam Reservoir during 2016-2020",
-                                    "Data file with interpolated BVR water level and volume from 2015-2022, based on observations from the staff gauge and pressure transducer when it was installed"),
+                                    "BVR water level from the staff gauge and converted to a depth"),
          other.entity = c('BVRPlatform_qaqc_2020_2023.R', 'BVRPlatform_inspection_2020_2023.Rmd',
                            'find_depths.R', 'Plot_function.R', 'BVRSensorString_qaqc_2016_2020.R',
-                          "BVR_Daily_WaterLevel_Vol_2015_2022_interp.Rmd"),
+                          "BVR_WaterLevel_qaqc_2009_2023.R",
+                          "BVR_Daily_WaterLevel_Vol_2015_2022.Rmd"),
          # other.entity.name = c('BVRPlatform_qaqc_2020_2023', 'BVRPlatform_inspection_2020_2023',
          #                       'find_depths', 'Plot_function',
          #                       'BVR_sensorstring_Collate_QAQC_2016_2020',
@@ -160,14 +161,15 @@ make_eml(path = folder,
                                       'Function that applies a depth to each observation',
                                       'A function used to create the QAQC plots in the inspection script',
                                       'Script that collates and QAQCs the files for BVRSensorString_2016_2020.csv',
-                                      'Script to make the BVR_Daily_WaterLevel_2015_2022_interp.csv file'),
-         temporal.coverage = c("2015-07-07", "2023-12-31"),
+                                      'Script to read in the digitized water level observations and assign data flags',
+                                      'Script to calculate daily water level and volume from 2015-2022'),
+         temporal.coverage = c("2009-09-01", "2023-12-31"),
          #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.157.29") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         package.id = "edi.157.30") # Put your package.id here, followed by .1 (for 1st version). This is for staging
          #package.id = "edi.725.3") # This is for the final version
 
 

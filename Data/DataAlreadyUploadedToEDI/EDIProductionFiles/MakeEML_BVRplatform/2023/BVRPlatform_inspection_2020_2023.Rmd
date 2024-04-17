@@ -40,10 +40,10 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermor
 
 # Source scripts from GitHub
 # This is the qaqc script. In the data package it is saved as BVRPlatform_qaqc_2023_2023.R
-devtools::source_url("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
+source("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
 
 # This is the plotting function used below to make the plots. In the data package it is saved as Plot_function.R
-devtools::source_url('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
 
  #turn off pander auto asis
@@ -57,7 +57,7 @@ current_time_start=force_tz(as.POSIXct("2023-01-01 00:00:00"), tzone = "EST")
 current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 ```
 
-```{r QAQC all Files, eval=FALSE, include=FALSE}
+```{r QAQC all Files, eval=FALSE, warning=FALSE, include=FALSE}
 
 
 # # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data file for EDI. 
@@ -65,7 +65,7 @@ current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 #   data_file= 'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',
 #   data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2020_2023.csv',
 #   maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv",
-#          output_file = NULL, 
+#          output_file = NULL,
 #          start_date = ymd_hms("2020-06-18 17:55:00", tz="EST"),  # this is when we want the file to start
 #          end_date = Sys.Date()
 #   )
@@ -73,7 +73,7 @@ current_time_end= force_tz(as.POSIXct("2023-12-31 23:59:00"), tzone = "EST")
 ```
 
 
-REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
 
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
   
@@ -90,11 +90,11 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
-# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
 
                                                                 ### CHANGE THIS NUMBER BELOW 
                                                                              ##      
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/29/6b78ab905a142b5dcc29044b83bae676")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/29/9adadd2a7c2319e54227ab31a161ea12")
 
  # Force files from EDI to have an EST timestamp
   current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
@@ -132,8 +132,11 @@ BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "
   # Take out extremly high values, EXO_Date and Time, and create depth column
    raw <- raw%>%
      select(-c("EXO_Date", "EXO_Time"))%>%
-      mutate(across(ThermistorTemp_C_1:LvlTemp_C_13, ~ifelse(.x >180, NA, .x)))%>%
-       mutate(LvlDepth_m_13=LvlPressure_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
+      mutate(across(ThermistorTemp_C_1:LvlTemp_C_13, ~ifelse(.x >180, NA, .x)),
+             LvlDepth_m_13=LvlPressure_psi_13*0.70455,
+             Reservoir = "BVR",
+             Site = 50)
+       
 
   # convert NaN to NAs in the dataframe
   raw[sapply(raw, is.nan)] <- NA
@@ -321,45 +324,6 @@ Make sure the observations are flagged
 
 ```
 
-### Subset and rename the files
-This section will subset the files so you can make plots of the whole time series and the current year. 
-Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
-
-```{r Filter for current year and daily average, include=FALSE}
-
-# Raw files
-current_raw <- raw%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "raw")
-
-current <- current_df%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "qaqc")%>%
-  select(DateTime:CR6Panel_Temp_C,type, -contains("adjusted"))
-
-
-# Let's only keep values that are different instead of plotting the raw and the qaqc value
-current_plot_df <- bind_rows(current, current_raw)%>%
-  dplyr::distinct(across(DateTime:LvlDepth_m_13), .keep_all = T)
-    
-
-daily <- current_df%>% 
-  group_by( Date = as.Date(DateTime)) %>% 
-  summarise_if(is.numeric, mean, na.rm=T)%>%
-  mutate(Year = as.factor(year(Date)),
-         Month = month(Date),
-         Time = "12:00:00")%>%
-  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
-  mutate(DateTime=ymd_hms(DateTime))
-
-  
-catdata <- current_df%>%
-  mutate(Year=year(DateTime))
-
-colors <- c("raw" = "red", "qaqc" = "black")
-# colors for comparing Thermistor, RDO and Pressure sensor
-colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
-```
 
 ## QAQC Plots
 
@@ -400,14 +364,15 @@ There are additional plots for depths that have more than one sensor such as at 
 
 ```{r Temp, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
+dx <- colnames(current_df%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly=F)
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
-output[[1]]
+#output[[1]]
 
 ```
 
@@ -454,7 +419,9 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
   
   
 # This is all the temps and just the current year
-    ggplot(current,aes(x = DateTime))+
+  cur_temp <- current_df%>%
+     filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+    ggplot(.,aes(x = DateTime))+
     geom_line(aes(y=ThermistorTemp_C_1, color="1"))+
     geom_line(aes(y=ThermistorTemp_C_2, color="2"))+
     geom_line(aes(y=EXOTemp_C_1.5, color="EXO_1.5m")) +
@@ -482,10 +449,11 @@ colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold",
 ```{r Pressure Sensor, echo=FALSE, results='asis'}
 ### Plotting depth from pressure sensor 
    
-dx <- colnames(current%>%select(grep("Depth_m",colnames(current))))
+dx <- colnames(current_df%>%select(grep("Depth_m",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "Meters", y_lab2 = "Meters", Use_plotly=T)
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "Meters", y_lab2 = "Meters", Water=T, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -517,10 +485,11 @@ output <- unlist(outputs, recursive = F)
 ```{r DO, echo=FALSE, results='asis'}
 
 
-dx <- colnames(current%>%select(grep("DO_mgL|sat_percent",colnames(current))))
+dx <- colnames(current_df%>%select(grep("DO_mgL|sat_percent",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot,y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Use_plotly=T)
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Water=T, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -552,10 +521,11 @@ output <- unlist(outputs, recursive = F)
 
 ```{r Check the EXO Chla and Blue Greens, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("Chla|BGAPC",colnames(current))))
+dx <- colnames(current_df%>%select(grep("Chla|BGAPC",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L")
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L", Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -586,10 +556,11 @@ output <- unlist(outputs, recursive = F)
 
 ```{r fdom EXO sensor, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
+dx <- colnames(current_df%>%select(grep("fDOM",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab = "RFU or QSU", y_lab2 = "RFU or QSU")
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "RFU or QSU", y_lab2 = "RFU or QSU", Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -620,10 +591,11 @@ output <- unlist(outputs, recursive = F)
 
 ```{r Cond Spcond and TDS, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("^EXOSpCond|^EXOCond|^EXOTDS",colnames(current))))
+dx <- colnames(current_df%>%select(grep("^EXOCond|^EXOSpCond|^EXOTDS",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Use_plotly=F)
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -658,7 +630,7 @@ output <- unlist(outputs, recursive = F)
 #dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
 
 # make the plots
-outputs <- lapply("EXOTurbidity_FNU_1.5", all_plot, y_lab="FNU", y_lab2="FNU", Use_plotly=F)
+outputs <- lapply("EXOTurbidity_FNU_1.5", all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab="FNU", y_lab2="FNU", Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -690,10 +662,11 @@ output <- unlist(outputs, recursive = F)
 
 ```{r Wiper, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("Wiper_V|Battery_V|power_V",colnames(current))))
+dx <- colnames(current_df%>%select(grep("Wiper_V|Battery_V|power_V",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab="Volts", y_lab2="Volts")
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab="Volts", y_lab2="Volts", Depth=F, Water=T, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 ```
@@ -726,7 +699,7 @@ output <- unlist(outputs, recursive = F)
 # Variable_StartYear_EndYear
 
 # convert datetimes to characters so that they are properly formatted in the output file
- current_df$DateTime <- as.character(current_df$DateTime)
+ current_df$DateTime <- as.character(format(current_df$DateTime))
 
 write_csv(current_df, "BVRPlatform_2020_2023.csv")
 
@@ -746,14 +719,19 @@ download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-p
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
 
 # Depth offsets
-download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_Depth_offsets.csv",
-              "BVRPlatform_Depth_offsets_2020_2023.csv")
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_Depth_offsets.csv", "BVRPlatform_Depth_offsets_2020_2023.csv")
 
 # Finding depth function
 download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R", "find_depths.R")
 
 # Download Heather's code to make BVR water level and then need to run it. 
 download.file("https://raw.githubusercontent.com/hlwander/bvr_glm/master/inputs/water_level/WaterLevel_BVR.Rmd", "BVR_Daily_WaterLevel_Vol_2015_2022.Rmd")
+
+# BVR water level file
+download.file("https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_waterlevel/BVR/BVR_WaterLevel_2009_2023.csv", "BVR_WaterLevel_2009_2023.csv")
+
+# BVR water level QAQC script
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_waterlevel/BVR/BVR_WaterLevel_qaqc_2029_2023.R", "BVR_WaterLevel_qaqc_2009_2023.R")
 
 ```
 

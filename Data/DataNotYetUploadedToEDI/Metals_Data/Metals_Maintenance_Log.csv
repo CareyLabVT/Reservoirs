@@ -1,20 +1,22 @@
 Reservoir,Site,Depth_m,Filter,DataStream,Sample_ID,Sample_Date,start_parameter,end_parameter,flag,notes
+FCR,100,0.1,T,Metals,15,2019-07-22,Mn_mgL,Mn_mgL,8,observation seems abnormally high.
 FCR,100.1,0.1,T,Metals,29,2020-03-24,Li_mgL,Ba_mgL,10,Sample was originally labelled; '03/24/2020 - 29 (decant)'; name was edited for ease of automation
 FCR,100.1,0.1,T,Metals,30,2020-03-24,Li_mgL,Ba_mgL,10,Sample was originally labelled; '03/24/2020 - 30 (decant)'; name was edited for ease of automation
 FCR,100.1,0.1,T,Metals,29,2020-04-20,Li_mgL,Ba_mgL,10,Sample was originally labelled; '04/20/2020 - 29 (decant)'; name was edited for ease of automation
 FCR,100.1,0.1,T,Metals,30,2020-04-20,Li_mgL,Ba_mgL,10,Sample was originally labelled; '04/20/2020 - 30 (decant)'; name was edited for ease of automation
+BVR,50,9.0,S,Metals,26,2020-04-20,Si_mgL,Si_mgL,8,observation seems abnormally high.
 BVR,50,10,T,Metals,67,2020-09-02,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2020-10-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,200,0.1,S,Metals,18,2020-10-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,200,0.1,S,Metals,18,2020-10-05,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,100,0.1,T,Metals,15,2020-11-02,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2021-02-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,S,Metals,16,2021-02-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,2021-02-26,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,100,0.1,T,Metals,15,2021-03-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,S,Metals,16,2021-03-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,2021-03-22,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,200,0.1,T,Metals,17,2021-03-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,200,0.1,S,Metals,18,2021-03-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,200,0.1,S,Metals,18,2021-03-22,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,100,0.1,T,Metals,15,2021-04-16,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,S,Metals,16,2021-04-16,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,2021-04-16,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,200,0.1,T,Metals,17,2021-04-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2021-05-06,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2021-05-24,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -27,6 +29,7 @@ FCR,200,0.1,T,Metals,17,2021-07-12,Li_mgL,Ba_mgL,6,sample had particulates and w
 FCR,100,0.1,T,Metals,15,2021-07-21,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2021-11-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2021-12-06,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+BVR,50,9.0,S,Metals,26,2022-02-06,Mg_mgL,Mg_mgL,8,observation seems abnormally high.
 FCR,100,0.1,T,Metals,15,2022-03-17,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2022-03-17,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-04-19,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -57,7 +60,7 @@ FCR,100,0.1,T,Metals,15,2022-08-18,Li_mgL,Ba_mgL,6,sample had particulates and w
 FCR,200,0.1,T,Metals,17,2022-08-18,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,9.0,T,Metals,13,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,S,Metals,16,2022-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,2022-08-29,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,100,0.1,T,Metals,15,2022-09-13,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2022-09-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2022-09-26,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -70,6 +73,7 @@ FCR,100,0.1,T,Metals,15,2023-04-04,Li_mgL,Ba_mgL,6,sample had particulates and w
 FCR,200,0.1,T,Metals,17,2023-04-04,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-04-18,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-05-01,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,2023-05-01,Ba_mgL,Ba_mgL,8,observation seems abnormally high.
 FCR,100,0.1,T,Metals,15,2023-05-08,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-05-16,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,2023-05-22,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -89,7 +93,7 @@ FCR,50,5,T,Metals,7,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was m
 FCR,50,6.2,T,Metals,9,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,8,T,Metals,11,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-BVR,50,3,S,Metals,22,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+BVR,50,3,S,Metals,22,2023-07-31,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 BVR,50,6,T,Metals,23,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 BVR,50,9,T,Metals,25,2023-07-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,1.6,T,Metals,3,2023-08-07,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -106,7 +110,7 @@ BVR,50,9,T,Metals,25,2023-08-29,Li_mgL,Ba_mgL,6,sample had particulates and was 
 FCR,50,0.1,T,Metals,1,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,1.6,T,Metals,3,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,3.8,T,Metals,5,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,50,3.8,S,Metals,6,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
+FCR,50,3.8,S,Metals,6,2023-09-05,Li_mgL,Ba_mgL,10,Filtered sample had particulates. Set to NA for improper procedure
 FCR,100,0.1,T,Metals,15,2023-09-05,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,8,T,Metals,11,2023-09-12,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-09-12,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
@@ -117,7 +121,3 @@ FCR,50,5,T,Metals,7,2023-10-09,Li_mgL,Ba_mgL,6,sample had particulates and was m
 BVR,50,3,T,Metals,21,2023-10-14,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,50,3.8,T,Metals,5,2023-10-17,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,2023-10-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-BVR,50,0.1,T,Metals,19,2023-10-31,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-BVR,50,9,T,Metals,25,2023-11-06,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,100,0.1,T,Metals,15,2023-12-04,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook
-FCR,200,0.1,T,Metals,17,2023-12-04,Li_mgL,Ba_mgL,6,sample had particulates and was microwave digested. See digestion notebook

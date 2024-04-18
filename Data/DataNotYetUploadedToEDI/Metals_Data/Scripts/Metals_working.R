@@ -2,6 +2,7 @@
 # Author: Cece Wood
 # Date: 18JUL23
 # Edit: 07 Mar. 24 A. Breef-Pilz
+# Edit: 18APR24 CEW
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -20,7 +21,7 @@ pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable", "hms")
 metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2023/",
                         historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
                         sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-                        maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+                        maintenance_file = "./Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
                         sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
                         MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
                         outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv", # put Null to return the file
@@ -314,13 +315,19 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-       else if (flag==10){
-         # improper procedure, set all data columns to NA and all flag columns to 10
-         raw_df[All, maintenance_cols] <- NA
+       else if (flag==8){
+         # abnormally high value, doesn't get flagged below but is manually flagged in maintenance log
 
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
+     else if (flag==10){
+       # improper procedure, set all data columns to NA and all flag columns to 10
+       raw_df[All, maintenance_cols] <- NA
+       
+       # Flag the sample here
+       raw_df[All, flag_cols] <- flag
+     }
        else {
          warning("Flag used in row ", i ," in the maintenance log not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
        }
@@ -367,8 +374,12 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
    # Flag values over 3 standard deviations above the mean for the year.
    # This will change each time we add more observations.
    # This is why we should qaqc all raw files
-
-   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3))),paste0("Flag_",colnames(raw_df[j]))] <- 8
+   
+   # Some samples are 3sd above the mean and we processed with a non-standard method, aka digestion
+   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]==6)),paste0("Flag_",j)] <- 68
+   
+   # Now flagging observations that were not digested and are 3sd above the mean
+   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]!=68)),paste0("Flag_",j)] <- 8
 
    print(j)
    print("mean")
@@ -565,3 +576,14 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
 
 
 }
+
+#a = metals_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+                historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
+                sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
+                maintenance_file = "./Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+                sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
+                MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
+                outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv", # put Null to return the file
+                ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
+                start_date = NULL,
+                end_date = NULL)

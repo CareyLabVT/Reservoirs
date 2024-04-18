@@ -578,12 +578,12 @@ metals_qaqc <- function(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/
 }
 
 #a = metals_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
-                historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
-                sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-                maintenance_file = "./Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
-                sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
-                MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
-                outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv", # put Null to return the file
-                ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
-                start_date = NULL,
-                end_date = NULL)
+#                historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
+#                sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
+#                maintenance_file = "./Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+#                sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
+#                MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
+#                outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv", # put Null to return the file
+#                ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
+#                start_date = NULL,
+#                end_date = NULL)

@@ -9,3 +9,10 @@ Lakes	lter controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
 iron	cuahsi controlled vocabulary
 manganese	cuahsi controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary
+BVR	carey lab controlled vocabulary
+CCR	carey lab controlled vocabulary
+FCR	carey lab controlled vocabulary

@@ -1,3 +1,4 @@
 geographicDescription	northBoundingCoordinate	southBoundingCoordinate	eastBoundingCoordinate	westBoundingCoordinate
 "Beaverdam Reservoir is located in Vinton, Virginia, USA"	37.322865	37.311961	-79.813848	-79.824834
+"Carvins Cove Reservoir is located in Roanoke, Virginia, USA"	37.409127	37.365345	-79.944052	-79.978642
 "Falling Creek Reservoir is located in Vinton, Virginia, USA"	37.309589	37.30266	-79.836009	-79.839249

@@ -10,6 +10,7 @@ All casts from 2018-2022 were re-processed in the revision published in February
 
 This data package includes the CTD data file (CTD_2013_2023.csv), QAQC R script (QAQC_2018_2023.R), maintenance log (CTD_Maintenance_Log.txt), visual inspection R script (CTD_visualization.R), sampling sites (site_descriptions.csv), and additional data processing scripts (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_CTD_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.
 
+
 INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2023
 
 From 2013-2016, profiles were taken with our first CTD (serial number 4397) equipped with an SBE 43 Dissolved Oxygen sensor and an ECO FLNTU sensor for turbidity and chlorophyll. In spring 2017, this CTD had a major upgrade and received a new data recorder, pH/ORP sensor, and PAR sensor; all other sensors and pumps remained the same. As the CTD received a new motherboard with the data recorder upgrade, its serial number updated from 4397 to 7809. Thus, from 2017-2023, the serial number 7809 CTD was equipped with an SBE 43 Dissolved Oxygen sensor, an ECOFLNTU sensor for turbidity and chlorophyll, a PAR-LOG ICSW sensor for photosynthetically active radiation, and a SBE 27 pH and oxidation-reduction potential (ORP) sensor. 
@@ -18,21 +19,28 @@ In May 2022, we added an additional, second CTD (serial number 8188) equipped wi
 
 During 2022-2023, we took simultaneous profiles with the two CTDs (serial numbers 7809 and 8188) on 42 occasions across three different reservoirs: Falling Creek Reservoir (24 casts), Beaverdam Reservoir (16 casts), and Carvins Cove Reservoir (2 casts). Casts were either collected at the same time ~1 m apart or in succession in the same location. We rounded depth observations to the nearest centimeter, then matched observations from the same day, reservoir, and depth. Using the mcr package in R (Potapov et al. 2023), we used the Passing-Babcock regression (Passing and Bablok 1983) and then used the Pearson correlation to test correspondence between the sensors on the two instruments. We used bootstrapping to quantify the slope and intercept estimates with confidence intervals from the Passing-Bablock regressions (Manuilova and Schuetzenmeister 2014). Good correspondence between CTDs would yield a slope near 1 and an intercept near 0, and a 95% confidence interval that does not include these best-case values indicates a statistically significant difference. If a slope was significantly different from 1, we evaluated both the magnitude of the difference and plots of residuals vs. concentrations. If there was no clear pattern over increasing values, the correspondence was judged acceptable.
 
-Below is a table of the comparison between the two CTDs with the statistics from the Passing-Babcock regression and the Pearson correlation coefficient for each variable measured by the instruments:
+Below are the results of the comparison between the two CTDs, with the statistics from the Passing-Babcock regression and the Pearson correlation coefficient for each variable measured by the instruments:
 
-| Variable | Timing of overlap casts | Number of casts in overlap | Results of overlap comparison
-| Temp_C | 2022 - 2023 | 791 | The Passing-Babcock regression slope was 1.00 (0.997-1.001), the intercept was 0.06 (-0.04 to 0.16), and the Pearson correlation coefficient was 0.996. Consequently, we judged the CTD overlap to be acceptable for water temperature. |
-| Turbidity_NTU | 2022 - 2023 | 809 | The Passing-Babcock regression slope was 0.96 (0.95 - 0.98), the intercept was -0.37 (-0.59 to -0.25), and the Pearson correlation coefficient was 0.833. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for turbidity. |
-| SpCond_uScm | 2022 - 2023 | 790 | The Passing-Babcock regression slope was 0.98 (0.98 - 0.99), the intercept was 0.71 (0.53 to 0.87), and the Pearson correlation coefficient was 0.958. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for specific conductivity. |
-| Cond_uScm | 2022 - 2023 | 790 | The Passing-Babcock regression slope was 0.98 (0.97 - 0.98), the intercept was 0.69 (0.57 to 0.87), and the Pearson correlation coefficient was 0.956. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for conductivity. |
-| PAR_umolsm2s | 2022 - 2023 | 1018 | The Passing-Babcock regression slope was 0.98 (0.96 - 1.01), the intercept was -0.01 (-0.01 to -0.00), and the Pearson correlation coefficient was 0.793. Deviation between the two CTDs tended to be highest under high PAR conditions. Consequently, we judged the CTD overlap to be acceptable for PAR. |
-| DO percent sat | 2022 - 2023 | 426 | The Passing-Babcock regression slope was 1.11 (1.05 - 1.16), the intercept was 0.27 (0.07 to 0.39), and the Pearson correlation coefficient was 0.936. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO percent saturation should be interpreted with caution when comparing between CTDs.
-| DO_mgL | 2022 - 2023 | 426 | The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs. |
-| Chla_ugL | 2022 - 2023 | 809 | The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs. |
+- Temp_C (2022 - 2023; n = 791): The Passing-Babcock regression slope was 1.00 (0.997-1.001), the intercept was 0.06 (-0.04 to 0.16), and the Pearson correlation coefficient was 0.996. Consequently, we judged the CTD overlap to be acceptable for water temperature.
+
+- Turbidity_NTU (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.96 (0.95 - 0.98), the intercept was -0.37 (-0.59 to -0.25), and the Pearson correlation coefficient was 0.833. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for turbidity.
+
+- SpCond_uScm (2022 - 2023; 790): The Passing-Babcock regression slope was 0.98 (0.98 - 0.99), the intercept was 0.71 (0.53 to 0.87), and the Pearson correlation coefficient was 0.958. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for specific conductivity.
+
+- Cond_uScm (2022 - 2023; n = 790): The Passing-Babcock regression slope was 0.98 (0.97 - 0.98), the intercept was 0.69 (0.57 to 0.87), and the Pearson correlation coefficient was 0.956. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for conductivity.
+
+- PAR_umolsm2s (2022 - 2023; n = 1018): The Passing-Babcock regression slope was 0.98 (0.96 - 1.01), the intercept was -0.01 (-0.01 to -0.00), and the Pearson correlation coefficient was 0.793. Deviation between the two CTDs tended to be highest under high PAR conditions. Consequently, we judged the CTD overlap to be acceptable for PAR.
+
+- DO percent sat (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.11 (1.05 - 1.16), the intercept was 0.27 (0.07 to 0.39), and the Pearson correlation coefficient was 0.936. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO percent saturation should be interpreted with caution when comparing between CTDs.
+
+- DO_mgL (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs.
+
+- Chla_ugL (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs.
 
 The serial number of the CTD used for each profile is indicated in the column SN in published data.
 
 Below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals. 
+
 
 ### CTD serial number 4397 ###
 
@@ -68,10 +76,13 @@ Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. FLNTU-7096 (2
 
 Wetlab ECO Triplet Scattering Fluorescence for CDOM, phycocyanin, and phycoerythrin- SERIAL NO. FL3-7350 (2022 - current)
 
-Reference:
+
+References:
+
 Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023). _mcr: Method Comparison  Regression_. R package version 1.3.2, <https://CRAN.R-project.org/package=mcr>.
 
 Passing, H., and Bablok. 1983. A new biometrical procedure for testing the equality of measurements from two different analytical methods. Application of linear regression procedures for method comparison studies in clinical chemistry, Part I. Journal of Clinical Chemistry and Clinical Biochemistry 21:709-720.
+
 
 Additional Notes
 

@@ -39,8 +39,6 @@ Confused about something in this folder? Here's the comprehensive file structure
 
 -   `CTD_season_csvs`: .csv files that combine all data for this year. The only file here that currently gets updated regularly is ctd_L0.csv, which is all data for the current season *before* QAQC and flags.
 
--   `metadata_files`: Automatically generated metadata for each cast. Note that I (Abby) don't really think these metadata files are useful...
-
 -   `Old_XMLCON_files`: .xml configuration affects the initial data processing when getting data off of the CTD. We archive these configuration files here for reproducibility
 
 -   `PDF_outputs`: Visualizations of individual profiles as a quality control gut-check.

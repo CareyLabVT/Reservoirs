@@ -13,6 +13,13 @@ THIS_YEAR <- 2023 #Latest year of data
 # Re-process all casts 2018-present rather than pulling the most recent data on EDI
 ctd_edi <- read.csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
 
+#Make sure all files have been processed
+processed_files <- sub(".csv","",list.files("../csv_outputs"))
+raw_files <- list.files("../RawDownloads")
+raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
+processed_files[!processed_files %in% raw_files]
+raw_files[!raw_files %in% processed_files]
+
 # Re-process all data. This will take a long time, particularly if you set force_reprocessing to T
 # Can be skipped if you only want to visualize data and have already run this once this year
 ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
@@ -26,7 +33,10 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
 
 #Load data
 ctd_reprocessed <- read.csv(paste0("../CTD_2018_", THIS_YEAR,".csv"))
-min(ctd_reprocessed$DateTime) #Gut check: we've re-processed files since 2018
+#Gut check
+min(ctd_reprocessed$DateTime) # we've re-processed files since 2018
+unique(ctd_reprocessed$Site)
+unique(ctd_reprocessed$Reservoir)
 
 #Add SN to historical EDI data
 ctd_edi <- ctd_edi %>%
@@ -41,17 +51,19 @@ unique(check$DateTime)
 # the only file since 2018 that is on EDI but not in the re-processed data is 
 # "2021-12-14 10:45:36" the reason this is not in the re-processed data is that 
 # the time was later adjusted to 12:45:36. I.e., the historical data includes an 
-# incorrect time. The version with 10:45:36 should be removed (which is done in the code below)
+# incorrect time. The version with 10:45:36 should be removed (which is done in 
+# "Combine with historical", below)
 
 #Now check for files that are in the re-processed data but not the historical data
 check2 <- ctd_reprocessed %>%
   arrange(desc(DateTime)) %>%
   filter(year(DateTime) <= 2022, #Since we are using the 2022 data publication
          !DateTime %in% unique(ctd_edi$DateTime), 
-         SN == "7809") %>%
+         #SN == "7809"
+         ) %>%
   mutate(Name = paste0(Reservoir, Site, " ", SN, " ", DateTime))
 unique(check2$Name) 
-# 53 new files. In 2022, many of these are the new CTD, which didn't get published
+# 54 new files. In 2022, many of these are the new CTD, which didn't get published
 # Also lots of CCR from 2019
 
 #Combine with historical

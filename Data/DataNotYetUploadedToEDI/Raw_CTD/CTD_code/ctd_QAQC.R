@@ -39,6 +39,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                                    ctd_cast_csvs = ctd_cast_csvs,
                                    start_date = start_date,
                                    force_reprocessing = force_reprocessing)
+  
   #If no new files, end QAQC
   if(length(file_names)==0){
     message("No new files could be processed")

@@ -17,8 +17,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                CTD_FOLDER = "../",
                                maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")) {
   
-  print("now in flag_seaonal_csvs")
-  
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   ctd = ctd1 %>%
     mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
@@ -86,8 +84,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
   }  
 
-  print("flaged in flag_seasonal_csvs")
-  
   # fix the time and flag it 
   ctd_flagged = ctd %>% 
     select(-Flag)%>%

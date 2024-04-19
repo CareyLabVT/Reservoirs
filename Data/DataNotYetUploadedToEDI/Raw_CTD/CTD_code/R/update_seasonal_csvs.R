@@ -18,9 +18,7 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
   # This reads all the files into the R environment
   files = list.files(ctd_cast_csvs, pattern = ".*\\d+.*.csv") #Get all csv files
   files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That do not include PAR or matlab
-  omit <- c("100719_bvr_sedtrap.csv",
-            "072121_fcr50_sit_1.6m.csv", 
-            "072621_fcr_50_sit_anoxic.csv") #fill in with any files you need to omit
+  omit <- c("072121_fcr50_sit_1.6m.csv") #fill in with any files you need to omit
   files <- files[!files %in% omit]
   files <- files[!grepl("test", files)] # take out files that were labeled test
   
@@ -35,8 +33,6 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
   
   ctd <- map(files_to_load, load_file) %>% #see function below. Using map() makes loading files faster
     dplyr::bind_rows()
-
-  print("Function load_file worked in update_seaonal_csv.R")
   
   write_csv(ctd, paste0(ctd_season_csvs, "/", intermediate_file_name))
 }

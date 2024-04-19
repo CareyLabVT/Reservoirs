@@ -17,6 +17,7 @@ Data visualization:
 Data/metadata upload
 
 -   If you are in charge of uploading data, new data files (.xml, .cnv, .hex) get uploaded into the `./RawDownloads/` folder. Maintenance records go into `CTD_Maintenance_Log.csv`. Thanks!
+-   If you don't want a file to get processed you can put the word "test" in the file name and it will not be added to the L1 file
 
 ## Comprehensive file structure overview
 

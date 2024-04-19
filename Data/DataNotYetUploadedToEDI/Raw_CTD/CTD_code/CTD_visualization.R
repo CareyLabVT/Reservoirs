@@ -13,13 +13,6 @@ THIS_YEAR <- 2023 #Latest year of data
 # Re-process all casts 2018-present rather than pulling the most recent data on EDI
 ctd_edi <- read.csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
 
-#Make sure all files have been processed
-processed_files <- sub(".csv","",list.files("../csv_outputs"))
-raw_files <- list.files("../RawDownloads")
-raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
-processed_files[!processed_files %in% raw_files]
-raw_files[!raw_files %in% processed_files]
-
 # Re-process all data. This will take a long time, particularly if you set force_reprocessing to T
 # Can be skipped if you only want to visualize data and have already run this once this year
 ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
@@ -27,9 +20,16 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
                             ctd_season_csvs = "../CTD_season_csvs",
                             CTD_FOLDER = "../",
                             start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
-                            force_reprocessing = F, #Re-process all files
+                            force_reprocessing = T, #Re-process all files
                             output_file_name = paste0("CTD_2018_", THIS_YEAR,".csv"),
                             intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
+
+#Make sure all files have been processed
+processed_files <- sub(".csv","",list.files("../csv_outputs"))
+raw_files <- list.files("../RawDownloads")
+raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
+processed_files[!processed_files %in% raw_files]
+raw_files[!raw_files %in% processed_files]
 
 #Load data
 ctd_reprocessed <- read.csv(paste0("../CTD_2018_", THIS_YEAR,".csv"))
@@ -115,7 +115,7 @@ vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm
 library(colorRamps)
 library(plotly)
 vars_to_plot %>%
-  map(plot_var, year = 2023)
+  map(plot_var, year = 2023, reservoirs = c("BVR"))
 
 vars_to_plot %>%
   map(plot_var, year = 2022)

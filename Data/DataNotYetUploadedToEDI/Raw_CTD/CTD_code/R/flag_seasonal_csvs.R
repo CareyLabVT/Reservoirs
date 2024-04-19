@@ -69,13 +69,13 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     ctd[c(which(is.na(ctd[,j]))),paste0("Flag_",j)] <- 2
     
     # Flag values less than 0 with a flag 4 except: Temp, ORP and Decent rate
-    ctd[c(which(!is.na(ctd[,j])& ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
+    ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
     
     # change negative values to 0
-    ctd[c(which(!is.na(ctd[,j])& ctd[,j]<0 & (j %in% zero))),j]<-0
+    ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% zero))),j]<-0
     
     # change negative values to NA
-    ctd[c(which(!is.na(ctd[,j])& ctd[,j]<0 & (j %in% changed_Na))),j]<-NA
+    ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% changed_Na))),j]<-NA
     
     
     #Not all variables are meaningful out of the water
@@ -93,94 +93,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                lubridate::minute(DateTime)==0&
                                lubridate::seconds(DateTime)==0,
                              7,0)) #Flag times that are missing time (date is meaningful but not time)
-  # 
-  # mutate(Flag_DateTime = 0,
-  #        Flag_Temp_C = 0,
-  #        Flag_DO_mgL = 0,
-  #        Flag_DOsat_percent = 0,
-  #        Flag_Cond_uScm = 0,
-  #        Flag_SpCond_uScm = 0,
-  #        Flag_Chla_ugL = 0,
-  #        Flag_Turbidity_NTU = 0,
-  #        Flag_pH = 0,
-  #        Flag_ORP_mV = 0,
-  #        Flag_PAR_umolm2s = 0,
-  #        Flag_CDOM_ugL = 0,
-  #        Flag_Phycoerythrin_ugL = 0,
-  #        Flag_Phycocyanin_ugL = 0,
-  #        Flag_DescRate_ms = 0,
-  
-  #   #TEMP
-  #   Flag_Temp_C = ifelse(is.na(Temp_C),2,Flag_Temp_C), #Flag NA temperatures
-  #   
-  #   #DO
-  #   Flag_DO_mgL = ifelse(is.na(DO_mgL),2,Flag_DO_mgL), #Flag NA
-  #   Flag_DO_mgL = ifelse(DO_mgL < 0,4,Flag_DO_mgL), #Flag DO < 0, set to 0
-  #   DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), 
-  #   
-  #   #DO pSat
-  #   Flag_DOsat_percent = ifelse(is.na(DOsat_percent),2,Flag_DOsat_percent), #Flag NA
-  #   Flag_DOsat_percent = ifelse(DOsat_percent < 0,4,Flag_DOsat_percent), #Flag pSat < 0, set to 0
-  #   DOsat_percent = ifelse(DOsat_percent < 0, 0, DOsat_percent), 
-  #   
-  #   #COND
-  #   Flag_Cond_uScm = ifelse(is.na(Cond_uScm),2,Flag_Cond_uScm), #Flag NA
-  #   Flag_Cond_uScm = ifelse(Cond_uScm < 0,4,Flag_Cond_uScm), #Flag Cond < 0, set to NA
-  #   Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), 
-  #   
-  #   #SPECCOND
-  #   Flag_SpCond_uScm = ifelse(is.na(SpCond_uScm),2,Flag_SpCond_uScm), #Flag NA
-  #   Flag_SpCond_uScm = ifelse(SpCond_uScm < 0,4,Flag_SpCond_uScm), #Flag SpCond < 0, set to NA
-  #   SpCond_uScm = ifelse(SpCond_uScm < 0, NA, SpCond_uScm), 
-  #   
-  #   #CHLA
-  #   Flag_Chla_ugL = ifelse(is.na(Chla_ugL),2,Flag_Chla_ugL), #Flag NA
-  #   Flag_Chla_ugL = ifelse(Chla_ugL < 0,4,Flag_Chla_ugL), #Flag Chla < 0, set to 0
-  #   Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), 
-  #   
-  #   #TURB
-  #   Flag_Turbidity_NTU = ifelse(is.na(Turbidity_NTU),2,Flag_Turbidity_NTU), #Flag NA
-  #   Flag_Turbidity_NTU = ifelse(Turbidity_NTU < 0,4,Flag_Turbidity_NTU), #Flag turbidity < 0, set to 0
-  #   Turbidity_NTU = ifelse(Turbidity_NTU < 0, 0, Turbidity_NTU), 
-  #   
-  #   #pH
-  #   Flag_pH = ifelse(is.na(pH),2,Flag_pH), #Flag NA
-  #   Flag_pH = ifelse(pH < 0,4,Flag_pH), #Flag pH < 0, set to NA
-  #   pH = ifelse(pH < 0, NA, pH), 
-  #   
-  #   #ORP
-  #   Flag_ORP_mV = ifelse(is.na(ORP_mV),2,Flag_ORP_mV), #Flag NA
-  #   
-  #   #PAR
-  #   Flag_PAR_umolm2s = ifelse(is.na(PAR_umolm2s),2,Flag_PAR_umolm2s), #Flag NA
-  #   Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0,4,Flag_PAR_umolm2s), #Flag PAR < 0, set to 0
-  #   PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, 0, PAR_umolm2s), 
-  #   
-  #   #CDOM
-  #   Flag_CDOM_ugL = ifelse(is.na(CDOM_ugL), 2, Flag_CDOM_ugL), #Flag NA
-  #   Flag_CDOM_ugL = ifelse(!is.na(CDOM_ugL) & CDOM_ugL < 0, 4, Flag_CDOM_ugL), #Flag CDOM < 0, set to 0
-  #   CDOM_ugL = ifelse(!is.na(CDOM_ugL) & CDOM_ugL < 0, NA, CDOM_ugL), 
-  #   
-  #   #Phycoerythrin
-  #   Flag_Phycoerythrin_ugL = ifelse(is.na(Phycoerythrin_ugL), 2, Flag_Phycoerythrin_ugL),
-  #   Flag_Phycoerythrin_ugL = ifelse(!is.na(Phycoerythrin_ugL) & Phycoerythrin_ugL < 0, 
-  #                                   4, Flag_Phycoerythrin_ugL), #Flag CDOM < 0, set to 0
-  #   Phycoerythrin_ugL = ifelse(!is.na(Phycoerythrin_ugL) & Phycoerythrin_ugL < 0, 
-  #                              NA, Phycoerythrin_ugL), 
-  #   
-  #   #Phycocyanin
-  #   Flag_Phycocyanin_ugL = ifelse(is.na(Phycocyanin_ugL), 2, Flag_Phycocyanin_ugL),
-  #   Flag_Phycocyanin_ugL = ifelse(!is.na(Phycocyanin_ugL) & Phycocyanin_ugL < 0, 
-  #                                 4, Flag_Phycocyanin_ugL), #Flag CDOM < 0, set to 0
-  #   Phycocyanin_ugL = ifelse(!is.na(Phycocyanin_ugL) & Phycocyanin_ugL < 0, 
-  #                            NA, Phycocyanin_ugL), 
-  #   
-  #   #DESC RATE
-  #   Flag_DescRate_ms = ifelse(is.na(DescRate_ms),2,Flag_DescRate_ms), #Flag NA
-  # 
-  # )
-  
-  
   
   # Fix times
   # CTD times in 2022 are incorrect by ~2 hr
@@ -214,10 +126,10 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     add_column(CTD_check = NA)%>% #create the CTD_check column
     #sets up criteria for the CTD_check column either "good","bad" or "NA"(if no data)
     mutate(
-      CTD_check=ifelse(Temp_C<25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C<25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
+      CTD_check=ifelse(Temp_C<25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "good", CTD_check),
+      CTD_check=ifelse(Temp_C<25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "bad", CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "good", CTD_check),
+      CTD_check=ifelse(Temp_C>25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "bad", CTD_check),
       CTD_check=ifelse(is.na(SpCond_uScm), "good",CTD_check),
       CTD_check=ifelse(Cond_uScm==0, "bad", CTD_check))%>%
     #the next part switches the column if labeled "bad" in CTD_check 

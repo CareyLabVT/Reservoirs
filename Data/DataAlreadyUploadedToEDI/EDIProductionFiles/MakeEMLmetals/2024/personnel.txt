@@ -1,0 +1,15 @@
+givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
+Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	creator
+Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	contact
+Cissy	L.	Ming	Virginia Tech	cissym@vt.edu	0000-0003-0316-2315	creator
+Cissy	L.	Ming	Virginia Tech	cissym@vt.edu	0000-0003-0316-2315	PI		Geological Society of America	
+Cissy	L.	Ming	Virginia Tech	cissym@vt.edu	0000-0003-0316-2315	PI		Virginia Water Resources Research Center	
+Nicholas	W.	Hammond	Virginia Tech	hammondnw@vt.edu	0000-0003-2975-8280	creator
+Adrienne	 	Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator
+Beckett	 	Geisler	Virginia Tech	beccadg@vt.edu	 	creator
+George	 	Haynie	Virginia Tech	georgeh0919@vt.edu	 	creator
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
+Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933016
+Renato	J.	Figueiredo	University of Florida	renato@acis.ufl.edu	0000-0001-9841-6060	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933102
+Jeffrey	 	Parks	Virginia Tech	jparks@vt.edu	0000-0002-1269-6987	analytical chemist

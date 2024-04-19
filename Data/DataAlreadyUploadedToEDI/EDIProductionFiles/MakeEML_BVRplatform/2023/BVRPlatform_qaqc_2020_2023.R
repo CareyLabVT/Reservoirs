@@ -2,7 +2,7 @@
 # This QAQC cleaning script was applied to create the data files included in this data package.
 # Author: Adrienne Breef-Pilz
 # First Developed Jan. 2023
-# Last edited: 19 Jan. 2024
+# Last edited: 08 Feb. 2024
 
 # This text is for EDI:
 #Additional notes: This script is included with this EDI package to show which QAQC has already been applied to 
@@ -12,16 +12,16 @@
 
 
 qaqc_bvr <- function(
-            data_file,
-            data2_file,
-            maintenance_file,  
+            data_file = 'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',
+            data2_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/BVRplatform_L1.csv',
+            maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv',  
             output_file, 
             start_date = NULL, 
             end_date = NULL)
 {
   
   # Call the source function to get the depths
- 
+  #source("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2023/find_depths.R")
   source_url("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R")
   
   #change column names
@@ -148,7 +148,10 @@ qaqc_bvr <- function(
     
   
   #####Maintenance Log QAQC############ 
-  
+  if(nrow(log)==0){
+     print('No Maintenance Events Found...')
+
+   } else {
   
   # modify bvrdata based on the information in the log   
   
@@ -308,7 +311,7 @@ qaqc_bvr <- function(
       }
     }
   }    
-  
+} 
   ############## Remove and Flag when sensors are out of position ####################
   
   #change EXO values to NA if EXO depth is less than 0.5m and Flag as 2
@@ -401,7 +404,7 @@ qaqc_bvr <- function(
                           output = NULL, # output = the path where you would like the data saved
                           date_offset = "2021-04-05", # Date_offset = the date we moved the sensors so we know where to split the file. If you don't need to split the file put NULL
                           offset_column1 = "Offset_before_05APR21",# offset_column1 = name of the column in the depth_offset file to subtract against the actual depth to get the sensor depth
-                          offset_column2 = "Current_offset", # offset_column2 = name of the second column if applicable for the column with the depth offsets
+                          offset_column2 = "Offset_after_05APR21", # offset_column2 = name of the second column if applicable for the column with the depth offsets
                           round_digits = 2, #round_digits = number of digits you would like to round to
                           bin_width = 0.25, # bin width in m
                           wide_data = T)  

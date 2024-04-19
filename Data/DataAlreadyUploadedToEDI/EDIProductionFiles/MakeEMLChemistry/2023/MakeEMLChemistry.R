@@ -139,15 +139,15 @@ make_eml(
   dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
   temporal.coverage = c("2013-04-04", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2023.csv", 
+  data.table = c("Chemistry_2013_2023_final.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("QAQC_Chemistry_2023_2023.R", "Chem_inspection_2013_2023.Rmd"),
+  other.entity = c("Chemistry_QAQC_2023_2023.R", "Chemistry_inspection_2013_2023.Rmd"),
   other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.12') #reserve new staging environment package id each year
+  package.id = 'edi.1025.15') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -186,23 +186,26 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2022",
-  temporal.coverage = c("2013-04-04", "2023-03-21"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
+  temporal.coverage = c("2013-04-04", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c("chemistry_2013_2022.csv",
+  data.table = c("Chemistry_2013_2023.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = "QAQC_chemistry_2015_2022.R",
-  other.entity.description = "Nutrient QAQC script",
+  other.entity = c("Chemistry_QAQC_2023_2023.R", "Chemistry_inspection_2013_2023.Rmd"),
+  other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.11') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.12') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
 
-# 2023 data pub = 199.10
+# 2024 data pub = 199.12
+
+# 2023 data pub = 199.11
+
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

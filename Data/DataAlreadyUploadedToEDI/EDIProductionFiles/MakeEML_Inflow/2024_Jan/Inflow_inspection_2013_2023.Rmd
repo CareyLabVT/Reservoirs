@@ -6,7 +6,7 @@ created: "2023-02-15"
 date: "`r Sys.Date()`"
 ---
 
-This script is the visual inspection scripts. 
+This script is the visual inspection script. 
 
 1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
 
@@ -16,7 +16,7 @@ This script is the visual inspection scripts.
 
 4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
 
-5. If necessary can QAQC data already on EDI using the QAQC function
+5. If necessary, the script can QAQC data already on EDI using the QAQC function
 
 6. Creates plots
 
@@ -41,8 +41,8 @@ source('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-dat
 
 
 # Function to make the plots below
-source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
-
+#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+source("Plot_function.R")
 
  #turn off pander auto asis. Used for making the ploty functions show up in the knitted markdown HTML
         pander::panderOptions('knitr.auto.asis', FALSE)
@@ -95,7 +95,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                   ### CHANGE THIS NUMBER BELOW 
                                                                                ##      
-  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/923/14/aae7888d68753b276d1623680f81d5de")
+  current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/923/15/aae7888d68753b276d1623680f81d5de")
  #
  # # Force files from EDI to have an EST timestamp
 
@@ -497,7 +497,7 @@ weirdata%>%
 # convert datetimes to characters so that they are properly formatted in the output file
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
-write_csv(current_df, "Inflow_2013_2023.csv")
+#write_csv(current_df, "Inflow_2013_2023.csv")
 
 ```
 

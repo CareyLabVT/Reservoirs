@@ -17,6 +17,7 @@ Data visualization:
 Data/metadata upload
 
 -   If you are in charge of uploading data, new data files (.xml, .cnv, .hex) get uploaded into the `./RawDownloads/` folder. Maintenance records go into `CTD_Maintenance_Log.csv`. Thanks!
+-   If you don't want a file to get processed you can put the word "test" in the file name and it will not be added to the L1 file
 
 ## Comprehensive file structure overview
 
@@ -37,8 +38,6 @@ Confused about something in this folder? Here's the comprehensive file structure
 -   `CTD_Notes.txt`: Additional notes about CTD maintenance/cleaning
 
 -   `CTD_season_csvs`: .csv files that combine all data for this year. The only file here that currently gets updated regularly is ctd_L0.csv, which is all data for the current season *before* QAQC and flags.
-
--   `metadata_files`: Automatically generated metadata for each cast. Note that I (Abby) don't really think these metadata files are useful...
 
 -   `Old_XMLCON_files`: .xml configuration affects the initial data processing when getting data off of the CTD. We archive these configuration files here for reproducibility
 

@@ -1,29 +1,87 @@
-Depth profiles of multiple water-quality variables were collected from 2013 through 2023 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA) at five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2023); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2023, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.
+Depth profiles of multiple water quality variables were collected from 2013 through 2023 using two Conductivity, Temperature, and Depth (CTD) profilers from SeaBird Electronics (SBE, Bellevue Washington, USA). 
 
-The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except during/before the 2021 field season when calibration was delayed until August 2021 due to the ongoing COVID-19 pandemic.
+Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2023); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some occasional CTD casts were collected at night. Above-surface (i.e., air) temperature and PAR are included in the dataset for 2018–2023, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.
+
+The CTDs were calibrated by the manufacturer according to the standards and practices of SBE and the companies that manufactured the secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February) for our first CTD (serial numbers 4397 and 7809), except for the 2021 and 2022 field seasons, when calibration was delayed until August 2022 due to the ongoing COVID-19 pandemic. A second CTD (serial number 8188) was added in May 2022 and was returned for re-calibration of its turbidity and chl-a sensors in August - October 2022. 
 
 Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data.
 
+All casts from 2018-2022 were re-processed in the revision published in February 2024 to standardize data processing across years (see QAQC_2018_2023.R and referenced data processing scripts). 
 
-INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2022
+This data package includes the CTD data file (CTD_2013_2023.csv), QAQC R script (QAQC_2018_2023.R), maintenance log (CTD_Maintenance_Log.txt), visual inspection R script (CTD_visualization.R), sampling sites (site_descriptions.csv), and additional data processing scripts (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_CTD_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.
 
-Multiple sensors and instruments were added over time; below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals.
 
-Seacat 19Plus V 1.6 SERIAL NO. 4397 2013 - 2016 http://www.seabird.com/sites/default/files/documents/19plus_018_0.pdf 
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2023
 
-Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2022 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
+From 2013-2016, profiles were taken with our first CTD (serial number 4397) equipped with an SBE 43 Dissolved Oxygen sensor and an ECO FLNTU sensor for turbidity and chlorophyll. In spring 2017, this CTD had a major upgrade and received a new data recorder, pH/ORP sensor, and PAR sensor; all other sensors and pumps remained the same. As the CTD received a new motherboard with the data recorder upgrade, its serial number updated from 4397 to 7809. Thus, from 2017-2023, the serial number 7809 CTD was equipped with an SBE 43 Dissolved Oxygen sensor, an ECOFLNTU sensor for turbidity and chlorophyll, a PAR-LOG ICSW sensor for photosynthetically active radiation, and a SBE 27 pH and oxidation-reduction potential (ORP) sensor. 
 
-For CTD processing, refer to the SeaBird Data processing manual. http://www.seabird.com/sites/default/files/documents/SBEDataProcessing_7.26.7.pdf
+In May 2022, we added an additional, second CTD (serial number 8188) equipped with an SBE 43 Dissolved Oxygen sensor, an ECO Triplet Scattering Fluorescence Sensor, an ECO FLNTU sensor, and a PAR-LOG ICSW sensor. 
 
-SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2022 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
+During 2022-2023, we took simultaneous profiles with the two CTDs (serial numbers 7809 and 8188) on 42 occasions across three different reservoirs: Falling Creek Reservoir (24 casts), Beaverdam Reservoir (16 casts), and Carvins Cove Reservoir (2 casts). Casts were either collected at the same time ~1 m apart or in succession in the same location. We rounded depth observations to the nearest centimeter, then matched observations from the same day, reservoir, and depth. Using the mcr package in R (Potapov et al. 2023), we used the Passing-Babcock regression (Passing and Bablok 1983) and then used the Pearson correlation to test correspondence between the sensors on the two instruments. We used bootstrapping to quantify the slope and intercept estimates with confidence intervals from the Passing-Bablock regressions (Manuilova and Schuetzenmeister 2014). Good correspondence between CTDs would yield a slope near 1 and an intercept near 0, and a 95% confidence interval that does not include these best-case values indicates a statistically significant difference. If a slope was significantly different from 1, we evaluated both the magnitude of the difference and plots of residuals vs. concentrations. If there was no clear pattern over increasing values, the correspondence was judged acceptable.
 
-FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2022
+Below are the results of the comparison between the two CTDs, with the statistics from the Passing-Babcock regression and the Pearson correlation coefficient for each variable measured by the instruments:
 
-Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2022 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
+- Temp_C (2022 - 2023; n = 791): The Passing-Babcock regression slope was 1.00 (0.997-1.001), the intercept was 0.06 (-0.04 to 0.16), and the Pearson correlation coefficient was 0.996. Consequently, we judged the CTD overlap to be acceptable for water temperature.
 
-pH and OxidationReductionPotentialSensor SERIAL NO. 0363 2017 - 2022 (replaced in 2022) http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
+- Turbidity_NTU (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.96 (0.95 - 0.98), the intercept was -0.37 (-0.59 to -0.25), and the Pearson correlation coefficient was 0.833. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for turbidity.
 
-Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2022 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
+- SpCond_uScm (2022 - 2023; 790): The Passing-Babcock regression slope was 0.98 (0.98 - 0.99), the intercept was 0.71 (0.53 to 0.87), and the Pearson correlation coefficient was 0.958. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for specific conductivity.
+
+- Cond_uScm (2022 - 2023; n = 790): The Passing-Babcock regression slope was 0.98 (0.97 - 0.98), the intercept was 0.69 (0.57 to 0.87), and the Pearson correlation coefficient was 0.956. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for conductivity.
+
+- PAR_umolsm2s (2022 - 2023; n = 1018): The Passing-Babcock regression slope was 0.98 (0.96 - 1.01), the intercept was -0.01 (-0.01 to -0.00), and the Pearson correlation coefficient was 0.793. Deviation between the two CTDs tended to be highest under high PAR conditions. Consequently, we judged the CTD overlap to be acceptable for PAR.
+
+- DO percent sat (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.11 (1.05 - 1.16), the intercept was 0.27 (0.07 to 0.39), and the Pearson correlation coefficient was 0.936. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO percent saturation should be interpreted with caution when comparing between CTDs.
+
+- DO_mgL (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs.
+
+- Chla_ugL (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs.
+
+The serial number of the CTD used for each profile is indicated in the column SN in published data.
+
+Below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals. 
+
+
+### CTD serial number 4397 ###
+
+Seacat 19Plus V 1.6 - SERIAL NO. 4397 (2013 - 2016)
+
+SBE 43 Dissolved Oxygen Sensor - SERIAL NO. 0434 (2013 - 2016, then transferred to CTD serial number 7809)
+
+Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. 2496 (2013 - 2016, then transferred to CTD serial number 7809)
+
+
+### CTD serial number 7809 ###
+
+Sea-Bird SBE19Plus V2 - SERIAL NO. 7809 (2017 - current)
+
+SBE 43 Dissolved Oxygen Sensor - SERIAL NO. 0434 (2013 - current)
+
+Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. 2496 (2013 - current)
+
+pH and Oxidation Reduction Potential Sensor - SERIAL NO. 0363 (2017 - current). Probe replaced in 2022
+
+Photosynthetically Active Radiation (PAR) Sensor - SERIAL NO. 1122 (2017 - current) 
+
+
+### CTD serial number 8188 ###
+
+Sea-Bird SBE19Plus V2 - SERIAL No. 8188 
+
+SBE 43 Dissolved Oxygen Sensor - SERIAL NO. 4269 (2022 - current)
+
+Photosynthetically Active Radiation (PAR) Sensor - SERIAL NO. 2209 (2022 - current)
+
+Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. FLNTU-7096 (2022 - current)
+
+Wetlab ECO Triplet Scattering Fluorescence for CDOM, phycocyanin, and phycoerythrin- SERIAL NO. FL3-7350 (2022 - current)
+
+
+References:
+
+Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023). _mcr: Method Comparison  Regression_. R package version 1.3.2, <https://CRAN.R-project.org/package=mcr>.
+
+Passing, H., and Bablok. 1983. A new biometrical procedure for testing the equality of measurements from two different analytical methods. Application of linear regression procedures for method comparison studies in clinical chemistry, Part I. Journal of Clinical Chemistry and Clinical Biochemistry 21:709-720.
 
 
 Additional Notes

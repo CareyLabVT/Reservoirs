@@ -20,13 +20,23 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
                             ctd_season_csvs = "../CTD_season_csvs",
                             CTD_FOLDER = "../",
                             start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
-                            force_reprocessing = F, #Re-process all files
+                            force_reprocessing = T, #Re-process all files
                             output_file_name = paste0("CTD_2018_", THIS_YEAR,".csv"),
                             intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
 
+#Make sure all files have been processed
+processed_files <- sub(".csv","",list.files("../csv_outputs"))
+raw_files <- list.files("../RawDownloads")
+raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
+processed_files[!processed_files %in% raw_files]
+raw_files[!raw_files %in% processed_files]
+
 #Load data
 ctd_reprocessed <- read.csv(paste0("../CTD_2018_", THIS_YEAR,".csv"))
-min(ctd_reprocessed$DateTime) #Gut check: we've re-processed files since 2018
+#Gut check
+min(ctd_reprocessed$DateTime) # we've re-processed files since 2018
+unique(ctd_reprocessed$Site)
+unique(ctd_reprocessed$Reservoir)
 
 #Add SN to historical EDI data
 ctd_edi <- ctd_edi %>%
@@ -41,17 +51,19 @@ unique(check$DateTime)
 # the only file since 2018 that is on EDI but not in the re-processed data is 
 # "2021-12-14 10:45:36" the reason this is not in the re-processed data is that 
 # the time was later adjusted to 12:45:36. I.e., the historical data includes an 
-# incorrect time. The version with 10:45:36 should be removed (which is done in the code below)
+# incorrect time. The version with 10:45:36 should be removed (which is done in 
+# "Combine with historical", below)
 
 #Now check for files that are in the re-processed data but not the historical data
 check2 <- ctd_reprocessed %>%
   arrange(desc(DateTime)) %>%
   filter(year(DateTime) <= 2022, #Since we are using the 2022 data publication
          !DateTime %in% unique(ctd_edi$DateTime), 
-         SN == "7809") %>%
+         #SN == "7809"
+         ) %>%
   mutate(Name = paste0(Reservoir, Site, " ", SN, " ", DateTime))
 unique(check2$Name) 
-# 53 new files. In 2022, many of these are the new CTD, which didn't get published
+# 54 new files. In 2022, many of these are the new CTD, which didn't get published
 # Also lots of CCR from 2019
 
 #Combine with historical
@@ -103,7 +115,7 @@ vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm
 library(colorRamps)
 library(plotly)
 vars_to_plot %>%
-  map(plot_var, year = 2023)
+  map(plot_var, year = 2023, reservoirs = c("BVR"))
 
 vars_to_plot %>%
   map(plot_var, year = 2022)

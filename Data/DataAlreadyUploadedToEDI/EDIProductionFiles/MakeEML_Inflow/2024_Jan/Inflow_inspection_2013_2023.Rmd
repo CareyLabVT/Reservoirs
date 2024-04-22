@@ -41,8 +41,8 @@ source('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-dat
 
 
 # Function to make the plots below
-#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
-source("Plot_function.R")
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+#source("Plot_function.R")
 
  #turn off pander auto asis. Used for making the ploty functions show up in the knitted markdown HTML
         pander::panderOptions('knitr.auto.asis', FALSE)
@@ -307,37 +307,6 @@ for(f in 1:ncol(Flags)){
 }
 ```
 
-### Subset and rename the files
-This section will subset the files so you can make plots of the whole time series and the current year. 
-Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
-
-```{r Filter for current year and daily average, include=FALSE}
-
-
-current <- current_df%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "qaqc")
- # %>%select(DateTime:CR6Panel_Temp_C,type, -contains("adjusted"))
-
-
-daily <- current_df%>% 
-  group_by( Date = as.Date(DateTime)) %>% 
-  summarise_if(is.numeric, mean, na.rm=T)%>%
-  mutate(Year = as.factor(year(Date)),
-         Month = month(Date),
-         Time = "12:00:00")%>%
-  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
-  mutate(DateTime=ymd_hms(DateTime))
-
-  
-# catdata <- current_df%>%
-#   mutate(Year=year(DateTime))
-
-colors <- c("raw" = "red", "qaqc" = "black")
-# colors for comparing Thermistor, RDO and Pressure sensor
-#colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
-```
-
 ## QAQC Plots
 
 ##### QAQC plot information and all_plot function information
@@ -375,10 +344,12 @@ Do not over think the last 2 plots.
 
 ```{r WVWA plots, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C))
+dx <- colnames(current_df%>%select(WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia, WVWA_Flow_cms, WVWA_Temp_C))
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab="var", y_lab2="var", Water=F, Raw_file=F, Use_plotly=T)
+outputs <- lapply(dx, all_plot, data=current_df, raw_data= NULL, reservoir = "FCR", res_site=100, y_lab = "psi/psia/cms/C", y_lab2 = "psi/psia/cms/C", Water=T, Use_plotly=T, Heatmap = F)
+
+
 
 output <- unlist(outputs, recursive = F)
 
@@ -409,10 +380,10 @@ output <- unlist(outputs, recursive = F)
 
 ```{r VT sensors, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(VT_Pressure_psia, VT_Flow_cms, VT_Temp_C))
+dx <- colnames(current_df%>%select(VT_Pressure_psia, VT_Flow_cms, VT_Temp_C))
 
 # make the plots
-outputs <- lapply(dx, all_plot, y_lab="var", y_lab2="var", Water=F, Raw_file=F, Use_plotly=T)
+outputs <- lapply(dx, all_plot, data=current_df, raw_data= NULL, reservoir = "FCR", res_site=100, y_lab = "psi/psia/cms/C", y_lab2 = "psi/psia/cms/C", Water=T, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -465,7 +436,8 @@ weirdata%>%
 
 # Just the current year
 
-current%>%
+current_df%>%
+  filter(DateTime>current_time_start & DateTime<current_time_end)%>%
   ggplot(., aes(x=DateTime))+
   geom_point(aes(y=WVWA_Flow_cms, color="WVWA"))+
   geom_point(aes(y=VT_Flow_cms, color="VT")) +

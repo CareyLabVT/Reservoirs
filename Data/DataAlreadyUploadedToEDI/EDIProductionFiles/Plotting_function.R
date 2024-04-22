@@ -241,7 +241,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
   # Create the current plotly so we can get the date of points out of range 
   
   # Battery and cable power don't need to be interactive
-if(length(qaqc_current$Reservoir)>0){
+if(length(qaqc_current$DateTime)>0){
   if(grepl("Battery_V|power_V", Var)|Use_plotly==FALSE){
     
     if(Depth==T){
@@ -373,7 +373,7 @@ if(length(qaqc_current$Reservoir)>0){
   if(Heatmap==T & Depth==T){ 
     
     
-    if(length(qaqc_current$Reservoir)>0){
+    if(length(qaqc_current$DateTime)>0){
     # Use this heatmap function 
     # create the heat map for the current year
     cur_heat <- heatmap_EDI(data= qaqc_current, reservoir=reservoir, site=res_site, z=Var)

@@ -39,6 +39,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                                    ctd_cast_csvs = ctd_cast_csvs,
                                    start_date = start_date,
                                    force_reprocessing = force_reprocessing)
+  
   #If no new files, end QAQC
   if(length(file_names)==0){
     message("No new files could be processed")
@@ -47,7 +48,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   
   ## Generate csv versions of these files (stored in csv_outputs folder)
   for(file in file_names) {
-    print(file)
+    message(file)
     process_CTD_file(file, 
                      raw_downloads = raw_downloads,
                      CTD_FOLDER = CTD_FOLDER) 
@@ -61,9 +62,11 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                        start_date = start_date)
   
   ## Add data flags to seasonal csv (L1)
-  flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
+  l1 <- flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                      intermediate_file_name = intermediate_file_name,
                      output_file_name = output_file_name)
+  
+  return(l1)
 }
 
 }

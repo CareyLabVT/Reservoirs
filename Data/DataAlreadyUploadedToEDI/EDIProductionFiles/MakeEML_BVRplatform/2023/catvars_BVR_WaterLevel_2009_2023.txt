@@ -5,5 +5,5 @@ Flag_Obs_waterlevel_from_full_pond_ft	0	no flag
 Flag_Obs_waterlevel_from_full_pond_ft	2	Water level was below the staff gauge and we could not get a reading
 Reservoir	BVR	Beaverdam Reservoir
 Site	50	"Deep hole or site nearest to dam in the reservoir, attached to the platform. 37.31288, -79.8159"
-Source	VT	Observation from Virginia Tech Field Crew
+Source	VT	Observation from Virginia Tech Reservoir Group LTREB Field Crew
 Source	WVWA	Observation from the Western Virginia Water Authority

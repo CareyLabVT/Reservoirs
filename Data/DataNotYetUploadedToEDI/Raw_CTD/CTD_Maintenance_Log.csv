@@ -26,3 +26,4 @@ BVR,NA,NA,CTD,2023-07-24 00:00:00 EST,2023-07-24 23:59:00 EST,Temp_C,SpCond_uScm
 NA,NA,NA,CTD,2023-08-29 00:00:00 EST,NA,DO_mgL,DOsat_percent,2,NA,8188,DO issues
 NA,NA,NA,CTD,2023-10-17 00:00:00 EST,2023-10-17 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,"Temp issue. Downcast is very different from upcast, and differs substantially from the other CTD"
 NA,NA,NA,CTD,2023-12-04 00:00:00 EST,2023-12-04 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,"Temp issue. Downcast is very different from upcast, and differs substantially from the other CTD"
+BVR,,,,,,,,,,,

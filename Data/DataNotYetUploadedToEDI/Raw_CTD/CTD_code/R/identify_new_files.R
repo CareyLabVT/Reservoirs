@@ -43,13 +43,13 @@ identify_new_files <- function(raw_downloads = "../RawDownloads",
   
   #See if we can get reservoir name and site from file name. 
   #If not, not worth processing (warning message below)
-  location <- sub("^[0-9]*_", "", sub("\\.csv","", missing_recent))
+  location <- sub("^[0-9]*_", "", missing_recent)
   Reservoir <- toupper(sub("[0-9]+.*", "", location))
   Site <- as.numeric(sub("_.*","", 
                          sub("^[A-Z|a-z]*", "", 
                              sub("_[a-z]+", "", location))))
   
-  to_process <- missing_recent[!is.na(Reservoir)&!is.na(Site)]
+  to_process <- missing_recent[!is.na(Reservoir) & !is.na(Site)]
   #Warn about unprocessed files
   if(length(missing_recent[is.na(Reservoir)|is.na(Site)])>0){
     warning("Couldn't identify reservoir and/or site for the following files (and therefore skipped processing):\n",

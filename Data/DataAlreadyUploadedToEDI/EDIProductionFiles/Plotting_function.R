@@ -2,7 +2,7 @@
 # Use in the markdown to create plots and for plotly to work
 # Author: Adrienne Breef-Pilz
 # First developed: 28 December 24
-# Last edited: 15 April 24 - added if statements if all obs at the same depth 
+# Last edited: 21 April 24 - added if statements if Res and Site is NULL 
 
 all_plot<-function(
     Var,
@@ -35,14 +35,26 @@ all_plot<-function(
   # Make a list of the names of all the possible plots
   
   cur<-cur_grid<-cur_heat<-all<-all_grid<-all_heat<-den<-box<-com_curr<-com_all<-daily_plot <- NULL
+    
+  # If Reservoir is not Null then sort by 
+  if(!is.null(reservoir) & !is.null(res_site)){
+    ResSite=T
+  }else{
+    ResSite=F
+  }
   
   # Subset the data frames for what we need 
   # rename the current data and keep it to save at the end
   current_df <- data%>%
-    filter(Reservoir %in% reservoir & Site %in% res_site) %>%
     #select(DateTime, Depth_m, Var) %>%
     mutate(Date = as.Date(DateTime),
            Year=year(DateTime))
+  
+  # filter by Reservoir and Site
+    if(ResSite==T){
+      current_df <- current_df[current_df$Reservoir %in% reservoir & current_df$Site %in% res_site,]} 
+    
+    
   
   # just the current year
   current <- current_df%>%
@@ -229,7 +241,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
   # Create the current plotly so we can get the date of points out of range 
   
   # Battery and cable power don't need to be interactive
-if(length(qaqc_current$Reservoir)>0){
+if(length(qaqc_current$DateTime)>0){
   if(grepl("Battery_V|power_V", Var)|Use_plotly==FALSE){
     
     if(Depth==T){
@@ -361,7 +373,7 @@ if(length(qaqc_current$Reservoir)>0){
   if(Heatmap==T & Depth==T){ 
     
     
-    if(length(qaqc_current$Reservoir)>0){
+    if(length(qaqc_current$DateTime)>0){
     # Use this heatmap function 
     # create the heat map for the current year
     cur_heat <- heatmap_EDI(data= qaqc_current, reservoir=reservoir, site=res_site, z=Var)

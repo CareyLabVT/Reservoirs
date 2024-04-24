@@ -154,8 +154,8 @@ make_eml(
   #other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.692.11') # FOR STAGING
-  #package.id = 'edi.1061.2') # FOR FINAL PRODUCTION
+  # package.id = 'edi.692.11') # FOR STAGING
+  package.id = 'edi.1061.3') # FOR FINAL PRODUCTION
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

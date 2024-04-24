@@ -1,0 +1,110 @@
+---
+title: "CTD Visualization"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+This is the visualization script for reading in and checking CTD data from the current + year(s). 
+
+Load required packages
+```{r load packages}
+install.packages("plotly")
+library(akima)
+library(colorRamps)
+library(plotly)
+library(tidyverse)
+library(lubridate)
+```
+
+
+first read in data from EDI. You will need to update the pasta. 
+```{r read in EDI data}
+ctd_edi <- read.csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/5/0432a298a90b2b662f26c46071f66b8a")
+```
+
+Next, subset the data!
+
+```{r subset to specified year}
+current_year <- ctd_edi %>% 
+  filter(DateTime >= "2023-01-01")
+```
+
+Abby's vis code below: 
+```{r}
+qaqc <-  current_year %>%
+  mutate(Date = as_datetime(DateTime))
+
+# Basic checks
+unique(qaqc$Site)
+unique(qaqc$Reservoir)
+
+#Function to plot all data for a given year as a heatmap
+plot_var <- function(var_name, 
+                     year, 
+                     reservoirs = c("FCR", "BVR", "CCR"),
+                     data = qaqc){
+  var <- sym(var_name)
+  flag <- sym(paste0("Flag_", var_name))
+  qaqc_plotly <- data %>%
+    filter(Reservoir %in% reservoirs, Site == 50, year(Date) %in% year) %>%
+    sample_frac(.1) %>%
+    ggplot(aes(x = Date, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_y_reverse() +
+    geom_point() +
+    facet_grid(cols = vars(Reservoir), rows = vars(SN))
+  ggplotly(qaqc_plotly)
+  #print(qaqc_plotly)
+}
+
+vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm",
+                  "Chla_ugL", "Turbidity_NTU", "pH", "ORP_mV", "PAR_umolm2s", 
+                  "DescRate_ms")
+
+library(colorRamps)
+library(plotly)
+
+qaqc_plotly <- data %>%
+    filter(Reservoir %in% reservoirs, Site == 50, year(Date) %in% year) %>%
+    sample_frac(.1) %>%
+    ggplot(aes(x = Date, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_y_reverse() +
+    geom_point() +
+    facet_grid(cols = vars(Reservoir), rows = vars(SN))
+
+ggplotly(qaqc_plotly)
+
+vars_to_plot %>%
+  map(plot_var, year = 2023, reservoirs = c("BVR"))
+
+vars_to_plot %>%
+  map(plot_var, year = 2022)
+
+vars_to_plot %>%
+  map(plot_var, year = 2021)
+
+vars_to_plot %>%
+  map(plot_var, year = 2020)
+
+vars_to_plot %>%
+  map(plot_var, year = 2019)
+
+vars_to_plot %>%
+  map(plot_var, year = 2018)
+
+qaqc %>%
+  select(DateTime, SN) %>%
+  unique() %>%
+  filter(year(DateTime) == 2023) %>%
+  ggplot(aes(x = hour(DateTime))) +
+  geom_histogram()+
+  facet_wrap(~SN)
+
+```
+
+
+
+

@@ -1,0 +1,13 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical	dimensionless		NA	Not applicable for mainteance issue
+Site	Sampling site within each reservoir	categorical	dimensionless		NA	Not applicable for mainteance issue
+Depth	Depth of observation with issues	numeric	meter		NA	Not applicable for mainteance issue
+DataStream	Code corresponding to if the entry is for a maintenance issue or for the rating curve 	categorical	dimensionless		NA	value is missing
+TIMESTAMP_start	"Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	Maintenance started before the sensors were out
+TIMESTAMP_end	"Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset."	Date		YYYY-MM-DD hh:mm:ss	NA	Maintenance is on going and has no current end date
+start_parameter	Name of start variable in the sequence corresponding to catwalk sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
+end_parameter	Name of end variable in the sequence corresponding to catwalk sensor string data table names	categorical	dimensionless		NA	There is only one parameter flagged
+flag	Data flag applied to associated variable	categorical	dimensionless		NA	value is missing
+update_value	New value to update the data to in the QAQC process	character			NA	No updated value used
+SN	Four digit serial number of the CTD 	categorical			NA	Not applicable for mainteance issue
+notes	Notes from the field crew on the maintenance or reason for changing the data	character			NA	No Note recorded

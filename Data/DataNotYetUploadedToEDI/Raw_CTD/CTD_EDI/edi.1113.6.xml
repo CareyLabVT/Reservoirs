@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1113.2" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1113.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023</title>
+    <title>Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023</title>
     <creator>
       <individualName>
         <givenName>Cayelan</givenName>
@@ -41,7 +41,7 @@
       <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
     </creator>
-    <pubDate>2024-04-19</pubDate>
+    <pubDate>2024-04-30</pubDate>
     <abstract>
       <para>Depth profiles of water biogeochemical properties were collected with SeaBird Electronics (SBE) Conductivity, Temperature, and Depth (CTD) profilers from 2013-2023. Data availability differs across years due to additional sensors that have been added or replaced over time. From 2013-2016, profiles were taken with a CTD equipped with an SBE 43 Dissolved Oxygen sensor and an ECO FLNTU sensor for turbidity and chlorophyll. From 2017-2023, profiles were taken with a CTD equipped with an SBE 43 Dissolved Oxygen sensor, an ECO FLNTU sensor for turbidity and chlorophyll, a PAR-LOG ICSW sensor for photosynthetically active radiation, and a SBE 27 pH and ORP (oxidation-reduction potential) sensor. In 2022 and 2023, profiles were also taken with an additional CTD equipped with an SBE 43 Dissolved Oxygen sensor, an ECO Triplet Scattering Fluorescence sensor for CDOM, phycocyanin, and phycoerythrin, an ECO FLNTU sensor for turbidity and chlorophyll, and PAR-LOG ICSW for photosynthetically active radiation. CTD profiles were collected in five drinking water reservoirs in southwestern Virginia, USA. All variables were measured every 0.25 seconds, resulting in depth profiles at approximately ten centimeter resolution. The five study reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the town of Pulaski, Virginia. The dataset consists of CTD depth profiles measured at the deepest site of each reservoir adjacent to the dam as well as other upstream reservoir sites. The profiles were collected approximately fortnightly in the spring months, weekly in the summer and early autumn, and monthly in the late autumn and winter. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2023); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. </para>
     </abstract>
@@ -171,28 +171,29 @@
       <methodStep>
         <description>
           <para>Depth profiles of multiple water quality variables were collected from 2013 through 2023 using two Conductivity, Temperature, and Depth (CTD) profilers from SeaBird Electronics (SBE, Bellevue Washington, USA). </para>
-          <para>Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2023); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some occasional CTD casts were collected at night. Above-surface (i.e., air) temperature and PAR are included in the dataset for 2018–2023, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.</para>
+          <para>Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2023); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some occasional CTD casts were collected outside of the usual sampling window (e.g., at night). Above-surface (i.e., air) temperature and PAR are included in the dataset for 2018–2023, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.</para>
           <para>The CTDs were calibrated by the manufacturer according to the standards and practices of SBE and the companies that manufactured the secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February) for our first CTD (serial numbers 4397 and 7809), except for the 2021 and 2022 field seasons, when calibration was delayed until August 2022 due to the ongoing COVID-19 pandemic. A second CTD (serial number 8188) was added in May 2022 and was returned for re-calibration of its turbidity and chl-a sensors in August - October 2022. </para>
-          <para>Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data.</para>
-          <para>All casts from 2018-2022 were re-processed in the revision published in February 2024 to standardize data processing across years (see QAQC_2018_2023.R and referenced data processing scripts). </para>
-          <para>This data package includes the CTD data file (CTD_2013_2023.csv), QAQC R script (QAQC_2018_2023.R), maintenance log (CTD_Maintenance_Log.txt), visual inspection R script (CTD_visualization.R), sampling sites (site_descriptions.csv), and additional data processing scripts (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_CTD_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.</para>
-          <para>INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2023</para>
+          <para>Flags indicate known or suspected issues with measured variables (see categorial flag descriptions in data table attributes). We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data.</para>
+          <para>All casts from 2018-2022 were re-processed in the revision published in May 2024 to standardize data processing across years (see QAQC_2018_2023.R and referenced data processing scripts). </para>
+          <para>This data package includes the CTD data file (CTD_2013_2023.csv), QAQC R script (QAQC_2018_2023.R), maintenance log (CTD_Maintenance_Log.txt), visual inspection R script (CTD_Visualization.qmd), sampling sites (site_descriptions.csv), and additional data processing scripts (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_CTD_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.</para>
+          <para>
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2023</para>
           <para>From 2013-2016, profiles were taken with our first CTD (serial number 4397) equipped with an SBE 43 Dissolved Oxygen sensor and an ECO FLNTU sensor for turbidity and chlorophyll. In spring 2017, this CTD had a major upgrade and received a new data recorder, pH/ORP sensor, and PAR sensor; all other sensors and pumps remained the same. As the CTD received a new motherboard with the data recorder upgrade, its serial number updated from 4397 to 7809. Thus, from 2017-2023, the serial number 7809 CTD was equipped with an SBE 43 Dissolved Oxygen sensor, an ECOFLNTU sensor for turbidity and chlorophyll, a PAR-LOG ICSW sensor for photosynthetically active radiation, and a SBE 27 pH and oxidation-reduction potential (ORP) sensor. </para>
           <para>In May 2022, we added an additional, second CTD (serial number 8188) equipped with an SBE 43 Dissolved Oxygen sensor, an ECO Triplet Scattering Fluorescence Sensor, an ECO FLNTU sensor, and a PAR-LOG ICSW sensor. </para>
           <para>During 2022-2023, we took simultaneous profiles with the two CTDs (serial numbers 7809 and 8188) on 42 occasions across three different reservoirs: Falling Creek Reservoir (24 casts), Beaverdam Reservoir (16 casts), and Carvins Cove Reservoir (2 casts). Casts were either collected at the same time ~1 m apart or in succession in the same location. We rounded depth observations to the nearest centimeter, then matched observations from the same day, reservoir, and depth. Using the mcr package in R (Potapov et al. 2023), we used the Passing-Babcock regression (Passing and Bablok 1983) and then used the Pearson correlation to test correspondence between the sensors on the two instruments. We used bootstrapping to quantify the slope and intercept estimates with confidence intervals from the Passing-Bablock regressions (Manuilova and Schuetzenmeister 2014). Good correspondence between CTDs would yield a slope near 1 and an intercept near 0, and a 95% confidence interval that does not include these best-case values indicates a statistically significant difference. If a slope was significantly different from 1, we evaluated both the magnitude of the difference and plots of residuals vs. concentrations. If there was no clear pattern over increasing values, the correspondence was judged acceptable.</para>
-          <para>Below is a table of the comparison between the two CTDs with the statistics from the Passing-Babcock regression and the Pearson correlation coefficient for each variable measured by the instruments:</para>
-          <para>| Variable | Timing of overlap casts | Number of casts in overlap | Results of overlap comparison
-| Temp_C | 2022 - 2023 | 791 | The Passing-Babcock regression slope was 1.00 (0.997-1.001), the intercept was 0.06 (-0.04 to 0.16), and the Pearson correlation coefficient was 0.996. Consequently, we judged the CTD overlap to be acceptable for water temperature. |
-| Turbidity_NTU | 2022 - 2023 | 809 | The Passing-Babcock regression slope was 0.96 (0.95 - 0.98), the intercept was -0.37 (-0.59 to -0.25), and the Pearson correlation coefficient was 0.833. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for turbidity. |
-| SpCond_uScm | 2022 - 2023 | 790 | The Passing-Babcock regression slope was 0.98 (0.98 - 0.99), the intercept was 0.71 (0.53 to 0.87), and the Pearson correlation coefficient was 0.958. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for specific conductivity. |
-| Cond_uScm | 2022 - 2023 | 790 | The Passing-Babcock regression slope was 0.98 (0.97 - 0.98), the intercept was 0.69 (0.57 to 0.87), and the Pearson correlation coefficient was 0.956. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for conductivity. |
-| PAR_umolsm2s | 2022 - 2023 | 1018 | The Passing-Babcock regression slope was 0.98 (0.96 - 1.01), the intercept was -0.01 (-0.01 to -0.00), and the Pearson correlation coefficient was 0.793. Deviation between the two CTDs tended to be highest under high PAR conditions. Consequently, we judged the CTD overlap to be acceptable for PAR. |
-| DO percent sat | 2022 - 2023 | 426 | The Passing-Babcock regression slope was 1.11 (1.05 - 1.16), the intercept was 0.27 (0.07 to 0.39), and the Pearson correlation coefficient was 0.936. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO percent saturation should be interpreted with caution when comparing between CTDs.
-| DO_mgL | 2022 - 2023 | 426 | The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs. |
-| Chla_ugL | 2022 - 2023 | 809 | The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs. |</para>
+          <para>Below are the results of the comparison between the two CTDs, with the statistics from the Passing-Babcock regression and the Pearson correlation coefficient for each variable measured by the instruments:</para>
+          <para>- Temp_C (2022 - 2023; n = 791): The Passing-Babcock regression slope was 1.00 (0.997-1.001), the intercept was 0.06 (-0.04 to 0.16), and the Pearson correlation coefficient was 0.996. Consequently, we judged the CTD overlap to be acceptable for water temperature.</para>
+          <para>- Turbidity_NTU (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.96 (0.95 - 0.98), the intercept was -0.37 (-0.59 to -0.25), and the Pearson correlation coefficient was 0.833. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for turbidity.</para>
+          <para>- SpCond_uScm (2022 - 2023; 790): The Passing-Babcock regression slope was 0.98 (0.98 - 0.99), the intercept was 0.71 (0.53 to 0.87), and the Pearson correlation coefficient was 0.958. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for specific conductivity.</para>
+          <para>- Cond_uScm (2022 - 2023; n = 790): The Passing-Babcock regression slope was 0.98 (0.97 - 0.98), the intercept was 0.69 (0.57 to 0.87), and the Pearson correlation coefficient was 0.956. While the slope was significantly different from 1, this difference was small. Plots of residuals showed no patterns. Consequently, we judged the CTD overlap to be acceptable for conductivity.</para>
+          <para>- PAR_umolsm2s (2022 - 2023; n = 1018): The Passing-Babcock regression slope was 0.98 (0.96 - 1.01), the intercept was -0.01 (-0.01 to -0.00), and the Pearson correlation coefficient was 0.793. Deviation between the two CTDs tended to be highest under high PAR conditions. Consequently, we judged the CTD overlap to be acceptable for PAR.</para>
+          <para>- DO percent sat (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.11 (1.05 - 1.16), the intercept was 0.27 (0.07 to 0.39), and the Pearson correlation coefficient was 0.936. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO percent saturation should be interpreted with caution when comparing between CTDs.</para>
+          <para>- DO_mgL (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs.</para>
+          <para>- Chla_ugL (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs.</para>
           <para>The serial number of the CTD used for each profile is indicated in the column SN in published data.</para>
           <para>Below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals. </para>
-          <para>### CTD serial number 4397 ###</para>
+          <para>
+### CTD serial number 4397 ###</para>
           <para>Seacat 19Plus V 1.6 - SERIAL NO. 4397 (2013 - 2016)</para>
           <para>SBE 43 Dissolved Oxygen Sensor - SERIAL NO. 0434 (2013 - 2016, then transferred to CTD serial number 7809)</para>
           <para>Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. 2496 (2013 - 2016, then transferred to CTD serial number 7809)</para>
@@ -210,10 +211,12 @@
           <para>Photosynthetically Active Radiation (PAR) Sensor - SERIAL NO. 2209 (2022 - current)</para>
           <para>Wetlab ECO FLNTU sensor for turbidity and chlorophyll - SERIAL NO. FLNTU-7096 (2022 - current)</para>
           <para>Wetlab ECO Triplet Scattering Fluorescence for CDOM, phycocyanin, and phycoerythrin- SERIAL NO. FL3-7350 (2022 - current)</para>
-          <para>Reference:
-Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023). _mcr: Method Comparison  Regression_. R package version 1.3.2, &lt;https://CRAN.R-project.org/package=mcr&gt;.</para>
+          <para>
+References:</para>
+          <para>Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023). _mcr: Method Comparison  Regression_. R package version 1.3.2, &lt;https://CRAN.R-project.org/package=mcr&gt;.</para>
           <para>Passing, H., and Bablok. 1983. A new biometrical procedure for testing the equality of measurements from two different analytical methods. Application of linear regression procedures for method comparison studies in clinical chemistry, Part I. Journal of Clinical Chemistry and Clinical Biochemistry 21:709-720.</para>
-          <para>Additional Notes</para>
+          <para>
+Additional Notes</para>
           <para>Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
 </para>
         </description>
@@ -314,8 +317,8 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
       <entityDescription>Reservoir CTD dataset</entityDescription>
       <physical>
         <objectName>CTD_2013_2023.csv</objectName>
-        <size unit="bytes">194379656</size>
-        <authentication method="MD5">697b47c44f015ef139e2214c4e300220</authentication>
+        <size unit="bytes">181840984</size>
+        <authentication method="MD5">8685d35216ed1b19d3799a88e4031a4a</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -381,6 +384,31 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
           </measurementScale>
         </attribute>
         <attribute>
+          <attributeName>SN</attributeName>
+          <attributeDefinition>CTD serial number (see Methods)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>4397</code>
+                    <definition>CTD serial number 4397 (used from 2013 - 2016)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7809</code>
+                    <definition>CTD serial number 4397 (used from 2017 - present)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8188</code>
+                    <definition>CTD serial number 4397 (used from 2022 - present)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
           <attributeName>DateTime</attributeName>
           <attributeDefinition>Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed</attributeDefinition>
           <storageType>date</storageType>
@@ -415,31 +443,6 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
           </missingValueCode>
         </attribute>
         <attribute>
-          <attributeName>SN</attributeName>
-          <attributeDefinition>CTD serial number (see Methods)</attributeDefinition>
-          <storageType>string</storageType>
-          <measurementScale>
-            <nominal>
-              <nonNumericDomain>
-                <enumeratedDomain>
-                  <codeDefinition>
-                    <code>4397</code>
-                    <definition>CTD serial number 4397 (used from 2013 - 2016)</definition>
-                  </codeDefinition>
-                  <codeDefinition>
-                    <code>7809</code>
-                    <definition>CTD serial number 4397 (used from 2017 - present)</definition>
-                  </codeDefinition>
-                  <codeDefinition>
-                    <code>8188</code>
-                    <definition>CTD serial number 4397 (used from 2022 - present)</definition>
-                  </codeDefinition>
-                </enumeratedDomain>
-              </nonNumericDomain>
-            </nominal>
-          </measurementScale>
-        </attribute>
-        <attribute>
           <attributeName>Temp_C</attributeName>
           <attributeDefinition>Water temperature</attributeDefinition>
           <storageType>float</storageType>
@@ -452,7 +455,7 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">3.1253</minimum>
-                  <maximum exclusive="false">31.0735</maximum>
+                  <maximum exclusive="false">30.3744</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -475,7 +478,7 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">0</minimum>
-                  <maximum exclusive="false">19.7582</maximum>
+                  <maximum exclusive="false">18.56988</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -520,7 +523,7 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.071384</minimum>
+                  <minimum exclusive="false">0.777231</minimum>
                   <maximum exclusive="false">466.855174</maximum>
                 </bounds>
               </numericDomain>
@@ -543,7 +546,7 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.064</minimum>
+                  <minimum exclusive="false">4.774</minimum>
                   <maximum exclusive="false">720.16</maximum>
                 </bounds>
               </numericDomain>
@@ -612,8 +615,8 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">0.012</minimum>
-                  <maximum exclusive="false">16.439</maximum>
+                  <minimum exclusive="false">4.561</minimum>
+                  <maximum exclusive="false">10.358</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -635,8 +638,8 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">-1240.7455</minimum>
-                  <maximum exclusive="false">1159.2414</maximum>
+                  <minimum exclusive="false">-265.4389</minimum>
+                  <maximum exclusive="false">853.5177</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1341,7 +1344,7 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
           </measurementScale>
         </attribute>
       </attributeList>
-      <numberOfRecords>1282987</numberOfRecords>
+      <numberOfRecords>1229253</numberOfRecords>
     </dataTable>
     <dataTable>
       <entityName>Descriptions of sample sites</entityName>
@@ -1381,6 +1384,14 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
                   <codeDefinition>
                     <code>FCR</code>
                     <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>GWR</code>
+                    <definition>Gatewood Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>SHR</code>
+                    <definition>Spring Hallow Reservoir</definition>
                   </codeDefinition>
                 </enumeratedDomain>
               </nonNumericDomain>
@@ -1477,17 +1488,304 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
       </attributeList>
       <numberOfRecords>32</numberOfRecords>
     </dataTable>
+    <dataTable>
+      <entityName>Maintenance log 2013 - 2023</entityName>
+      <entityDescription>Log of data issues that have been flagged or addressed in the final data publication</entityDescription>
+      <physical>
+        <objectName>CTD_Maintenance_Log.csv</objectName>
+        <size unit="bytes">3809</size>
+        <authentication method="MD5">4168c0c841535098affa3bc4d35358c6</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>GWR</code>
+                    <definition>Gatewood Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>SHR</code>
+                    <definition>Spring Hollow Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Not applicable for mainteance issue</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Not applicable for mainteance issue</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth</attributeName>
+          <attributeDefinition>Depth of observation with issues</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Not applicable for mainteance issue</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DataStream</attributeName>
+          <attributeDefinition>Name of data source (should always be CTD for this data package)</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Name of data source (should always be CTD for this data package)</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_start</attributeName>
+          <attributeDefinition>Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance started before the sensors were out</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_end</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time), No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance is on going and has no current end date</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>start_parameter</attributeName>
+          <attributeDefinition>Name of start variable in the sequence corresponding to catwalk sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Name of start variable in the sequence corresponding to catwalk sensor string data table names</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>end_parameter</attributeName>
+          <attributeDefinition>Name of end variable in the sequence corresponding to catwalk sensor string data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Name of end variable in the sequence corresponding to catwalk sensor string data table names</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag</attributeName>
+          <attributeDefinition>Data flag applied to associated variable (see metadata for applicable flags for each measured parameter)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">2</minimum>
+                  <maximum exclusive="false">8</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>update_value</attributeName>
+          <attributeDefinition>New value to update the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>New value to update the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No updated value used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>SN</attributeName>
+          <attributeDefinition>Four digit serial number of the CTD</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>4397</code>
+                    <definition>CTD serial number 4397 (used from 2013 - 2016)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>7809</code>
+                    <definition>CTD serial number 4397 (used from 2017 - present)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>8188</code>
+                    <definition>CTD serial number 4397 (used from 2022 - present)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Not applicable for mainteance issue</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>notes</attributeName>
+          <attributeDefinition>Notes from the field crew on the maintenance or reason for changing the data</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Notes from the field crew on the maintenance or reason for changing the data</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No Note recorded</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>30</numberOfRecords>
+    </dataTable>
     <otherEntity>
       <entityName>QAQC script</entityName>
-      <entityDescription>High-level QAQC script used to process data from 2018-2023 - 
-                                      references scripts in helper_scripts.zip</entityDescription>
+      <entityDescription>High-level QAQC script used to process data from 2018-2023: references scripts in helper_scripts.zip</entityDescription>
       <physical>
-        <objectName>CTD_QAQC_2018_2023.R</objectName>
-        <size unit="bytes">2795</size>
-        <authentication method="MD5">3946f12cd9f39831589fdbda2d6c9064</authentication>
+        <objectName>CTD_QAQC_2013_2023.R</objectName>
+        <size unit="bytes">3388</size>
+        <authentication method="MD5">f9a085e5cf189b5850c641fbaf2bb365</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Visualization script</entityName>
+      <entityDescription>Script that plots the data for visual inspection during the publishing process</entityDescription>
+      <physical>
+        <objectName>CTD_Visualization_2023.qmd</objectName>
+        <size unit="bytes">5978</size>
+        <authentication method="MD5">16ac2f7ee6250c60de4f38b63e070f47</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>Unknown</formatName>
           </externallyDefinedFormat>
         </dataFormat>
       </physical>
@@ -1499,8 +1797,8 @@ Potapov S, Model F, Schuetzenmeister A, Manuilova E, Dufey F, Raymaekers J (2023
                                       as referenced by CTD_QAQC_2018_2023.R</entityDescription>
       <physical>
         <objectName>helper_scripts.zip</objectName>
-        <size unit="bytes">13059</size>
-        <authentication method="MD5">3deb90f77b78e7f2141ec8d2f99429ac</authentication>
+        <size unit="bytes">12759</size>
+        <authentication method="MD5">7b1a42cbe4bf704ce370c0a9eab98cad</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>application/zip</formatName>

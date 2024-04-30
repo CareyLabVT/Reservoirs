@@ -8,42 +8,55 @@ editor: visual
 created: 23 April 2024
 ---
 
-This is the visualization script for creating yearly data frame for EDI and inspecting the data before publishing it. If you are a reviewer then read in the file from EDI and create plots. 
+## Overview
 
-Load required packages
+This visualization script has two purposes:
+
+1.  Creating a compiled data frame of ALL CTD data for EDI and inspecting the data before publishing
+
+2.  Visualizing data currently staged on EDI
+
+If you are a reviewer, you can skip some of the first sections focused on compiling data (see notes below)
+
+## STEP 1: Load required packages
 
 ```{r load packages}
-#install.packages("plotly")
 library(akima)
 library(colorRamps)
 library(plotly)
 library(tidyverse)
 library(lubridate)
 library(plotly)
-
-setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/")
-source("ctd_QAQC.R")
-
+library(here)
+source("../CTD_code/ctd_QAQC.R")
 
 THIS_YEAR <- 2023 #Latest year of data
 ```
 
+## STEP 2: Collate all CTD files and run QAQC
+
+**Note: reviewers can skip this chunk**
+
+This chunk will take a long time to run, because it involves QAQCing literally all historical CTD data
+
 ```{r Combine and qaqc all files}
-
 # Combine all the CTD files and QAQC them. If you want to reprocess all the files then set force_reprocessing to T. 
-
-ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
-                            ctd_cast_csvs = "../csv_outputs",
-                            ctd_season_csvs = "../CTD_season_csvs",
-                            CTD_FOLDER = "../",
+ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
+ctd_reprocessed <- ctd_QAQC(raw_downloads = here(ctd_folder, "RawDownloads"),
+                            ctd_cast_csvs = here(ctd_folder, "csv_outputs"),
+                            ctd_season_csvs = here(ctd_folder, "CTD_season_csvs"),
+                            CTD_FOLDER = paste0(ctd_folder, "/"),
                             start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
                             force_reprocessing = F, #Re-process all files
                             historical_files = T, # add in files before we save all casts
                             output_file_name = paste0("CTD_2013_", THIS_YEAR,".csv"),
                             intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
+
+ctd_reprocessed <- ctd_reprocessed %>%
+  filter(year(DateTime) <= THIS_YEAR)
 ```
 
-Double check that all of the files have been processed.
+## STEP 3: Quick gut checks for reprocessing
 
 ```{r Check all files have been processed}
 #Make sure all files have been processed
@@ -52,31 +65,26 @@ raw_files <- list.files("../RawDownloads")
 raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
 processed_files[!processed_files %in% raw_files]
 raw_files[!raw_files %in% processed_files]
+min(ctd_reprocessed$DateTime) # we've re-processed files since 2018 (but also added historical files above)
+unique(ctd_reprocessed$Site)
+unique(ctd_reprocessed$Reservoir)
 ```
 
-REVIEWERS START HERE. Double check you have the right pasta link for the data package you are reviewing. 
+## STEP 4: REVIEWERS- load data from EDI
+
+REVIEWERS START HERE. Double check you have the right pasta link for the data package you are reviewing.
 
 ```{r read in EDI data}
 # Read in Data from GitHub
-#ctd_edi <- read_csv("../CTD_2013_2023.csv")
-
-ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/5/0432a298a90b2b662f26c46071f66b8a")
+ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/0432a298a90b2b662f26c46071f66b8a")
 ```
 
-Next, subset the data!
-
-```{r subset to specified year}
-current_year <- ctd_edi %>% 
-  filter(DateTime >= "2023-01-01")
-```
-
-Abby's vis code below:
+## STEP 5: Visualize data
 
 ```{r}
-# qaqc <-  current_year %>%
-#   mutate(Date = as_datetime(DateTime))
-# look at all of the files
+#Choose which data you want to visualize
 qaqc <- ctd_edi
+#qaqc <- ctd_reprocessed
 
 # Basic checks
 unique(qaqc$Site)
@@ -166,7 +174,7 @@ htmltools::tagList(list(c))
 
 ```{r SHR and GWR}
 
-# Check that Spring Hallow and Gateweood Reservoir data look good
+# Check that Spring Hollow and Gateweood Reservoir data look good
 
 aa <- vars_to_plot %>%
   map(plot_var, year= c(2013:2017, 2019), reservoirs="SHR")
@@ -182,10 +190,9 @@ htmltools::tagList(list(bb))
 
 ```
 
-
 ```{r hist}
 
-# look at the histogram of casts per a year. Change the year in line 140. 
+# look at the histogram of the time that casts were taken each year. Change the year in line 175. 
 qaqc %>%
   select(DateTime, SN) %>%
   unique() %>%
@@ -195,6 +202,3 @@ qaqc %>%
   facet_wrap(~SN)
 
 ```
-
-
-

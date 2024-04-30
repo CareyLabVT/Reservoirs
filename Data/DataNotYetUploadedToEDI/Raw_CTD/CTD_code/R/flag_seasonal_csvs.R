@@ -1,5 +1,5 @@
 #' 
-#' @author Abigail Lewis. Updated by ABP 26 April 2024
+#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year (or multiple years) and adds data flags
 #' 
@@ -71,7 +71,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   only_old <- c("pH","ORP_mV")
   
   
-  # varibales that changed to NA when CTD out of the water
+  # variables that changed to NA when CTD out of the water
   water_vars <- c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL",
                   "DOsat_percent","pH","ORP_mV", "CDOM_ugL", "Phycoerythrin_ugL",
                   "Phycocyanin_ugL")
@@ -112,8 +112,10 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   # Add in historical files
   if(historical_files==T){
-    # Read the files from before 2018 and add them to the current file
     
+    # Read the files from before 2018 and add them to the current file
+    # NOTE: I THINK we do NOT want to change this link in future revisions, given our decision in 2024 to 
+    # Re-process all casts 2018-present rather than pulling the most recent data on EDI
     ctd_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
     
     #Add SN to historical EDI data
@@ -123,10 +125,13 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     # bind historical and current
     
-    ctd <- dplyr::bind_rows(ctd_edi,ctd)%>%
+    ctd <- ctd_edi %>%
       mutate(Flag_CDOM_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_CDOM_ugL),
              Flag_Phycoerythrin_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_Phycoerythrin_ugL),
-             Flag_Phycocyanin_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_Phycocyanin_ugL))
+             Flag_Phycocyanin_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_Phycocyanin_ugL)) %>%
+      filter(!DateTime %in% ctd$DateTime) %>% #Remove files that have been re-processed
+      filter(!DateTime == "2021-12-14 10:45:36") %>% #This file was re-processed and the time was updated
+      full_join(ctd)
     
   }
 

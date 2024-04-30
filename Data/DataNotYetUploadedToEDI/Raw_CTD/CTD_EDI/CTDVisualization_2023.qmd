@@ -39,7 +39,7 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
                             start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
                             force_reprocessing = F, #Re-process all files
                             historical_files = T, # add in files before we save all casts
-                            output_file_name = paste0("CTD_2018_", THIS_YEAR,".csv"),
+                            output_file_name = paste0("CTD_2013_", THIS_YEAR,".csv"),
                             intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
 ```
 
@@ -171,8 +171,14 @@ htmltools::tagList(list(c))
 aa <- vars_to_plot %>%
   map(plot_var, year= c(2013:2017, 2019), reservoirs="SHR")
 
+# when you render the document then the interactive plots will work
+htmltools::tagList(list(aa))
+
 bb <- vars_to_plot %>%
   map(plot_var, year=2016, reservoirs="GWR")
+
+# when you render the document then the interactive plots will work
+htmltools::tagList(list(bb))
 
 ```
 

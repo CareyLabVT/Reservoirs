@@ -10,7 +10,10 @@
 #' This is also where the ctd_L1.csv file will be stored
 #' @param start_date only process files after this date
 #' @param force_reprocessing if TRUE, process all files, even if they have already been processed
+#' @param historical_files if TRUE, add the files from 2013-2017 to the data file
 #' @param output_file_name name of output file (usually ctd_L1.csv)
+#' @param intermediate_file_name name of the file saved in the CTD_season_csvs folder
+
 #'
 #' @return no output
 #'
@@ -31,6 +34,7 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
                      CTD_FOLDER = "../",
                      start_date = as.Date(paste0(year(Sys.Date()),"-01-01")),
                      force_reprocessing = FALSE,
+                     historical_files = FALSE,
                      output_file_name = "ctd_L1.csv",
                      intermediate_file_name = "ctd_L0.csv"){
   
@@ -64,7 +68,8 @@ ctd_QAQC <- function(raw_downloads = "../RawDownloads",
   ## Add data flags to seasonal csv (L1)
   l1 <- flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                      intermediate_file_name = intermediate_file_name,
-                     output_file_name = output_file_name)
+                     output_file_name = output_file_name,
+                     historical_files = historical_files)
   
   return(l1)
 }

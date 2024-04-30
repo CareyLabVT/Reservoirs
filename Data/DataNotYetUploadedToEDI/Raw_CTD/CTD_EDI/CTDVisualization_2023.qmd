@@ -1,27 +1,66 @@
 ---
 title: "CTD Visualization"
+author: Abby Lewis, Katie Hoffman, and Adrienne Breef-Pilz
 format:
   html:
     embed-resources: true
 editor: visual
+created: 23 April 2024
 ---
 
-This is the visualization script for reading in and checking CTD data from the current + year(s). 
+This is the visualization script for creating yearly data frame for EDI and inspecting the data before publishing it. If you are a reviewer then read in the file from EDI and create plots. 
 
 Load required packages
+
 ```{r load packages}
-install.packages("plotly")
+#install.packages("plotly")
 library(akima)
 library(colorRamps)
 library(plotly)
 library(tidyverse)
 library(lubridate)
+library(plotly)
+
+setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/")
+source("ctd_QAQC.R")
+
+
+THIS_YEAR <- 2023 #Latest year of data
 ```
 
+```{r Combine and qaqc all files}
 
-first read in data from EDI. You will need to update the pasta. 
+# Combine all the CTD files and QAQC them. If you want to reprocess all the files then set force_reprocessing to T. 
+
+ctd_reprocessed <- ctd_QAQC(raw_downloads = "../RawDownloads",
+                            ctd_cast_csvs = "../csv_outputs",
+                            ctd_season_csvs = "../CTD_season_csvs",
+                            CTD_FOLDER = "../",
+                            start_date = as.Date("2012-01-01"), #Since the beginning of the reservoir monitoring program
+                            force_reprocessing = F, #Re-process all files
+                            historical_files = T, # add in files before we save all casts
+                            output_file_name = paste0("CTD_2018_", THIS_YEAR,".csv"),
+                            intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
+```
+
+Double check that all of the files have been processed.
+
+```{r Check all files have been processed}
+#Make sure all files have been processed
+processed_files <- sub(".csv","",list.files("../csv_outputs"))
+raw_files <- list.files("../RawDownloads")
+raw_files <- sub(".cnv", "", raw_files[grepl(".cnv", raw_files)])
+processed_files[!processed_files %in% raw_files]
+raw_files[!raw_files %in% processed_files]
+```
+
+REVIEWERS START HERE. Double check you have the right pasta link for the data package you are reviewing. 
+
 ```{r read in EDI data}
-ctd_edi <- read.csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/5/0432a298a90b2b662f26c46071f66b8a")
+# Read in Data from GitHub
+#ctd_edi <- read_csv("../CTD_2013_2023.csv")
+
+ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/5/0432a298a90b2b662f26c46071f66b8a")
 ```
 
 Next, subset the data!
@@ -31,10 +70,13 @@ current_year <- ctd_edi %>%
   filter(DateTime >= "2023-01-01")
 ```
 
-Abby's vis code below: 
+Abby's vis code below:
+
 ```{r}
-qaqc <-  current_year %>%
-  mutate(Date = as_datetime(DateTime))
+# qaqc <-  current_year %>%
+#   mutate(Date = as_datetime(DateTime))
+# look at all of the files
+qaqc <- ctd_edi
 
 # Basic checks
 unique(qaqc$Site)
@@ -45,56 +87,99 @@ plot_var <- function(var_name,
                      year, 
                      reservoirs = c("FCR", "BVR", "CCR"),
                      data = qaqc){
+  
   var <- sym(var_name)
   flag <- sym(paste0("Flag_", var_name))
   qaqc_plotly <- data %>%
-    filter(Reservoir %in% reservoirs, Site == 50, year(Date) %in% year) %>%
+    filter(Reservoir %in% reservoirs, Site == 50, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
-    ggplot(aes(x = Date, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
+    ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
     scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
     scale_y_reverse() +
     geom_point() +
+    ggtitle(year) +
     facet_grid(cols = vars(Reservoir), rows = vars(SN))
   ggplotly(qaqc_plotly)
   #print(qaqc_plotly)
 }
 
+
 vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm",
-                  "Chla_ugL", "Turbidity_NTU", "pH", "ORP_mV", "PAR_umolm2s", 
-                  "DescRate_ms")
+                   "Chla_ugL", "Turbidity_NTU", "pH", "ORP_mV", "PAR_umolm2s", "CDOM_ugL",
+                  "Phycoerythrin_ugL", "Phycocyanin_ugL", "DescRate_ms")
+```
 
-library(colorRamps)
-library(plotly)
+```{r plots}
 
-qaqc_plotly <- data %>%
-    filter(Reservoir %in% reservoirs, Site == 50, year(Date) %in% year) %>%
-    sample_frac(.1) %>%
-    ggplot(aes(x = Date, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
-    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
-    scale_y_reverse() +
-    geom_point() +
-    facet_grid(cols = vars(Reservoir), rows = vars(SN))
+# If you try to render the file with all of plots for every year, it will run out of memory. I have run it in 3 year chunks and run 2016-2013 at one time. You can also just make the plots in the qmd with out rendering them. 
 
-ggplotly(qaqc_plotly)
+a <-vars_to_plot %>%
+  map(plot_var, year = 2023)
 
-vars_to_plot %>%
-  map(plot_var, year = 2023, reservoirs = c("BVR"))
+htmltools::tagList(list(a))
 
-vars_to_plot %>%
+
+b <- vars_to_plot %>%
   map(plot_var, year = 2022)
 
-vars_to_plot %>%
+htmltools::tagList(list(b))
+
+c <- vars_to_plot %>%
   map(plot_var, year = 2021)
+htmltools::tagList(list(c))
 
-vars_to_plot %>%
-  map(plot_var, year = 2020)
+# d <- vars_to_plot %>%
+#   map(plot_var, year = 2020)
+# htmltools::tagList(list(d))
+# 
+# e <- vars_to_plot %>%
+#   map(plot_var, year = 2019)
+# htmltools::tagList(list(e))
+# 
+# f <- vars_to_plot %>%
+#   map(plot_var, year = 2018)
+# htmltools::tagList(list(f))
+# 
+# g <- vars_to_plot %>%
+#   map(plot_var, year = 2017)
+# htmltools::tagList(list(g))
 
-vars_to_plot %>%
-  map(plot_var, year = 2019)
 
-vars_to_plot %>%
-  map(plot_var, year = 2018)
+ # h <- vars_to_plot %>%
+ #   map(plot_var, year = 2016)
+ # htmltools::tagList(list(h))
+ # 
+ # i <- vars_to_plot %>%
+ #   map(plot_var, year = 2015)
+ # htmltools::tagList(list(i))
+ # 
+ # j <- vars_to_plot %>%
+ #   map(plot_var, year = 2014)
+ # htmltools::tagList(list(j))
+ # 
+ # k <- vars_to_plot %>%
+ #   map(plot_var, year = 2013)
+ # htmltools::tagList(list(k))
 
+
+```
+
+```{r SHR and GWR}
+
+# Check that Spring Hallow and Gateweood Reservoir data look good
+
+aa <- vars_to_plot %>%
+  map(plot_var, year= c(2013:2017, 2019), reservoirs="SHR")
+
+bb <- vars_to_plot %>%
+  map(plot_var, year=2016, reservoirs="GWR")
+
+```
+
+
+```{r hist}
+
+# look at the histogram of casts per a year. Change the year in line 140. 
 qaqc %>%
   select(DateTime, SN) %>%
   unique() %>%
@@ -104,7 +189,6 @@ qaqc %>%
   facet_wrap(~SN)
 
 ```
-
 
 
 

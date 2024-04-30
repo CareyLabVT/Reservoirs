@@ -1,11 +1,12 @@
 #' 
-#' @author Abigail Lewis. Updated by ABP 08 Mar 2024
+#' @author Abigail Lewis. Updated by ABP 26 April 2024
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year (or multiple years) and adds data flags
 #' 
 #' @param ctd_season_csvs directory of CTD seasonal csvs
 #' @param intermediate_file_name file name of un-flagged dataset
 #' @param output_file_name file name of flagged dataset
+#' @param historical_files if TRUE, add in the files from 2013-2017 to the data file
 #' @param CTD_FOLDER high level CTD folder where L1 output will be stored
 #'
 #' @return no output
@@ -14,8 +15,17 @@
 flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                intermediate_file_name = "ctd_L0.csv",
                                output_file_name = "ctd_L1.csv",
+                               historical_files = F, 
                                CTD_FOLDER = "../",
-                               maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")) {
+                               maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")){
+  
+  # ctd_season_csvs = "../CTD_season_csvs"
+  # intermediate_file_name = "CTD_L0_2018_2023.csv"
+  # output_file_name = "CTD_2013_2023.csv"
+  # historical_files=T
+  # CTD_FOLDER = "../"
+  # maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")
+  
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   ctd = ctd1 %>%
@@ -52,6 +62,15 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   # Change negative to NA
   changed_Na <- neg[!grepl("PAR_umolm2s|Turbidity_NTU|Chla_ugL|DO_mgL|DOsat_percent", neg)]
   
+  # Flag cols not in 7809
+  
+  only_new <- c("CDOM_ugL", "Phycoerythrin_ugL",
+                "Phycocyanin_ugL")
+  
+  # Flag cols not in 8188
+  only_old <- c("pH","ORP_mV")
+  
+  
   # varibales that changed to NA when CTD out of the water
   water_vars <- c("Chla_ugL","Turbidity_NTU","Cond_uScm","SpCond_uScm","DO_mgL",
                   "DOsat_percent","pH","ORP_mV", "CDOM_ugL", "Phycoerythrin_ugL",
@@ -65,8 +84,14 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     #creates flag column + name of variable
     ctd[,paste0("Flag_",j)] <- 0
     
+    # puts in flag 5 if the sensor was not the 7809 CTD
+    ctd[c(which(is.na(ctd[,j]) & ctd[,"SN"] ==7809 & (j %in% only_new))), paste0("Flag_",j)]<-5
+    
+    # puts in flag 5 if the sensor was not the 8188 CTD
+    ctd[c(which(is.na(ctd[,j]) & ctd[,"SN"] ==8188 & (j %in% only_old))), paste0("Flag_",j)]<-5
+    
     # puts in flag 2 if value not collected
-    ctd[c(which(is.na(ctd[,j]))),paste0("Flag_",j)] <- 2
+    ctd[c(which(is.na(ctd[,j])) & paste0("Flag_",j)==0),paste0("Flag_",j)] <- 2
     
     # Flag values less than 0 with a flag 4 except: Temp, ORP and Decent rate
     ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
@@ -79,10 +104,31 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     
     #Not all variables are meaningful out of the water
+    ctd[c(which(!is.na(ctd[,j]) & ctd$Depth_m<0 & (j %in% water_vars))), paste0("Flag_",j)] <- 6
     ctd[c(which(ctd$Depth_m<0 & (j %in% water_vars))), j]<-NA
-    ctd[c(which(ctd$Depth_m<0 & (j %in% water_vars))), paste0("Flag_",j)] <- 6
+   
     
   }  
+  
+  # Add in historical files
+  if(historical_files==T){
+    # Read the files from before 2018 and add them to the current file
+    
+    ctd_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
+    
+    #Add SN to historical EDI data
+    ctd_edi <- ctd_edi %>%
+      filter(year(DateTime)<2018) %>% #only want casts before 2018
+      mutate(SN = ifelse(year(DateTime) %in% c(2013:2016), 4397, 7809))
+    
+    # bind historical and current
+    
+    ctd <- dplyr::bind_rows(ctd_edi,ctd)%>%
+      mutate(Flag_CDOM_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_CDOM_ugL),
+             Flag_Phycoerythrin_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_Phycoerythrin_ugL),
+             Flag_Phycocyanin_ugL = ifelse(SN %in% c(4397,7809), 5, Flag_Phycocyanin_ugL))
+    
+  }
 
   # fix the time and flag it 
   ctd_flagged = ctd %>% 
@@ -149,6 +195,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                     "Flag_pH", "Flag_ORP_mV", "Flag_PAR_umolm2s", "Flag_CDOM_ugL", 
                     "Flag_Phycoerythrin_ugL", "Flag_Phycocyanin_ugL", "Flag_DescRate_ms")))
   
+  # order the DateTime on the CTD casts
+  CTD_fix_renamed <- CTD_fix_renamed[order(CTD_fix_renamed$DateTime),]
+  
   
   # ## ADD MAINTENANCE LOG FLAGS 
   # The maintenance log includes manual edits to the data for suspect samples or human error
@@ -161,7 +210,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   # filter out the maintenance log 
   log <- log_read%>%
-    filter(TIMESTAMP_start>ctd[1,"DateTime"]|is.na(TIMESTAMP_start))
+    filter(TIMESTAMP_start>CTD_fix_renamed[1,"DateTime"]|is.na(TIMESTAMP_start))
   
   for(i in 1:nrow(log)){
     if (!is.na(log$Depth[i])) {
@@ -242,18 +291,18 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     #7=Datetime missing time (date is meaningful but not time)
     #8=Measurement outside of expected range but retained in dataset
     
-    if(is.na(maintenance_cols)[1]==F){
-      
+    if(is.na(maintenance_cols)[1]==T){
+      print("No maintenance_cols selected")
     }else{
       
-      if(flag %in% c(2, 8, 5)){ ## UPDATE THIS WITH ANY NEW FLAGS
+      if(flag %in% c(2, 5)){ ## UPDATE THIS WITH ANY NEW FLAGS
         # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
         if(is.na(log$update_value[i]) || !log$update_value[i] == "NO CHANGE"){
           CTD_fix_renamed[CTD_fix_renamed$DateTime %in% times &
                             CTD_fix_renamed$Reservoir %in% Reservoir &
                             CTD_fix_renamed$Site %in% Site &
                             CTD_fix_renamed$SN %in% SN,
-                          maintenance_cols] <- log$update_value[i]
+                          maintenance_cols] <- as.numeric(log$update_value[i])
         }
         CTD_fix_renamed[CTD_fix_renamed$DateTime %in% times &
                           CTD_fix_renamed$Reservoir %in% Reservoir &
@@ -271,8 +320,19 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     }  
   } # end for loop
   
-  write.csv(CTD_fix_renamed, paste0(CTD_FOLDER, output_file_name), row.names = FALSE)
+  # Check if there are any casts that were duplicated
+  
+  dup <- nrow(CTD_fix_renamed[duplicated(CTD_fix_renamed),])
+  
+  warning(paste0("There were ", dup, " rows that were duplicated and will be removed"))
+  
+  # Remove the duplicates 
+  
+  CTD_fix_renamed2 <- CTD_fix_renamed[!duplicated(CTD_fix_renamed),]
+  
+  write.csv(CTD_fix_renamed2, paste0(CTD_FOLDER, output_file_name), row.names = FALSE)
   message(paste0("Successfully updated ", output_file_name))
   
   return(CTD_fix_renamed)
 }
+

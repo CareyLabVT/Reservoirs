@@ -76,15 +76,15 @@ REVIEWERS START HERE. Double check you have the right pasta link for the data pa
 
 ```{r read in EDI data}
 # Read in Data from GitHub
-ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/5/0432a298a90b2b662f26c46071f66b8a")
+ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/0432a298a90b2b662f26c46071f66b8a")
 ```
 
 ## STEP 5: Visualize data
 
 ```{r}
 #Choose which data you want to visualize
-#qaqc <- ctd_edi
-qaqc <- ctd_reprocessed
+qaqc <- ctd_edi
+#qaqc <- ctd_reprocessed
 
 # Basic checks
 unique(qaqc$Site)

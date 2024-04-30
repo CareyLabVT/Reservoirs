@@ -1493,8 +1493,8 @@ Additional Notes</para>
       <entityDescription>Log of data issues that have been flagged or addressed in the final data publication</entityDescription>
       <physical>
         <objectName>CTD_Maintenance_Log.csv</objectName>
-        <size unit="bytes">3809</size>
-        <authentication method="MD5">4168c0c841535098affa3bc4d35358c6</authentication>
+        <size unit="bytes">3800</size>
+        <authentication method="MD5">f1c4ca5bec8fec193b77e6229407d816</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1782,7 +1782,7 @@ Additional Notes</para>
       <physical>
         <objectName>CTD_Visualization_2023.qmd</objectName>
         <size unit="bytes">5978</size>
-        <authentication method="MD5">16ac2f7ee6250c60de4f38b63e070f47</authentication>
+        <authentication method="MD5">42aeaeeb3d590222d9c5d9237c44aa4a</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>Unknown</formatName>

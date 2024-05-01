@@ -3,9 +3,9 @@ Carey Lab	carey lab
 Virginia Tech	carey lab
 Lake	cuahsi
 Reservoir	cuahsi
-High-frequency Sensors	cuahsi
-water temperature	lter
-Dissolved Oxygen	lter
+High-frequency sensors	cuahsi
+Water temperature	lter
+Dissolved oxygen	lter
 Conductivity	lter
 Specific conductance	lter
 Chlorophyll a	lter

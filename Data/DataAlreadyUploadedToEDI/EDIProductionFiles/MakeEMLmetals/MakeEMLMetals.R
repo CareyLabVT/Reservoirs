@@ -1,7 +1,7 @@
 ##MakeEMLMetals
 ##Author: Mary Lofton
 ##Date: 07SEP19
-##Edited for Metals by: Cissy Ming on 01/25/2023
+##Edited for Metals by: CEW 11Apr24
 
 
 #good site for step-by-step instructions
@@ -48,19 +48,14 @@ library(EMLassemblyline)
 ??template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-                          data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-                          data.table = "Metals_2014_2022.csv",
-                          write.file = TRUE)
-
-template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-                          data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-                          data.table = "site_descriptions.csv",
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+                          data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv'),
                           write.file = TRUE)
 
 
@@ -68,7 +63,7 @@ template_table_attributes(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
                              data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-                             data.table = "Metals_2014_2022.csv",
+                             data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv'),
                              empty = TRUE,
                              write.file = TRUE)
 

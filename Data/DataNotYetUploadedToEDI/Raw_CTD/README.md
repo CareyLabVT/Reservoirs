@@ -17,10 +17,11 @@ Data visualization:
 Data/metadata upload
 
 -   If you are in charge of uploading data, new data files (.xml, .cnv, .hex) get uploaded into the `./RawDownloads/` folder. Maintenance records go into `CTD_Maintenance_Log.csv`. Thanks!
+-   If you don't want a file to get processed you can put the word "test" in the file name and it will not be added to the L1 file
 
 ## Comprehensive file structure overview
 
-Confused about something in this folder? Here's the comprehensive reference with everything I know:
+Confused about something in this folder? Here's the comprehensive file structure reference:
 
 -   `csv_outputs`: .csv files for all processed CTD casts (individually). Automatic data processing will check whether a given cast has been processed and exported here. If not, it will convert the .cnv file for a given cast to a .csv and store it here
 
@@ -37,8 +38,6 @@ Confused about something in this folder? Here's the comprehensive reference with
 -   `CTD_Notes.txt`: Additional notes about CTD maintenance/cleaning
 
 -   `CTD_season_csvs`: .csv files that combine all data for this year. The only file here that currently gets updated regularly is ctd_L0.csv, which is all data for the current season *before* QAQC and flags.
-
--   `metadata_files`: Automatically generated metadata for each cast. Note that I (Abby) don't really think these metadata files are useful...
 
 -   `Old_XMLCON_files`: .xml configuration affects the initial data processing when getting data off of the CTD. We archive these configuration files here for reproducibility
 
@@ -67,7 +66,7 @@ For data publication, first we want to re-process all historical files. We made 
 
 Here's the approximate workflow:
 
-1.  Run CTD_visualization.R. This will first re-process ALL raw files (2018-present) with the current QAQC script (this takes a long time) then visualize the combined dataset. If you see issues, you can update maintenance logs as necessary
+1.  Run `CTD_visualization.R`. This will first re-process ALL raw files (2018-present) with the current QAQC script (this takes a long time) then visualize the combined dataset. If you see issues, you can update maintenance logs as necessary
 
 2.  Update metadata for the data publication in the EDI folder (`CTD_EDI`). First, archive all files from the previous year if they are not already in the `old` subdirectory
 

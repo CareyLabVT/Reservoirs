@@ -1,3 +1,3 @@
 attributeName	code	definition
 Reservoir	BVR	Beaverdam Reservoir
-Site	50	"Deep Hole site 37.31288, -79.8159"
+Site	50	Deep Hole site 37.31288, -79.8159

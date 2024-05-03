@@ -12,3 +12,6 @@ Austin	D. 	Delany	Virginia Tech	addelany@vt.edu	0000-0002-2266-6300	creator
 Alexandria	G.	Hounshell	Virginia Tech	alexgh@vt.edu	0000-0003-1616-9399	creator			
 Abigail	S.L.	Lewis	Virginia Tech	aslewis@vt.edu 	0000-0001-9933-4542	creator			
 Heather	L.	Wander	Virginia Tech	hwander@vt.edu	0000-0002-3762-6045	creator			
+George		Haynie	Virginia Tech	georgeh0919@vt.edu		creator			
+Michael		Kricheldorf	Virginia Tech	mkricheldorf@vt.edu	0009-0009-7898-1957	creator			
+Evelyn  		Tipper	Virginia Tech	etipper@vt.edu		creator			

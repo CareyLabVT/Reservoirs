@@ -1,0 +1,9 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir 	categorical			NA	value is missing
+Source	Name of the instution who took the measurement	categorical			NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Obs_waterlevel_from_full_pond_ft	The water level observation from the staff gauge at Beaverdamn Reservoir in feet where 0 is equal to full pond.  	numeric	foot		NA	value is missing
+WaterLevel_m	Calculated water level based on the observation from the staff gauge. The equation we used is the observation from the staff gauge times 0.3048, which converts ft to meters, then add 13.4 because the water level at full pond is 13.4 meters. 	numeric	meter		NA	value is missing
+Flag_DateTime	Flag value for DateTime	categorical	dimensionless		NA	value is missing
+Flag_Obs_waterlevel_from_full_pond_ft	Flag value for Obs_waterlevel_from_full_pond_ft	categorical	dimensionless		NA	value is missing

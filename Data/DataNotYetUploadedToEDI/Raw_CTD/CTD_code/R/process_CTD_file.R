@@ -14,29 +14,28 @@ process_CTD_file <- function(file,
                                  raw_downloads = "../../RawDownloads",
                                  CTD_FOLDER = "../../") {
   #Specify global variables
-  location <- sub("^[0-9]*_","",sub("\\.cnv","",file))
-  SITE <- sub("_S[0-9]+[a-z]*", "",sub("test","",location))
-  SAMPLER <- ""
-  DATE <- substr(file,1,6)
-  DATE_TEXT <- format(as.Date(DATE, "%m%d%y"), '%d-%b-%Y') #format should be "01-Aug-2019"
-  MAX_DEPTH <- 100 #9.3 for FCR, 11 for BVR
-  AUTO_NAME <- TRUE 
+  DATE <- as.Date(substr(file,1,6), "%m%d%y")
+  MAX_DEPTH <- 100 # was 9.3 for FCR, 11 for BVR
   AUTO_FOLDER <- TRUE 
   REP <- str_extract(file, "_S[0-9]+[a-z]+|_S[0-9]+") # get the ending of the file
-  if(is.na(REP)){
-    REP <- ""
+  if(is.na(REP)){ # prior to 2022, naming conventions were different and REP was included
+    REP <- ""     # keeping REP to maintain consistency with older files
   }
-  SN <- as.numeric(str_extract(location, "\\d{4}"))
+  SN <- as.numeric(str_extract(sub("^[0-9]*_","",sub("\\.cnv","",file)), "\\d{4}"))
   if(is.na(SN)|SN < 6000){
     message("SN is missing, setting to 7809")
     SN <- 7809
+    
+    if(year(DATE) >= 2024){
+      stop("SN is missing and date is after 2024, please check the file name")
+    }
   }
   
+  #These are in ctd_functions_automated.R
   #trim ctd
-  ctdTrimmed <- trim_ctd(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloads)
+  ctdTrimmed <- trim_ctd(file, raw_downloads) 
   #do the rest of the processing. This does NOT add SN to file
-  epic_ctd_function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
-                    REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
+  epic_ctd_function(ctdTrimmed, file, SN, AUTO_FOLDER, 
                     CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER)
   
   

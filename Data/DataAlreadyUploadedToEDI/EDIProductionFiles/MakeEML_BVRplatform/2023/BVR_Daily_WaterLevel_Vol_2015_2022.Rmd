@@ -1,0 +1,244 @@
+---
+title: "Interporlated Daily Water Level and Volume for BVR"
+author: "Heather Wander"
+created: "2023-05-14"
+output: html_document
+date:  "`r Sys.Date()`"
+---
+
+This script reads in the water level observations from the pressure transducer, the observed water level and then makes an interportlated daily water level observations. Then it reads in the 
+bathymetry data to calculate the volume based on water level. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(RCurl, tidyverse, lubridate)
+
+```
+
+```{r}
+
+#read in BVR EDI data 
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/725/3/a9a7ff6fe8dc20f7a8f89447d4dc2038" 
+infile1 <- tempfile()
+options(timeout=3000)
+try(download.file(inUrl1,infile1,method="auto"))
+
+ sensor <-read_csv(infile1)
+
+sensor_depth = sensor%>%
+  #mutate(DateTime = as.POSIXct(TIMESTAMP),
+         #WaterLevel = Lvl_psi*0.70455)%>%
+  filter(year(DateTime)==2022,
+         month(DateTime)>3,
+         Depth_m_13>7.5)%>%
+  arrange(DateTime)%>%
+  filter(!lag(Depth_m_13)-Depth_m_13>0.2)%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(WaterLevel = mean(Depth_m_13))%>%
+  mutate(Year = year(Date),
+         Site = 50)
+
+
+sensor_depth = sensor%>%
+  mutate(WaterLevel=Depth_m_13)%>%#the sensor is 0.5m off the bottom
+  #mutate(DateTime = as.POSIXct(TIMESTAMP),
+         #WaterLevel = Lvl_psi*0.70455)%>%
+  #filter(WaterLevel>7.5)%>%
+  arrange(DateTime)%>%
+  #filter(!lag(WaterLevel)-WaterLevel>0.05)%>%
+  mutate(Date = as.Date(DateTime))%>%
+  group_by(Date)%>%
+  summarize(WaterLevel = mean(WaterLevel, na.rm=T))%>%
+  mutate(Year = year(Date),
+         Site = 50)
+  #filter(!lag(WaterLevel)-WaterLevel>0.05)
+
+#oct 27-29 wl is NA so replace with the 26oct
+sensor_depth$WaterLevel[is.nan(sensor_depth$WaterLevel)] <- sensor_depth$WaterLevel[sensor_depth$Date=="2020-10-26"]
+
+```
+
+```{r combine WL obs }
+# Get Water level observations to compare to calculated waterlevel to get an offset
+
+bvr_wl_obs <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_waterlevel/BVR/BVR_WaterLevel_2009_2023.csv") |> 
+ # filter(Reservoir=="BVR") |> 
+  drop_na(WaterLevel_m) |> 
+  select(DateTime, WaterLevel_m, Source)
+
+#add in WVWA water level obs to supplement VT obs
+# wvwa_bvr_wl <- read_csv("https://raw.githubusercontent.com/CareyLabVT/BVR-GLM/fb418db53a1d85618b5403d28d7e0472beb65038/Data_Output/09Nov20_BVR_WaterLevel.csv")
+
+# wvwa_bvr_wl$Date <-   parse_date_time(wvwa_bvr_wl$Date, orders = c("%Y-%m-%d")) 
+  
+#  bvr_wl_obs2<-bvr_wl_obs |> 
+    mutate(DateTime = as.character(DateTime)) |> 
+    separate(DateTime, c("Date", "Time"), " ") |> 
+    mutate(Time=ifelse(Time=="00:00:00", "12:00:00", Time)) |> #not necessary anymore 
+    unite(col='DateTime', c('Date', 'Time'), sep=' ') |> 
+    mutate(DateTime=ymd_hms(DateTime))
+  
+```
+
+```{r find lm}
+
+depth<- sensor%>%
+  select(DateTime, Depth_m_13)%>%
+  merge(., bvr_wl_obs, by.x="DateTime", by.y="DateTime")
+
+plot(depth$WaterLevel_m, depth$Depth_m_13)
+
+lm_depth<- lm(WaterLevel_m~Depth_m_13, data=depth)
+
+summary(lm_depth)
+
+depth$check=-0.247+ (1.043*depth$Depth_m_13)
+
+```
+
+```{r filter obs}
+
+vt_obs<- bvr_wl_obs%>%
+  select(DateTime,WaterLevel_m, Source)%>%
+  filter(DateTime>ymd_hms("2015-07-07 00:00:00") & DateTime<ymd_hms("2020-06-17 00:00:00"))%>%
+  mutate(Date=as.Date(DateTime))%>%
+  select(Date, WaterLevel_m, Source)
+
+#merge wvwa and vt observations
+# wvwa_wl <- wvwa_bvr_wl %>%
+#   filter(Date>as.Date("2015-07-07") & Date<as.Date("2020-06-17")) #need obs before sensors were deployed
+
+# #change water level column name to match for merge below
+# names(wvwa_wl)[names(wvwa_wl) == 'BVR_WaterLevel_m'] <- 'WaterLevel_m'
+
+#drop a few vt obs because they are the same as wvwa obs for this same day
+# Keep the VT observations over the WVWA observations
+wl_final <- vt_obs |>
+  group_by(Date) |>
+  filter(Source == "VT" | !("VT" %in% Source)) |>
+  ungroup() |>
+  select(Date, WaterLevel_m)
+
+#vt_obs <- vt_obs[vt_obs$Date %in% vt_obs$Date[which(!vt_obs$Date %in% as.Date(wvwa_wl$Date))],]
+                   
+#only keeping one vt water level observation because the others match wvwa obs
+#wl_final <- rbind(vt_obs, wvwa_wl)
+
+```
+
+
+```{r add missing values}
+# Constrain to study time period: 2020-04-05 (time series start date) to
+# last 30 minute period - UPDATE WITH EACH NEW SET OF DATA!
+ts <- seq(as.Date('2015-07-07'), as.Date('2020-06-17'), by = "day")
+ts2 <- data.frame(Date = ts)
+
+# Join water level data with list of dates+time
+wl_pre_sensors <- left_join(ts2, wl_final, by = 'Date')%>%
+  mutate(WaterLevel_m = ifelse(Date=="2015-07-07", 11.3, WaterLevel_m)) %>% #make first date be 11.3 for interpolation
+    mutate(WaterLevel_m = ifelse(Date=="2020-06-17", 11.9, WaterLevel_m)) %>% #make last date be 11.9 for interpolation
+  mutate(WaterLevel_m = zoo::na.approx(WaterLevel_m)) %>%
+  #fill(WaterLevel_m, .direction = "up")%>% # back fill based on obs from staff gauge
+  mutate(Reservoir="BVR",
+         Site=50)%>%
+  select(Date, WaterLevel_m)
+
+#then assume that water level is not changing from Jun 4-17 (so no NAs in df)
+wl_pre_sensors$WaterLevel_m[is.na(wl_pre_sensors$WaterLevel_m)] <- wl_pre_sensors$WaterLevel_m[wl_pre_sensors$Date=="2020-06-04"]
+
+```
+
+```{r combine obs and waterlevel}
+
+calc_sensor_depth<- sensor_depth%>%
+  mutate(WaterLevel_m=(WaterLevel*1.043)-0.247)%>%
+  select(Date,WaterLevel_m) %>%
+  filter(Date<as.Date("2022-05-05"))
+  
+
+wl_final<-rbind(wl_pre_sensors, calc_sensor_depth)
+
+write.csv(wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/BVR_WaterLevel_2015_2022_interp.csv", row.names = F)
+
+```
+
+```{r}
+#Load bathymetry
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+ bathy_raw <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Depth_m",     
+                    "SA_m2",     
+                    "Volume_layer_L",     
+                    "Volume_below_L"    ), check.names=TRUE)
+unlink(infile1)
+
+bathy = bathy_raw %>%
+  filter(Reservoir == "BVR")
+```
+
+
+```{r add missing values}
+
+#adjust volume based on waterlevel
+
+flexible_bathy = wl_final%>%
+  mutate(Reservoir = "BVR")%>%
+  full_join(bathy)%>%
+  group_by(Date)%>%
+  mutate(Depth_m = Depth_m - (max(Depth_m)-unique(WaterLevel_m)) + 1)%>%
+  filter(Depth_m>=-1)
+
+total_bathy = flexible_bathy%>%
+  group_by(Date)%>%
+  rename(Volume_L = Volume_layer_L)%>%
+  dplyr::summarize(depth_above_water = unique(Depth_m[Depth_m<0]),
+                   surface_and_above = sum(Volume_L[Depth_m>=depth_above_water]), #1m layers
+                   correction_surf = abs(unique(depth_above_water))*Volume_L[Depth_m==depth_above_water],
+                   approx_volume = unique(surface_and_above-correction_surf)
+  )
+
+total_bathy%>%
+  ggplot(aes(x=Date,y=approx_volume))+
+  geom_line()
+```
+
+```{r}
+#combine the approx vol column with daily water level
+bvr_wl_final <- wl_final %>% select(Date, WaterLevel_m)
+bvr_wl_final$vol_m3 <- total_bathy$approx_volume / 1000
+
+#get into date format
+bvr_wl_final$Date <- as.Date(bvr_wl_final$Date)
+
+#export file
+write.csv(bvr_wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv", row.names = FALSE)
+
+```
+
+```{r}
+#compare AGH vs above wl 
+
+#read in AGH's 2009-2019 water level file
+old_wl <- read.csv("/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/09Apr20_BVR_WaterLevelDailyVol.csv") %>% mutate(Date = as.Date(Date, format="%m/%d/%Y")) %>% 
+  filter(Date < as.Date("2020-01-01") & Date > as.Date("2015-07-06"))
+
+#drop one row because 01 nov has 2 different values
+old_wl <- old_wl[-c(118),]
+
+new_wl <- bvr_wl_final %>% filter(Date < as.Date("2020-01-01"))
+
+#plots to compare wl
+plot(old_wl$BVR_Vol_m3~old_wl$Date, type="l", lty=1)
+lines(new_wl$vol_m3~new_wl$Date, col="red", type="l")
+
+```
+

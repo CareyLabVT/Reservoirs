@@ -31,5 +31,5 @@ sensors	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
-Water level	cuahsi controlled vocabulary
-Reservoir storage	cuahsi controlled vocabulary
+water level	cuahsi controlled vocabulary
+reservoir storage	cuahsi controlled vocabulary

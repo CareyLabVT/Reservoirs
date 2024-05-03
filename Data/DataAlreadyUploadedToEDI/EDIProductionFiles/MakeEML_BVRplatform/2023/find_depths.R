@@ -1,12 +1,3 @@
-# Title: Find depths based on the depth of the pressure transducer
-# This function assigns depths for each observation based on the depth of the pressure sensor at the bottom of 
-# the temperature string of sensors. It is based on how far sensors are from each other and the depth of the pressure
-# sensor when other sensors in the string are out of the water. 
-# Author: Adrienne Breef-Pilz wrote the original script and Austin Delany made edits
-# First developed: September 2023
-# Last Edit: 5 Jan. 2024
-
-
 find_depths <- function(data_file, # data_file = the file of most recent data either from EDI or GitHub. Currently reads in the L1 file
                         depth_offset,  # depth_offset = the file of depth of each sensor relative to each other. This file for BVR is on GitHub
                         output, # output = the path where you would like the data saved
@@ -159,7 +150,7 @@ find_depths <- function(data_file, # data_file = the file of most recent data ei
       dplyr::mutate(Depth_m = round(Depth_m, round_digits)) |>
       dplyr::select(Reservoir, Site, Depth_m,
                     DateTime, variable,
-                    Position, sensor_depth,
+                    Position, observation, sensor_depth,
                     rounded_depth,
                     depth_bin)
 

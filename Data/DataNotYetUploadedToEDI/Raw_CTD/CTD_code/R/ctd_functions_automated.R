@@ -1,14 +1,7 @@
-trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloads){
-  ### Format date and names for the rest of the automated script
-  DATE<- dmy(DATE_TEXT)
-  DATE_NUM <- format(DATE, "%m%d%y")
-  
-  if(AUTO_NAME == TRUE){
-    NAME <- paste(raw_downloads, "/", DATE_NUM,"_",SITE, REP, sep = "")
-  } else {NAME <- NAME_OVERRIDE}
-  
+trim_ctd <- function(file, raw_downloads){
   
   ### Pull in the raw CTD file as a .cnv format ###
+  NAME <- paste(raw_downloads, "/", file, sep = "")
   name_cnv <- paste(NAME,"cnv", sep = ".")
  
   # Wrap read.ctd.sbe in a try() function so if there is a warning it keeps running
@@ -28,29 +21,20 @@ trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloa
       lines[i] <-  gsub("e\\s","e",gsub("-"," -",lines[i]))
       }
       else{}
-    
   }
+    
     ### Let's try reading it in again
     ctdRaw <- read.ctd.sbe(textConnection(lines),            
                            columns = list(), 
                            monitor = T,
                            debug = getOption("oceDebug"))
-   
   }
   
   ### Find the range of the cast that only includes the downcast ###
   par(mfrow=c(1,1))
   
-  ### Trim the dataframe to include ONLY the downcast (SCAN_NUMBERS "from = XXX," will need to be adjusted)
-  trim_function <- function(data, parameters){
-    max_depth_index <- data$scan[which.max(data$depth)]
-    scan_index <- data$scan[max(which(data$depth < parameters[1] & data$scan < max_depth_index))]
-    if(!is.finite(scan_index)){scan_index <- 1}
-    data$scan >= scan_index
-  }
-  
   ctdTrimmed <- ctdTrim(ctdRaw, trim_function,
-                        parameters=list(depth= -0.1))
+                        parameters = list(depth = -0.1))
   
   ### Verify that we only include the downcast
   plotScan(ctdTrimmed)
@@ -58,17 +42,22 @@ trim_ctd <- function(DATE_TEXT, AUTO_NAME, SITE, REP, NAME_OVERRIDE, raw_downloa
   return(ctdTrimmed)
 }
 
+### Trim the dataframe to include ONLY the downcast (SCAN_NUMBERS "from = XXX," will need to be adjusted)
+trim_function <- function(data, parameters){
+  max_depth_index <- data$scan[which.max(data$depth)]
+  
+  #Identify the scan number where you want to start the cast
+  scan_index <- data$scan[max(which(data$depth < parameters[1] & data$scan < max_depth_index))]
+  if(!is.finite(scan_index)){scan_index <- 1}
+  #Filter to after that scan number
+  data$scan >= scan_index
+}
 
-epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER, 
-                              REP, SN, AUTO_NAME, NAME_OVERRIDE, AUTO_FOLDER, 
+
+epic_ctd_function <- function(ctdTrimmed, file, SN, AUTO_FOLDER, 
                               CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER){
   ### Format date and names for the rest of the automated script
-  DATE<- dmy(DATE_TEXT)
-  DATE_NUM <- format(DATE, "%m%d%y")
-  
-  if(AUTO_NAME == TRUE){
-    NAME <- paste(DATE_NUM,"_",SITE, REP, sep = "")
-  } else {NAME <- NAME_OVERRIDE}
+  NAME <- file
   
   ### extract only the raw data from the .cnv file
   data <- data.frame(ctdTrimmed@data)
@@ -171,9 +160,6 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
   }
   
   
-  
-  
-  
   ### REMOVE THE BOTTOM NA values ###
   data <- data[!is.na(data$DO_mgL),]
   
@@ -222,38 +208,6 @@ epic_ctd_function <- function(ctdTrimmed, DATE_TEXT, SITE, SAMPLER,
   }
   
   write_csv(data_wtr, name_csv)
-  
-  ### New feature, This saves the Metadata text from the .cnv as a raw .txt file 
-  ### so we can refer to prior dates to see if there are any discrepancies or to use for EDI
-  
-  ### Change the MetaData to clarify who, when, and where cast was taken ###
-  # specify the day sampled
-  ctdTrimmed[["metadata"]]$cruise <- paste("Sampling on", DATE_TEXT)            
-  
-  # Who took the cast?
-  ctdTrimmed[["metadata"]]$scientist <- SAMPLER                        
-  
-  # What group was the cast affiliated with?
-  ctdTrimmed[["metadata"]]$institute <- "Carey Lab, Virginia Tech"
-  
-  # What site was the cast taken from?
-  ctdTrimmed[["metadata"]]$station <- SITE 
-  
-  ### Specify names ###
-  CTD_SN <- ctdTrimmed@metadata$serialNumberTemperature
-  CTD_type <- ctdTrimmed@metadata$type
-  Sampling_event <- ctdTrimmed@metadata$cruise
-  User <- ctdTrimmed@metadata$scientist
-  Institute <- ctdTrimmed@metadata$institute
-  Cast_location <- ctdTrimmed@metadata$station
-  
-  ### Bind the metadata together ###
-  metadata <- as.data.frame(rbind(CTD_SN,CTD_type,Institute,Sampling_event,Cast_location,User))
-  names(metadata) <- c("")
-  
-  ### write the simple metadata table ###
-  name_txt <- paste(CTD_FOLDER, "metadata_files/",NAME, "_metadata.txt", sep = "")
-  write.table(metadata, file = name_txt, sep = "\t")
   
   print(paste("Success! Data have been processed for ",NAME, ". ", "Double check the files on github to make sure everything looks right.", sep = ""))
 }

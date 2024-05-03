@@ -30,7 +30,7 @@ Flag_WVWA_Flow_cms	5	value of NA due to leaking at weir
 Flag_WVWA_Flow_cms	6	flow topping the v-notch weir
 Flag_WVWA_Flow_cms	7	missing observation/not recorded
 Flag_WVWA_Flow_cms	8	values removed because of maintenance
-Flag_WVWA_Flow_cms	13	value down corrected due to low flows on the rectangular weir
+Flag_WVWA_Flow_cms	13	value downcorrected due to low flows on the rectangular weir
 Flag_WVWA_Flow_cms	16	value downcorrected due to flow overtopping the rectangular weir
 Flag_WVWA_Flow_cms	24	sensor malfunction and demonic intrusion
 Flag_WVWA_Pressure_psi	0	no flag

@@ -17,8 +17,15 @@
 # Download/load libraries
 pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
 
-# library(EDIutils)
-# library(xml2)
+ library(EDIutils)
+ library(xml2)
+
+## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+package_ID <- 'edi.1061.3'
+eml <- read_metadata(package_ID)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
 
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/eddy_flux_create.R')
 
@@ -29,7 +36,7 @@ eddypro_cleaning_function(
   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
   #current_year = 2024,
   output_file = "/EddyPro_Cleaned_L1.csv",
-  start_date = as.Date("2022-12-31") + lubridate::days(1), # change when we update to read date from EDI
+  start_date =last_edi_date, # change when we update to read date from EDI
   end_date = Sys.Date() + lubridate::days(1))
 
 

@@ -91,6 +91,6 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1113.6") #staging 2023
+         package.id = "edi.200.14") #2024
 ```
 

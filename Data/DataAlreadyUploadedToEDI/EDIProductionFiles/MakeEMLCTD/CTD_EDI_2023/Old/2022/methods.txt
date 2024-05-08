@@ -1,0 +1,31 @@
+Depth profiles of multiple water-quality variables were collected from 2013 through 2022 using a Conductivity, Temperature and Depth (CTD) profiler from SeaBird Electronics (SBE, Bellevue Washington, USA) at five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2022); Spring Hollow Reservoir was not in sampled in 2018 or 2020–2022; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected from 9:00 to 15:00, however, some CTD casts were collected at night. Above water temperature and PAR are included in the dataset for 2018–2022, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.
+
+The CTD was calibrated by the manufacturer according to the standards and practices of SBE and the companies with secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February), except during/before the 2021 field season when calibration was delayed until August 2021 due to the ongoing COVID-19 pandemic.
+
+Flags indicate known or suspected issues with measured variables. We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data.
+
+
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2022
+
+Multiple sensors and instruments were added over time; below we note changes in the CTD software, sensor versions, and provide links to the accompanying instrument manuals.
+
+Seacat 19Plus V 1.6 SERIAL NO. 4397 2013 - 2016 http://www.seabird.com/sites/default/files/documents/19plus_018_0.pdf 
+
+Sea-Bird SBE19Plus V2 SERIAL NO. 7809 2017 - 2022 http://www.seabird.com/sites/default/files/documents/19plusV2_015.pdf
+
+For CTD processing, refer to the SeaBird Data processing manual. http://www.seabird.com/sites/default/files/documents/SBEDataProcessing_7.26.7.pdf
+
+SBE 43 Dissolved Oxygen Sensor SERIAL NO. 0434 2013 - 2022 http://www.seabird.com/sites/default/files/documents/appnote64Jun13.pdf
+
+FluoroWetlabECO_AFL_FL_Sensor SERIAL NO. 2496 2013 - 2022
+
+Turbidity Meter WET Labs ECO-NTU SERIAL NO. 2496 2013 - 2022 http://www.seabird.com/sites/default/files/documents/manual-ECOMasterben.pdf
+
+pH and OxidationReductionPotentialSensor SERIAL NO. 0363 2017 - 2022 (replaced in 2022) http://www.seabird.com/sites/default/files/documents/appnote18-1Sep14.pdf
+
+Photosynthetically Active Radiation (PAR) Sensor SERIAL NO. 1122 2017 - 2022 https://www.seabird.com/product.detail-print.version.jsa?id=54627923891
+
+
+Additional Notes
+
+Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.

@@ -52,8 +52,6 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = here(ctd_folder, "RawDownloads"),
                             output_file_name = paste0("CTD_2013_", THIS_YEAR,".csv"),
                             intermediate_file_name = paste0("CTD_L0_2018_", THIS_YEAR,".csv"))
 
-ctd_reprocessed <- ctd_reprocessed %>%
-  filter(year(DateTime) <= THIS_YEAR)
 ```
 
 ## STEP 3: Quick gut checks for reprocessing
@@ -83,8 +81,8 @@ ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/043
 
 ```{r}
 #Choose which data you want to visualize
-qaqc <- ctd_edi
-#qaqc <- ctd_reprocessed
+#qaqc <- ctd_edi
+qaqc <- ctd_reprocessed
 
 # Basic checks
 unique(qaqc$Site)
@@ -112,9 +110,16 @@ plot_var <- function(var_name,
 }
 
 
-vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "SpCond_uScm",
-                   "Chla_ugL", "Turbidity_NTU", "pH", "ORP_mV", "PAR_umolm2s", "CDOM_ugL",
-                  "Phycoerythrin_ugL", "Phycocyanin_ugL", "DescRate_ms")
+vars_to_plot <- c("Turbidity_NTU")
+
+qaqc %>%
+  filter(as.Date(DateTime) == as.Date("2021-07-28"))
+
+qaqc %>%
+  filter(Turbidity_NTU>100)
+
+qaqc %>%
+  filter(Flag_DO_mgL == 2, !is.na(DO_mgL))
 ```
 
 ```{r plots}

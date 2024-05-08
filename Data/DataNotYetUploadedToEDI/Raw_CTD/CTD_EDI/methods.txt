@@ -4,7 +4,7 @@ Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoi
 
 The CTDs were calibrated by the manufacturer according to the standards and practices of SBE and the companies that manufactured the secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February) for our first CTD (serial numbers 4397 and 7809), except for the 2021 and 2022 field seasons, when calibration was delayed until August 2022 due to the ongoing COVID-19 pandemic. A second CTD (serial number 8188) was added in May 2022 and was returned for re-calibration of its turbidity and chl-a sensors in August - October 2022. 
 
-Flags indicate known or suspected issues with measured variables (see categorial flag descriptions in data table attributes). We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data.
+Flags indicate known or suspected issues with measured variables (see categorial flag descriptions in data table attributes). We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data. In this revision, PAR values > 3000 umolm2s have been removed and flagged as instrument malfunction, as have turbidity values > 200 NTU. 
 
 All casts from 2018-2022 were re-processed in the revision published in May 2024 to standardize data processing across years (see QAQC_2018_2023.R and referenced data processing scripts). 
 

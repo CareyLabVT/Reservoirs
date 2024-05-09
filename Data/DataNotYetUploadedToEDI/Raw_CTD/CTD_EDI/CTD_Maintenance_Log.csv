@@ -24,8 +24,10 @@ FCR,NA,NA,CTD,2022-10-11 12:14:03 EST,2022-10-11 14:09:38 EST,Temp_C,SpCond_uScm
 NA,NA,NA,CTD,2022-10-17  00:00:00 EST,2022-10-17  23:59:00 EST,Temp_C,DescRate_ms,2,NA,8188,Issues with this cast compared to old CTD
 NA,NA,NA,CTD,2022-10-24  00:00:00 EST,2022-10-24  23:59:00 EST,DO_mgL,DOsat_percent,2,NA,8188,DO issues
 NA,NA,NA,CTD,2022-11-01 00:00:00 EST,2022-11-01 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,Temp issue. Downcast is very different from upcast and differs substantially from the other CTD
-NA,NA,NA,CTD,2022-12-12 00:00:00 EST,2022-12-12 23:59:00 EST, Temp_C,DescRate_ms,2,NA,7809, Very short cast probably a battery issue
+NA,NA,NA,CTD,2022-12-12 00:00:00 EST,2022-12-12 23:59:00 EST, Temp_C,DescRate_ms,2,NA,7809,Very short cast probably a battery issue
 BVR,NA,NA,CTD,2023-07-24 00:00:00 EST,2023-07-24 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,7809,Not totally sure what the issue is - issues with temp/cond/DO on this cast
 NA,NA,NA,CTD,2023-08-29 00:00:00 EST,NA,DO_mgL,DOsat_percent,2,NA,8188,DO issues
 NA,NA,NA,CTD,2023-10-17 00:00:00 EST,2023-10-17 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,Temp issue. Downcast is very different from upcast and differs substantially from the other CTD
 NA,NA,NA,CTD,2023-12-04 00:00:00 EST,2023-12-04 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,Temp issue. Downcast is very different from upcast and differs substantially from the other CTD
+NA,NA,NA,CTD,2021-07-28 00:00:00 EST,2021-07-28 23:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,7809,Crazy high turbidity
+NA,NA,NA,CTD,2022-07-07 00:00:00 EST,2021-07-07 23:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,7809,Crazy high turbidity

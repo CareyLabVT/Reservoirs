@@ -1,0 +1,250 @@
+---
+title: "CTD Meta Processing"
+author: "Abby Lewis"
+date: "12/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Package ID: edi.200.7 Cataloging System:https://pasta.edirepository.org.
+# Data set title: Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductivity, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetic active radiation, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in Southwestern Virginia, USA 2013-2018.
+# Data set creator:  Cayelan Carey - Virginia Tech 
+# Data set creator:  Ryan McClure - Virginia Tech 
+# Data set creator:  Alexandra Gerling - Virginia Tech 
+# Data set creator:  Jonathan Doubek - Virginia Tech 
+# Data set creator:  Shengyang Chen - University of Sydney 
+# Data set creator:  Mary Lofton - Virginia Tech 
+# Data set creator:  Kathleen Hamre - Virginia Tech 
+# Contact:  Cayelan Carey -  Virginia Tech  - cayelan@vt.edu
+# Stylesheet v2.7 for metadata conversion into program: John H. Porter, Univ. Virginia, jporter@virginia.edu 
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/7/2461524a7da8f1906bfc3806d594f94c" 
+infile1 <- tempfile()
+download.file(inUrl1,infile1,method="curl")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+                ,quot='"' 
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "Date",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "Cond_uScm",     
+                    "Spec_Cond_uScm",     
+                    "Chla_ugL",     
+                    "Turb_NTU",     
+                    "pH",     
+                    "ORP_mV",     
+                    "PAR_umolm2s",     
+                    "Desc_rate",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_Cond",     
+                    "Flag_SpecCond",     
+                    "Flag_Chla",     
+                    "Flag_Turb",     
+                    "Flag_pH",     
+                    "Flag_ORP",     
+                    "Flag_PAR",     
+                    "Flag_DescRate"    ), check.names=TRUE)
+               
+  
+# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+                
+if (class(dt1$Reservoir)!="factor") dt1$Reservoir<- as.factor(dt1$Reservoir)
+if (class(dt1$Site)=="factor") dt1$Site <-as.numeric(levels(dt1$Site))[as.integer(dt1$Site) ]                                   
+# attempting to convert dt1$Date dateTime string to R date structure (date or POSIXct)                                
+tmpDateFormat<-"%Y-%m-%d %H:%M:%S" 
+tmp1Date<-as.POSIXct(dt1$Date,format=tmpDateFormat)
+# Keep the new dates only if they all converted correctly
+if(length(tmp1Date) == length(tmp1Date[!is.na(tmp1Date)])){dt1$Date <- tmp1Date } else {print("Date conversion failed for dt1$Date. Please inspect the data and do the date conversion yourself.")}                                                                    
+rm(tmpDateFormat,tmp1Date) 
+if (class(dt1$Depth_m)=="factor") dt1$Depth_m <-as.numeric(levels(dt1$Depth_m))[as.integer(dt1$Depth_m) ]
+if (class(dt1$Temp_C)=="factor") dt1$Temp_C <-as.numeric(levels(dt1$Temp_C))[as.integer(dt1$Temp_C) ]
+if (class(dt1$DO_mgL)=="factor") dt1$DO_mgL <-as.numeric(levels(dt1$DO_mgL))[as.integer(dt1$DO_mgL) ]
+if (class(dt1$Cond_uScm)=="factor") dt1$Cond_uScm <-as.numeric(levels(dt1$Cond_uScm))[as.integer(dt1$Cond_uScm) ]
+if (class(dt1$Spec_Cond_uScm)=="factor") dt1$Spec_Cond_uScm <-as.numeric(levels(dt1$Spec_Cond_uScm))[as.integer(dt1$Spec_Cond_uScm) ]
+if (class(dt1$Chla_ugL)=="factor") dt1$Chla_ugL <-as.numeric(levels(dt1$Chla_ugL))[as.integer(dt1$Chla_ugL) ]
+if (class(dt1$Turb_NTU)=="factor") dt1$Turb_NTU <-as.numeric(levels(dt1$Turb_NTU))[as.integer(dt1$Turb_NTU) ]
+if (class(dt1$pH)=="factor") dt1$pH <-as.numeric(levels(dt1$pH))[as.integer(dt1$pH) ]
+if (class(dt1$ORP_mV)=="factor") dt1$ORP_mV <-as.numeric(levels(dt1$ORP_mV))[as.integer(dt1$ORP_mV) ]
+if (class(dt1$PAR_umolm2s)=="factor") dt1$PAR_umolm2s <-as.numeric(levels(dt1$PAR_umolm2s))[as.integer(dt1$PAR_umolm2s) ]
+if (class(dt1$Desc_rate)=="factor") dt1$Desc_rate <-as.numeric(levels(dt1$Desc_rate))[as.integer(dt1$Desc_rate) ]
+if (class(dt1$Flag_Temp)=="factor") dt1$Flag_Temp <-as.numeric(levels(dt1$Flag_Temp))[as.integer(dt1$Flag_Temp) ]
+if (class(dt1$Flag_DO)=="factor") dt1$Flag_DO <-as.numeric(levels(dt1$Flag_DO))[as.integer(dt1$Flag_DO) ]
+if (class(dt1$Flag_Cond)=="factor") dt1$Flag_Cond <-as.numeric(levels(dt1$Flag_Cond))[as.integer(dt1$Flag_Cond) ]
+if (class(dt1$Flag_SpecCond)=="factor") dt1$Flag_SpecCond <-as.numeric(levels(dt1$Flag_SpecCond))[as.integer(dt1$Flag_SpecCond) ]
+if (class(dt1$Flag_Chla)=="factor") dt1$Flag_Chla <-as.numeric(levels(dt1$Flag_Chla))[as.integer(dt1$Flag_Chla) ]
+if (class(dt1$Flag_Turb)=="factor") dt1$Flag_Turb <-as.numeric(levels(dt1$Flag_Turb))[as.integer(dt1$Flag_Turb) ]
+if (class(dt1$Flag_pH)=="factor") dt1$Flag_pH <-as.numeric(levels(dt1$Flag_pH))[as.integer(dt1$Flag_pH) ]
+if (class(dt1$Flag_ORP)=="factor") dt1$Flag_ORP <-as.numeric(levels(dt1$Flag_ORP))[as.integer(dt1$Flag_ORP) ]
+if (class(dt1$Flag_PAR)=="factor") dt1$Flag_PAR <-as.numeric(levels(dt1$Flag_PAR))[as.integer(dt1$Flag_PAR) ]
+if (class(dt1$Flag_DescRate)=="factor") dt1$Flag_DescRate <-as.numeric(levels(dt1$Flag_DescRate))[as.integer(dt1$Flag_DescRate) ]
+                
+# Convert Missing Values to NA for non-dates
+                
+dt1$Depth_m <- ifelse((trimws(as.character(dt1$Depth_m))==trimws("NA")),NA,dt1$Depth_m)
+dt1$Temp_C <- ifelse((trimws(as.character(dt1$Temp_C))==trimws("NA")),NA,dt1$Temp_C)
+dt1$DO_mgL <- ifelse((trimws(as.character(dt1$DO_mgL))==trimws("NA")),NA,dt1$DO_mgL)
+dt1$Cond_uScm <- ifelse((trimws(as.character(dt1$Cond_uScm))==trimws("NA")),NA,dt1$Cond_uScm)
+dt1$Spec_Cond_uScm <- ifelse((trimws(as.character(dt1$Spec_Cond_uScm))==trimws("NA")),NA,dt1$Spec_Cond_uScm)
+dt1$Chla_ugL <- ifelse((trimws(as.character(dt1$Chla_ugL))==trimws("NA")),NA,dt1$Chla_ugL)
+dt1$Turb_NTU <- ifelse((trimws(as.character(dt1$Turb_NTU))==trimws("NA")),NA,dt1$Turb_NTU)
+dt1$pH <- ifelse((trimws(as.character(dt1$pH))==trimws("NA")),NA,dt1$pH)
+dt1$ORP_mV <- ifelse((trimws(as.character(dt1$ORP_mV))==trimws("NA")),NA,dt1$ORP_mV)
+dt1$PAR_umolm2s <- ifelse((trimws(as.character(dt1$PAR_umolm2s))==trimws("NA")),NA,dt1$PAR_umolm2s)
+dt1$Desc_rate <- ifelse((trimws(as.character(dt1$Desc_rate))==trimws("NA")),NA,dt1$Desc_rate)
+
+
+# Here is the structure of the input data frame:
+str(dt1)                            
+attach(dt1)                            
+# The analyses below are basic descriptions of the variables. After testing, they should be replaced.                 
+
+summary(Reservoir)
+summary(Site)
+summary(Date)
+summary(Depth_m)
+summary(Temp_C)
+summary(DO_mgL)
+summary(Cond_uScm)
+summary(Spec_Cond_uScm)
+summary(Chla_ugL)
+summary(Turb_NTU)
+summary(pH)
+summary(ORP_mV)
+summary(PAR_umolm2s)
+summary(Desc_rate)
+summary(Flag_Temp)
+summary(Flag_DO)
+summary(Flag_Cond)
+summary(Flag_SpecCond)
+summary(Flag_Chla)
+summary(Flag_Turb)
+summary(Flag_pH)
+summary(Flag_ORP)
+summary(Flag_PAR)
+summary(Flag_DescRate) 
+detach(dt1)               
+        
+
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+# This reads all the files into the R environment
+files = list.files(pattern = ".*\\d+.*.csv") #Get all csv files
+files <- files[!grepl("PAR",files)&!grepl("matlab",files)] #That include "bvr" and not PAR
+omit <- c("100719_bvr_sedtrap.csv","090419_bvr50.csv","090419_fcr50.csv","ctd_short_for_GLM_AED_2019.csv","CTD_Meta_13_19.csv","CTD_Meta_2019.csv")
+files <- files[!files %in% omit]
+
+#This reads the first file in
+ctd = read_csv(files[1]) 
+location <- sub("^[0-9]*_","",sub("\\.csv","",files[1]))
+ctd = ctd%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("^[a-z]*","",sub("_[a-z]","",location))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')%>%
+    select(-DO_pSat,-Salinity)
+
+# Loop through and pull all the files in
+for (i in 2:length(files)){
+  new = read_csv(files[i]) 
+  location <- sub("^[0-9]*_","",sub("\\.csv","",files[i]))
+  new = new%>%
+    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
+           Site = as.numeric(sub("^[a-z]*","",sub("_[a-z]","",location))))%>%
+    rename(PAR_umolm2s = PAR,
+           Desc_rate = 'Descent Rate (m/s)')%>%
+    select(-DO_pSat,-Salinity)
+  ctd = ctd %>%
+    full_join(new)
+}
+
+write_csv(ctd, "CTD_Meta_2019.csv")
+```
+
+```{r}
+ctd <- read.csv("CTD_Meta_2019.csv")
+ctd = ctd %>%
+  select(-Pressure..PSI.,-Density_mg_m3)%>%
+  mutate(Date = as.POSIXct(Date))
+
+ctd_flagged = ctd %>%
+  select(-Flag)%>%
+  mutate(Flag_Temp = 0,
+         Flag_DO= 0,
+         Flag_Cond = 0,
+         Flag_SpecCond = 0,
+         Flag_Chla = 0,
+         Flag_Turb = 0,
+         Flag_pH = 0,
+         Flag_ORP = 0,
+         Flag_PAR = 0,
+         Flag_DescRate = 0) %>%
+  mutate(
+    #TEMP
+    Flag_Temp = ifelse(is.na(Temp_C),2,Flag_Temp),
+  
+    #DO
+    Flag_DO = ifelse(is.na(DO_mgL),2,Flag_DO),
+    DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL),
+    Flag_DO = ifelse(DO_mgL < 0,4,Flag_DO),
+  
+    #COND
+    Flag_Cond = ifelse(is.na(Cond_uScm),2,Flag_Cond),
+    Cond_uScm = ifelse(Cond_uScm < 0, 0, Cond_uScm),
+    Flag_Cond = ifelse(Cond_uScm < 0,4,Flag_Cond),
+    
+    #SPECCOND
+    Flag_SpecCond = ifelse(is.na(Spec_Cond_uScm),2,Flag_SpecCond),
+    Spec_Cond_uScm = ifelse(Spec_Cond_uScm < 0, 0, Spec_Cond_uScm),
+    Flag_SpecCond = ifelse(Spec_Cond_uScm < 0,4,Flag_SpecCond),
+    
+    #CHLA
+    Flag_Chla = ifelse(is.na(Chla_ugL),2,Flag_Chla),
+    Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL),
+    Flag_Chla = ifelse(Chla_ugL < 0,4,Flag_Chla),
+    
+    #TURB
+    Flag_Turb = ifelse(is.na(Turb_NTU),2,Flag_Turb),
+    Turb_NTU = ifelse(Turb_NTU < 0, 0, Turb_NTU),
+    Flag_Turb = ifelse(Turb_NTU < 0,4,Flag_Turb),
+    
+    #pH
+    Flag_pH = ifelse(is.na(pH),2,Flag_pH),
+    pH = ifelse(pH < 0, 0, pH),
+    Flag_pH = ifelse(pH < 0,4,Flag_pH),
+    
+    #ORP
+    Flag_ORP = ifelse(is.na(ORP_mV),2,Flag_ORP),
+  
+    #PAR
+    Flag_PAR = ifelse(is.na(PAR_umolm2s),2,Flag_PAR),
+    
+    #DESC RATE
+    Flag_DescRate = ifelse(is.na(Desc_rate),2,Flag_DescRate))
+
+summary(ctd_flagged)
+```
+
+
+```{r}
+final = dt1 %>%
+  full_join(ctd_flagged)%>%
+  mutate(Date = as.POSIXct(Date, format = "%Y-%m-%d %H:%M:%S"))
+
+write.csv(final,"../MakeEMLCTD/CTD_final_2013_2019.csv", row.names = FALSE)
+```

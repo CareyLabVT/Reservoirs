@@ -143,18 +143,6 @@ ghg_qaqc<-function(directory,
   all<-list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
-  # Filter for just the unprocessed files
-  ### identify the date subsetting for the data
-  if (!is.null(start_date)){
-    all <- all %>% 
-      dplyr::filter(datetime >= start_date)
-  }
-  
-  if(!is.null(end_date)){
-    all <- all %>% 
-      dplyr::filter(datetime <= end_date)
-  }
-  
   
   # some timestamps are duplicated between files. Inspect:
   duplicate_timestamps <- all[duplicated(all$date_acquired), ]
@@ -389,7 +377,18 @@ ghg_qaqc<-function(directory,
            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
            DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
     select(-c(Time, Date, Hours))
+
+    # Filter for just the unprocessed files
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    all <- all %>% 
+      dplyr::filter(Datetime >= start_date)
+  }
   
+  if(!is.null(end_date)){
+    all <- all %>% 
+      dplyr::filter(Datetime <= end_date)
+  }
   
   ### 4. Take out values based on the Maintenance Log ####
   

@@ -66,6 +66,7 @@ ghg_qaqc<-function(directory,
   # Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
   # start_date = as.Date("2024-01-01")
   # end_date = as.Date(Sys.Date())
+
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
   
@@ -143,6 +144,18 @@ ghg_qaqc<-function(directory,
   all<-list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
+   # Filter for just the unprocessed files
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    all <- all %>% 
+      dplyr::filter(date_acquired >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    all <- all %>% 
+      dplyr::filter(date_acquired <= end_date)
+  }
+  
   
   # some timestamps are duplicated between files. Inspect:
   duplicate_timestamps <- all[duplicated(all$date_acquired), ]
@@ -161,7 +174,7 @@ ghg_qaqc<-function(directory,
       notes = ifelse(is.na(CH4_GC_headspace_ppm) & is.na(CO2_GC_headspace_ppm),"CH4CO2_NO_PEAK", 
                      ifelse(is.na(CH4_GC_headspace_ppm), "CH4_NO_PEAK",
                             ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", notes))))
-  
+
   #### 2.2 Assign Air temp and lab pressure for time of lab sampling ####
   # read in the file Bobbie created for air temp and pressure
   
@@ -218,6 +231,21 @@ ghg_qaqc<-function(directory,
       DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy')),
       Date=as.Date(DateTime),
       Date_upper=Date+4)
+  
+
+  # Filter the site info 
+  
+  # Filter for just the unprocessed files
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    site_info <- site_info %>% 
+      dplyr::filter(DateTime >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    site_info <- site_info %>% 
+      dplyr::filter(DateTime <= end_date)
+  }
   
   
   # samples that were take less than 3 days from the process date. Usually they are processed the next day
@@ -377,18 +405,6 @@ ghg_qaqc<-function(directory,
            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
            DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
     select(-c(Time, Date, Hours))
-
-    # Filter for just the unprocessed files
-  ### identify the date subsetting for the data
-  if (!is.null(start_date)){
-    all <- all %>% 
-      dplyr::filter(Datetime >= start_date)
-  }
-  
-  if(!is.null(end_date)){
-    all <- all %>% 
-      dplyr::filter(Datetime <= end_date)
-  }
   
   ### 4. Take out values based on the Maintenance Log ####
   
@@ -720,9 +736,10 @@ ghg_qaqc<-function(directory,
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
   # save data if there is an output)file path. If not then the file is returned. 
   if (is.null(ghg_final)){
-    return(ec_all)
+    return(ghg_final)
   }else{
     # convert datetimes to characters so that they are properly formatted in the output file
+
     ghg_final$DateTime <- as.character(format( ghg_final$DateTime))
     
     readr::write_csv(ghg_final, output_file)

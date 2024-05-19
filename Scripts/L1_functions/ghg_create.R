@@ -53,19 +53,20 @@ ghg_qaqc<-function(directory,
                    Vial_Number_Check,
                    start_date,
                    end_date){
-# 
-#   directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/"
-#   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
-#   gdrive = F # Are the files on Google Drive. True or False
-#   gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
-#   Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328"
-#   vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
-#   Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555"
-#   output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
-#   MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
-#   Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
-#   start_date = as.Date("2024-01-01")
-#   end_date = as.Date(Sys.Date())
+
+  # directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/"
+  # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+  # gdrive = T # Are the files on Google Drive. True or False
+  # gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+  # Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328"
+  # vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
+  # Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555"
+  # output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
+  # MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
+  # Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
+  # start_date = as.Date("2024-01-01")
+  # end_date = as.Date(Sys.Date())
+
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
   
@@ -143,7 +144,18 @@ ghg_qaqc<-function(directory,
   all<-list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
- 
+   # Filter for just the unprocessed files
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    all <- all %>% 
+      dplyr::filter(date_acquired >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    all <- all %>% 
+      dplyr::filter(date_acquired <= end_date)
+  }
+  
   
   # some timestamps are duplicated between files. Inspect:
   duplicate_timestamps <- all[duplicated(all$date_acquired), ]
@@ -162,19 +174,7 @@ ghg_qaqc<-function(directory,
       notes = ifelse(is.na(CH4_GC_headspace_ppm) & is.na(CO2_GC_headspace_ppm),"CH4CO2_NO_PEAK", 
                      ifelse(is.na(CH4_GC_headspace_ppm), "CH4_NO_PEAK",
                             ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", notes))))
-  
-  # Filter for just the unprocessed files
-  ### identify the date subsetting for the data
-  if (!is.null(start_date)){
-    all <- all %>% 
-      dplyr::filter(date_acquired >= start_date)
-  }
-  
-  if(!is.null(end_date)){
-    all <- all %>% 
-      dplyr::filter(date_acquired <= end_date)
-  }
-  
+
   #### 2.2 Assign Air temp and lab pressure for time of lab sampling ####
   # read in the file Bobbie created for air temp and pressure
   
@@ -232,6 +232,7 @@ ghg_qaqc<-function(directory,
       Date=as.Date(DateTime),
       Date_upper=Date+4)
   
+
   # Filter the site info 
   
   # Filter for just the unprocessed files
@@ -735,14 +736,14 @@ ghg_qaqc<-function(directory,
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
   # save data if there is an output)file path. If not then the file is returned. 
   if (is.null(ghg_final)){
-    return(ec_all)
+    return(ghg_final)
   }else{
     # convert datetimes to characters so that they are properly formatted in the output file
-    ghg_final$DateTime <- as.character(format(ghg_final$DateTime))
+
+    ghg_final$DateTime <- as.character(format( ghg_final$DateTime))
     
     readr::write_csv(ghg_final, output_file)
-  }
-  
+  } 
 }
 
 # Use the function here

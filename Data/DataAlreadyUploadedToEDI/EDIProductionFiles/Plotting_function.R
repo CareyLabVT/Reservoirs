@@ -217,7 +217,8 @@ current_plot_df <- bind_rows(current, current_raw)%>%
   #     #scale_color_manual(values = colors)+
   #     theme_bw()
 
-    if(Depth==T & length(all_depth[["Depth_m"]])>1){
+    if(Depth==T){ 
+      if(length(all_depth[["Depth_m"]])>1){
     
       all_grid <- current_df%>%
         drop_na(Var)%>%
@@ -230,7 +231,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
         facet_wrap(~ as.factor(Depth_m), scale="free")+
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-      
+      }    
   }else {
     all <- ggplot()+
       geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"), pointsize = 5)+
@@ -265,7 +266,8 @@ if(length(qaqc_current$DateTime)>0){
     #     theme_bw()
       
       # use facet wrap
-      if(Depth==T & length(cur_depth[["Depth_m"]])>1){
+      if(Depth==T){
+        if(length(cur_depth[["Depth_m"]])>1){
         
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
@@ -276,7 +278,7 @@ if(length(qaqc_current$DateTime)>0){
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")
-      
+        } 
     }else{
       cur <- ggplot()+
         {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -308,7 +310,8 @@ if(length(qaqc_current$DateTime)>0){
       
       
       # use facet wrap
-      if(Depth==T & length(cur_depth[["Depth_m"]])>1){
+      if(Depth==T){
+        if(length(cur_depth[["Depth_m"]])>1){
         
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
@@ -319,7 +322,7 @@ if(length(qaqc_current$DateTime)>0){
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")}%>%ggplotly %>% as_widget()
-      
+        }
     }else{
       cur <- {ggplot()+
           {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 

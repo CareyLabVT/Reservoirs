@@ -42,7 +42,7 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # Source scripts from GitHub
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
 
 
 # Plotting script

@@ -175,7 +175,7 @@ p3 <- heat_labs(
   high = 20,
   sample_dates = Met_CCR,
   turnover = as.Date("2022-11-20"),
-  tit="Soluble Manganes",
+  tit="Soluble Manganese",
   units="mg/L")
 
 CCR_TMn <- heatmap_EDI(data=Met, reservoir = "CCR", site=50, z="TMn_mgL")+
@@ -186,7 +186,7 @@ p4 <- heat_labs(
   high = 20,
   sample_dates = Met_CCR,
   turnover = as.Date("2022-11-20"),
-  tit="Total Manganes",
+  tit="Total Manganese",
   units="mg/L")
 
 ```
@@ -205,7 +205,7 @@ g<-annotate_figure(plot, top = text_grob("Carvins Cove Reservoir",
                color = "black", face = "bold", size = 24))
  
 
-ggsave(file="CCR_All_20240510.jpg", g,width=11, height=7, units="in")
+ggsave(file="CCR_All_20240516.jpg", g,width=11, height=7, units="in")
 
 ```
 
@@ -249,7 +249,7 @@ pp3 <- heat_labs(
   turnover = as.Date("2022-10-19"),
   HOX=T,
   HOX_date = as.Date("2022-05-19"),
-  tit="Soluble Manganes",
+  tit="Soluble Manganese",
   units="mg/L")
 
 FCR_TMn <- heatmap_EDI(data=Met, reservoir = "FCR", site=50, z="TMn_mgL")+
@@ -262,7 +262,7 @@ pp4 <- heat_labs(
   turnover = as.Date("2022-10-19"),
   HOX=T,
   HOX_date = as.Date("2022-05-19"),
-  tit="Total Manganes",
+  tit="Total Manganese",
   units="mg/L")
 ```
 
@@ -278,7 +278,7 @@ g<-annotate_figure(plot, top = text_grob("Falling Creek Reservoir",
                color = "black", face = "bold", size = 24))
  
 
-ggsave(file="FCR_All_20240510.jpg", g,width=11, height=7, units="in")
+ggsave(file="FCR_All_20240516.jpg", g,width=11, height=7, units="in")
 
 ```
 

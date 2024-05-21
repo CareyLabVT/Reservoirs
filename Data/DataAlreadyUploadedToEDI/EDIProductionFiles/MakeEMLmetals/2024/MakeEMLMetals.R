@@ -55,7 +55,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
-                          data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv'),
+                          data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2023.csv'),
                           write.file = TRUE)
 
 
@@ -137,19 +137,19 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-  data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-  eml.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-  dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2022",
-  temporal.coverage = c("2014-04-01", "2022-12-16"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2023",
+  temporal.coverage = c("2014-04-01", "2023-12-04"),
   maintenance.description = 'ongoing',
-  data.table = c("Metals_2014_2022.csv","site_descriptions.csv"),
-  data.table.description = c("Reservoir iron and manganese chemistry dataset","Sampling site description"),
-  other.entity = "Metals_QAQC_2014_2022.R",
-  other.entity.description = "QAQC script",
+  data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2023.csv'),
+  data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
+  other.entity = c('Metals_qaqc_2020_2023.R', 'Metals_Inspection_2014_2023.Rmd', 'Plotting_function.R'),
+  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses QAQC script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1004.6') # This package identifier is only for the staging environment
+  package.id = 'edi.718.6') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -186,9 +186,9 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-  data.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
-  eml.path = "C:/Users/Cissy/Documents/EDI Publishing 2023",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
   dataset.title = "Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2022",
   temporal.coverage = c("2014-04-01", "2022-12-16"),
   maintenance.description = 'ongoing',

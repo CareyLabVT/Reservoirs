@@ -2,7 +2,7 @@
 # Author: Cece Wood
 # Date: 18JUL23
 # Edit: 07 Mar. 24 A. Breef-Pilz
-# Edit: 18APR24 CEW
+# Edit: 30 May 2024 ABP. Move the save ISCO file section up. 
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -552,7 +552,19 @@ metals_qaqc <- function(directory,
 
  }
 
- if(is.null(outfile)){
+ # Save the ISCO observations
+ ISCO <- frame4|>
+   filter(Site == 100.1)
+
+ # add in filter later. Right now save everything.
+
+ ISCO$DateTime <- as.character(format(ISCO$DateTime)) # convert DateTime to character
+
+ write_csv(ISCO, ISCO_outfile)
+
+  # save the metals L1 file. If the outfile=NULL then it just returns the file. 
+
+  if(is.null(outfile)){
    return(final)
 
  }else{
@@ -563,16 +575,6 @@ metals_qaqc <- function(directory,
 
  }
 
-
- # Save the ISCO observations
- ISCO <- frame4|>
-   filter(Site == 100.1)
-
- # add in filter later. Right now save everything.
-
- ISCO$DateTime <- as.character(format(ISCO$DateTime)) # convert DateTime to character
-
- write_csv(ISCO, ISCO_outfile)
 
 
 }

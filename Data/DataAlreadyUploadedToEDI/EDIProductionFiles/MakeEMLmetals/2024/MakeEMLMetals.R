@@ -146,10 +146,10 @@ make_eml(
   data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2023.csv'),
   data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
   other.entity = c('Metals_qaqc_2020_2023.R', 'Metals_Inspection_2014_2023.Rmd', 'Plotting_function.R'),
-  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses QAQC script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses Metals_qaqc_2020_2023.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.6') # This package identifier is only for the staging environment
+  package.id = 'edi.718.7') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

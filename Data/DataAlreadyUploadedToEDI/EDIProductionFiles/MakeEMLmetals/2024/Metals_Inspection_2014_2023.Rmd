@@ -65,14 +65,14 @@ current_time_end=ymd_hms("2023-12-31 23:59:00", tz="America/New_York")
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data file for EDI. 
 
-#current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
-#historic = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
-# sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-# maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
-# sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
-# MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
+#current_df <- metals_qaqc(directory = "",
+#historic = "",
+# sample_ID_key =  "", 
+# maintenance_file = "",
+# sample_time = "",
+# MRL_file = "",
 #         outfile = NULL, # put Null to return the file
-#         ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
+#         ISCO_outfile = "", # put Null to return the file
 #         start_date = NULL,
 #         end_date = NULL)
 
@@ -97,7 +97,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                 ### CHANGE THIS NUMBER BELOW
                                                                              ##
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/718/5/9c8c61b003923f4f03ebfe55cea8bbfd")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/718/7/9c8c61b003923f4f03ebfe55cea8bbfd")
  # 
  # # Force files from EDI to have an EST timestamp
  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")

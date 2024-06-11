@@ -13,7 +13,7 @@ output: html_document
  
  1. Compile data
  
- 2. Read in Met files from EDI
+ 2. Read in Met files from Environmental Data Initiative
  
  3. Adjust values and do additional QAQC
  

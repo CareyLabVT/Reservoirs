@@ -2,3 +2,11 @@ attributeName	code	definition
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
+Site	40	Pelagic upstream site
+Site	50	Pelagic deep hole site
+Site	100	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located
+Site	200	Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream
+Site	201	Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns
+Site	301	Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream
+Site	400	Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel
+Site	501	Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel

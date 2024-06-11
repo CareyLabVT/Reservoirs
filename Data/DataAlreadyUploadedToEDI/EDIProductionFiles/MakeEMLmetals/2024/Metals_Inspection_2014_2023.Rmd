@@ -42,14 +42,12 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # Source scripts from GitHub
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
 
 
 # Plotting script
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
-#source("../Plotting_function.R")
-# Source the Heatmap function from GitHub
-#  source("../Heatmap_EDI_function.R")
+#source("../../Plotting_function.R")
 
 
  #turn off pander auto asis
@@ -67,14 +65,14 @@ current_time_end=ymd_hms("2023-12-31 23:59:00", tz="America/New_York")
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data file for EDI. 
 
-#current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
-#historic = "https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
-# sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-# maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
-# sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
-# MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
+#current_df <- metals_qaqc(directory = "",
+#historic = "",
+# sample_ID_key =  "", 
+# maintenance_file = "",
+# sample_time = "",
+# MRL_file = "",
 #         outfile = NULL, # put Null to return the file
-#         ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
+#         ISCO_outfile = "", # put Null to return the file
 #         start_date = NULL,
 #         end_date = NULL)
 
@@ -99,7 +97,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
                                                                 ### CHANGE THIS NUMBER BELOW
                                                                              ##
- current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/271/8/71e6b946b751aa1b966ab5653b01077f")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/718/7/9c8c61b003923f4f03ebfe55cea8bbfd")
  # 
  # # Force files from EDI to have an EST timestamp
  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
@@ -299,7 +297,9 @@ The plotting function is called all_plot() which plots the 4 or more plots descr
     Water=T, # Are these plots for inwater streaming sensors?
     Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
     Use_plotly = F, # Do you want to produce plotly interactive plots?
-    Heatmap = F) # Do you want to make a heat maps?
+    Heatmap = F,# Do you want to make a heat maps?
+    start_time = current_time_start, # these times are set in the top chunk
+    end_time = current_time_end)   # these times are set in the top chunk
 
 
 The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must change the argument. 
@@ -326,7 +326,7 @@ The plots are broken down by reservoir and site
 
 ### FCR 50 - samples from the catwalk 
 
-```{r QAQC FCR 50 Plots, eval=FALSE, warning=FALSE, include=FALSE, results='asis'}
+```{r QAQC FCR 50 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
@@ -339,7 +339,7 @@ output <- unlist(outputs, recursive = F)
 
 ```
 
-```{r Print plotly F50, eval=FALSE, warning=FALSE, include=FALSE, messages=FALSE}
+```{r Print plotly F50, echo=FALSE, warning=FALSE, messages=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
@@ -363,13 +363,13 @@ output <- unlist(outputs, recursive = F)
 
 ### FCR 100-samples from the weir
 
-```{r QAQC FCR 100 Plots, eval=FALSE, warning=FALSE, include=FALSE, results='asis'}
+```{r QAQC FCR 100 Plots, eecho=FALSE, warning=FALSE, results='asis', time_it = TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=100, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=100, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -377,7 +377,7 @@ output <- unlist(outputs, recursive = F)
 
 ```
 
-```{r Print plotly F100, eval=FALSE, warning=FALSE, include=FALSE, messages=FALSE}
+```{r Print plotly F100, echo=FALSE, warning=FALSE, messages=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
@@ -399,14 +399,14 @@ output <- unlist(outputs, recursive = F)
 
 ### BVR 50 - samples from the platform at BVR
 
-```{r QAQC BVR 50 Plots, echo=FALSE, warning=FALSE, results='asis'}
+```{r QAQC BVR 50 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
 
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -438,7 +438,7 @@ output <- unlist(outputs, recursive = F)
 
 These samples were taken in 2022 and it might not be necessary to plot this each time. 
 
-```{r QAQC BVR 40 Plots, echo=FALSE, warning=FALSE, results='asis'}
+```{r QAQC BVR 40 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
@@ -476,13 +476,13 @@ output <- unlist(outputs, recursive = F)
 
 These samples were taken in 2022 and might not need to be plotted each year. 
 
-```{r QAQC CCR 50 Plots, echo=FALSE, warning=FALSE, results='asis'}
+```{r QAQC CCR 50 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = T)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -512,7 +512,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, eval=TRUE, include=TRUE}
+```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
@@ -525,7 +525,7 @@ write_csv(current_df, "Metals_2014_2023.csv")
 
 
 
-```{r Download and save Maintenance Log, eval=TRUE, include=TRUE}
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2023.csv")
@@ -538,7 +538,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
 
 # Heat map code
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R", "Heatmap_EDI_function.R")
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R", "Heatmap_EDI_function.R")
 
 # 
 

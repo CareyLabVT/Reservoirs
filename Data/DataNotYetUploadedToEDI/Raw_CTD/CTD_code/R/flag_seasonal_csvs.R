@@ -102,7 +102,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     # change negative values to NA
     ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% changed_Na))),j]<-NA
     
-    
     #Not all variables are meaningful out of the water
     ctd[c(which(!is.na(ctd[,j]) & ctd$Depth_m<0 & (j %in% water_vars))), paste0("Flag_",j)] <- 6
     ctd[c(which(ctd$Depth_m<0 & (j %in% water_vars))), j]<-NA
@@ -329,10 +328,10 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   dup <- nrow(CTD_fix_renamed[duplicated(CTD_fix_renamed),])
   
-  warning(paste0("There were ", dup, " rows that were duplicated and will be removed"))
-  
-  # Remove the duplicates 
-  
+  if(dup > 0){
+    warning(paste0("There were ", dup, " rows that were duplicated and will be removed"))
+  }
+  # Remove any duplicates 
   CTD_fix_renamed2 <- CTD_fix_renamed[!duplicated(CTD_fix_renamed),]
   
   write.csv(CTD_fix_renamed2, paste0(CTD_FOLDER, output_file_name), row.names = FALSE)

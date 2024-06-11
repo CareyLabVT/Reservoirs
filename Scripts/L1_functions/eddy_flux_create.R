@@ -109,7 +109,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     
     # read in the compiled old file
     
-    oldfiles <- list.files(path=paste0(mydir,"/data/"), pattern="FCR_Eddy_up_to", recursive = T, full.names = T)
+    oldfiles <- list.files(path=mydir, pattern="FCR_Eddy_up_to", recursive = T, full.names = T)
     
     if(identical(oldfiles, character(0))==T){
       

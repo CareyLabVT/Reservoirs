@@ -1,0 +1,22 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab
+Virginia Tech	carey lab
+Lake	cuahsi
+Reservoir	cuahsi
+High-frequency Sensors	cuahsi
+water temperature	lter
+Dissolved Oxygen	lter
+Conductivity	lter
+Specific conductance	lter
+Photosynthetic active radiation	lter
+Chlorophyll a	lter
+Turbidity	lter
+pH	lter
+Descent rate	carey lab
+Western Virginia Water Authority	carey lab
+Falling Creek Reservoir	carey lab
+Beaverdam Reservoir	carey lab
+Carvins Cove Reservoir	carey lab
+Spring Hollow Reservoir	carey lab
+Gatewood Reservoir	carey lab
+Oxidation-reduction potential	carey lab

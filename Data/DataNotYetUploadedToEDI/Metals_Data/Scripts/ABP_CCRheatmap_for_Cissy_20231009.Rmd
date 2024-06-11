@@ -1,6 +1,6 @@
 ---
 title: "Cissy Manuscript Heat Map 2023"
-author: "Adrienne"
+author: "Adrienne Breef-Pilz"
 date: "2023-10-09"
 output: html_document
 ---
@@ -8,18 +8,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(tidyverse, akima, reshape2, gridExtra, colorRamps, RColorBrewer, ggpubr)
+pacman::p_load(tidyverse, akima, reshape2, gridExtra, colorRamps, RColorBrewer, ggpubr, geomtextpath)
+
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R")
 ```
 
 ```{r Read in Metals file}
-
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/455/7/e71d70cac1650610e6a3fbbf7928007f" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
                    
- Metals_2014_2022 <-read_csv(infile1) 
+ Metals_2014_2022 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/455/7/e71d70cac1650610e6a3fbbf7928007f") 
 
 FCR_met<-Metals_2014_2022%>%
   filter(Reservoir=="FCR")%>%
@@ -36,444 +32,53 @@ Met<-Metals_2014_2022%>%
   filter(DateTime>ymd_hms("2022-01-01 00:00:00"))%>%
   filter(Reservoir=="CCR"|Reservoir=="FCR")%>%
   filter(Site==50)%>%
-  dplyr::rename(Date="DateTime")%>%
+  #dplyr::rename(Date="DateTime")%>%
   mutate(Depth_m=ifelse(Depth_m==21,20,Depth_m)) # Force 21m to 20m so it looks nice
          #Depth_m=ifelse(Depth_m==18,20,Depth_m))
+
+Met_CCR <- Met %>%
+  filter(Reservoir=="CCR")%>%
+  select(DateTime)%>%
+  dplyr::mutate(DateTime=as.Date(DateTime))%>%
+  unique()
+
+Met_FCR <- Met %>%
+  filter(Reservoir=="FCR")%>%
+  select(DateTime)%>%
+  dplyr::mutate(DateTime=as.Date(DateTime))%>%
+  unique()
 ```
 
 
 ```{r Read in and add new CCR files}
 
 # Read in from EDI
-
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
                    
- EDI_CTD <-read_csv(infile1)%>%
-   #filter(DateTime>ymd_hms("2022-01-01 00:00:00") & DateTime<ymd_hms("2022-12-31 00:00:00"))%>%
+ EDI_CTD <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/200/14/0432a298a90b2b662f26c46071f66b8a")%>%
+   filter(DateTime>ymd_hms("2022-01-01 00:00:00") & DateTime<ymd_hms("2022-12-31 00:00:00"))%>%
    filter(Reservoir=="CCR"|Reservoir=="FCR")%>%
    filter(Site==50)%>%
    select(-starts_with("Flag"))
  
  
- obs<-EDI_CTD%>%
+ CTD_CCR<-EDI_CTD%>%
+   filter(Reservoir=="CCR")%>%
+   select(DateTime)%>%
+   unique()
+ 
+ CTD_FCR<-EDI_CTD%>%
+   filter(Reservoir=="FCR")%>%
    select(DateTime)%>%
    unique()
 
-# Read in and compile missing CCR files
 
-# Combine all of the S7809 files
-
-lookup <- c(PAR_umolm2s  = "PAR",
-              DescRate_ms  = 'Descent Rate (m/s)',
-              DateTime = "Date",
-              DOsat_percent = "DO_pSat",
-              SpCond_uScm = "Spec_Cond_uScm",
-              Turbidity_NTU = "Turb_NTU",
-              Phycoerythrin_ugL = "Phycoerythrin",
-              Phycocyanin_ugL = "Phycocyanin")
-
-# Found in the Reservoirs>Data>DataNotYetUploadedToEDI
-
-# Choose the CCR files to process
-  file_names <- c("060922_ccr50_S7809002", "063022_ccr50_S7809001", "072822_ccr50_S7809001","092922_ccr50_S7809001")
-
-
-#This reads the first file in
-ctd = read_csv(paste0("../../Raw_CTD/csv_outputs/",file_names[1],".csv")) 
-location <- sub("^[0-9]*_","",sub("\\.csv","",file_names[1]))
-ctd = ctd%>%
-    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-    dplyr::rename(any_of(lookup))%>%
-    select(-Salinity)
-    
-
-# Loop through and pull all the files in
-for (i in 2:length(file_names)){
-  new = read_csv(paste0("../../Raw_CTD/csv_outputs/",file_names[i],".csv"))
-  location <- sub("^[0-9]*_","",sub("\\.csv","",file_names[i]))
-new = new%>%
-    mutate(Reservoir = toupper(sub("[0-9]+.*","",location)),
-           Site = as.numeric(sub("_.*","",sub("^[A-Z|a-z]*","",sub("_[a-z]+","",location)))))%>%
-    dplyr::rename(any_of(lookup))%>%
-    select(-Salinity)
-    
-  ctd = ctd %>%
-    full_join(new)
-}
-
-# Change some Columns and rund through a quick QAQC
-new_CTD<-ctd%>%
-  # filter(Reservoir=="FCR")%>%
-  # filter(Site==50)%>%
-  # filter(DateTime>ymd_hms("2023-01-01 00:00:00") & DateTime<ymd_hms("2023-07-01 00:00:00"))%>%
-  # filter(Depth_m>0)%>%
-  # mutate(SN=8188)%>%
-  #select(-Flag)%>%
-  
-
-# Run through a quick QAQC
-
-mutate(
-  
-      #DO
-      DO_mgL = ifelse(DO_mgL < 0, 0, DO_mgL), #Flag DO<0
-      
-      #DO pSat
-      DOsat_percent = ifelse(DOsat_percent < 0, 0, DOsat_percent), #Flag pSat<0
-      
-      #COND
-      Cond_uScm = ifelse(Cond_uScm < 0, NA, Cond_uScm), #Flag Cond < 0. 
-      
-      #SPECCOND
-      SpCond_uScm = ifelse(SpCond_uScm < 0, NA, SpCond_uScm), #Flag Cond < 0.
-      
-      #CHLA
-      Chla_ugL = ifelse(Chla_ugL < 0, 0, Chla_ugL), #Flag Chla <0
-      
-      #Phycoerythrin
-      pH = ifelse(pH < 0, 0, pH), #Flag Chla <0
-      
-      #Phycocyanin
-      ORP_mV = ifelse(ORP_mV < 0, 0, ORP_mV), #Flag Chla <0
-      
-      #TURB
-      Turbidity_NTU = ifelse(Turbidity_NTU < 0, 0, Turbidity_NTU), #Flag turbidity <0
-      
-      #PAR
-      PAR_umolm2s = ifelse(!is.na(PAR_umolm2s)&PAR_umolm2s < 0, NA, PAR_umolm2s))%>%
-      
-      
-  
-  #Fix for CTD when conductivity and specific conductivity columns were switched
-  #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is
-  # less than specific conductivity and if temp is greater than 25 then conductivity is greater than 
-  # specific conductivity. Based on this I created the a CTD_check column if the columns were good or bad. 
-  # If they were bad then the conductivity and the spec. conductivity column need to be flipped. 
-  
-  #ABP 10 DEC 21
-  
-  
-    add_column(CTD_check = NA)%>%#create the CTD_check column
-    #sets up criteria for the CTD_check column either "good","bad" or "NA"(if no data)
-    mutate(
-      CTD_check=ifelse(Temp_C<25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C<25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm>SpCond_uScm & !is.na(SpCond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Temp_C>25& Cond_uScm<SpCond_uScm & !is.na(SpCond_uScm), "bad",CTD_check),
-      CTD_check=ifelse(is.na(SpCond_uScm), "good",CTD_check),
-      CTD_check=ifelse(Cond_uScm==0, "bad", CTD_check))%>%
-    #the next part switches the column if labeled "bad" in CTD_check 
-    transform(., SpCond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), Cond_uScm, SpCond_uScm), 
-              Cond_uScm = ifelse(CTD_check == 'bad' & !is.na(SpCond_uScm), SpCond_uScm, Cond_uScm))%>%
-    select(-CTD_check)
-
-# Add in the new CTD to old and the EDI 
-
-all_CTD<-bind_rows(EDI_CTD, new_CTD)
-
-CTD_FCR_point<-all_CTD%>%
-  select(DateTime, Reservoir)%>%
-  filter(Reservoir=="FCR")%>%
-  unique()
-  
-CTD_CCR_point<-all_CTD%>%
-  select(DateTime, Reservoir)%>%
-  filter(Reservoir=="CCR")%>%
-  unique()
-
-# Merge both
-
-```
-
-```{r Get CTD ready for Heatmap}
-###getting heat maps 
-#come back here after you do it for BVR and now do it for FCR 
-ctd <- all_CTD
-
-
-
-depths = seq(0, 20, by = .1)
-df.final<-data.frame()
-
-for (i in 1:length(depths)){
-  
-  fp_layer<-ctd %>% 
-    #mutate(Date_only = as.Date(Date)) %>% 
-    group_by(DateTime) %>% 
-    slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
-  
-  # Bind each of the data layers together.
-  df.final = bind_rows(df.final, fp_layer)
-}
-  
-  
-  
-
-ctd <- arrange(df.final, DateTime)
-#ctd$Depth_m <- round(as.numeric(ctd$Depth_m), digits = 1)
-#ctd$Depth_m <-   round(ctd$Depth_m/0.5)*0.5  # new rounding function to ensure values get to nearest 0.5 
-
-CCR_DO <-ctd%>%
-  filter(Reservoir=="CCR")%>%
-  filter(Depth_m>0)%>%
-  mutate(DOY=yday(DateTime))%>%
-  mutate(Date=as.Date(DateTime))%>%
-  select(DOY,Date, Depth_m, DO_mgL)%>%
-  filter(Date>ymd("2022-01-01")& Date<ymd("2022-12-31"))%>%
-  drop_na()%>%
-  unique()
-
-CCR_pH <-ctd%>%
-  filter(Reservoir=="CCR")%>%
-  filter(Depth_m>0)%>%
-  mutate(DOY=yday(DateTime))%>%
-  mutate(Date=as.Date(DateTime))%>%
-  select(DOY,Date, Depth_m, pH)%>%
-  filter(Date>ymd("2022-01-01")& Date<ymd("2022-12-31"))%>%
-  drop_na()%>%
-  unique()
-
-FCR_DO <-ctd%>%
-  filter(Reservoir=="FCR")%>%
-  filter(Depth_m>0)%>%
-  mutate(DOY=yday(DateTime))%>%
-  mutate(Date=as.Date(DateTime))%>%
-  select(DOY,Date, Depth_m, DO_mgL)%>%
-  filter(Date>ymd("2022-01-01")& Date<ymd("2022-12-31"))%>%
-  drop_na()%>%
-  unique()
-
-FCR_pH <-ctd%>%
-  filter(Reservoir=="FCR")%>%
-  filter(Depth_m>0)%>%
-  mutate(DOY=yday(DateTime))%>%
-  mutate(Date=as.Date(DateTime))%>%
-  select(DOY,Date, Depth_m, pH)%>%
-  filter(Date>ymd("2022-01-01")& Date<ymd("2022-12-31"))%>%
-  drop_na()%>%
-  unique()
-
-
-
-```
-
-```{r Metals set up }
- CCR_TMn <-Met%>%
-   filter(Reservoir=="CCR")%>%
-   filter(Depth_m>0)%>%
-   mutate(DOY=yday(Date))%>%
-   mutate(Date=as.Date(Date))%>%
-   select(DOY,Date, Depth_m, TMn_mgL)%>%
-   drop_na()%>%
-   unique()
-
-
-  CCR_SMn <- Met%>%
-    filter(Reservoir=="CCR")%>%
-    mutate(DOY=yday(Date))%>%
-    mutate(Date=as.Date(Date))%>%
-    select(DOY,Date, Depth_m, SMn_mgL)%>%
-    drop_na()%>%
-  unique()
-  
-   FCR_TMn <-Met%>%
-   filter(Reservoir=="FCR")%>%
-   filter(Depth_m>0)%>%
-   mutate(DOY=yday(Date))%>%
-   mutate(Date=as.Date(Date))%>%
-   select(DOY,Date, Depth_m, TMn_mgL)%>%
-   drop_na()%>%
-   unique()
-
-
-  FCR_SMn <- Met%>%
-    filter(Reservoir=="FCR")%>%
-    mutate(DOY=yday(Date))%>%
-    mutate(Date=as.Date(Date))%>%
-    select(DOY,Date, Depth_m, SMn_mgL)%>%
-    drop_na()%>%
-  unique()
-
-```
-
-
-```{r interpolation}
-# Complete data interpolation for the heatmaps
-
-
-#### CCR Section ####
-
-interp_CCR_DO <- 
-  interp(x=CCR_DO$DOY, y = CCR_DO$Depth_m, z = CCR_DO$DO_mgL,
-                             xo = seq(min(CCR_DO$DOY), max(CCR_DO$DOY), by = 1), 
-                             #xo = seq(min(as.Date(CCR_DO$Date)), max(as.Date(CCR_DO$Date)), by = "day"),
-                             yo = seq(0.1, 20, by = .1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_CCR_DO <- interp2xyz(interp_CCR_DO, data.frame=T)
-
-interp_CCR_DO=interp_CCR_DO%>%
-  mutate(Date=as.Date(x, origin = "2021-12-31"))
-
-
-# pH
-
-interp_CCR_pH <- 
-  interp(x=CCR_pH$DOY, y = CCR_pH$Depth_m, z = CCR_pH$pH,
-                             xo = seq(min(CCR_pH$DOY), max(CCR_pH$DOY), by = 1), 
-                             #xo = seq(min(as.Date(CCR_pH$Date)), max(as.Date(CCR_pH$Date)), by = "day"),
-                             yo = seq(0.1, 20, by = .1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_CCR_pH <- interp2xyz(interp_CCR_pH, data.frame=T)
-
-interp_CCR_pH=interp_CCR_pH%>%
-  mutate(Date = as.Date(x, origin = "2021-12-31")) 
-
-as.Date(104, format = "%j", origin = "1.1.2014")
-
-# Total Mn
-interp_CCR_TMn <- interp(x=as.numeric(CCR_TMn$Date), y = CCR_TMn$Depth_m, z = CCR_TMn$TMn_mgL,
-                             #xo = seq(min(CCR_TMn$DOY), max(CCR_TMn$DOY), by = 1), 
-                             xo = seq(min(as.Date(CCR_TMn$Date)), max(as.Date(CCR_TMn$Date)), by = "day"),
-                             yo = seq(0.1, 20, by = 0.01),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_CCR_TMn <- interp2xyz(interp_CCR_TMn, data.frame=T)
-
-interp_CCR_TMn=interp_CCR_TMn%>%
-  mutate(Date=as.Date(x, origin = "1970-01-01"))
-
-
-# Soluble Mn
-interp_CCR_SMn <- interp(x=as.numeric(CCR_SMn$Date), y = CCR_SMn$Depth_m, z = CCR_SMn$SMn_mgL,
-                             #xo = seq(min(CCR_SMn$DOY), max(CCR_SMn$DOY), by = 1), 
-                             xo = seq(min(as.Date(CCR_SMn$Date)), max(as.Date(CCR_SMn$Date)), by = "day"),
-                             yo = seq(0.1, 20, by = 0.01),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_CCR_SMn <- interp2xyz(interp_CCR_SMn, data.frame=T)
-
-interp_CCR_SMn=interp_CCR_SMn%>%
-  mutate(Date=as.Date(x, origin = "1970-01-01"))
-  #mutate(DateTime = as.POSIXct(x, origin = "1970-01-01")) 
-
-### FCR Interp ###
-
-interp_FCR_DO <- 
-  interp(x=as.numeric(FCR_DO$Date), y = FCR_DO$Depth_m, z = FCR_DO$DO_mgL,
-                             #xo = seq(min(FCR_TMn$DOY), max(FCR_TMn$DOY), by = 0.1), 
-                             xo = seq(min(as.Date(FCR_DO$Date)), max(as.Date(FCR_DO$Date)), by = "day"),
-                             yo = seq(0.1, 9, by = .1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_FCR_DO <- interp2xyz(interp_FCR_DO, data.frame=T)
-
-interp_FCR_DO=interp_FCR_DO%>%
-  mutate(Date=as.Date(x, origin = "1970-01-01"))
-
-# pH
-
-interp_FCR_pH <- 
-  interp(x=as.numeric(FCR_pH$Date), y = FCR_pH$Depth_m, z = FCR_pH$pH,
-                             #xo = seq(min(FCR_TMn$DOY), max(FCR_TMn$DOY), by = 0.1), 
-                             xo = seq(min(as.Date(FCR_pH$Date)), max(as.Date(FCR_pH$Date)), by = "day"),
-                             yo = seq(0.1, 9, by = .1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_FCR_pH <- interp2xyz(interp_FCR_pH, data.frame=T)
-
-interp_FCR_pH=interp_FCR_pH%>%
-  mutate(Date = as.Date(x, origin = "1970-01-01")) 
-
-# Total Mn
-interp_FCR_TMn <- interp(x=as.numeric(FCR_TMn$Date), y = FCR_TMn$Depth_m, z = FCR_TMn$TMn_mgL,
-                             #xo = seq(min(FCR_SMn$DOY), max(FCR_SMn$DOY), by = 1), 
-                             xo = seq(min(as.Date(FCR_TMn$Date)), max(as.Date(FCR_TMn$Date)), by = "day"),
-                             yo = seq(0.1, 9, by = 0.1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_FCR_TMn <- interp2xyz(interp_FCR_TMn, data.frame=T)
-
-interp_FCR_TMn=interp_FCR_TMn%>%
-  mutate(Date=as.Date(x, origin = "1970-01-01"))
-
-# Soluble Mn
-interp_FCR_SMn <- interp(x=as.numeric(FCR_SMn$Date), y = FCR_SMn$Depth_m, z = FCR_SMn$SMn_mgL,
-                             #xo = seq(min(FCR_SMn$DOY), max(FCR_SMn$DOY), by = 1), 
-                             xo = seq(min(as.Date(FCR_SMn$Date)), max(as.Date(FCR_SMn$Date)), by = "day"),
-                             yo = seq(0.1,9, by = 0.1),
-                             extrap = F, linear = T, duplicate = "strip")
-interp_FCR_SMn <- interp2xyz(interp_FCR_SMn, data.frame=T)
-
-interp_FCR_SMn=interp_FCR_SMn%>%
-  mutate(Date=as.Date(x, origin = "1970-01-01"))
-  #mutate(DateTime = as.POSIXct(x, origin = "1970-01-01")) 
-
-```
-
-```{r}
-
-# Plotting #
-
-# This a theme I have adapted from 
-#https://gist.github.com/jslefche/eff85ef06b4705e6efbc
-# I LIKE IT!
-theme_black = function(base_size = 12, base_family = "") {
-  
-  theme_grey(base_size = base_size, base_family = base_family) %+replace%
-    
-    theme(
-      # Specify axis options
-      axis.line = element_line(size = 1, colour = "white"),  
-      axis.text.x = element_text(size = base_size*1, color = "white", lineheight = 0.9),  
-      axis.text.y = element_text(size = base_size*1, color = "white", lineheight = 0.9),  
-      axis.ticks = element_line(color = "white", size  =  1),  
-      axis.title.x = element_text(size = base_size, color = "white", margin = margin(0, 10, 0, 0)),  
-      axis.title.y = element_text(size = base_size, color = "white", angle = 90, margin = margin(0, 10, 0, 0)),  
-      axis.ticks.length = unit(0.5, "lines"),   
-      # Specify legend options
-      legend.background = element_rect(color = NA, fill = "black"),  
-      legend.key = element_rect(color = "white",  fill = "black"),  
-      legend.key.size = unit(2, "lines"),  
-      legend.key.height = NULL,  
-      legend.key.width = NULL,      
-      legend.text = element_text(size = base_size*0.8, color = "white"),  
-      legend.title = element_text(size = base_size*1.5, face = "bold", hjust = 0, color = "white"),  
-      legend.position = "right",  
-      legend.text.align = NULL,  
-      legend.title.align = NULL,  
-      legend.direction = "vertical",  
-      legend.box = NULL, 
-      # Specify panel options
-      panel.background = element_rect(fill = "black", color  =  NA),  
-      panel.border = element_rect(fill = NA, color = "black"),  
-      panel.grid.major = element_line(color = "black"),  
-      panel.grid.minor = element_line(color = "black"),  
-      panel.spacing = unit(0, "lines"),   #chagned to panel.spacing from panel.margin in orginal code
-      # Specify facetting options
-      strip.background = element_rect(fill = "grey30", color = "grey10"),  
-      strip.text.x = element_text(size = base_size*0.8, color = "white"),  
-      strip.text.y = element_text(size = base_size*0.8, color = "white",angle = -90),  
-      # Specify plot options
-      plot.background = element_rect(color = "black", fill = "black"),  
-      plot.title = element_text(size = base_size*1.5, color = "white"),  
-      plot.margin = unit(rep(1, 4), "lines")
-      
-    )
-  
-}
 ```
 
 ```{r Find CCR Turnover Date, eval=FALSE, include=FALSE}
 
 # Read in data from EDI
-
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/719/20/2ecdcd6114591d6a798ecce9050c13c7" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
                    
- dt1 <-read_csv(infile1) 
+ dt1 <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/719/20/2ecdcd6114591d6a798ecce9050c13c7" ) 
  
  # Find when the top thermistor and the bottom thermistor are less than 0.01 degrees apart
  
@@ -497,90 +102,92 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
 ```{r FCR Turnover, eval=FALSE, include=FALSE}
 
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/271/7/71e6b946b751aa1b966ab5653b01077f" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
-                   
- dt1 <-read_csv(infile1)
+ dt1 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/271/7/71e6b946b751aa1b966ab5653b01077f" )
  
  turonver_FCR<-dt1%>%
    filter(DateTime>ymd_hms("2022-10-01 00:00:00"))%>%
    mutate(Diff=ThermistorTemp_C_surface-ThermistorTemp_C_9)%>%
    select(DateTime,Diff)%>%
    filter(Diff<=0.1 & !is.na(Diff))
+ 
+ # Tunrover was Oct. 19
 
 ```
 
 
-```{r Add in a section for HoX on and off times}
-
- #geom_vline(data=ON, aes(xintercept=Date) , linetype="solid", color="black", size=1.6)+
-  #geom_vline(data=OFF, aes(xintercept=Date) , linetype="dashed", color="black", size=1.6)+
-
+```{r Heatmap label function}
+heat_labs <- function(plot,
+                      low,
+                      high,
+                      sample_dates,
+                      turnover,
+                      HOX=F,
+                      HOX_date = NA,
+                      tit,
+                      units){
+  plot+
+  scale_y_reverse()+
+  ylim(high,low)+
+  geom_point(data = sample_dates, aes(x = as.Date(DateTime), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
+   geom_textvline(xintercept=turnover ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
+  {if(HOX)geom_textvline(xintercept=HOX_date, label="HoX ON", linetype="solid",linewidth=2, color="white", size=5)}+
+  labs(x = "Date", y = "Depth (m)", title = tit, fill= units)+ #x was day of year
+  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
+  theme_classic()+
+    theme(plot.title = element_text(size =18, hjust = 0.5))
+  
+  
+}
 ```
 
+```{r CCR}
 
+CCR_DO <- heatmap_EDI(data=EDI_CTD, reservoir = "CCR", site=50, z="DO_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), transform='reverse', limits=c(16,0))
+  
+p1 <- heat_labs(
+  plot = CCR_DO,
+  low = 0,
+  high = 20,
+  sample_dates = CTD_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit="Dissolved Oxygen",
+  units="mg/L")
+  
 
-```{r CCR Heat Maps}
-# Create a pdf so the plots can all be saved in one giant bin!
-#jpeg("./CCR_plots/CCR_CTD_2013_2019_test.jpg", width=1440, height=480, quality = 150)  
+CCR_pH <- heatmap_EDI(data=EDI_CTD, reservoir = "CCR", site=50, z="pH")+
+   scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(5, 10.5))
+p2 <- heat_labs(
+  plot = CCR_pH,
+  low = 0,
+  high = 20,
+  sample_dates = CTD_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit="pH",
+  units="")
 
-# Dissolved Oxygen
-p1 <- ggplot(interp_CCR_DO, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(20,0)+
-  geom_point(data = CTD_CCR_point, aes(x = as.Date(DateTime), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates
-  geomtextpath::geom_textvline(xintercept=as.Date("2022-11-20") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", trans = 'reverse', limits=c(16,0))+
-  labs(x = "Date", y = "Depth (m)", title = "Dissolved Oxygen",fill= "mg/L")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
+# Metals
+CCR_SMn <- heatmap_EDI(data=Met, reservoir = "CCR", site=50, z="SMn_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,10))
+p3 <- heat_labs(
+  plot = CCR_SMn,
+  low = 0,
+  high = 20,
+  sample_dates = Met_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit="Soluble Manganese",
+  units="mg/L")
 
-ggsave("CCR_DO_20231019.jpg", width=11, height=7, units="in")
-
-# CCR pH
-p2 <- ggplot(interp_CCR_pH, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(20,0)+
-  geom_point(data = CTD_CCR_point, aes(x = as.Date(DateTime), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-  geom_textvline(xintercept=as.Date("2022-11-20") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(5, 10.5))+
-  labs(x = "Date", y = "Depth (m)", title = "pH",fill= "")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
-
-ggsave("CCR_ph_20231009.jpg", width=11, height=7, units="in")
-
-p3 <- ggplot(interp_CCR_SMn, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(20,0)+
-  geom_point(data = CCR_SMn, aes(x = as.Date(Date), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-   geom_textvline(xintercept=as.Date("2022-11-20") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(0, 10))+
-  labs(x = "Date", y = "Depth (m)", title = "Soluble Manganese",fill= "mg/L")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
-
-ggsave("CCR_SMn_20231019.jpg", width=11, height=7, units="in")
-
-
-p4 <- ggplot(interp_CCR_TMn, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(20,0)+
-  geom_point(data = CCR_SMn, aes(x = as.Date(Date), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-   geom_textvline(xintercept=as.Date("2022-11-20") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(0, 10))+
-  labs(x = "Date", y = "Depth (m)", title = "Total Manganese",fill= "mg/L", tag = "D")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
-
-ggsave("CCR_TMn_20231019.jpg", width=11, height=7, units="in")
+CCR_TMn <- heatmap_EDI(data=Met, reservoir = "CCR", site=50, z="TMn_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,10))
+p4 <- heat_labs(
+  plot = CCR_TMn,
+  low = 0,
+  high = 20,
+  sample_dates = Met_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit="Total Manganese",
+  units="mg/L")
 
 ```
 
@@ -591,97 +198,163 @@ ggsave("CCR_TMn_20231019.jpg", width=11, height=7, units="in")
 grid.arrange(p1, p2, p4, p3, nrow = 2, top="Carvins Cove Reservoir")
 
 plot<-ggarrange(p1, p2, p4, p3, labels = c("  A.", "  B.", "  C.", "  D."), 
-          font.label = list(size = 18, color = "white", face = "bold", family = NULL),
+          font.label = list(size = 18, color = "black",face='plain', family = NULL),
           ncol=2, nrow=2, common.legend = F)
 
 g<-annotate_figure(plot, top = text_grob("Carvins Cove Reservoir", 
                color = "black", face = "bold", size = 24))
  
 
-ggsave(file="CCR_All_20231019.jpg", g,width=11, height=7, units="in")
+ggsave(file="CCR_All_20240516.jpg", g,width=11, height=7, units="in")
 
 ```
 
-```{r FCR Heat Maps}
-# Create a pdf so the plots can all be saved in one giant bin!
-#jpeg("./CCR_plots/CCR_CTD_2013_2019_test.jpg", width=1440, height=480, quality = 150)  
+```{r FCR Heatmap}
 
-# Dissolved Oxygen
-pp1 <- ggplot(interp_FCR_DO, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(9,0)+
-  geom_point(data = CTD_FCR_point, aes(x = as.Date(DateTime), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-   geom_textvline(xintercept=as.Date("2022-10-19") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  geom_textvline(xintercept=as.Date("2022-05-19"), label="HoX ON", linetype="solid",linewidth=2, color="white", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", trans = 'reverse', limits = c(16, 0))+
-  labs(x = "Date", y = "Depth (m)", title = "Dissolved Oxygen",fill= "mg/L")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
+FCR_DO <- heatmap_EDI(data=EDI_CTD, reservoir = "FCR", site=50, z="DO_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), transform='reverse', limits=c(16,0))
+pp1 <- heat_labs(
+  plot = FCR_DO,
+  low = 0,
+  high = 9,
+  sample_dates = CTD_FCR,
+  turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="Dissolved Oxygen",
+  units="mg/L")
+  
 
-ggsave("FCR_DO_20231019.jpg", width=11, height=7, units="in")
+FCR_pH <- heatmap_EDI(data=EDI_CTD, reservoir = "FCR", site=50, z="pH")+
+  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(5, 10.5))
+pp2 <- heat_labs(
+  plot = FCR_pH,
+  low = 0,
+  high = 9,
+  sample_dates = CTD_FCR,
+  turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="pH",
+  units="")
 
-# FCR pH
-pp2 <- ggplot(interp_FCR_pH, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(9,0)+
-  geom_point(data = CTD_FCR_point, aes(x = as.Date(DateTime), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-  geom_textvline(xintercept=as.Date("2022-10-19") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  geom_textvline(xintercept=as.Date("2022-05-19"), label="HoX ON", linetype="solid",linewidth=2, color="white", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(5, 10.5))+
-  labs(x = "Date", y = "Depth (m)", title = "pH",fill= "")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
+# Metals
+FCR_SMn <- heatmap_EDI(data=Met, reservoir = "FCR", site=50, z="SMn_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,3))
+pp3 <- heat_labs(
+  plot = FCR_SMn,
+  low = 0,
+  high = 9,
+  sample_dates = Met_FCR,
+  turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="Soluble Manganese",
+  units="mg/L")
 
-ggsave("FCR_ph_20231019.jpg", width=11, height=7, units="in")
-
-pp3 <- ggplot(interp_FCR_SMn, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(9,0)+
-  geom_point(data = FCR_SMn, aes(x = as.Date(Date), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-  geom_textvline(xintercept=as.Date("2022-10-19") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  geom_textvline(xintercept=as.Date("2022-05-19"), label="HoX ON", linetype="solid",linewidth=2, color="white", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(0, 3))+
-  labs(x = "Date", y = "Depth (m)", title = "Soluble Manganese",fill= "mg/L")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
-
-ggsave("FCR_SMn_20231019.jpg", width=11, height=7, units="in")
-
-
-pp4 <- ggplot(interp_FCR_TMn, aes(x=Date, y=y))+
-  geom_raster(aes(fill=z),interpolate = TRUE)+
-  scale_y_reverse()+
-  ylim(9,0)+
-  geom_point(data = FCR_TMn, aes(x = as.Date(Date), y = 0.1, z = NULL), pch = 25, size = 4, color = "white", fill = "black")+ #to mark cast dates 
-  geom_textvline(xintercept=as.Date("2022-10-19") ,label="Turnover", linetype="solid", linewidth=2, color="purple", size=5)+
-  geom_textvline(xintercept=as.Date("2022-05-19"), label="HoX ON", linetype="solid",linewidth=2, color="white", size=5)+
-  scale_fill_gradientn(colours = blue2green2red(60), na.value="gray", limits = c(0, 3))+
-  labs(x = "Date", y = "Depth (m)", title = "Total Manganese",fill= "mg/L")+ #x was day of year
-  scale_x_date(date_breaks = "1 month", date_labels = "%b", limits = c(as.Date("2022-02-24"), as.Date("2022-12-15")))+
-  theme_black()
-
-ggsave("FCR_TMn_20231019.jpg", width=11, height=7, units="in")
+FCR_TMn <- heatmap_EDI(data=Met, reservoir = "FCR", site=50, z="TMn_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,3))
+pp4 <- heat_labs(
+  plot = FCR_TMn,
+  low = 0,
+  high = 9,
+  sample_dates = Met_FCR,
+  turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="Total Manganese",
+  units="mg/L")
 ```
-
 
 ```{r FCR Put on the same plot}
 
 #grid.arrange(p1, p2, p4, p3, nrow = 2, top="Falling Creek Reservoir")
 
 plot<-ggarrange(pp1, pp2, pp4, pp3, labels = c("  A.", "  B.", "  C.", "  D."), 
-          font.label = list(size = 18, color = "white", face = "bold", family = NULL),
+          font.label = list(size = 18, color = "black", face = "plain", family = NULL),
           ncol=2, nrow=2, common.legend = F)
 
 g<-annotate_figure(plot, top = text_grob("Falling Creek Reservoir", 
                color = "black", face = "bold", size = 24))
  
 
-ggsave(file="FCR_All_20231019.jpg", g,width=11, height=7, units="in")
+ggsave(file="FCR_All_20240516.jpg", g,width=11, height=7, units="in")
 
 ```
+
+
+```{r Iron for CCR and FCR}
+
+# Iron 
+CCR_SFe <- heatmap_EDI(data=Met, reservoir = "CCR", site=50, z="SFe_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,12))
+ppp3 <- heat_labs(
+  plot = CCR_SFe,
+  low = 0,
+  high = 20,
+  sample_dates = Met_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit=" Carvins Cove Soluble Iron",
+  units="mg/L")
+
+CCR_TFe <- heatmap_EDI(data=Met, reservoir = "CCR", site=50, z="TFe_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,12))
+ppp4 <- heat_labs(
+  plot = CCR_TFe,
+  low = 0,
+  high = 20,
+  sample_dates = Met_CCR,
+  turnover = as.Date("2022-11-20"),
+  tit="Carvins Cove Total Iron",
+  units="mg/L") 
+# Iron 
+FCR_SFe <- heatmap_EDI(data=Met, reservoir = "FCR", site=50, z="SFe_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,12))
+ppp1 <- heat_labs(
+  plot = FCR_SFe,
+  low = 0,
+  high = 9,
+  sample_dates = Met_FCR,
+ turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="Falling Creek Soluble Iron",
+  units="mg/L")
+
+FCR_TFe <- heatmap_EDI(data=Met, reservoir = "FCR", site=50, z="TFe_mgL")+
+  scale_fill_gradientn(colors=blue2green2red(60), limits=c(0,12))
+ppp2 <- heat_labs(
+  plot = FCR_TFe,
+  low = 0,
+  high = 9,
+  sample_dates = Met_FCR,
+  turnover = as.Date("2022-10-19"),
+  HOX=T,
+  HOX_date = as.Date("2022-05-19"),
+  tit="Falling Creek Total Iron",
+  units="mg/L")
+
+
+```
+
+
+
+```{r Fe plots}
+
+#grid.arrange(p1, p2, p4, p3, nrow = 2, top="Falling Creek Reservoir")
+
+plot<-ggarrange(ppp4, ppp2, ppp3, ppp1, labels = c("  A.", "  B.", "  C.", "  D."), 
+          font.label = list(size = 18, color = "black", face = "plain", family = NULL),
+          ncol=2, nrow=2, common.legend = F)
+
+g<-annotate_figure(plot, top = text_grob("Iron Concentrations at Falling Creek and Carvins Cove Reservoirs", 
+               color = "black", face = "bold", size = 24))
+ 
+
+ggsave(file="Fe2_All_20240512.jpg", g,width=11, height=7, units="in")
+
+```
+
 
 ```{r What does the DO in CCR look like over time}
 

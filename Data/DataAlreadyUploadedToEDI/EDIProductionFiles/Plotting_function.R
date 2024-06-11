@@ -2,7 +2,7 @@
 # Use in the markdown to create plots and for plotly to work
 # Author: Adrienne Breef-Pilz
 # First developed: 28 December 24
-# Last edited: 21 April 24 - added if statements if Res and Site is NULL 
+# Last edited: 19 May 24 - changed the timeseries with depth to y=Depth not concentration 
 
 all_plot<-function(
     Var,
@@ -15,19 +15,22 @@ all_plot<-function(
     Depth=F,  # Do you want depth as a factor
     Water=T, # Are these plots for inwater streaming sensors?
     Use_plotly = F, # Do you want to produce interactive plots for observations of the current year?
-    Heatmap = F) # Do you want to make a heat maps?
+    Heatmap = F, # Do you want to make a heat maps?
+    start_time = current_time_start,
+    end_time = current_time_end) 
 { 
-  
-  # data=current_df
+
+  # data=df
   # reservoir = "FCR"
   # res_site=50
+  # raw_data = NULL
   # Var = "TFe_mgL"
   # y_lab = "mg/L"
   # y_lab2 = "mg/L"
   # Depth=T
   # Water=F
   # Use_plotly=T
-  # Heatmap = T
+  # Heatmap = F
 
    # source the heat map function
     source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R")
@@ -92,6 +95,10 @@ all_plot<-function(
     select(Depth_m)%>%
     dplyr::distinct()%>%
     as.list()
+  }else{
+    all_depth <- NULL
+    
+    cur_depth <- NULL
   }
   
   
@@ -200,35 +207,38 @@ current_plot_df <- bind_rows(current, current_raw)%>%
   } 
   
   # Plot all of the observations
-  if (Depth==T){
+  # if (){
+  # 
+  #   all<-current_df %>%
+  #     filter(!is.na(Depth_m)) %>%
+  #     ggplot(.) +
+  #     geom_scattermore(aes(x=DateTime, y=as.factor(Depth_m), color=.data[[Var]]), pointsize = 4)+
+  #     scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+  #     scale_y_discrete(limits=rev) +
+  #     ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
+  #     labs(y = y_lab,
+  #          color = "Legend") +
+  #     #scale_color_manual(values = colors)+
+  #     theme_bw()
+
+    if(Depth==T & !is.null(all_depth) & length(all_depth[["Depth_m"]])>1){ 
+      #if(length(all_depth[["Depth_m"]])>1){
     
-    all<- 
-      ggplot() +
-      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 3)+
-      ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
-      labs(y = y_lab,
-           color = "Legend") +
-      #scale_color_manual(values = colors)+
-      theme_bw()
+      all_grid <- current_df%>%
+        drop_na(Var)%>%
+        ggplot(.)+
+        geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
+        labs(y = "Meters",
+             color = y_lab) +
+        ggtitle(paste0("All ",Var," by Depth"," ",reservoir," ",res_site)) +
+        theme_bw()+
+        facet_wrap(~ as.factor(Depth_m), scale="free")+
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-  if(Depth==T){  
-    if(length(all_depth[["Depth_m"]])>1){
-    
-    all_grid <- current_df%>%
-      drop_na(Var)%>%
-      ggplot(.)+
-      geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
-      labs(y = y_lab,
-           color = "Legend") +
-      ggtitle(paste0("All ",Var," by Depth"," ",reservoir," ",res_site)) +
-      theme_bw()+
-      facet_wrap(~ as.factor(Depth_m), scale="free")+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-      }
-    } 
+      #}    
   }else {
     all <- ggplot()+
-      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"))+
+      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"), pointsize = 5)+
       ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
       labs(y = y_lab,
            color = "Legend") +
@@ -244,33 +254,35 @@ current_plot_df <- bind_rows(current, current_raw)%>%
 if(length(qaqc_current$DateTime)>0){
   if(grepl("Battery_V|power_V", Var)|Use_plotly==FALSE){
     
-    if(Depth==T){
-      cur <- 
-        ggplot()+
-        {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
-                                                               color=as.factor(Depth_m),shape=type), pointsize = 3)}+
-        geom_scattermore(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
-                                                 color=as.factor(Depth_m), shape=type), pointsize = 3)+
-        ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
-        labs(y = y_lab2,
-             color = "Legend") +
-        #scale_color_manual(values = colors)+
-        theme_bw()
+    # if(Depth==T){
+    #   cur <- 
+    #     ggplot()+
+    #     {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=as.factor(Depth_m), 
+    #                                                            color=.data[[Var]],shape=type), pointsize = 3)}+
+    #     geom_scattermore(data= qaqc_current, aes(x=DateTime, y=as.factor(Depth_m), 
+    #                                              color=.data[[Var]], shape=type), pointsize = 3)+
+    #     scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    #     scale_y_discrete(limits=rev) +
+    #     ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
+    #     labs(y = y_lab2,
+    #          color = "Legend") +
+    #     #scale_color_manual(values = colors)+
+    #     theme_bw()
       
       # use facet wrap
-      if(length(cur_depth[["Depth_m"]])>1){
+      if(Depth==T & !is.null(cur_depth) & length(cur_depth[["Depth_m"]])>1){
+        #if(length(cur_depth[["Depth_m"]])>1){
         
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
           ggplot(.)+
           geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
-          labs(y = y_lab,
-               color = "Legend") +
+          labs(y = "Meters",
+               color = y_lab) +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")
-        }
-      
+        #} 
     }else{
       cur <- ggplot()+
         {if(switch_raw)geom_scattermore(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -285,31 +297,36 @@ if(length(qaqc_current$DateTime)>0){
     }
   }else{
     
-    if(Depth==T){
-      cur <- {ggplot()+
-          {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
-                                                            color=as.factor(Depth_m),shape=type))}+
-          geom_point(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
-                                             color=as.factor(Depth_m),shape=type))+
-          ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
-          labs(y = y_lab2,
-               color = "Legend") +
-          #scale_color_manual(values = colors)+
-          theme_bw()}%>% ggplotly%>% as_widget
+    # if(Depth==T){
+    #   cur <- 
+    #     {ggplot()+
+    #     {if(switch_raw)geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
+    #                                                            color=as.factor(Depth_m),shape=type))}+
+    #     geom_point(data= qaqc_current, aes(x=DateTime, y=as.factor(Depth_m), 
+    #                                              color=.data[[Var]], shape=type))+
+    #     scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    #     scale_y_discrete(limits=rev) +
+    #     ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
+    #     labs(y = y_lab2,
+    #          color = "Legend") +
+    #     #scale_color_manual(values = colors)+
+    #       theme_bw()}%>%ggplotly %>% as_widget()
+      
       
       # use facet wrap
-      if(length(cur_depth[["Depth_m"]])>1){
+      if(Depth==T & !is.null(cur_depth) & length(cur_depth[["Depth_m"]])>1){
+        #if(length(cur_depth[["Depth_m"]])>1){
         
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
-          ggplot(.)+
-          geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
-          labs(y = y_lab,
-               color = "Legend") +
+          {ggplot(.)+
+          geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)))+
+          labs(y = "Meters",
+               color = y_lab) +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
-          facet_wrap(~ as.factor(Depth_m), scale="free")
-      }
+          facet_wrap(~ as.factor(Depth_m), scale="free")}%>%ggplotly %>% as_widget()
+        #}
     }else{
       cur <- {ggplot()+
           {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
@@ -376,12 +393,40 @@ if(length(qaqc_current$DateTime)>0){
     if(length(qaqc_current$DateTime)>0){
     # Use this heatmap function 
     # create the heat map for the current year
-    cur_heat <- heatmap_EDI(data= qaqc_current, reservoir=reservoir, site=res_site, z=Var)
+    #cur_heat <- heatmap_EDI(data= qaqc_current, reservoir=reservoir, site=res_site, z=Var)
+    
+    
+      cur_heat <-
+        {ggplot()+
+        geom_point(data= qaqc_current, aes(x=DateTime, y=as.factor(Depth_m),
+                                                 color=.data[[Var]], shape=type))+
+        scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+        scale_y_discrete(limits=rev) +
+        ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
+        labs(y = "Meters",
+             color = y_lab) +
+        #scale_color_manual(values = colors)+
+          theme_bw()}%>%ggplotly %>% as_widget()
+    
+    
     }
     
     if(length(all_depth[["Depth_m"]])>1){
     # heat map for all the observations
-    all_heat <- heatmap_EDI(data=current_df, reservoir = reservoir, site = res_site, z=Var)
+    #all_heat <- heatmap_EDI(data=current_df, reservoir = reservoir, site = res_site, z=Var)
+      
+        all_heat <-current_df %>%
+          filter(!is.na(Depth_m)) %>%
+          ggplot(.) +
+          geom_scattermore(aes(x=DateTime, y=as.factor(Depth_m), color=.data[[Var]]), pointsize = 4)+
+          scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+          scale_y_discrete(limits=rev) +
+          ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
+          labs(y = y_lab,
+               color = "Legend") +
+          #scale_color_manual(values = colors)+
+          theme_bw()
+      
     } 
   }
   # Add extra plots for chla and blue greens

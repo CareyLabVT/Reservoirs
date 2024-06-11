@@ -11,7 +11,7 @@
     </allow>
   </access>
   <dataset>
-    <title>Time series of total and soluble iron and manganese concentrations from Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2023</title>
+    <title>Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2023</title>
     <creator>
       <individualName>
         <givenName>Madeline</givenName>
@@ -58,6 +58,7 @@
       </individualName>
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>georgeh0919@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0003-2316-2037</userId>
     </creator>
     <creator>
       <individualName>
@@ -83,6 +84,7 @@
       </individualName>
       <organizationName>Virginia Tech</organizationName>
       <electronicMailAddress>etipper@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0001-5005-0319</userId>
     </creator>
     <associatedParty>
       <individualName>
@@ -94,9 +96,9 @@
       <userId directory="https://orcid.org">https://orcid.org/0000-0002-1269-6987</userId>
       <role>analytical chemist</role>
     </associatedParty>
-    <pubDate>2024-04-18</pubDate>
+    <pubDate>2024-05-21</pubDate>
     <abstract>
-      <para>Depth profiles of total and soluble metals were sampled from 2014-2023 in two drinking-water reservoirs, Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR), located in Vinton, Virginia, USA.  Only Fe and Mn were analyzed from 2014-2019. The full suite of metals (Li, Na, Mg, Al, Si, K, Ca, Fe, Mn, Cu, Sr, Ba) were analyzed from 2020-2023. Both reservoirs are owned and operated by the Western Virginia Water Authority and are managed as secondary drinking-water sources for the city of Roanoke, VA. The dataset includes metals samples that were collected along a depth profile taken at the deepest site of the reservoir near the dam. Additional samples were collected at a gauged weir located on the primary inflow tributary, as well as at a secondary tributary, to Falling Creek Reservoir. Sampling frequency was approximately weekly during the summer and fall (May - October), approximately fortnightly during the spring (March - April), and approximately monthly during the winter (November - March). </para>
+      <para>Depth profiles of total and soluble metals were sampled from 2014-2023 in two drinking-water reservoirs, Falling Creek Reservoir (FCR) Beaverdam Reservoir (BVR), and Carvins Cove Reservoir (CCR). FCR and BVR are located in Vinton, Virginia, USA and CCR is located in Roanoke, Virginia, USA.  Only Fe and Mn were analyzed from 2014-2019. The full suite of metals (Li, Na, Mg, Al, Si, K, Ca, Fe, Mn, Cu, Sr, Ba) were analyzed from 2020-2023. All reservoirs are owned and operated by the Western Virginia Water Authority and are managed as secondary drinking-water sources for the city of Roanoke, VA. The dataset includes metals samples that were collected along a depth profile taken at the deepest site of each reservoir near the dam. Additional samples were collected at a gauged weir located on the primary inflow tributary, as well as at a secondary tributary, to FCR. A 2022 sampling campaign at CCR included inflows and a depth profile at the deepest site. Sampling frequency in 2023 was approximately weekly during the summer and fall (May - October), approximately fortnightly during the spring (March - April), and approximately monthly during the winter (November - March). </para>
     </abstract>
     <keywordSet>
       <keyword>Carey Lab</keyword>
@@ -116,8 +118,30 @@
     <keywordSet>
       <keyword>Reservoir</keyword>
       <keyword>Lake</keyword>
-      <keyword>iron</keyword>
-      <keyword>manganese</keyword>
+      <keyword>total iron</keyword>
+      <keyword>dissolved iron</keyword>
+      <keyword>total manganese</keyword>
+      <keyword>dissolved manganese</keyword>
+      <keyword>total sodium</keyword>
+      <keyword>dissolved sodium</keyword>
+      <keyword>total lithium</keyword>
+      <keyword>dissolved lithium</keyword>
+      <keyword>total magnesium</keyword>
+      <keyword>dissolved magnesium</keyword>
+      <keyword>total aluminum</keyword>
+      <keyword>dissolved aluminum</keyword>
+      <keyword>total silicon</keyword>
+      <keyword>dissolved silicon</keyword>
+      <keyword>total potassium</keyword>
+      <keyword>dissolved potassium</keyword>
+      <keyword>total calcium</keyword>
+      <keyword>dissolved calcium</keyword>
+      <keyword>total copper</keyword>
+      <keyword>dissolved copper</keyword>
+      <keyword>total strontium</keyword>
+      <keyword>dissolved strontium</keyword>
+      <keyword>total barium</keyword>
+      <keyword>dissolved barium</keyword>
       <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <keywordSet>
@@ -125,10 +149,10 @@
       <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
     </keywordSet>
     <additionalInfo>
-      <para>Contributions to the 2022 revision:&#13;
-MES initiated metals sampling at Falling Creek Reservoir and Beaverdam Reservoir in 2014, and at Carvins Cove Reservoir in 2022. CLM served as the point person for data cleaning, analysis and QAQC from fall 2022 to present. CLM scripted the automation of raw data processing into publishable form with assistance from NWH. ABP led field crew and sampling efforts at all three reservoirs in 2022. NWH, BG and GH contributed substantially to preparation and sampling for field campaigns.</para>
+      <para>Contributions to the 2023 revision:&#13;
+MES oversaw the metals sampling program at Falling Creek Reservoir and Beaverdam Reservoir in 2014-present, and at Carvins Cove Reservoir in 2022. CEW served as the point person for data cleaning, analysis, and QAQC in 2023. CEW and ABP automated the data processing with CEB. ABP led field crew and sampling efforts at all three reservoirs, and wrote the visual inspection script. CEW and CEB contributed to fieldwork and digested select samples with assistance from MES. GH, MK, RK, and ET contributed to fieldwork, data digitization, and field monitoring preparations.</para>
       <para>Acknowledgments and historical contributions:&#13;
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Gavin Moore for organizing samples in summer 2022.</para>
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Cissy Ming for past contributions as data product lead, and Gracie Litsinger for organizing samples in summer 2023. We thank Freya Olsson for helpful reviews of this data package.</para>
     </additionalInfo>
     <intellectualRights>
       <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data (\"Data User\" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available \"as is.\" The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
@@ -189,14 +213,27 @@ This data package has been iteratively updated over time and builds on the many 
     <methods>
       <methodStep>
         <description>
-          <para>WATER COLUMN SAMPLING: We collected water samples for total and soluble metal concentrations from Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR) approximately fortnightly from March-April, weekly from May-October, and monthly from November-February.  Water samples were collected at the deepest site of each reservoir using a 4-L Van Dorn sampler (Wildlife Supply Company, Yulee, FL). In FCR, water samples were collected at specified depths ranging from 0.1 m to 9.8 m. Additional water samples were collected from the primary inflow tributary as well as a secondary tributary. In BVR, water samples were collected at specified depths ranging from 0.1 m to 12.0 m. After collection, we poured raw water samples directly from the Van Dorn sampler into sample bottles for total metal analyses and we syringe-filtered water using 0.45 micron nylon filters into bottles for soluble metal analyses. All samples were preserved using trace metal grade nitric acid to pH less than 2. </para>
+          <para>WATER COLUMN SAMPLING: We collected water samples for total and soluble metal concentrations from Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR) approximately fortnightly from March-April, weekly from May-October, and monthly from November-February. In 2022, we collected water samples from CCR approximately fortnightly during summer (May-October).  Water samples were collected at the deepest site of each reservoir using a 4-L Van Dorn sampler (Wildlife Supply Company, Yulee, FL). In FCR, water samples were collected at specified depths ranging from 0.1 m to 9.8 m. Additional water samples were collected from the primary inflow tributary as well as a secondary tributary. In BVR, water samples were collected at specified depths ranging from 0.1 m to 12.0 m. After collection, we poured raw water samples directly from the Van Dorn sampler into sample bottles for total metal analyses and we syringe-filtered water using 0.45 micron nylon filters into bottles for soluble metal analyses. All samples were preserved using trace metal grade nitric acid to pH less than 2. </para>
           <para>
-SAMPLING TIMES: Most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. Samples with no exact sampling time recorded are reported as 12:00 in the DateTime column and flagged with a '1' in the Flag_DateTime column. Samples were collected in the America/New York Eastern Time Zone, which observed daylight savings time from approximately March to November in 2014-2020.</para>
+SAMPLING TIMES: Most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. Samples with no exact sampling time recorded are reported as 12:00 in the DateTime column and flagged with a '1' in the Flag_DateTime column. Samples were collected in the America/New York Eastern Time Zone, which observed daylight savings time from approximately March to November in 2014-2023.</para>
           <para>
-CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an Inductively Coupled Plasma-Mass Spectrometer (ICP-MS; Thermo Electron X-Series) following APHA Standard Method 3125-B (American Public Health Association et al., 1998).  Detection limits for Fe and Mn were 0.0008 mg/L and 0.0005 mg/L, respectively, in 2014 and 0.0012 mg/L and 0.00007 mg/L, respectively, in 2015.  In 2016-2019, samples were analyzed for Fe and Mn using an Inductively Coupled Plasma Optical Emission Spectrometer (ICP-OES) using a Spectro ARCOS SOP (Side-On Plasma interface) instrument using methods similar to EPA 200.7 (EPA, 1994). Detection limits for Fe and Mn were 0.004 mg/L and 0.001 mg/L, respectively. Starting in 2020, samples were analyzed for Li, Na, Mg, Al, Si, K, Ca, Fe, Mn, Cu, Sr, and Ba using an Inductively Coupled Plasma-Mass Spectrometer (ICP-MS; Thermo Electron iCAP-RQ) following APHA Standard Method 3125-B (American Public Health Association et al., 1998). In 2020-2021, minimum reporting levels for Fe and Mn were 0.005 mg/L and 0.0001 mg/L, respectively. In 2023, minimum reporting levels for Fe and Mn are as listed in the MRL document: https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt. The minimum reporting levels for Li, Na, Mg, Al, Si, K, Ca, Cu, Sr, and Ba from 2020-2023 are also listed in the MRL document. We used the minimum reporting levels as the lower threshold for data in 2020-2023. Values that were below the minimum detection limit (for 2014-2019) or minimum reporting level (for 2020-2023) were flagged as '3' and set to the value of the minimum detection limit or minimum reporting level. Negative values were flagged as '4' and set to 0 in 2014-2022 and were set to the minimum reporting level in 2023. </para>
+CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an Inductively Coupled Plasma-Mass Spectrometer (ICP-MS; Thermo Electron X-Series) following APHA Standard Method 3125-B (American Public Health Association et al., 1998).  Detection limits for Fe and Mn were 0.0008 mg/L and 0.0005 mg/L, respectively, in 2014 and 0.0012 mg/L and 0.00007 mg/L, respectively, in 2015.  In 2016-2019, samples were analyzed for Fe and Mn using an Inductively Coupled Plasma Optical Emission Spectrometer (ICP-OES) using a Spectro ARCOS SOP (Side-On Plasma interface) instrument using methods similar to EPA 200.7 (EPA, 1994). Detection limits for Fe and Mn were 0.004 mg/L and 0.001 mg/L, respectively. Starting in 2020, samples were analyzed for Li, Na, Mg, Al, Si, K, Ca, Fe, Mn, Cu, Sr, and Ba using an Inductively Coupled Plasma-Mass Spectrometer (ICP-MS; Thermo Electron iCAP-RQ) following APHA Standard Method 3125-B (American Public Health Association et al., 1998). In 2020-2021, minimum reporting levels for Fe and Mn were 0.005 mg/L and 0.0001 mg/L, respectively. In 2023, minimum reporting levels for Fe and Mn are as listed in the last paragraph. The minimum reporting levels for Li, Na, Mg, Al, Si, K, Ca, Cu, Sr, and Ba from 2020-2023 are also listed in the MRL document. We used the minimum reporting levels as the lower threshold for data in 2020-2023. Values that were below the minimum detection limit (for 2014-2019) or minimum reporting level (for 2020-2023) were flagged as '3' and set to the value of the minimum detection limit or minimum reporting level. Negative values were flagged as '4' and set to 0 in 2014-2022 and were set to the minimum reporting level in 2023. </para>
           <para>	Occasionally, unfiltered samples contain particulates. As particulates cannot be analyzed using ICPMS, samples with particulates were first microwave-digested with concentrated trace metal grade nitric acid (modified from EPA 3015a) prior to analysis and are flagged with a '6'. Please see Metals_maintenancelog_2014_2023 for more information about specific samples.</para>
           <para>	This data package includes 2 data files (Metals_2014_2023.csv), QAQC R script (metals_qaqc.R), maintenance log (Metals_maintenancelog_2014_2023.csv), visual inspection R script (Metals_Inspection_2014_2023.Rmd), sampling sites (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files.</para>
-          <para>	Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
+          <para>	Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.</para>
+          <para>Minimum Reporting Levels (mg/L):
+Al_mgL - 0.001
+Ba_mgL - 0.00005
+Ca_mgL - 0.05
+Cu_mgL - 0.001
+Fe_mgL - 0.01
+Li_mgL - 0.0005
+Mg_mgL - 0.001
+Mn_mgL - 0.0001
+K_mgL - 0.01
+Si_mgL - 0.1
+Na_mgL - 0.05
+Sr_mgL - 0.00005
 </para>
         </description>
       </methodStep>
@@ -342,20 +379,46 @@ CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an In
         <attribute>
           <attributeName>Site</attributeName>
           <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
-          <storageType>float</storageType>
+          <storageType>string</storageType>
           <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>natural</numberType>
-                <bounds>
-                  <minimum exclusive="false">40</minimum>
-                  <maximum exclusive="false">501</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>40</code>
+                    <definition>Pelagic upstream site</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>50</code>
+                    <definition>Pelagic deep hole site</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>100</code>
+                    <definition>Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>200</code>
+                    <definition>Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>201</code>
+                    <definition>Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>301</code>
+                    <definition>Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>400</code>
+                    <definition>Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>501</code>
+                    <definition>Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
           </measurementScale>
           <missingValueCode>
             <code>NA</code>
@@ -966,7 +1029,7 @@ CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an In
                   </codeDefinition>
                   <codeDefinition>
                     <code>1</code>
-                    <definition>sample not taken</definition>
+                    <definition>DateTime set to 12:00 because no sampling time was recorded</definition>
                   </codeDefinition>
                 </enumeratedDomain>
               </nonNumericDomain>
@@ -2051,20 +2114,46 @@ CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an In
         <attribute>
           <attributeName>Site</attributeName>
           <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
-          <storageType>float</storageType>
+          <storageType>string</storageType>
           <measurementScale>
-            <ratio>
-              <unit>
-                <standardUnit>dimensionless</standardUnit>
-              </unit>
-              <numericDomain>
-                <numberType>natural</numberType>
-                <bounds>
-                  <minimum exclusive="false">40</minimum>
-                  <maximum exclusive="false">501</maximum>
-                </bounds>
-              </numericDomain>
-            </ratio>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>40</code>
+                    <definition>Pelagic upstream site</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>50</code>
+                    <definition>Pelagic deep hole site</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>100</code>
+                    <definition>Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>200</code>
+                    <definition>Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>201</code>
+                    <definition>Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>301</code>
+                    <definition>Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>400</code>
+                    <definition>Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>501</code>
+                    <definition>Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
           </measurementScale>
           <missingValueCode>
             <code>NA</code>
@@ -2466,8 +2555,8 @@ CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an In
       <entityDescription>Script that uses QAQC script to create the final dataframe and plots the data</entityDescription>
       <physical>
         <objectName>Metals_Inspection_2014_2023.Rmd</objectName>
-        <size unit="bytes">21529</size>
-        <authentication method="MD5">95f3ee552c9e7306f848418c66d2df16</authentication>
+        <size unit="bytes">21600</size>
+        <authentication method="MD5">953fbdc6cee5194eaffe438786bdd122</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/x-markdown</formatName>
@@ -2477,27 +2566,12 @@ CHEMICAL ANALYSIS: In 2014-2015, samples were analyzed for Fe and Mn using an In
       <entityType>unknown</entityType>
     </otherEntity>
     <otherEntity>
-      <entityName>Plot_function.R</entityName>
+      <entityName>Plotting_function.R</entityName>
       <entityDescription>Function to create output plots utilized by visual inspection script</entityDescription>
       <physical>
-        <objectName>Plot_function.R</objectName>
-        <size unit="bytes">14893</size>
-        <authentication method="MD5">fef801fc806a96ac2ac735465c8077df</authentication>
-        <dataFormat>
-          <externallyDefinedFormat>
-            <formatName>text/plain</formatName>
-          </externallyDefinedFormat>
-        </dataFormat>
-      </physical>
-      <entityType>unknown</entityType>
-    </otherEntity>
-    <otherEntity>
-      <entityName>Heatmap_EDI_function.R</entityName>
-      <entityDescription>Function to create heatmaps utilized in the plotting script</entityDescription>
-      <physical>
-        <objectName>Heatmap_EDI_function.R</objectName>
-        <size unit="bytes">3810</size>
-        <authentication method="MD5">46543e7f93b73bb22837987f2b4873a9</authentication>
+        <objectName>Plotting_function.R</objectName>
+        <size unit="bytes">16877</size>
+        <authentication method="MD5">11da4cfa843c1193e78ed0bf4dcaaac1</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

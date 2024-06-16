@@ -1,0 +1,381 @@
+---
+title: "ISCO Load Calculations"
+author: "Adrienne"
+date: "2024-06-10"
+output: html_document
+---
+This script was created by Nick Hammond and adopted by Adrienne Breef-Pilz into an RMarkdown format. 
+
+Purpose:
+1. Convert ISCO water level measurements to discharge (Q)
+2. Two methods: a.) v-notch weir equation only, b.) v-notch weir equation + rectangular weir equation for water levels above the v-notch
+      Method b is still a rough approximation, since the flow over the weir likely does not conform to the same 
+      geometry as a rectangular weir, but this approximation may be more accurate than simply using the v-notch weir equation for all water levels
+3. Compare ISCO discharge measurements to Carey Lab discharge measurements (from pressure transducer also at the weir)
+4. Calculate loads of total Fe and Mn using the ISCO flow-weighted composite sampling and compare to loads calculated from weekly grab samples
+
+NOTES: This script is just working with data from 2019, but it can be adapted for subsequent years (once the ISCO metals samples have been analyzed)
+
+Things to decide:
+1. What is the best way to determine discharge? 
+  A. Calculated from the ISCO- field pictures from the field crew. How many discharge measurements do we actually have? This is probably the most accurate because it is stopped and started when samples were taken. 
+  B. Calculate discharge from the water level sensor on the ISCO. This is at 1 minute resolution
+  C. Use the discharge from the VT pressure transducer. 
+  
+NEED TO FIGURE OUT TIMEZONES- I think the ISCO is with daylight savings observed
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, readxl, scattermore, plotly)
+
+```
+
+This section makes a water level data frame from the files on GitHub. It looks like I might be missing some. 
+ABP needs to look into this. It looks like it is Dec. 2021 and Dec. 2023
+
+```{r Make ISCO water level}
+
+
+# waterlevel12 <- dir(path = "Raw_water_level", pattern = "")[12]
+# 
+# qwe <- read_csv("Raw_water_level/2022_full_221128_ISCO_FCRWEIR_WaterLevel.csv", skip = 6, col_names = c("DateTime", "WaterLevel_m"))%>%
+#   mutate(DateTime2 = parse_date_time(DateTime, c("mdy HMS","mdy HM", "mdy HMS p", "mdy HM p")))
+
+waterlevel <- dir(path = "Raw_water_level", pattern = "")%>%  
+  map_df(~ read_csv(file.path(path = "Raw_water_level", .),
+                    col_names = c("DateTime", "WaterLevel_m"), col_types = cols(.default = "c"), skip = 6))
+
+waterlevel_2<-waterlevel%>%
+  mutate(DateTime=parse_date_time(DateTime, c("mdy HMS","mdy HM", "mdy HMS p", "mdy HM p")),
+         WaterLevel_m=as.numeric(WaterLevel_m))%>%
+  filter(DateTime>ymd_hms("2019-06-06 14:51:00"))%>%
+  filter(WaterLevel_m<2)%>%
+  mutate(Date = date(DateTime),
+         Year=year(DateTime),
+         DOY=yday(DateTime))%>%
+  #filter(DOY>50)%>%
+  drop_na()%>%
+  distinct()
+  
+
+waterlevel_ISCO<-waterlevel_2%>%
+  select(DateTime, WaterLevel_m)%>%
+  mutate(WaterLevel_m=ifelse(DateTime>ymd_hms("2020-07-20 10:00:00")&DateTime<ymd_hms("2020-08-24 14:50:00"), NA, WaterLevel_m),
+         WaterLevel_m = ifelse(WaterLevel_m==0, NA, WaterLevel_m))
+  
+# Need to take out 2020-07-20 10:00:00 EST, 2020-08-24 14:49:00 EST for when the weir was blown out
+
+# order the time 
+
+```
+Let's look at the water level from the ISCO as compared to the observations of the staff gauge from the field crew. 
+They should be virtually the same. This should help us determine the best method for discharge. 
+
+```{r Compare the observed water level at the Staff gauge to water level from ISCO}
+
+# read in the staff gauge observations from GitHub
+
+staff_gauge <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-weir-data-qaqc/Inflow_Gauge_Height_at_Weir.csv")%>%
+  mutate(GageHeight_cm=GageHeight_cm/100)
+
+# make a plot 
+ggplot()+
+  geom_scattermore(data=waterlevel_ISCO, aes(x=DateTime, y= WaterLevel_m))+
+  geom_point(data= staff_gauge, aes(x=DateTime, y=GageHeight_cm), col='red')+
+  theme_bw()
+
+```
+Yea! The water level and the ISCO follow along very well. There are some points at the end of 2022 when the observations are lower the ISCO was measuring. Might be worth checking into. 
+
+Now let's calculate discharge from the weir using the water level from the ISCO. 
+
+The v-notched weir is 27.5 cm tall so what should we do when water goes over the top?
+Let's compare the two different methods. 
+1) discharge if you disregard the flow over the top
+2) calculate discharge that goes through the weir. Then assume the discharge over the top is a rectangle. 
+
+```{r Calculate discharge}
+
+# Method number 1
+waterlevel_ISCO <- waterlevel_ISCO %>% mutate(Flow_cms_v = 2.391*(WaterLevel_m^2.5))%>% 
+ select(DateTime, WaterLevel_m, Flow_cms_v)
+
+# Method number 2
+# V-notch weir equation + rectangular weir equation for flow above 0.275 m #    (flow over-topped the weir at 27.5 cm)
+B = 0.953 + 1.99 + 1.59 # channel width in meters (see 'WeirMeasurements.jpg')
+
+waterlevel_ISCO <- waterlevel_ISCO %>% mutate(Flow_cms_r = ifelse(WaterLevel_m > 0.275, 
+2.391*(0.275^2.5) + (1.84*B*((WaterLevel_m-0.275)^1.5)), 2.391*(WaterLevel_m^2.5)))  
+#select(Date_Time, head, Flow_cms)
+
+```
+
+Let's look at a time series of the 2 methods. 
+
+```{r}
+
+ggplot()+
+  geom_scattermore(data = waterlevel_ISCO, aes(x=DateTime, y = Flow_cms_r))+
+  geom_scattermore(data = waterlevel_ISCO, aes(x=DateTime, y = Flow_cms_v), col='red')+
+  theme_bw()
+
+```
+
+Just using the v-notched weir does a nice job catching most of the flow. Are those high high events in 2020 real? 
+That is where using the v-notched plus the rectangle calculations matter. This issue is I don't know if we have the discharge calculated from the ISCO for that. 
+
+Compare the discharge from the pressure transducers
+
+```{r Read in EDI discharge}
+
+VT_discharge <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/202/12/aae7888d68753b276d1623680f81d5de")%>%
+  filter(DateTime>as.Date("2019-06-06"))
+
+# Average VT and WVWA
+
+weir_discharge <- VT_discharge%>%
+  mutate(DateTime = force_tz(DateTime, "America/New_York"))%>% # put it with daylight savings observed to line with the ISCO
+  select(DateTime, WVWA_Flow_cms, VT_Flow_cms)%>%
+  pivot_longer(!DateTime, names_to = "source", values_to = "observations")%>%
+  group_by(DateTime)%>%
+  summarise(mean_flow = mean(observations, na.rm = T)) %>%
+  ungroup()%>%
+  drop_na(DateTime)
+
+```
+
+```{r Plot all discharge}
+
+ggplot()+
+  geom_scattermore(data = waterlevel_ISCO, aes(x=DateTime, y = Flow_cms_r))+
+  geom_scattermore(data = waterlevel_ISCO, aes(x=DateTime, y = Flow_cms_v), col='red')+
+  geom_scattermore(data = weir_discharge, aes(x=DateTime, y = mean_flow), col ='darkgreen')+
+  theme_bw()
+
+```
+We see the same trends for discharge from the ISCO and from the VT pressure transducers.
+The ISCO records every minute and the VT sensors are every 15 minutes which is why we see the higher peaks/ finer resolution for the ISCO data. 
+Is that resolution something that we need? 
+
+Next section is looking a total discharge over sampling events. 
+
+
+Determine the start and end for each ISCO sample to get the discharge over that time period
+
+Read in the ICPMS data from the ISCO.
+
+It looks like we are missing samples from the first half of 2022.
+
+```{r Read in ISCO metals file}
+
+# Read in the historical ISCO files and clean them up. Average across the duplicates
+hist <- read_csv("Data/ISCO_metals_samples_2019_2020.csv")%>%
+  mutate(DateTime = parse_date_time(DateTime, "mdy HM"))%>%
+  filter(DateTime<as.Date("2020-01-01"))%>%
+  group_by(Reservoir, Site, DateTime)%>%
+  dplyr::summarise(TFe_mgL = mean(TFe_mgL, na.rm = T),
+            TMn_mgL = mean(TMn_mgL, na.rm = T))%>%
+  ungroup()
+
+# Read in the current L1 file
+current <- read_csv('ISCO_metals_L1.csv')%>%
+  select(-c(starts_with("S")|starts_with("Flag_S")))
+  
+# Bind them together
+ISCO_metals <- dplyr::bind_rows(hist, current)
+
+# Make a data frame of when samples were taken
+
+ISCO_samp_date <- ISCO_metals%>%
+  select(DateTime)
+ 
+
+```
+
+Using the waterlevel_ISCO file let's figure out the start and end date for each sampling. 
+
+First we are going to determine when the ISCO was first put out in the field each year. Then when it was taken in.
+
+```{r Get first and last date for the ISCO each year}
+
+startdate<-waterlevel_ISCO%>%
+  mutate(Year=year(DateTime))%>%
+  group_by(Year)%>%
+  dplyr::summarise(DateTime=first(DateTime))%>%
+  mutate(Start_date="START",
+         Date=as.Date(DateTime))%>%
+  select(DateTime,Date, Start_date)
+
+lastdate<-waterlevel_ISCO%>%
+  mutate(Year=year(DateTime))%>%
+  group_by(Year)%>%
+  dplyr::summarise(DateTime=last(DateTime))%>%
+  mutate(Start_date="END",
+         Date=as.Date(DateTime))%>%
+  select(DateTime,Date, Start_date)%>%
+  rbind(., startdate)%>%
+  drop_na(DateTime)
+
+# 
+
+# add the start dates in 
+
+all_samples2=merge(ISCO_samp_date, lastdate, by="DateTime", all=T)
+
+# drop a few of the observation
+# 2021-12-06 12:00:00 - find this one
+# 2022-12-12 11:04:00 - change the name
+# 2023-11-14 10:30:00 - change the name
+# 2023-12-04 13:53:00 - find this one
+
+# remove some of these observations to make it nice. Will need to change some dates later. 
+all_samples22 <- all_samples2%>%
+  filter(DateTime!=ymd_hms("2021-12-06 12:00:00") & DateTime!=ymd_hms("2022-12-12 11:04:00") & 
+           DateTime!=ymd_hms("2023-11-14 10:30:00") & DateTime!=ymd_hms("2023-12-04 13:53:00"))
+
+
+# merge with the ISCO discharge data to calculate discharge per an event
+
+total_dis <- merge(waterlevel_ISCO, all_samples22, by="DateTime", all =T)
+
+
+#Subset Q based on sampling times
+#int = data.frame(metals$Date)
+#colnames(int) = c("interval")
+time = data.frame(all_samples22$DateTime, all_samples22$DateTime, all_samples22$Start_date)
+colnames(time) = c("time1", "time2", "Start_date")
+
+# shift time 2 up one row. Then remove the rows when start_date=END
+time2=time %>% 
+  mutate_at(("time2"), funs(lead), n = 1)%>%
+  filter(Start_date=="START"|is.na(Start_date))%>%
+  select(time1, time2)%>%
+  dplyr::rename("Start_time"="time1",
+                "End_time"="time2")
+  
+options(scipen = 100, digits = 4)
+
+# create the lists of discharge based on the sample duration of deployments. When the ISCO started collecting the sample
+# until it ended. 
+sample = list()
+  for(i in 1:nrow(time2)){
+  sample[[i]] = waterlevel_ISCO[waterlevel_ISCO$DateTime>time2[i,1] & waterlevel_ISCO$DateTime<time2[i,2],]
+  }
+
+# Multiply each minute Q by 60 s to get a cumulative volume of flow per minute
+for(i in 1:length(sample)){
+  sample[[i]]$cum_flow_v = sample[[i]]$Flow_cms_v*60
+  sample[[i]]$cum_flow_r = sample[[i]]$Flow_cms_r*60
+}
+
+# Sum up all cum_flow for each sampling period to get a total cumulative flow
+for(i in 1:nrow(time2)){
+  time2$cum_v[i] = sum(sample[[i]]$cum_flow_v, na.rm = T)
+  time2$cum_r[i] = sum(sample[[i]]$cum_flow_r, na.rm = T)
+}
+
+```
+
+```{r}
+# Now let's calculate the cumulative flow for the VT sensors
+
+# merge with the ISCO discharge data to calculate discharge per an event
+
+total_dis_VT <- merge(weir_discharge, all_samples22, by="DateTime", all =T)%>%
+  filter(DateTime>"2019-06-06 10:45:00")
+
+# shift time 2 up one row. Then remove the rows when start_date=END
+time_VT=time %>% 
+  mutate_at(("time2"), funs(lead), n = 1)%>%
+  filter(Start_date=="START"|is.na(Start_date))%>%
+  select(time1, time2)%>%
+  dplyr::rename("Start_time"="time1",
+                "End_time"="time2")
+  
+options(scipen = 100, digits = 4)
+
+# create the lists of discharge based on the sample duration of deployments. When the ISCO started collecting the sample
+# until it ended. 
+sample = list()
+  for(i in 1:nrow(time_VT)){
+  sample[[i]] = weir_discharge[weir_discharge$DateTime>time_VT[i,1] & weir_discharge$DateTime<time_VT[i,2],]
+  }
+
+# Multiply each minute Q by 60 s to get a cumulative volume of flow per minute and then by 15 because we record a discahrge event every 15 minutes
+for(i in 1:length(sample)){
+  sample[[i]]$VT_cum_flow_v = sample[[i]]$mean_flow*(60*15)
+}
+
+# Sum up all cum_flow for each sampling period to get a total cumulative flow
+for(i in 1:nrow(time_VT)){
+  time_VT$VT_cum_v[i] = sum(sample[[i]]$VT_cum_flow_v, na.rm = T)
+}
+
+```
+
+
+Then compare the calculated discharge from the ISCO with v-notched, ISCO with v-notched and rectangle, VT pressure transducer, recorded discharge from the ISCO.
+
+The discharge from the ISCO is the gold standard. This will determine what is the best way to calculate discharge when it goes over the weir. 
+
+```{r Plot cumulative discharge}
+
+# merge the two data frames so we have VT discharge and ISCO calculated discharge 
+
+calc_discharge <- merge(time2, time_VT, by= c("Start_time", "End_time"))
+
+a <- ggplot(calc_discharge, aes(x = Start_time))+
+  geom_point(aes(y= cum_v))+
+  geom_point(aes(y=cum_r), color= "red")+
+  geom_point(aes(y=VT_cum_v), color="darkorange")+
+  theme_bw()
+
+ggplotly(a)
+
+```
+
+
+
+Once we determine the best method for discharge then we can use that to calculate loads. 
+
+```{r Calculate Load}
+
+# make metals easy to work with 
+long_metals <- ISCO_metals%>%
+  select(-starts_with("Flag"))%>%
+  #pivot_longer(!DateTime, names_to = "source", values_to = "observations")%>%
+  pivot_longer(!c(Reservoir, Site, DateTime), names_to = "variable", values_to = "observation")%>%
+  drop_na(observation)
+  
+
+# join the cumulative flow and the metals observation by the closes observations
+  by <- join_by(closest(End_time <= DateTime))
+Calc_dis_metals <- full_join(calc_discharge, long_metals, by)
+  
+
+# Calculate loads
+
+calc_load <- Calc_dis_metals%>%
+  # convert m3 to L
+  mutate(cum_v_L = cum_v * 1000,
+         cum_r_L = cum_r * 1000,
+         VT_cum_v_L = VT_cum_v * 1000,
+         # cumulative volume (L) * metals concentration (mg/L) = load (mg)/ divide by 1000000 to get (kg)
+         ISCO_load_v_kg = (cum_v_L*observation)/1000000,
+         ISCO_load_r_kg = (cum_r_L*observation)/1000000,
+         VT_load_v_kg = (VT_cum_v_L*observation)/1000000,
+         diff_time = difftime(End_time, Start_time, units='mins'),
+         ISCO_load_v_kg_d = (ISCO_load_v_kg/as.numeric(diff_time))*(60*24),
+         ISCO_load_r_kg_d = (ISCO_load_r_kg/as.numeric(diff_time))*(60*24),
+         VT_load_v_kg_d = (VT_load_v_kg/as.numeric(diff_time))*(60*24),
+         Reservoir = "FCR",
+         Site = 100.1)%>%
+  select(Reservoir, Site, Start_time, End_time, variable, observation, cum_v, cum_r, VT_cum_v,
+         cum_v_L, cum_r_L, VT_cum_v_L, ISCO_load_v_kg, ISCO_load_r_kg, VT_load_v_kg, diff_time,
+         ISCO_load_v_kg_d, ISCO_load_r_kg_d, VT_load_v_kg_d)
+  
+
+```
+

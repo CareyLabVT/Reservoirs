@@ -1,7 +1,7 @@
 # Title: GHG L1 generation (QA/QC) script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov 23, 
-# Last updated: 15 May 24 (ABP)
+# Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -58,7 +58,7 @@ ghg_qaqc<-function(directory,
   # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
   # gdrive = T # Are the files on Google Drive. True or False
   # gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
-  # Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328"
+  # _Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328"
   # vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
   # Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555"
   # output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
@@ -178,11 +178,11 @@ ghg_qaqc<-function(directory,
   #### 2.2 Assign Air temp and lab pressure for time of lab sampling ####
   # read in the file Bobbie created for air temp and pressure
   
-  # read in the Air temp and lab pressure Google Sheet Bobbie Maintains
-  temp_pres <- gsheet::gsheet2tbl(Air_Pressure)
+  # read in the Air temp and lab pressure Google Sheets Frances Maintains
   
-  # take out the first 9 rows because we don't need them
-  temp_pres<-temp_pres[9:nrow(temp_pres),1:4]
+ temp_pres <- purrr::map_df(Air_Pressure, 
+                            ~read_csv(construct_download_url(.x), skip = 7, col_select = c(`Date`, `Lab Temp`, `Weather Station BP`, `Notes`)))%>%
+  filter(Date!="")
   
   # Rename the columns
   names(temp_pres)<- c("Date","lab_temp", "weather_station_bp", "notes")

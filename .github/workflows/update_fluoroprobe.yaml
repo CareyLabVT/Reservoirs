@@ -21,7 +21,7 @@ jobs:
           
       - name: Run automated target files
         run: |
-          R -e 'remotes::install_version("gsheet", version = "0.4.5")'
+          R -e 'remotes::install_version("pacman", version = "0.5.1")'
           R -e 'utils::install.packages("RCurl")'
           Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/fluoroprobe_qaqc.R
       

@@ -30,9 +30,8 @@ historic_data_2017 <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/Fluoro
 maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
 #out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/FluoroProbe_2014_2023.csv"
 out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv"
-start_date <- date_attribute
-end_date <- last_edi_date
-
+start_date <- last_edi_date
+end_date <- Sys.Date() + lubridate::days(1)
 # run the function
 fluoroprobe_qaqc(example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,

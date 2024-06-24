@@ -11,7 +11,7 @@ library(tidyverse)
 library(lubridate)
 #library(httr)
 
-rm(list=ls())
+#rm(list=ls())
 
 # load packages
 #install.packages('pacman')

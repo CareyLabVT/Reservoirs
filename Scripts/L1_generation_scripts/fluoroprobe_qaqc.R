@@ -18,10 +18,10 @@ date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/en
 last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 
-source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/fluoroprobe_create.R')
+#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/fluoroprobe_create.R')
+source('./Scripts/L1_functions/fluoroprobe_create.R')
 
 ## Run Function 
-
 
 example_file_for_colnames <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
 current_year_data_folder <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe"

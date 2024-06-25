@@ -1,11 +1,11 @@
 name: Metals QAQC
 on:
   workflow_dispatch:
-  #schedule:
-  #- cron: "0 10 * * *"
+  schedule:
+  - cron: "10 10 * * *"
   
 jobs:
-  ysi:
+  metals:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

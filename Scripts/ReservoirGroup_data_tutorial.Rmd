@@ -1,0 +1,283 @@
+---
+title: "Getting started with Reservoir Group data"
+author: "Dexter Howard"
+date: "2024-05-29"
+output: html_document
+---
+
+## What is an R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+Code is written in code chunks (see gray boxes below) and can either be run line by line like a standard .R document or you can press the green arrow to have the entire chunk run as once. Code chunks can be added using the shortcut 
+cntrl + alt + I
+
+One important notes is that working directories are based on the location of the Rmarkdown document.
+
+## Getting Reservoir Group data
+
+Reservoir group data can be found in three main places:
+
+1) Enivronmental Data Initiative (EDI) repository. 
+This is where our published data is kept and can be referenced in papers using its DOI (digital object identifier). Data can be found at this link (https://portal.edirepository.org/nis/home.jsp) by searching for key words related to the reservoirs (i.e., FCR, Falling Creek Reservoir, Beaverdam Reservoir) and by variable (i.e., methane, phytoplankton, etc)
+
+Once you've found a data set of interest you can select the link and review the meta data (see the FCR catwalk data for example here: https://portal.edirepository.org/nis/mapbrowse?packageid=edi.271.8). Its helpful to review information in the "view full metadata section" to know what variables are involved in this data set and any caveats or important information associated with this data. 
+
+2) Github
+
+L1 data can be found in multiple places in github including the FLARE repo (see FCR catwalk data here for example: https://github.com/FLARE-forecast/FCRE-data/tree/fcre-catwalk-data-qaqc) or the CareyLab/Reservoirs github (see YSI example here: https://github.com/CareyLabVT/Reservoirs/tree/master/Data/DataNotYetUploadedToEDI/YSI_PAR).
+
+L1 data is data that has been collected and QAQC'd similar to the published data but has not gone through the publishing step yet.
+
+Most often when working with lab data you will be working with either just EDI data or EDI and L1 data that have been combined. 
+
+3) Reservoir Group google drive
+
+Raw data from field seasons is additionally kept on google drive and can be accessed by the google drive url but this data has not undergone any QAQC. Examples of working with this data are not in this tutorial but are accessible if data sets are of interest. Note: most data on google drive is incorporated into the L1 files shortly after digitzation.
+
+## Get helpful packages 
+I find starting with tidyverse is helpful since this encompases all of the dplyr data manipulations (mutate, filter, select, etc) and contains ggplot and tidyverse (for working with dates)
+
+If you find other packages are helpful add them here!
+
+```{r Load packages}
+library(tidyverse)
+```
+
+
+## Example for working with data 
+For this example we will show you how to read in both the FCR catwalk data from EDI and the L1 file 
+
+First we will get the catwalk data from EDI. To do this navigate to the EDI link for the catwalk and clink on the 'R' button at the bottom of the page. Then in the code section copy to the url from 'inUrl1' (note that some data packages may have multiple urls so check you're accessing the data you're interested in)
+
+We are going to read in the in the file using read.csv which is in base R. Then we are going to read in the data using read_csv, which is part of the tidyverse library. See if you can spot the difference between the two. 
+
+```{r Read in EDI data}
+#read in csv from EDI
+fcr_catwalk_edi <- read.csv("https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce")
+
+```
+
+## Look at the structure of the data 
+
+This argument tells you the number of observations or rows and the number of columns or variables. It also lists the column header, the type of data also know as data classes, and the first 4 rows for each column. 
+
+
+```{r structure of the data frame}
+
+str(fcr_catwalk_edi)
+
+```
+
+Read in the same data file using read_csv
+
+```{r Read_csv, eval=FALSE, include=FALSE}
+
+fcr_catwalk_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce")
+
+```
+Let's look at the data structure to determine the difference. 
+
+```{r}
+
+str(fcr_catwalk_edi)
+
+```
+
+What are the major differences? 
+
+I like using read_csv because it will usually convert my dates and times into the right format. 
+
+For more information on data types: https://intro2r.com/data-types.html
+
+Becareful that you read in your data frames the same way or else the column types won't be the same and they can not join together. 
+
+Next we will get the most recent L1 data from github
+
+```{r Read data from GitHub}
+#read in L1 csv from github
+fcr_catwalk_L1 <- read.csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
+
+```
+
+
+Next lets look at our data sets 
+
+```{r Data structure and header}
+
+# Let's look at the structure of our data again and make sure the data types line up
+
+str(fcr_catwalk_edi)
+str(fcr_catwalk_L1)
+
+#see first 6 rows of EDI
+head(fcr_catwalk_edi)
+#last 6 rows of EDI
+tail(fcr_catwalk_edi)
+#first 6 rows of L1
+head(fcr_catwalk_L1)
+#last 6 rows of L1
+tail(fcr_catwalk_edi)
+
+
+```
+
+Now we can see that both files have the same columns and don't have overlapping data so we can bind them together. We will use another argument in the tidyverse library. This one bind the columns for all for all the rows in both of the data columns. 
+
+```{r bind data frame}
+#bind L1 data to end of catwalk
+fcr_catwalk <- dplyr::bind_rows(fcr_catwalk_edi, fcr_catwalk_L1)
+```
+
+Now we have data from 2018 to present! 
+
+## Plotting 
+With this data set we can now explore the data! 
+
+We are going to use the ggplot package. We loaded this package in the tidyverse library. If you read the Description of the ggplot2 package it says : "A system for 'declaratively' creating graphics, based on "The Grammar of Graphics". You provide the data, tell 'ggplot2' how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details." 
+
+
+
+I find its helpful to pick a variable of interest and look at the timeseries to begin with. Lets chose specific conductance for now 
+
+```{r plot timeseries}
+#plot of specific conductance in FCR 
+fcr_catwalk |> # ' |> ' is the native R pipe as opposed to the tidyverse specific one %>% , either are fine to use
+  ggplot(aes(x = DateTime, y = EXOSpCond_uScm_1)) + # aes is the aesthetics. We want the x-axis to be the DateTime and the y-axis is the chosen variable.
+  geom_point() # This is how we want the data represented on the plot. These will be points. 
+  
+```
+
+So we have data! But its not very visually appealing or easy to tell whats happening is it? 
+
+One important thing to check is the format of your data (you may notice that the DateTimes are illegible, this is because they are in character format note datetime)
+
+So lets make this figure a little nicer!
+
+```{r plot time series with datetime fixed}
+fcr_catwalk |> 
+  mutate(DateTime = ymd_hms(DateTime)) |>  #convert DateTime from character to DateTime value
+  ggplot(aes(x = DateTime, y = EXOSpCond_uScm_1))+
+  geom_point()+
+  theme_classic()+ #change theme of plot (there's a lot of them to explore!)
+  labs(x = "Date", y = "Sp. Cond (uS/cm)", title = "Specific Conductance at FCR") #make labels and a title
+
+```
+
+
+CHALLENGE: whats up with those two points near 0 in 2024? why might this be the case and how would you handle these points? 
+
+Now let's choose another way to look at our data. Open the ggplot cheat sheet https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf and choose another geom
+
+```{r try with a line}
+
+fcr_catwalk |> 
+  mutate(DateTime = ymd_hms(DateTime)) |>  #convert DateTime from character to DateTime value
+  ggplot(aes(x = DateTime, y = EXOSpCond_uScm_1))+
+  geom_line()+
+  theme_classic()+ #change theme of plot (there's a lot of them to explore!)
+  labs(x = "Date", y = "Sp. Cond (uS/cm)", title = "Specific Conductance at FCR") #make labels and a title
+
+```
+
+
+## Data analysis 
+Now that we have a data set and some basic plots maybe we're curious about looking at some summary stats 
+
+Lets continue looking at Specific Conductance in FCR, and maybe we're curious about how it changes year to year
+
+Calculate the mean Specific conductance for each year of the data set
+
+```{r yearly summary}
+summary_fcr <- fcr_catwalk |> 
+  mutate(DateTime = ymd_hms(DateTime),
+         Year = year(DateTime)) |>   #change DateTime from a character and make a new column that is the year for each observation
+  group_by(Year) |> #group our Data by Year for subsequent calculations 
+  summarise(Sp_Cond = mean(EXOSpCond_uScm_1, na.rm = T)) #determine the mean Sp. Cond for each year
+
+# view the yearly means
+summary_fcr
+  
+```
+
+So now we have yearly Sp. Cond, cool! 
+
+Let's plot it so we can see how similar or different each year is 
+
+```{r plot just yearly sums}
+
+summary_fcr|>
+  ggplot(aes(x= as.factor(Year), y= Sp_Cond))+
+  geom_boxplot()+
+  theme_classic()
+
+```
+
+Oh no! What happened? We only have one point for each year. Let's try it another way
+
+```{r boxplot yearly sum}
+
+fcr_catwalk |>
+  mutate(DateTime = ymd_hms(DateTime),
+    Year = year(DateTime))|>
+  ggplot(aes(x=as.factor(Year), y=EXOSpCond_uScm_1))+ #needed to put year as a factor so everything in 2018 would be together
+  geom_boxplot()+
+  theme_classic()
+
+```
+
+
+
+CHALLENGE: Do you think its fair to compare 2018 and 2024 to the other years in this timeseries? If so why or why not? If not, how would you calculate the yearly means to not include this data? 
+
+
+## Make our plots pretty
+
+Once you have the plot you like, there are so many things you can change. The size of the text, the color of the plots, the x and y axis labels. You can add a title and many other things. 
+
+Here are some resources to check out on how to do it: http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/
+
+## Next steps
+You can either continue to explore the FCR catwalk (theres a ton of data in here!) Or you can search EDI for some other variables (we have data on: phytoplankton, zooplankton, greenhouse gases, nutrients, hydrology, metals, temperature, light, meteorology, and more!)
+
+## Bonus 
+
+Plotting variables at different depths on the same plot. Maybe you want to look at the temperature sensors or the greenhouse gas samples at the discreet depths in the reservoir. How would you do that?
+
+Make sure your data is in long format. This means that observations in your columns may repeat.(https://www.statology.org/long-vs-wide-data/).In my opinion, this makes it easier for plotting
+
+
+```{r pivot longer}
+
+fcr_temp <- fcr_catwalk |>
+  select(DateTime, starts_with("Thermistor"))|>
+  # we want to keep DateTime in it's own column
+  pivot_longer(!DateTime, names_to = "sensor", values_to = "observations")|>
+  # Let's clean up the names a little. We want to separate each section of the name into differnt columns
+  separate_wider_delim(sensor, "_", names = c("sensor", "units", "depth_m"))|>
+  #surface doesn't tell us much for a depth so let's replace it with 0.1
+  mutate(depth_m = ifelse(depth_m=="surface", 0.1, depth_m)) # if in the depth_m column you see "surface" replace it with 0.1, else leave the value that was there 
+
+# Let's look at the data frame
+fcr_temp
+```
+
+Now let's plot
+
+```{r data with multiple depths}
+
+fcr_temp |>
+  filter(DateTime>as.Date("2024-01-01")) |> # This is a lot of data so let's just look at 2024
+  ggplot(aes(x=DateTime, y= observations, col=as.factor(depth_m)))+
+  geom_point()+
+  theme_classic()
+
+# this is a lot of data points! 
+
+```
+
+
+
+

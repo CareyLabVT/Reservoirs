@@ -29,7 +29,8 @@ last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 # 7. Save files
 
 
-source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R')
+#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R')
+source('./Scripts/L1_functions/metals_create.R')
 
 ## Run Function 
 metals_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",

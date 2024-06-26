@@ -388,11 +388,12 @@ if(!is.null(end_date)){
 # save the file or if Null return the file
 
 if(is.null(out_file)){
-  
-  write.csv(fp_final, out_file, row.names = FALSE)
+
+   return(fp_final)
+
 }else{
   
-  return(fp_final)
+    write.csv(fp_final, out_file, row.names = FALSE)
 }
 
 

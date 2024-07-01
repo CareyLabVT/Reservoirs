@@ -258,8 +258,6 @@ ysi <- update_profiles |>
 
 ## FINAL GENERAL QAQC ##
 
-#change all ccr site 100 to 101
-ysi$Site[ysi$Reservoir=="CCR" & ysi$Site==100] <- 101
 
 #add a 5 flag for all pH values between 4 and 5 from past years
 ysi$Flag_pH[!is.na(ysi$pH) & ysi$pH < 5] <- 5

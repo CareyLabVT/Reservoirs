@@ -153,7 +153,7 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
 
 ## Set the start_date from EDI package. This needs to be updated when new data packages are updated. 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-package_ID <- 'edi.202.10'
+package_ID <- 'edi.202.12'
 eml <- read_metadata(package_ID)
 date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
 last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)

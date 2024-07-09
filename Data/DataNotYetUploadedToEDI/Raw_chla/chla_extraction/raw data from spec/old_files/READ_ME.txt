@@ -1,0 +1,1 @@
+These files are old chla files that don't have enough information to be used in the current script to calculate chla. All of these observations are included in the raw file XXXX.

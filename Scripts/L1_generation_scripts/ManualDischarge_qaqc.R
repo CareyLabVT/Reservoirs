@@ -4,11 +4,12 @@ library(tidyverse)
 library(gsheet)
 
 
-ManualDischarge_qaqc <- function(gsheet_url = gsheet_url,
-                                 maintenance_file = maintenance_file){
+ManualDischarge_qaqc <- function(gsheet_url,
+                                 maintenance_file,
+                                output_file){
   
 #read in and format data
-gsheet_url <- gsheet_url
+#gsheet_url <- gsheet_url
 discharge_df <- gsheet::gsheet2tbl(gsheet_url)
 
 discharge_df$DateTime = lubridate::parse_date_time(discharge_df$Date, orders = c('ymd HMS','ymd HM','ymd','mdy'))
@@ -146,16 +147,20 @@ for(i in 1:nrow(log)){
 #### END MAINTENANCE LOG CODE #####
 
 #write L1 data csv
-write.csv(final_Q, './Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv', row.names = FALSE)
+write.csv(final_Q, output_file, row.names = FALSE)
 
 #write maint log as csv to data publishing folder
-write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_Maintenance_Log.csv', row.names = FALSE)
+# Don't need to save the maintenance log here 
+#write.csv(log, './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_Maintenance_Log.csv', row.names = FALSE)
 
 
 }
 
 ## Run function
-gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0Wv_duW33bYS81PHY6o/edit#gid=0'
+gsheet_url <- 'https://docs.google.com/spreadsheets/d/1niKKxyHLZfqnJEZ93nu49yCn0Wv_duW33bYS81PHY6o'
 maintenance_file <- "./Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
+output <- './Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_L1.csv'
 
-ManualDischarge_qaqc(gsheet_url = gsheet_url, maintenance_file = maintenance_file)
+ManualDischarge_qaqc(gsheet_url = gsheet_url, 
+                     maintenance_file = maintenance_file, 
+                     output_file=output)

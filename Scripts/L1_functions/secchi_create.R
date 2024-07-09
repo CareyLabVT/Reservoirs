@@ -2,16 +2,20 @@
 # QAQC of Secchi data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-01-11
+# Last edited: 2024-07-03
 
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate,
                dplyr, EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
 
-secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile){
 
-  #gsheet_url <- 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
+secchi_qaqc <- function(data_file, 
+                        gsheet_data = TRUE, 
+                        maintenance_file = NULL, 
+                        outfile, 
+                        start_date = NULL,
+                        end_date = NULL){
 
   if(is.character(data_file) & gsheet_data == FALSE){
     # read catwalk data and maintenance log
@@ -33,22 +37,44 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   #secchi_df$Notes <- as.character(secchi_df$Notes)
 
 
-  # fix dates
-  secchi_df$DateTime = lubridate::parse_date_time(secchi_df$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy'))
-  #secchi_df$DateTime <- as.POSIXct(strptime(secchi_df$DateTime, "%Y-%m-%d %H:%M"), tz = 'America/New_York') ## need to fix dates that don't have timestamp
-  secchi_df$Flag_DateTime <- NA
+  # fix dates and set the timezone
+  secchi_df$DateTime = lubridate::parse_date_time(secchi_df$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM'))
+  secchi_df$DateTime <- force_tz(as.POSIXct(secchi_df$DateTime), tzone = "America/New_York") ## need to fix dates that don't have timestamp
+  secchi_df$Flag_DateTime <- 0
+  
+  # filter so you just have current data
+  
+  #force tz check 
+  
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    #force tz check 
+    start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+    
+    secchi_df <- secchi_df %>% 
+      filter(DateTime >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    #force tz check 
+    end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+    
+    secchi_df <- secchi_df %>% 
+      filter(DateTime <= end_date)
+  }
 
   ## fill in any missing datetimes with noon
   secchi_df <- secchi_df %>%
     mutate(Time = format(DateTime,"%H:%M:%S"),
-           Time = ifelse(Time == "00:00:00", "12:00:00",Time),
+           #Time = ifelse(Time == "00:00:00", "12:00:00",Time),
            Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
            Date = as.Date(DateTime),
-           DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"),
-           Hours = hour(DateTime),
-           DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
-           DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
-    select(-c(Time, Date, Hours))
+           DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"))%>%
+  # leaving the night secchi's in
+           # Hours = hour(DateTime),
+           # DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
+           # DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
+    select(-c(Time, Date, Notes))
 
   # secchi_reformat <- secchi_df |>
   #   rename(Flag_Secchi_m = Flag_Secchi)
@@ -60,9 +86,9 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
     select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi_m) |>    # Arrange order of columns for final data table
     arrange(Reservoir, DateTime, .by_group = TRUE )
 
-  secchi_reformat[is.na(secchi_reformat)] <- 0
+  #secchi_reformat[is.na(secchi_reformat)] <- 0
 
-  secchi_reformat <- as.data.frame(secchi_reformat)
+  #secchi_reformat <- as.data.frame(secchi_reformat)
 
 
   # ## CHECK FOR DUPLICATES
@@ -75,18 +101,41 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
   #   print('DUPLICATE DATA FOUND')
   # }
 
-  if(!is.null(maintenance_file)){ # only run this file if the maint file arugment is non-null
+  if(!is.null(maintenance_file)){ # only run this file if the maint file argument is non-null
 
   # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
     log_read <- read_csv(maintenance_file, col_types = cols(
       .default = col_character(),
-      TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
-      TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+      #TIMESTAMP_start = col_datetime("%Y-%m-%d %H:%M:%S%*"),
+      #TIMESTAMP_end = col_datetime("%Y-%m-%d %H:%M:%S%*"),
       flag = col_integer()
     ))
 
-  log <- log_read
-
+  log <- log_read%>%
+    # parse datetime depending on the format it is in
+    mutate(
+    TIMESTAMP_start =  lubridate::parse_date_time(TIMESTAMP_start, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
+    TIMESTAMP_end = lubridate::parse_date_time(TIMESTAMP_end, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM'))
+    )
+  
+  # subset the maintenance log if there are defined start and end times
+  if (!is.null(start_date)){
+    
+    log <- log %>% 
+      filter(TIMESTAMP_start <= end_date)
+  }
+  
+  if(!is.null(end_date)){
+    
+    log <- log %>% 
+      filter(TIMESTAMP_end >= start_date)
+  }
+  
+  ## filter maintenance log is there are star
+  if(nrow(log)==0){
+    print('No Maintenance Events Found...')
+    
+  } else {
     for(i in 1:nrow(log)){
       ### Assign variables based on lines in the maintenance log.
 
@@ -140,21 +189,27 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
       ### This is where information in the maintenance log gets updated
 
       if(flag %in% c(1) & colname_start != 'Site'){ ## UPDATE THIS WITH ANY NEW FLAGS
-        # UPDATE THE MANUAL ISSUE FLAGS (BAD SAMPLE / USER ERROR) AND SET TO NEW VALUE
+        
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime  &
                           secchi_reformat$Site %in% c(Site_temp) & 
                           secchi_reformat$Reservoir %in% c(Reservoir), maintenance_cols] <- NA
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
                           secchi_reformat$Site %in% c(Site_temp) & 
                           secchi_reformat$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
+        
+      }else if (flag %in% c(2)){
+        # value is suspect
+        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
+                          secchi_reformat$Site %in% c(Site_temp) & 
+                          secchi_reformat$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
 
-      } else if (flag %in% c(2) & colname_start == 'Site'){
+      } else if (flag %in% c(3) & colname_start == 'Site'){
         ## this fixes site issues for now -- no flag shown in data
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
                           secchi_reformat$Site %in% c(Site_temp) & 
                           secchi_reformat$Reservoir %in% c(Reservoir), maintenance_cols] <- update_value
 
-      } else if (flag %in% c(2) & colname_start != 'Site'){
+      } else if (flag %in% c(3) & colname_start != 'Site'){
         ## this fixes digitizing issues and adds a flag
         secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
                           secchi_reformat$Site %in% c(Site_temp) & 
@@ -163,11 +218,7 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
                           secchi_reformat$Site %in% c(Site_temp) & 
                           secchi_reformat$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
 
-      }else if (flag %in% c(3)){
-        # value is suspect
-        secchi_reformat[secchi_reformat$DateTime %in% Time$DateTime &
-                          secchi_reformat$Site %in% c(Site_temp) & 
-                          secchi_reformat$Reservoir %in% c(Reservoir), paste0("Flag_",maintenance_cols)] <- flag
+      
 
       }else if (flag %in% c(4)){
         # to be deleted
@@ -176,10 +227,10 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
                                                                   secchi_reformat$Site %in% Site_temp)),]
       }else{
         warning("Flag not coded in the L1 script. See Austin or Adrienne")
-      }
-    } # end for loop
-  } #end conditional statement
-
+        }
+      } # end for loop
+    } #end conditional statement
+  }
   # #### END MAINTENANCE LOG CODE #####
 
   ## CHECK FOR DUPLICATES
@@ -208,7 +259,12 @@ secchi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile
 
   if (!is.null(outfile)){
     # Write to CSV -- save as L1 file
-    write.csv(secchi_reformat, outfile, row.names = FALSE)
+    
+    # format datetime as a character
+    
+    secchi_reformat$DateTime <- as.character(format(secchi_reformat$DateTime)) # convert DateTime to character
+    
+    write_csv(secchi_reformat, outfile)
   }
 
   return(secchi_reformat)

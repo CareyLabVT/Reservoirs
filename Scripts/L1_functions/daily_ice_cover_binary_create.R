@@ -9,7 +9,7 @@
 
 ## current and historic = catwalk
 
-target_IceTransition_binary <- function(current_file, historic_wq_file, historic_file){
+daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file, maint_log = NULL, ice_site){
   
   ## read in current data file
   # Github, Googlesheet, etc.
@@ -126,7 +126,7 @@ target_IceTransition_binary <- function(current_file, historic_wq_file, historic
     ungroup() |> 
     distinct(site_id, datetime, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, ice_presence) |> 
-    dplyr::filter(Method = 'T')
+    dplyr::mutate(Method = 'T')
     #dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
     # dplyr::mutate(Site = 50, 
     #               Year = lubridate::year(datetime), 
@@ -165,7 +165,27 @@ target_IceTransition_binary <- function(current_file, historic_wq_file, historic
     dplyr::mutate(Reservoir = ifelse(is.na(Reservoir), reservoir_name, Reservoir), 
                   site_id = ifelse(is.na(site_id), site_identifier, site_id), 
                   ice_presence = ifelse(is.na(ice_presence), 0, ice_presence), 
-                  Method = ifelse(is.na(Method), 'Default', Method))
+                  Method = ifelse(is.na(Method), 'T', Method), 
+                  Flag = 0) |> 
+    dplyr::rename(Date = datetime)
+  
+  
+  if(!is.null(maint_log)){ # only run this file if the maint file argument is non-null
+    
+    # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
+    
+    log_read <- gsheet::gsheet2tbl(maint_log) |> 
+      filter(Reservoir == ice_site) |> 
+      select(Reservoir, Date = DateTime, Maint_Ice_Presence = Ice_Presence, Flag_Ice_Presence)
+    
+    daily_ice_df <- daily_ice_df |> 
+      full_join(log_read, by = c('Date', 'Reservoir')) |> 
+      dplyr::mutate(ice_presence = ifelse((!is.na(Maint_Ice_Presence) & (ice_presence != Maint_Ice_Presence)), Maint_Ice_Presence, ice_presence),
+                    Method = ifelse(!is.na(Maint_Ice_Presence), 'V', Method),
+                    Flag = ifelse(is.na(Flag_Ice_Presence), 0, Flag_Ice_Presence)) |> 
+      select(-Maint_Ice_Presence, -Flag_Ice_Presence)
+    
+  }
   
   message('EDI file ready')
   
@@ -199,7 +219,7 @@ target_IceTransition_binary <- function(current_file, historic_wq_file, historic
   # for hourly
   
   ## return dataframe formatted to match FLARE targets
-  return(combined_df)
+  return(daily_ice_df)
 }
 
 current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
@@ -208,17 +228,22 @@ current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/b
 historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
                        'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
 
-historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151",
-                        "https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
+historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
+
+ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
 
 
-bvr_ice_data <- target_IceTransition_binary(current_file = current_files[1], 
+bvr_ice_data <- daily_ice_cover_binary(current_file = current_files[1], 
                                             historic_wq_file = historic_wq_files[1], 
-                                            historic_file = historic_ice_files[1])
+                                            historic_file = historic_ice_files,
+                                       maint_log = NULL, 
+                                       ice_site = 'BVR')
 
-fcr_ice_data <- target_IceTransition_binary(current_file = current_files[2], 
+fcr_ice_data <- daily_ice_cover_binary(current_file = current_files[2], 
                                             historic_wq_file = historic_wq_files[2], 
-                                            historic_file = historic_ice_files[2])
+                                            historic_file = historic_ice_files,
+                                       maint_log = ice_maintenance_log, 
+                                       ice_site = 'FCR')
 
 combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data)
 

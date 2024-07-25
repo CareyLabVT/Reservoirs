@@ -1,3 +1,8 @@
+##Load Sed Trap Filtering Logs
+##Author: Cece Wood
+##Date edited: 25 June 2024
+##Edited by: Carly Bauer
+
 #load all the libraries first
 rm(list=ls(all=TRUE))
 library(dplyr)
@@ -7,68 +12,68 @@ library(lubridate)
 library(stringr)
 
 ###
-# 2022 data
+# 2023 data
 ###
 
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("~/Documents/GitHub/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
-filteringlog <- read_excel('2022_SedTraps_FilteringLog.xlsx')
+setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
+filteringlog <- read_excel("2023_FilteringLog_EDI.xlsx") 
 log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")
 log_2019 <- read_excel("2019_FilteringLog_EDI.xlsx")
 log_2020 <- read_excel("2020_FilteringLog_EDI.xlsx")
 log_2021 <- read_excel("2021_FilteringLog_EDI.xlsx")
+log_2022 <- read_excel("2022_FilteringLog_EDI.xlsx")
 
 filteringlog = filteringlog%>%
-  rbind(log_2018)%>%
-  rbind(log_2019)%>%
-  rbind(log_2020)%>%
-  rbind(log_2021)
+  full_join(log_2018)%>%
+  full_join(log_2019)%>%
+  full_join(log_2020)%>%
+  full_join(log_2021) %>% 
+  full_join(log_2022)
 
 #create first data frame
-frame1 <- select(filteringlog, Sample_ID, Volume_filtered_mL, Volume_discarded_mL, 
-                 Filter_mass_pre_filtering_g, Filter_mass_post_filtering_g, Mass_of_sediment_g, Duration_days)
+frame1 <- select(filteringlog, FilterID, FilterVol_L, VolDiscarded_L, 
+                 FilterMassPre_g, FilterMassPost_g, SedMass_g, Duration_days)
 
-  #let's make the right columns
-
-    #Reservoir
+#let's make the right columns
+#Reservoir
 frame1 <- frame1 %>% 
-  mutate(Reservoir = ifelse(substring(frame1$Sample_ID, 1,1) == 'F','FCR',NA),
-        Reservoir = ifelse(substring(frame1$Sample_ID, 1,1) == 'B','BVR', Reservoir))
+  mutate(Reservoir = ifelse(substring(frame1$FilterID, 1,1) == 'F','FCR',NA),
+         Reservoir = ifelse(substring(frame1$FilterID, 1,1) == 'B','BVR', Reservoir))
 
-    #Date
-#frame1$Date <- as.Date(substring(frame1$Sample_ID, 16,22), format = '%d%b%y')
+#Date
 frame1 <- frame1 %>% 
-  mutate(Date = as.Date(as.character(str_extract(frame1$Sample_ID, '(?<=_)[:digit:]*[:alpha:]*[:digit:]*$')), format = '%d%b%y'))
-         
-    #Site
+  mutate(Date = as.Date(as.character(str_extract(frame1$FilterID, '(?<=_)[:digit:]*[:alpha:]*[:digit:]*$')), format = '%d%b%y'))
+
+#Site
 frame1$Site <- 50
 
-    #Depth_m
+#Depth_m
 frame1 <- frame1 %>% 
-  mutate(Depth_m = as.numeric(str_extract(frame1$Sample_ID, '(?<=_)[:digit:]+(?=m)')))
+  mutate(Depth_m = as.numeric(str_extract(frame1$FilterID, '(?<=_)[:digit:]+(?=m)')))
 
-    #TrapRep
+#TrapRep
 frame1 <- frame1 %>% 
-  mutate(TrapRep = as.numeric(str_extract(frame1$Sample_ID, '(?<=_R)[:digit:]+')))
+  mutate(TrapRep = as.numeric(str_extract(frame1$FilterID, '(?<=_R)[:digit:]+')))
 
-    #TrapXSA_m2
+#TrapXSA_m2
 frame1$TrapXSA_m2 <- 0.0040715
 
     #TrapVol_L
-frame1$TrapVol_L <- 2
+frame1$TrapVol_L <- 1.8
 
     #CollectionVol_L
 frame1 <- frame1 %>% 
-  mutate(Volume_discarded_mL = ifelse(year(Date)==2019&Date<"2019-09-15",NA,Volume_discarded_mL))%>% #Mistakes in filtering log before this point
+  mutate(VolDiscarded_L = ifelse(year(Date)==2019&Date<"2019-09-15",NA,VolDiscarded_L))%>% #Mistakes in filtering log before this point
   group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
-  mutate(CollectionVol_L = (sum(Volume_filtered_mL) + unique(Volume_discarded_mL))/1000) %>% 
+  mutate(CollectionVol_L = (sum(FilterVol_L) + mean(VolDiscarded_L))/1000) %>% # changed unique to mean because I was getting an error but may not be correct now
   ungroup()
 
     #FilterRep
 frame1 <- frame1 %>% 
-  mutate(FilterRep = as.numeric(str_extract(frame1$Sample_ID, '(?<=_F)[:digit:]+')))
+  mutate(FilterRep = as.numeric(str_extract(frame1$FilterID, '(?<=_F)[:digit:]+')))
 
     #make Volume_filtered column in correct units
 frame1 <- frame1 %>% 
@@ -79,21 +84,21 @@ frame1$Volume_filtered_L <- frame1$Volume_filtered_L/1000
 #reorder columns in the first data frame and rename. Prep for EDI publishing
 frame1 <- frame1 %>% 
   select(Reservoir, Date, Site, Duration_days, Depth_m, TrapRep, TrapXSA_m2, TrapVol_L, 
-  CollectionVol_L, FilterRep, Volume_filtered_L, Filter_mass_pre_filtering_g,
-  Filter_mass_post_filtering_g, Mass_of_sediment_g, Sample_ID)
+         CollectionVol_L, FilterRep, FilterVol_L, FilterMassPre_g,
+         FilterMassPost_g, SedMass_g, FilterID)
 
-frame1 <- frame1 %>% rename("FilterVol_L" = "Volume_filtered_L", 
-                            "FilterMassPre_g" = "Filter_mass_pre_filtering_g",
-                            "FilterMassPost_g" = "Filter_mass_post_filtering_g", 
-                            "SedMass_g" = "Mass_of_sediment_g", "FilterID" = "Sample_ID")
 
+# if collection volume is NA, flag it 2 because it wasn't calculated 
 frame1 = frame1%>%
   mutate(Flag_CollectionVol_L = ifelse(is.na(CollectionVol_L),2,1),
-         CollectionVol_L = ifelse(is.na(CollectionVol_L),1.7,CollectionVol_L),
+         CollectionVol_L = ifelse(is.na(CollectionVol_L),1.7,CollectionVol_L), # if NA, then changed to preset that abby and cece calculated, might need to change this
+                                                                               # might want to code something like in metals, ex: 3 std away flag it 
+                                                                               # 1.7 = average collection volume 
          
-         Flag_SedMass_g = ifelse(is.na(SedMass_g),2,1),
-         Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g),
-         SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g))
+         Flag_SedMass_g = ifelse(is.na(SedMass_g),2,1), # unsure exactly why would be NA, but flagging that it is NA
+         Flag_SedMass_g = ifelse(!is.na(SedMass_g)&SedMass_g<0,3,Flag_SedMass_g), # if neg, then flag as 3
+         SedMass_g = ifelse(SedMass_g<0,NA,SedMass_g)) # if neg, set to NA now that it's flagged
+
 
 #Some durations are unknown at the beginning of each year
 frame1 = frame1%>%

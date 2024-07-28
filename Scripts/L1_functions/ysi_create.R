@@ -9,7 +9,12 @@ pacman::p_load(tidyverse, lubridate, dplyr,
                 gsheet) ## Use pacman package to install/load other packages
 
 
-ysi_qaqc <- function(data_file, gsheet_data, maintenance_file = NULL, outfile){
+ysi_qaqc <- function(data_file, 
+                     gsheet_data = TRUE, 
+                     maintenance_file = NULL, 
+                     outfile,
+                    start_date = NULL,
+                    end_date = NULL){
 
   if(is.character(data_file) & gsheet_data == FALSE){
     # read catwalk data and maintenance log
@@ -33,6 +38,25 @@ raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders
 
 # remove notes column
 raw_profiles$Notes <- NULL
+
+
+  ### identify the date subsetting for the data
+  if (!is.null(start_date)){
+    #force tz check 
+    start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+    
+    raw_profiles <- raw_profiles %>% 
+      filter(DateTime >= start_date)
+  }
+  
+  if(!is.null(end_date)){
+    #force tz check 
+    end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+    
+    raw_profiles <- raw_profiles %>% 
+      filter(DateTime <= end_date)
+  }
+ 
 
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
@@ -101,6 +125,25 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
   ))
   
   log <- log_read
+
+  # subset the maintenance log if there are defined start and end times
+  if (!is.null(start_date)){
+    
+    log <- log %>% 
+      filter(TIMESTAMP_start <= end_date)
+  }
+  
+  if(!is.null(end_date)){
+    
+    log <- log %>% 
+      filter(TIMESTAMP_end >= start_date)
+  }
+  
+  ## filter maintenance log is there are star
+  if(nrow(log)==0){
+    print('No Maintenance Events Found...')
+    
+  } else {
   
   for(i in 1:nrow(log)){
     ### Assign variables based on lines in the maintenance log.
@@ -220,9 +263,10 @@ if (!is.null(maintenance_file)){ # check to see if maint log is non-null value
       
     }else{
       warning("Flag not coded in the L1 script. See Austin or Adrienne")
-    }
-  }#end for loop
-}#end conditional statement
+      }
+    }#end for loop
+  }#end conditional statement
+}
 
 #### END MAINTENANCE LOG CODE
 

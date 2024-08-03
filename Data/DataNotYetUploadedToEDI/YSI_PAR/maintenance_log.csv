@@ -1,5 +1,14 @@
 Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
 FCR,50,3.8,YSI,2016-06-06 11:45:00 EDT,2016-06-06 11:45:00 EDT,PAR_umolm2s,NA,5,NA,very high value just below the water
+FCR,50,0.1,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,0.8,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,1.6,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,2.8,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,3.8,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,5.0,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,6.2,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,8.0,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
+FCR,50,9.0,YSI, 2016-06-02 14:30:00 EDT, 2016-06-02 14:30:00 EDT, ORP_mV, NA, 5, NA, high values for profile
 FCR,200,0.1,YSI,2021-11-22 13:32:00 EST,2021-11-22 13:32:00 EST,DOsat_percent,NA,5,73.3,DO probe not calibrated
 FCR,100,0.1,YSI,2021-11-22 13:32:00 EST,2021-11-22 13:32:00 EST,DO_mgL,NA,5,10.05,DO probe not calibrated
 BVR,50,0.1,YSI,2023-10-31 10:30:00 EST,2023-10-31 10:30:00 EST,pH,NA,2,NA,pH probe broken

@@ -1,6 +1,6 @@
 Authorship Contribution Statement: 
 
-CCC developed and led the reservoir monitoring program. ABP was the point person for this data package, led the field crew, and contributed substantially to sampling in 2023. HLW led data publication and QAQC in 2023. ADD automated the datastream and developed the QAQC and visual inspection scripts. MK, ET, and RK contributed to fieldwork, data digitization, and field monitoring preparations in 2023.
+CCC developed and led the reservoir monitoring program. ABP was the point person for this data package, led the field crew, contributed substantially to sampling in 2023, and led an overhaul of the data in 2024. HLW led data publication and QAQC in 2023. ADD automated the datastream and developed the QAQC and visual inspection scripts. GH, MK, ET, and RK contributed to fieldwork, checking historical observations, data digitization, and field monitoring preparations in 2023.
 
 Acknowledgments and historical contributions:
 

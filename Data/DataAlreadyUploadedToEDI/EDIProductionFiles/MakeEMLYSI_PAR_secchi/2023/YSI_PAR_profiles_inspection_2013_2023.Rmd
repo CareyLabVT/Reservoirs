@@ -475,8 +475,8 @@ ggplotly(a)
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_PAR_profiles_maintenancelog_2013_2023.csv")
 
-# qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2013_2023.R")
+d# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2023_2023.R")
 ```
 
 ```{r Site description, eval=FALSE, include=FALSE}

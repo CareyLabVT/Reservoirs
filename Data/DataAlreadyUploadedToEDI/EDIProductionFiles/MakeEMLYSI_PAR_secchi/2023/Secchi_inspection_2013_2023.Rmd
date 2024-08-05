@@ -1,6 +1,6 @@
 ---
 title: "Secchi_inspection_2013_2023"
-author: "Austin Delany"
+author: "Austin Delany and Adrienne Breef-Pilz"
 date: "2023-12-08"
 edit: "2024-07-03"
 output: html_document
@@ -30,19 +30,19 @@ current_time_end= ymd_hms("2023-12-31 23:59:00", tz = "America/New_York")
 ```
 
 
-```{r Create the file for EDI, include=FALSE}
+```{r Create the file for EDI, eval=FALSE, include=FALSE}
 
-#source L1 function to run all data through QAQC process
-#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
-source("../../../../../../Scripts/L1_functions/secchi_create.R")
-
-# read in the Google sheet with all of the observations and QAQC them 
-current_df <- secchi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1KKBBWJo8vHUGsdt2ybF_kdqAy7mKHQi2Vi6qCmJXiJ4',
-            gsheet_data = TRUE,
-            maintenance_file = "../../../../../DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
-            outfile = NULL, 
-            start_date = as.Date("2013-01-01"),
-            end_date = as.Date(current_time_end))
+# #source L1 function to run all data through QAQC process
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
+# 
+# 
+# # read in the Google sheet with all of the observations and QAQC them 
+# current_df <- secchi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1KKBBWJo8vHUGsdt2ybF_kdqAy7mKHQi2Vi6qCmJXiJ4',
+#             gsheet_data = TRUE,
+#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+#             outfile = NULL, 
+#             start_date = as.Date("2013-01-01"),
+#             end_date = as.Date(current_time_end))
 
 ```
 
@@ -56,10 +56,10 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
                                                                    ### CHANGE THIS NUMBER BELOW 
                                                                               ##      
-   # current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/ea78dd541e089687af1f4c4b550bc9ca")
- # 
- # # Force files from EDI to have an EST timestamp
-   # current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
+ current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/ea78dd541e089687af1f4c4b550bc9ca")
+
+ # Force files from EDI to have an EST timestamp
+ current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
 
 ```
 
@@ -71,7 +71,7 @@ This section identifies if there are any duplicates. If there are duplicates. Lo
 ### Are there any duplicates?
 
 
-```{r Check for dups, include=FALSE}
+```{r Check for dups, echo=FALSE}
 
 # Make sure there are no duplicated observations.
 # Print them if there are
@@ -105,7 +105,7 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  3: value changed through the maintenance log
  
  
-```{r Check out the flags, include=FALSE}
+```{r Check out the flags, echo=FALSE}
 
 #make sure no NAS in the Flag columns
 Flags <- current_df%>%
@@ -133,8 +133,8 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv("../../../../../DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
-   #"https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv",
+ maint <- read_csv(#"../../../../../DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+   "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
                     show_col_types = FALSE)
 
 # parse datetime depending on the format it is in
@@ -159,7 +159,7 @@ Look at the first few rows of the data frame and check that the observations aft
 
 #### Look at the first 5 rows for that time
 
-```{r Did the maint log work head, message=FALSE, warning=FALSE, include=FALSE}
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
 # get the last row of the data file
 last_row <- tail(sd, n=1)
 
@@ -219,7 +219,7 @@ secchi_long <- current_df %>%
 ```
 
 
-```{r Plot range, include=FALSE}
+```{r Plot range, echo=FALSE}
 # Plot range of values per year for each reservoir; 
 # annual mean value indicated with large black dot
 ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
@@ -244,7 +244,7 @@ ggplot(secchi_long, aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
 #ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_months.jpg"),width=3.5, height=4)
 ```
 
-```{r DOY plot, include=FALSE}
+```{r DOY plot, echo=FALSE}
 # Time series for each reservoir by julian day (see interannual varaibility)
 #jpeg("Secchi_JulianDay.jpg", width = 6, height = 5, units = "in",res = 300)
 ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
@@ -257,7 +257,7 @@ ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
 #ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_JulianDay.jpg"),width=3.5, height=4)
 ```
 
-```{r current plot, include=FALSE}
+```{r current plot, echo=FALSE}
 #look at 2023 secchi
 a <- ggplot(data = subset(secchi_long, year(DateTime) %in% c(2023)), 
        aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
@@ -274,23 +274,23 @@ ggplotly(a)
 ```
 
 
-```{r save the data}
+```{r save the data, eval=FALSE, include=FALSE}
 
-# convert DateTime to character
-current_df$DateTime <- as.character(format(current_df$DateTime)) 
-    
-
-write_csv(current_df, 'secchi_depth_2013_2023.csv')
-
-#list.files()
+# # convert DateTime to character
+# current_df$DateTime <- as.character(format(current_df$DateTime)) 
+#     
+# 
+# write_csv(current_df, 'secchi_2013_2023.csv')
+# 
+# #list.files()
 
 ```
 
-```{r Save maintlog and function, eval=FALSE, include=FALSE}
+```{r Save maintlog and function, include=FALSE}
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Data/Secchi_depth_maintenancelog_2013_2023.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "secchi_maintenancelog_2013_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_Secchi/2023/Data/Secchi_qaqc_2023_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "secchi_qaqc_2013_2023.R")
 ```
 

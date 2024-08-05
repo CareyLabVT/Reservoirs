@@ -1,0 +1,10 @@
+attributeName	code	definition
+DataStream	Secchi	data stream
+Reservoir	BVR	Beaverdam Reservoir
+end_parameter	Flag_Secchi_m	end parameter
+end_parameter	NA	end parameter
+start_parameter	Reservoir	start parameter
+start_parameter	Secchi_m	start parameter
+flag	2	digitizing error
+flag	3	suspect value
+flag	4	internally removed due to issues

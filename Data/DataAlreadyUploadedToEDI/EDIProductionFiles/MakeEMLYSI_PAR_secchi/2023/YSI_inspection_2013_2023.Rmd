@@ -1,5 +1,5 @@
 ---
-title: "YSI_inspection_2013_2023"
+title: "YSI PAR inspection 2013_2023"
 author: "Austin Delany and Adrienne Breef-Pilz"
 date: "2023-12-08"
 edit: "2024-07-29"
@@ -7,11 +7,20 @@ output: html_document
 ---
 
 This script is the data visualization script that:
-1) reads in YSI data from the most recent year (current_file)
-2) reads in YSI data from the most recent EDI data publication (historic_file)
-3) combines the current and historic data
-4) reprocesses historic data using the L1 qaqc script
-5) generates figures to visualize both this past year and all combined years of data
+1) Makes QAQC file of all YSI and PAR data from a digitized google sheet
+2) Checks to make sure there are no duplicate in the file
+3) Look at the sites in the file
+4) Make sure we don't have observations deeper than the reservoirs
+5) Makes sure the maintenance log is working
+6) generates figures to visualize both this past year and all combined years of data
+7) Save the final EDI file
+8) Downloads the qaqc function and the maintenance log for publication
+9) Make a site description file 
+
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "QAQC file or READ IN EDI FOR REVIEWER". Make sure to comment out "Create the file for EDI" section. In addition, make sure eval=FALSE is in the chunk header for "Create the file for EDI", "Make current csv" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+When you are making the data frame make sure all of the files that you uncomment "Create the file for EDI", "save the data", and "save maintlog and function". In the top of each chunk, make sure eval=TRUE. Turn off the review chunk. 
 
 
 ```{r setup packages, include=FALSE}
@@ -26,40 +35,40 @@ current_time_start=ymd_hms("2023-01-01 00:00:00", tz = "America/New_York")
 current_time_end= ymd_hms("2023-12-31 23:59:00", tz = "America/New_York")
 ```
 
-```{r Create the file for EDI, include=FALSE}
+```{r Create the file for EDI, eval=FALSE, include=FALSE}
 
-#source L1 function to run all data through QAQC process
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
-#source("../../../../../../Scripts/L1_functions/secchi_create.R")
-
-# read in the Google sheet with all of the observations and QAQC them 
-current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
-            gsheet_data = TRUE,
-            maintenance_file = "../../../../DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
-            outfile = NULL, 
-            start_date = as.Date("2013-01-01"),
-            end_date = as.Date(current_time_end))
+# #source L1 function to run all data through QAQC process
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
+# 
+# 
+# # read in the Google sheet with all of the observations and QAQC them
+# current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
+#             gsheet_data = TRUE,
+#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
+#             outfile = NULL,
+#             start_date = as.Date("2013-01-01"),
+#             end_date = as.Date(current_time_end))
 
 ```
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
 
-```{r READ IN EDI FOR REVIEWER, include=FALSE}
+```{r READ IN EDI FOR REVIEWER, eval=TRUE, include=FALSE}
   
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
   
   
-                                                                   ### CHANGE THIS NUMBER BELOW 
+                                                                   ### CHANGE THIS BELOW 
                                                                               ##      
-   # current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/ea78dd541e089687af1f4c4b550bc9ca")
- # 
- # # Force files from EDI to have an EST timestamp
-   # current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
+ current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/ea78dd541e089687af1f4c4b550bc9ca")
+
+ # Force files from EDI to have an Daylight savings observed timestamp
+ current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
 
 ```
 
-## Check for duplicates and  gaps in the data frame
+## Check for duplicates and gaps in the data frame
 
 This section identifies if there are any duplicates. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function to see how they were missed. 
 
@@ -67,7 +76,7 @@ This section identifies if there are any duplicates. If there are duplicates. Lo
 ### Are there any duplicates?
 
 
-```{r Check for dups, include=FALSE}
+```{r Check for dups, echo=FALSE}
 
 # Make sure there are no duplicated observations.
 # Print them if there are
@@ -109,7 +118,7 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  7 - TEMP MEASURED USING PH PROBE
  
  
-```{r Check out the flags, include=FALSE}
+```{r Check out the flags, echo=FALSE}
 
 #make sure no NAS in the Flag columns
 Flags <- current_df%>%
@@ -137,9 +146,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv("../../../../DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
-   #"https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv",
-                    show_col_types = FALSE)
+ maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", show_col_types = FALSE)
 
 # parse datetime depending on the format it is in
  maint <- maint |>
@@ -378,34 +385,6 @@ ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y
 ```
 
 
-```{r eval=FALSE, include=FALSE}
-
-# Look at a timeseries of every variable from every site for all observations and just the current year
-
-# mylist <- list()
-# 
-# for(d in colnames(current_df%>%select(Temp_C:pH))){
-#   
-#   var <- sym(d)
-#   
-#   sd <- 
-#     current_df|>
-#     filter(Site==50)%>%
-#     ggplot(.,aes(x= DateTime, y=.data[[d]], color=Depth_m))+
-#     geom_point()+
-#     facet_grid(Reservoir~., scales="free")+
-#     scale_color_gradient("Depth (m)", high = "black", low = "darkgreen")
-#     theme_bw()
-#   
-#    mylist[[d]] <- sd
-# }
-# 
-# 
-# mylist[[3]]
-
-```
-
-
 ## Current Profiles
 
 Let's look at the profiles at the Reservoirs at each of the sites. These plots are created by ggplotly so they are interactive. If you hover over the point you will see when it was collected. This helps for qaqc. 
@@ -475,20 +454,20 @@ ggplotly(a)
 ```
 
 
-```{r save the data, include=FALSE}
+```{r save the data, eval=FALSE, include=FALSE}
 
-#drop rows with NAs across all variables
-profiles_cleaned <- current_df |> 
-  filter(!if_all(c(Temp_C:pH), is.na))
+# #drop rows with NAs across all variables
+# profiles_cleaned <- current_df |>
+#   filter(!if_all(c(Temp_C:pH), is.na))
 
 
 # convert DateTime to character
-profiles_cleaned$DateTime <- as.character(format(profiles_cleaned$DateTime)) 
-    
+# current_df$DateTime <- as.character(format(current_df$DateTime))
+# 
+# 
+# write_csv(current_df, 'YSI_PAR_profiles_2013_2023.csv')
 
-write_csv(profiles_cleaned, 'YSI_PAR_profiles_2013_2023.csv')
-
-#list.files()
+# #list.files()
 
 ```
 
@@ -497,6 +476,26 @@ write_csv(profiles_cleaned, 'YSI_PAR_profiles_2013_2023.csv')
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_PAR_profiles_maintenancelog_2013_2023.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2023_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2013_2023.R")
+```
+
+```{r Site description, eval=FALSE, include=FALSE}
+
+# These lines of code make the csv of the site descriptions with lat and long
+# Use Gsheet because you don't need to authenticate it.
+ sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
+ #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+ data <- current_df #This is the line you need to modify!
+ trim_sites = function(data,sites){
+   data_res_site=data%>% #Create a Reservoir/Site combo column
+     mutate(res_site = trimws(paste0(Reservoir,Site)))
+   sites_merged = sites%>% #Filter to Sites that are in the dataframe
+     mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+     filter(res_site%in%data_res_site$res_site)%>%
+     select(-res_site)
+ }
+ sites_trimmed = trim_sites(data,sites)
+ write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
 ```
 

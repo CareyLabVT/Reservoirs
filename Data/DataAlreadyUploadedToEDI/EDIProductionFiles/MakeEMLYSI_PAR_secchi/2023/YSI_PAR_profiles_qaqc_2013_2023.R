@@ -2,7 +2,7 @@
 # QAQC of YSI and PAR data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-07-27 updated the range for flagging and changed dates to include all overnight sampling
+# Last edited: 2024-08-05 changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate, dplyr,
@@ -78,7 +78,7 @@ raw_profiles <- raw_profiles %>%
          #Time = ifelse(Time == "00:00:00", "12:00:00",Time),
          Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
          #just need to catch some of the old data that didn't properly get flagged
-         Date = as.Date(DateTime),
+         Date = as.Date.character(DateTime),
          DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"))|>
          # Hours = hour(DateTime),
          # DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time

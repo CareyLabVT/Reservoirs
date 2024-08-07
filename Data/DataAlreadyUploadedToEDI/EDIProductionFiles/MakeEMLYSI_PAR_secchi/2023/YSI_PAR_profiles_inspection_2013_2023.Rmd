@@ -456,12 +456,8 @@ ggplotly(a)
 
 ```{r save the data, eval=FALSE, include=FALSE}
 
-# #drop rows with NAs across all variables
-# profiles_cleaned <- current_df |>
-#   filter(!if_all(c(Temp_C:pH), is.na))
-
-
-# convert DateTime to character
+# 
+# # convert DateTime to character
 # current_df$DateTime <- as.character(format(current_df$DateTime))
 # 
 # 
@@ -476,26 +472,26 @@ ggplotly(a)
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_PAR_profiles_maintenancelog_2013_2023.csv")
 
 d# qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2023_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2013_2023.R")
 ```
 
 ```{r Site description, eval=FALSE, include=FALSE}
 
-# These lines of code make the csv of the site descriptions with lat and long
-# Use Gsheet because you don't need to authenticate it.
- sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
- #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
- data <- current_df #This is the line you need to modify!
- trim_sites = function(data,sites){
-   data_res_site=data%>% #Create a Reservoir/Site combo column
-     mutate(res_site = trimws(paste0(Reservoir,Site)))
-   sites_merged = sites%>% #Filter to Sites that are in the dataframe
-     mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-     filter(res_site%in%data_res_site$res_site)%>%
-     select(-res_site)
- }
- sites_trimmed = trim_sites(data,sites)
- write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+# # These lines of code make the csv of the site descriptions with lat and long
+# # Use Gsheet because you don't need to authenticate it.
+#  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
+#  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+#  data <- current_df #This is the line you need to modify!
+#  trim_sites = function(data,sites){
+#    data_res_site=data%>% #Create a Reservoir/Site combo column
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))
+#    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+#      filter(res_site%in%data_res_site$res_site)%>%
+#      select(-res_site)
+#  }
+#  sites_trimmed = trim_sites(data,sites)
+#  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
 
 ```
 

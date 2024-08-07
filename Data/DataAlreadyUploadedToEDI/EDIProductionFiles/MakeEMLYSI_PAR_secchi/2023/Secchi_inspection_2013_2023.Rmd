@@ -30,17 +30,17 @@ current_time_end= ymd_hms("2023-12-31 23:59:00", tz = "America/New_York")
 ```
 
 
-```{r Create the file for EDI, eval=FALSE, include=FALSE}
+```{r Create the file for EDI, eval = FALSE, include=FALSE}
 
 # #source L1 function to run all data through QAQC process
 # source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
 # 
 # 
-# # read in the Google sheet with all of the observations and QAQC them 
+# # read in the Google sheet with all of the observations and QAQC them
 # current_df <- secchi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1KKBBWJo8vHUGsdt2ybF_kdqAy7mKHQi2Vi6qCmJXiJ4',
 #             gsheet_data = TRUE,
 #             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
-#             outfile = NULL, 
+#             outfile = NULL,
 #             start_date = as.Date("2013-01-01"),
 #             end_date = as.Date(current_time_end))
 
@@ -52,10 +52,10 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
   
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
-  
-  
-                                                                   ### CHANGE THIS NUMBER BELOW 
-                                                                              ##      
+
+
+                                                                   ### CHANGE THIS NUMBER BELOW
+                                                                              ##
  current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/ea78dd541e089687af1f4c4b550bc9ca")
 
  # Force files from EDI to have an EST timestamp
@@ -277,20 +277,20 @@ ggplotly(a)
 ```{r save the data, eval=FALSE, include=FALSE}
 
 # # convert DateTime to character
-# current_df$DateTime <- as.character(format(current_df$DateTime)) 
-#     
+# current_df$DateTime <- as.character(format(current_df$DateTime))
+# 
 # 
 # write_csv(current_df, 'secchi_2013_2023.csv')
-# 
+
 # #list.files()
 
 ```
 
-```{r Save maintlog and function, include=FALSE}
+```{r Save maintlog and function, include=FALSE, eval=FALSE}
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "secchi_maintenancelog_2013_2023.csv")
-
-# qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "secchi_qaqc_2013_2023.R")
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "secchi_maintenancelog_2013_2023.csv")
+# 
+# # qaqc function
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "secchi_qaqc_2013_2023.R")
 ```
 

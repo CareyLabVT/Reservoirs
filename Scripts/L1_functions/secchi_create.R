@@ -2,7 +2,7 @@
 # QAQC of Secchi data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-07-03
+# Last edited: 2024-08-05
 
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate,
@@ -68,7 +68,7 @@ secchi_qaqc <- function(data_file,
     mutate(Time = format(DateTime,"%H:%M:%S"),
            #Time = ifelse(Time == "00:00:00", "12:00:00",Time),
            Flag_DateTime = ifelse(Time == "12:00:00", 1, Flag_DateTime), # Flag if set time to noon
-           Date = as.Date(DateTime),
+           Date = as.Date.character(DateTime),
            DateTime = ymd_hms(paste0(Date, "", Time), tz = "America/New_York"))%>%
   # leaving the night secchi's in
            # Hours = hour(DateTime),

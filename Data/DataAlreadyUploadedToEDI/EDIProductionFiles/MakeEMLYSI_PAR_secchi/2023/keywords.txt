@@ -7,13 +7,17 @@ Beaverdam Reservoir	carey lab controlled vocabulary
 Carvins Cove Reservoir	carey lab controlled vocabulary
 Gatewood Reservoir	carey lab controlled vocabulary
 Spring Hollow Reservoir	carey lab controlled vocabulary
+reservoirs	cuahsi controlled vocabulary
 reservoir	cuahsi controlled vocabulary
+stream	cuahsi controlled vocabulary
 lake	cuahsi controlled vocabulary
 lakes	lter controlled vocabulary
 water temperature	lter controlled vocabulary
 dissolved oxygen	lter controlled vocabulary
 pH	lter controlled vocabulary
 conductivity	lter controlled vocabulary
+specific conductance	lter controlled vocabulary
+specific conductivity 	lter controlled vocabulary
 photosynthetically active radiation	lter controlled vocabulary
 Secchi depth	lter controlled vocabulary
 oxidation-reduction potential	carey lab controlled vocabulary 

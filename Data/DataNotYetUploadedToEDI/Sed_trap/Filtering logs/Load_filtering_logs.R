@@ -10,6 +10,7 @@ library(tidyr)
 library(readxl)
 library(lubridate)
 library(stringr)
+library(readr)
 
 ###
 # 2023 data
@@ -19,7 +20,8 @@ library(stringr)
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
 setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
-filteringlog <- read_excel("2023_FilteringLog_EDI.xlsx") 
+filteringlog <- read_csv("2023_FilteringLog_EDI.csv") %>% 
+  mutate(DateFiltered = as.POSIXct(DateFiltered, format = '%d%b%y'))
 log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")
 log_2019 <- read_excel("2019_FilteringLog_EDI.xlsx")
 log_2020 <- read_excel("2020_FilteringLog_EDI.xlsx")
@@ -68,17 +70,12 @@ frame1$TrapVol_L <- 1.8
 frame1 <- frame1 %>% 
   mutate(VolDiscarded_L = ifelse(year(Date)==2019&Date<"2019-09-15",NA,VolDiscarded_L))%>% #Mistakes in filtering log before this point
   group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
-  mutate(CollectionVol_L = (sum(FilterVol_L) + mean(VolDiscarded_L))/1000) %>% # changed unique to mean because I was getting an error but may not be correct now
+  mutate(CollectionVol_L = (sum(FilterVol_L) + unique(VolDiscarded_L))/1000) %>% 
   ungroup()
 
     #FilterRep
 frame1 <- frame1 %>% 
   mutate(FilterRep = as.numeric(str_extract(frame1$FilterID, '(?<=_F)[:digit:]+')))
-
-    #make Volume_filtered column in correct units
-frame1 <- frame1 %>% 
-  rename("Volume_filtered_L" = "Volume_filtered_mL")
-frame1$Volume_filtered_L <- frame1$Volume_filtered_L/1000
 
 
 #reorder columns in the first data frame and rename. Prep for EDI publishing

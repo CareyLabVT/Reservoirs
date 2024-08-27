@@ -2,7 +2,7 @@
 # QAQC of YSI and PAR data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-08-05 changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight
+# Last edited: 2024-08-05 changed as.Date to as.Date.character because as.Date would add a day if time close to midnight
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate, dplyr,

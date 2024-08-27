@@ -18,11 +18,21 @@ template_core_metadata(path = folder,
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = c("secchi_depth_2013_2023.csv",
+                          data.table = c("secchi_2013_2023.csv",
                                          "YSI_PAR_profiles_2013_2023.csv",
                                          "secchi_maintenancelog_2013_2023.csv",
                                          "YSI_PAR_profiles_maintenancelog_2013_2023.csv",
                                          "site_descriptions.csv"))
+
+### Note that in the secchi_maintenancelog the end_parameter column is NA so it needs to be set as a character
+# or else you get this warning:
+
+# Categorical variables (secchi_maintenancelog_2013_2023.csv, Required) - Variables defined as categorical 
+# will be reclassified as 'character' until these issues are fixed:
+# 1.  Missing categorical variable metadata. Variables are listed as 'categorical' 
+# in the table attributes metadata but are not found in the categorical variables metadata. 
+# These variables are missing: end_parameter
+
               
 template_categorical_variables(path = folder,
                                data.path = folder,
@@ -68,7 +78,7 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1105.7") 
+         package.id = "edi.1105.8") 
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 

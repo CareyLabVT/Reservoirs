@@ -1,10 +1,11 @@
-##MakeEDISedTraps
-##Authors: Carly Bauer & Cece Wood
-##Date updated: 23 July 2024
+# Title: Sed traps processing script for all metals
+# Author: Cece Wood and Carly Bauer
+# Date: 22Aug24
 
 
 #load all the libraries first
 rm(list=ls(all=TRUE))
+library(plyr)
 library(dplyr)
 library(tidyr)
 library(readxl)
@@ -12,18 +13,19 @@ library(lubridate)
 library(stringr)
 library(readr)
 
+
 #read Excel sheets in; need to read in filtering logs for first data frame
- #for now, need to set working directories to read sheets in
+#for now, need to set working directories to read sheets in
 setwd("/Users/carlybauer/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap")
 
 frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
 
-#
+
 #
 #
 #
 #frame 2 let's gooo
-  #need to read in the Jeff sheets, will do a little QA/QC to account for Jeff's formatting
+#need to read in the Jeff sheets, will do a little QA/QC to account for Jeff's formatting
 ICP2023 <- read_excel('Metals/Raw_Data/2023_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`) # need to change this set up so it reads in all of the 2023 ICP data sheets
 ICP2022 <- read_excel('Metals/Raw_Data/2022_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
 ICP2021 <- read_excel('Metals/Raw_Data/2021_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
@@ -36,6 +38,7 @@ if (!"7Li (STDR)" %in% names(ICP2018)) {
   ICP2018 <- ICP2018 %>% mutate(`7Li (STDR)` = NA)
 }
 
+
 ICPData = ICP2023 %>% 
   rbind(ICP2022)%>%
   rbind(ICP2021)%>%
@@ -43,6 +46,7 @@ ICPData = ICP2023 %>%
   rbind(ICP2019)%>%
   rbind(ICP2018)
 
+#rename headers to element in ppb
 glimpse(ICPData)
 ICPData <- ICPData %>% dplyr::rename('Li_ppb' = `7Li (STDR)`,
                               'Na_ppb' = `23Na (STDR)`, 
@@ -57,7 +61,7 @@ ICPData <- ICPData %>% dplyr::rename('Li_ppb' = `7Li (STDR)`,
                               'Sr_ppb' = `88Sr (STDR)`,
                               'Ba_ppb' = `138Ba (STDR)`,'JeffID' = '...1')
 
-  #need to join digestion spreadsheet while sample names are still in code
+#need to join digestion spreadsheet while sample names are still in code
 Digestion2023 <- read_excel('Metals/Digestions/2023_AcidDigestion_EDI.xlsx')
 Digestion2022 <-  read_excel('Metals/Digestions/2022_AcidDigestion_EDI.xlsx')
 Digestion2021 <-  read_excel('Metals/Digestions/2021_AcidDigestion_EDI.xlsx')
@@ -72,24 +76,33 @@ Digestion <- Digestion2023 %>%
   rbind(Digestion2019)%>%
   rbind(Digestion2018)
 
-frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple = "all")
+#combine all ICPdata with digestion information
+frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple = "all", relationship = "many-to-many")
 
-  #separating to get sample date
+#separating to get sample date
 frame2 <- frame2 %>% 
-    separate(JeffID,c("Sample","Date"),"_")
+  separate(JeffID,c("Sample","Date"),"_")
 frame2$Date <- as.Date(frame2$Date, format = '%d%b%y') #NIST Standard and Acid Blank will go to NA
 frame2 <- frame2[!(is.na(frame2$Date)), ] #removes NIST Standard and Acid Blank
 
 
-  #let's use the first filter ID to extract reservoir and depth info (should be the same year to year)
-  #also add in info that never changes
+#let's use the first filter ID to extract reservoir and depth info (should be the same year to year)
+#also add in info that never changes
+# frame2 <- frame2 %>% 
+#   mutate(Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'F','FCR',NA),
+#          Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'B','BVR', Reservoir),
+#          Depth_m = as.numeric(str_extract(frame2$Filter1ID, '(?<=_)[:digit:]+(?=m)')),
+#          Site = 50, TrapXSA_m2 = 0.0040715)
+
 frame2 <- frame2 %>% 
-  mutate(Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'F','FCR',NA),
-         Reservoir = ifelse(substring(frame2$Filter1ID, 1,1) == 'B','BVR', Reservoir),
-         Depth_m = as.numeric(str_extract(frame2$Filter1ID, '(?<=_)[:digit:]+(?=m)')),
-         Site = 50, TrapXSA_m2 = 0.0040715)
+  mutate(Reservoir = case_when(
+    substring(Filter1ID, 1, 1) == 'F' ~ 'FCR',
+    substring(Filter1ID, 1, 1) == 'B' ~ 'BVR',
+    TRUE ~ NA_character_),
+    Depth_m = as.numeric(str_extract(Filter1ID, '(?<=_)[:digit:]+(?=m)')),
+    Site = 50, TrapXSA_m2 = 0.0040715)
 
-
+#
 
 #Need to get data from each filter separately. Doing that in a for loop
 #Set up empty columns
@@ -114,7 +127,6 @@ frame2_complete = frame2%>%
          Flag_ICPTCu_mgL = 1,
          Flag_ICPTSr_mgL = 1,
          Flag_ICPTBa_mgL = 1)
-
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
@@ -151,7 +163,7 @@ for(i in 1:nrow(frame2_complete)){
     
   }
 }
-  
+#make ppb values numeric 
 frame2_complete=frame2_complete%>%
   mutate(Li_ppb=as.numeric(Li_ppb),
          Na_ppb=as.numeric(Na_ppb),
@@ -166,6 +178,7 @@ frame2_complete=frame2_complete%>%
          Sr_ppb=as.numeric(Sr_ppb),
          Ba_ppb=as.numeric(Ba_ppb))
 
+#change ppb to mg/L by dividing by 1000 #changing ppb to concentration
 frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000, 
                                      ICPTNa_mgL = Na_ppb/1000,
                                      ICPTMg_mgL = Mg_ppb/1000,
@@ -205,8 +218,9 @@ frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000,
                                      TBaFlux_gm2d = TBa_g/CombinedXSA_m2/Duration_days)
 
 #sort out the names and column order
-frame2 <- frame2 %>%  
+frame2 <- frame2 %>% 
   dplyr::rename("AcidVol_L" = "Vol_acid_L") %>% 
   select(-(ends_with("ppb")))
 
-write.csv(frame2,"./Metals/2023_allSedMetals.csv",row.names = F)
+#save frame2 as a .csv
+write.csv(frame2, file="./Metals/2023_allMetals.csv",row.names = F)

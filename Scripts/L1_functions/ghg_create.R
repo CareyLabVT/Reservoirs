@@ -228,7 +228,7 @@ ghg_qaqc<-function(directory,
     #dplyr::rename(clean_vial_number="Vial Number")%>%
     mutate(
       clean_vial_number= `Vial Number`,
-      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy')),
+      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
       Date=as.Date(DateTime),
       Date_upper=Date+4)
   
@@ -397,9 +397,9 @@ ghg_qaqc<-function(directory,
   # Convert time that are in 12 hours to 24 hours
   raw_df <- working_final_df %>% 
     mutate(Time = format(DateTime,"%H:%M:%S"),
-           Flag_DateTime = ifelse(Time == "00:00:00", 1, 0), # Flag if set time to noon
+           Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
            Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-           Date = as.Date(DateTime),
+           Date = as.Date.character(DateTime),
            DateTime = ymd_hms(paste0(Date, "", Time)),
            Hours = hour(DateTime),
            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time

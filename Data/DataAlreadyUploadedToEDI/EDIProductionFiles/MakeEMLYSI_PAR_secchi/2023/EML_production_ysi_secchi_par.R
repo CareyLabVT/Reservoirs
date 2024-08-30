@@ -3,101 +3,94 @@ library(devtools)
 #install_github("EDIorg/EMLassemblyline", force=T)
 library(EMLassemblyline)
 
-#Create site description file
-#Install the required googlesheets4 package
-#install.packages('googlesheets4')
-
-#Load the library 
-library(googlesheets4)
-library(tidyverse)
 
 #set up permissions
 #gs4_auth(cache = FALSE)
 
-#read in all sites from google drive
-sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
 
-#read in ysi df
-data<- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/YSI_PAR_profiles_2013-2023.csv") 
-
-#only select sites that are in your df
-trim_sites = function(data,sites){
-  data_res_site=data%>% #Create a Reservoir/Site combo column
-    mutate(res_site = trimws(paste0(Reservoir,Site)))
-  sites_merged = sites%>% #Filter to Sites that are in the dataframe
-    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-    filter(res_site%in%data_res_site$res_site)%>%
-    select(-res_site)
-}
-sites_trimmed = trim_sites(data,sites) 
-
-#save as a csv
-write.csv(sites_trimmed,"/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data/site_descriptions.csv", row.names = FALSE)
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023"
 
 # Import templates for dataset licensed under CCBY, with 2 tables.
-template_core_metadata(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+template_core_metadata(path = folder,
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-                          data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
-                          data.table = c("Secchi_depth_2013-2023.csv",
-                                         "YSI_PAR_profiles_2013-2023.csv",
-                                         "Secchi_maintenancelog_2013_2023.csv",
-                                         "YSI_maintenancelog_2013_2023.csv",
+template_table_attributes(path = folder,
+                          data.path = folder,
+                          data.table = c("secchi_2013_2023.csv",
+                                         "YSI_PAR_profiles_2013_2023.csv",
+                                         "secchi_maintenancelog_2013_2023.csv",
+                                         "YSI_PAR_profiles_maintenancelog_2013_2023.csv",
                                          "site_descriptions.csv"))
+
+### Note that in the secchi_maintenancelog the end_parameter column is NA so it needs to be set as a character
+# or else you get this warning:
+
+# Categorical variables (secchi_maintenancelog_2013_2023.csv, Required) - Variables defined as categorical 
+# will be reclassified as 'character' until these issues are fixed:
+# 1.  Missing categorical variable metadata. Variables are listed as 'categorical' 
+# in the table attributes metadata but are not found in the categorical variables metadata. 
+# These variables are missing: end_parameter
+
               
-template_categorical_variables(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-                               data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
 
-template_geographic_coverage(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-                             data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
-                             data.table = c("Secchi_depth_2013-2022.csv",
-                                            "YSI_PAR_profiles_2013-2022.csv",
-                                            "Secchi_maintenancelog_2013_2023.csv",
-                                            "YSI_maintenancelog_2013_2023.csv",
-                                            "site_descriptions.csv"),
-                             empty = TRUE,
-                             write.file = TRUE)
+# template_geographic_coverage(path = folder,
+#                              data.path = folder,
+#                              data.table = c("Secchi_depth_2013-2022.csv",
+#                                             "YSI_PAR_profiles_2013-2022.csv",
+#                                             "Secchi_maintenancelog_2013_2023.csv",
+#                                             "YSI_maintenancelog_2013_2023.csv",
+#                                             "site_descriptions.csv"),
+#                              empty = TRUE,
+#                              write.file = TRUE)
 
 
 # Run this function for staging data
-make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-         dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
-         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
-         eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-         data.table = c("Secchi_depth_2013-2023.csv",
-                        "YSI_PAR_profiles_2013-2023.csv",
-                        "Secchi_maintenancelog_2013_2023.csv",
-                        "YSI_maintenancelog_2013_2023.csv",
+make_eml(path = folder,
+         dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, 
+         conductivity, specific conductance, photosynthetic active radiation, oxidation-reduction potential, 
+         and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, 
+         and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
+         data.path = folder,
+         eml.path = folder,
+         data.table = c("secchi_2013_2023.csv",
+                        "YSI_PAR_profiles_2013_2023.csv",
+                        "secchi_maintenancelog_2013_2023.csv",
+                        "YSI_PAR_profiles_maintenancelog_2013_2023.csv",
                         "site_descriptions.csv"),
          data.table.description = c("Secchi depth data from five reservoirs in southwestern Virginia", 
-                                    "Discrete depths of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH in five southwestern Virginia reservoirs"),
-         other.entity = c("YSI_qaqc_2023_2023.R", "Secchi_qaqc_2023_2023.R",
-                          "YSI_inspection_2013_2023.Rmd", "Secchi_inspection_2013_2023.Rmd"),
-         other.entity.description = c("YSI and PAR QAQC script for most recent year of data publication",
-                                      "Secchi QAQC script for most recent year of data publication",
-                                      "YSI and PAR visualization script for full dataset",
-                                      "Secchi visualization script for full dataset"),
+                                    "Discrete depths of water temperature, dissolved oxygen, conductivity, specific conductance, 
+                                    photosynthetic active radiation, oxidation-reduction potential, and pH in five southwestern Virginia reservoirs",
+                                    "Secchi maintenance log for observations that are removed or flagged in the qaqc script",
+                                    "YSI PAR profiles maintenance log for observation that are removed or flagged in the qaqc script",
+                                    "List of reservoirs, sites, description of the site, and coordinates"),
+         other.entity = c("secchi_qaqc_2013_2023.R","secchi_inspection_2013_2023.Rmd",
+                          "YSI_PAR_profiles_qaqc_2013_2023.R","YSI_PAR_profiles_inspection_2013_2023.Rmd"),
+         other.entity.description = c("Secchi QAQC script for observations from 2013-2023",
+                                      "Secchi visualization script for full dataset",
+                                      "YSI and PAR QAQC script for observations from 2013-2023",
+                                      "YSI and PAR visualization script for full dataset"),
          temporal.coverage = c("2013-08-30", "2023-12-04"),
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1105.6") 
+         package.id = "edi.1105.8") 
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 
 
 ################################
 # Run this function when ready for REAL EDI environment
-make_eml(path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
+make_eml(path = folder,
          dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, conductivity, specific conductance, photosynthetic active radiation, redox potential, and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
-         data.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Data",
-         eml.path = "/Users/heatherwander/Documents/VirginiaTech/research/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023",
-         data.table = c("Secchi_depth_2013-2023.csv",
-                        "YSI_PAR_profiles_2013-2023.csv",
+         data.path = folder,
+         eml.path = folder,
+         data.table = c("Secchi_depth_2013_2023.csv",
+                        "YSI_PAR_profiles_2013_2023.csv",
                         "Secchi_maintenancelog_2013_2023.csv",
                         "YSI_maintenancelog_2013_2023.csv",
                         "site_descriptions.csv"),

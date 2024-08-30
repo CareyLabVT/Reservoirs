@@ -1,7 +1,0 @@
-Reservoir, Site, Depth, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
-BVR,40,NA,Secchi,2022-05-31 12:56:00 EST,2022-05-31 12:56:00 EST,Secchi_m,NA,2,1.25,fix digitizing error
-BVR,40,NA,Secchi,2022-06-07 11:53:00 EST,2022-06-07 11:53:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,40,NA,Secchi,2022-07-18 10:30:00 EST,2022-07-18 10:30:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,50,NA,Secchi,2022-05-09 09:58:00 EST,2022-05-09 09:58:00 EST,Reservoir,Flag_Secchi_m,4,NA,to be deleted in QAQC
-BVR,50,NA,Secchi,2014-04-30 12:00:00 EST,2014-04-30 12:00:00 EST,Secchi_m,NA,3,NA,suspect value; two obs at same day/time/reservoir
-BVR,50,NA,Secchi,2014-07-23 12:00:00 EST,2014-07-23 12:00:00 EST,Secchi_m,NA,3,NA,suspect value; two obs at same day/time/reservoir

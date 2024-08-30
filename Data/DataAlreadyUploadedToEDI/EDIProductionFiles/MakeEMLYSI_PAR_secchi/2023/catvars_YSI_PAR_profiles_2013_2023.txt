@@ -1,0 +1,33 @@
+attributeName	code	definition
+Flag_Cond_uScm	0	No flag
+Flag_Cond_uScm	1	Sample not taken
+Flag_DateTime	0	No flag
+Flag_DateTime	1	Sample not taken
+Flag_DO_mgL	0	No flag
+Flag_DO_mgL	1	Sample not taken
+Flag_DO_mgL	4	Negative values set to 0
+Flag_DO_mgL	5	Suspect samples
+Flag_DOsat_percent	0	No flag
+Flag_DOsat_percent	1	Sample not taken
+Flag_DOsat_percent	4	Negative values set to 0
+Flag_DOsat_percent	5	Suspect samples
+Flag_ORP_mV	0	No flag
+Flag_ORP_mV	1	Sample not taken
+Flag_ORP_mV	5	Suspect samples
+Flag_PAR_umolm2s	0	No flag
+Flag_PAR_umolm2s	1	Sample not taken
+Flag_PAR_umolm2s	5	Suspect samples
+Flag_pH	0	No flag
+Flag_pH	1	Sample not taken
+Flag_pH	2	Instrument malfunction
+Flag_pH	5	Suspect samples
+Flag_SpCond_uScm	0	No flag
+Flag_SpCond_uScm	1	Sample not taken
+Flag_Temp_C	0	No flag
+Flag_Temp_C	1	Sample not taken
+Flag_Temp_C	7	Temperature measured by pH probe
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hallow Reservoir

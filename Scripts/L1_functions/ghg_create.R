@@ -228,7 +228,7 @@ ghg_qaqc<-function(directory,
     #dplyr::rename(clean_vial_number="Vial Number")%>%
     mutate(
       clean_vial_number= `Vial Number`,
-      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy')),
+      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
       Date=as.Date(DateTime),
       Date_upper=Date+4)
   

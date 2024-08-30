@@ -9,7 +9,7 @@
 
 ## current and historic = catwalk
 
-target_IceTransition_binary <- function(current_file, historic_wq_file, historic_file){
+target_IceTransition_binary <- function(current_file, historic_wq_file, historic_file, ice_site, maint_log = NULL){
   
   ## read in current data file
   # Github, Googlesheet, etc.
@@ -174,6 +174,29 @@ target_IceTransition_binary <- function(current_file, historic_wq_file, historic
   
   combined_df <- dplyr::bind_rows(historic_ice_df, historic_wq_ice_df, current_ice_df)
   
+  
+  if(!is.null(maint_log)){ # only run this file if the maint file argument is non-null
+    
+    # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
+    
+    log_read <- gsheet::gsheet2tbl(maint_log) |> 
+      filter(Reservoir == ice_site) |> 
+      select(Reservoir, Date = DateTime, Ice_Presence, Site, Flag_Ice_Presence)
+    
+    combined_df <- combined_df |> 
+      full_join(log_read, by = c('Date', 'Reservoir', "Site")) |> 
+      mutate(Method = ifelse(is.na(IceOn),'V', Method), 
+             IceOn = ifelse(is.na(IceOn),Ice_Presence, IceOn), 
+             IceOff = ifelse(is.na(IceOff) & Ice_Presence == 0, 1, IceOff),
+             IceOff = ifelse(is.na(IceOff) & Ice_Presence == 1, 0, IceOff), 
+             Year = lubridate::year(Date), 
+             DayOfYear = lubridate::yday(Date), 
+             Flag_IceValue = ifelse(is.na(Flag_Ice_Presence), 0, Flag_Ice_Presence), 
+             site_id = site_id[1]) |> 
+      select(-Ice_Presence, -Flag_Ice_Presence)
+    
+  }
+  
   message('EDI file ready')
   
   
@@ -209,24 +232,63 @@ target_IceTransition_binary <- function(current_file, historic_wq_file, historic
   return(combined_df)
 }
 
-current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
-                   "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
-
-historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
-                       'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
-
-historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151",
-                    "https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
-
-
-bvr_ice_data <- target_IceTransition_binary(current_file = current_files[1], 
-                                            historic_wq_file = historic_wq_files[1], 
-                                            historic_file = historic_ice_files[1])
-
-fcr_ice_data <- target_IceTransition_binary(current_file = current_files[2], 
-                                            historic_wq_file = historic_wq_files[2], 
-                                            historic_file = historic_ice_files[2])
-
-combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data)
+# current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
+#                    "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
+# 
+# historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
+#                        'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
+# 
+# historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
+# 
+# ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
+# 
+# 
+# bvr_ice_data <- target_IceTransition_binary(current_file = current_files[1], 
+#                                             historic_wq_file = historic_wq_files[1], 
+#                                             historic_file = historic_ice_files, 
+#                                             ice_site = 'BVR',
+#                                             maint_log = NULL)
+# 
+# fcr_ice_data <- target_IceTransition_binary(current_file = current_files[2], 
+#                                             historic_wq_file = historic_wq_files[2], 
+#                                             historic_file = historic_ice_files,
+#                                             ice_site = "FCR",
+#                                             maint_log = ice_maintenance_log)
+# 
+# combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data) |> select(-site_id)
 
 #write.csv(combined_ice_data, "C:/Users/13188/Desktop/Data_repository/DataNotYetUploadedToEDI/Ice_binary/ice_L1.csv", row.names = FALSE)
+
+
+# fcr_ice_data |> 
+#   ggplot(aes(x = Date, y = IceOn)) + 
+#   geom_point() + 
+#   geom_point(aes(y = IceOff, color = 'red'), alpha = 0.6) + 
+#   labs(title="FCR Ice Transition Binary", x ="Date", y = "IceOn/IceOff Binary")
+# 
+# bvr_ice_data |> 
+#   ggplot(aes(x = Date, y = IceOn)) + 
+#   geom_point() + 
+#   geom_point(aes(y = IceOff, color = 'red'), alpha = 0.6) + 
+#   labs(title="BVR Ice Transition Binary", x ="Date", y = "IceOn/IceOff Binary")
+# 
+# 
+# historic_transition_check <- historic_ice_df |> # DEFINED IN CODE ABOVE
+#   mutate(IceOn_historic = IceOn, 
+#          IceOff_historic = IceOff, 
+#          Method_historic = Method) |> 
+#   select(Date, IceOn_historic, IceOff_historic, Method_historic) |> 
+#   right_join(fcr_ice_data, by = c('Date'))
+# 
+# historic_transition_check |> 
+#   ggplot(aes(x = Date, y = IceOn)) +
+#   geom_point() +
+#   geom_point(aes(y = IceOn_historic, color = 'red'), alpha = 0.6)
+#   #geom_point() #+
+#   #geom_point(aes(y = IceOn_historic, color = 'red'), alpha = 0.3)
+#   
+# historic_transition_check |> 
+#   ggplot(aes(x = Date, y = IceOff)) +
+#   geom_point() +
+#   geom_point(aes(y = IceOff_historic, color = 'red'), alpha = 0.6)
+#   #geom_point()

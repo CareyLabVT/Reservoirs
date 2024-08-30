@@ -150,11 +150,14 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
     dplyr::select(Reservoir, site_id, datetime = Date, ice_presence = IceOn, Method)
   
   # combine available data and then join onto daily dataframe
+  if (nrow(historic_ice_df) == 0){
+    combined_df <- dplyr::bind_rows(historic_wq_ice_df, current_ice_df)
+  } else{
   combined_df <- dplyr::bind_rows(historic_ice_df, historic_wq_ice_df, current_ice_df)
+  }
   
-  
-  ice_df_build <- data.frame(datetime = seq.Date(min(as.Date(historic_ice_df$datetime)), 
-                                                 max(as.Date(current_wq_df$datetime)), 
+  ice_df_build <- data.frame(datetime = seq.Date(min(as.Date(combined_df$datetime)), 
+                                                 max(as.Date(combined_df$datetime)), 
                                                  by = 'day'))
   
   reservoir_name <- combined_df$Reservoir[1]
@@ -163,7 +166,7 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
   daily_ice_df <- ice_df_build |> 
     dplyr::full_join(combined_df, by = c('datetime')) |> 
     dplyr::mutate(Reservoir = ifelse(is.na(Reservoir), reservoir_name, Reservoir), 
-                  site_id = ifelse(is.na(site_id), site_identifier, site_id), 
+                  #site_id = ifelse(is.na(site_id), site_identifier, site_id), 
                   ice_presence = ifelse(is.na(ice_presence), 0, ice_presence), 
                   Method = ifelse(is.na(Method), 'T', Method), 
                   Flag = 0) |> 
@@ -183,7 +186,7 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
       dplyr::mutate(ice_presence = ifelse((!is.na(Maint_Ice_Presence) & (ice_presence != Maint_Ice_Presence)), Maint_Ice_Presence, ice_presence),
                     Method = ifelse(!is.na(Maint_Ice_Presence), 'V', Method),
                     Flag = ifelse(is.na(Flag_Ice_Presence), 0, Flag_Ice_Presence)) |> 
-      select(-Maint_Ice_Presence, -Flag_Ice_Presence)
+      select(-Maint_Ice_Presence, -Flag_Ice_Presence, -site_id)
     
   }
   
@@ -222,29 +225,51 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
   return(daily_ice_df)
 }
 
-current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
-                   "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
-
-historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
-                       'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
-
-historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
-
-ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
-
-
-bvr_ice_data <- daily_ice_cover_binary(current_file = current_files[1], 
-                                            historic_wq_file = historic_wq_files[1], 
-                                            historic_file = historic_ice_files,
-                                       maint_log = NULL, 
-                                       ice_site = 'BVR')
-
-fcr_ice_data <- daily_ice_cover_binary(current_file = current_files[2], 
-                                            historic_wq_file = historic_wq_files[2], 
-                                            historic_file = historic_ice_files,
-                                       maint_log = ice_maintenance_log, 
-                                       ice_site = 'FCR')
-
-combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data)
+# current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
+#                    "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
+# 
+# historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
+#                        'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
+# 
+# historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
+# 
+# ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
+# 
+# 
+# bvr_ice_data <- daily_ice_cover_binary(current_file = current_files[1], 
+#                                             historic_wq_file = historic_wq_files[1], 
+#                                             historic_file = historic_ice_files,
+#                                        maint_log = NULL, 
+#                                        ice_site = 'BVR')
+# 
+# fcr_ice_data <- daily_ice_cover_binary(current_file = current_files[2], 
+#                                             historic_wq_file = historic_wq_files[2], 
+#                                             historic_file = historic_ice_files,
+#                                        maint_log = ice_maintenance_log, 
+#                                        ice_site = 'FCR')
+# 
+# combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data)
 
 #write.csv(combined_ice_data, "C:/Users/13188/Desktop/Data_repository/DataNotYetUploadedToEDI/Ice_binary/ice_L1.csv", row.names = FALSE)
+
+# fcr_year_build <- data.frame(Date = seq.Date(as.Date('2015-01-01'), as.Date('2024-01-01'), "years"), year_Date = seq.Date(as.Date('2015-01-01'), as.Date('2024-01-01'), "years"))
+# 
+# fcr_ice_data |> 
+#   full_join(fcr_year_build) |> 
+#   ggplot(aes(x = Date, y = ice_presence)) + 
+#   geom_point() + 
+#   geom_vline(aes(xintercept = as.Date(year_Date), linetype="dashed")) +
+#   labs(title="FCR Daily Ice Binary", x ="Date", y = "Ice Presenece Binary")
+# 
+# bvr_year_build <- data.frame(Date = seq.Date(as.Date('2021-01-01'), as.Date('2024-01-01'), "years"), year_Date = seq.Date(as.Date('2021-01-01'), as.Date('2024-01-01'), "years"))
+# 
+# bvr_ice_data |> 
+#   full_join(bvr_year_build) |> 
+#   ggplot(aes(x = Date, y = ice_presence)) + 
+#   geom_point() + 
+#   geom_vline(aes(xintercept = as.Date(year_Date), linetype="dashed")) +
+#   labs(title="BVR Daily Ice Binary", x ="Date", y = "Ice Presence Binary")
+# 
+# 
+# fcr_visual_comparison <- fcr_ice_data |> 
+#   right_join(historic_visual, by)

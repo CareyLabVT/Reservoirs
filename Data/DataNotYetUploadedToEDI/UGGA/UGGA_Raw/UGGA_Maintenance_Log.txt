@@ -1,2 +1,0 @@
-Reservoir	 Site	 Depth	 DataStream	 TIMESTAMP_start	 TIMESTAMP_end	 start_parameter	 end_parameter	 vial_number	 flag	 update_value	 notes
-			UGGA								

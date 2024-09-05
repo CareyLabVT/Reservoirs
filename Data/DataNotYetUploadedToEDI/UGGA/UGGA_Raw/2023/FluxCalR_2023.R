@@ -114,6 +114,10 @@ for (file in one_peak) {
 # Combine all csvs in the processed_csvs folder
 flux_output <- read_csv(paste0("processed_csvs/", list.files("processed_csvs")))
 
+# drop inflow and saw grass sites
+flux_output <- flux_output |> 
+  filter(!(Site %in% c('inflow', 'saw grass'))) 
+
 #Fix time issues
 flux_output2 <- flux_output %>%
   group_by(Date_real, Reservoir, Site) %>%
@@ -157,8 +161,8 @@ flux_all <- left_join(flux_co2,flux_ch4,by=c("Num",
 flux_all <- flux_all %>% 
   rename(Rep = Num, Temp_C = Ta) %>% 
   mutate(co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0,
-         Start = format(Start, format = "%H:%M"),
-         End = format(End, format = "%H:%M"))
+         Start_time = format(Start, format = "%H:%M"),
+         End_time = format(End, format = "%H:%M"))
 
 # Export out fluxes
 write.csv(flux_all,"./2023_season_Flux_Output.csv", row.names = F)

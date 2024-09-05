@@ -31,15 +31,15 @@ filt_chla_qaqc <- function(directory,
                       end_date)
   {
   
-  # directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
-  # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
-  # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
-  # final_vol_extract = 6
-  # blank_vol_filt = 500
-  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
-  # historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
-  # sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps" 
-  # outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
+  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
+  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
+  final_vol_extract = 6
+  blank_vol_filt = 500
+  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
+  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+  sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps"
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
   
   #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
@@ -101,8 +101,8 @@ filt_chla_qaqc <- function(directory,
  # Label the types of samples are so they are easier to sort label
  out.file2<- out.file%>%
    mutate(
-     samp_type = ifelse(grepl("et|blan", Sample.ID), "eth_blank",NA),
-     samp_type = ifelse(grepl("[0-9]", Sample.ID), "res_samp", samp_type),
+     samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",NA),
+     samp_type = ifelse(grepl("^[0-9]", Sample.ID), "res_samp", samp_type),
      samp_type = ifelse(grepl("fa", Sample.ID), "fake", samp_type),
      samp_type = ifelse(grepl("ref", Sample.ID), "ref", samp_type)
      
@@ -169,7 +169,8 @@ filt_chla_qaqc <- function(directory,
  
  ### 3. Combine with the filtering log 
  comb <- left_join(res_samp2, filtering_log2, 
-                   by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep"))
+                   by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep", "Depth"="Depth")) 
+ 
  
  
  # add the vol filt and final vol used for the ethanol samples 
@@ -258,7 +259,7 @@ filt_chla_qaqc <- function(directory,
      # Sample below detection. Not used in the maintenance log
      
    }else if (flag==2){
-     # This one is below minimum detection level and most likely won't be in the maintenance log
+     # Samples set to NA
      raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
             maintenance_cols] <- NA
      raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 

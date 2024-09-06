@@ -19,7 +19,7 @@ library(readr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("~/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
+setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
 filteringlog <- read_csv("2023_FilteringLog_EDI.csv") %>% 
   mutate(DateFiltered = as.POSIXct(DateFiltered, format = '%d%b%y'))
 log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")

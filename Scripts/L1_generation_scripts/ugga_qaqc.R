@@ -30,7 +30,7 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 ## Run Function 
 
-UGGA_qaqc(
+ugga_qaqc(
   files = "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
   outfile = "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_L1.csv",

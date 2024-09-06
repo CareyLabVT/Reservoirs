@@ -16,7 +16,7 @@ library(readr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
 #for now, need to set working directories to read sheets in
-setwd("/Users/carlybauer/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap")
+setwd("./Data/DataNotYetUploadedToEDI/Sed_trap")
 
 frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
 
@@ -132,6 +132,7 @@ for(i in 1:nrow(frame2_complete)){
   filter1 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter1ID[i])) #filter to the first filter
   filter2 = frame1%>%filter(tolower(FilterID)==tolower(frame2_complete$Filter2ID[i])) #filter to the second filter
   if(nrow(filter1)==1&nrow(filter2)==1){
+    frame2_complete$nTraps[i]=if_else(filter1$TrapRep==filter2$TrapRep, 1, 2) #number of trap reps/tubes used for each digestion
     frame2_complete$CombinedCollectionVol_L[i]=if_else(filter1$TrapRep==filter2$TrapRep, filter1$CollectionVol_L, filter1$CollectionVol_L + filter2$CollectionVol_L) #sum collection volumes only if the trap reps are not the same
     frame2_complete$CombinedFilterVol_L[i]=filter1$FilterVol_L+filter2$FilterVol_L #sum filter volumes
     frame2_complete$CombinedSedMass_g[i]=filter1$SedMass_g+filter2$SedMass_g #sum sed mass
@@ -179,43 +180,116 @@ frame2_complete=frame2_complete%>%
          Ba_ppb=as.numeric(Ba_ppb))
 
 #change ppb to mg/L by dividing by 1000 #changing ppb to concentration
-frame2 <- frame2_complete %>% mutate(ICPTLi_mgL = Li_ppb/1000, 
-                                     ICPTNa_mgL = Na_ppb/1000,
-                                     ICPTMg_mgL = Mg_ppb/1000,
-                                     ICPTAl_mgL = Al_ppb/1000,
-                                     ICPTSi_mgL = Si_ppb/1000,
-                                     ICPTK_mgL = K_ppb/1000,
-                                     ICPTCa_mgL = Ca_ppb/1000,
-                                     ICPTFe_mgL = Fe_ppb/1000, 
-                                     ICPTMn_mgL = Mn_ppb/1000, 
-                                     ICPTCu_mgL = Cu_ppb/1000,
-                                     ICPTSr_mgL = Sr_ppb/1000,
-                                     ICPTBa_mgL = Ba_ppb/1000,
-                                     DilutionFactor = 20,
-                                     TLi_g = (ICPTLi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TNa_g = (ICPTNa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TMg_g = (ICPTMg_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TAl_g = (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TSi_g = (ICPTSi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TK_g = (ICPTK_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TCa_g = (ICPTCa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TFe_g = (ICPTFe_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TMn_g = (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L),
-                                     TCu_g = (ICPTCu_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TSr_g = (ICPTSr_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TBa_g = (ICPTBa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L), 
-                                     TLiFlux_gm2d = TLi_g/CombinedXSA_m2/Duration_days,
-                                     TNaFlux_gm2d = TNa_g/CombinedXSA_m2/Duration_days,
-                                     TMgFlux_gm2d = TMg_g/CombinedXSA_m2/Duration_days,
-                                     TAlFlux_gm2d = TAl_g/CombinedXSA_m2/Duration_days,
-                                     TSiFlux_gm2d = TSi_g/CombinedXSA_m2/Duration_days,
-                                     TKFlux_gm2d = TK_g/CombinedXSA_m2/Duration_days,
-                                     TCaFlux_gm2d = TCa_g/CombinedXSA_m2/Duration_days,
-                                     TFeFlux_gm2d = TFe_g/CombinedXSA_m2/Duration_days,
-                                     TMnFlux_gm2d = TMn_g/CombinedXSA_m2/Duration_days,
-                                     TCuFlux_gm2d = TCu_g/CombinedXSA_m2/Duration_days,
-                                     TSrFlux_gm2d = TSr_g/CombinedXSA_m2/Duration_days,
-                                     TBaFlux_gm2d = TBa_g/CombinedXSA_m2/Duration_days)
+frame2 <- frame2_complete %>% 
+  mutate(ICPTLi_mgL = Li_ppb/1000,
+         ICPTNa_mgL = Na_ppb/1000,
+         ICPTMg_mgL = Mg_ppb/1000,
+         ICPTAl_mgL = Al_ppb/1000,
+         ICPTSi_mgL = Si_ppb/1000,
+         ICPTK_mgL = K_ppb/1000,
+         ICPTCa_mgL = Ca_ppb/1000,
+         ICPTFe_mgL = Fe_ppb/1000, 
+         ICPTMn_mgL = Mn_ppb/1000, 
+         ICPTCu_mgL = Cu_ppb/1000,
+         ICPTSr_mgL = Sr_ppb/1000,
+         ICPTBa_mgL = Ba_ppb/1000,
+         DilutionFactor = 20,
+         TLi_g = case_when(
+           nTraps == 2 ~ (ICPTLi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTLi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TNa_g = case_when(
+           nTraps == 2 ~ (ICPTNa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTNa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TMg_g = case_when(
+           nTraps == 2 ~ (ICPTMg_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTMg_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+            ),
+         TAl_g = case_when(
+           nTraps == 2 ~ (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+            ),
+         TSi_g = case_when(
+           nTraps == 2 ~ (ICPTSi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTSi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TK_g = case_when(
+           nTraps == 2 ~ (ICPTK_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTK_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+            ),
+         TCa_g = case_when(
+           nTraps == 2 ~ (ICPTCa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTCa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L)
+            ), 
+         TFe_g = case_when(
+           nTraps == 2 ~ (ICPTFe_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTFe_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*(CombinedCollectionVol_L/CombinedFilterVol_L)
+            ),
+         TMn_g = case_when(
+           nTraps == 2 ~ (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTMn_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+            ),
+         TCu_g = case_when(
+           nTraps == 2 ~ (ICPTCu_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTCu_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TSr_g = case_when(
+           nTraps == 2 ~ (ICPTSr_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTSr_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TBa_g = case_when(
+           nTraps == 2 ~ (ICPTBa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
+           .default = (ICPTBa_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
+           ),
+         TLiFlux_gm2d = case_when(
+           nTraps == 2 ~ TLi_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TLi_g/CombinedXSA_m2/Duration_days
+           ),
+         TNaFlux_gm2d = case_when(
+           nTraps == 2 ~ TNa_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TNa_g/CombinedXSA_m2/Duration_days
+           ),
+         TMgFlux_gm2d = case_when(
+           nTraps == 2 ~ TMg_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TMg_g/CombinedXSA_m2/Duration_days
+           ),
+         TAlFlux_gm2d = case_when( 
+           nTraps == 2 ~ TAl_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TAl_g/CombinedXSA_m2/Duration_days
+           ),
+         TSiFlux_gm2d = case_when(
+           nTraps == 2 ~ TSi_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TSi_g/CombinedXSA_m2/Duration_days
+           ),
+         TKFlux_gm2d = case_when(
+           nTraps == 2 ~ TK_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TK_g/CombinedXSA_m2/Duration_days
+           ),
+         TCaFlux_gm2d = case_when(
+           nTraps == 2 ~ TCa_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TCa_g/CombinedXSA_m2/Duration_days
+           ),
+         TFeFlux_gm2d = case_when(
+           nTraps == 2 ~ TFe_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TFe_g/CombinedXSA_m2/Duration_days
+           ),
+         TMnFlux_gm2d = case_when(
+           nTraps == 2 ~ TMn_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TMn_g/CombinedXSA_m2/Duration_days
+           ),
+         TCuFlux_gm2d = case_when(
+           nTraps == 2 ~ (TCu_g/CombinedXSA_m2/2)/Duration_days,
+           .default = TCu_g/CombinedXSA_m2/Duration_days
+           ),
+         TSrFlux_gm2d = case_when(
+           nTraps == 2 ~ TSr_g/CombinedXSA_m2/Duration_days,
+           .default = TSr_g/CombinedXSA_m2/Duration_days
+           ),
+         TBaFlux_gm2d = case_when(
+           nTraps == 2 ~ TBa_g/(CombinedXSA_m2/2)/Duration_days,
+           .default = TBa_g/CombinedXSA_m2/Duration_days
+           ))
 
 #sort out the names and column order
 frame2 <- frame2 %>% 

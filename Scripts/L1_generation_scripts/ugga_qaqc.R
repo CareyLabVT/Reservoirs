@@ -32,7 +32,7 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 UGGA_qaqc(
   files = "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
-  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv"
+  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
   outfile = "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_L1.csv",
   start_date =last_edi_date, # change when we update to read date from EDI
   end_date = Sys.Date() + lubridate::days(1))

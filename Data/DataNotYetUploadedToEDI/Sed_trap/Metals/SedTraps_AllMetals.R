@@ -16,7 +16,7 @@ library(readr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
 #for now, need to set working directories to read sheets in
-setwd("./Data/DataNotYetUploadedToEDI/Sed_trap")
+setwd("~/Data/DataNotYetUploadedToEDI/Sed_trap")
 
 frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
 

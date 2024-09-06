@@ -13,11 +13,11 @@ library(FluxCalR)
 
 # Load in data: will need to load in individual files - I recommend doing this by year
 
-wd <- setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2023")
+wd <- setwd("./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2024")
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
 
-field_sheet <- read.csv("UGGA_log_2023.csv")
+field_sheet <- read.csv("UGGA_log_2024.csv")
 
 # Here, we create a function that will be used for processing each file. 
 # You don't need to modify this
@@ -27,6 +27,7 @@ process_txt <- function(file,
                         site = field_sheet$Site[field_sheet$file == file_name],
                         date = field_sheet$Date[field_sheet$file == file_name],
                         time = field_sheet$Time[field_sheet$file == file_name]) {
+  
   
   message("Processing ", file_name,"
           Reservoir: ", reservoir, "
@@ -39,7 +40,7 @@ process_txt <- function(file,
   time_cue <- SelCue(flux_lgr,flux="CH4", cue="End", save=F) %>%
     mutate(Reservoir = reservoir, 
            Site = site, 
-           Date_real = as.Date(date),
+           Date_real = as.Date(date, format="%m/%d/%Y"),
            Time = time)
   
   # Then calculate fluxes
@@ -80,14 +81,15 @@ processed_files <- sub(".csv", ".txt", list.files("processed_csvs"))
 #Compare these two to figure out which files still need to be processed
 files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
-files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0013.txt", #leaky tube
-                                                              "gga_2001-12-31_f0055.txt", # missing
-                                                              "gga_2001-12-31_f0057.txt",
-                                                              "gga_2001-12-31_f0077.txt",
-                                                              "gga_2001-12-31_f0074.txt", # unusable
-                                                              "gga_2001-12-31_f0029.txt",
-                                                              "gga_2001-12-31_f0082.txt"
-                                                              )] 
+files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0112.txt",
+                                                              "gga_2001-12-31_f0113.txt",
+                                                              "gga_2001-12-31_f0116.txt",
+                                                              "gga_2001-12-31_f0119.txt",
+                                                              "gga_2001-12-31_f0123.txt",
+                                                              "gga_2001-12-31_f0136.txt",
+                                                              "gga_2001-12-31_f0139.txt",
+                                                              "gga_2001-12-31_f0161.txt")] # very messy and doesn't seem usable
+
 
 ## RUN THE PROCESSING!!
 # Instructions: Use the cursor to select the timepoint before the peak; click once for the first peak and again for
@@ -113,10 +115,6 @@ for (file in one_peak) {
 ### Compile all data and prepare for output
 # Combine all csvs in the processed_csvs folder
 flux_output <- read_csv(paste0("processed_csvs/", list.files("processed_csvs")))
-
-# drop inflow and saw grass sites
-flux_output <- flux_output |> 
-  filter(!(Site %in% c('inflow', 'saw grass'))) 
 
 #Fix time issues
 flux_output2 <- flux_output %>%
@@ -161,8 +159,8 @@ flux_all <- left_join(flux_co2,flux_ch4,by=c("Num",
 flux_all <- flux_all %>% 
   rename(Rep = Num, Temp_C = Ta) %>% 
   mutate(co2_flux_umolCm2s_flag = 0, ch4_flux_umolCm2s_flag = 0,
-         Start_time = format(Start, format = "%H:%M"),
-         End_time = format(End, format = "%H:%M"))
+         Start = format(Start, format = "%H:%M"),
+         End = format(End, format = "%H:%M"))
 
 # Export out fluxes
-write.csv(flux_all,"./2023_season_Flux_Output.csv", row.names = F)
+write.csv(flux_all,"./2024_season_Flux_Output.csv", row.names = F)

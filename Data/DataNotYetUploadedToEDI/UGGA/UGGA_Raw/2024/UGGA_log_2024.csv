@@ -1,0 +1,39 @@
+﻿file,Reservoir,Date,Time,Site,Note
+gga_2001-12-31_f0092,FCR,1/29/2024,12:00,50,
+gga_2001-12-31_f0098,FCR,2/27/2024,,50,
+gga_2001-12-31_f0102,BVR,3/5/2024,10:12,50,no wind for first interval may be responsible for difference between reps
+gga_2001-12-31_f0103,FCR,3/5/2024,,50,
+gga_2001-12-31_f0112,BVR,3/18/2024,,50,tube was broken do not use
+gga_2001-12-31_f0113,FCR,3/18/2024,,50,tube was broken do not use
+gga_2001-12-31_f0114,FCR,3/18/2024,,50,filter
+gga_2001-12-31_f0115,FCR,3/18/2024,,50,no filter
+gga_2001-12-31_f0116,FCR,3/25/2024,11:45,50,hard to see curves when using the filter
+gga_2001-12-31_f0117,FCR,3/25/2024,,50,power cable was bumped had to restart this time without the filter
+gga_2001-12-31_f0118,BVR,4/1/2024,11:50,50,
+gga_2001-12-31_f0119,FCR,4/1/2024,14:47,50,No peaks. Do not use this cast because battery died
+gga_2001-12-31_f0120,FCR,4/1/2024,15:10,50,redid the cast above
+gga_2001-12-31_f0122,FCR,4/8/2024,11:22,50,
+gga_2001-12-31_f0123,BVR,4/15/2024,,50,do not use because the battery died
+gga_2001-12-31_f0124,FCR,4/15/2024,13:06,50,
+gga_2001-12-31_f0127,FCR,4/22/2024,12:00,50,
+gga_2001-12-31_f0129,BVR,4/29/2024,10:40,50,
+gga_2001-12-31_f0130,FCR,4/29/2024,,50,weird methane peak so did a 3rd rep
+gga_2001-12-31_f0137,FCR,5/13/2024,13:45,50,
+gga_2001-12-31_f0138,FCR,5/20/2024,,50,
+gga_2001-12-31_f0139,BVR,5/20/2024,,50,battery died after one run
+gga_2001-12-31_f0140,BVR,5/27/2024,,50,
+gga_2001-12-31_f0141,FCR,6/5/2024,11:55,50,
+gga_2001-12-31_f0142,FCR,6/10/2024,,50,
+gga_2001-12-31_f0144,FCR,6/17/2024,,50,
+gga_2001-12-31_f0145,FCR,6/24/2024,12:40,50,
+gga_2001-12-31_f0146,FCR,7/1/2024,,50,
+gga_2001-12-31_f0149,FCR,7/8/2024,,50,
+gga_2001-12-31_f0150,FCR,7/15/2024,,50,
+gga_2001-12-31_f0151,FCR,7/22/2024,10:20,50,
+gga_2001-12-31_f0152,FCR,7/29/2024,9:40,50,
+gga_2001-12-31_f0153,FCR,8/5/2024,,50,
+gga_2001-12-31_f0154,FCR,8/12/2024,,50,
+gga_2001-12-31_f0155,FCR,8/19/2024,,50,
+gga_2001-12-31_f0157,FCR,8/26/2024,,50,
+gga_2001-12-31_f0159,BVR,9/2/2024,10:40,50,
+gga_2001-12-31_f0161,FCR,9/2/2024,12:00,50,Very messy did not use. Did 3 reps because of wind spike in data 

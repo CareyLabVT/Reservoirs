@@ -23,7 +23,7 @@ jobs:
         run: |
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
           R -e 'utils::install.packages("RCurl")'
-          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/UGGA_qaqc.R
+          Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/ugga_qaqc.R
       - name: Commit and Push
         run: |
           git config user.name github-actions

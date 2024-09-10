@@ -228,8 +228,8 @@ current_plot_df <- bind_rows(current, current_raw)%>%
         drop_na(Var)%>%
         ggplot(.)+
         geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
-        labs(y = "Meters",
-             color = y_lab) +
+        labs(y = y_lab,
+             color = "Meters") +
         ggtitle(paste0("All ",Var," by Depth"," ",reservoir," ",res_site)) +
         theme_bw()+
         facet_wrap(~ as.factor(Depth_m), scale="free")+
@@ -277,8 +277,8 @@ if(length(qaqc_current$DateTime)>0){
           drop_na(Var)%>%
           ggplot(.)+
           geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
-          labs(y = "Meters",
-               color = y_lab) +
+          labs(y = y_lab,
+               color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")
@@ -321,8 +321,8 @@ if(length(qaqc_current$DateTime)>0){
           drop_na(Var)%>%
           {ggplot(.)+
           geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)))+
-          labs(y = "Meters",
-               color = y_lab) +
+          labs(y = y_lab,
+               color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
           facet_wrap(~ as.factor(Depth_m), scale="free")}%>%ggplotly %>% as_widget()

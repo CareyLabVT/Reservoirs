@@ -58,21 +58,7 @@ process_txt <- function(file,
   write.csv(flux_output, save_name, row.names = F)
 }
 
-#Manual notes about files from this year:
 
-#FILES NOT ON FIELD SHEET
-#"gga_2001-12-31_f0021.txt" --> should not use, was Carla
-#"gga_2001-12-31_f0016.txt" --> should not use, not totally sure what this is
-#"gga_2001-12-31_f0028.txt" --> should not use, not totally sure what this is
-#"gga_2001-12-31_f0037.txt" --> empty, not on field sheet
-#"gga_2001-12-31_f0039.txt" is real and gga_2001-12-31_f0038.txt is not. Mislabeled on field sheet
-
-#FILES ON FIELD SHEET BUT ISSUES
-#"gga_2001-12-31_f0013.txt" --> should not use, leaky tube
-#48 and 49 are weird. Could be real, but not on field sheet
-#55, 57, 77 missing
-#64, 65, 66 one usable peak
-#74, 82, 29 are unusable
 
 #Identify all files we SHOULD have (from field sheet)
 files <- paste0(field_sheet$file,".txt")
@@ -83,6 +69,7 @@ files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
 files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0112.txt",
                                                               "gga_2001-12-31_f0113.txt",
+							                                                "gga_2001-12-31_f0114.txt",
                                                               "gga_2001-12-31_f0116.txt",
                                                               "gga_2001-12-31_f0119.txt",
                                                               "gga_2001-12-31_f0123.txt",

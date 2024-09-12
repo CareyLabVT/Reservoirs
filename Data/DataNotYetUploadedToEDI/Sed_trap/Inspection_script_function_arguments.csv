@@ -1,0 +1,13 @@
+data_flux,data_mass,y_var_flux,y_var_mass,element_name,current_year,use_plotly
+sedtraps,fluxes33,TLiFlux_gm2d,Cumul_TLi_g,Lithium,2023,T
+sedtraps,fluxes33,TNaFlux_gm2d,Cumul_TNa_g,Sodium,2023,T
+sedtraps,fluxes33,TMgFlux_gm2d,Cumul_TMg_g,Magnesium,2023,T
+sedtraps,fluxes33,TAlFlux_gm2d,Cumul_TAl_g,Aluminum,2023,T
+sedtraps,fluxes33,TSiFlux_gm2d,Cumul_TSi_g,Silicon,2023,T
+sedtraps,fluxes33,TKFlux_gm2d,Cumul_TK_g,Potassium,2023,T
+sedtraps,fluxes33,TCaFlux_gm2d,Cumul_TCa_g,Calcium,2023,T
+sedtraps,fluxes33,TFeFlux_gm2d,Cumul_TFe_g,Iron,2023,T
+sedtraps,fluxes33,TMnFlux_gm2d,Cumul_TMn_g,Manganese,2023,T
+sedtraps,fluxes33,TCuFlux_gm2d,Cumul_TCu_g,Copper,2023,T
+sedtraps,fluxes33,TSrFlux_gm2d,Cumul_TSr_g,Strontium,2023,T
+sedtraps,fluxes33,TBaFlux_gm2d,Cumul_TBa_g,Barium,2023,T

@@ -1,3 +1,0 @@
-attributeName	code	definition
-Reservoir	BVR	Beaverdam Reservoir
-Reservoir	FCR	Falling Creek Reservoir

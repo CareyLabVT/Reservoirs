@@ -1,0 +1,10 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Flag_CollectionVol_L	1	No issues
+Flag_CollectionVol_L	2	Collection volume was not recorded and set to 1.7 L
+Flag_SedMass_g	1	No issues
+Flag_SedMass_g	2	Missing value
+Flag_SedMass_g	3	Negative value; set to NA
+Flag_Duration_days	1	No issues
+Flag_Duration_days	2	Deployment date not recorded; inferred

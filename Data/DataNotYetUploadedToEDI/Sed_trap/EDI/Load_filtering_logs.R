@@ -19,7 +19,7 @@ library(readr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
   #for now, need to set working directories to read sheets in
-setwd("~/Desktop/Reservoirs/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
+setwd("./Data/DataNotYetUploadedToEDI/Sed_trap/Filtering logs")
 filteringlog <- read_csv("2023_FilteringLog_EDI.csv") %>% 
   mutate(DateFiltered = as.POSIXct(DateFiltered, format = '%d%b%y'))
 log_2018 <- read_excel("2018_FilteringLog_EDI.xlsx")
@@ -70,7 +70,7 @@ frame1$TrapVol_L <- 1.8
 frame1 <- frame1 %>% 
   mutate(VolDiscarded_L = ifelse(year(Date)==2019&Date<"2019-09-15",NA,VolDiscarded_L))%>% #Mistakes in filtering log before this point
   group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
-  mutate(CollectionVol_L = (sum(FilterVol_L) + unique(VolDiscarded_L))/1000) %>% 
+  mutate(CollectionVol_L = (sum(FilterVol_L) + unique(VolDiscarded_L))) %>% 
   ungroup()
 
     #FilterRep

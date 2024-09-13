@@ -7,7 +7,7 @@ library(lubridate)
 library(stringr)
 
 #add sed flux
-setwd('./Data/DataNotYetUploadedToEDI/Sed_trap/EDI')
+setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024')
 fluxes <- read.csv('CN_Metals_Flux_EDI.csv')
 fluxes$Date <- as.Date(fluxes$Date)
 fluxes <- fluxes %>% 
@@ -119,6 +119,7 @@ flux_summary_final <- flux_summary %>%
          TSrFlux_gm2d, TBaFlux_gm2d,TOCFlux_gm2d,
          TNFlux_gm2d, Flag_AvgSedFlux_gm2d, 
          Flag_TLiFlux_gm2d, Flag_TNaFlux_gm2d,
+         Flag_TMgFlux_gm2d, Flag_TAlFlux_gm2d,
          Flag_TSiFlux_gm2d, Flag_TKFlux_gm2d,
          Flag_TCaFlux_gm2d, Flag_TFeFlux_gm2d,
          Flag_TMnFlux_gm2d, Flag_TCuFlux_gm2d,

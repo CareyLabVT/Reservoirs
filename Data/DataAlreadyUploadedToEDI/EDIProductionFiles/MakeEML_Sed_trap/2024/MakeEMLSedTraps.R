@@ -43,21 +43,21 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                       data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
                        data.table = c("FluxSummary.csv","CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                             data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
                              data.table = c("FluxSummary.csv", "CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
                           empty = TRUE,
                           write.file = TRUE)
@@ -105,8 +105,8 @@ template_geographic_coverage(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-                               data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -130,11 +130,11 @@ template_categorical_variables(path = "./Data/DataNotYetUploadedToEDI/Sed_trap/E
 
 # Run this function
 make_eml(
-  path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-  data.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-  eml.path = "./Data/DataNotYetUploadedToEDI/Sed_trap/EDI",
-  dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2022",
-  temporal.coverage = c("2018-05-21", "2022-11-28"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+  dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2023",
+  temporal.coverage = c("2018-05-21", "2023-12-04"),
   maintenance.description = 'ongoing',
   data.table = c("FluxSummary.csv",
                  "FilteringLog_EDI.csv", 
@@ -144,25 +144,25 @@ make_eml(
                       "Filtering log",
                       "Fluxes",
                       "Site desciptions"),
-  data.table.description = c("Summary of sediment, carbon, nitrogen, iron, and manganese fluxes",
+  data.table.description = c("Summary of sediment, carbon, nitrogen, and metal fluxes",
                              "Sediment trap filtering log",
-                             "Carbon, nitrogen, iron, manganese fluxes",
+                             "Carbon, nitrogen, and metal fluxes",
                              "Sampling site descriptions"),
   other.entity = c("MakeEDI_FluxSummary.R",
                    "MakeEDI_SedTraps.R",
                    "MakeEDI_SedTraps_CN.Rmd",
                    "Load_filtering_logs.R"),
   other.entity.name = c("Flux summary script",
-                        "Iron and manganese flux script",
+                        "Metals flux script",
                         "Carbon and nitrogen flux script",
                         "Filtering log script"),
-  other.entity.description = c("Script to summarize sediment, carbon, nitrogen, iron, and manganese fluxes",
-                               "Iron and manganese flux calculations script",
+  other.entity.description = c("Script to summarize sediment, carbon, nitrogen, and metal fluxes",
+                               "Metals flux calculations script",
                                "Carbon and nitrogen flux calculations script",
                                "Script to generate filtering log record for EDI"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1474.1') #reserve new staging environment package id each year
+  package.id = 'edi.1474.3') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

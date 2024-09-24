@@ -2,6 +2,7 @@
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov 23, 
 # Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
+# 24 Sep 24- round numeric columns to 4 digits
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -725,7 +726,8 @@ ghg_qaqc<-function(directory,
   # Make final data frame with only the columns we want
   ghg_final <- ghg_all%>%
     select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
-           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)
+           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)|>
+    mutate_if(is.numeric, round, digits = 4) # round to 4 digits
   
   
   # Write the MDL file

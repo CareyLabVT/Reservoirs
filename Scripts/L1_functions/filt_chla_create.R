@@ -2,6 +2,7 @@
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
 # Edit: 16 Jun 24- add in historical file, add a start and end date filter, add in time of sample
+# 24 Sept 24 - round all numeric columns to 4 digits
 
 # Things the script does: 
 # 1. Read in Maintenance log and read in raw chla file from the spec
@@ -497,7 +498,8 @@ filt_chla_qaqc <- function(directory,
             DateTime_samp = ifelse(is.na(DateTime_samp), paste0(Date," ","12:00:00"),as.character(DateTime_samp)),
             DateTime = ymd_hms(DateTime_samp))%>%
      select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
-            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)
+            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
+     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
      
      
      # put in order

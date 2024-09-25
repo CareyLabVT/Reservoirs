@@ -183,7 +183,7 @@ metals_qaqc <- function(directory,
 
  # bind the historic files and the current files
  frame22 <- bind_rows(frame2, hist)%>%
-   select(Reservoir, Site, Depth_m, Filter, Date, Time, Li_mgL, Na_mgL, Mg_mgL,
+   select(Reservoir, Site, Depth_m, Filter, Date, Li_mgL, Na_mgL, Mg_mgL,
           Al_mgL, Si_mgL, K_mgL, Ca_mgL, Fe_mgL, Mn_mgL, Cu_mgL, Sr_mgL, Ba_mgL, everything())
 
  # Reorder the date

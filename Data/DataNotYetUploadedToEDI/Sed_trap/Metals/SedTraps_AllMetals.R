@@ -16,7 +16,7 @@ library(readr)
 
 #read Excel sheets in; need to read in filtering logs for first data frame
 #for now, need to set working directories to read sheets in
-setwd("~/Data/DataNotYetUploadedToEDI/Sed_trap")
+setwd("./Data/DataNotYetUploadedToEDI/Sed_trap")
 
 frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
 
@@ -26,12 +26,12 @@ frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
 #
 #frame 2 let's gooo
 #need to read in the Jeff sheets, will do a little QA/QC to account for Jeff's formatting
-ICP2023 <- read_excel('Metals/Raw_Data/2023_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`) # need to change this set up so it reads in all of the 2023 ICP data sheets
-ICP2022 <- read_excel('Metals/Raw_Data/2022_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
-ICP2021 <- read_excel('Metals/Raw_Data/2021_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
-ICP2020 <- read_excel('Metals/Raw_Data/2020_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
-ICP2019 <- read_excel('Metals/Raw_Data/2019_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
-ICP2018 <- read_excel('Metals/Raw_Data/2018_ICPData.xlsx', skip = 3) %>% select(...1,  `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `29Si (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2023 <- read_excel('Metals/Raw_Data/2023_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`) # need to change this set up so it reads in all of the 2023 ICP data sheets
+ICP2022 <- read_excel('Metals/Raw_Data/2022_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2021 <- read_excel('Metals/Raw_Data/2021_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2020 <- read_excel('Metals/Raw_Data/2020_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2019 <- read_excel('Metals/Raw_Data/2019_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2018 <- read_excel('Metals/Raw_Data/2018_ICPData.xlsx', skip = 3) %>% select(...1,  `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
 
 # add NAs for Li because 2018 doesn't have Li data
 if (!"7Li (STDR)" %in% names(ICP2018)) {
@@ -52,7 +52,6 @@ ICPData <- ICPData %>% dplyr::rename('Li_ppb' = `7Li (STDR)`,
                               'Na_ppb' = `23Na (STDR)`, 
                               'Mg_ppb' = `24Mg (STDR)`,
                               'Al_ppb' = `27Al (STDR)`,
-                              'Si_ppb' = `29Si (STDR)`,
                               'K_ppb' = `39K (STDR)`,
                               'Ca_ppb' = `44Ca (STDR)`,
                               'Fe_ppb' = `54Fe (STDR)`,
@@ -119,7 +118,6 @@ frame2_complete = frame2%>%
          Flag_ICPTNa_mgL = 1,
          Flag_ICPTMg_mgL = 1,
          Flag_ICPTAl_mgL = 1,
-         Flag_ICPTSi_mgL = 1,
          Flag_ICPTK_mgL = 1,
          Flag_ICPTCa_mgL = 1,
          Flag_ICPTFe_mgL = 1, #Not currently changing these below
@@ -170,7 +168,6 @@ frame2_complete=frame2_complete%>%
          Na_ppb=as.numeric(Na_ppb),
          Mg_ppb=as.numeric(Mg_ppb),
          Al_ppb=as.numeric(Al_ppb),
-         Si_ppb=as.numeric(Si_ppb),
          K_ppb=as.numeric(K_ppb),
          Ca_ppb=as.numeric(Ca_ppb),
          Fe_ppb=as.numeric(Fe_ppb),
@@ -185,7 +182,6 @@ frame2 <- frame2_complete %>%
          ICPTNa_mgL = Na_ppb/1000,
          ICPTMg_mgL = Mg_ppb/1000,
          ICPTAl_mgL = Al_ppb/1000,
-         ICPTSi_mgL = Si_ppb/1000,
          ICPTK_mgL = K_ppb/1000,
          ICPTCa_mgL = Ca_ppb/1000,
          ICPTFe_mgL = Fe_ppb/1000, 
@@ -210,10 +206,6 @@ frame2 <- frame2_complete %>%
            nTraps == 2 ~ (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
            .default = (ICPTAl_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
             ),
-         TSi_g = case_when(
-           nTraps == 2 ~ (ICPTSi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
-           .default = (ICPTSi_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
-           ),
          TK_g = case_when(
            nTraps == 2 ~ (ICPTK_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L/2)/CombinedFilterVol_L),
            .default = (ICPTK_mgL/1000)*(Vol_acid_L)*(DilutionFactor)*((CombinedCollectionVol_L)/CombinedFilterVol_L)
@@ -257,10 +249,6 @@ frame2 <- frame2_complete %>%
          TAlFlux_gm2d = case_when( 
            nTraps == 2 ~ TAl_g/(CombinedXSA_m2/2)/Duration_days,
            .default = TAl_g/CombinedXSA_m2/Duration_days
-           ),
-         TSiFlux_gm2d = case_when(
-           nTraps == 2 ~ TSi_g/(CombinedXSA_m2/2)/Duration_days,
-           .default = TSi_g/CombinedXSA_m2/Duration_days
            ),
          TKFlux_gm2d = case_when(
            nTraps == 2 ~ TK_g/(CombinedXSA_m2/2)/Duration_days,

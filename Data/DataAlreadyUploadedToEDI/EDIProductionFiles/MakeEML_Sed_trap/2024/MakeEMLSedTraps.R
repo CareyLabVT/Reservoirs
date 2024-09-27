@@ -153,11 +153,11 @@ make_eml(
                    "MakeEDI_SedTraps_CN.Rmd",
                    "Load_filtering_logs.R",
                    "SedTrap_Inspection_2014_2023.Rmd"),
-  other.entity.name = c("Flux summary script",
-                        "Metals flux script",
-                        "Carbon and nitrogen flux script",
-                        "Filtering log script",
-                        "Metals Visual Inspection Script"),
+  # other.entity.name = c("Flux summary script",
+  #                       "Metals flux script",
+  #                       "Carbon and nitrogen flux script",
+  #                       "Filtering log script",
+  #                       "Metals Visual Inspection Script"),
   other.entity.description = c("Script to summarize sediment, carbon, nitrogen, and metal fluxes",
                                "Metals flux calculations script",
                                "Carbon and nitrogen flux calculations script",
@@ -165,7 +165,7 @@ make_eml(
                                "Plots metal fluxes and cumulative masses"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1474.3') #reserve new staging environment package id each year
+  package.id = 'edi.1474.6') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

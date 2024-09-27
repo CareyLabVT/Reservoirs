@@ -7,7 +7,6 @@ TLiFlux_gm2d	Calculated downward flux of total lithium	numeric	gramPerMeterSquar
 TNaFlux_gm2d	Calculated downward flux of total sodium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TMgFlux_gm2d	Calculated downward flux of total magnesium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TAlFlux_gm2d	Calculated downward flux of total aluminum	numeric	gramPerMeterSquaredPerDay		NA	No data
-TSiFlux_gm2d	Calculated downward flux of total silicon	numeric	gramPerMeterSquaredPerDay		NA	No data
 TKFlux_gm2d	Calculated downward flux of total potassium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TCaFlux_gm2d	Calculated downward flux of total calcium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TFeFlux_gm2d	Calculated downward flux of total iron	numeric	gramPerMeterSquaredPerDay		NA	No data
@@ -22,7 +21,6 @@ Flag_TLiFlux_gm2d	Data flag for TLiFlux_gm2d	categorical			NA	No data
 Flag_TNaFlux_gm2d	Data flag for TNaFlux_gm2d	categorical			NA	No data
 Flag_TMgFlux_gm2d	Data flag for TMgFlux_gm2d	categorical			NA	No data
 Flag_TAlFlux_gm2d	Data flag for TAlFlux_gm2d	categorical			NA	No data
-Flag_TSiFlux_gm2d	Data flag for TSiFlux_gm2d	categorical			NA	No data
 Flag_TKFlux_gm2d	Data flag for TKFlux_gm2d	categorical			NA	No data
 Flag_TCaFlux_gm2d	Data flag for TCaFlux_gm2d	categorical			NA	No data
 Flag_TFeFlux_gm2d	Data flag for TFeFlux_gm2d	categorical			NA	No data

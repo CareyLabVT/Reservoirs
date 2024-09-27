@@ -290,10 +290,10 @@ sed <- read_csv("Inspection_script_function_arguments.csv", show_col_types= F)
 #   data_mass = c(rep("fluxes33", 14)),
 #   y_var_flux = c(sedtraps%>%select(starts_with("T") & ends_with("_gm2d"))%>% colnames()),
 #   y_var_mass = c(fluxes33%>%select(starts_with("Cumul_T"))%>%
-#     select('Cumul_TLiFlux_gm2d', 'Cumul_TNaFlux_gm2d', 'Cumul_TMgFlux_gm2d', 'Cumul_TAlFlux_gm2d', 'Cumul_TSiFlux_gm2d', 
+#     select('Cumul_TLiFlux_gm2d', 'Cumul_TNaFlux_gm2d', 'Cumul_TMgFlux_gm2d', 'Cumul_TAlFlux_gm2d', 
 #            'Cumul_TKFlux_gm2d', 'Cumul_TCaFlux_gm2d', 'Cumul_TFeFlux_gm2d','Cumul_TMnFlux_gm2d', 'Cumul_TCuFlux_gm2d',     'Cumul_TSrFlux_gm2d', 'Cumul_TBaFlux_gm2d', 'Cumul_TOCFlux_gm2d', 'Cumul_TNFlux_gm2d')%>%
 #     colnames()),
-#   element_name = c("Lithium","Sodium","Magnesium","Aluminum", "Silicon","Potassium",
+#   element_name = c("Lithium","Sodium","Magnesium","Aluminum", "Potassium",
 #      "Calcium", "Iron","Manganese","Copper","Strontium","Barium", "Carbon", "Nitrogen"),
 #   current_year = c(rep(2023, 14)),
 #   use_plotly = c(rep(T, 14))

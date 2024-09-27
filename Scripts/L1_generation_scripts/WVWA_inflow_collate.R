@@ -2,6 +2,7 @@
 # By: Adrienne Breef-Pilz
 # Created:30 Jan 2024
 # Edited: 17 April 2024 - added start and end dates
+# 25 Sep 2024- add in a 4 digit round
 
 #' @author Adrienne BP
 #' @title WVWA_inflow_collate
@@ -94,7 +95,8 @@ WVWA_inflow_collate <- function(raw_inflow_files = "./Data/DataNotYetUploadedToE
   diff <- left_join(inflow_pressure, pressure_a4d, by = "DateTime")%>%
     mutate(WVWA_Pressure_psia = WVWA_Pressure_psi-WVWA_Baro_pressure_psi)%>%
     drop_na(WVWA_Pressure_psia)%>% # Take out NAs when there is only one observation
-    select(DateTime, WVWA_Temp_C, WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia)
+    select(DateTime, WVWA_Temp_C, WVWA_Pressure_psi, WVWA_Baro_pressure_psi, WVWA_Pressure_psia)|>
+  mutate_if(is.numeric, round, digits = 4) # round to 4 digits
   
   diff$DateTime <- force_tz(diff$DateTime, tzone="EST")
     

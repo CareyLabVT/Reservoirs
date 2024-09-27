@@ -14,7 +14,6 @@ ICPTLi_mgL	Raw total lithium concentration of diluted digestion solution	numeric
 ICPTNa_mgL	Raw total sodium concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
 ICPTMg_mgL	Raw total magnesium concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
 ICPTAl_mgL	Raw total alumunum concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
-ICPTSi_mgL	Raw total silicon concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
 ICPTK_mgL	Raw total potassium concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
 ICPTCa_mgL	Raw total calcium concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
 ICPTFe_mgL	Raw total iron concentration of diluted digestion solution	numeric	milligramPerLiter		NA	No data
@@ -28,7 +27,6 @@ TLi_g	Total mass of lithium in each trap (calculated)	numeric	gram		NA	No data
 TNa_g	Total mass of sodium in each trap (calculated)	numeric	gram		NA	No data
 TMg_g	Total mass of magnesium in each trap (calculated)	numeric	gram		NA	No data
 TAl_g	Total mass of aluminum in each trap (calculated)	numeric	gram		NA	No data
-TSi_g	Total mass of silicon in each trap (calculated)	numeric	gram		NA	No data
 TK_g	Total mass of potassium in each trap (calculated)	numeric	gram		NA	No data
 TCa_g	Total mass of calcium in each trap (calculated)	numeric	gram		NA	No data
 TFe_g	Total mass of iron in each trap (calculated)	numeric	gram		NA	No data
@@ -40,7 +38,6 @@ TLiFlux_gm2d	Calculated downward flux of total lithium	numeric	gramPerMeterSquar
 TNaFlux_gm2d	Calculated downward flux of total sodium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TMgFlux_gm2d	Calculated downward flux of total magnesium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TAlFlux_gm2d	Calculated downward flux of total aluminum	numeric	gramPerMeterSquaredPerDay		NA	No data
-TSiFlux_gm2d	Calculated downward flux of total silicon	numeric	gramPerMeterSquaredPerDay		NA	No data
 TKFlux_gm2d	Calculated downward flux of total potassium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TCaFlux_gm2d	Calculated downward flux of total calcium	numeric	gramPerMeterSquaredPerDay		NA	No data
 TFeFlux_gm2d	Calculated downward flux of total iron	numeric	gramPerMeterSquaredPerDay		NA	No data
@@ -61,7 +58,6 @@ Flag_ICPTLi_mgL	Data flag for ICPTLi (mg/L)	categorical			NA	No data
 Flag_ICPTNa_mgL	Data flag for ICPTNa (mg/L)	categorical			NA	No data
 Flag_ICPTMg_mgL	Data flag for ICPTMg (mg/L)	categorical			NA	No data
 Flag_ICPTAl_mgL	Data flag for ICPTAl (mg/L)	categorical			NA	No data
-Flag_ICPTSi_mgL	Data flag for ICPTSi (mg/L)	categorical			NA	No data
 Flag_ICPTK_mgL	Data flag for ICPTK (mg/L)	categorical			NA	No data
 Flag_ICPTCa_mgL	Data flag for ICPTCa (mg/L)	categorical			NA	No data
 Flag_ICPTFe_mgL	Data flag for ICPTFe (mg/L)	categorical			NA	No data

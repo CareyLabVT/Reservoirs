@@ -8,7 +8,6 @@ Beaverdam Reservoir	carey lab controlled vocabulary
 reservoir	cuahsi controlled vocabulary
 lakes	lter controlled vocabulary
 total lithium	cuahsi controlled vocabulary
-total sodium	cuahsi controlled vocabulary
 total magnesium	cuahsi controlled vocabulary
 total aluminum	cuahsi controlled vocabulary
 total silicon	cuahsi controlled vocabulary

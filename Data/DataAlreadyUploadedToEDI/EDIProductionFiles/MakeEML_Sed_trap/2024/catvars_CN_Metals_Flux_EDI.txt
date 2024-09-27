@@ -16,8 +16,6 @@ Flag_ICPTMg_mgL	1	No issues
 Flag_ICPTMg_mgL	2	Not run
 Flag_ICPTAl_mgL	1	No issues
 Flag_ICPTAl_mgL	2	Not run
-Flag_ICPTSi_mgL	1	No issues
-Flag_ICPTSi_mgL	2	Not run
 Flag_ICPTK_mgL	1	No issues
 Flag_ICPTK_mgL	2	Not run
 Flag_ICPTCa_mgL	1	No issues

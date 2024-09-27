@@ -14,9 +14,6 @@ Flag_TMgFlux_gm2d	3	Values for two replicate sediment traps averaged
 Flag_TAlFlux_gm2d	1	No issues
 Flag_TAlFlux_gm2d	2	Missing value
 Flag_TAlFlux_gm2d	3	Values for two replicate sediment traps averaged
-Flag_TSiFlux_gm2d	1	No issues
-Flag_TSiFlux_gm2d	2	Missing value
-Flag_TSiFlux_gm2d	3	Values for two replicate sediment traps averaged
 Flag_TKFlux_gm2d	1	No issues
 Flag_TKFlux_gm2d	2	Missing value
 Flag_TKFlux_gm2d	3	Values for two replicate sediment traps averaged

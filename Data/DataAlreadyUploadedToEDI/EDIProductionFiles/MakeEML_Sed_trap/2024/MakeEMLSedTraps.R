@@ -165,7 +165,7 @@ make_eml(
                                "Plots metal fluxes and cumulative masses"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1474.7') #reserve new staging environment package id each year
+  package.id = 'edi.1474.8') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

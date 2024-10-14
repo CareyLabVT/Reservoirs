@@ -4,7 +4,7 @@ Date	"Date of sampling. All data were collected in the eastern time zone of the 
 Site	Sampling site within each reservoir	numeric	dimensionless		NA	No data
 Duration_days	Duration of deployment/ time between collection points	numeric	nominalDay		NA	No data
 Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	No data
-CombinedXSA_m2	Trap cross sectional area	numeric	squareMeter		NA	No data
+CombinedXSA_m2	"Combined trap cross sectional area of 1 or 2 traps, depending on how many used for digestion. See filter IDs for trap rep information"	numeric	squareMeter		NA	No data
 Filter1ID	Identification code for first filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
 Filter2ID	Identification code for second filter analyzed (Reservoir_Depth_TrapRep_FilterRep_Date)	character			NA	No data
 CombinedCollectionVol_L	Total collection volume for two filters analyzed	numeric	liter		NA	No data

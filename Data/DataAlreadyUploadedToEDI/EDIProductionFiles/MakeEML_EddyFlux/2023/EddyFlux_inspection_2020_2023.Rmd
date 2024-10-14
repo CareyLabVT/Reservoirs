@@ -48,7 +48,7 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 
 #current time of QAQC for graphing
 # The flux system is in Eastern time and observes daylight savings
-current_time_start=ymd_hms("2023-01-01 00:00:00", tz= "America/New_York")
+current_time_start=ymd_hms("202-01-01 00:00:00", tz= "America/New_York")
 current_time_end=ymd_hms("2023-12-31 23:59:00", tz= "America/New_York")
 ```
 
@@ -57,21 +57,23 @@ current_time_end=ymd_hms("2023-12-31 23:59:00", tz= "America/New_York")
 ```{r QAQC raw files, eval=FALSE, include=FALSE}
 # QAQC the files we have
 
-# current_df <- eddypro_cleaning_function(
-#   directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/",
-#   gdrive = F, # Are the files on Google Drive. True or False
-#   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-#   current_year = NULL,
-#   output_file = NULL)
-# 
-# # Make a DateTime column but remove it before saving the file
-#  current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
-#  
-#  # force the timezone to Eastern/New_York
-#  
-#  # Set timezone as EST. Streaming sensors don't observe daylight savings
-#   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
-#  
+ current_df <- eddypro_cleaning_function(
+   directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/data/",
+    text_file = F,
+   gdrive = F, # Are the files on Google Drive. True or False
+   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
+   output_file = NULL,
+   start_date = as.Date("2020-01-01"),
+   end_date = as.Date("2025-01-01"))
+
+ # Make a DateTime column but remove it before saving the file
+  current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
+
+  # force the timezone to Eastern/New_York
+
+  # Set timezone as EST. Streaming sensors don't observe daylight savings
+   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
+
 
 ```
 

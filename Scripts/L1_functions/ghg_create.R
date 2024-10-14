@@ -2,6 +2,7 @@
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov 23, 
 # Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
+# 24 Sep 24- round numeric columns to 4 digits
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -58,7 +59,8 @@ ghg_qaqc<-function(directory,
   # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
   # gdrive = T # Are the files on Google Drive. True or False
   # gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
-  # _Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328"
+  # Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG", 
+  #                                 "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
   # vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
   # Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555"
   # output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
@@ -228,7 +230,7 @@ ghg_qaqc<-function(directory,
     #dplyr::rename(clean_vial_number="Vial Number")%>%
     mutate(
       clean_vial_number= `Vial Number`,
-      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy')),
+      DateTime=parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
       Date=as.Date(DateTime),
       Date_upper=Date+4)
   
@@ -397,9 +399,9 @@ ghg_qaqc<-function(directory,
   # Convert time that are in 12 hours to 24 hours
   raw_df <- working_final_df %>% 
     mutate(Time = format(DateTime,"%H:%M:%S"),
-           Flag_DateTime = ifelse(Time == "00:00:00", 1, 0), # Flag if set time to noon
+           Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
            Time = ifelse(Time == "00:00:00", "12:00:00",Time),
-           Date = as.Date(DateTime),
+           Date = as.Date.character(DateTime),
            DateTime = ymd_hms(paste0(Date, "", Time)),
            Hours = hour(DateTime),
            DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
@@ -724,7 +726,8 @@ ghg_qaqc<-function(directory,
   # Make final data frame with only the columns we want
   ghg_final <- ghg_all%>%
     select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
-           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)
+           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)|>
+    mutate_if(is.numeric, round, digits = 4) # round to 4 digits
   
   
   # Write the MDL file

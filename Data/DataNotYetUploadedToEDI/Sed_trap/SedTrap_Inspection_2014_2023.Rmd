@@ -1,0 +1,333 @@
+---
+title: "SedTrap Inspection 2014 2023"
+author: "Adrienne - CEB edited for Sed Traps"
+date: "2024-08-29"
+output: html_document
+edit: "2024-09-12"
+---
+
+This is a visual inspection script to look at Metals data from the sed traps. In the final EDI publication we also include Carbon and Nitrogen fluxes. 
+
+This script reads in the metals data. Checks if there are any NAs in the flag columns. The creates QAQC plots. These plots are time series of the fluxes along with cumulative mass plots. See below for more details on the plots. 
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, plotly,knitr, htmltools, pander)
+
+ #turn off pander auto asis
+        pander::panderOptions('knitr.auto.asis', FALSE)
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+```
+
+
+```{r read in the data file, include=FALSE}
+
+ current_df <-read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Sed_trap/Metals/2023_allMetals.csv') %>% # this file will change to pasta-s link when in EDI
+  rename(DateTime=Date)
+
+ 
+# # Force files from EDI to have an EST timestamp
+ current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
+
+```
+
+## Check Data Flags 
+
+This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
+
+```{r Check there are no NAs in Flag columns, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags=current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+```
+
+
+```{r Cumul mass calculations, warning=FALSE, include=FALSE}
+
+# These data need some transformation for cumulative mass calculations
+
+# renames 2023_allMetals.csv to match other names used here
+sedtraps <- current_df%>%  
+  mutate(
+    Date = as.Date(DateTime),
+    Year = year(DateTime),
+    Layer = if_else(Depth_m <= 5, 'Epilimnion', 'Hypolimnion'))
+
+# # Read in the sed trap log to calculate Sed mass
+# sedtraps2 <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Sed_trap/Filtering%20logs/FilteringLog_EDI.csv")
+
+
+# make a list of the names of elements
+element_names <- current_df%>%
+  select(starts_with("T") & ends_with("_g"))%>%
+  colnames()
+
+# add in the SedFlux and SedMass because will use this list to sort later
+#element_names <- c(element_names, "SedFlux_gm2d", "SedMass_g")
+
+fluxes <- sedtraps %>% 
+  select(Reservoir, Date, Depth_m, TLi_g:TBaFlux_gm2d)%>%
+  pivot_longer(!c(Reservoir,Date,Depth_m), names_to = "variable", values_to = "obs")%>%
+  group_by(Reservoir, Date, Depth_m, variable)%>%
+  summarise(mean=mean(obs, na.rm=T))%>%
+  ungroup()
+
+# #just want to get avg sed fluxes and masses from filtering log (sedtraps2); avging across all filters from all reps
+# sedflux <- sedtraps2 %>% 
+#   select(Reservoir, Date, Depth_m, SedFlux_gm2d, SedMass_g)%>%
+#   pivot_longer(!c(Reservoir, Date, Depth_m), names_to = "variable", values_to = "obs")%>%
+#   group_by(Date, Reservoir, Depth_m, variable) %>% 
+#   summarise(mean=mean(obs, na.rm=T))%>%  
+#   ungroup() 
+  
+  # use bind_rows to put the fluxes file and the sed fluxes from the filtering log together
+  
+  fluxes33 <- fluxes%>%
+    #bind_rows(., sedflux)%>%
+    # filter using the list above so we only have list of elements and SedFlux
+  filter(variable %in% element_names)%>%
+    # add in a epi and hypo list
+  dplyr::mutate(Layer = if_else(Depth_m <= 5, 'Epilimnion', 'Hypolimnion'),
+                Year = year(Date))%>%
+  group_by(Reservoir, Year, Layer, variable) %>% 
+    # calculate the cumulative amount
+  dplyr::mutate(Cumul = cumsum(mean))%>%
+  ungroup()%>%
+    # give each element its own column
+  pivot_wider(names_from = variable, values_from = c(mean, Cumul))%>%
+  dplyr::mutate(
+    CumulFeMn = Cumul_TFe_g/Cumul_TMn_g,
+    Layer = as.factor(Layer),
+    #Year = year(Date),
+    DOY = yday(Date))%>% 
+  # change NAN to NA 
+  mutate(across(where(is.numeric), \(x) ifelse(is.nan(x), NA, x)))%>%
+  arrange(Date)
+  # pivot longer to make everything easier
+
+
+```
+
+### QAQC Plots
+
+##### QAQC plot information and all_plot function information
+
+For the plots, they use a function called "cum_mass_plot". The function is created in this Markdown document.  In cum_mass_plot you can specify if you want plotly plots for the flux data. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+The plotting function is called cum_mass_plot() which plots the 3 plots described below. 
+The arguments are:
+    data_flux, # name of the data frame for fluxes, which needs to be in quotes,
+    data_mass, # name of the data frame for cumulative mass, which needs to be in quotes,
+    y_var_flux, # name of the col in the flux df where the data are in quotes
+    y_var_mass, # name of the col in the mass df
+    element_name, # full name of the element for the title
+    current_year, # current year that we want to take a closer look at
+    use_plotly) # Do we want to make the plots interactive? = T
+
+  
+##### Plot Description:
+
+The plots below are:
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. There is an option to include heatmaps. Once note with heat
+
+1. A time series of the current years' data that has been qaqced. Make sure noting was missed in the script or that need to be added to the maintenance log. In addition to the timeseries, there is a timeseries but each depth is on its own plot. This is only if there are more than one depth in the data frame. There is also an option for a heatmap. Make sure you have multiple depths in your data and that Heatmap=T is an argument in the function. Heat maps observations are interpolated so I would use this plots caution. If you find something off in the heatmap then look at the actual observation in the timeseries. 
+
+2. A time series of the historical and the current data just the qaqced values. Just as the current years' data there is also a timeseries split by depth and an option for a heatmap. 
+
+The next two plots are just fun to see trends over time with the data. 
+
+3. Cumulative mass plots. Check to make sure all the calculations are done correctly
+
+### QAQC Plots 
+
+```{r function to create cumulative mass plot, include=FALSE}
+
+cum_mass_plot <- function(
+    data_flux, 
+    data_mass, # name of the data frame which needs to be in quotes,
+    y_var_flux, # name of the col in the flux df where the data are in quotes
+    y_var_mass, # name of the col in the mass df
+    element_name, # full name of the element for the title
+    current_year, # current year that we want to take a closer look at
+    use_plotly) # Do we want to make the plots interactive? = T
+  {
+  
+  
+  flux_current <- get(data_flux)%>%
+    filter(Year %in% current_year)%>%
+    ggplot(.)+
+     geom_point(aes(x=DateTime, y=.data[[y_var_flux]], color=as.factor(Layer)))+
+          labs(y = "gm2d",
+               color = "Depth") +
+          ggtitle(paste0("Current ", element_name, " fluxes")) +
+    facet_wrap(vars(Reservoir), nrow = 2, scale="free_y")+
+    theme_bw()+
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  # Make time series of the fluxes
+  flux_all <- ggplot(data = get(data_flux))+
+    geom_point(aes(x=DateTime, y=.data[[y_var_flux]], color=as.factor(Layer)))+
+          labs(y = "gm2d",
+               color = "Depth") +
+          ggtitle(paste0("All ", element_name, " fluxes")) +
+    facet_wrap(vars(Reservoir), nrow = 2, scale="free_y")+
+    theme_bw()+
+    theme(plot.title = element_text(hjust = 0.5)) 
+  
+  if (use_plotly ==T){
+    flux_current <- flux_current%>%
+      ggplotly %>% 
+      as_widget()
+    
+    flux_all <- flux_all%>%
+      ggplotly %>% 
+      as_widget()
+  }
+  
+
+# Make the cumulative mass plots  
+mass <- ggplot(data= get(data_mass)) + 
+  geom_point(aes(as.Date(Date), .data[[y_var_mass]], colour = Reservoir)) +
+  facet_grid(cols = vars(Year), rows = vars(Layer), scales = 'free_x', space = "free_x") +
+  scale_x_date(date_labels = '%b', breaks = '2 months') +
+  scale_y_continuous(name = paste0("Cumulative ", element_name  , " Removal (g)") )+
+  ggtitle(paste0("Cumulative ", element_name ," Removal by Reservoir, Depth, and Year")) +
+  xlab('Date') +
+  theme_bw() + 
+  theme(panel.grid = element_blank()) + 
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+# Make the list of the plots
+sedlist <- list(flux_current, flux_all, mass)
+
+# Prints the plots where they should be. 
+  # Plotly would always print out of order. 
+  # This is how I could get them working for each Variable
+  
+  
+  for(j in 1:length(sedlist)){
+    x <- sedlist[[j]]
+    
+    if (inherits(x, "plotly")) {
+      # print the html piece of the htmlwidgets
+      cat(renderTags(x)$html)
+    } else {
+      # print the ggplot graphs
+      print(x)
+      
+    }
+  }
+
+return(sedlist)
+
+}
+
+```
+
+
+```{r plot cumul mass of metals, echo=FALSE, warning=FALSE, results='asis'}
+
+
+# Use pmap to make the plots. Because we are using the purrr pmap function, we need to create a data frame with all of the arguments we want for the function for each of the different plots we want to make. This is much easier than writing the ggplot function and changing the y value in the plot. 
+
+# First we made the plots we want to see into a function. We did this above. 
+
+# Then we made a data table with all of the arguments for each of the separate variables we want to use. We made it in # Excell and read it in but you can also make the data frame in the script. That is the commented out section below. 
+
+# First map a data frame of the arguments into the plotting function
+# or you can make a dataframe in excel and read it in as a csv
+
+sed <- read_csv("Inspection_script_function_arguments.csv", show_col_types= F)
+
+# Making the data frame in the script. This is the same as above. Make sure the names of the columns match the name of your arguments. 
+
+# sed <- data.frame(
+#   data_flux = c(rep("sedtraps", 12)),
+#   data_mass = c(rep("fluxes33", 12)),
+#   y_var_flux = c(sedtraps%>%select(starts_with("T") & ends_with("_gm2d"))%>% colnames()),
+#   y_var_mass = c(fluxes33%>%select(starts_with("Cumul_T"))%>%
+#     select('Cumul_TLi_g', 'Cumul_TNa_g', 'Cumul_TMg_g', 'Cumul_TAl_g', 'Cumul_TSi_g', 
+#            'Cumul_TK_g', 'Cumul_TCa_g', 'Cumul_TFe_g','Cumul_TMn_g', 'Cumul_TCu_g', 'Cumul_TSr_g', 'Cumul_TBa_g')%>%
+#     colnames()),
+#   element_name = c("Lithium","Sodium","Magnesium","Aluminum", "Silicon","Potassium",
+#      "Calcium", "Iron","Manganese","Copper","Strontium","Barium"),
+#   current_year = c(rep(2023, 12)),
+#   use_plotly = c(rep(T, 12))
+
+```
+
+```{r make the plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
+
+# Use the pmap function in the purrr package to make the plots. 
+# This function take the arguments from each row of the csv used. Here is it called sed. Then uses those arguments in the function. 
+  outputs <- purrr::pmap(sed,cum_mass_plot)
+  
+# Because we have 3 plots every time the function is run we want to put all the plots in one list and not in a list within a list. 
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly, echo=FALSE, warning=FALSE, messages=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+```{r Cum Fe/Mn, echo=FALSE}
+# In the data frame we divide Fe by Mn to looked at cumulative iron to Mn. 
+# Cumulative Iron compared to Manganese Removal plot
+
+ggplot(data= fluxes33) + 
+  geom_point(aes(as.Date(Date), CumulFeMn, colour = Reservoir)) +
+  facet_grid(cols = vars(Year), rows = vars(Layer), scales = 'free_x', space = "free_x") +
+  scale_x_date(date_labels = '%b', breaks = '2 months') +
+  scale_y_continuous(name = "Cumulative Iron to Manganese Removal (g)") +
+  ggtitle(paste0("Cumulative Iron to Manganese Removal by Reservoir, Depth, and Year")) +
+  xlab('Date') +
+  theme_bw() + 
+  theme(panel.grid = element_blank()) + 
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+
+```

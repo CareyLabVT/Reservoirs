@@ -3,6 +3,7 @@
 # Date: 18JUL23
 # Edit: 07 Mar. 24 A. Breef-Pilz
 # Edit: 30 May 2024 ABP. Move the save ISCO file section up. 
+# 24 Sep. 24 Round numeric columns to 4 digits
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -39,7 +40,7 @@ metals_qaqc <- function(directory,
   # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
   # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
   # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
-  # #outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+  # outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
   # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
@@ -58,7 +59,7 @@ metals_qaqc <- function(directory,
   # Read in Sample ID Key 
   
   #read in metals ID, reservoir, site, depth, and total/soluble key
-  metals_key <- read_csv(sample_ID_key)|> 
+  metals_key <- read_csv(sample_ID_key, show_col_types = F)|> 
     dplyr::rename(Depth_m =`Sample Depth (m)`,
                   Sample_ID = Sample)
 
@@ -171,11 +172,18 @@ metals_qaqc <- function(directory,
 
  # Add in the historic files from 2014_2019 plus some one off sampling campaigns. We only have Fe and Mn for that time.
 
- hist <- read_csv(historic)
+ if (is.null(start_date) | start_date<as.Date("2020-01-01")){
+   
+   hist <- read_csv(historic, show_col_types = F)
+ }else{
+   hist <- NULL
+ }
+ 
+ 
 
  # bind the historic files and the current files
  frame22 <- bind_rows(frame2, hist)%>%
-   select(Reservoir, Site, Depth_m, Filter, Date, Time, Li_mgL, Na_mgL, Mg_mgL,
+   select(Reservoir, Site, Depth_m, Filter, Date, Li_mgL, Na_mgL, Mg_mgL,
           Al_mgL, Si_mgL, K_mgL, Ca_mgL, Fe_mgL, Mn_mgL, Cu_mgL, Sr_mgL, Ba_mgL, everything())
 
  # Reorder the date
@@ -339,7 +347,7 @@ metals_qaqc <- function(directory,
 
    ### 4. Read in the Minimum Reporting Limits and add flags ####
 
-   MRL <- read_csv(MRL_file)|>
+   MRL <- read_csv(MRL_file, show_col_types = F)|>
      pivot_wider(names_from = 'Symbol',
                  values_from = "MRL_mgL")
 
@@ -436,9 +444,9 @@ metals_qaqc <- function(directory,
       Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
       Flag_DateTime = ifelse(is.na(Time), 1, 0),
       Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
-      DateTime = ymd_hms(paste0(Date," ",Time))
-    )|>
-     select(-c(Date, Time))
+      DateTime = ymd_hms(paste0(Date," ",Time)))|>
+     select(-c(Date, Time))|>
+     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
 
 
    #### 6. Switch observations if total and soluble samples were mixed up ####

@@ -1,10 +1,7 @@
 attributeName	code	definition
-DataStream	Secchi	data stream
+DataStream	Secchi	The name of the data file: secchi
 Reservoir	BVR	Beaverdam Reservoir
-end_parameter	Flag_Secchi_m	end parameter
-end_parameter	NA	end parameter
-start_parameter	Reservoir	start parameter
-start_parameter	Secchi_m	start parameter
-flag	2	digitizing error
-flag	3	suspect value
-flag	4	internally removed due to issues
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+flag	2	Multiple observations at a site at the same time are averaged together
+start_parameter	Secchi_m	Depth of the secchi reading in meters

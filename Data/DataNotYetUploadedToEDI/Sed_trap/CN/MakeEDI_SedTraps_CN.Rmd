@@ -2,6 +2,7 @@
 title: "Sed traps CN 2019-present"
 author: "Abby Lewis"
 date: "2023-02-01"
+updated: "2024-08-22 by Carly Bauer"
 output: html_document
 ---
 
@@ -72,7 +73,7 @@ cn_processed = cn_raw%>%
                        Depth_m,"m_R",substr(Filter2ID,2,2),"_F",substr(Filter2ID,4,4),"_",
                        format(Date_sampled,"%d%b%y")))%>%
   select(-cut,-No.,-Hole..Pos.,-Method,-Info,-C..Blank,-N..Blank)%>%
-  rename(Time_run = Time,
+  dplyr::rename(Time_run = Time,
          Weight_mg = Weight...mg.,
          N_area = N..Area,
          C_area = C..Area,
@@ -199,7 +200,8 @@ The hard part is done! Now just some simple arithmetic to get the CN flux values
 ```{r}
 CN_DONE = frame2_complete %>%
   filter(!is.na(CombinedXSA_m2)) %>%
-  rename(Entered_weight_mg = Weight_mg) %>%
+  mutate(Reservoir = as.character(Reservoir)) %>% 
+  dplyr::rename(Entered_weight_mg = Weight_mg) %>%
   mutate(C_mass_CN_g = C_pct / 100 * Entered_weight_mg / 1000, #convert to g
          N_mass_CN_g = N_pct / 100 * Entered_weight_mg / 1000,
          C_pct = C_mass_CN_g / CombinedSedMass_g * 100, #convert to pct
@@ -226,15 +228,15 @@ CN_DONE%>%
 ## Combine with metals and export for EDI
 
 ```{r}
-metals_to_combine = read.csv("../Metals/2022_FeMnCN.csv")%>%
+metals_to_combine = read.csv("../Metals/2023_allMetals.csv")%>%
   mutate(Date=as.Date(Date))
 
 comb_raw = CN_DONE%>%
-  rename(Date = Date_sampled)%>%
+  dplyr:: rename(Date = Date_sampled)%>%
   full_join(metals_to_combine)
 
 comb_formatted = comb_raw%>%
-  rename(TOCFlux_gm2d = C_flux_gm2d,
+  dplyr::rename(TOCFlux_gm2d = C_flux_gm2d,
          TNFlux_gm2d = N_flux_gm2d,
          TOC_g = C_mass_traps_g,
          TN_g = N_mass_traps_g)%>%
@@ -249,14 +251,41 @@ comb_formatted = comb_raw%>%
                 CombinedCollectionVol_L,
                 CombinedFilterVol_L,
                 CombinedSedMass_g,
+                ICPTLi_mgL,
+                ICPTNa_mgL,
+                ICPTMg_mgL,
+                ICPTAl_mgL,
+                ICPTK_mgL,
+                ICPTCa_mgL,
                 ICPTFe_mgL,
                 ICPTMn_mgL,
+                ICPTCu_mgL,
+                ICPTSr_mgL,
+                ICPTBa_mgL,
                 AcidVol_L,
                 DilutionFactor,
+                TLi_g,
+                TNa_g,
+                TMg_g,
+                TAl_g,
+                TK_g,
+                TCa_g,
                 TFe_g,
                 TMn_g,
+                TCu_g,
+                TSr_g,
+                TBa_g,
+                TLiFlux_gm2d,
+                TNaFlux_gm2d,
+                TMgFlux_gm2d,
+                TAlFlux_gm2d,
+                TKFlux_gm2d,
+                TCaFlux_gm2d,
                 TFeFlux_gm2d,
                 TMnFlux_gm2d,
+                TCuFlux_gm2d,
+                TSrFlux_gm2d,
+                TBaFlux_gm2d,
                 TOC_g,
                 TN_g,
                 TOCFlux_gm2d,
@@ -266,11 +295,29 @@ comb_formatted = comb_raw%>%
                 Flag_CombinedSedMass_g,
                 Flag_TOC_g,
                 Flag_TN_g,
+                Flag_ICPTLi_mgL,
+                Flag_ICPTNa_mgL,
+                Flag_ICPTMg_mgL,
+                Flag_ICPTAl_mgL,
+                Flag_ICPTK_mgL,
+                Flag_ICPTCa_mgL,
                 Flag_ICPTFe_mgL,
-                Flag_ICPTMn_mgL)%>%
+                Flag_ICPTMn_mgL,
+                Flag_ICPTCu_mgL,
+                Flag_ICPTSr_mgL,
+                Flag_ICPTBa_mgL)%>%
   arrange(Date) %>%
-  mutate(Flag_ICPTFe_mgL = ifelse(is.na(ICPTFe_mgL), 2, Flag_ICPTFe_mgL),
+  mutate(Flag_ICPTLi_mgL = ifelse(is.na(ICPTLi_mgL), 2, Flag_ICPTLi_mgL),
+         Flag_ICPTNa_mgL = ifelse(is.na(ICPTNa_mgL), 2, Flag_ICPTNa_mgL),
+         Flag_ICPTMg_mgL = ifelse(is.na(ICPTMg_mgL), 2, Flag_ICPTMg_mgL),
+         Flag_ICPTAl_mgL = ifelse(is.na(ICPTAl_mgL), 2, Flag_ICPTAl_mgL),
+         Flag_ICPTK_mgL = ifelse(is.na(ICPTK_mgL), 2, Flag_ICPTK_mgL),
+         Flag_ICPTCa_mgL = ifelse(is.na(ICPTCa_mgL), 2, Flag_ICPTCa_mgL),
+         Flag_ICPTFe_mgL = ifelse(is.na(ICPTFe_mgL), 2, Flag_ICPTFe_mgL),
          Flag_ICPTMn_mgL = ifelse(is.na(ICPTMn_mgL), 2, Flag_ICPTMn_mgL),
+         Flag_ICPTCu_mgL = ifelse(is.na(ICPTCu_mgL), 2, Flag_ICPTCu_mgL),
+         Flag_ICPTSr_mgL = ifelse(is.na(ICPTSr_mgL), 2, Flag_ICPTSr_mgL),
+         Flag_ICPTBa_mgL = ifelse(is.na(ICPTBa_mgL), 2, Flag_ICPTBa_mgL),
          Flag_TOC_g = ifelse(is.na(TOC_g), 2, Flag_TOC_g),
          Flag_TN_g = ifelse(is.na(TN_g), 2, Flag_TN_g))
 

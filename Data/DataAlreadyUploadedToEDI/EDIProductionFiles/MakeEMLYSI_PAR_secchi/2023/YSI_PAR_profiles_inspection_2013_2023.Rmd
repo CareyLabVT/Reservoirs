@@ -1,0 +1,497 @@
+---
+title: "YSI PAR inspection 2013_2023"
+author: "Austin Delany and Adrienne Breef-Pilz"
+date: "2023-12-08"
+edit: "2024-07-29"
+output: html_document
+---
+
+This script is the data visualization script that:
+1) Makes QAQC file of all YSI and PAR data from a digitized google sheet
+2) Checks to make sure there are no duplicate in the file
+3) Look at the sites in the file
+4) Make sure we don't have observations deeper than the reservoirs
+5) Makes sure the maintenance log is working
+6) generates figures to visualize both this past year and all combined years of data
+7) Save the final EDI file
+8) Downloads the qaqc function and the maintenance log for publication
+9) Make a site description file 
+
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "QAQC file or READ IN EDI FOR REVIEWER". Make sure to comment out "Create the file for EDI" section. In addition, make sure eval=FALSE is in the chunk header for "Create the file for EDI", "Make current csv" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+When you are making the data frame make sure all of the files that you uncomment "Create the file for EDI", "save the data", and "save maintlog and function". In the top of each chunk, make sure eval=TRUE. Turn off the review chunk. 
+
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet, plotly)
+
+#current time of QAQC for graphing
+current_time_start=ymd_hms("2023-01-01 00:00:00", tz = "America/New_York")
+current_time_end= ymd_hms("2023-12-31 23:59:00", tz = "America/New_York")
+```
+
+```{r Create the file for EDI, eval=FALSE, include=FALSE}
+
+# #source L1 function to run all data through QAQC process
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
+# 
+# 
+# # read in the Google sheet with all of the observations and QAQC them
+# current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
+#             gsheet_data = TRUE,
+#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
+#             outfile = NULL,
+#             start_date = as.Date("2013-01-01"),
+#             end_date = as.Date(current_time_end))
+
+```
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+
+```{r READ IN EDI FOR REVIEWER, eval=TRUE, include=FALSE}
+  
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+  
+  
+                                                                   ### CHANGE THIS BELOW 
+                                                                              #########   
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1105/8/e0181372c6d4cbc66eca4644f8385470")
+
+ # Force files from EDI to have an Daylight savings observed timestamp
+ current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
+
+```
+
+## Check for duplicates and gaps in the data frame
+
+This section identifies if there are any duplicates. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function to see how they were missed. 
+
+
+### Are there any duplicates?
+
+
+```{r Check for dups, echo=FALSE}
+
+# Make sure there are no duplicated observations.
+# Print them if there are
+ dups<- current_df[duplicated(current_df), ]
+
+dups <- dups%>%
+  select(Reservoir, Site, DateTime,  
+         Depth_m)
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((dups))
+```
+
+### Flag Frequency
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+
+ Flag values for DateTime
+ 
+ 0: no flag
+ 
+ 1: Time set to 12:00:00 because an exact time was not recorded
+
+ Flag values for other variables: Temp, DO, Cond, PAR, ORP, pH
+ 
+ 0 - NOT SUSPECT
+ 
+ 1 - SAMPLE NOT TAKEN
+ 
+ 2 - INSTRUMENT MALFUNCTION
+ 
+ 3 - SAMPLE BELOW DETECTION LIMIT
+ 
+ 4 - NEGATIVE VALUE SET TO ZERO
+ 
+ 5 - SUSPECT SAMPLE
+ 
+ 6 - HUMAN ERROR
+ 
+ 7 - TEMP MEASURED USING PH PROBE
+ 
+ 
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+ maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", show_col_types = FALSE)
+
+# parse datetime depending on the format it is in
+ maint <- maint |>
+   mutate(
+    TIMESTAMP_start =  lubridate::parse_date_time(TIMESTAMP_start, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
+    TIMESTAMP_end = lubridate::parse_date_time(TIMESTAMP_end, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM'))
+    )
+
+
+# name the data file for just the tail of the maintenance log
+
+sd <- tail(maint)
+
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "America/New_York")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "America/New_York")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    #colname_end <- last_row$end_parameter
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, message=FALSE, warning=FALSE, include=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+
+### List of Reservoirs and Site in the data frame
+
+Make sure we have all the correct site names
+
+```{r List of Sites in df, echo=FALSE}
+
+sites <- current_df|>
+  dplyr::distinct(Reservoir, Site)
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((sites))
+
+```
+
+### Check that we don't have measurements deeper than the reservoirs
+
+Add a section to check on the max depth for each site. 
+
+Falling Creek at Site 50 should be 11m
+
+Beaverdam at Site 50 should be 13m at max but I am not sure if we have seen this
+
+Carvins Cove Site 50 should be 19m 
+
+```{r Check depth, echo=FALSE}
+
+deep <- current_df|>
+  group_by(Reservoir, Site) |>
+  slice(which.max(Depth_m)) |>
+  filter(Depth_m>0.1)|>
+  select(Reservoir, Site, DateTime, Depth_m)
+
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((deep))
+```
+
+
+```{r make data long, include=FALSE}
+#### YSI diagnostic plots #### 
+profiles_long <- current_df |>
+  ungroup() |>
+  mutate(year = year(DateTime)) |> 
+  select(-c(Flag_DateTime:Flag_pH)) |>
+  gather(metric, value, c(Temp_C:pH)) |>
+  drop_na(value)
+
+#value as numeric
+profiles_long$value<- as.numeric(profiles_long$value)
+profiles_long$Depth_m<- as.numeric(profiles_long$Depth_m)
+```
+
+```{r ORP vs DO, eval=FALSE, include=FALSE}
+# Plot ORP as a function of DO
+# ggplot(subset(current_df, Reservoir == "BVR" | Reservoir=="FCR"), aes(x = DO_mgL, y = ORP_mV, col = Reservoir)) + 
+#   geom_point() + 
+#   facet_grid(Reservoir ~., scales= 'free_y')+
+#   theme_bw()
+```
+
+```{r All res mean, eval=FALSE, include=FALSE}
+# Plot all values
+# ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
+#   geom_point(size=1) +
+#   stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
+#   facet_grid(metric ~ Reservoir, scales= 'free_y') +
+#   scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+#   scale_y_continuous("") +
+#   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
+#   theme_bw()
+```
+
+### All profiles from Beaverdam Reservoir 
+
+```{r All BVR, echo=FALSE}
+# BVR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='BVR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Beaverdam at Site 50 
+
+```{r BVR 50, echo=FALSE}
+# Deep hole time series for BVR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+  
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_bvr.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Falling Creek 
+
+```{r All FCR, echo=FALSE}
+# FCR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Falling Creek at Site 50 
+
+```{r All FCR 50, echo=FALSE}
+# Deep hole time series for FCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="FCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+  
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Carvins Cove
+
+```{r All CCR, echo=FALSE}
+# CCR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='CCR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Carvins at Site 50 
+
+```{r CCR 50, echo=FALSE}
+# Deep hole time series for CCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_ccr.jpg"),width=3.5, height=4)
+```
+
+
+## Current Profiles
+
+Let's look at the profiles at the Reservoirs at each of the sites. These plots are created by ggplotly so they are interactive. If you hover over the point you will see when it was collected. This helps for qaqc. 
+
+### Current profiles for Falling Creek
+
+```{r current FCR, echo=FALSE}
+#just look at current year - fcr
+a <- profiles_long|>
+  #filter(Reservoir=="FCR")|>
+  filter(Reservoir=="FCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+
+# print plot and make it interactive
+ggplotly(a)
+```
+
+### Current profiles for Beaverdam
+
+```{r current BVR, echo=FALSE}
+#just look at current year - bvr (just temp)
+a <- profiles_long|>
+  filter(Reservoir=="BVR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/BVR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+
+# print the plot
+ggplotly(a)
+```
+
+
+### Current profiles for Carvins Cove
+
+
+```{r current CCR, echo=FALSE}
+#just look at current year - ccr
+
+a <- profiles_long|>
+  filter(Reservoir=="CCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/CCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+
+# print the plot and make it interactive
+ggplotly(a)
+```
+
+
+```{r save the data, eval=FALSE, include=FALSE}
+
+# 
+# # convert DateTime to character
+# current_df$DateTime <- as.character(format(current_df$DateTime))
+# 
+# 
+# write_csv(current_df, 'YSI_PAR_profiles_2013_2023.csv')
+
+# #list.files()
+
+```
+
+```{r Save maintlog and function, eval=FALSE, include=FALSE}
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_PAR_profiles_maintenancelog_2013_2023.csv")
+
+d# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2013_2023.R")
+```
+
+```{r Site description, eval=FALSE, include=FALSE}
+
+# # These lines of code make the csv of the site descriptions with lat and long
+# # Use Gsheet because you don't need to authenticate it.
+#  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
+#  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+#  data <- current_df #This is the line you need to modify!
+#  trim_sites = function(data,sites){
+#    data_res_site=data%>% #Create a Reservoir/Site combo column
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))
+#    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+#      filter(res_site%in%data_res_site$res_site)%>%
+#      select(-res_site)
+#  }
+#  sites_trimmed = trim_sites(data,sites)
+#  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

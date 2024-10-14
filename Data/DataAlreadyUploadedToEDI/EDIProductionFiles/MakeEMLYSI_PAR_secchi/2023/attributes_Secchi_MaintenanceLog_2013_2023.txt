@@ -1,12 +1,11 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical	dimensionless		NA	value is missing
 Site	Sampling site within each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
-Depth	Water depth where sensor reading was measured	numeric	meter		NA	value is missing
 DataStream	Data product	categorical	dimensionless		NA	value is missing
-TIMESTAMP_start	Start date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-TIMESTAMP_end	End date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-start_parameter	Column name that where QAQC should start	character	dimensionless		NA	value is missing
-end_parameter	Column name that where QAQC should end	character	dimensionless		NA	value is missing
+TIMESTAMP_start	"Start date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+TIMESTAMP_end	"End date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+start_parameter	Column name where QAQC should start	categorical	dimensionless		NA	value is missing
+end_parameter	Column name where QAQC should end. This is NA because there is only one column of observations in the data frame.	character	dimensionless		NA	value is missing
 flag	Data flag to be added	categorical	dimensionless		NA	value is missing
 update_value	Value that data are changed to	character			NA	value is missing
 notes	Notes on why data are changing	character			NA	value is missing

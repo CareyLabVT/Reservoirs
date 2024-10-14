@@ -1,0 +1,296 @@
+---
+title: "Secchi_inspection_2013_2023"
+author: "Austin Delany and Adrienne Breef-Pilz"
+date: "2023-12-08"
+edit: "2024-07-03"
+output: html_document
+---
+
+This script is the data visualization script that:
+1) Makes QAQC file of all Secchi data from a digitized google sheet
+2) Checks to make sure there are no duplicate in the file
+3) Makes sure the maintenance log is working
+4) generates figures to visualize both this past year and all combined years of data
+5) Save the final EDI file
+6) Downloads the qaqc function and the maintenance log for publication
+
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, plotly)
+
+# Set up the current time end time of the file and the current year for QAQC plots
+
+#current time of QAQC for graphing
+current_time_start=ymd_hms("2023-01-01 00:00:00", tz = "America/New_York")
+current_time_end= ymd_hms("2023-12-31 23:59:00", tz = "America/New_York")
+```
+
+
+```{r Create the file for EDI, eval = FALSE, include=FALSE}
+
+# #source L1 function to run all data through QAQC process
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
+# 
+# 
+# # read in the Google sheet with all of the observations and QAQC them
+# current_df <- secchi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1KKBBWJo8vHUGsdt2ybF_kdqAy7mKHQi2Vi6qCmJXiJ4',
+#             gsheet_data = TRUE,
+#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+#             outfile = NULL,
+#             start_date = as.Date("2013-01-01"),
+#             end_date = as.Date(current_time_end))
+
+```
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+
+```{r READ IN EDI FOR REVIEWER, include=FALSE}
+  
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+
+                                                                   ### CHANGE THIS NUMBER BELOW
+                                                                              ##
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1105/8/80bec97dc53d85b0298a72bb1a098442")
+
+ # Force files from EDI to have an EST timestamp
+ current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "America/New_York")
+
+```
+
+## Check for duplicates and  gaps in the data frame
+
+This section identifies if there are any duplicates. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function to see how they were missed. 
+
+
+### Are there any duplicates?
+
+
+```{r Check for dups, echo=FALSE}
+
+# Make sure there are no duplicated observations.
+# Print them if there are
+ dups<- current_df[duplicated(current_df), ]
+
+dups <- dups%>%
+  select(Reservoir, Site, DateTime,  
+         Secchi_m)
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((dups))
+```
+
+### Flag Frequency
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+
+ Flag values for DateTime
+ 
+ 0: no flag
+ 
+ 1: Time set to 12:00:00 because an exact time was not recorded
+
+ Flag values for Secchi_m
+ 
+ 0: no flag
+ 
+ 1: value missing or removed and set to NA
+ 
+ 2: multiple observations at a site at the same time are averaged together
+ 
+ 3: value changed through the maintenance log
+ 
+ 
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+ maint <- read_csv(#"../../../../../DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+   "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+                    show_col_types = FALSE)
+
+# parse datetime depending on the format it is in
+ maint <- maint |>
+   mutate(
+    TIMESTAMP_start =  lubridate::parse_date_time(TIMESTAMP_start, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')),
+    TIMESTAMP_end = lubridate::parse_date_time(TIMESTAMP_end, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM'))
+    )
+
+
+# name the data file for just the tail of the maintenance log
+
+sd <- tail(maint)
+
+
+knitr::kable((tail(sd)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "America/New_York")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "America/New_York")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    #colname_end <- last_row$end_parameter
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, message=FALSE, warning=FALSE, include=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+
+### QAQC Plots
+
+```{r make df longer, include=FALSE}
+#------------------------------------------------------------------------------#
+#### Secchi diagnostic plots #### 
+secchi_long <- current_df %>%
+  mutate(year = as.factor(year(DateTime)), day = yday(DateTime))
+```
+
+
+```{r Plot range, echo=FALSE}
+# Plot range of values per year for each reservoir; 
+# annual mean value indicated with large black dot
+ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
+  geom_point(size=1) +
+  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
+  facet_grid(Reservoir~., scales= 'free_x') +
+  scale_x_discrete("Date", breaks=seq(2013,2023,1)) +
+  scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
+  theme_bw()
+```
+
+```{r All reservoir plots, echo=FALSE}
+# All reservoirs time series 
+ggplot(secchi_long, aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
+  geom_point(size=1) +
+  facet_grid(Reservoir~., scales= 'free_y') +
+  scale_x_datetime("Date", date_breaks= "12 months", date_labels = "%Y") +
+  #scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
+  theme_bw()
+#ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_months.jpg"),width=3.5, height=4)
+```
+
+```{r DOY plot, echo=FALSE}
+# Time series for each reservoir by julian day (see interannual varaibility)
+#jpeg("Secchi_JulianDay.jpg", width = 6, height = 5, units = "in",res = 300)
+ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
+  geom_point(size=2) + 
+  facet_grid(Reservoir ~ ., scales= 'free_y') +
+  scale_x_continuous("Julian day", limits=c(10,315), breaks=seq(50,300,50))+
+  scale_y_reverse("Secchi depth (m)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='bottom')+
+  theme_bw()
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_JulianDay.jpg"),width=3.5, height=4)
+```
+
+```{r current plot, echo=FALSE}
+#look at 2023 secchi
+a <- ggplot(data = subset(secchi_long, year(DateTime) %in% c(2023)), 
+       aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
+  geom_line()+
+  geom_point(size=1) +
+  facet_grid(Reservoir~., scales= 'free_x') +
+  scale_x_datetime("Date", date_breaks= "1 month", date_labels = "%b") +
+  scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
+  theme_bw()
+#ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_2023.jpg"),width=3.5, height=4)
+
+ggplotly(a)
+```
+
+
+```{r save the data, eval=FALSE, include=FALSE}
+
+# # convert DateTime to character
+# current_df$DateTime <- as.character(format(current_df$DateTime))
+# 
+# 
+# write_csv(current_df, 'secchi_2013_2023.csv')
+
+# #list.files()
+
+```
+
+```{r Save maintlog and function, include=FALSE, eval=FALSE}
+# Maintenance Log
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "secchi_maintenancelog_2013_2023.csv")
+# 
+# # qaqc function
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "secchi_qaqc_2013_2023.R")
+```
+

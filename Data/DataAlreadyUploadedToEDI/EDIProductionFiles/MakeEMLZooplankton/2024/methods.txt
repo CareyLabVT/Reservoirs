@@ -1,6 +1,6 @@
 Below, we divide the sampling methods by years, as sampling and microscopy in 2014-2016 was led by J.P.D. and in 2019-2022 by H.L.W., with slightly varying techniques used between the two periods.
 
-Note that the only difference between version 197.4 and 197.3 is that n = 7 total rotifer density values were updated in the most recent version. Previous versions of this data product include total rotifer density values that were calculated incorrectly.
+Note that the primary difference between version 197.4 and 197.3 is that n = 7 total rotifer density values were updated in the most recent version. Previous versions of this data product include total rotifer density values that were calculated incorrectly.
 
 2014-2016
 

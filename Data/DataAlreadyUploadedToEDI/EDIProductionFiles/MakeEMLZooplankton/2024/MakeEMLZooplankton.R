@@ -91,7 +91,7 @@ make_eml(
                                "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.37') 
+  package.id = 'edi.1090.38') 
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment

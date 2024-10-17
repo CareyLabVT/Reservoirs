@@ -24,7 +24,7 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
 
 
 ```{r Read in draft EDI file}
-current_df <- read_csv("./FluoroProbe_2014_2023.csv")
+current_df <- read_csv("./FluoroProbe_2014_2023.csv") #replace this with sourcing the L1 generation script from GitHub
 ```
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
@@ -355,6 +355,10 @@ Make sure the observations are flagged
   # }
   # sites_trimmed = trim_sites(data,sites) 
   # write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+# add section here to download the QAQC function and put it in the folder where the EDI production files are to make sure that it happens and to get the most recent version
+# save qaqc file in the folder
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/eddy_flux_create.R", "EddyFlux_qaqc_2020_2023.R")
 
 ```
 

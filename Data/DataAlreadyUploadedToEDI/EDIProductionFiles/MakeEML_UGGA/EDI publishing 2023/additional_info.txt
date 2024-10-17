@@ -1,0 +1,8 @@
+Contributions to the 2023 revision:
+
+CCC developed and led the reservoir monitoring program. ASL wrote new code for data processing, processed data for 2023, and created the visual inspection script. ABP led the field crew and contributed substantially to fieldwork and sensor maintenance in 2023. ADD helped with workflow automation in 2023.
+
+
+Acknowledgments and historical contributions:
+
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork. Thanks to Heather Wander and Freya Olsson for reviewing this data package and Bibek Kandel for help with data publication.

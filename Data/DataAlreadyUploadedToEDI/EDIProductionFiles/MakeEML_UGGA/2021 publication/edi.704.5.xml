@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.704.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Time series of methane and carbon dioxide diffusive fluxes using an Ultraportable Greenhouse Gas Analyzer (UGGA) for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2018–2021</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Abigail</givenName>
+        <givenName>S. L.</givenName>
+        <surName>Lewis</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aslewis@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-9933-4542</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alexandria</givenName>
+        <givenName>G.</givenName>
+        <surName>Hounshell</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>alexgh@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-1616-9399</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>P.</givenName>
+        <surName>McClure</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>ryan333@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-6370-3852</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+    </creator>
+    <pubDate>2022-01-19</pubDate>
+    <abstract>
+      <para>Diffusive fluxes of methane and carbon dioxide were measured using an Ultraportable Greenhouse Gas Analyzer (UGGA) in Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR; Vinton, Virginia, USA). FCR and BVR are owned and operated by the Western Virginia Water Authority as drinking water sources for Roanoke, Virginia. The dataset consists of calculated diffusive fluxes of methane and carbon dioxide measured at the deepest site of the reservoir adjacent to the dam (2018–2021) and additional reservoir upstream sites in FCR (2018). Measurements were collected approximately fortnightly in FCR throughout the stratified periods of 2018–2021, while measurements from BVR were only taken in 2018. </para>
+    </abstract>
+    <keywordSet>
+      <keyword>greenhouse gas</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Stream Team</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>reservoir</keyword>
+      <keyword>lake</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>methane</keyword>
+      <keyword>carbon dioxide</keyword>
+      <keyword>carbon flux</keyword>
+      <keyword>gas flux</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>diffusion</keyword>
+    </keywordSet>
+    <additionalInfo>
+      <para>Author contributions:</para>
+      <para>CCC developed and led the reservoir monitoring program, and oversaw UGGA purchasing, use, and maintenance throughout 2018-2021. ASL is the point person for 2018-2021 data collation, QAQC, and publishing. AGH was the point person for UGGA data collection in 2020 and developed an automated QAQC script for UGGA data processing. RPM was the point person for UGGA data collection from 2018–2019. ABP is a collaborator on the 2021 publication because she was the 2021 field season lead and assisted in UGGA maintenance. </para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2018-05-07</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2021-04-26</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Diffusive fluxes for methane and carbon dioxide were collected using the floating chamber method (Galfalk et al. 2013; McClure et al. 2020). Following McClure et al. 2020, the flux chamber was constructed using an opaque bucket fitted with foam and wrapped with reflective aluminum tape to prevent internal heating. The volume of the bucket was 0.02 meters cubed with an area of 0.15 meters squared. The fitted foam allowed the chamber to sit approximately 3 cm below the water surface and sealed the inside of the chamber from the surrounding air. The chamber was connected to a Los Gatos ultraportable GHG analyzer (UGGA: Los Gatos Research Inc., San Jose, CA, USA) through two air-tight gas ports which were fitted to the top of the chamber and connected to two separate three-meter sections of 0.635-cm Tygon PVC tubing before being connected to the inlet and waste valves on the UGGA. Air was circulated through the chamber at approximately 405 mL per minute. The moisture corrected methane and carbon dioxide (ppm) were recorded every 10 seconds. The chamber was vented until atmospheric concentrations were reached before being lowered to the water’s surface where 5 minutes of data were collected. This was repeated twice at each site for two replicate measurements per sampling occurence.</para>
+          <para>Diffusive fluxes (methane, carbon dioxide) were calculated from the collected UGGA concentrations using the FluxCalR package (Zhao, 2019). Briefly, peaks for methane concentration were visually identified for each day and each replicate and served as the end time point for slope calculation (CO2 and CH4, respectively). The slope of carbon dioxide/methane concentration was then calculated for 4 minutes prior to the identified end time point. The slope was converted to diffusive flux assuming 1 atmosphere of pressure and averaging the ambient temperature over the entire measurement period.</para>
+          <para>References:</para>
+          <para>Galfalk, M., Bastviken, D., Fredriksson, S., &amp; Arneborg, L. (2013). Determination of the piston velocity for water‐air interfaces using flux chambers, acoustic Doppler velocimetry, and IR imaging of the water surface. J. Geophys. Res. Biogeosci., 118(2), 770-782. https://doi.org/10.1002/jgrg.20064</para>
+          <para>McClure, R.P., M.E. Lofton, S. Chen, K.M. Krueger, J.C. Little, and C.C. Carey. 2020. Methane ebullition and diffusion rates, turbulence, water temperature, and water depth data from Falling Creek Reservoir (Virginia, USA) in the ice-free period during 2016-2019 ver 2. Environmental Data Initiative. https://doi.org/10.6073/pasta/c6b1a54e356f5ab093d86dcdb89177ba</para>
+          <para>Zhao, J (2019). FluxCalR: a R package for calculating CO2 and CH4 fluxes from static chambers. Journal of Open Source Software, 4(43), 1751, https://doi.org/10.21105/joss.01751</para>
+          <para>Additional notes:</para>
+          <para>From 2018-2021, multiple whole-ecosystem oxygen manipulations were conducted at Falling Creek Reservoir. For a detailed description of the hypolimnetic oxygenation engineered system, see Gerling et al. (2014). These systems were operated over time following the SSS inflow file in Carey et al. (2021).</para>
+          <para>Carey, C. C., R. Q. Thomas, R. P. McClure, A. G. Hounshell, W. M. Woelmer, H. L. Wander, &amp; A. S. L. Lewis. (2021). CareyLabVT/FCR-GLM: FCR GLM-AED model, data, and code for Carey et al. manuscript (v1.0). Zenodo. https://doi.org/10.5281/zenodo.5528865</para>
+          <para>Gerling, A.B., Browne, R.G., Gantzer, P.A., Mobley, M.H., Little, J.C., and C.C. Carey. 2014. First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir.  Water Research. 67: 129-143. doi: 10.1016/j.watres.2014.09.002</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>N/A</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority N/A</funding>
+      <relatedProject>
+        <title>Dynamics of coupled P-Fe-Mn cycling in drinking water reservoirs and implications for water quality</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Institute of Critical Technology and Applied Science N/A</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation� DBI-1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>renato@ece.ufl.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation� DBI-1933016</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>UGGA dataset 2018-2021</entityName>
+      <entityDescription>UGGA diffusive flux dataset from FCR and BVR</entityDescription>
+      <physical>
+        <objectName>UGGA_2018_2021.csv</objectName>
+        <size unit="bytes">15520</size>
+        <authentication method="MD5">544619d44650524f8980fbd27db8cbbd</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir. 50=Deep hole or site nearest to dam in each reservoir, 45=Transect 45 in Falling Creek Reservoir, 30=Transect 30 in Falling Creek Reservoir, 20=Transect 20 in Falling Creek Reservoir, 10=Transect 10 in Falling Creek Reservoir. On transects 45, 40, 30, 20, and 10 in Falling Creek Reservoir, measurements were collected at the deepest site of the reservoir. For a map of the transects in Falling Creek Reservoir, see Chen et al. 2017</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">10</minimum>
+                  <maximum exclusive="false">50</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Date</attributeName>
+          <attributeDefinition>Date of sampling</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Replicate sample number. Samples are coded as either 1 or 2 for the first and second sampling period, respectively.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Start_time</attributeName>
+          <attributeDefinition>Start time for diffusive flux calculations, typically defined as 4 minutes before the visually identified end time using FluxCalR. All data were collected in the eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>End_time</attributeName>
+          <attributeDefinition>End time for diffusive flux calculations as visually identified using the FluxCalR package. All data were collected in th eastern time zone of the U.S.A.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Temp_C</attributeName>
+          <attributeDefinition>Averaged ambient temperature from the measurement time period used to calculate diffusive fluxes in FluxCalR.</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">16.02</minimum>
+                  <maximum exclusive="false">42</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>co2_slope_ppmS</attributeName>
+          <attributeDefinition>Slope of CO2 concentration over time, calculated using FluxCalR</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>partsPerMillionPerSecond</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.078</minimum>
+                  <maximum exclusive="false">1.528</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>co2_R2</attributeName>
+          <attributeDefinition>R2 for the calculated slope for CO2 concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.09</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>co2_flux_umolCm2s</attributeName>
+          <attributeDefinition>Diffusive CO2 flux</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerMeterSquaredPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.447</minimum>
+                  <maximum exclusive="false">8.832</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>ch4_slope_ppmS</attributeName>
+          <attributeDefinition>Slope of CH4 concentration over time, calculated using FluxCalR</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>partsPerMillionPerSecond</customUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.003</minimum>
+                  <maximum exclusive="false">0.064</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>ch4_R2</attributeName>
+          <attributeDefinition>R2 for the calculated slope for CH4 concentration</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.01</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>ch4_flux_umolCm2s</attributeName>
+          <attributeDefinition>Diffusive CH4 flux</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>micromolePerMeterSquaredPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.018</minimum>
+                  <maximum exclusive="false">0.388</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_co2_flux_umolCm2s</attributeName>
+          <attributeDefinition>Flag for diffusive CO2 flux. 0 = No issues; 1 = R2 of slope is under 0.9</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_ch4_flux_umolCm2s</attributeName>
+          <attributeDefinition>Flag for diffusive CH4 flux. 0 = No issues; 1 = R2 of slope is under 0.9</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>184</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>Raw UGGA files and code</entityName>
+      <entityDescription>Raw data from the Ultraportable Greenhouse Gas Analyzer and code used to translate these data into the diffusive flux rates presented in this data table</entityDescription>
+      <physical>
+        <objectName>RawData.zip</objectName>
+        <size unit="bytes">3387249</size>
+        <authentication method="MD5">e93d5885c49dc1ed71cda4e12724e359</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>application/zip</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Data compilation and publishing script</entityName>
+      <entityDescription>Code used to compile and QAQC all years of UGGA data, then publish to EDI</entityDescription>
+      <physical>
+        <objectName>QAQC_UGGA_2018_2021.Rmd</objectName>
+        <size unit="bytes">3331</size>
+        <authentication method="MD5">d971b1dadbaad4f00e86b7393c4ec291</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <unitList>
+        <unit id="partsPerMillionPerSecond" multiplierToSI="percent/10000/second" name="partsPerMillionPerSecond" parentSI="percent, second" unitType="concentration rate">
+          <description>rate of change in concentration (ppm/s)</description>
+        </unit>
+      </unitList>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

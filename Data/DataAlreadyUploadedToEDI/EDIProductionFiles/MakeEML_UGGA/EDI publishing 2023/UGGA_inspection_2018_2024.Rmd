@@ -1,0 +1,121 @@
+---
+title: "Visual inspection for EDI"
+author: "Abby Lewis"
+date: "1/6/2022"
+output: html_document
+---
+
+Script to visualize seasonal UGGA data
+Author: Abigail Lewis
+Created: 20 December 2023
+Last edit: 17 October 2024 (ABP)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+
+# The reads in the QAQC function from GitHub so we can use it to make the data frame and qaqc it in this script
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/UGGA_create.R")
+```
+
+
+```{r Make the qaqced data frame}
+# Use the qaqc function to make the current data frame
+
+current_df <- ugga_qaqc(
+  files = "./../../../../DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
+  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
+  outfile = NULL,
+  start_date =NULL, # change when we update to read date from EDI
+  end_date = NULL)
+
+```
+
+Dom and ABP add a few more plots for QAQC- focus on one that looks at just the current publishing year. 
+
+```{r QAQC plots}
+#Plot all CH4
+current_df%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+#by day of year
+current_df%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CH4Flux_umolCm2s),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+#one negative methane flux in 2020 FCR
+```
+
+```{r Plot CO2}
+#Plot all CO2
+current_df%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("CO2 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+#by day of year
+current_df%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CO2Flux_umolCm2s),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("CO2 flux (µumol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+
+```
+
+
+```{r Save the data frame}
+
+# Double Check naming convention
+# Variable_StartYear_EndYear
+
+# convert datetimes to characters so that they are properly formatted in the output file
+ current_df$DateTime <- as.character(format(current_df$DateTime))
+
+write_csv(current_df, "UGGA_2018_2024.csv")
+
+
+```
+
+```{r Download relavant files}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv", "UGGA_maintenancelog_2018_2024.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/UGGA_create.R", "UGGA_qaqc_2018_2024.R")
+
+# helper script to process the UGGA files
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2024/FluxCalR_2024.R", "UGGA_FluxCalR_2024.R")
+
+```
+
+```{r Site description file}
+
+# ABP will add later
+
+```
+

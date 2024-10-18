@@ -1,7 +1,7 @@
 # Title: heatmap_EDI function
 # Authors: Mary Lofton and Adrienne Breef-Pilz
 # Created: 04 April 2024
-# Edited: 
+# Edited: 18 Oct. 2024- made the data flexible with strings or data frames
 
 # Heatmap function for inspection plots. 
 # Took Mary's code from Fluoroprobe
@@ -13,6 +13,13 @@ heatmap_EDI <- function(data, reservoir, site, z){
   # load packages
   pacman::p_load(tidyverse, lubridate, akima, reshape2, 
                gridExtra, grid, colorRamps, RColorBrewer, cowplot)
+  
+  # if data is a string then make it into a frame
+  
+  if(is.character(data)){
+    data <- eval(parse(text=data))
+  }
+  
   #subset to relevant data
   fp <- data %>%
     filter(Reservoir %in% reservoir & Site %in% site) %>%

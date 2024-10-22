@@ -8,5 +8,5 @@ flag	5	Suspect sample but left in dataset
 start_parameter	DO_mgL	Dissolved oxygen milligrams per liter
 start_parameter	DOsat_percent	Dissolved oxygen percent saturation 
 start_parameter	ORP_mV	Oxidation-reduction potential in millivolts
-start_parameter	PAR_umolm2s	Photosynthetic active radiation 
+start_parameter	PAR_umolm2s	Photosynthetically active radiation 
 start_parameter	pH	pH

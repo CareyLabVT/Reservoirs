@@ -78,7 +78,8 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1105.8") 
+         # package.id = "edi.1105.10") #This is for staging
+         package.id = "edi.198.12") # This is for the production enviornment 
 
 #staging environment - https://portal-s.edirepository.org/nis/login.jsp
 

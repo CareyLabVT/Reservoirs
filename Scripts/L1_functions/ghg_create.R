@@ -3,6 +3,7 @@
 # Written: 24 Nov 23, 
 # Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
 # 24 Sep 24- round numeric columns to 4 digits
+# 22 Oct 24- added in option for a historical file for obs from 2015-2022
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -26,7 +27,8 @@ pacman::p_load(lubridate,tidyverse, googledrive, readxl, gsheet)
 
 # The place of the functions used in the function
 # source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
 
 ##### Function to qaqc discreet ghg data
 #'@param directory filepath to raw files 
@@ -56,19 +58,22 @@ ghg_qaqc<-function(directory,
                    start_date,
                    end_date){
 
-  # directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/"
-  # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
-  # gdrive = T # Are the files on Google Drive. True or False
-  # gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
-  # Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG", 
-  #                                 "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
-  # vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
-  # Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555"
-  # output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
-  # MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
-  # Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
-  # start_date = as.Date("2024-01-01")
-  # end_date = as.Date(Sys.Date())
+ #  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
+ # # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+ #  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+ #  gdrive = T # Are the files on Google Drive. True or False
+ #  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+ #  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
+ #                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
+ #  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
+ #  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9"
+ #  historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv"
+ #  #historical_file = NULL
+ #  output_file = NULL
+ #  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
+ #  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
+ #  start_date = NULL
+ #  end_date = NULL
 
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
@@ -81,22 +86,29 @@ ghg_qaqc<-function(directory,
     flag = col_integer()
   ))
   
-  # For later
-  # if(!is.null(current_year)){
-  #   log <- log_read%>%
-  #     filter(year(TIMESTAMP_start)>current_year)
-  # }else{
-  #   log <- log_read
-  # }
+# Filter maintenance log based on start and end times
+  if(!is.null(end_date)){
+    log <- log_read |>
+      filter(year(TIMESTAMP_start)<= end_date)
+  }else{
+    log <- log_read
+  }
   
-  log <- log_read
+  
+  if(!is.null(start_date)){
+    log <- log_read %>% 
+      filter(TIMESTAMP_end >= start_date)
+  }else{
+    log <- log_read
+  }
+  
   
   
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <- directory
   
   # list of GHG files on Github
-  rfiles <- list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)
+  rfiles <- list.files(path= mydir, pattern="", full.names=TRUE)
   
   
   ### 1.2 Get Files off of Google Drive ####
@@ -126,7 +138,7 @@ ghg_qaqc<-function(directory,
         
         name<-gdrive_files$name[i]
         
-        googledrive::drive_download(gdrive_files$id[i], path = paste0(mydir,"data/",name))
+        googledrive::drive_download(gdrive_files$id[i], path = paste0(mydir,name))
         
       }else{
         
@@ -141,10 +153,10 @@ ghg_qaqc<-function(directory,
   
   # First make sure to include the newly downloaded files if necessary
   # list of GHG files on Github
-  rfiles <- list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)
+  rfiles <- list.files(path=mydir, pattern="", full.names=TRUE)
   
   # use purr to read in all the files using the function above
-  all<-list.files(path=paste0(mydir,"data/"),pattern="", full.names=TRUE)%>%
+  all<-list.files(path= mydir,pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
    # Filter for just the unprocessed files
@@ -159,6 +171,7 @@ ghg_qaqc<-function(directory,
       dplyr::filter(date_acquired <= end_date)
   }
   
+  print("Files combined")
   
   # some timestamps are duplicated between files. Inspect:
   duplicate_timestamps <- all[duplicated(all$date_acquired), ]
@@ -198,6 +211,7 @@ ghg_qaqc<-function(directory,
       weather_station_bp=as.numeric(weather_station_bp))%>%
     select(-notes)
   
+  print("Added air temp and lab pressure to the df")
   
   #### 2.2 Assign the lab temp and BP based on the observations ####
   
@@ -219,6 +233,7 @@ ghg_qaqc<-function(directory,
   
   ghg_con <- ghg_concentration(raw_file = fg)
   
+  print("Caluclated umolL with ghg concentration function")
   
   #### 2.4 Match up vial numbers to Sampling Locations #####
   
@@ -322,12 +337,12 @@ ghg_qaqc<-function(directory,
   # Use the historical file if there is no start date or it is in the historical file
   
   ### identify the date subsetting for the data
-  if (is.null(start_date)|start_date<as.Date("2023-01-01")|!is.null(historical_file)){
+  if (is.null(start_date) & !is.null(historical_file)){
     
     hist <- read_csv(historical_file, show_col_types = F)
     
     
-    working_final_df <- dplyr::bind_rows(historical_file,working_final_df)
+    working_final_df <- dplyr::bind_rows(hist,working_final_df)
     
     print("Added in historical file")
   }else{
@@ -418,13 +433,13 @@ ghg_qaqc<-function(directory,
   raw_df <- working_final_df %>% 
     mutate(Time = format(DateTime,"%H:%M:%S"),
            Flag_DateTime = ifelse(Time == "12:00:00", 1, 0), # Flag if set time to noon
-           Time = ifelse(Time == "00:00:00", "12:00:00",Time),
+           #Time = ifelse(Time == "00:00:00", "12:00:00",Time),
            Date = as.Date.character(DateTime),
-           DateTime = ymd_hms(paste0(Date, "", Time)),
-           Hours = hour(DateTime),
-           DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
-           DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
-    select(-c(Time, Date, Hours))
+           DateTime = ymd_hms(paste0(Date, "", Time)))%>%
+           #Hours = hour(DateTime),
+           #DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
+           #DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
+    select(-c(Time, Date))
   
   ### 4. Take out values based on the Maintenance Log ####
   
@@ -448,6 +463,10 @@ ghg_qaqc<-function(directory,
     ### Get the depth
     
     Depth <- as.numeric(log$Depth[i])
+    
+    ### Get the Rep from the observation
+    
+    Rep <- as.numeric(log$Reps[i])
     
     ### Get the vial number
     
@@ -518,23 +537,27 @@ ghg_qaqc<-function(directory,
         raw_df[Time, maintenance_cols] <- NA
         raw_df[Time, flag_cols] <- flag
         
-      } else if (is.na(vial)){
+      } else if (is.na(vial) & is.na(Rep)){
         # Just use the time and depth for indexing
         raw_df[c(which(Time & (raw_df[,"Depth_m"] = Depth))), maintenance_cols] <- NA
         raw_df[c(which(Time & (raw_df[,"Depth_m"] = Depth))), flag_cols] <- flag
         
-      } else if (is.na(Depth)){
+      } else if (is.na(Depth) & is.na(Rep)){
         # Just use the time and vial number for indexing
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), maintenance_cols] <- NA
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial))), flag_cols] <- flag
         
-      } else {
-        
-        # Use time, depth and vial number for indexing
+      } else if (is.na(Rep) & !is.na(vial) & !is.na(Depth)){
+      # Use time, depth and vial number for indexing
         
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))),
                maintenance_cols] <- NA
         raw_df[c(which(Time & (raw_df[,"Vial Number"] == vial) & (raw_df[,"Depth_m"] == Depth))),
+               flag_cols] <- flag
+     } else{
+        raw_df[c(which(Time & (raw_df[,"Rep"] == Rep) & (raw_df[,"Depth_m"] == Depth))),
+               maintenance_cols] <- NA
+        raw_df[c(which(Time & (raw_df[,"Rep"] == Rep) & (raw_df[,"Depth_m"] == Depth))),
                flag_cols] <- flag
         
       }
@@ -549,6 +572,7 @@ ghg_qaqc<-function(directory,
     #next
   }
   
+  print("Took out values in the maintenance log")
   
   #### 5. Additional Maintenance ####
   
@@ -613,6 +637,7 @@ ghg_qaqc<-function(directory,
     select(-Date)%>%
     distinct()
   
+  print("Calculated MDL")
   
   ### 5.12 Calculate the concentration in umol/L ####
   
@@ -678,7 +703,7 @@ ghg_qaqc<-function(directory,
     mutate(CO2_pdiff = round((abs(CO2_umolL_rep1-CO2_umolL_rep2)/(abs(CO2_umolL_rep1+CO2_umolL_rep2)/2))*100)) %>%
     mutate(CO2_diff = abs(CO2_umolL_rep1 - CO2_umolL_rep2))
   
-  # Now that we calculated the differences then seperate rep 1 and rep2 and then bind them on top of each other again
+  # Now that we calculated the differences then separate rep 1 and rep2 and then bind them on top of each other again
   
   ghg_rep1 <- ghgs_reps %>%
     select(Reservoir, Site, DateTime,Depth_m,CH4_umolL_rep1,CO2_umolL_rep1,
@@ -714,15 +739,16 @@ ghg_qaqc<-function(directory,
   
   ghg_all <- ghg_all %>%
     mutate(Flag_CH4_umolL = ifelse((CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &Flag_CH4_umolL == 0) | 
-                                     is.na(CH4_pdiff), 4,
+                                     is.na(CH4_pdiff) & Flag_CH4_umolL == 0, 4,
                                    ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
                                             Flag_CH4_umolL == 0, 3, Flag_CH4_umolL)),
            
            Flag_CO2_umolL = ifelse((CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0) |
-                                     is.na(CH4_pdiff), 4,
+                                     is.na(CH4_pdiff) & Flag_CO2_umolL == 0, 4,
                                    ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
                                             Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
   
+  print("Flagged observations based on MDLs")
   
   ### 5.3 Check that all NA values are flagged ####
   
@@ -730,23 +756,14 @@ ghg_qaqc<-function(directory,
     ghg_all[c(which(is.na(ghg_all[,m]))), paste0("Flag_",colnames(ghg_all[m]))] <- 1 # puts in flag 1 if value not collected
   }
   
-  
-  # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-  # package_ID <- 'edi.551.7'
-  # eml <- read_metadata(package_ID)
-  # date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-  # last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
-  
-  # ghg_all <- ghg_all |> filter(DateTime > last_edi_date)
-  
   ### 6. Save files ####
   
   # Make final data frame with only the columns we want
   ghg_final <- ghg_all%>%
     select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
            Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)|>
-    mutate_if(is.numeric, round, digits = 4) # round to 4 digits
-  
+    mutate_if(is.numeric, round, digits = 4)|> # round to 4 digits
+    arrange(Reservoir, DateTime, Site, Depth_m) # rearrange the df
   
   # Write the MDL file
   write.csv(MDL_umolL, MDL_file, row.names = F)
@@ -756,7 +773,7 @@ ghg_qaqc<-function(directory,
   
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
   # save data if there is an output)file path. If not then the file is returned. 
-  if (is.null(ghg_final)){
+  if (is.null(output_file)){
     return(ghg_final)
   }else{
     # convert datetimes to characters so that they are properly formatted in the output file
@@ -764,21 +781,9 @@ ghg_qaqc<-function(directory,
     ghg_final$DateTime <- as.character(format( ghg_final$DateTime))
     
     readr::write_csv(ghg_final, output_file)
+    
+    print(paste0("saved ", output_file))
   } 
 }
 
-# Use the function here
 
-# ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/",
-#          maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
-#          gdrive = F, # Are the files on Google Drive. True or False
-#          gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn"),
-#          Air_Pressure = "https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG/edit#gid=462758328",
-#          vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
-#          Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555",
-#          output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
-#          MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
-#          Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv")
-
-## Call healthcheck
-#RCurl::url.exists("https://hc-ping.com/46cfa878-1fd4-4ebb-abcc-87f84071c9ab", timeout = 5)

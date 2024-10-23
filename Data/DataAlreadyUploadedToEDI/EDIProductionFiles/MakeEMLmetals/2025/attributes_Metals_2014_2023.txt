@@ -1,0 +1,54 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir	categorical			NA	value is missing
+DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Depth_m	Depth of sample collection (from surface)	numeric	meter		NA	value is missing
+TLi_mgL	total lithium concentration	numeric	milligramsPerLiter		NA	value is missing
+SLi_mgL	soluble lithium concentration	numeric	milligramsPerLiter		NA	value is missing
+TNa_mgL	total sodium concentration	numeric	milligramsPerLiter		NA	value is missing
+SNa_mgL	soluble sodium concentration	numeric	milligramsPerLiter		NA	value is missing
+TMg_mgL	total magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
+SMg_mgL	soluble magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
+TAl_mgL	total aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
+SAl_mgL	soluble aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
+TSi_mgL	total silicon concentration	numeric	milligramsPerLiter		NA	value is missing
+SSi_mgL	soluble silicon concentration	numeric	milligramsPerLiter		NA	value is missing
+TK_mgL	total potassium concentration	numeric	milligramsPerLiter		NA	value is missing
+SK_mgL	soluble potassium concentration	numeric	milligramsPerLiter		NA	value is missing
+TCa_mgL	total calcium concentration	numeric	milligramsPerLiter		NA	value is missing
+SCa_mgL	soluble calcium concentration	numeric	milligramsPerLiter		NA	value is missing
+TFe_mgL	total iron concentration	numeric	milligramsPerLiter		NA	value is missing
+SFe_mgL	soluble iron concentration	numeric	milligramsPerLiter		NA	value is missing
+TMn_mgL	total manganese concentration	numeric	milligramsPerLiter		NA	value is missing
+SMn_mgL	soluble manganese concentration	numeric	milligramsPerLiter		NA	value is missing
+TCu_mgL	total copper concentration	numeric	milligramsPerLiter		NA	value is missing
+SCu_mgL	soluble copper concentration	numeric	milligramsPerLiter		NA	value is missing
+TSr_mgL	total strontium concentration	numeric	milligramsPerLiter		NA	value is missing
+SSr_mgL	soluble strontium concentration	numeric	milligramsPerLiter		NA	value is missing
+TBa_mgL	total barium concentration	numeric	milligramsPerLiter		NA	value is missing
+SBa_mgL	soluble barium concentration	numeric	milligramsPerLiter		NA	value is missing
+Flag_DateTime	Data flag for DateTime	categorical			NA	value is missing
+Flag_TLi_mgL	Data flag for total lithium (TLi)	categorical			NA	value is missing
+Flag_SLi_mgL	Data flag for soluble lithium (SLi)	categorical			NA	value is missing
+Flag_TNa_mgL	Data flag for total sodium (TNa)	categorical			NA	value is missing
+Flag_SNa_mgL	Data flag for soluble sodium (SNa)	categorical			NA	value is missing
+Flag_TMg_mgL	Data flag for total magnesium (TMg)	categorical			NA	value is missing
+Flag_SMg_mgL	Data flag for soluble magnesium (SMg)	categorical			NA	value is missing
+Flag_TAl_mgL	Data flag for total aluminum (TAl)	categorical			NA	value is missing
+Flag_SAl_mgL	Data flag for soluble aluminum (SAl)	categorical			NA	value is missing
+Flag_TSi_mgL	Data flag for total silicon (TSi)	categorical			NA	value is missing
+Flag_SSi_mgL	Data flag for soluble silicon (SSi)	categorical			NA	value is missing
+Flag_TK_mgL	Data flag for total potassium (TK)	categorical			NA	value is missing
+Flag_SK_mgL	Data flag for soluble potassium (SK)	categorical			NA	value is missing
+Flag_TCa_mgL	Data flag for total calcium (TCa)	categorical			NA	value is missing
+Flag_SCa_mgL	Data flag for soluble calcium (SCa)	categorical			NA	value is missing
+Flag_TFe_mgL	Data flag for total iron (TFe)	categorical			NA	value is missing
+Flag_SFe_mgL	Data flag for soluble iron (SFe)	categorical			NA	value is missing
+Flag_TMn_mgL	Data flag for total manganese (TMn)	categorical			NA	value is missing
+Flag_SMn_mgL	Data flag for soluble manganese (SMn)	categorical			NA	value is missing
+Flag_TCu_mgL	Data flag for total copper (TCu)	categorical			NA	value is missing
+Flag_SCu_mgL	Data flag for soluble copper (SCu)	categorical			NA	value is missing
+Flag_TSr_mgL	Data flag for total strontium (TSr)	categorical			NA	value is missing
+Flag_SSr_mgL	Data flag for soluble strontium (SSr)	categorical			NA	value is missing
+Flag_TBa_mgL	Data flag for total barium (TBa)	categorical			NA	value is missing
+Flag_SBa_mgL	Data flag for soluble barium (SBa)	categorical			NA	value is missing

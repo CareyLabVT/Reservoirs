@@ -27,8 +27,8 @@ pacman::p_load(lubridate,tidyverse, googledrive, readxl, gsheet)
 
 # The place of the functions used in the function
 # source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
-#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
-source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
+#source("./Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R")
 
 ##### Function to qaqc discreet ghg data
 #'@param directory filepath to raw files 

@@ -28,6 +28,8 @@ read_ghg_files<-function(FILES){
            notes = coalesce(Note, notes_from_vial_number))%>%
     select(!c(Note, notes_from_vial_number))
   
+  print(paste0("Read in ", FILES))
+  
   # There are numbers over 3 digits then duplicate the row and split the numbers
  # for (i in 1:nrow(df)){
   #   if(df$count[i]>3){

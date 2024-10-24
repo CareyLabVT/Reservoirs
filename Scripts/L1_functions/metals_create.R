@@ -414,29 +414,10 @@ metals_qaqc <- function(directory,
 
    }
 
-   # Pivot the data wider so that there is a T_element and and S_element
-
-  wed <- raw_df |>
-    # order the columns so the time column is not in the middle of the elements
-    select(Reservoir, Site, Date, Time, Depth_m, Filter, everything()) |>
-   #group_by(DateTime, Reservoir, Depth_m, Site) |>
-   pivot_wider(names_from = 'Filter',
-                              values_from = Li_mgL:Flag_Ba_mgL,
-                               names_glue = "{Filter}_{.value}")
-
-  # rename the Flag column
-  # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the
-
-  frame3 <- wed |>
-    rename_with(~gsub("T_Flag", "Flag_T", gsub("S_Flag", "Flag_S",.)), -1)|>
-    mutate(
-      clean_site = Site,
-      Site = ifelse(Site==100.1, 100, Site)
-    )
-
+   
    # read in the timesheet with the date and time the samples were taken.
-  # For the ISCO just use the weir time. Figure out how to do this.
-
+   # For the ISCO just use the weir time. Figure out how to do this.
+   
    time_sheet <- gsheet::gsheet2tbl(sample_time)|>
      select(Reservoir, Site,Date,Time,Depth_m)|>
      #filter(VT_Metals =="X")|> #only take obs when metals samples were collected
@@ -445,25 +426,48 @@ metals_qaqc <- function(directory,
        Date = as.Date(Date),
        Site = as.numeric(Site),
        Depth_m = as.numeric(Depth_m))
-     #select(-VT_Metals)
-
-
+   #select(-VT_Metals)
+   
+   
    # add the time the sample was collected. Use Natural join to override NAs
-
-   raw_df <-
-     natural_join(frame3,time_sheet,
+   
+   raw_df2 <-
+     natural_join(raw_df,time_sheet,
                   by = c("Reservoir", "Site","Date","Depth_m"),
                   jointype = "LEFT")|>
-     select(-Site)|>
-     dplyr::rename(Site=clean_site)|>
-     select(Reservoir, Site, Date, Time, Depth_m, starts_with("T"), starts_with("S"), starts_with("Flag"))|>
-    mutate(
-      Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
-      Flag_DateTime = ifelse(is.na(Time), 1, 0),
-      Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
-      DateTime = ymd_hms(paste0(Date," ",Time)))|>
+     #select(-Site)|>
+     #dplyr::rename(Site=clean_site)|>
+     select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
+     mutate(
+       Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
+       Flag_DateTime = ifelse(is.na(Time), 1, 0),
+       Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
+       DateTime = ymd_hms(paste0(Date," ",Time)))|>
      select(-c(Date, Time))|>
      mutate_if(is.numeric, round, digits = 4) # round to 4 digits
+   
+   
+   # Pivot the data wider so that there is a T_element and and S_element
+
+  wed <- raw_df2 |>
+    # order the columns so the time column is not in the middle of the elements
+    select(Reservoir, Site, DateTime, Depth_m, Filter, everything())|>
+   #group_by(DateTime, Reservoir, Depth_m, Site) |>
+   pivot_wider(names_from = 'Filter',
+                              values_from = Flag_Al_mgL:Sr_mgL,
+                               names_glue = "{Filter}_{.value}")
+
+  # rename the Flag column
+  # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the
+
+  raw_df <- wed |>
+    rename_with(~gsub("T_Flag", "Flag_T", gsub("S_Flag", "Flag_S",.)), -1)
+    # mutate(
+    #   clean_site = Site,
+    #   Site = ifelse(Site==100.1, 100, Site)
+    # )
+
+ 
 
 
    #### 6. Switch observations if total and soluble samples were mixed up ####
@@ -475,7 +479,7 @@ metals_qaqc <- function(directory,
     #we want to do 3 MRL for Fe, and Mn, give it a flag of 9, and then see what it looks like
 
   for(l in c('T_Fe_mgL', 'T_Mn_mgL')){
-    raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0  #creates Check column + name of variable
+    raw_df[,paste0("Check_",colnames(raw_df[l]))] <- "0"  #creates Check column + name of variable
     MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
     switch_threshold <- MRL_value*3
 
@@ -517,11 +521,11 @@ metals_qaqc <- function(directory,
   # Flag all Na in the data frame again
   for(j in colnames(raw_df|>select(starts_with("T_"),starts_with("S_")))) {
     
-    # add a flag if the samples were switched
-    raw_df[which(raw_df[,'switch_all'] == 1), paste0("Flag_",j)] <- 9
-
     # puts in flag 1 if value not collected
     raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
+    
+    # add a flag if the samples were switched
+    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1), paste0("Flag_",j)] <- 9
 
   }
    # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the
@@ -646,3 +650,5 @@ if(metals_save==T){
  }
  
 } # closes the function
+
+

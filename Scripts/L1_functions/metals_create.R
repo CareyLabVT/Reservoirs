@@ -4,6 +4,8 @@
 # Edit: 07 Mar. 24 A. Breef-Pilz
 # Edit: 30 May 2024 ABP. Move the save ISCO file section up. 
 # 24 Sep. 24 Round numeric columns to 4 digits
+# 22 Oct. 24 Changed the flipped metals to look at just Fe and Mn
+# 23 Oct. 24 Added more arguments so you can save or return the ISCO and or the metals data frame
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -20,13 +22,15 @@
 pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable", "hms")
 
 metals_qaqc <- function(directory,
-                        historic,
+                        historic = NULL, 
                         sample_ID_key, 
                         maintenance_file,
                         sample_time,
                         MRL_file,
-                        outfile, # put Null to return the file
-                        ISCO_outfile, # put Null to return the file
+                        metals_save, 
+                        metals_outfile, # put metals_save=T and Null to return the file
+                        ISCO_save = F, # Do you want to save or use the ISCO file? This allows us to use the function for metals and ISCO separatly.
+                        ISCO_outfile, # put ISCO_save=T and Null to return the file
                         start_date = NULL,
                         end_date = NULL)
                         
@@ -34,14 +38,18 @@ metals_qaqc <- function(directory,
   
   # # These are so I can run the function one step at a time and figure everything out.
   # # Leave for now while still in figuring out mode
-  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
-  # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
-  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-  # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
-  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
-  # outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
-  # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
+ #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+ #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+ #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+ #  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+ #  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+ #  MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
+ # metals_save = T
+ #   metals_outfile = NULL
+ #   ISCO_save = T
+ #  ISCO_outfile = NULL
+ #  start_date = NULL
+ #  end_date = NULL
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -142,6 +150,8 @@ metals_qaqc <- function(directory,
     #list.files(path=directory, pattern="ICPMS", full.names=TRUE, recursive=TRUE)|>
     map_df(~ read_metals_files(.x))
     #drop_na(Date) # when NA in DateTime column. Maybe a warning?
+  
+  print("Read in files and combined them together")
  
 #set up data frame with Reservoir, Site, Depth, and filter
   # then pivot longer so we can get the mean of any samples that had to be rerun
@@ -172,11 +182,15 @@ metals_qaqc <- function(directory,
 
  # Add in the historic files from 2014_2019 plus some one off sampling campaigns. We only have Fe and Mn for that time.
 
- if (is.null(start_date) | start_date<as.Date("2020-01-01")){
+ if (is.null(start_date) & !is.null(historic)|| start_date<as.Date("2020-01-01") & !is.null(historic)){
    
    hist <- read_csv(historic, show_col_types = F)
+   
+   print("Added historic file")
  }else{
    hist <- NULL
+   
+   print("Did not add historic file")
  }
  
  
@@ -345,6 +359,7 @@ metals_qaqc <- function(directory,
    }
 
 
+   print("Created flag columns and used maintenance log to qaqc the data.")
    ### 4. Read in the Minimum Reporting Limits and add flags ####
 
    MRL <- read_csv(MRL_file, show_col_types = F)|>
@@ -402,6 +417,8 @@ metals_qaqc <- function(directory,
    # Pivot the data wider so that there is a T_element and and S_element
 
   wed <- raw_df |>
+    # order the columns so the time column is not in the middle of the elements
+    select(Reservoir, Site, Date, Time, Depth_m, Filter, everything()) |>
    #group_by(DateTime, Reservoir, Depth_m, Site) |>
    pivot_wider(names_from = 'Filter',
                               values_from = Li_mgL:Flag_Ba_mgL,
@@ -471,8 +488,7 @@ metals_qaqc <- function(directory,
   raw_df$switch_all <- 0
   for (i in 1:nrow(raw_df)){
   if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
-      raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
-      raw_df[i,'Check_T_Si_mgL'] == 'SWITCHED'){
+      raw_df[i,'Check_T_Mn_mgL'] == 'SWITCHED'){
     raw_df[i,'switch_all'] <- 1
   }
 }
@@ -560,40 +576,73 @@ metals_qaqc <- function(directory,
 
  }
 
- # Save the ISCO observations
+ 
+
+ # Do we want to get ISCO oput up 
+ 
+ if(isTRUE(ISCO_save)){
+   
+   # Save the ISCO observations
  ISCO <- frame4|>
    filter(Site == 100.1)
+ 
+ if(!is.null(ISCO_outfile)){
+   
+   # save the ISCO file
+   ISCO$DateTime <- as.character(format(ISCO$DateTime)) # convert DateTime to character
+   
+   # save the ISCO file
+   write_csv(ISCO, ISCO_outfile)
+   
+   print(paste0("ISCO file will be save here: ", ISCO_outfile))
+   
+ }else{
+   return(ISCO)
+   
+   print("ISCO data frame returned to the enviornment")
+  }
+ 
+  
+ }else{
+   warning("ISCO file is not saved and will not be returned. This is a check to make sure you know this.")
+ }
+ 
 
  # add in filter later. Right now save everything.
-
- ISCO$DateTime <- as.character(format(ISCO$DateTime)) # convert DateTime to character
-
- write_csv(ISCO, ISCO_outfile)
+ 
 
   # save the metals L1 file. If the outfile=NULL then it just returns the file. 
-
-  if(is.null(outfile)){
-   return(final)
-
- }else{
-   final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
+if(metals_save==T){
+  if(!is.null(metals_outfile)){
+    
+     # If there is an outfile argument, that is where the data are saved
+    final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
 
     # Write the L1 file
- write_csv(final, outfile)
+ write_csv(final, metals_outfile)
+ 
+ # print where the file will be saved
+ print(paste0("Metals file will be save here: ", metals_outfile))
 
+  }else{
+   return(final)
+    print("Metals data frame returned to the enviornment")
  }
-
-
-
+  }else{
+   warning("The metals data frame was not save or returned. This is a check to make sure you know this.")
 }
-
-#a = metals_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
-#                historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
-#                sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
-#                maintenance_file = "./Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
-#                sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
-#                MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
-#                outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv", # put Null to return the file
-#                ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv", # put Null to return the file
-#                start_date = NULL,
-#                end_date = NULL)
+ 
+ # returns a list of data frames from both the ISCO and the metals. 
+ if(metals_save==T && is.null(metals_outfile) && ISCO_save==T && is.null(ISCO_outfile)){
+   
+   # make a list of ISCO and metals data frames that gets returned
+   
+   all_plots <- list(final, ISCO)
+   
+   return(all_plots)
+   
+   print("Data frames are in a list with the metals data frame being first and then the ISCO data frame")
+ 
+ }
+ 
+} # closes the function

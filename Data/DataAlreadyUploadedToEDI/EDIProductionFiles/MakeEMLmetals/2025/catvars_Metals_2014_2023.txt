@@ -1,0 +1,167 @@
+attributeName	code	definition
+Flag_DateTime	0	no issues
+Flag_SAl_mgL	0	no issues
+Flag_SBa_mgL	0	no issues
+Flag_SCa_mgL	0	no issues
+Flag_SCu_mgL	0	no issues
+Flag_SFe_mgL	0	no issues
+Flag_SK_mgL	0	no issues
+Flag_SLi_mgL	0	no issues
+Flag_SMg_mgL	0	no issues
+Flag_SMn_mgL	0	no issues
+Flag_SNa_mgL	0	no issues
+Flag_SSi_mgL	0	no issues
+Flag_SSr_mgL	0	no issues
+Flag_TAl_mgL	0	no issues
+Flag_TBa_mgL	0	no issues
+Flag_TCa_mgL	0	no issues
+Flag_TCu_mgL	0	no issues
+Flag_TFe_mgL	0	no issues
+Flag_TK_mgL	0	no issues
+Flag_TLi_mgL	0	no issues
+Flag_TMg_mgL	0	no issues
+Flag_TMn_mgL	0	no issues
+Flag_TNa_mgL	0	no issues
+Flag_TSi_mgL	0	no issues
+Flag_TSr_mgL	0	no issues
+Flag_DateTime	1	DateTime set to 12:00 because no sampling time was recorded
+Flag_SAl_mgL	1	sample not taken
+Flag_SBa_mgL	1	sample not taken
+Flag_SCa_mgL	1	sample not taken
+Flag_SCu_mgL	1	sample not taken
+Flag_SFe_mgL	1	sample not taken
+Flag_SK_mgL	1	sample not taken
+Flag_SLi_mgL	1	sample not taken
+Flag_SMg_mgL	1	sample not taken
+Flag_SMn_mgL	1	sample not taken
+Flag_SNa_mgL	1	sample not taken
+Flag_SSi_mgL	1	sample not taken
+Flag_SSr_mgL	1	sample not taken
+Flag_TAl_mgL	1	sample not taken
+Flag_TBa_mgL	1	sample not taken
+Flag_TCa_mgL	1	sample not taken
+Flag_TCu_mgL	1	sample not taken
+Flag_TFe_mgL	1	sample not taken
+Flag_TK_mgL	1	sample not taken
+Flag_TLi_mgL	1	sample not taken
+Flag_TMg_mgL	1	sample not taken
+Flag_TMn_mgL	1	sample not taken
+Flag_TNa_mgL	1	sample not taken
+Flag_TSi_mgL	1	sample not taken
+Flag_TSr_mgL	1	sample not taken
+Flag_SAl_mgL	3	sample below MRL and set to MRL
+Flag_SCu_mgL	3	sample below MRL and set to MRL
+Flag_SFe_mgL	3	sample below MRL and set to MRL
+Flag_SLi_mgL	3	sample below MRL and set to MRL
+Flag_SMn_mgL	3	sample below MRL and set to MRL
+Flag_TAl_mgL	3	sample below MRL and set to MRL
+Flag_TCu_mgL	3	sample below MRL and set to MRL
+Flag_TFe_mgL	3	sample below MRL and set to MRL
+Flag_TLi_mgL	3	sample below MRL and set to MRL
+Flag_TMn_mgL	3	sample below MRL and set to MRL
+Flag_SAl_mgL	6	non-standard method
+Flag_SBa_mgL	6	non-standard method
+Flag_SCa_mgL	6	non-standard method
+Flag_SFe_mgL	6	non-standard method
+Flag_SK_mgL	6	non-standard method
+Flag_SMg_mgL	6	non-standard method
+Flag_SMn_mgL	6	non-standard method
+Flag_SNa_mgL	6	non-standard method
+Flag_SSi_mgL	6	non-standard method
+Flag_SSr_mgL	6	non-standard method
+Flag_TAl_mgL	6	non-standard method
+Flag_TBa_mgL	6	non-standard method
+Flag_TCa_mgL	6	non-standard method
+Flag_TCu_mgL	6	non-standard method
+Flag_TFe_mgL	6	non-standard method
+Flag_TK_mgL	6	non-standard method
+Flag_TLi_mgL	6	non-standard method
+Flag_TMg_mgL	6	non-standard method
+Flag_TMn_mgL	6	non-standard method
+Flag_TNa_mgL	6	non-standard method
+Flag_TSi_mgL	6	non-standard method
+Flag_TSr_mgL	6	non-standard method
+Flag_SFe_mgL	7	sample run multiple times and values averaged
+Flag_SMn_mgL	7	sample run multiple times and values averaged
+Flag_TFe_mgL	7	sample run multiple times and values averaged
+Flag_TMn_mgL	7	sample run multiple times and values averaged
+Flag_SBa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SCa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SCu_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SFe_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SK_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SLi_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SMg_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SMn_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SNa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SSr_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TAl_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TBa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TCa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TCu_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TFe_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TLi_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TMg_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TMn_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TNa_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TSr_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_SAl_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SBa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SCa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SCu_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SFe_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SK_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SLi_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SMg_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SMn_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SNa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SSi_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SSr_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TAl_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TBa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TCa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TCu_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TFe_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TK_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TLi_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TMg_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TMn_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TNa_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TSi_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_TSr_mgL	9	total and soluble samples switched prior to analysis; fixed in QAQC
+Flag_SAl_mgL	10	improper procedure and set to NA
+Flag_SBa_mgL	10	improper procedure and set to NA
+Flag_SCa_mgL	10	improper procedure and set to NA
+Flag_SCu_mgL	10	improper procedure and set to NA
+Flag_SFe_mgL	10	improper procedure and set to NA
+Flag_SK_mgL	10	improper procedure and set to NA
+Flag_SLi_mgL	10	improper procedure and set to NA
+Flag_SMg_mgL	10	improper procedure and set to NA
+Flag_SMn_mgL	10	improper procedure and set to NA
+Flag_SNa_mgL	10	improper procedure and set to NA
+Flag_SSi_mgL	10	improper procedure and set to NA
+Flag_SSr_mgL	10	improper procedure and set to NA
+Flag_SCu_mgL	63	non-standard method and sample below MRL and set to MRL
+Flag_SLi_mgL	63	non-standard method and sample below MRL and set to MRL
+Flag_TCu_mgL	63	non-standard method and sample below MRL and set to MRL
+Flag_TLi_mgL	63	non-standard method and sample below MRL and set to MRL
+Flag_SSi_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TAl_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TBa_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TCa_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TCu_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TFe_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TLi_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TNa_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_TSi_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Site	40	Pelagic upstream site
+Site	50	Pelagic deep hole site
+Site	100	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located
+Site	200	Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream
+Site	201	Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns
+Site	301	Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream
+Site	400	Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel
+Site	501	Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel

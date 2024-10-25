@@ -49,6 +49,7 @@ ghg_qaqc<-function(directory,
                    Air_Pressure,
                    vial_digitized_sheet,
                    Rolling_MDL,
+                   historical_file,
                    output_file,
                    MDL_file,
                    Vial_Number_Check,
@@ -317,6 +318,23 @@ ghg_qaqc<-function(directory,
            Notes = paste0(notes, Notes)) %>% 
     select(Reservoir, Site, DateTime, Depth_m,`Vial Number`,CH4_umolL, CO2_umolL, Notes)
   
+  # Add in the historical file here so everything is QAQCed the same way.
+  # Use the historical file if there is no start date or it is in the historical file
+  
+  ### identify the date subsetting for the data
+  if (is.null(start_date)|start_date<as.Date("2023-01-01")|!is.null(historical_file)){
+    
+    hist <- read_csv(historical_file, show_col_types = F)
+    
+    
+    working_final_df <- dplyr::bind_rows(historical_file,working_final_df)
+    
+    print("Added in historical file")
+  }else{
+    print("Did not use the historical file")
+  }
+  
+ 
   
   ### QAQC Section ###
   
@@ -347,9 +365,9 @@ ghg_qaqc<-function(directory,
   
   working_final_df <- working_final_df%>%
     mutate(
-      Flag_CO2_umolL = ifelse(grepl("CO2_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
+      Flag_CO2_umolL = ifelse(grepl("CO2_NO_PEAK|CH4CO2_NO_PEAK", Notes)|CO2_umolL==0, 
                               6, Flag_CO2_umolL),
-      Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
+      Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes)|CH4_umolL==0, 
                               6, Flag_CH4_umolL)
     )
   

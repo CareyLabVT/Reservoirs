@@ -1,2 +1,0 @@
-id	unitType	parentSI	multiplierToSI	description
-partsPerMillionPerSecond	concentration rate	"percent, second"	percent/10000/second	rate of change in concentration (ppm/s)

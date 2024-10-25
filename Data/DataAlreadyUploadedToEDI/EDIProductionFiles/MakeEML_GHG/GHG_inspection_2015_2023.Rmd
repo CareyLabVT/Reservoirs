@@ -17,29 +17,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet)
+
+# source the qaqc code for GHG from GitHub
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R")
 ```
 
 
 
-```{r Read in Historical files from EDI}
+```{r QAQC all files}
 
-inUrl1  <- 'https://pasta.lternet.edu/package/data/eml/edi/551/7/38d72673295864956cccd6bbba99a1a3'
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"), silent = T)
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
-                   
-historic <-read_csv(infile1)
-
+current_df <- ghg_qaqc(
+  directory = "./../../Data/DataNotYetUploadedToEDI/Raw_GHG/",
+  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
+  gdrive = F, # Are the files on Google Drive. True or False
+  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn"),
+  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",                              "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg"),
+  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207",
+  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9/edit#gid=571411555",
+ # historical_file = "" add in link
+output_file = NULL,
+MDL_file = "MDL_GHG_file.csv", 
+Vial_Number_Check = "Vial_Number_Check.csv", #Use as a qaqc check to make sure you didn't miss any vials
+start_date = NULL,
+end_date = NULL)
 ```
 
-
-```{r Read in L1 file}
-
-L1 <- read_csv('../../../DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv')
-```
-
-```{r Bind historic and L1 files together}
+```{r Reviewers start here}
 
 current_df <- dplyr::bind_rows(historic, L1)
 
@@ -288,6 +291,12 @@ current_df |>
 write.csv(current_df, "GHG_2015_2023.csv", row.names = F)
 
 ```
+
+```{r download files}
+
+```
+
+
 
 ```{r Make site description file}
  # These lines of code make the csv of the site descriptions with lat and long

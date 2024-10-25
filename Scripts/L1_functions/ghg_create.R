@@ -58,22 +58,22 @@ ghg_qaqc<-function(directory,
                    start_date,
                    end_date){
 
- #  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
- # # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
- #  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
- #  gdrive = T # Are the files on Google Drive. True or False
- #  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
- #  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
- #                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
- #  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
- #  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9"
- #  historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv"
- #  #historical_file = NULL
- #  output_file = NULL
- #  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
- #  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
- #  start_date = NULL
- #  end_date = NULL
+#  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
+#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+# # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+#  gdrive = F # Are the files on Google Drive. True or False
+#  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+#  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
+#                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
+#  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
+#  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9"
+# # historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv"
+#  historical_file = NULL
+#  output_file = NULL
+#  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
+#  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
+#  start_date = NULL
+#  end_date = NULL
 
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
@@ -775,6 +775,8 @@ ghg_qaqc<-function(directory,
   # save data if there is an output)file path. If not then the file is returned. 
   if (is.null(output_file)){
     return(ghg_final)
+    
+    print("Data frame in your enviornment")
   }else{
     # convert datetimes to characters so that they are properly formatted in the output file
 

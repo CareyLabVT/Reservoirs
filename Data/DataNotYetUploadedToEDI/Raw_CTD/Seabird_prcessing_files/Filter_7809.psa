@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Filter >
+  <Version value="7.26.7.129" />
+  <ServerName value="Filter" />
+  <InputDir value="C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads" />
+  <InputFileArray size="11" GrowBy="-1" >
+    <ArrayItem index="0" value="052724_bvr50_S7809001.cnv" />
+    <ArrayItem index="1" value="052724_fcr10_S7809002.cnv" />
+    <ArrayItem index="2" value="052724_fcr20_S7809003.cnv" />
+    <ArrayItem index="3" value="052724_fcr30_S7809004.cnv" />
+    <ArrayItem index="4" value="052724_fcr40_S7809005.cnv" />
+    <ArrayItem index="5" value="052724_fcr50_S7809006.cnv" />
+    <ArrayItem index="6" value="060324_fcr10_S7809007.cnv" />
+    <ArrayItem index="7" value="060324_fcr20_S7809008.cnv" />
+    <ArrayItem index="8" value="060324_fcr30_S7809009.cnv" />
+    <ArrayItem index="9" value="060324_fcr40_S7809010.cnv" />
+    <ArrayItem index="10" value="060324_fcr50_S7809011.cnv" />
+  </InputFileArray>
+  <OutputDir value="C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads" />
+  <NameAppend value="" />
+  <OutputFile value="" />
+  <LastProcessed value="0" />
+  <TimeConstFilterA value="0.030000" />
+  <TimeConstFilterB value="0.150000" />
+  <CalcArray Size="14" >
+    <CalcArrayItem index="0" CalcID="17" >
+      <Calc UnitID="30" Ordinal="0" >
+        <FullName value="Depth [fresh water, m]" />
+        <Latitude value="0.000000" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="1" CalcID="18" >
+      <Calc UnitID="32" Ordinal="0" >
+        <FullName value="Descent Rate [m/s]" />
+        <WindowSize value="2.000000" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="2" CalcID="55" >
+      <Calc UnitID="37" Ordinal="0" >
+        <FullName value="Oxygen, SBE 43 [mg/l]" />
+        <WindowSize value="2.000000" />
+        <ApplyHysteresisCorrection value="1" />
+        <ApplyTauCorrection value="1" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="3" CalcID="55" >
+      <Calc UnitID="47" Ordinal="0" >
+        <FullName value="Oxygen, SBE 43 [% saturation]" />
+        <WindowSize value="2.000000" />
+        <ApplyHysteresisCorrection value="1" />
+        <ApplyTauCorrection value="1" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="4" CalcID="78" >
+      <Calc UnitID="62" Ordinal="0" >
+        <FullName value="Specific Conductance [uS/cm]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="5" CalcID="12" >
+      <Calc UnitID="62" Ordinal="0" >
+        <FullName value="Conductivity [uS/cm]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="6" CalcID="93" >
+      <Calc UnitID="38" Ordinal="0" >
+        <FullName value="Fluorescence, WET Labs ECO-AFL/FL [mg/m^3]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="7" CalcID="60" >
+      <Calc UnitID="-1" Ordinal="0" >
+        <FullName value="pH" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="8" CalcID="58" >
+      <Calc UnitID="42" Ordinal="0" >
+        <FullName value="Oxidation Reduction Potential [mV]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="9" CalcID="201" >
+      <Calc UnitID="-1" Ordinal="0" >
+        <FullName value="PAR/Logarithmic, Satlantic" />
+        <PAR_Units value="0" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="10" CalcID="150" >
+      <Calc UnitID="45" Ordinal="0" >
+        <FullName value="Turbidity, WET Labs ECO [NTU]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="11" CalcID="95" >
+      <Calc UnitID="3" Ordinal="0" >
+        <FullName value="Pressure, Strain Gauge [db]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="12" CalcID="95" >
+      <Calc UnitID="48" Ordinal="0" >
+        <FullName value="Pressure, Strain Gauge [psi]" />
+      </Calc>
+    </CalcArrayItem>
+    <CalcArrayItem index="13" CalcID="97" >
+      <Calc UnitID="6" Ordinal="0" >
+        <FullName value="Temperature [ITS-90, deg C]" />
+      </Calc>
+    </CalcArrayItem>
+  </CalcArray>
+  <FilterTypeArray >
+    <ArrayItem index="0" value="2" />
+    <ArrayItem index="1" value="2" />
+    <ArrayItem index="2" value="1" />
+    <ArrayItem index="3" value="2" />
+    <ArrayItem index="4" value="2" />
+    <ArrayItem index="5" value="2" />
+    <ArrayItem index="6" value="2" />
+    <ArrayItem index="7" value="2" />
+    <ArrayItem index="8" value="2" />
+    <ArrayItem index="9" value="2" />
+    <ArrayItem index="10" value="2" />
+    <ArrayItem index="11" value="1" />
+    <ArrayItem index="12" value="1" />
+    <ArrayItem index="13" value="1" />
+  </FilterTypeArray>
+</Filter>

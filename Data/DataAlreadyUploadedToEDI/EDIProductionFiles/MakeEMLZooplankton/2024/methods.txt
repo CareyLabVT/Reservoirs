@@ -28,7 +28,7 @@ Data package summary: This package includes three data files: 1) zoop_summary_20
 
 Data flags: The zoop_qaqc_2014_2022.R assigns data flags (1) to MeanLength_mm, MeanWeight_ug, and Biomass_ugL if those data were not measured or calculated (i.e., columns contain NA values). Note that data flags are only present in the summary file, not the raw data files.
 
-Data manipulation: In zoop_summary_2014_2022.csv, zooplankton can be summed only across taxa that are at the same taxonomic level. For example, D. ambigua and D. catawba can be summed to determine biomass or density values for the genus Daphnia across sampling days, but Daphnia and D. ambigua, for example, can not be summed together.
+Data manipulation: In zoop_summary_2014_2022.csv, zooplankton can be summed only across taxa that are at the same taxonomic level. For example, D. ambigua and D. catawba can be summed to determine biomass or density values for the genus Daphnia across sampling days, but Daphnia and D. ambigua, for example, cannot be summed together.
 
 Additional notes: Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
 

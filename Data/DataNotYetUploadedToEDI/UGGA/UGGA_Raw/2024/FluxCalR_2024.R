@@ -74,7 +74,6 @@ files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0
                                                               "gga_2001-12-31_f0119.txt",
                                                               "gga_2001-12-31_f0123.txt",
                                                               "gga_2001-12-31_f0136.txt",
-                                                              "gga_2001-12-31_f0139.txt",
                                                               "gga_2001-12-31_f0161.txt")] # very messy and doesn't seem usable
 
 
@@ -89,9 +88,8 @@ for (file in files_to_process) {
 
 # QAQC: there were a few times that there was only one peak but we still had to click twice. 
 # Here, we manually remove the second peak from these files
-one_peak <- c("processed_csvs/gga_2001-12-31_f0064.csv", #Specify file names with one peak
-              "processed_csvs/gga_2001-12-31_f0065.csv",
-              "processed_csvs/gga_2001-12-31_f0066.csv")
+one_peak <- c("processed_csvs/gga_2001-12-31_f0139.csv",
+  "processed_csvs/gga_2001-12-31_f0177.csv")
 #Filter to only the first peak in these files
 for (file in one_peak) {
   data <- read.csv(file) %>%

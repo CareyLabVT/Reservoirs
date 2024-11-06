@@ -224,7 +224,7 @@ zoop_biom$DateTime[substr(zoop_biom$DateTime,12,13) == ""] <-
 #drop the one duplicate chaoborus sample on 2014-06-02
 zoops_final <- zoops_final |> distinct()
 
-#fix a couple of mispelled taxon
+#fix a couple of misspelled taxa
 zoops_final$Taxon[zoops_final$Taxon=="Finilia"] <- "Filinia"
 zoops_final$Taxon[zoops_final$Taxon=="bipalpus"] <- "Bipalpus"
 zoops_final$Taxon[zoops_final$Taxon=="Nauplius"] <- "Nauplii"

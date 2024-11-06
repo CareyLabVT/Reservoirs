@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ASCII_Out >
+  <Version value="7.26.7.129" />
+  <ServerName value="ASCII Out" />
+  <InputDir value="C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads" />
+  <InputFileArray size="0" GrowBy="-1" />
+  <OutputDir value="C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads" />
+  <NameAppend value="" />
+  <OutputFile value="" />
+  <LastProcessed value="0" />
+  <HeaderFile value="1" />
+  <DataFile value="1" />
+  <ExcludedMarkedBad value="0" />
+  <LinesPerPage value="60" />
+  <LabelColumns value="2" high="2" low="0" initialValue="2" />
+  <ColumnSeparator value="0" high="4" low="0" initialValue="0" />
+  <JulianDaysConvFmt value="0" />
+  <ElapsedTimeConvFmt value="0" />
+  <NMEA_TimeConvFmt value="0" />
+  <SystemTimeConvFmt value="0" />
+  <InstrumentTimeConvFmt value="0" />
+  <AddFirstColumn value="0" />
+  <FirstColumnName value="" />
+  <FirstColumnValue value="" />
+  <ReplaceBadFlag value="0" />
+  <BadFlagValue value="999000000000000020000000000000.000000" />
+  <CalcArray Size="0" />
+</ASCII_Out>

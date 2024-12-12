@@ -1,0 +1,2100 @@
+
+04/30/2022 14:29:37 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:31:08 Data Conversion is shutting down.
+
+04/30/2022 14:31:23 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:32:11 Data Conversion is shutting down.
+
+04/30/2022 14:34:40 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:42:28 Data Conversion is shutting down.
+
+04/30/2022 14:44:25 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:55:41 Data Conversion is shutting down.
+
+04/30/2022 14:57:09 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:57:25 Data Conversion is shutting down.
+
+04/30/2022 14:57:45 Data Conversion is starting up, version 7.26.7.129
+04/30/2022 14:58:05 Data Conversion is shutting down.
+
+05/03/2022 18:50:31 Data Conversion is starting up, version 7.26.7.129
+05/03/2022 18:52:51 Data Conversion is shutting down.
+
+05/03/2022 18:56:50 Data Conversion is starting up, version 7.26.7.129
+05/03/2022 19:35:13 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050222_bvr50_0001.hex'.
+05/03/2022 19:35:13 DatCnvImp is exiting.
+05/03/2022 19:35:13 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050222_bvr50_0002.hex'.
+05/03/2022 19:35:14 DatCnvImp is exiting.
+05/03/2022 19:35:14 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050222_bvr50_0003.hex'.
+05/03/2022 19:35:14 DatCnvImp is exiting.
+05/03/2022 19:35:21 Data Conversion is shutting down.
+
+05/03/2022 19:37:05 Filter is starting up, version 7.26.7.129
+05/03/2022 19:51:24 Filter is shutting down.
+
+05/03/2022 19:51:29 Data Conversion is starting up, version 7.26.7.129
+05/03/2022 19:51:44 Data Conversion is shutting down.
+
+05/03/2022 19:51:48 Filter is starting up, version 7.26.7.129
+05/03/2022 19:52:28 Filter is shutting down.
+
+05/03/2022 19:52:35 Align CTD is starting up, version 7.26.7.129
+05/03/2022 19:54:39 Align CTD is shutting down.
+
+05/03/2022 19:54:50 ASCII Out is starting up, version 7.26.7.129
+05/03/2022 19:55:37 ASCII Out is shutting down.
+
+05/04/2022 11:05:49 Data Conversion is starting up, version 7.26.7.129
+05/04/2022 11:05:52 Data Conversion is shutting down.
+
+05/09/2022 16:24:58 Data Conversion is starting up, version 7.26.7.129
+05/09/2022 16:25:02 Data Conversion is shutting down.
+
+05/09/2022 16:26:03 Data Conversion is starting up, version 7.26.7.129
+05/09/2022 16:26:08 Data Conversion is shutting down.
+
+05/09/2022 23:54:08 Data Conversion is starting up, version 7.26.7.129
+05/09/2022 23:54:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0001.hex'.
+05/09/2022 23:54:39 DatCnvImp is exiting.
+05/09/2022 23:54:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0002.hex'.
+05/09/2022 23:54:39 DatCnvImp is exiting.
+05/09/2022 23:54:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0003.hex'.
+05/09/2022 23:54:40 DatCnvImp is exiting.
+05/09/2022 23:54:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0004.hex'.
+05/09/2022 23:54:40 DatCnvImp is exiting.
+05/09/2022 23:54:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0005.hex'.
+05/09/2022 23:54:41 DatCnvImp is exiting.
+05/09/2022 23:54:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0006.hex'.
+05/09/2022 23:54:41 DatCnvImp is exiting.
+05/09/2022 23:54:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0007.hex'.
+05/09/2022 23:54:42 DatCnvImp is exiting.
+05/09/2022 23:56:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0001.hex'.
+05/09/2022 23:56:05 DatCnvImp is exiting.
+05/09/2022 23:56:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0002.hex'.
+05/09/2022 23:56:06 DatCnvImp is exiting.
+05/09/2022 23:56:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0003.hex'.
+05/09/2022 23:56:06 DatCnvImp is exiting.
+05/09/2022 23:56:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0004.hex'.
+05/09/2022 23:56:07 DatCnvImp is exiting.
+05/09/2022 23:56:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0005.hex'.
+05/09/2022 23:56:07 DatCnvImp is exiting.
+05/09/2022 23:56:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0006.hex'.
+05/09/2022 23:56:08 DatCnvImp is exiting.
+05/09/2022 23:56:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050922_bvr50_0007.hex'.
+05/09/2022 23:56:08 DatCnvImp is exiting.
+05/09/2022 23:59:34 Data Conversion is shutting down.
+
+05/09/2022 23:59:37 Filter is starting up, version 7.26.7.129
+05/10/2022 00:01:06 Filter is shutting down.
+
+05/10/2022 00:01:09 Align CTD is starting up, version 7.26.7.129
+05/10/2022 00:02:26 Align CTD is shutting down.
+
+05/10/2022 00:02:34 ASCII Out is starting up, version 7.26.7.129
+05/10/2022 00:03:01 ASCII Out is shutting down.
+
+05/10/2022 00:06:22 ASCII Out is starting up, version 7.26.7.129
+05/10/2022 00:07:01 ASCII Out is shutting down.
+
+05/10/2022 00:08:08 ASCII Out is starting up, version 7.26.7.129
+05/10/2022 00:08:25 ASCII Out is shutting down.
+
+05/13/2022 11:29:08 Data Conversion is starting up, version 7.26.7.129
+05/13/2022 11:29:26 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051222_bvr01_0008.hex'.
+05/13/2022 11:29:27 DatCnvImp is exiting.
+05/13/2022 11:29:27 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051222_bvr50_0009.hex'.
+05/13/2022 11:29:27 DatCnvImp is exiting.
+05/13/2022 11:29:27 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051222_fcr50_0010.hex'.
+05/13/2022 11:29:28 DatCnvImp is exiting.
+05/13/2022 11:29:42 Data Conversion is shutting down.
+
+05/13/2022 11:29:45 Filter is starting up, version 7.26.7.129
+05/13/2022 11:30:07 Filter is shutting down.
+
+05/13/2022 11:30:10 Align CTD is starting up, version 7.26.7.129
+05/13/2022 11:30:33 Align CTD is shutting down.
+
+05/24/2022 16:30:36 Align CTD is starting up, version 7.26.7.129
+05/24/2022 16:31:53 Align CTD is shutting down.
+
+05/24/2022 16:32:00 Data Conversion is starting up, version 7.26.7.129
+05/24/2022 16:32:34 Data Conversion is shutting down.
+
+05/24/2022 17:27:49 Data Conversion is starting up, version 7.26.7.129
+05/24/2022 17:30:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051722_bvr01_0001.hex'.
+05/24/2022 17:30:43 DatCnvImp is exiting.
+05/24/2022 17:30:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051722_bvr01_0002.hex'.
+05/24/2022 17:30:43 DatCnvImp is exiting.
+05/24/2022 17:30:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052322_bvr01_0003.hex'.
+05/24/2022 17:30:44 DatCnvImp is exiting.
+05/24/2022 17:30:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052322_bvr50_0004.hex'.
+05/24/2022 17:30:44 DatCnvImp is exiting.
+05/24/2022 17:30:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052322_bvr50_0005.hex'.
+05/24/2022 17:30:45 DatCnvImp is exiting.
+05/24/2022 17:30:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052322_bvr50_0006.hex'.
+05/24/2022 17:30:45 DatCnvImp is exiting.
+05/24/2022 17:30:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052322_fcr50_0007.hex'.
+05/24/2022 17:30:46 DatCnvImp is exiting.
+05/24/2022 17:30:53 Data Conversion is shutting down.
+
+05/24/2022 17:30:55 Filter is starting up, version 7.26.7.129
+05/24/2022 17:34:00 Filter is shutting down.
+
+05/24/2022 17:34:03 Align CTD is starting up, version 7.26.7.129
+05/24/2022 17:34:33 Align CTD is shutting down.
+
+05/25/2022 21:28:04 Data Conversion is starting up, version 7.26.7.129
+05/25/2022 21:28:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052522_fcr50_0001.hex'.
+05/25/2022 21:28:26 DatCnvImp is exiting.
+05/25/2022 21:28:30 Data Conversion is shutting down.
+
+05/25/2022 21:28:33 Filter is starting up, version 7.26.7.129
+05/25/2022 21:28:48 Filter is shutting down.
+
+05/25/2022 21:28:52 Align CTD is starting up, version 7.26.7.129
+05/25/2022 21:29:12 Align CTD is shutting down.
+
+06/07/2022 07:57:17 Data Conversion is starting up, version 7.26.7.129
+06/07/2022 07:57:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\053122_bvr01_0001.hex'.
+06/07/2022 07:57:38 DatCnvImp is exiting.
+06/07/2022 07:57:45 Data Conversion is shutting down.
+
+06/07/2022 07:57:49 Filter is starting up, version 7.26.7.129
+06/07/2022 07:59:34 Filter is shutting down.
+
+06/07/2022 07:59:38 Align CTD is starting up, version 7.26.7.129
+06/07/2022 07:59:56 Align CTD is shutting down.
+
+06/08/2022 10:19:10 Data Conversion is starting up, version 7.26.7.129
+06/08/2022 10:24:31 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\053122_bvr01_0002.hex'.
+06/08/2022 10:24:32 DatCnvImp is exiting.
+06/08/2022 10:24:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\053122_bvr01_0003.hex'.
+06/08/2022 10:24:32 DatCnvImp is exiting.
+06/08/2022 10:24:37 Data Conversion is shutting down.
+
+06/08/2022 10:24:40 Filter is starting up, version 7.26.7.129
+06/08/2022 10:25:02 Filter is shutting down.
+
+06/08/2022 10:25:05 Align CTD is starting up, version 7.26.7.129
+06/08/2022 10:25:26 Align CTD is shutting down.
+
+06/08/2022 15:19:11 Data Conversion is starting up, version 7.26.7.129
+06/08/2022 15:21:14 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060722_bvr01_0005.hex'.
+06/08/2022 15:21:15 DatCnvImp is exiting.
+06/08/2022 15:21:15 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060722_bvr50_0006.hex'.
+06/08/2022 15:21:15 DatCnvImp is exiting.
+06/08/2022 15:21:15 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060722_fcr50_0007.hex'.
+06/08/2022 15:21:16 DatCnvImp is exiting.
+06/08/2022 15:21:22 Data Conversion is shutting down.
+
+06/08/2022 15:21:25 Filter is starting up, version 7.26.7.129
+06/08/2022 15:22:32 Filter is shutting down.
+
+06/08/2022 15:22:35 Align CTD is starting up, version 7.26.7.129
+06/08/2022 15:23:41 Align CTD is shutting down.
+
+06/10/2022 16:07:55 Data Conversion is starting up, version 7.26.7.129
+06/10/2022 16:08:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060922_ccr50_0002.hex'.
+06/10/2022 16:08:08 DatCnvImp is exiting.
+06/10/2022 16:08:11 Data Conversion is shutting down.
+
+06/10/2022 16:08:14 Filter is starting up, version 7.26.7.129
+06/10/2022 16:08:32 Filter is shutting down.
+
+06/10/2022 16:08:34 Align CTD is starting up, version 7.26.7.129
+06/10/2022 16:08:51 Align CTD is shutting down.
+
+06/10/2022 16:10:43 ASCII Out is starting up, version 7.26.7.129
+06/10/2022 16:20:13 ASCII Out is shutting down.
+
+06/14/2022 12:12:21 Data Conversion is starting up, version 7.26.7.129
+06/14/2022 12:50:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061322_bvr01_0002.hex'.
+06/14/2022 12:50:06 DatCnvImp is exiting.
+06/14/2022 12:50:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061322_bvr50_0004.hex'.
+06/14/2022 12:50:06 DatCnvImp is exiting.
+06/14/2022 12:50:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061322_fcr50_0005.hex'.
+06/14/2022 12:50:07 DatCnvImp is exiting.
+06/14/2022 12:50:15 Data Conversion is shutting down.
+
+06/14/2022 12:50:17 Filter is starting up, version 7.26.7.129
+06/14/2022 12:50:39 Filter is shutting down.
+
+06/14/2022 12:50:42 Align CTD is starting up, version 7.26.7.129
+06/14/2022 12:51:05 Align CTD is shutting down.
+
+06/15/2022 21:05:40 Data Conversion is starting up, version 7.26.7.129
+06/15/2022 21:05:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061522_fcr50_0001.hex'.
+06/15/2022 21:05:59 DatCnvImp is exiting.
+06/15/2022 21:06:05 Data Conversion is shutting down.
+
+06/15/2022 21:06:11 Filter is starting up, version 7.26.7.129
+06/15/2022 21:06:41 Filter is shutting down.
+
+06/15/2022 21:06:45 Align CTD is starting up, version 7.26.7.129
+06/15/2022 21:07:12 Align CTD is shutting down.
+
+06/21/2022 11:51:03 Data Conversion is starting up, version 7.26.7.129
+06/21/2022 11:51:18 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062022_bvr01_0003.hex'.
+06/21/2022 11:51:19 DatCnvImp is exiting.
+06/21/2022 11:51:19 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062022_bvr50_0004.hex'.
+06/21/2022 11:51:19 DatCnvImp is exiting.
+06/21/2022 11:51:19 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062022_fcr50_0005.hex'.
+06/21/2022 11:51:20 DatCnvImp is exiting.
+06/21/2022 11:51:23 Data Conversion is shutting down.
+
+06/21/2022 11:51:27 Filter is starting up, version 7.26.7.129
+06/21/2022 11:51:43 Filter is shutting down.
+
+06/21/2022 11:51:46 Align CTD is starting up, version 7.26.7.129
+06/21/2022 11:52:07 Align CTD is shutting down.
+
+06/24/2022 15:23:46 Data Conversion is starting up, version 7.26.7.129
+06/24/2022 15:47:42 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 15:47:52 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 15:48:24 Data Conversion is shutting down.
+
+06/24/2022 15:50:12 Data Conversion is starting up, version 7.26.7.129
+06/24/2022 16:08:39 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:08:51 Data Conversion is shutting down.
+
+06/24/2022 16:08:54 Filter is starting up, version 7.26.7.129
+06/24/2022 16:17:37 Filter is shutting down.
+
+06/24/2022 16:17:41 Data Conversion is starting up, version 7.26.7.129
+06/24/2022 16:18:34 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:18:38 Data Conversion is shutting down.
+
+06/24/2022 16:19:26 Data Conversion is starting up, version 7.26.7.129
+06/24/2022 16:23:58 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:24:40 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:26:35 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0001.hex'.
+06/24/2022 16:26:39 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:26:53 Data Conversion is shutting down.
+
+06/24/2022 16:29:08 Data Conversion is starting up, version 7.26.7.129
+06/24/2022 16:29:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/24/2022 16:29:58 DatCnvImp is exiting.
+06/24/2022 16:32:21 Data Conversion is shutting down.
+
+06/24/2022 16:32:24 Filter is starting up, version 7.26.7.129
+06/24/2022 16:37:45 Filter is shutting down.
+
+06/24/2022 16:37:49 Filter is starting up, version 7.26.7.129
+06/24/2022 16:38:41 Filter is shutting down.
+
+06/24/2022 16:39:23 Filter is starting up, version 7.26.7.129
+06/24/2022 16:40:30 Filter is shutting down.
+
+06/29/2022 12:28:34 Filter is starting up, version 7.26.7.129
+06/29/2022 13:21:42 Filter is shutting down.
+
+06/29/2022 13:21:44 Align CTD is starting up, version 7.26.7.129
+06/29/2022 13:25:42 Align CTD is shutting down.
+
+06/29/2022 13:26:42 Align CTD is starting up, version 7.26.7.129
+06/29/2022 13:30:00 Align CTD is shutting down.
+
+06/29/2022 15:31:04 Align CTD is starting up, version 7.26.7.129
+06/29/2022 15:31:33 Align CTD is shutting down.
+
+06/29/2022 15:53:58 Data Conversion is starting up, version 7.26.7.129
+06/29/2022 15:55:28 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01907809_062722_bvr50_0006.hex'.
+06/29/2022 15:55:29 DatCnvImp is exiting.
+06/29/2022 15:55:29 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01907809_062722_bvr50_0007.hex'.
+06/29/2022 15:55:29 DatCnvImp is exiting.
+06/29/2022 15:55:41 Data Conversion is shutting down.
+
+06/29/2022 15:55:44 Filter is starting up, version 7.26.7.129
+06/29/2022 15:56:21 Filter is shutting down.
+
+06/29/2022 15:56:26 Align CTD is starting up, version 7.26.7.129
+06/29/2022 15:56:59 Align CTD is shutting down.
+
+06/29/2022 16:07:00 Data Conversion is starting up, version 7.26.7.129
+06/29/2022 16:08:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_062722_fcr50_0003.hex'.
+06/29/2022 16:08:58 DatCnvImp is exiting.
+06/29/2022 16:09:02 Data Conversion is shutting down.
+
+06/29/2022 16:09:06 Filter is starting up, version 7.26.7.129
+06/29/2022 16:09:31 Filter is shutting down.
+
+06/29/2022 16:09:34 Align CTD is starting up, version 7.26.7.129
+06/29/2022 16:10:02 Align CTD is shutting down.
+
+06/29/2022 16:16:43 Data Conversion is starting up, version 7.26.7.129
+06/29/2022 16:16:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188_052522_fcr50_0002.hex'.
+06/29/2022 16:16:54 DatCnvImp is exiting.
+06/29/2022 16:16:56 Data Conversion is shutting down.
+
+06/29/2022 16:16:59 Filter is starting up, version 7.26.7.129
+06/29/2022 16:17:15 Filter is shutting down.
+
+06/29/2022 16:17:17 Align CTD is starting up, version 7.26.7.129
+06/29/2022 16:17:28 Align CTD is shutting down.
+
+07/05/2022 22:48:11 Data Conversion is starting up, version 7.26.7.129
+07/05/2022 22:50:16 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063022_ccr50_SBE19plus01907809_0001.hex'.
+07/05/2022 22:50:16 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063022_ccr50_SBE19plus01907809_0001.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:16 DatCnvImp is exiting.
+07/05/2022 22:50:19 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0002.hex'.
+07/05/2022 22:50:19 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0002.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:19 DatCnvImp is exiting.
+07/05/2022 22:50:20 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0003.hex'.
+07/05/2022 22:50:20 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0003.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:20 DatCnvImp is exiting.
+07/05/2022 22:50:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr40_SBE19plus01907809_0004.hex'.
+07/05/2022 22:50:21 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr40_SBE19plus01907809_0004.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:21 DatCnvImp is exiting.
+07/05/2022 22:50:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr50_SBE19plus01907809_0005.hex'.
+07/05/2022 22:50:21 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr50_SBE19plus01907809_0005.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:21 DatCnvImp is exiting.
+07/05/2022 22:50:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_fcr50_SBE19plus01907809_0006.hex'.
+07/05/2022 22:50:22 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_fcr50_SBE19plus01907809_0006.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:22 DatCnvImp is exiting.
+07/05/2022 22:50:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063022_ccr50_SBE19plus01907809_0001.hex'.
+07/05/2022 22:50:54 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063022_ccr50_SBE19plus01907809_0001.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 22:50:54 DatCnvImp is exiting.
+07/05/2022 22:51:02 Data Conversion is shutting down.
+
+07/05/2022 22:55:37 Data Conversion is starting up, version 7.26.7.129
+07/05/2022 22:57:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063022_ccr50_SBE19plus01907809_0001.hex'.
+07/05/2022 22:57:52 DatCnvImp is exiting.
+07/05/2022 22:57:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0002.hex'.
+07/05/2022 22:57:53 DatCnvImp is exiting.
+07/05/2022 22:57:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01907809_0003.hex'.
+07/05/2022 22:57:53 DatCnvImp is exiting.
+07/05/2022 22:57:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr40_SBE19plus01907809_0004.hex'.
+07/05/2022 22:57:54 DatCnvImp is exiting.
+07/05/2022 22:57:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_bvr50_SBE19plus01907809_0005.hex'.
+07/05/2022 22:57:54 DatCnvImp is exiting.
+07/05/2022 22:57:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070522_fcr50_SBE19plus01907809_0006.hex'.
+07/05/2022 22:57:55 DatCnvImp is exiting.
+07/05/2022 22:58:28 Data Conversion is shutting down.
+
+07/05/2022 22:58:31 Filter is starting up, version 7.26.7.129
+07/05/2022 22:59:04 Filter is shutting down.
+
+07/05/2022 22:59:07 Align CTD is starting up, version 7.26.7.129
+07/05/2022 23:00:04 Align CTD is shutting down.
+
+07/05/2022 23:06:01 Data Conversion is starting up, version 7.26.7.129
+07/05/2022 23:07:31 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041922_fcr50_0001.hex'.
+07/05/2022 23:07:31 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041922_fcr50_0001.cnv' for writing. Error #5 - Access is denied.
+
+07/05/2022 23:07:31 DatCnvImp is exiting.
+07/05/2022 23:07:42 Data Conversion is shutting down.
+
+07/05/2022 23:08:10 Data Conversion is starting up, version 7.26.7.129
+07/05/2022 23:09:19 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041922_fcr50_0001.hex'.
+07/05/2022 23:09:20 DatCnvImp is exiting.
+07/05/2022 23:09:29 Data Conversion is shutting down.
+
+07/05/2022 23:09:32 Filter is starting up, version 7.26.7.129
+07/05/2022 23:09:49 Filter is shutting down.
+
+07/05/2022 23:09:51 Align CTD is starting up, version 7.26.7.129
+07/05/2022 23:10:09 Align CTD is shutting down.
+
+07/10/2022 17:25:49 Data Conversion is starting up, version 7.26.7.129
+07/10/2022 17:26:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01908188_0001.hex'.
+07/10/2022 17:26:22 DatCnvImp is exiting.
+07/10/2022 17:26:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01908188_0001.hex'.
+07/10/2022 17:26:35 DatCnvImp is exiting.
+07/10/2022 17:26:40 Data Conversion is shutting down.
+
+07/10/2022 17:26:43 Filter is starting up, version 7.26.7.129
+07/10/2022 17:27:04 Filter is shutting down.
+
+07/10/2022 17:27:07 Align CTD is starting up, version 7.26.7.129
+07/10/2022 17:27:41 Align CTD is shutting down.
+
+07/10/2022 17:45:45 Data Conversion is starting up, version 7.26.7.129
+07/10/2022 17:46:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_SBE19plus01908188_0001.hex'.
+07/10/2022 17:46:02 DatCnvImp is exiting.
+07/10/2022 17:46:05 Data Conversion is shutting down.
+
+07/10/2022 17:46:07 Filter is starting up, version 7.26.7.129
+07/10/2022 17:46:22 Filter is shutting down.
+
+07/10/2022 17:46:24 Align CTD is starting up, version 7.26.7.129
+07/10/2022 17:46:37 Align CTD is shutting down.
+
+07/14/2022 16:12:34 Data Conversion is starting up, version 7.26.7.129
+07/14/2022 16:13:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_bvr40_S7809001.hex'.
+07/14/2022 16:13:07 DatCnvImp is exiting.
+07/14/2022 16:13:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_bvr50_S7809002.hex'.
+07/14/2022 16:13:08 DatCnvImp is exiting.
+07/14/2022 16:13:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S7809003.hex'.
+07/14/2022 16:13:08 DatCnvImp is exiting.
+07/14/2022 16:13:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071422_ccr50_S7809004.hex'.
+07/14/2022 16:13:09 DatCnvImp is exiting.
+07/14/2022 16:13:13 Data Conversion is shutting down.
+
+07/14/2022 16:13:15 Filter is starting up, version 7.26.7.129
+07/14/2022 16:13:51 Filter is shutting down.
+
+07/14/2022 16:13:55 Align CTD is starting up, version 7.26.7.129
+07/14/2022 16:14:23 Align CTD is shutting down.
+
+07/14/2022 16:35:34 Data Conversion is starting up, version 7.26.7.129
+07/14/2022 16:36:38 Data Conversion is shutting down.
+
+07/14/2022 16:36:42 Data Conversion is starting up, version 7.26.7.129
+07/14/2022 16:37:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S8188001.hex'.
+07/14/2022 16:37:54 DatCnvImp is exiting.
+07/14/2022 16:37:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071422_ccr50_S8188002.hex'.
+07/14/2022 16:37:54 DatCnvImp is exiting.
+07/14/2022 16:37:58 Data Conversion is shutting down.
+
+07/14/2022 16:38:00 Filter is starting up, version 7.26.7.129
+07/14/2022 16:38:27 Filter is shutting down.
+
+07/14/2022 16:38:30 Align CTD is starting up, version 7.26.7.129
+07/14/2022 16:39:02 Align CTD is shutting down.
+
+07/16/2022 14:52:12 Data Conversion is starting up, version 7.26.7.129
+07/16/2022 14:53:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071522_bvr50_S8188001.hex'.
+07/16/2022 14:53:08 DatCnvImp is exiting.
+07/16/2022 14:53:12 Data Conversion is shutting down.
+
+07/16/2022 14:53:15 Filter is starting up, version 7.26.7.129
+07/16/2022 14:53:33 Filter is shutting down.
+
+07/16/2022 14:53:36 Align CTD is starting up, version 7.26.7.129
+07/16/2022 14:53:49 Align CTD is shutting down.
+
+07/16/2022 15:05:01 Data Conversion is starting up, version 7.26.7.129
+07/16/2022 15:06:16 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071522_bvr50_S7809001.hex'.
+07/16/2022 15:06:16 DatCnvImp is exiting.
+07/16/2022 15:06:19 Data Conversion is shutting down.
+
+07/16/2022 15:06:22 Filter is starting up, version 7.26.7.129
+07/16/2022 15:06:44 Filter is shutting down.
+
+07/16/2022 15:06:47 Align CTD is starting up, version 7.26.7.129
+07/16/2022 15:07:13 Align CTD is shutting down.
+
+07/18/2022 15:45:35 Data Conversion is starting up, version 7.26.7.129
+07/18/2022 15:47:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071822_bvr40_S7809001.hex'.
+07/18/2022 15:47:21 DatCnvImp is exiting.
+07/18/2022 15:47:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071822_bvr50_S7809002.hex'.
+07/18/2022 15:47:22 DatCnvImp is exiting.
+07/18/2022 15:47:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071822_fcr50_S7809003.hex'.
+07/18/2022 15:47:22 DatCnvImp is exiting.
+07/18/2022 15:47:27 Data Conversion is shutting down.
+
+07/18/2022 15:47:29 Filter is starting up, version 7.26.7.129
+07/18/2022 15:47:45 Filter is shutting down.
+
+07/18/2022 15:47:48 Align CTD is starting up, version 7.26.7.129
+07/18/2022 15:48:07 Align CTD is shutting down.
+
+07/21/2022 14:06:35 Data Conversion is starting up, version 7.26.7.129
+07/21/2022 14:07:27 Data Conversion is shutting down.
+
+07/21/2022 14:07:31 Filter is starting up, version 7.26.7.129
+07/21/2022 14:24:03 Filter is shutting down.
+
+07/21/2022 14:24:08 Data Conversion is starting up, version 7.26.7.129
+07/21/2022 14:27:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S8188001.hex'.
+07/21/2022 14:27:03 DatCnvImp is exiting.
+07/21/2022 14:27:07 Data Conversion is shutting down.
+
+07/21/2022 14:27:10 Filter is starting up, version 7.26.7.129
+07/21/2022 14:27:45 Filter is shutting down.
+
+07/21/2022 14:27:47 Align CTD is starting up, version 7.26.7.129
+07/21/2022 14:28:12 Align CTD is shutting down.
+
+07/25/2022 15:15:52 Data Conversion is starting up, version 7.26.7.129
+07/25/2022 15:19:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\072522_bvr50_S7809001.hex'.
+07/25/2022 15:19:12 DatCnvImp is exiting.
+07/25/2022 15:19:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\072522_fcr50_S7809002.hex'.
+07/25/2022 15:19:13 DatCnvImp is exiting.
+07/25/2022 15:19:18 Data Conversion is shutting down.
+
+07/25/2022 15:19:21 Filter is starting up, version 7.26.7.129
+07/25/2022 15:19:47 Filter is shutting down.
+
+07/25/2022 15:19:50 Align CTD is starting up, version 7.26.7.129
+07/25/2022 15:20:21 Align CTD is shutting down.
+
+07/26/2022 16:19:21 Data Conversion is starting up, version 7.26.7.129
+07/26/2022 16:21:19 Data Conversion is shutting down.
+
+07/26/2022 16:35:33 Data Conversion is starting up, version 7.26.7.129
+07/26/2022 17:06:31 Data Conversion is shutting down.
+
+07/27/2022 10:19:12 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 11:11:16 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052522_fcr50_S8188002.hex'.
+07/27/2022 11:11:16 DatCnvImp is exiting.
+07/27/2022 11:11:38 Data Conversion is shutting down.
+
+07/27/2022 11:11:41 Filter is starting up, version 7.26.7.129
+07/27/2022 11:13:36 Filter is shutting down.
+
+07/27/2022 11:13:39 Align CTD is starting up, version 7.26.7.129
+07/27/2022 11:15:21 Align CTD is shutting down.
+
+07/27/2022 11:39:07 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 11:39:38 Data Conversion is shutting down.
+
+07/27/2022 11:39:41 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 11:41:26 Data Conversion is shutting down.
+
+07/27/2022 11:43:39 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 11:44:18 Data Conversion is shutting down.
+
+07/27/2022 11:51:19 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 11:53:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052522_fcr50_S8188002.hex'.
+07/27/2022 11:53:43 DatCnvImp is exiting.
+07/27/2022 11:53:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062722_fcr50_S8188003.hex'.
+07/27/2022 11:53:44 DatCnvImp is exiting.
+07/27/2022 11:53:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S8188001.hex'.
+07/27/2022 11:53:44 DatCnvImp is exiting.
+07/27/2022 11:53:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071422_ccr50_S8188002.hex'.
+07/27/2022 11:53:45 DatCnvImp is exiting.
+07/27/2022 11:53:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071522_bvr50_S8188001.hex'.
+07/27/2022 11:53:45 DatCnvImp is exiting.
+07/27/2022 11:55:48 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070122_fcr50_S8188001.hex'.
+07/27/2022 11:55:48 DatCnvImp is exiting.
+07/27/2022 11:55:53 Data Conversion is shutting down.
+
+07/27/2022 11:55:55 Filter is starting up, version 7.26.7.129
+07/27/2022 11:56:26 Filter is shutting down.
+
+07/27/2022 11:56:29 Align CTD is starting up, version 7.26.7.129
+07/27/2022 11:56:57 Align CTD is shutting down.
+
+07/27/2022 13:24:53 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 13:27:32 Data Conversion is shutting down.
+
+07/27/2022 13:41:09 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 13:41:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S8188001.hex'.
+07/27/2022 13:41:52 DatCnvImp is exiting.
+07/27/2022 13:42:00 Data Conversion is shutting down.
+
+07/27/2022 13:42:03 Filter is starting up, version 7.26.7.129
+07/27/2022 13:43:04 Filter is shutting down.
+
+07/27/2022 13:43:07 Align CTD is starting up, version 7.26.7.129
+07/27/2022 13:43:22 Align CTD is shutting down.
+
+07/27/2022 13:44:32 Filter is starting up, version 7.26.7.129
+07/27/2022 13:57:23 Filter is shutting down.
+
+07/27/2022 13:57:26 Data Conversion is starting up, version 7.26.7.129
+07/27/2022 13:57:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071122_fcr50_S8188001.hex'.
+07/27/2022 13:57:52 DatCnvImp is exiting.
+07/27/2022 13:57:56 Data Conversion is shutting down.
+
+07/27/2022 13:57:59 Filter is starting up, version 7.26.7.129
+07/27/2022 13:58:33 Filter is shutting down.
+
+07/27/2022 13:58:35 Align CTD is starting up, version 7.26.7.129
+07/27/2022 13:58:48 Align CTD is shutting down.
+
+07/29/2022 15:40:16 Data Conversion is starting up, version 7.26.7.129
+07/29/2022 15:40:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\072822_ccr50_S7809001.hex'.
+07/29/2022 15:40:43 DatCnvImp is exiting.
+07/29/2022 15:40:47 Data Conversion is shutting down.
+
+07/29/2022 15:40:50 Filter is starting up, version 7.26.7.129
+07/29/2022 15:41:15 Filter is shutting down.
+
+07/29/2022 15:41:18 Align CTD is starting up, version 7.26.7.129
+07/29/2022 15:41:41 Align CTD is shutting down.
+
+08/02/2022 14:57:51 Data Conversion is starting up, version 7.26.7.129
+08/02/2022 14:59:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080122_bvr50_S7809001.hex'.
+08/02/2022 14:59:30 DatCnvImp is exiting.
+08/02/2022 14:59:31 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080122_fcr50_S7809002.hex'.
+08/02/2022 14:59:31 DatCnvImp is exiting.
+08/02/2022 14:59:35 Data Conversion is shutting down.
+
+08/02/2022 14:59:38 Filter is starting up, version 7.26.7.129
+08/02/2022 14:59:54 Filter is shutting down.
+
+08/02/2022 14:59:57 Align CTD is starting up, version 7.26.7.129
+08/02/2022 15:00:17 Align CTD is shutting down.
+
+08/10/2022 10:01:38 Data Conversion is starting up, version 7.26.7.129
+08/10/2022 10:02:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080822_bvr50_S7809001.hex'.
+08/10/2022 10:02:02 DatCnvImp is exiting.
+08/10/2022 10:02:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080822_fcr50_S7809003.hex'.
+08/10/2022 10:02:02 DatCnvImp is exiting.
+08/10/2022 10:02:09 Data Conversion is shutting down.
+
+08/10/2022 10:02:12 Filter is starting up, version 7.26.7.129
+08/10/2022 10:02:29 Filter is shutting down.
+
+08/10/2022 10:02:32 Align CTD is starting up, version 7.26.7.129
+08/10/2022 10:02:50 Align CTD is shutting down.
+
+08/18/2022 17:48:41 Data Conversion is starting up, version 7.26.7.129
+08/18/2022 17:48:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\081822_bvr50_S7809001.hex'.
+08/18/2022 17:48:58 DatCnvImp is exiting.
+08/18/2022 17:48:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\081822_fcr50_S7809002.hex'.
+08/18/2022 17:48:58 DatCnvImp is exiting.
+08/18/2022 17:49:02 Data Conversion is shutting down.
+
+08/18/2022 17:49:05 Filter is starting up, version 7.26.7.129
+08/18/2022 17:49:22 Filter is shutting down.
+
+08/18/2022 17:49:27 Align CTD is starting up, version 7.26.7.129
+08/18/2022 17:49:45 Align CTD is shutting down.
+
+08/21/2022 17:27:34 Data Conversion is starting up, version 7.26.7.129
+08/21/2022 17:27:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\081922_ccr50_S7809001.hex'.
+08/21/2022 17:27:44 DatCnvImp is exiting.
+08/21/2022 17:27:47 Data Conversion is shutting down.
+
+08/21/2022 17:27:50 Filter is starting up, version 7.26.7.129
+08/21/2022 17:28:04 Filter is shutting down.
+
+08/21/2022 17:28:07 Align CTD is starting up, version 7.26.7.129
+08/21/2022 17:28:21 Align CTD is shutting down.
+
+08/23/2022 11:25:48 Data Conversion is starting up, version 7.26.7.129
+08/23/2022 11:26:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082222_bvr50_S7809001.hex'.
+08/23/2022 11:26:02 DatCnvImp is exiting.
+08/23/2022 11:26:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082222_fcr50_S7809003.hex'.
+08/23/2022 11:26:02 DatCnvImp is exiting.
+08/23/2022 11:26:06 Data Conversion is shutting down.
+
+08/23/2022 11:26:08 Filter is starting up, version 7.26.7.129
+08/23/2022 11:26:28 Filter is shutting down.
+
+08/23/2022 11:26:31 Align CTD is starting up, version 7.26.7.129
+08/23/2022 11:26:52 Align CTD is shutting down.
+
+09/05/2022 15:43:41 Data Conversion is starting up, version 7.26.7.129
+09/05/2022 15:43:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\090522_bvr50_S7809001.hex'.
+09/05/2022 15:43:51 DatCnvImp is exiting.
+09/05/2022 15:43:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\090522_fcr50_S7809002.hex'.
+09/05/2022 15:43:52 DatCnvImp is exiting.
+09/05/2022 15:43:55 Data Conversion is shutting down.
+
+09/05/2022 15:43:59 Filter is starting up, version 7.26.7.129
+09/05/2022 15:44:14 Filter is shutting down.
+
+09/05/2022 15:44:17 Align CTD is starting up, version 7.26.7.129
+09/05/2022 15:44:33 Align CTD is shutting down.
+
+09/12/2022 15:56:46 Data Conversion is starting up, version 7.26.7.129
+09/12/2022 15:56:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091222_fcr50_S7809_0001.hex'.
+09/12/2022 15:56:59 DatCnvImp is exiting.
+09/12/2022 15:57:05 Data Conversion is shutting down.
+
+09/12/2022 15:57:07 Filter is starting up, version 7.26.7.129
+09/12/2022 15:57:28 Filter is shutting down.
+
+09/12/2022 15:57:31 Align CTD is starting up, version 7.26.7.129
+09/12/2022 15:57:49 Align CTD is shutting down.
+
+09/14/2022 15:52:38 Data Conversion is starting up, version 7.26.7.129
+09/14/2022 15:52:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091322_fcr50_S7809003.hex'.
+09/14/2022 15:52:55 DatCnvImp is exiting.
+09/14/2022 15:53:00 Data Conversion is shutting down.
+
+09/14/2022 15:53:03 Filter is starting up, version 7.26.7.129
+09/14/2022 15:53:19 Filter is shutting down.
+
+09/14/2022 15:53:23 Align CTD is starting up, version 7.26.7.129
+09/14/2022 15:53:37 Align CTD is shutting down.
+
+09/19/2022 16:05:27 Filter is starting up, version 7.26.7.129
+09/19/2022 16:06:36 Filter is shutting down.
+
+09/19/2022 16:06:38 Data Conversion is starting up, version 7.26.7.129
+09/19/2022 16:06:50 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091922_bvr50_S7809002.hex'.
+09/19/2022 16:06:51 DatCnvImp is exiting.
+09/19/2022 16:06:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091922_bvr50_S7809003.hex'.
+09/19/2022 16:06:51 DatCnvImp is exiting.
+09/19/2022 16:06:53 Data Conversion is shutting down.
+
+09/19/2022 16:06:55 Filter is starting up, version 7.26.7.129
+09/19/2022 16:07:09 Filter is shutting down.
+
+09/19/2022 16:07:11 Cell Thermal Mass is starting up, version 7.26.7.129
+09/19/2022 16:07:16 Cell Thermal Mass is shutting down.
+
+09/19/2022 16:07:19 Cell Thermal Mass is starting up, version 7.26.7.129
+09/19/2022 16:07:20 Cell Thermal Mass is shutting down.
+
+09/19/2022 16:07:23 Align CTD is starting up, version 7.26.7.129
+09/19/2022 16:07:36 Align CTD is shutting down.
+
+09/26/2022 16:51:02 Data Conversion is starting up, version 7.26.7.129
+09/26/2022 16:51:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092622_fcr50_S7809_0001.hex'.
+09/26/2022 16:51:43 DatCnvImp is exiting.
+09/26/2022 16:51:53 Data Conversion is shutting down.
+
+09/26/2022 16:51:59 Filter is starting up, version 7.26.7.129
+09/26/2022 16:52:14 Filter is shutting down.
+
+09/26/2022 16:52:17 Align CTD is starting up, version 7.26.7.129
+09/26/2022 16:52:48 Align CTD is shutting down.
+
+09/30/2022 15:19:48 Data Conversion is starting up, version 7.26.7.129
+09/30/2022 15:19:54 Data Conversion is shutting down.
+
+09/30/2022 15:20:27 Data Conversion is starting up, version 7.26.7.129
+09/30/2022 15:20:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092922_ccr50_S7809001.hex'.
+09/30/2022 15:20:37 DatCnvImp is exiting.
+09/30/2022 15:20:41 Data Conversion is shutting down.
+
+09/30/2022 15:20:44 Filter is starting up, version 7.26.7.129
+09/30/2022 15:21:06 Filter is shutting down.
+
+09/30/2022 15:21:10 Align CTD is starting up, version 7.26.7.129
+09/30/2022 15:21:28 Align CTD is shutting down.
+
+10/03/2022 17:06:30 Data Conversion is starting up, version 7.26.7.129
+10/03/2022 17:07:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100322_fcr50_S7809001.hex'.
+10/03/2022 17:07:07 DatCnvImp is exiting.
+10/03/2022 17:07:11 Data Conversion is shutting down.
+
+10/03/2022 17:07:13 Filter is starting up, version 7.26.7.129
+10/03/2022 17:07:25 Filter is shutting down.
+
+10/03/2022 17:07:28 Align CTD is starting up, version 7.26.7.129
+10/03/2022 17:07:37 Align CTD is shutting down.
+
+10/03/2022 17:07:41 Translate is starting up, version 7.26.7.129
+10/03/2022 17:07:44 Translate is shutting down.
+
+10/04/2022 11:03:24 Data Conversion is starting up, version 7.26.7.129
+10/04/2022 11:03:43 Data Conversion is shutting down.
+
+10/04/2022 11:57:01 Align CTD is starting up, version 7.26.7.129
+10/04/2022 12:24:48 Align CTD is shutting down.
+
+10/04/2022 13:45:42 Data Conversion is starting up, version 7.26.7.129
+10/04/2022 13:49:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100322_fcr_S8188001.hex'.
+10/04/2022 13:49:35 DatCnvImp is exiting.
+10/04/2022 13:49:41 Data Conversion is shutting down.
+
+10/04/2022 13:49:45 Filter is starting up, version 7.26.7.129
+10/04/2022 14:34:21 Filter is shutting down.
+
+10/04/2022 14:34:26 Data Conversion is starting up, version 7.26.7.129
+10/04/2022 14:34:41 Data Conversion is shutting down.
+
+10/04/2022 14:38:31 Filter is starting up, version 7.26.7.129
+10/04/2022 14:40:50 Filter is shutting down.
+
+10/04/2022 14:40:53 Align CTD is starting up, version 7.26.7.129
+10/04/2022 17:04:58 Align CTD is shutting down.
+
+10/04/2022 17:05:03 Data Conversion is starting up, version 7.26.7.129
+10/04/2022 17:05:28 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100422_test_S7809_0002.hex'.
+10/04/2022 17:05:29 DatCnvImp is exiting.
+10/04/2022 17:05:33 Data Conversion is shutting down.
+
+10/04/2022 17:05:35 Filter is starting up, version 7.26.7.129
+10/04/2022 17:05:57 Filter is shutting down.
+
+10/04/2022 17:06:00 Align CTD is starting up, version 7.26.7.129
+10/04/2022 17:06:43 Align CTD is shutting down.
+
+10/05/2022 18:33:51 Data Conversion is starting up, version 7.26.7.129
+10/05/2022 18:34:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100522_test_S7809_0001.hex'.
+10/05/2022 18:34:09 DatCnvImp is exiting.
+10/05/2022 18:34:14 Data Conversion is shutting down.
+
+10/05/2022 18:34:17 Filter is starting up, version 7.26.7.129
+10/05/2022 18:34:33 Filter is shutting down.
+
+10/05/2022 18:34:38 Align CTD is starting up, version 7.26.7.129
+10/05/2022 18:34:54 Align CTD is shutting down.
+
+10/06/2022 11:44:53 Data Conversion is starting up, version 7.26.7.129
+10/06/2022 11:46:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100622_test_S8188_0002.hex'.
+10/06/2022 11:46:07 DatCnvImp is exiting.
+10/06/2022 11:46:12 Data Conversion is shutting down.
+
+10/06/2022 11:46:14 Filter is starting up, version 7.26.7.129
+10/06/2022 11:46:39 Filter is shutting down.
+
+10/06/2022 11:46:42 Align CTD is starting up, version 7.26.7.129
+10/06/2022 11:47:37 Align CTD is shutting down.
+
+10/06/2022 12:28:39 Data Conversion is starting up, version 7.26.7.129
+10/06/2022 12:29:47 CPreReadConFile - failed to open C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plus_01908188.xmlcon for reading. Error #2 - The system cannot find the file specified.
+
+10/06/2022 12:30:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100622_test_S7809_0001.hex'.
+10/06/2022 12:30:40 DatCnvImp is exiting.
+10/06/2022 12:30:46 Data Conversion is shutting down.
+
+10/12/2022 10:51:57 Data Conversion is starting up, version 7.26.7.129
+10/12/2022 10:53:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_bvr50_S7809001.hex'.
+10/12/2022 10:53:25 DatCnvImp is exiting.
+10/12/2022 10:53:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_fcr50_S7809002.hex'.
+10/12/2022 10:53:25 DatCnvImp is exiting.
+10/12/2022 10:53:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_fcr50_S7809003.hex'.
+10/12/2022 10:53:26 DatCnvImp is exiting.
+10/12/2022 10:53:29 Data Conversion is shutting down.
+
+10/12/2022 10:53:31 Filter is starting up, version 7.26.7.129
+10/12/2022 10:53:57 Filter is shutting down.
+
+10/12/2022 10:54:00 Align CTD is starting up, version 7.26.7.129
+10/12/2022 10:54:37 Align CTD is shutting down.
+
+10/12/2022 11:13:25 Data Conversion is starting up, version 7.26.7.129
+10/12/2022 11:20:09 Data Conversion is shutting down.
+
+10/12/2022 11:20:13 Align CTD is starting up, version 7.26.7.129
+10/12/2022 11:22:58 Align CTD is shutting down.
+
+10/12/2022 11:23:01 Filter is starting up, version 7.26.7.129
+10/12/2022 11:34:39 Filter is shutting down.
+
+10/12/2022 11:48:25 Data Conversion is starting up, version 7.26.7.129
+10/12/2022 11:49:29 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_bvr50_S8188001.hex'.
+10/12/2022 11:49:30 DatCnvImp is exiting.
+10/12/2022 11:49:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_fcr50_S8188002.hex'.
+10/12/2022 11:49:30 DatCnvImp is exiting.
+10/12/2022 11:49:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_fcr50_S8188003.hex'.
+10/12/2022 11:49:31 DatCnvImp is exiting.
+10/12/2022 11:49:36 Data Conversion is shutting down.
+
+10/12/2022 11:49:38 Filter is starting up, version 7.26.7.129
+10/12/2022 11:50:09 Filter is shutting down.
+
+10/12/2022 11:50:11 Align CTD is starting up, version 7.26.7.129
+10/12/2022 12:03:41 Align CTD is shutting down.
+
+10/12/2022 12:14:31 Align CTD is starting up, version 7.26.7.129
+10/12/2022 12:15:44 Align CTD is shutting down.
+
+10/26/2022 16:55:01 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 16:57:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101722_fcr50_S7809001.hex'.
+10/26/2022 16:57:32 DatCnvImp is exiting.
+10/26/2022 16:57:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102422_bvr50_S7809002.hex'.
+10/26/2022 16:57:33 DatCnvImp is exiting.
+10/26/2022 16:57:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102422_fcr50_S7809003.hex'.
+10/26/2022 16:57:34 DatCnvImp is exiting.
+10/26/2022 16:57:38 Data Conversion is shutting down.
+
+10/26/2022 16:57:40 Filter is starting up, version 7.26.7.129
+10/26/2022 16:58:09 Filter is shutting down.
+
+10/26/2022 16:58:12 Align CTD is starting up, version 7.26.7.129
+10/26/2022 16:59:08 Align CTD is shutting down.
+
+10/26/2022 17:20:16 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 17:20:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101122_fcr50_S8188004.hex'.
+10/26/2022 17:20:53 DatCnvImp is exiting.
+10/26/2022 17:20:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101722_fcr50_S8188001.hex'.
+10/26/2022 17:20:54 DatCnvImp is exiting.
+10/26/2022 17:20:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102422_bvr50_S8188002.hex'.
+10/26/2022 17:20:55 DatCnvImp is exiting.
+10/26/2022 17:20:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102422_fcr50_S8188003.hex'.
+10/26/2022 17:20:55 DatCnvImp is exiting.
+10/26/2022 17:21:01 Data Conversion is shutting down.
+
+10/26/2022 17:21:04 Filter is starting up, version 7.26.7.129
+10/26/2022 17:21:33 Filter is shutting down.
+
+10/26/2022 17:21:37 Align CTD is starting up, version 7.26.7.129
+10/26/2022 17:23:11 Align CTD is shutting down.
+
+10/26/2022 17:53:40 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 17:53:55 Data Conversion is shutting down.
+
+10/26/2022 17:53:59 Align CTD is starting up, version 7.26.7.129
+10/26/2022 17:54:45 Align CTD is shutting down.
+
+10/26/2022 17:55:18 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 17:55:25 Data Conversion is shutting down.
+
+10/26/2022 17:59:16 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 18:00:56 Data Conversion is shutting down.
+
+10/26/2022 18:01:25 Data Conversion is starting up, version 7.26.7.129
+10/26/2022 18:01:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101722_fcr50_S8188001 - Copy.hex'.
+10/26/2022 18:01:39 DatCnvImp is exiting.
+10/26/2022 18:01:42 Data Conversion is shutting down.
+
+10/26/2022 18:01:45 Filter is starting up, version 7.26.7.129
+10/26/2022 18:02:01 Filter is shutting down.
+
+10/26/2022 18:02:03 Align CTD is starting up, version 7.26.7.129
+10/26/2022 18:07:12 Align CTD is shutting down.
+
+11/18/2022 13:18:07 Data Conversion is starting up, version 7.26.7.129
+11/18/2022 13:19:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S7809001.hex'.
+11/18/2022 13:19:58 DatCnvImp is exiting.
+11/18/2022 13:19:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_bvr50_S7809002.hex'.
+11/18/2022 13:19:59 DatCnvImp is exiting.
+11/18/2022 13:19:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_fcr50_S7809003.hex'.
+11/18/2022 13:19:59 DatCnvImp is exiting.
+11/18/2022 13:19:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_bvr50_S7809004.hex'.
+11/18/2022 13:20:00 DatCnvImp is exiting.
+11/18/2022 13:20:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_fcr50_S7809006.hex'.
+11/18/2022 13:20:00 DatCnvImp is exiting.
+11/18/2022 13:20:04 Data Conversion is shutting down.
+
+11/18/2022 13:20:07 Filter is starting up, version 7.26.7.129
+11/18/2022 13:20:35 Filter is shutting down.
+
+11/18/2022 13:20:37 Align CTD is starting up, version 7.26.7.129
+11/18/2022 13:21:24 Align CTD is shutting down.
+
+11/18/2022 13:21:32 Data Conversion is starting up, version 7.26.7.129
+11/18/2022 13:22:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S8188001.hex'.
+11/18/2022 13:22:23 DatCnvImp is exiting.
+11/18/2022 13:22:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_bvr50_S8188002.hex'.
+11/18/2022 13:22:24 DatCnvImp is exiting.
+11/18/2022 13:22:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_fcr50_S8188003.hex'.
+11/18/2022 13:22:24 DatCnvImp is exiting.
+11/18/2022 13:22:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_bvr50_S8188005.hex'.
+11/18/2022 13:22:25 DatCnvImp is exiting.
+11/18/2022 13:22:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_fcr50_S8188006.hex'.
+11/18/2022 13:22:25 DatCnvImp is exiting.
+11/18/2022 13:22:28 Data Conversion is shutting down.
+
+11/18/2022 13:22:31 Filter is starting up, version 7.26.7.129
+11/18/2022 13:22:59 Filter is shutting down.
+
+11/18/2022 13:23:01 Align CTD is starting up, version 7.26.7.129
+11/18/2022 13:24:10 Align CTD is shutting down.
+
+11/28/2022 16:52:22 Data Conversion is starting up, version 7.26.7.129
+11/28/2022 16:52:49 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_bvr50_S7809_0007.hex'.
+11/28/2022 16:52:49 DatCnvImp is exiting.
+11/28/2022 16:52:49 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_fcr50_S7809_0008.hex'.
+11/28/2022 16:52:50 DatCnvImp is exiting.
+11/28/2022 16:53:45 Data Conversion is shutting down.
+
+11/28/2022 16:53:47 Filter is starting up, version 7.26.7.129
+11/28/2022 16:54:08 Filter is shutting down.
+
+11/28/2022 16:54:10 Align CTD is starting up, version 7.26.7.129
+11/28/2022 16:54:48 Align CTD is shutting down.
+
+11/28/2022 17:06:20 Data Conversion is starting up, version 7.26.7.129
+11/28/2022 17:06:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_bvr50_S8188007.hex'.
+11/28/2022 17:06:40 DatCnvImp is exiting.
+11/28/2022 17:06:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_fcr50_S8188008.hex'.
+11/28/2022 17:06:41 DatCnvImp is exiting.
+11/28/2022 17:06:44 Data Conversion is shutting down.
+
+11/28/2022 17:06:46 Filter is starting up, version 7.26.7.129
+11/28/2022 17:07:07 Filter is shutting down.
+
+11/28/2022 17:07:09 Align CTD is starting up, version 7.26.7.129
+11/28/2022 17:07:38 Align CTD is shutting down.
+
+12/12/2022 16:30:30 Data Conversion is starting up, version 7.26.7.129
+12/12/2022 16:31:46 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110122_fcr50_S8188001.hex'.
+12/12/2022 16:31:47 DatCnvImp is exiting.
+12/12/2022 16:31:47 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_bvr50_S8188002.hex'.
+12/12/2022 16:31:47 DatCnvImp is exiting.
+12/12/2022 16:31:47 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110822_fcr50_S8188003.hex'.
+12/12/2022 16:31:48 DatCnvImp is exiting.
+12/12/2022 16:31:48 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_bvr50_S8188005.hex'.
+12/12/2022 16:31:48 DatCnvImp is exiting.
+12/12/2022 16:31:48 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111622_fcr50_S8188006.hex'.
+12/12/2022 16:31:49 DatCnvImp is exiting.
+12/12/2022 16:31:49 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_bvr50_S8188007.hex'.
+12/12/2022 16:31:49 DatCnvImp is exiting.
+12/12/2022 16:31:49 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\112822_fcr50_S8188008.hex'.
+12/12/2022 16:31:50 DatCnvImp is exiting.
+12/12/2022 16:31:50 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\121222_fcr50_S8188003.hex'.
+12/12/2022 16:31:50 DatCnvImp is exiting.
+12/12/2022 16:31:55 Data Conversion is shutting down.
+
+12/12/2022 16:31:57 Filter is starting up, version 7.26.7.129
+12/12/2022 16:32:37 Filter is shutting down.
+
+12/12/2022 16:32:39 Align CTD is starting up, version 7.26.7.129
+12/12/2022 16:33:14 Align CTD is shutting down.
+
+12/12/2022 16:43:28 Data Conversion is starting up, version 7.26.7.129
+12/12/2022 16:43:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\121222_fcr50_S7809001.hex'.
+12/12/2022 16:43:56 DatCnvImp is exiting.
+12/12/2022 16:43:59 Data Conversion is shutting down.
+
+12/12/2022 16:44:02 Filter is starting up, version 7.26.7.129
+12/12/2022 16:44:22 Filter is shutting down.
+
+12/12/2022 16:44:24 Align CTD is starting up, version 7.26.7.129
+12/12/2022 16:44:49 Align CTD is shutting down.
+
+12/18/2022 13:50:21 Data Conversion is starting up, version 7.26.7.129
+12/18/2022 13:51:13 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\121622_bvr50_S7809001.hex'.
+12/18/2022 13:51:13 DatCnvImp is exiting.
+12/18/2022 13:51:19 Data Conversion is shutting down.
+
+12/18/2022 13:52:05 Filter is starting up, version 7.26.7.129
+12/18/2022 13:52:25 Filter is shutting down.
+
+12/18/2022 13:52:27 Align CTD is starting up, version 7.26.7.129
+12/18/2022 13:52:44 Align CTD is shutting down.
+
+12/18/2022 14:00:47 Data Conversion is starting up, version 7.26.7.129
+12/18/2022 14:01:09 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\121622_bvr50_S8188001.hex'.
+12/18/2022 14:01:10 DatCnvImp is exiting.
+12/18/2022 14:01:12 Data Conversion is shutting down.
+
+12/18/2022 14:01:14 Filter is starting up, version 7.26.7.129
+12/18/2022 14:01:32 Filter is shutting down.
+
+12/18/2022 14:01:34 Align CTD is starting up, version 7.26.7.129
+12/18/2022 14:02:02 Align CTD is shutting down.
+
+03/20/2023 15:32:37 Data Conversion is starting up, version 7.26.7.129
+03/20/2023 15:32:40 Data Conversion is shutting down.
+
+03/20/2023 15:37:00 Data Conversion is starting up, version 7.26.7.129
+03/20/2023 15:37:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\011123_bvr50_S8188001.hex'.
+03/20/2023 15:37:31 DatCnvImp is exiting.
+03/20/2023 15:37:31 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\011123_fcr50_S8188002.hex'.
+03/20/2023 15:37:31 DatCnvImp is exiting.
+03/20/2023 15:37:31 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\020723_fcr50_S8188003.hex'.
+03/20/2023 15:37:32 DatCnvImp is exiting.
+03/20/2023 15:37:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\022423_fcr50_S8188004.hex'.
+03/20/2023 15:37:32 DatCnvImp is exiting.
+03/20/2023 15:37:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\030623_fcr50_S8188005.hex'.
+03/20/2023 15:37:33 DatCnvImp is exiting.
+03/20/2023 15:37:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\030623_fcr50_S8188006.hex'.
+03/20/2023 15:37:33 DatCnvImp is exiting.
+03/20/2023 15:37:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\030723_fcr50_S8188007.hex'.
+03/20/2023 15:37:34 DatCnvImp is exiting.
+03/20/2023 15:37:39 Data Conversion is shutting down.
+
+03/20/2023 15:37:41 Filter is starting up, version 7.26.7.129
+03/20/2023 15:44:45 Filter is shutting down.
+
+03/20/2023 15:44:50 Align CTD is starting up, version 7.26.7.129
+03/20/2023 15:45:32 Align CTD is shutting down.
+
+03/24/2023 10:52:41 Data Conversion is starting up, version 7.26.7.129
+03/24/2023 10:52:50 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\032123_bvr50_S8188002.hex'.
+03/24/2023 10:52:51 DatCnvImp is exiting.
+03/24/2023 10:52:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\032123_fcr50_S8188004.hex'.
+03/24/2023 10:52:51 DatCnvImp is exiting.
+03/24/2023 10:52:56 Data Conversion is shutting down.
+
+03/24/2023 10:52:58 Filter is starting up, version 7.26.7.129
+03/24/2023 10:53:10 Filter is shutting down.
+
+03/24/2023 10:53:13 Align CTD is starting up, version 7.26.7.129
+03/24/2023 10:53:29 Align CTD is shutting down.
+
+04/07/2023 11:46:37 Data Conversion is starting up, version 7.26.7.129
+04/07/2023 11:47:13 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\040423_fcr50_S8188_0001.hex'.
+04/07/2023 11:47:13 DatCnvImp is exiting.
+04/07/2023 11:47:18 Data Conversion is shutting down.
+
+04/07/2023 11:47:21 Filter is starting up, version 7.26.7.129
+04/07/2023 11:48:03 Filter is shutting down.
+
+04/07/2023 11:48:05 Align CTD is starting up, version 7.26.7.129
+04/07/2023 11:48:55 Align CTD is shutting down.
+
+04/19/2023 15:25:03 Data Conversion is starting up, version 7.26.7.129
+04/19/2023 15:30:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041223_fcr50_S8188001.hex'.
+04/19/2023 15:30:25 DatCnvImp is exiting.
+04/19/2023 15:30:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041823_fcr50_S8188002.hex'.
+04/19/2023 15:30:25 DatCnvImp is exiting.
+04/19/2023 15:31:37 Data Conversion is shutting down.
+
+04/19/2023 15:31:39 Filter is starting up, version 7.26.7.129
+04/19/2023 15:32:15 Filter is shutting down.
+
+04/19/2023 15:32:19 Align CTD is starting up, version 7.26.7.129
+04/19/2023 15:38:26 Align CTD is shutting down.
+
+05/11/2023 10:45:17 Data Conversion is starting up, version 7.26.7.129
+05/11/2023 10:45:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\042423_bvr50_S8188001.hex'.
+05/11/2023 10:45:32 DatCnvImp is exiting.
+05/11/2023 10:45:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050123_bvr50_S8188002.hex'.
+05/11/2023 10:45:33 DatCnvImp is exiting.
+05/11/2023 10:45:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050123_fcr50_S8188003.hex'.
+05/11/2023 10:45:33 DatCnvImp is exiting.
+05/11/2023 10:45:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050423_ccr50_S8188004.hex'.
+05/11/2023 10:45:34 DatCnvImp is exiting.
+05/11/2023 10:45:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050823_bvr50_S8188005.hex'.
+05/11/2023 10:45:34 DatCnvImp is exiting.
+05/11/2023 10:45:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050823_fcr50_S8188006.hex'.
+05/11/2023 10:45:35 DatCnvImp is exiting.
+05/11/2023 10:45:39 Data Conversion is shutting down.
+
+05/11/2023 10:45:42 Filter is starting up, version 7.26.7.129
+05/11/2023 10:46:02 Filter is shutting down.
+
+05/11/2023 10:46:05 Align CTD is starting up, version 7.26.7.129
+05/11/2023 10:46:23 Align CTD is shutting down.
+
+05/31/2023 17:06:18 Data Conversion is starting up, version 7.26.7.129
+05/31/2023 17:06:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051623_fcr50_S8188001.hex'.
+05/31/2023 17:06:34 DatCnvImp is exiting.
+05/31/2023 17:06:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052223_bvr50_S8188003.hex'.
+05/31/2023 17:06:35 DatCnvImp is exiting.
+05/31/2023 17:06:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052223_fcr50_S8188004.hex'.
+05/31/2023 17:06:35 DatCnvImp is exiting.
+05/31/2023 17:06:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052923_bvr50_S8188005.hex'.
+05/31/2023 17:06:36 DatCnvImp is exiting.
+05/31/2023 17:06:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052923_fcr50_S8188006.hex'.
+05/31/2023 17:06:36 DatCnvImp is exiting.
+05/31/2023 17:06:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\053023_fcr50_S8188007.hex'.
+05/31/2023 17:06:37 DatCnvImp is exiting.
+05/31/2023 17:06:41 Data Conversion is shutting down.
+
+05/31/2023 17:06:42 Filter is starting up, version 7.26.7.129
+05/31/2023 17:07:04 Filter is shutting down.
+
+05/31/2023 17:07:07 Align CTD is starting up, version 7.26.7.129
+05/31/2023 17:07:30 Align CTD is shutting down.
+
+06/12/2023 14:50:43 Data Conversion is starting up, version 7.26.7.129
+06/12/2023 14:51:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060523_bvr50_S8188002.hex'.
+06/12/2023 14:51:54 DatCnvImp is exiting.
+06/12/2023 14:51:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060523_fcr50_S8188001.hex'.
+06/12/2023 14:51:54 DatCnvImp is exiting.
+06/12/2023 14:52:08 Data Conversion is shutting down.
+
+06/12/2023 14:52:21 Filter is starting up, version 7.26.7.129
+06/12/2023 14:53:17 Filter is shutting down.
+
+06/12/2023 14:53:22 Align CTD is starting up, version 7.26.7.129
+06/12/2023 14:53:56 Align CTD is shutting down.
+
+06/19/2023 15:57:06 Data Conversion is starting up, version 7.26.7.129
+06/19/2023 15:57:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061423_bvr50_S8188003.hex'.
+06/19/2023 15:57:22 DatCnvImp is exiting.
+06/19/2023 15:57:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061423_fcr50_S8188001.hex'.
+06/19/2023 15:57:23 DatCnvImp is exiting.
+06/19/2023 15:57:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061423_fcr50_S8188_0004.hex'.
+06/19/2023 15:57:23 DatCnvImp is exiting.
+06/19/2023 15:57:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061923_fcr50_S8188005.hex'.
+06/19/2023 15:57:24 DatCnvImp is exiting.
+06/19/2023 15:57:27 Data Conversion is shutting down.
+
+06/19/2023 15:57:29 Filter is starting up, version 7.26.7.129
+06/19/2023 15:58:30 Filter is shutting down.
+
+06/19/2023 15:58:33 Align CTD is starting up, version 7.26.7.129
+06/19/2023 15:58:51 Align CTD is shutting down.
+
+07/03/2023 16:58:24 Data Conversion is starting up, version 7.26.7.129
+07/03/2023 16:58:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062623_bvr50_S8188001.hex'.
+07/03/2023 16:58:58 DatCnvImp is exiting.
+07/03/2023 16:58:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062623_fcr50_S8188002.hex'.
+07/03/2023 16:58:58 DatCnvImp is exiting.
+07/03/2023 16:58:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188003.hex'.
+07/03/2023 16:58:59 DatCnvImp is exiting.
+07/03/2023 16:58:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188004.hex'.
+07/03/2023 16:58:59 DatCnvImp is exiting.
+07/03/2023 16:58:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188005.hex'.
+07/03/2023 16:58:59 DatCnvImp is exiting.
+07/03/2023 16:58:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188006.hex'.
+07/03/2023 16:59:00 DatCnvImp is exiting.
+07/03/2023 16:59:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188007.hex'.
+07/03/2023 16:59:00 DatCnvImp is exiting.
+07/03/2023 16:59:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188008.hex'.
+07/03/2023 16:59:01 DatCnvImp is exiting.
+07/03/2023 16:59:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188009.hex'.
+07/03/2023 16:59:01 DatCnvImp is exiting.
+07/03/2023 16:59:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188010.hex'.
+07/03/2023 16:59:02 DatCnvImp is exiting.
+07/03/2023 16:59:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188011.hex'.
+07/03/2023 16:59:02 DatCnvImp is exiting.
+07/03/2023 16:59:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188012.hex'.
+07/03/2023 16:59:03 DatCnvImp is exiting.
+07/03/2023 16:59:03 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188013.hex'.
+07/03/2023 16:59:03 DatCnvImp is exiting.
+07/03/2023 16:59:03 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188014.hex'.
+07/03/2023 16:59:04 DatCnvImp is exiting.
+07/03/2023 16:59:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188015.hex'.
+07/03/2023 16:59:04 DatCnvImp is exiting.
+07/03/2023 16:59:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188016.hex'.
+07/03/2023 16:59:04 DatCnvImp is exiting.
+07/03/2023 16:59:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188017.hex'.
+07/03/2023 16:59:05 DatCnvImp is exiting.
+07/03/2023 16:59:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188018.hex'.
+07/03/2023 16:59:05 DatCnvImp is exiting.
+07/03/2023 16:59:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188019.hex'.
+07/03/2023 16:59:06 DatCnvImp is exiting.
+07/03/2023 16:59:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188020.hex'.
+07/03/2023 16:59:06 DatCnvImp is exiting.
+07/03/2023 16:59:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188021.hex'.
+07/03/2023 16:59:07 DatCnvImp is exiting.
+07/03/2023 16:59:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063023_ccr50_S8188022.hex'.
+07/03/2023 16:59:07 DatCnvImp is exiting.
+07/03/2023 16:59:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070323_bvr50_S8188024.hex'.
+07/03/2023 16:59:08 DatCnvImp is exiting.
+07/03/2023 16:59:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070323_fcr50_S8188025.hex'.
+07/03/2023 16:59:08 DatCnvImp is exiting.
+07/03/2023 16:59:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062623_bvr50_S8188001.hex'.
+07/03/2023 16:59:36 DatCnvImp is exiting.
+07/03/2023 16:59:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062623_fcr50_S8188002.hex'.
+07/03/2023 16:59:36 DatCnvImp is exiting.
+07/03/2023 16:59:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188003.hex'.
+07/03/2023 16:59:37 DatCnvImp is exiting.
+07/03/2023 16:59:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188004.hex'.
+07/03/2023 16:59:37 DatCnvImp is exiting.
+07/03/2023 16:59:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188005.hex'.
+07/03/2023 16:59:38 DatCnvImp is exiting.
+07/03/2023 16:59:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188006.hex'.
+07/03/2023 16:59:38 DatCnvImp is exiting.
+07/03/2023 16:59:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188007.hex'.
+07/03/2023 16:59:39 DatCnvImp is exiting.
+07/03/2023 16:59:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188008.hex'.
+07/03/2023 16:59:39 DatCnvImp is exiting.
+07/03/2023 16:59:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188009.hex'.
+07/03/2023 16:59:40 DatCnvImp is exiting.
+07/03/2023 16:59:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188010.hex'.
+07/03/2023 16:59:40 DatCnvImp is exiting.
+07/03/2023 16:59:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188011.hex'.
+07/03/2023 16:59:40 DatCnvImp is exiting.
+07/03/2023 16:59:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188012.hex'.
+07/03/2023 16:59:41 DatCnvImp is exiting.
+07/03/2023 16:59:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188013.hex'.
+07/03/2023 16:59:41 DatCnvImp is exiting.
+07/03/2023 16:59:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188014.hex'.
+07/03/2023 16:59:42 DatCnvImp is exiting.
+07/03/2023 16:59:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188015.hex'.
+07/03/2023 16:59:42 DatCnvImp is exiting.
+07/03/2023 16:59:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188016.hex'.
+07/03/2023 16:59:43 DatCnvImp is exiting.
+07/03/2023 16:59:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188017.hex'.
+07/03/2023 16:59:43 DatCnvImp is exiting.
+07/03/2023 16:59:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188018.hex'.
+07/03/2023 16:59:44 DatCnvImp is exiting.
+07/03/2023 16:59:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188019.hex'.
+07/03/2023 16:59:44 DatCnvImp is exiting.
+07/03/2023 16:59:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188020.hex'.
+07/03/2023 16:59:45 DatCnvImp is exiting.
+07/03/2023 16:59:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062723_fcrXX_S8188021.hex'.
+07/03/2023 16:59:45 DatCnvImp is exiting.
+07/03/2023 16:59:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\063023_ccr50_S8188022.hex'.
+07/03/2023 16:59:46 DatCnvImp is exiting.
+07/03/2023 16:59:46 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070323_bvr50_S8188024.hex'.
+07/03/2023 16:59:46 DatCnvImp is exiting.
+07/03/2023 16:59:46 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070323_fcr50_S8188025.hex'.
+07/03/2023 16:59:46 DatCnvImp is exiting.
+07/03/2023 16:59:52 Data Conversion is shutting down.
+
+07/03/2023 16:59:54 Filter is starting up, version 7.26.7.129
+07/03/2023 17:00:19 Filter is shutting down.
+
+07/03/2023 17:00:22 Align CTD is starting up, version 7.26.7.129
+07/03/2023 17:00:46 Align CTD is shutting down.
+
+08/02/2023 16:19:23 Data Conversion is starting up, version 7.26.7.129
+08/02/2023 16:19:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070623_fcr50_S8188001.hex'.
+08/02/2023 16:19:38 DatCnvImp is exiting.
+08/02/2023 16:19:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071023_bvr50_S8188002.hex'.
+08/02/2023 16:19:38 DatCnvImp is exiting.
+08/02/2023 16:19:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071023_fcr50_S8188003.hex'.
+08/02/2023 16:19:39 DatCnvImp is exiting.
+08/02/2023 16:19:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\073123_fcr50_S8188004.hex'.
+08/02/2023 16:19:39 DatCnvImp is exiting.
+08/02/2023 16:19:45 Data Conversion is shutting down.
+
+08/02/2023 16:19:47 Filter is starting up, version 7.26.7.129
+08/02/2023 16:20:06 Filter is shutting down.
+
+08/02/2023 16:20:08 Align CTD is starting up, version 7.26.7.129
+08/02/2023 16:20:32 Align CTD is shutting down.
+
+08/03/2023 12:14:17 Data Conversion is starting up, version 7.26.7.129
+08/03/2023 12:21:08 Data Conversion is shutting down.
+
+08/03/2023 15:48:15 Data Conversion is starting up, version 7.26.7.129
+08/03/2023 15:49:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070323_fcr50_S7809001.hex'.
+08/03/2023 15:49:58 DatCnvImp is exiting.
+08/03/2023 15:49:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070623_fcr50_S7809002.hex'.
+08/03/2023 15:49:58 DatCnvImp is exiting.
+08/03/2023 15:49:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071023_fcr50_S7809003.hex'.
+08/03/2023 15:49:59 DatCnvImp is exiting.
+08/03/2023 15:49:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071723_bvr50_S7809006.hex'.
+08/03/2023 15:49:59 DatCnvImp is exiting.
+08/03/2023 15:49:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071723_fcr50_S7809004.hex'.
+08/03/2023 15:50:00 DatCnvImp is exiting.
+08/03/2023 15:50:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071723_fcr50_S7809005.hex'.
+08/03/2023 15:50:00 DatCnvImp is exiting.
+08/03/2023 15:50:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\072423_bvr50_S7809007.hex'.
+08/03/2023 15:50:01 DatCnvImp is exiting.
+08/03/2023 15:50:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\072423_fcr50_S7809008.hex'.
+08/03/2023 15:50:01 DatCnvImp is exiting.
+08/03/2023 15:50:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\073123_bvr50_S7809009.hex'.
+08/03/2023 15:50:02 DatCnvImp is exiting.
+08/03/2023 15:50:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\073123_fcr50_S7809010.hex'.
+08/03/2023 15:50:02 DatCnvImp is exiting.
+08/03/2023 15:50:12 Data Conversion is shutting down.
+
+08/03/2023 15:50:14 Filter is starting up, version 7.26.7.129
+08/03/2023 15:50:52 Filter is shutting down.
+
+08/03/2023 15:50:55 Align CTD is starting up, version 7.26.7.129
+08/03/2023 15:51:44 Align CTD is shutting down.
+
+08/10/2023 11:21:10 Data Conversion is starting up, version 7.26.7.129
+08/10/2023 11:21:33 Data Conversion is shutting down.
+
+08/10/2023 11:21:36 Data Conversion is starting up, version 7.26.7.129
+08/10/2023 11:25:25 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080723_fcr50_S7809001.hex'.
+08/10/2023 11:25:27 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080923_ccr50_S7809002.hex'.
+08/10/2023 11:25:34 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080723_fcr50_S7809001.hex'.
+08/10/2023 11:25:36 Failed to get matching .xmlcon or .con file for 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080923_ccr50_S7809002.hex'.
+08/10/2023 11:25:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080723_fcr50_S7809001.hex'.
+08/10/2023 11:25:43 DatCnvImp is exiting.
+08/10/2023 11:25:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080923_ccr50_S7809002.hex'.
+08/10/2023 11:25:43 DatCnvImp is exiting.
+08/10/2023 11:26:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080723_bvr50_S8188002.hex'.
+08/10/2023 11:26:22 DatCnvImp is exiting.
+08/10/2023 11:26:22 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080723_fcr50_S8188001.hex'.
+08/10/2023 11:26:23 DatCnvImp is exiting.
+08/10/2023 11:26:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\080923_ccr50_S8188001.hex'.
+08/10/2023 11:26:23 DatCnvImp is exiting.
+08/10/2023 11:26:26 Data Conversion is shutting down.
+
+08/10/2023 11:26:29 Filter is starting up, version 7.26.7.129
+08/10/2023 11:27:21 Filter is shutting down.
+
+08/10/2023 11:27:24 Align CTD is starting up, version 7.26.7.129
+08/10/2023 11:28:19 Align CTD is shutting down.
+
+08/30/2023 15:14:32 Data Conversion is starting up, version 7.26.7.129
+08/30/2023 15:15:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082923_fcr50_S8188001.hex'.
+08/30/2023 15:15:24 DatCnvImp is exiting.
+08/30/2023 15:15:28 Data Conversion is shutting down.
+
+08/30/2023 15:15:30 Filter is starting up, version 7.26.7.129
+08/30/2023 15:15:44 Filter is shutting down.
+
+08/30/2023 15:15:48 Align CTD is starting up, version 7.26.7.129
+08/30/2023 15:16:21 Align CTD is shutting down.
+
+08/30/2023 15:18:54 Data Conversion is starting up, version 7.26.7.129
+08/30/2023 15:20:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\081423_bvr50_S7809001.hex'.
+08/30/2023 15:20:38 DatCnvImp is exiting.
+08/30/2023 15:20:38 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\081423_fcr50_S7809002.hex'.
+08/30/2023 15:20:39 DatCnvImp is exiting.
+08/30/2023 15:20:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082223_bvr50_S7809003.hex'.
+08/30/2023 15:20:39 DatCnvImp is exiting.
+08/30/2023 15:20:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082223_fcr50_S7809004.hex'.
+08/30/2023 15:20:40 DatCnvImp is exiting.
+08/30/2023 15:20:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082923_bvr50_S7809005.hex'.
+08/30/2023 15:20:40 DatCnvImp is exiting.
+08/30/2023 15:20:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\082923_fcr50_S7809006.hex'.
+08/30/2023 15:20:41 DatCnvImp is exiting.
+08/30/2023 15:20:44 Data Conversion is shutting down.
+
+08/30/2023 15:20:46 Filter is starting up, version 7.26.7.129
+08/30/2023 15:21:13 Filter is shutting down.
+
+08/30/2023 15:21:15 Align CTD is starting up, version 7.26.7.129
+08/30/2023 15:21:48 Align CTD is shutting down.
+
+09/06/2023 10:35:44 Data Conversion is starting up, version 7.26.7.129
+09/06/2023 10:38:02 Data Conversion is shutting down.
+
+09/06/2023 10:38:04 Data Conversion is starting up, version 7.26.7.129
+09/06/2023 10:38:27 Data Conversion is shutting down.
+
+09/06/2023 10:38:31 Data Conversion is starting up, version 7.26.7.129
+09/06/2023 10:39:20 CPreReadConFile - failed to open C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\SBE19plusV2_7809_Old_CTD.xmlcon for reading. Error #2 - The system cannot find the file specified.
+
+09/06/2023 10:40:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\090523_fcr50_S8188001.hex'.
+09/06/2023 10:40:13 DatCnvImp is exiting.
+09/06/2023 10:40:16 Data Conversion is shutting down.
+
+09/06/2023 10:40:18 Filter is starting up, version 7.26.7.129
+09/06/2023 10:40:42 Filter is shutting down.
+
+09/06/2023 10:40:44 Align CTD is starting up, version 7.26.7.129
+09/06/2023 10:41:12 Align CTD is shutting down.
+
+09/06/2023 12:40:31 Data Conversion is starting up, version 7.26.7.129
+09/06/2023 12:41:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\090523_bvr50_S7809001.hex'.
+09/06/2023 12:41:13 DatCnvImp is exiting.
+09/06/2023 12:41:13 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\090523_fcr50_S7809002.hex'.
+09/06/2023 12:41:13 DatCnvImp is exiting.
+09/06/2023 12:41:17 Data Conversion is shutting down.
+
+09/06/2023 12:41:19 Filter is starting up, version 7.26.7.129
+09/06/2023 12:41:39 Filter is shutting down.
+
+09/06/2023 12:41:41 Align CTD is starting up, version 7.26.7.129
+09/06/2023 12:42:03 Align CTD is shutting down.
+
+09/12/2023 18:13:33 Data Conversion is starting up, version 7.26.7.129
+09/12/2023 18:14:28 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091223_bvr50_S7809001.hex'.
+09/12/2023 18:14:29 DatCnvImp is exiting.
+09/12/2023 18:14:29 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091223_fcr50_S7809003.hex'.
+09/12/2023 18:14:29 DatCnvImp is exiting.
+09/12/2023 18:14:34 Data Conversion is shutting down.
+
+09/12/2023 18:14:36 Filter is starting up, version 7.26.7.129
+09/12/2023 18:14:53 Filter is shutting down.
+
+09/12/2023 18:14:55 Align CTD is starting up, version 7.26.7.129
+09/12/2023 18:15:12 Align CTD is shutting down.
+
+09/12/2023 18:16:00 Data Conversion is starting up, version 7.26.7.129
+09/12/2023 18:18:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091223_bvr50_S8188001.hex'.
+09/12/2023 18:18:42 DatCnvImp is exiting.
+09/12/2023 18:18:46 Data Conversion is shutting down.
+
+09/12/2023 18:18:47 Filter is starting up, version 7.26.7.129
+09/12/2023 18:19:15 Filter is shutting down.
+
+09/12/2023 18:19:17 Align CTD is starting up, version 7.26.7.129
+09/12/2023 18:19:43 Align CTD is shutting down.
+
+09/22/2023 13:19:09 Data Conversion is starting up, version 7.26.7.129
+09/22/2023 13:19:47 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091823_bvr50_S8188001.hex'.
+09/22/2023 13:19:48 DatCnvImp is exiting.
+09/22/2023 13:19:48 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091823_fcr50_S8188002.hex'.
+09/22/2023 13:19:48 DatCnvImp is exiting.
+09/22/2023 13:19:54 Data Conversion is shutting down.
+
+09/22/2023 13:19:57 Filter is starting up, version 7.26.7.129
+09/22/2023 13:20:21 Filter is shutting down.
+
+09/22/2023 13:20:24 Align CTD is starting up, version 7.26.7.129
+09/22/2023 13:24:35 Align CTD is shutting down.
+
+09/22/2023 13:37:04 Data Conversion is starting up, version 7.26.7.129
+09/22/2023 13:37:43 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091823_bvr50_S7809001.hex'.
+09/22/2023 13:37:44 DatCnvImp is exiting.
+09/22/2023 13:37:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\091823_fcr50_S7809002.hex'.
+09/22/2023 13:37:44 DatCnvImp is exiting.
+09/22/2023 13:37:49 Data Conversion is shutting down.
+
+09/22/2023 13:37:52 Filter is starting up, version 7.26.7.129
+09/22/2023 13:38:33 Filter is shutting down.
+
+09/22/2023 13:38:35 Align CTD is starting up, version 7.26.7.129
+09/22/2023 13:39:00 Align CTD is shutting down.
+
+09/25/2023 16:40:54 Data Conversion is starting up, version 7.26.7.129
+09/25/2023 16:41:27 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092523_fcr50_S7809001.hex'.
+09/25/2023 16:41:27 DatCnvImp is exiting.
+09/25/2023 16:41:30 Data Conversion is shutting down.
+
+09/25/2023 16:41:32 Filter is starting up, version 7.26.7.129
+09/25/2023 16:41:44 Filter is shutting down.
+
+09/25/2023 16:41:46 Align CTD is starting up, version 7.26.7.129
+09/25/2023 16:42:01 Align CTD is shutting down.
+
+09/25/2023 16:42:43 Data Conversion is starting up, version 7.26.7.129
+09/25/2023 16:43:08 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092523_fcr50_S8188001.hex'.
+09/25/2023 16:43:08 DatCnvImp is exiting.
+09/25/2023 16:43:12 Data Conversion is shutting down.
+
+09/25/2023 16:43:14 Filter is starting up, version 7.26.7.129
+09/25/2023 16:43:36 Filter is shutting down.
+
+09/25/2023 16:43:37 Align CTD is starting up, version 7.26.7.129
+09/25/2023 16:44:13 Align CTD is shutting down.
+
+10/05/2023 10:19:03 Data Conversion is starting up, version 7.26.7.129
+10/05/2023 10:19:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092623_bvr50_S8188001.hex'.
+10/05/2023 10:19:40 DatCnvImp is exiting.
+10/05/2023 10:19:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100323_bvr50_S8188002.hex'.
+10/05/2023 10:19:40 DatCnvImp is exiting.
+10/05/2023 10:19:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100323_fcr50_S8188003.hex'.
+10/05/2023 10:19:41 DatCnvImp is exiting.
+10/05/2023 10:19:44 Data Conversion is shutting down.
+
+10/05/2023 10:19:46 Filter is starting up, version 7.26.7.129
+10/05/2023 10:20:06 Filter is shutting down.
+
+10/05/2023 10:20:08 Align CTD is starting up, version 7.26.7.129
+10/05/2023 10:20:31 Align CTD is shutting down.
+
+10/05/2023 10:22:39 Data Conversion is starting up, version 7.26.7.129
+10/05/2023 10:23:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\092623_bvr50_S7809001.hex'.
+10/05/2023 10:23:06 DatCnvImp is exiting.
+10/05/2023 10:23:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100323_bvr50_S7809002.hex'.
+10/05/2023 10:23:07 DatCnvImp is exiting.
+10/05/2023 10:23:07 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100323_fcr50_S7809003.hex'.
+10/05/2023 10:23:07 DatCnvImp is exiting.
+10/05/2023 10:23:10 Data Conversion is shutting down.
+
+10/05/2023 10:23:13 Filter is starting up, version 7.26.7.129
+10/05/2023 10:23:37 Filter is shutting down.
+
+10/05/2023 10:23:39 Align CTD is starting up, version 7.26.7.129
+10/05/2023 10:24:08 Align CTD is shutting down.
+
+10/10/2023 16:10:25 Data Conversion is starting up, version 7.26.7.129
+10/10/2023 16:10:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100923_bvr50_S7809001.hex'.
+10/10/2023 16:10:35 DatCnvImp is exiting.
+10/10/2023 16:10:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100923_fcr50_S7809002.hex'.
+10/10/2023 16:10:35 DatCnvImp is exiting.
+10/10/2023 16:10:40 Data Conversion is shutting down.
+
+10/10/2023 16:10:42 Filter is starting up, version 7.26.7.129
+10/10/2023 16:11:06 Filter is shutting down.
+
+10/10/2023 16:11:08 Align CTD is starting up, version 7.26.7.129
+10/10/2023 16:11:29 Align CTD is shutting down.
+
+10/10/2023 16:12:53 Data Conversion is starting up, version 7.26.7.129
+10/10/2023 16:13:16 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100923_bvr50_S8188004.hex'.
+10/10/2023 16:13:16 DatCnvImp is exiting.
+10/10/2023 16:13:16 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\100923_fcr50_S8188005.hex'.
+10/10/2023 16:13:17 DatCnvImp is exiting.
+10/10/2023 16:13:22 Data Conversion is shutting down.
+
+10/10/2023 16:13:24 Filter is starting up, version 7.26.7.129
+10/10/2023 16:13:53 Filter is shutting down.
+
+10/10/2023 16:13:55 Align CTD is starting up, version 7.26.7.129
+10/10/2023 16:14:28 Align CTD is shutting down.
+
+10/18/2023 12:29:04 Data Conversion is starting up, version 7.26.7.129
+10/18/2023 12:57:46 Data Conversion is shutting down.
+
+10/18/2023 15:33:30 Data Conversion is starting up, version 7.26.7.129
+10/18/2023 15:34:15 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101723_bvr50_S8188001.hex'.
+10/18/2023 15:34:15 DatCnvImp is exiting.
+10/18/2023 15:34:15 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101723_fcr50_S8188002.hex'.
+10/18/2023 15:34:16 DatCnvImp is exiting.
+10/18/2023 15:34:22 Data Conversion is shutting down.
+
+10/18/2023 15:34:24 Filter is starting up, version 7.26.7.129
+10/18/2023 15:34:43 Filter is shutting down.
+
+10/18/2023 15:34:46 Align CTD is starting up, version 7.26.7.129
+10/18/2023 15:35:06 Align CTD is shutting down.
+
+10/18/2023 15:35:13 Bin Average is starting up, version 7.26.7.129
+10/18/2023 15:35:30 Bin Average is shutting down.
+
+10/18/2023 15:35:39 Align CTD is starting up, version 7.26.7.129
+10/18/2023 15:35:45 Align CTD is shutting down.
+
+10/18/2023 15:43:27 Data Conversion is starting up, version 7.26.7.129
+10/18/2023 15:43:50 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101723_bvr50_S7809001.hex'.
+10/18/2023 15:43:50 DatCnvImp is exiting.
+10/18/2023 15:43:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\101723_fcr50_S7809002.hex'.
+10/18/2023 15:43:51 DatCnvImp is exiting.
+10/18/2023 15:43:59 Data Conversion is shutting down.
+
+10/18/2023 15:44:00 Filter is starting up, version 7.26.7.129
+10/18/2023 15:45:10 Filter is shutting down.
+
+10/18/2023 15:45:12 Align CTD is starting up, version 7.26.7.129
+10/18/2023 15:45:44 Align CTD is shutting down.
+
+10/30/2023 22:57:25 Data Conversion is starting up, version 7.26.7.129
+10/30/2023 22:58:15 Data Conversion is shutting down.
+
+11/01/2023 16:52:36 Data Conversion is starting up, version 7.26.7.129
+11/01/2023 16:53:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_bvr50_S7809001.hex'.
+11/01/2023 16:53:02 DatCnvImp is exiting.
+11/01/2023 16:53:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_fcr50_S7809002.hex'.
+11/01/2023 16:53:02 DatCnvImp is exiting.
+11/01/2023 16:53:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_fcr50_S7809004test.hex'.
+11/01/2023 16:53:03 DatCnvImp is exiting.
+11/01/2023 16:53:03 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_fvr50_S7809003.hex'.
+11/01/2023 16:53:03 DatCnvImp is exiting.
+11/01/2023 16:53:10 Data Conversion is shutting down.
+
+11/01/2023 16:53:12 Filter is starting up, version 7.26.7.129
+11/01/2023 16:53:34 Filter is shutting down.
+
+11/01/2023 16:53:39 Align CTD is starting up, version 7.26.7.129
+11/01/2023 16:54:00 Align CTD is shutting down.
+
+11/01/2023 16:56:34 Data Conversion is starting up, version 7.26.7.129
+11/01/2023 16:56:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102423_bvr50_S7809001.hex'.
+11/01/2023 16:56:51 DatCnvImp is exiting.
+11/01/2023 16:56:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102423_fcr50_S7809002.hex'.
+11/01/2023 16:56:52 DatCnvImp is exiting.
+11/01/2023 16:56:54 Data Conversion is shutting down.
+
+11/01/2023 16:56:56 Filter is starting up, version 7.26.7.129
+11/01/2023 16:57:12 Filter is shutting down.
+
+11/01/2023 16:57:14 Align CTD is starting up, version 7.26.7.129
+11/01/2023 16:57:33 Align CTD is shutting down.
+
+11/01/2023 16:57:40 Data Conversion is starting up, version 7.26.7.129
+11/01/2023 16:58:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102423_bvr50_S8188001.hex'.
+11/01/2023 16:58:05 DatCnvImp is exiting.
+11/01/2023 16:58:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\102423_fcr50_S8188002.hex'.
+11/01/2023 16:58:05 DatCnvImp is exiting.
+11/01/2023 16:58:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_bvr50_S8188001.hex'.
+11/01/2023 16:58:06 DatCnvImp is exiting.
+11/01/2023 16:58:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_fcr50_S8188002.hex'.
+11/01/2023 16:58:06 DatCnvImp is exiting.
+11/01/2023 16:58:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\103123_fcr50_S8188003test.hex'.
+11/01/2023 16:58:07 DatCnvImp is exiting.
+11/01/2023 16:58:10 Data Conversion is shutting down.
+
+11/01/2023 16:58:12 Filter is starting up, version 7.26.7.129
+11/01/2023 16:58:41 Filter is shutting down.
+
+11/01/2023 16:58:42 Align CTD is starting up, version 7.26.7.129
+11/01/2023 16:59:17 Align CTD is shutting down.
+
+11/14/2023 17:16:42 Data Conversion is starting up, version 7.26.7.129
+11/14/2023 17:16:53 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110623_bvr50_S8188001.hex'.
+11/14/2023 17:16:54 DatCnvImp is exiting.
+11/14/2023 17:16:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110623_fcr50_S8188002.hex'.
+11/14/2023 17:16:54 DatCnvImp is exiting.
+11/14/2023 17:16:54 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111423_bvr50_S8188003.hex'.
+11/14/2023 17:16:55 DatCnvImp is exiting.
+11/14/2023 17:16:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111423_fcr50_S8188004.hex'.
+11/14/2023 17:16:55 DatCnvImp is exiting.
+11/14/2023 17:16:58 Data Conversion is shutting down.
+
+11/14/2023 17:16:59 Filter is starting up, version 7.26.7.129
+11/14/2023 17:17:18 Filter is shutting down.
+
+11/14/2023 17:17:20 Align CTD is starting up, version 7.26.7.129
+11/14/2023 17:17:36 Align CTD is shutting down.
+
+11/14/2023 17:17:38 Data Conversion is starting up, version 7.26.7.129
+11/14/2023 17:18:11 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110623_bvr50_S7809001.hex'.
+11/14/2023 17:18:11 DatCnvImp is exiting.
+11/14/2023 17:18:11 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\110623_fcr50_S7809002.hex'.
+11/14/2023 17:18:12 DatCnvImp is exiting.
+11/14/2023 17:18:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111423_bvr50_S7809003.hex'.
+11/14/2023 17:18:12 DatCnvImp is exiting.
+11/14/2023 17:18:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\111423_fcr50_S7809004.hex'.
+11/14/2023 17:18:13 DatCnvImp is exiting.
+11/14/2023 17:18:16 Data Conversion is shutting down.
+
+11/14/2023 17:18:18 Filter is starting up, version 7.26.7.129
+11/14/2023 17:18:39 Filter is shutting down.
+
+11/14/2023 17:18:41 Align CTD is starting up, version 7.26.7.129
+11/14/2023 17:19:07 Align CTD is shutting down.
+
+12/07/2023 11:13:42 Data Conversion is starting up, version 7.26.7.129
+12/07/2023 11:13:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\120423_bvr50_S7809001.hex'.
+12/07/2023 11:13:56 DatCnvImp is exiting.
+12/07/2023 11:13:56 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\120423_fcr50_S7809002.hex'.
+12/07/2023 11:13:56 DatCnvImp is exiting.
+12/07/2023 11:14:03 Data Conversion is shutting down.
+
+12/07/2023 11:14:04 Filter is starting up, version 7.26.7.129
+12/07/2023 11:14:20 Filter is shutting down.
+
+12/07/2023 11:14:23 Align CTD is starting up, version 7.26.7.129
+12/07/2023 11:14:40 Align CTD is shutting down.
+
+12/07/2023 11:14:42 Data Conversion is starting up, version 7.26.7.129
+12/07/2023 11:15:11 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\120423_bvr50_S8188001.hex'.
+12/07/2023 11:15:12 DatCnvImp is exiting.
+12/07/2023 11:15:12 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\120423_fcr50_S8188002.hex'.
+12/07/2023 11:15:12 DatCnvImp is exiting.
+12/07/2023 11:15:18 Data Conversion is shutting down.
+
+12/07/2023 11:15:20 Filter is starting up, version 7.26.7.129
+12/07/2023 11:15:44 Filter is shutting down.
+
+12/07/2023 11:15:46 Align CTD is starting up, version 7.26.7.129
+12/07/2023 11:16:21 Align CTD is shutting down.
+
+12/14/2023 10:36:12 Data Conversion is starting up, version 7.26.7.129
+12/14/2023 11:34:08 Data Conversion is shutting down.
+
+02/28/2024 09:42:27 Data Conversion is starting up, version 7.26.7.129
+02/28/2024 09:42:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\022724_fcr50_S7809005.hex'.
+02/28/2024 09:42:59 DatCnvImp is exiting.
+02/28/2024 09:43:05 Data Conversion is shutting down.
+
+02/28/2024 09:43:07 Filter is starting up, version 7.26.7.129
+02/28/2024 09:43:29 Filter is shutting down.
+
+02/28/2024 09:43:32 Align CTD is starting up, version 7.26.7.129
+02/28/2024 09:44:04 Align CTD is shutting down.
+
+03/06/2024 14:21:57 Data Conversion is starting up, version 7.26.7.129
+03/06/2024 14:23:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\030524_bvr50_S7809001.hex'.
+03/06/2024 14:23:30 DatCnvImp is exiting.
+03/06/2024 14:23:30 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\030524_fcr50_S7809002.hex'.
+03/06/2024 14:23:31 DatCnvImp is exiting.
+03/06/2024 14:23:45 Data Conversion is shutting down.
+
+03/06/2024 14:23:47 Filter is starting up, version 7.26.7.129
+03/06/2024 14:24:01 Filter is shutting down.
+
+03/06/2024 14:24:04 Align CTD is starting up, version 7.26.7.129
+03/06/2024 14:24:17 Align CTD is shutting down.
+
+03/18/2024 15:52:42 Data Conversion is starting up, version 7.26.7.129
+03/18/2024 15:52:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\031824_bvr50_S7809001.hex'.
+03/18/2024 15:52:58 DatCnvImp is exiting.
+03/18/2024 15:52:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\031824_fcr50_S7809002.hex'.
+03/18/2024 15:52:59 DatCnvImp is exiting.
+03/18/2024 15:53:02 Data Conversion is shutting down.
+
+03/18/2024 15:53:05 Filter is starting up, version 7.26.7.129
+03/18/2024 15:53:21 Filter is shutting down.
+
+03/18/2024 15:53:23 Align CTD is starting up, version 7.26.7.129
+03/18/2024 15:53:41 Align CTD is shutting down.
+
+04/02/2024 15:07:07 Data Conversion is starting up, version 7.26.7.129
+04/02/2024 15:07:20 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\032524_fcr50_S7809001.hex'.
+04/02/2024 15:07:21 DatCnvImp is exiting.
+04/02/2024 15:07:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\040124_bvr50_S7809002.hex'.
+04/02/2024 15:07:21 DatCnvImp is exiting.
+04/02/2024 15:07:21 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\040124_fcr50_S7809003.hex'.
+04/02/2024 15:07:22 DatCnvImp is exiting.
+04/02/2024 15:07:24 Data Conversion is shutting down.
+
+04/02/2024 15:07:27 Filter is starting up, version 7.26.7.129
+04/02/2024 15:07:48 Filter is shutting down.
+
+04/02/2024 15:07:50 Align CTD is starting up, version 7.26.7.129
+04/02/2024 15:08:17 Align CTD is shutting down.
+
+04/08/2024 15:55:05 Data Conversion is starting up, version 7.26.7.129
+04/08/2024 15:55:20 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\040824_fcr50_S7809001.hex'.
+04/08/2024 15:55:20 DatCnvImp is exiting.
+04/08/2024 15:55:24 Data Conversion is shutting down.
+
+04/08/2024 15:55:26 Filter is starting up, version 7.26.7.129
+04/08/2024 15:55:40 Filter is shutting down.
+
+04/08/2024 15:55:43 Align CTD is starting up, version 7.26.7.129
+04/08/2024 15:55:57 Align CTD is shutting down.
+
+05/16/2024 15:40:09 Data Conversion is starting up, version 7.26.7.129
+05/16/2024 15:40:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041524_bvr50_S7809001.hex'.
+05/16/2024 15:40:33 DatCnvImp is exiting.
+05/16/2024 15:40:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\041524_fcr50_S7809002.hex'.
+05/16/2024 15:40:34 DatCnvImp is exiting.
+05/16/2024 15:40:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\042224_fcr50_S7809003.hex'.
+05/16/2024 15:40:34 DatCnvImp is exiting.
+05/16/2024 15:40:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\042924_bvr50_S7809004.hex'.
+05/16/2024 15:40:35 DatCnvImp is exiting.
+05/16/2024 15:40:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\042924_fcr50_S7809005.hex'.
+05/16/2024 15:40:35 DatCnvImp is exiting.
+05/16/2024 15:40:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050624_bvr50_S7809006.hex'.
+05/16/2024 15:40:36 DatCnvImp is exiting.
+05/16/2024 15:40:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\050624_fcr50_S7809007.hex'.
+05/16/2024 15:40:36 DatCnvImp is exiting.
+05/16/2024 15:40:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051324_bvr50_S7809008.hex'.
+05/16/2024 15:40:37 DatCnvImp is exiting.
+05/16/2024 15:40:37 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\051324_fcr50_S7809009.hex'.
+05/16/2024 15:40:37 DatCnvImp is exiting.
+05/16/2024 15:40:42 Data Conversion is shutting down.
+
+05/16/2024 15:40:44 Filter is starting up, version 7.26.7.129
+05/16/2024 15:41:23 Filter is shutting down.
+
+05/16/2024 15:41:25 Align CTD is starting up, version 7.26.7.129
+05/16/2024 15:41:49 Align CTD is shutting down.
+
+05/23/2024 16:58:45 Data Conversion is starting up, version 7.26.7.129
+05/23/2024 16:58:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052024_bvr50_S7809001.hex'.
+05/23/2024 16:58:55 DatCnvImp is exiting.
+05/23/2024 16:58:55 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052024_fcr50_S7809002.hex'.
+05/23/2024 16:58:56 DatCnvImp is exiting.
+05/23/2024 16:58:56 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052224_ccr50_S7809003.hex'.
+05/23/2024 16:58:56 DatCnvImp is exiting.
+05/23/2024 16:58:56 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052224_ccr80_S7809004.hex'.
+05/23/2024 16:58:57 DatCnvImp is exiting.
+05/23/2024 16:58:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052224_ccr99_S7809005.hex'.
+05/23/2024 16:58:57 DatCnvImp is exiting.
+05/23/2024 16:59:01 Data Conversion is shutting down.
+
+05/23/2024 16:59:03 Filter is starting up, version 7.26.7.129
+05/23/2024 16:59:20 Filter is shutting down.
+
+05/23/2024 16:59:22 Align CTD is starting up, version 7.26.7.129
+05/23/2024 16:59:38 Align CTD is shutting down.
+
+06/04/2024 12:35:37 Data Conversion is starting up, version 7.26.7.129
+06/04/2024 12:35:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_bvr50_S7809001.hex'.
+06/04/2024 12:35:57 DatCnvImp is exiting.
+06/04/2024 12:35:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_fcr10_S7809002.hex'.
+06/04/2024 12:35:58 DatCnvImp is exiting.
+06/04/2024 12:35:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_fcr20_S7809003.hex'.
+06/04/2024 12:35:58 DatCnvImp is exiting.
+06/04/2024 12:35:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_fcr30_S7809004.hex'.
+06/04/2024 12:35:59 DatCnvImp is exiting.
+06/04/2024 12:35:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_fcr40_S7809005.hex'.
+06/04/2024 12:35:59 DatCnvImp is exiting.
+06/04/2024 12:35:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\052724_fcr50_S7809006.hex'.
+06/04/2024 12:36:00 DatCnvImp is exiting.
+06/04/2024 12:36:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr10_S7809007.hex'.
+06/04/2024 12:36:00 DatCnvImp is exiting.
+06/04/2024 12:36:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr20_S7809008.hex'.
+06/04/2024 12:36:01 DatCnvImp is exiting.
+06/04/2024 12:36:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr30_S7809009.hex'.
+06/04/2024 12:36:01 DatCnvImp is exiting.
+06/04/2024 12:36:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr40_S7809010.hex'.
+06/04/2024 12:36:02 DatCnvImp is exiting.
+06/04/2024 12:36:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr50_S7809011.hex'.
+06/04/2024 12:36:02 DatCnvImp is exiting.
+06/04/2024 12:36:08 Data Conversion is shutting down.
+
+06/04/2024 12:36:10 Filter is starting up, version 7.26.7.129
+06/04/2024 12:36:31 Filter is shutting down.
+
+06/04/2024 12:36:34 Align CTD is starting up, version 7.26.7.129
+06/04/2024 12:39:01 Align CTD is shutting down.
+
+06/11/2024 14:43:47 Data Conversion is starting up, version 7.26.7.129
+06/11/2024 14:44:20 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.hex'.
+06/11/2024 14:44:31 Data Conversion is shutting down.
+
+06/11/2024 14:44:33 Data Conversion is starting up, version 7.26.7.129
+06/11/2024 14:44:56 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.hex'.
+06/11/2024 14:44:56 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.cnv' for writing. Error #32 - The process cannot access the file because it is being used by another process.
+
+06/11/2024 14:44:56 DatCnvImp is exiting.
+06/11/2024 14:45:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr10_S7809003.hex'.
+06/11/2024 14:45:00 DatCnvImp is exiting.
+06/11/2024 14:45:00 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr20_S7809004.hex'.
+06/11/2024 14:45:01 DatCnvImp is exiting.
+06/11/2024 14:45:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr30_S7809005.hex'.
+06/11/2024 14:45:01 DatCnvImp is exiting.
+06/11/2024 14:45:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr40_S7809006.hex'.
+06/11/2024 14:45:02 DatCnvImp is exiting.
+06/11/2024 14:45:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr50_S7809002.hex'.
+06/11/2024 14:45:03 DatCnvImp is exiting.
+06/11/2024 14:45:06 Data Conversion is shutting down.
+
+06/11/2024 14:45:08 Filter is starting up, version 7.26.7.129
+06/11/2024 14:45:39 Filter is shutting down.
+
+06/11/2024 14:45:41 Data Conversion is starting up, version 7.26.7.129
+06/11/2024 14:45:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.hex'.
+06/11/2024 14:45:59 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.cnv' for writing. Error #32 - The process cannot access the file because it is being used by another process.
+
+06/11/2024 14:45:59 DatCnvImp is exiting.
+06/11/2024 14:46:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.hex'.
+06/11/2024 14:46:06 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.cnv' for writing. Error #32 - The process cannot access the file because it is being used by another process.
+
+06/11/2024 14:46:06 DatCnvImp is exiting.
+06/11/2024 14:46:36 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.hex'.
+06/11/2024 14:46:36 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809001.cnv' for writing. Error #32 - The process cannot access the file because it is being used by another process.
+
+06/11/2024 14:46:36 DatCnvImp is exiting.
+06/11/2024 14:46:40 Data Conversion is shutting down.
+
+06/11/2024 14:46:44 Filter is starting up, version 7.26.7.129
+06/11/2024 14:47:11 Filter is shutting down.
+
+06/11/2024 14:47:14 Align CTD is starting up, version 7.26.7.129
+06/11/2024 14:47:52 Align CTD is shutting down.
+
+06/11/2024 14:59:12 Data Conversion is starting up, version 7.26.7.129
+06/11/2024 14:59:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_bvr50_S7809_0001.hex'.
+06/11/2024 14:59:24 DatCnvImp is exiting.
+06/11/2024 14:59:27 Data Conversion is shutting down.
+
+06/11/2024 14:59:29 Filter is starting up, version 7.26.7.129
+06/11/2024 14:59:42 Filter is shutting down.
+
+06/11/2024 14:59:44 Align CTD is starting up, version 7.26.7.129
+06/11/2024 15:00:01 Align CTD is shutting down.
+
+06/20/2024 16:18:41 Data Conversion is starting up, version 7.26.7.129
+06/20/2024 16:19:01 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_fcr10_S7809003.hex'.
+06/20/2024 16:19:02 DatCnvImp is exiting.
+06/20/2024 16:19:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_fcr20_S7809004.hex'.
+06/20/2024 16:19:02 DatCnvImp is exiting.
+06/20/2024 16:19:02 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_fcr30_S7809005.hex'.
+06/20/2024 16:19:03 DatCnvImp is exiting.
+06/20/2024 16:19:03 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_fcr40_S7809007.hex'.
+06/20/2024 16:19:03 DatCnvImp is exiting.
+06/20/2024 16:19:03 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_fcr50_S7809002.hex'.
+06/20/2024 16:19:04 DatCnvImp is exiting.
+06/20/2024 16:19:08 Data Conversion is shutting down.
+
+06/20/2024 16:19:10 Filter is starting up, version 7.26.7.129
+06/20/2024 16:19:29 Filter is shutting down.
+
+06/20/2024 16:19:31 Align CTD is starting up, version 7.26.7.129
+06/20/2024 16:19:49 Align CTD is shutting down.
+
+06/21/2024 10:05:28 Data Conversion is starting up, version 7.26.7.129
+06/21/2024 10:11:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_bvr50_S78188001.hex'.
+06/21/2024 10:11:44 DatCnvImp is exiting.
+06/21/2024 10:11:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\060324_fcr50_S78188002.hex'.
+06/21/2024 10:11:45 DatCnvImp is exiting.
+06/21/2024 10:11:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061024_fcr50_S78188003.hex'.
+06/21/2024 10:11:45 DatCnvImp is exiting.
+06/21/2024 10:11:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061724_bvr50_S78188005.hex'.
+06/21/2024 10:11:46 DatCnvImp is exiting.
+06/21/2024 10:11:46 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061924_ccr50_S78188008.hex'.
+06/21/2024 10:11:46 DatCnvImp is exiting.
+06/21/2024 10:11:46 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061924_ccr88_S78188009.hex'.
+06/21/2024 10:11:47 DatCnvImp is exiting.
+06/21/2024 10:11:47 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\061924_ccr90_S78188010.hex'.
+06/21/2024 10:11:47 DatCnvImp is exiting.
+06/21/2024 10:11:54 Data Conversion is shutting down.
+
+06/21/2024 10:11:56 Filter is starting up, version 7.26.7.129
+06/21/2024 10:12:22 Filter is shutting down.
+
+06/21/2024 10:12:25 Align CTD is starting up, version 7.26.7.129
+06/21/2024 10:13:06 Align CTD is shutting down.
+
+06/26/2024 15:07:47 Data Conversion is starting up, version 7.26.7.129
+06/26/2024 15:08:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr10_S7809002.hex'.
+06/26/2024 15:08:23 DatCnvImp is exiting.
+06/26/2024 15:08:23 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr20_S7809003.hex'.
+06/26/2024 15:08:24 DatCnvImp is exiting.
+06/26/2024 15:08:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr30_S7809004.hex'.
+06/26/2024 15:08:24 DatCnvImp is exiting.
+06/26/2024 15:08:24 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr40_S7809005.hex'.
+06/26/2024 15:08:25 DatCnvImp is exiting.
+06/26/2024 15:08:25 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr50_S7809001.hex'.
+06/26/2024 15:08:25 DatCnvImp is exiting.
+06/26/2024 15:08:28 Data Conversion is shutting down.
+
+06/26/2024 15:08:30 Filter is starting up, version 7.26.7.129
+06/26/2024 15:08:57 Filter is shutting down.
+
+06/26/2024 15:08:59 Align CTD is starting up, version 7.26.7.129
+06/26/2024 15:09:27 Align CTD is shutting down.
+
+07/01/2024 15:37:49 Data Conversion is starting up, version 7.26.7.129
+07/01/2024 15:38:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr10_S7809002.hex'.
+07/01/2024 15:38:46 Data Conversion is shutting down.
+
+07/01/2024 15:38:49 Data Conversion is starting up, version 7.26.7.129
+07/01/2024 15:41:32 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr10_S7809002.hex'.
+07/01/2024 15:41:32 DatCnv failed to open 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr10_S7809002.cnv' for writing. Error #32 - The process cannot access the file because it is being used by another process.
+
+07/01/2024 15:41:32 DatCnvImp is exiting.
+07/01/2024 15:41:33 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr20_S7809003.hex'.
+07/01/2024 15:41:34 DatCnvImp is exiting.
+07/01/2024 15:41:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr30_S7809004.hex'.
+07/01/2024 15:41:34 DatCnvImp is exiting.
+07/01/2024 15:41:34 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr40_S7809005.hex'.
+07/01/2024 15:41:35 DatCnvImp is exiting.
+07/01/2024 15:41:35 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr50_S7809001.hex'.
+07/01/2024 15:41:35 DatCnvImp is exiting.
+07/01/2024 15:41:56 Data Conversion is shutting down.
+
+07/01/2024 15:41:59 Filter is starting up, version 7.26.7.129
+07/01/2024 15:44:19 Filter is shutting down.
+
+07/01/2024 16:20:03 Data Conversion is starting up, version 7.26.7.129
+07/01/2024 16:32:28 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\022724_fcr50_S7809005.hex'.
+07/01/2024 16:32:28 DatCnvImp is exiting.
+07/01/2024 16:32:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr10_S7809002.hex'.
+07/01/2024 16:32:44 DatCnvImp is exiting.
+07/01/2024 16:32:44 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr20_S7809003.hex'.
+07/01/2024 16:32:45 DatCnvImp is exiting.
+07/01/2024 16:32:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr30_S7809004.hex'.
+07/01/2024 16:32:45 DatCnvImp is exiting.
+07/01/2024 16:32:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr40_S7809005.hex'.
+07/01/2024 16:32:45 DatCnvImp is exiting.
+07/01/2024 16:32:45 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr50_S7809001.hex'.
+07/01/2024 16:32:46 DatCnvImp is exiting.
+07/01/2024 16:36:30 Data Conversion is shutting down.
+
+07/01/2024 16:36:33 Filter is starting up, version 7.26.7.129
+07/01/2024 16:44:54 Filter is shutting down.
+
+07/01/2024 16:44:56 Align CTD is starting up, version 7.26.7.129
+07/01/2024 16:45:18 Align CTD is shutting down.
+
+07/02/2024 13:24:38 Data Conversion is starting up, version 7.26.7.129
+07/02/2024 13:25:39 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_bvr50_S8188001.hex'.
+07/02/2024 13:25:40 DatCnvImp is exiting.
+07/02/2024 13:25:40 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr50_S8188002.hex'.
+07/02/2024 13:25:41 DatCnvImp is exiting.
+07/02/2024 13:25:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\062424_fcr50_S8188003.hex'.
+07/02/2024 13:25:41 DatCnvImp is exiting.
+07/02/2024 13:25:41 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_bvr50_S8188004.hex'.
+07/02/2024 13:25:42 DatCnvImp is exiting.
+07/02/2024 13:25:42 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070124_fcr50_S8188005.hex'.
+07/02/2024 13:25:43 DatCnvImp is exiting.
+07/02/2024 13:25:48 Data Conversion is shutting down.
+
+07/02/2024 13:25:50 Filter is starting up, version 7.26.7.129
+07/02/2024 13:26:19 Filter is shutting down.
+
+07/02/2024 13:26:22 Align CTD is starting up, version 7.26.7.129
+07/02/2024 13:26:56 Align CTD is shutting down.
+
+07/10/2024 16:02:24 Data Conversion is starting up, version 7.26.7.129
+07/10/2024 16:02:50 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr10_S7809007.hex'.
+07/10/2024 16:02:51 DatCnvImp is exiting.
+07/10/2024 16:02:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr20_S7809008.hex'.
+07/10/2024 16:02:51 DatCnvImp is exiting.
+07/10/2024 16:02:51 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr30_S7809009.hex'.
+07/10/2024 16:02:52 DatCnvImp is exiting.
+07/10/2024 16:02:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr40_S7809010.hex'.
+07/10/2024 16:02:52 DatCnvImp is exiting.
+07/10/2024 16:02:52 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr50_S7809006.hex'.
+07/10/2024 16:02:53 DatCnvImp is exiting.
+07/10/2024 16:02:56 Data Conversion is shutting down.
+
+07/10/2024 16:02:58 Filter is starting up, version 7.26.7.129
+07/10/2024 16:03:39 Filter is shutting down.
+
+07/10/2024 16:03:43 Align CTD is starting up, version 7.26.7.129
+07/10/2024 16:04:20 Align CTD is shutting down.
+
+07/11/2024 15:56:59 Data Conversion is starting up, version 7.26.7.129
+07/11/2024 15:57:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_bvr50_S8188001.hex'.
+07/11/2024 15:57:57 DatCnvImp is exiting.
+07/11/2024 15:57:57 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\070824_fcr50_S8188002.hex'.
+07/11/2024 15:57:58 DatCnvImp is exiting.
+07/11/2024 15:57:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071124_ccr50_S8188003.hex'.
+07/11/2024 15:57:58 DatCnvImp is exiting.
+07/11/2024 15:57:58 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071124_ccr88_S8188004.hex'.
+07/11/2024 15:57:59 DatCnvImp is exiting.
+07/11/2024 15:57:59 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071124_ccr90_S8188005.hex'.
+07/11/2024 15:57:59 DatCnvImp is exiting.
+07/11/2024 15:58:01 Data Conversion is shutting down.
+
+07/11/2024 15:58:04 Filter is starting up, version 7.26.7.129
+07/11/2024 15:58:33 Filter is shutting down.
+
+07/11/2024 15:58:37 Align CTD is starting up, version 7.26.7.129
+07/11/2024 15:59:12 Align CTD is shutting down.
+
+07/15/2024 16:33:23 Data Conversion is starting up, version 7.26.7.129
+07/15/2024 16:34:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_fcr10_S7809001.hex'.
+07/15/2024 16:34:04 DatCnvImp is exiting.
+07/15/2024 16:34:04 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_fcr20_S7809002.hex'.
+07/15/2024 16:34:05 DatCnvImp is exiting.
+07/15/2024 16:34:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_fcr30_S7809003.hex'.
+07/15/2024 16:34:05 DatCnvImp is exiting.
+07/15/2024 16:34:05 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_fcr40_S7809004.hex'.
+07/15/2024 16:34:06 DatCnvImp is exiting.
+07/15/2024 16:34:06 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_fcr50_S7809005.hex'.
+07/15/2024 16:34:06 DatCnvImp is exiting.
+07/15/2024 16:34:10 Data Conversion is shutting down.
+
+07/15/2024 16:35:26 Filter is starting up, version 7.26.7.129
+07/15/2024 16:35:49 Filter is shutting down.
+
+07/15/2024 16:35:52 Align CTD is starting up, version 7.26.7.129
+07/15/2024 16:36:19 Align CTD is shutting down.
+
+07/15/2024 16:46:47 Data Conversion is starting up, version 7.26.7.129
+07/15/2024 16:47:56 DatCnvImp is processing file 'C:\R\Reservoirs\Data\DataNotYetUploadedToEDI\Raw_CTD\RawDownloads\071524_bvr50_S8188001.hex'.
+07/15/2024 16:47:57 DatCnvImp is exiting.
+07/15/2024 16:48:00 Data Conversion is shutting down.
+
+07/15/2024 16:48:03 Filter is starting up, version 7.26.7.129
+07/15/2024 16:48:25 Filter is shutting down.
+
+07/15/2024 16:48:28 Align CTD is starting up, version 7.26.7.129
+07/15/2024 16:48:56 Align CTD is shutting down.
+
+07/23/2024 16:07:40 Data Conversion is starting up, version 7.26.7.129

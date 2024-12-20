@@ -11,8 +11,9 @@ pacman::p_load(tidyverse, lubridate, dplyr,
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.198.12'
 eml <- read_metadata(package_ID)
-date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+#date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit?gid=1787819257#gid=1787819257'
+ast_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R')

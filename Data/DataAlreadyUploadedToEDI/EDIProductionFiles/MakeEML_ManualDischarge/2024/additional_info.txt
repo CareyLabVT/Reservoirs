@@ -1,0 +1,6 @@
+Contributions to the 2023 revision:
+CCC developed and led the reservoir monitoring program 2013-present. ABP led the field crew and conducted substantial fieldwork at Falling Creek Reservoir in 2023. DWH led the field crew at Carvins Cove Reservoir, QAQC, data collation, and data publishing in 2023.
+
+Acknowledgments and historical contributions:
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Cece Wood, Carly Bauer, and Bibek Kandel for constructive reviews on this data package.
+

@@ -16,3 +16,4 @@ BVR,50,3,YSI,2023-10-31 10:47:00 EST,2023-10-31 10:47:00 EST,pH,NA,2,NA,pH probe
 BVR,50,6,YSI,2023-10-31 11:07:00 EST,2023-10-31 11:07:00 EST,pH,NA,2,NA,pH probe broken
 BVR,50,9,YSI,2023-10-31 11:18:00 EST,2023-10-31 11:18:00 EST,pH,NA,2,NA,pH probe broken
 FCR,100,0.1,YSI,2023-07-31 11:48:00 EDT,2023-07-31 11:48:00 EDT,DO_mgL,DOsat_percent,5,NA,DO value high compared to rest of the observations
+FCR,100,0.1,YSI,2024-06-17 10:05:00 EDT,2024-06-17 10:16:00 EDT,DO_mgL,DOsat_percent,6,NA,DO value very low and user error

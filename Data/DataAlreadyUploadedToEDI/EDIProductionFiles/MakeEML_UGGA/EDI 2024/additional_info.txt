@@ -1,0 +1,8 @@
+Contributions to the 2024 revision:
+
+CCC developed and led the reservoir monitoring program. ABP led the field crew and contributed substantially to fieldwork and sensor maintenance in 2024.A SL updated code from 2023 for data processing, processed data in 2024.
+
+Acknowledgments and historical contributions:
+
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, DXE for publishing the dataset, and XX for constructive reviews. 
+

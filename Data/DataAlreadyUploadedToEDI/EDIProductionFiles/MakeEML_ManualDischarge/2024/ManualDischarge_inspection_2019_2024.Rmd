@@ -39,7 +39,7 @@ maintenance_file <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/ref
 ## Run function
 
 staged_edi <- ManualDischarge_qaqc(gsheet_url = gsheet_url, 
-                     historical_file = ,
+                     historical_file = his_file,
                      maintenance_file = maintenance_file, 
                      output_file= NULL,
                      start_date = NULL,
@@ -142,7 +142,7 @@ staged_edi %>%
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(current_df, "ManualDischarge_2019_2023.csv", row.names = F)
+write.csv(current_df, "ManualDischarge_2019_2024.csv", row.names = F)
 
 ```
 

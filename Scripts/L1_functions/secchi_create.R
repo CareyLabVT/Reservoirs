@@ -33,7 +33,8 @@ secchi_qaqc <- function(data_file,
   secchi_df$Reservoir <- as.character(secchi_df$Reservoir)
   secchi_df$Site <- as.numeric(secchi_df$Site)
   secchi_df$Secchi_m <- as.numeric(secchi_df$Secchi_m)
-  secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
+  secchi_df$Flag_secchi_m <- NA
+  #secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
   #secchi_df$Notes <- as.character(secchi_df$Notes)
 
 

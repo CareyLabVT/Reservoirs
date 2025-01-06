@@ -1,0 +1,6 @@
+Author Contribution Statement-
+CCC is the PI of the project and set up the FCR water quality monitoring program from 2013-present. ABP is the point person for the dataset and led sensor maintenance, sensor connectivity, and data management.  
+
+Acknowledgements: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Vahid Daneshmand for sensor connectivity, and XXX and XXX for helpful reviews of this data package.
+
+

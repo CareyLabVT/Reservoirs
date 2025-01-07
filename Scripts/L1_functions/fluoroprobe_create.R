@@ -9,7 +9,7 @@
 
 library(tidyverse)
 library(lubridate)
-#library(httr)
+library(rvest) 
 
 #rm(list=ls())
 
@@ -27,7 +27,8 @@ library(lubridate)
 #'@param start_date first day of current year (day after last day of data pushed to EDI)
 #'@param end_date last day of current year (last day before we publish a revision to EDI)
 
-fluoroprobe_qaqc <- function(example_file_for_colnames,
+fluoroprobe_qaqc <- function(repo_link,
+                             example_file_for_colnames,
                              current_year_data_folder,
                              historic_data_folder,
                              historic_data_2017,
@@ -40,12 +41,19 @@ fluoroprobe_qaqc <- function(example_file_for_colnames,
 col_names <- names(read_tsv(example_file_for_colnames, n_max = 0))
 
 # Load in all txt files from previous years
-historic_fp_casts <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>%
+req <- GET(repo_link)
+stop_for_status(req)
+filelist <- unlist(lapply(content(req)$tree, "[", "path"), use.names = F)
+historic_list0 <- grep(paste0(historic_data_folder,".*.txt"), filelist, value = TRUE)
+historic_list1 <- historic_list0[-grep("recal", historic_list0, value = FALSE)]
+historic_list2 <- paste0("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/",historic_list1)
+
+historic_fp_casts <- historic_list2 %>%
   map_df(~ data_frame(x = .x), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
-historic_raw_fp <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>% 
-  map_df(~ read_tsv(file.path(path = historic_data_folder, .), 
+historic_raw_fp <- historic_list2 %>% 
+  map_df(~ read_tsv(., 
                     col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
@@ -59,13 +67,16 @@ historic_fp_casts <- historic_fp_casts %>%
   mutate(CastID = c(1:num_pre_2017_casts,((num_pre_2017_casts+1) + num_2017_casts):(num_historic_casts + num_2017_casts)))
 
 # Load in all txt files from current year
-fp_casts <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>%
+current_list1 <- grep(paste0(current_year_data_folder,".*.txt"), filelist, value = TRUE)
+current_list2 <- paste0("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/",current_list1)
+
+fp_casts <- current_list2 %>%
   map_df(~ data_frame(x = .x), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 num_current_year_casts <- length(fp_casts$cast)
 
-raw_fp <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>% 
-  map_df(~ read_tsv(file.path(path = current_year_data_folder, .), 
+raw_fp <- current_list2 %>% 
+  map_df(~ read_tsv(., 
                     col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
@@ -77,6 +88,7 @@ current <- left_join(fp_casts, raw_fp, by = c("cast"))
 
 #split out column containing filename to get Reservoir and Site data
 fp2 <- bind_rows(historic,current) %>%
+  mutate(x = unlist(strsplit(x, split = "20", fixed = TRUE))[2]) %>%
   rowwise() %>% 
   mutate(Reservoir = unlist(strsplit(x, split='_', fixed=TRUE))[2],
          Site = unlist(strsplit(x, split='_', fixed=TRUE))[3],
@@ -85,7 +97,7 @@ fp2 <- bind_rows(historic,current) %>%
   mutate(Site = as.numeric(Site))
 
 #check to make sure strsplit function worked for all casts
-# check <- subset(fp2, is.na(fp2$Site))
+check <- subset(fp2, is.na(fp2$Site))
 # check <- subset(fp2, fp2$Reservoir == "")
 # 
 # unique(fp2$Reservoir)

@@ -23,13 +23,13 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 ## Run Function 
 
-example_file_for_colnames <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
-current_year_data_folder <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe"
-historic_data_folder <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
-historic_data_2017 <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+current_year_data_folder <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe"
+historic_data_folder <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
+historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
 #out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/FluoroProbe_2014_2023.csv"
-out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv"
+out_file <- "fluoroprobe_L1.csv"
 start_date <- last_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 # run the function

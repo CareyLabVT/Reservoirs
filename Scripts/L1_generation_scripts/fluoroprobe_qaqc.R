@@ -29,12 +29,13 @@ current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
 maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
-#out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/FluoroProbe_2014_2023.csv"
-out_file <- "fluoroprobe_L1.csv"
+out_file <- "./Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_L1.csv"
 start_date <- last_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 # run the function
-fluoroprobe_qaqc(example_file_for_colnames = example_file_for_colnames,
+fluoroprobe_qaqc(repo_link = repo_link,
+                 repo_filepath = repo_filepath,
+                 example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,
                  historic_data_folder = historic_data_folder,
                  historic_data_2017 = historic_data_2017,

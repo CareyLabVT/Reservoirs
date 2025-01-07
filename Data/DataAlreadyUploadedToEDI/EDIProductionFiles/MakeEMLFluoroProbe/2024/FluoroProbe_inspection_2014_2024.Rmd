@@ -22,10 +22,42 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
                devtools)
 ```
 
+```{r Make draft EDI file}
+# next time - need to assign name to output of function; also figure
+# out whether just working from function or reading in old historic data
+# from EDI for this? why not just make new every year?
 
+devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
-```{r Read in draft EDI file}
-devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_generation_scripts/fluoroprobe_qaqc.R")
+## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
+package_ID <- 'edi.272.8'
+eml <- read_metadata(package_ID)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
+last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+
+## Run Function 
+repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
+repo_filepath <- "https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/"
+example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
+historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
+historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+out_file <- NULL
+start_date <- last_edi_date
+end_date <- Sys.Date() + lubridate::days(1)
+
+# Run function
+fluoroprobe_qaqc(repo_link = repo_link,
+                 repo_filepath = repo_filepath,
+                 example_file_for_colnames = example_file_for_colnames,
+                 current_year_data_folder = current_year_data_folder,
+                 historic_data_folder = historic_data_folder,
+                 historic_data_2017 = historic_data_2017,
+                 maintenance_file = maintenance_file,
+                 out_file = out_file,
+                 start_date = start_date,
+                 end_date = end_date) 
 ```
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 

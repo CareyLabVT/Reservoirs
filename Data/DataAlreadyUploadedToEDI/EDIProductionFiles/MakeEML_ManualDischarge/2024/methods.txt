@@ -2,7 +2,7 @@ We calculated the discharge rate of water in cubic meters per second at multiple
 
 Data were collected weekly to monthly from February through October 2019 at Falling Creek and Beaverdam Reservoir, approximately monthly at Falling Creek in 2020-2022, approximately monthly at Carvins Cove in 2021-2022, approximately seasonally in 2023 at Falling Creek and Carvins Cove, and approximately monthly in 2024 at Falling Creek and Carvins Cove. All data were collected in local time (either EST or EDT), and if time was not recorded when sampling, the time was set to 12pm.
 
-Discharge from 2024 was calculated using equations in the R script "ManualDischarge_qaqc_2019_2024.R" and "ManualDischarge_inspection_2019_2024.Rmd" was used to validate data and apply additonal flags. Flags for discharge include: flag	3	"Value suspect, conditions not well captured by flowmeter method", Flag	5	"Value suspect, conditions not well captured by velocity float method", and a csv of dates and sites that this flags apply to are recorded in "ManualDischarge_maintenancelog_2019_2024.csv".
+Discharge from 2024 was calculated using equations in the R script "ManualDischarge_qaqc_2019_2024.R" and "ManualDischarge_inspection_2019_2024.Rmd" was used to validate data and apply additional flags. Flags for discharge include: flag	3	"Value suspect, conditions not well captured by flowmeter method", Flag	5	"Value suspect, conditions not well captured by velocity float method", and a csv of dates and sites that this flags apply to are recorded in "ManualDischarge_maintenancelog_2019_2024.csv".
 
 
 See the 'site_descriptions.csv' file for a full description and GPS coordinates of the sites included in this data package.

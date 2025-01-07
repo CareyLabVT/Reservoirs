@@ -1,20 +1,19 @@
 # Install devtools
 #install.packages("devtools")
-
-# Load devtools
 library(devtools)
-library(tidyverse)
-library(lubridate)
 
-
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023"
-
-# Install and load EMLassemblyline
-#package_url <- 'https://cran.r-project.org/bin/windows/contrib/3.5/EML_1.0.3.zip'
-#install.packages(package_url, repos = NULL, type = 'source')
-
-# install_github("EDIorg/EMLassemblyline")
+# Install and load EMLassemblyline, needs devtools
+#also installing two other packages from github needed
+remotes::install_github("ropensci/bold")
+remotes::install_github("ropensci/taxize")
+remotes::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
+
+
+##Set folder 
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2024"
+
+
 
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLInflow/Jan2021
@@ -120,23 +119,23 @@ library(EMLassemblyline)
 
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2023",
-         data.table = c("ManualDischarge_2019_2023.csv",
+         data.table = c("ManualDischarge_2019_2024.csv",
                         "site_descriptions.csv",
                          # "../../../../../Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"),
-                        "ManualDischarge_maintenancelog_2019_2023.csv"),
+                        "ManualDischarge_maintenancelog_2019_2024.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenance Log'),
-         temporal.coverage = c("2019-02-08", "2023-12-04"),
+         temporal.coverage = c("2019-02-08", "2024-12-17"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('ManualDischarge_qaqc_2023_2023.R',
+         other.entity = c('ManualDischarge_qaqc_2019_2024.R',
                           #'../../../../../Scripts/L1_generation_scripts/ManualDischarge_qaqc.R',
-                          'ManualDischarge_inspection_2019_2023.Rmd',
+                          'ManualDischarge_inspection_2019_2024.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-         other.entity.description = c('Script used to QAQC 2023 data',
-                                      'Script used to collate 2019-2023 data for publication',
+         other.entity.description = c('Script used to QAQC 2019-2024 data',
+                                      'Script used to collate 2019-2024 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
          package.id = "edi.1017.11", #### this is the one that I need to change!!!

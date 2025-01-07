@@ -23,6 +23,7 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 ## Run Function 
 repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
+repo_filepath <- "https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/"
 example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"

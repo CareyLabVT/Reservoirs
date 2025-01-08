@@ -17,7 +17,8 @@ last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R')
 
-data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
+#data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
+data_file = 'https://docs.google.com/spreadsheets/d/1EXxvt4zke3M-RdJIG5wWB-1KVTSM7DOAx2Xnng5NXbI/edit?gid=0#gid=0'
 maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'
 outfile <- './Data/DataNotYetUploadedToEDI/Secchi/secchi_L1.csv'
 

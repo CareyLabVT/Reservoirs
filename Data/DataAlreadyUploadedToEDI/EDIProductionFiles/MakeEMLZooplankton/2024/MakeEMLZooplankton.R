@@ -91,15 +91,15 @@ make_eml(
                                "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.39') 
+  package.id = 'edi.1090.41') 
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment
 #https://portal.edirepository.org/nis/logout
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2023",
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
   dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
   temporal.coverage = c("2014-04-04", "2022-07-01"),
   maintenance.description = 'ongoing',
@@ -108,11 +108,12 @@ make_eml(
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("zoop_qaqc_2014_2022.R",
+  other.entity = c("zoop_qaqc_2014_2022_v4.R",
                    "zoop_length_weight_conversions_2019_2022.zip"),
   other.entity.description = c("Zooplankton QAQC and visualization script",
                                "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.197.3') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.197.4') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
   # 197.3 for 2024 pub
+  # 197.4 for Oct 2024 pub

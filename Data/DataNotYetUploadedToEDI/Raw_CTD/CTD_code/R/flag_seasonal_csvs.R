@@ -1,5 +1,5 @@
 #' 
-#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024
+#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024, ABP 07 Jan 2024
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year (or multiple years) and adds data flags
 #' 
@@ -18,13 +18,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                historical_files = F, 
                                CTD_FOLDER = "../",
                                maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")){
-  
-  # ctd_season_csvs = "../CTD_season_csvs"
-  # intermediate_file_name = "CTD_L0_2018_2023.csv"
-  # output_file_name = "CTD_2013_2023.csv"
-  # historical_files=T
-  # CTD_FOLDER = "../"
-  # maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")
   
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
@@ -92,6 +85,46 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     # puts in flag 2 if value not collected
     ctd[c(which(is.na(ctd[,j])) & paste0("Flag_",j)==0),paste0("Flag_",j)] <- 2
+  }
+  
+  ## Take out the negative conductivity spike in casts
+  # Make an array of the rows that have a negative conductivity, which indicates a spike
+  
+  row <- which(ctd$Cond_uScm<0,arr.ind = TRUE)
+  
+  # Make a blank array
+  gfg <- NULL
+  
+  # make a new list of observations that are not in sequential order this gives us each of the spikes
+  for(i in 1:length(row)){
+    # if the previous observation in the list is greater than 1 or it is the first in the list add it to the spike list
+    if(abs(row[i]-row[i-1])>1|| i==1){
+      
+      # add to the list
+      gfg <- append(gfg, row[i]) 
+    }
+    
+  }
+  
+  # Loop through that list of rows that just created
+  for(d in 1:length(gfg)){
+    
+    # Get the sequence of rows in the low spike which we want to remove  
+    low <- as.numeric(gfg[d])-6
+    high <- as.numeric(gfg[d])+11
+    
+    # change those rows in Conductivity and specific conductance to NA
+    ctd[c(low:high), c("Cond_uScm", "SpCond_uScm")] <- NA
+    
+    # Then flag those columns that we change
+    
+    ctd[c(low:high), c("Flag_Cond_uScm", "Flag_SpCond_uScm")] <- 4
+    
+  }
+  
+  
+  # Now back to flagging more things. 
+  for(j in flag_cols){
     
     # Flag values less than 0 with a flag 4 except: Temp, ORP and Decent rate
     ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
@@ -188,6 +221,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     select(-CTD_check)%>%
     mutate(Site=ifelse(Reservoir=="BVR"&Site==1,40,Site),
            Site=ifelse(Site==49,50,Site))
+    
   
   #Order columns
   CTD_fix_renamed = CTD_fix%>% 
@@ -323,7 +357,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
       }
     }  
   } # end for loop
-  
+ 
   # Check if there are any casts that were duplicated
   
   dup <- nrow(CTD_fix_renamed[duplicated(CTD_fix_renamed),])

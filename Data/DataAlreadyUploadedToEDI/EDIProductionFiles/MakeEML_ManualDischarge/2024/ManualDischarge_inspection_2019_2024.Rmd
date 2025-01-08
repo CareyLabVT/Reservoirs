@@ -1,0 +1,183 @@
+---
+title: "manualDischarge_inspection_2019_2024"
+author: "Adrienne and Dexter"
+date: "2023-12-19"
+output: html_document
+---
+
+The script QAQCs all manual discharge and the plots the data frame before it is saved. 
+
+For EDI review run chunk 'r setup packages' then start at section 'Start here to read in EDI data' on line 171
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+
+# QAQC function
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/manual_discharge_create.R')
+```
+
+
+
+```{r Create the data file}
+
+
+gsheet_url <- "https://docs.google.com/spreadsheets/d/1fgYcGsZeALuwdAX3H0UeA3u57zKsuqTkouh2bxuBTKw/"
+his_file <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/manual_discharge_historical_saltslug_velocity_2019_2022.csv"
+maintenance_file <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
+
+
+## Run function
+
+staged_edi <- ManualDischarge_qaqc(gsheet_url = gsheet_url, 
+                     historical_file = ,
+                     maintenance_file = maintenance_file, 
+                     output_file= NULL,
+                     start_date = NULL,
+                     end_date = NULL)
+
+
+
+```
+
+
+## Start here to read in EDI data 
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+
+```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
+
+                                                                ### CHANGE THIS LINK BELOW 
+                                                                             ##      
+ # staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1017/8/702d3b355854211a8dbb587094cfccb7")
+
+ # # Force files from EDI to have an EST timestamp
+ #  staged_edi$DateTime <- force_tz(as.POSIXct(staged_edi$DateTime), tzone = "American/New_York")
+
+```
+
+
+```{r Check flags}
+##change these back to current_df if not testing EDI staged data
+
+
+### Check flags 
+Flags=staged_edi%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=staged_edi%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+```{r plots}
+
+### Look at data
+
+staged_edi %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("All data")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'BVR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("BVR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'FCR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("FCR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'FCR',
+         Site ==200) %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("FCR 200")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'CCR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("CCR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+
+```
+
+```{r Make new CSV with current and historic files}
+
+# Need to decide on a naming convention for this file
+write.csv(current_df, "ManualDischarge_2019_2023.csv", row.names = F)
+
+```
+
+```{r Download files into folder}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv", "manual_discharge_maintenancelog_2019_2024.csv")
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/manual_discharge_create.R", "manual_discharge_qaqc_2019_2024.R")
+
+```
+
+
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+
+  data <- staged_edi #This is the line you need to modify!
+  
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  
+sites_trimmed = trim_sites(data,sites) 
+  
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

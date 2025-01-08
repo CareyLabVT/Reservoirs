@@ -30,11 +30,13 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 # 4. Take out values based on the Maintenance Log
 # 5. Additional Maintenance
 # 6. Save files
+
+# source("./Scripts/L1_functions/ghg_create.R")
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ghg_create.R')
 
 ## Function 
 ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/",
-         maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
+         maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
          gdrive = F, # Are the files on Google Drive. True or False
          gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn"),
          Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG", 
@@ -44,6 +46,7 @@ ghg_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/",
          output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv",
          MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv",
          Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv",
+         Issue_vial = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Issue_obs.csv",
         start_date =last_edi_date, # change when we update to read date from EDI
         end_date = Sys.Date() + lubridate::days(1))
 

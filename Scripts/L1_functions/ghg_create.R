@@ -4,6 +4,8 @@
 # Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
 # 24 Sep 24- round numeric columns to 4 digits
 # 22 Oct 24- added in option for a historical file for obs from 2015-2022
+# 02 Jan 25- Changed how MDLs are calculated. Only take the previous 2 years for the observation year.
+# added in a saved data frame of observations that had notes from the Analytical Lab. 
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -55,25 +57,28 @@ ghg_qaqc<-function(directory,
                    output_file,
                    MDL_file,
                    Vial_Number_Check,
+                   Issue_vial,
                    start_date,
                    end_date){
 
- #  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
- # # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
- #  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
- #  gdrive = T # Are the files on Google Drive. True or False
- #  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
- #  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
- #                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
- #  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
- #  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9"
- #  historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv"
- #  #historical_file = NULL
- #  output_file = NULL
- #  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
- #  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
- #  start_date = NULL
- #  end_date = NULL
+#  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
+#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+# # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
+#  gdrive = F # Are the files on Google Drive. True or False
+#  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+#  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
+#                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
+#  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
+#  Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9"
+#  historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv"
+#  #historical_file = NULL
+#  output_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv"
+#  #output_file = NULL
+#  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
+#  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
+#  Issue_vial = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Issue_obs.csv"
+#  start_date = as.Date("2024-01-01")
+#  end_date = Sys.Date()
 
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
@@ -190,6 +195,8 @@ ghg_qaqc<-function(directory,
       notes = ifelse(is.na(CH4_GC_headspace_ppm) & is.na(CO2_GC_headspace_ppm),"CH4CO2_NO_PEAK", 
                      ifelse(is.na(CH4_GC_headspace_ppm), "CH4_NO_PEAK",
                             ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", notes))))
+  
+    
 
   #### 2.2 Assign Air temp and lab pressure for time of lab sampling ####
   # read in the file Bobbie created for air temp and pressure
@@ -276,7 +283,7 @@ ghg_qaqc<-function(directory,
   # Check out how that worked and it did!!
   
   work_check <- ab%>%
-    select(Reservoir, Site, Depth_m, Date.y, date_acquired, Date_upper, vial_number,`Vial Number`)%>%
+    select(Reservoir, Site, Depth_m, Date.y, date_acquired, Date_upper, vial_number,`Vial Number`, notes)%>%
     dplyr::rename(field_date=Date.y,
                   lab_date=date_acquired,
                   upper_date=Date_upper,
@@ -285,6 +292,27 @@ ghg_qaqc<-function(directory,
     distinct()
   
   work_check$lab_date = as.Date(as.character(with_tz(work_check$lab_date, "America/Nome")))
+  
+  # Make a list of observations with notes and then print the date an vial number number in question
+  
+  issue_obs <- work_check|>
+    filter(grepl("^[A-Z]|[a-z]", notes))|>
+    filter(!grepl("CO2_NO_PEAK", notes))|>
+    filter(!grepl ("CH4_NO_PEAK", notes))|>
+    select(-c(upper_date, lab_vial_number))|>
+    arrange(field_date)
+  
+  #Missing field info
+  if(nrow(issue_obs) > 0){
+    format_to_print_field <- issue_obs %>%
+      mutate(message = paste0("Date: ", field_date, ", Vial Number: ", field_vial_number, ", Notes: ", notes)) %>%
+      summarize(message = paste(message, collapse = "\n"))
+    
+    warning("There are ", nrow(issue_obs), 
+            " samples issues during the processing in AC lab. Check the Issue_obs.csv for more information.
+            These are the samples with issues:\n",
+            format_to_print_field$message)
+  }
   
   # Make a list of observations that don't fall with in the 3 days after collection
   
@@ -333,22 +361,6 @@ ghg_qaqc<-function(directory,
            Notes = paste0(notes, Notes)) %>% 
     select(Reservoir, Site, DateTime, Depth_m,`Vial Number`,CH4_umolL, CO2_umolL, Notes)
   
-  # Add in the historical file here so everything is QAQCed the same way.
-  # Use the historical file if there is no start date or it is in the historical file
-  
-  ### identify the date subsetting for the data
-  if (is.null(start_date) & !is.null(historical_file)){
-    
-    hist <- read_csv(historical_file, show_col_types = F)
-    
-    
-    working_final_df <- dplyr::bind_rows(hist,working_final_df)
-    
-    print("Added in historical file")
-  }else{
-    print("Did not use the historical file")
-  }
-  
  
   
   ### QAQC Section ###
@@ -380,9 +392,9 @@ ghg_qaqc<-function(directory,
   
   working_final_df <- working_final_df%>%
     mutate(
-      Flag_CO2_umolL = ifelse(grepl("CO2_NO_PEAK|CH4CO2_NO_PEAK", Notes)|CO2_umolL==0, 
+      Flag_CO2_umolL = ifelse(grepl("CO2_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
                               6, Flag_CO2_umolL),
-      Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes)|CH4_umolL==0, 
+      Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
                               6, Flag_CH4_umolL)
     )
   
@@ -440,6 +452,23 @@ ghg_qaqc<-function(directory,
            #DateTime = ifelse(Hours<5, DateTime + (12*60*60), DateTime), # convert time to 24 hour time
            #DateTime = as_datetime(DateTime))%>% # time is in seconds put it in ymd_hms
     select(-c(Time, Date))
+  
+  
+  # Add in the historical file here so everything is QAQCed the same way.
+  # Use the historical file if there is no start date or it is in the historical file
+  
+  ### identify the date subsetting for the data
+  if (is.null(start_date) & !is.null(historical_file)){
+    
+    hist <- read_csv(historical_file, show_col_types = F)
+    
+    
+    raw_df <- dplyr::bind_rows(hist,raw_df)
+    
+    print("Added in historical file")
+  }else{
+    print("Did not use the historical file")
+  }
   
   ### 4. Take out values based on the Maintenance Log ####
   
@@ -596,46 +625,92 @@ ghg_qaqc<-function(directory,
   
   # Reformat the date, get the headspace concentrations as numeric, and only take the columns with a date
   MDL_from_ref_tank <- MDL_from_ref_tank%>%
-    drop_na(Date)%>% # take out anything that doesn't have a depth
+   drop_na(Date)%>% # take out anything that doesn't have a depth
     mutate(
       Date= as.POSIXct(Date, format = "%m/%d/%y %H:%M"),
       CH4_GC_headspace_ppm = as.numeric(CH4_GC_headspace_ppm),
-      CO2_GC_headspace_ppm = as.numeric(CO2_GC_headspace_ppm))
+      CO2_GC_headspace_ppm = as.numeric(CO2_GC_headspace_ppm),
+      Year = year(Date))|>
+    as.data.frame()|>
+    filter(Date>as.Date("2021-01-01"))
   
   
-  ## Filter because we only want the last 2 years
+  ## Filter because we only want a rolling MDL so it is taken for the prior 2 years
   
-  # Get end date as system time
-  end_date <- Sys.Date()
-  # Start date is years prior. Can change later if we want
-  start_date <- end_date - years(2)
+  # Define a rolling window function
+  calculate_rolling_mdls <- function(data, x, window_years = 2) {
+    
+    # Ensure data is sorted by date
+    data <- data %>% arrange(Date)
+    # mutate(Date = as.Date(Date))
+    
+    # Add a rolling sd column
+    data <- data %>%
+      mutate(
+        rolling_mdl = sapply(Date, function(current_date) {
+          # Define the window range
+          start_date <- year(as.Date(current_date)) - (window_years)
+          end_date <- year(as.Date(current_date))
+          
+          # Subset data within the window
+          window_data <- filter(data, Year > start_date & Year <= end_date)
+          
+          # Calculate the sd load within the window
+          if (nrow(window_data) > 0) {
+            sd(window_data[,x], na.rm = TRUE)
+          } else {
+            NA
+          }
+        })
+      )|>
+      mutate(
+        Count = sapply(Date, function(current_date) {
+          # Define the window range
+          start_date <- year(as.Date(current_date)) - (window_years)
+          end_date <- year(as.Date(current_date))
+          
+          # Subset data within the window
+          window_data <- filter(data, Year > start_date & Year <= end_date)
+          
+          count(window_data)
+          
+        })
+      )
+    
+    
+    return(data)
+  }
   
-  # filter for only the last 2 years
-  current <- MDL_from_ref_tank%>%
-    filter(Date>=start_date & Date<=end_date)
+  # Apply the rolling MDL function to get the MDL for each year for both CH4 and CO2 in ppm
+  resultwe <- calculate_rolling_mdls(data=MDL_from_ref_tank, x="CH4_GC_headspace_ppm")|>
+    dplyr::rename("CH4_STDEV"= rolling_mdl,
+                  "CH4_Count" = Count)
   
-  # Get the ppm for CH4 and CO2 of the MDL
-  MDL_ppm <- current%>%
+  resultwe2 <- calculate_rolling_mdls(data=resultwe, x="CO2_GC_headspace_ppm")|>
+    dplyr::rename("CO2_STDEV"= rolling_mdl,
+                  "CO2_Count" = Count)|>
+    filter(Year>=2023)
+  
+  
+  MDL_ppm <- resultwe2|>
+    select(Year, CH4_STDEV, CH4_Count, CO2_STDEV, CO2_Count)|>
+    distinct()|>
+    group_by(Year)|>
     mutate(
-      # standard deviation for CH4 and
-      CH4_standard_dev = sd(CH4_GC_headspace_ppm),
-      CO2_standard_dev = sd(CO2_GC_headspace_ppm),
-      
       # find the t value based on the number of observations
       # To find the critical t-value for a 98% confidence interval with x degrees freedom:
-      CH4_tvalue = qt(1-0.02/2, (length(CH4_GC_headspace_ppm)-1)),
-      CO2_tvalue = qt(1-0.02/2, (length(CO2_GC_headspace_ppm)-1)),
+      CH4_tvalue = qt(1-0.02/2, (as.numeric(CH4_Count)-1)),
+      CO2_tvalue = qt(1-0.02/2, (as.numeric(CO2_Count)-1)),
+    
       
       # Get the MDL in ppm of tvalue * standard deviation
-      CH4_GC_headspace_ppm = CH4_tvalue * CH4_standard_dev,
-      CO2_GC_headspace_ppm = CO2_tvalue * CO2_standard_dev,
+      CH4_GC_headspace_ppm = as.numeric(CH4_tvalue) * as.numeric(CH4_STDEV),
+      CO2_GC_headspace_ppm = as.numeric(CO2_tvalue) * as.numeric(CO2_STDEV),
       
       # add in standard lab temperature and bp
       lab_temp = 20,
       weather_station_bp = 29.99
-    )%>%
-    select(-Date)%>%
-    distinct()
+    )
   
   print("Calculated MDL")
   
@@ -648,28 +723,36 @@ ghg_qaqc<-function(directory,
   # Create a table with the MDL info that gets save every time there is an update
   
   MDL_umolL <- MDL_umolL%>%
-    select(CH4_GC_headspace_ppm, CO2_GC_headspace_ppm, CH4_standard_dev, CO2_standard_dev,
-           CH4_tvalue, CO2_tvalue, CH4_umolL, CO2_umolL)
+    select(CH4_GC_headspace_ppm, CO2_GC_headspace_ppm, CH4_STDEV, CO2_STDEV,
+           CH4_tvalue, CO2_tvalue, CH4_umolL, CO2_umolL)|>
+    dplyr::rename("CH4_umolL_MDL" = CH4_umolL,
+                  "CO2_umolL_MDL" = CO2_umolL)
   
-  # Assign them a name to use below
-  CH4_umolL_MDL <- MDL_umolL$CH4_umolL
-  CO2_umolL_MDL <- MDL_umolL$CO2_umolL
+  # Add MDL to the data frame for comparison 
+  ghg2 <- ghg|>
+    mutate(Year = 0,
+           Year = year(DateTime))%>%
+    merge(.,MDL_umolL, by="Year", all.x = TRUE)|>
+    select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
+           Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL, CH4_umolL_MDL, CO2_umolL_MDL)
+  
   
   # Flag with 2 if less than the MDL but don't change the flag if observation was negative and changed to 0
   
-  ghg <- ghg%>%
+  ghg2 <- ghg2%>%
     mutate(
-      Flag_CH4_umolL = ifelse(CH4_umolL>0 & CH4_umolL<CH4_umolL_MDL & !is.na(CH4_umolL),
+      Flag_CH4_umolL = ifelse(!is.na(CH4_umolL_MDL) & CH4_umolL>0 & CH4_umolL<CH4_umolL_MDL & !is.na(CH4_umolL),
                               2, Flag_CH4_umolL),
-      Flag_CO2_umolL = ifelse(CO2_umolL>0 & CO2_umolL<CO2_umolL_MDL & !is.na(CO2_umolL),
+      Flag_CO2_umolL = ifelse(!is.na(CO2_umolL_MDL) & CO2_umolL>0 & CO2_umolL<CO2_umolL_MDL & !is.na(CO2_umolL),
                               2, Flag_CO2_umolL)
     )
+  
   
   
   ### 5.2 Calculating the difference and percent difference between the reps ####
   
   ## Separate into rep 1 and rep2
-  ghgs_rep1 <- ghg %>%
+  ghgs_rep1 <- ghg2 %>%
     filter(Rep == 1) %>%
     dplyr::rename(CH4_umolL_rep1 = CH4_umolL,
                   CO2_umolL_rep1 = CO2_umolL,
@@ -677,7 +760,7 @@ ghg_qaqc<-function(directory,
                   Flag_CH4_umolL_rep1 = Flag_CH4_umolL,
                   Flag_CO2_umolL_rep1 = Flag_CO2_umolL)
   
-  ghgs_rep2 <- ghg %>%
+  ghgs_rep2 <- ghg2 %>%
     filter(Rep == 2) %>%
     rename(CH4_umolL_rep2 = CH4_umolL,
            CO2_umolL_rep2 = CO2_umolL,
@@ -685,14 +768,16 @@ ghg_qaqc<-function(directory,
            Flag_CH4_umolL_rep2 = Flag_CH4_umolL,
            Flag_CO2_umolL_rep2 = Flag_CO2_umolL)
   
-  ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Site","Depth_m","Reservoir"))
+  ghgs_reps <- left_join(ghgs_rep1,ghgs_rep2,by=c("DateTime","Site","Depth_m","Reservoir", "CH4_umolL_MDL", "CO2_umolL_MDL"))
   
   # Add '2' when rep 2 is NA
   ghgs_reps <- ghgs_reps %>%
     mutate(Rep.y = ifelse(is.na(Rep.y),2,Rep.y), 
            Flag_DateTime_rep2 = ifelse(is.na(Flag_DateTime_rep2), 
                                        Flag_DateTime_rep1,
-                                       Flag_DateTime_rep2)) # and give it the same DateTime flag as rep1 if it is missing
+                                       Flag_DateTime_rep2),# and give it the same DateTime flag as rep1 if it is missing
+           Flag_CH4_umolL_rep2 = ifelse(is.na(Flag_CH4_umolL_rep2) & is.na(CH4_umolL_rep2), 1, Flag_CH4_umolL_rep2),
+           Flag_CO2_umolL_rep2 = ifelse(is.na(Flag_CO2_umolL_rep2) & is.na(CO2_umolL_rep2), 1, Flag_CO2_umolL_rep2))
   
   ## Calculate percent difference between reps
   ghgs_reps <- ghgs_reps %>%
@@ -708,7 +793,7 @@ ghg_qaqc<-function(directory,
   ghg_rep1 <- ghgs_reps %>%
     select(Reservoir, Site, DateTime,Depth_m,CH4_umolL_rep1,CO2_umolL_rep1,
            CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep1,
-           Flag_CH4_umolL_rep1, Flag_CO2_umolL_rep1)%>%
+           Flag_CH4_umolL_rep1, Flag_CO2_umolL_rep1, CH4_umolL_MDL, CO2_umolL_MDL)%>%
     mutate(Rep = 1) %>%
     dplyr::rename(CH4_umolL = CH4_umolL_rep1,
                   CO2_umolL = CO2_umolL_rep1,
@@ -719,7 +804,7 @@ ghg_qaqc<-function(directory,
   ghg_rep2 <- ghgs_reps %>%
     select(Reservoir, Site, DateTime,Depth_m,CH4_umolL_rep2,CO2_umolL_rep2,
            CH4_pdiff,CH4_diff,CO2_pdiff,CO2_diff, Flag_DateTime_rep2,
-           Flag_CH4_umolL_rep2, Flag_CO2_umolL_rep2) %>%
+           Flag_CH4_umolL_rep2, Flag_CO2_umolL_rep2, CH4_umolL_MDL, CO2_umolL_MDL) %>%
     mutate(Rep = 2) %>%
     dplyr::rename(CH4_umolL = CH4_umolL_rep2,
                   CO2_umolL = CO2_umolL_rep2,
@@ -739,14 +824,15 @@ ghg_qaqc<-function(directory,
   
   ghg_all <- ghg_all %>%
     mutate(Flag_CH4_umolL = ifelse((CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &Flag_CH4_umolL == 0) | 
-                                     is.na(CH4_pdiff) & Flag_CH4_umolL == 0, 4,
+                                      is.na(CH4_pdiff) & Flag_CH4_umolL == 0, 4,
                                    ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
                                             Flag_CH4_umolL == 0, 3, Flag_CH4_umolL)),
            
            Flag_CO2_umolL = ifelse((CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0) |
-                                     is.na(CH4_pdiff) & Flag_CO2_umolL == 0, 4,
-                                   ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
+                                      is.na(CO2_pdiff) & Flag_CO2_umolL == 0, 4, 
+                                   ifelse(CO2_pdiff<50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
                                             Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
+
   
   print("Flagged observations based on MDLs")
   
@@ -771,10 +857,15 @@ ghg_qaqc<-function(directory,
   # Write an out of range file to check if vial numbers were messed up
   write.csv(out_range, Vial_Number_Check, row.names = F)
   
+  # Write an issues file to check what needs to be added to the maintenance log
+  write.csv(issue_obs, Issue_vial, row.names = F)
+  
   #write_csv(ec_all, paste0(mydir,output_file), row.names = FALSE)
   # save data if there is an output)file path. If not then the file is returned. 
   if (is.null(output_file)){
     return(ghg_final)
+    
+    print("Data frame in your enviornment")
   }else{
     # convert datetimes to characters so that they are properly formatted in the output file
 

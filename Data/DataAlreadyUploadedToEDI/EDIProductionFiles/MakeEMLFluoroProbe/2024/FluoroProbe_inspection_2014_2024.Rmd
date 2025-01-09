@@ -19,21 +19,17 @@ knitr::opts_chunk$set(echo = TRUE)
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate, akima, reshape2, 
                gridExtra, grid, colorRamps, RColorBrewer, cowplot,
-               devtools)
+               devtools, EDIutils, xml2, httr)
 ```
 
 ```{r Make draft EDI file}
-# next time - need to assign name to output of function; also figure
-# out whether just working from function or reading in old historic data
-# from EDI for this? why not just make new every year?
-
 devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.272.8'
 eml <- read_metadata(package_ID)
-date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
+date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/beginDate/calendarDate")
+first_edi_date <- as.Date(xml_text(date_attribute)) - lubridate::days(1)
 
 ## Run Function 
 repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
@@ -44,11 +40,11 @@ historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/Fluoro
 historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
 maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
 out_file <- NULL
-start_date <- last_edi_date
+start_date <- first_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 
 # Run function
-fluoroprobe_qaqc(repo_link = repo_link,
+current_df <- fluoroprobe_qaqc(repo_link = repo_link,
                  repo_filepath = repo_filepath,
                  example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,
@@ -102,7 +98,7 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     ggtitle(castname)+
     theme_bw()
   
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/biomass/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/biomass/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
 
 }
@@ -125,7 +121,7 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     ggtitle(castname)+
     theme_bw()
   
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/RFUs/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/RFUs/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
 
 }
@@ -143,7 +139,7 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/temperature/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/temperature/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
@@ -159,7 +155,7 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2023/transmission/",castname,".png")
+  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/transmission/",castname,".png")
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }

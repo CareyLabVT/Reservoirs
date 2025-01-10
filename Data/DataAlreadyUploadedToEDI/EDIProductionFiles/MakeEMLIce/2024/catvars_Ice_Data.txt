@@ -1,0 +1,5 @@
+attributeName	code	definition
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir BVR Beaverdam Reservoir
+Method	V = visual observation
+Method	T = water temperature data

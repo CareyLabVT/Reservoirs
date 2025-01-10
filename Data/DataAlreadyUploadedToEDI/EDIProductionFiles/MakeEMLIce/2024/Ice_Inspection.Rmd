@@ -1,0 +1,374 @@
+```{r setup, include=FALSE}
+
+## FOCUSING ON INSPECTION OF ICE TRANSITION DATES ##
+## daily binary product is interpolated from ice transition dates, so transitions should be main focus ##
+
+library(tidyverse)
+library(readr)
+
+## use function to read in data 
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ice_transition_binary_create.R')
+
+current_files <- c("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_L1.csv",
+                   "https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv")
+
+historic_wq_files <- c('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12',
+                       'https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
+
+historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/ebfaad16975326a7b874a21beb50c151")
+
+ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
+
+
+bvr_ice_data <- ice_transition_binary_create(current_file = current_files[1],
+                                            historic_wq_file = historic_wq_files[1],
+                                            historic_file = historic_ice_files,
+                                            ice_site = 'BVR',
+                                            maint_log = NULL)
+
+fcr_ice_data <- ice_transition_binary_create(current_file = current_files[2],
+                                            historic_wq_file = historic_wq_files[2],
+                                            historic_file = historic_ice_files,
+                                            ice_site = "FCR",
+                                            maint_log = ice_maintenance_log)
+
+
+### use L1 file and historic file in the future ##
+```
+
+## MAKE PROFILE PLOT TO BE USED LATER
+```{r function, include=FALSE}
+profile_plot<-function(DATA,start_time,end_time, Varibles){
+  DATA%>%
+  filter(DateTime>ymd_hms(start_time) & DateTime<ymd_hms(end_time))%>%
+  select(DateTime, Varibles)%>%
+  pivot_longer(!DateTime, names_to = "sensor", values_to = "obs")%>%
+  separate_wider_delim(sensor, "_", names = c("sensor", "unit", "depth"))%>%
+    drop_na()%>%
+  mutate(depth=ifelse(depth=="surface", 0.1, depth))%>%
+    mutate(depth=as.numeric(depth))%>%
+    
+
+  ggplot(., aes(DateTime,obs, col=as.factor(depth)))+
+  geom_line()+
+    scale_x_datetime(date_breaks = "5 day", date_minor_breaks = "1 day")+
+    theme_bw()
+  
+  
+  
+}
+```
+
+## ICE ON
+```{r plot recent ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+fcr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+
+```{r plot full ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+fcr_ice_data |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+## ICE OFF
+
+```{r plot recent ice-off, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+fcr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  ggplot(aes(Date,IceOff)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+```{r plot full ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+fcr_ice_data |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+```{r plot full ice-off, include=TRUE}
+## inspect all ICE-OFF transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+fcr_ice_data |> 
+  ggplot(aes(Date,IceOff)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+## IDENTIFY ICE TRANSITION DATES
+```{r, include=TRUE}
+## print transition dates for publishing year and December of previous year (capture possible ice duration between years)
+
+fcre_recent_transition <- fcr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  select(Date, IceOn, Method) |> 
+  arrange(Date)
+
+print(fcre_recent_transition)
+
+```
+
+```{r, include = FALSE}
+# Read in FCR, Met, and BVR data
+fcr_current_catwalk <- read_csv('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-catwalk-data-qaqc/fcre-waterquality_L1.csv')
+fcr_historic_catwalk <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/271/8/fbb8c7a0230f4587f1c6e11417fe9dce')
+
+FCR_met<-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_L1.csv")
+
+FCR_Catwalk_EDI_2018_2024 <- dplyr::bind_rows(fcr_current_catwalk, fcr_historic_catwalk)
+```
+
+## IDENTIFY ICE TRANSITION DATES
+```{r, include=TRUE}
+## print transition dates for publishing year and December of previous year (capture possible ice duration between years)
+
+fcre_recent_transition <- fcr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  select(Date, IceOn, Method) |> 
+  arrange(Date)
+
+print(fcre_recent_transition)
+
+```
+
+```{r last year, include=TRUE}
+
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2024,
+           start_time = "2024-01-01 00:00:00",
+           end_time = "2024-01-31 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2024,
+           start_time = "2024-01-01 00:00:00",
+           end_time = "2024-01-31 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+```
+
+```{r this year, include=TRUE}
+
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2024,
+           start_time = "2024-12-15 00:00:00",
+           end_time = "2025-01-10 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=FCR_Catwalk_EDI_2018_2024,
+           start_time = "2024-12-15 00:00:00",
+           end_time = "2025-01-10 00:00:00",
+           Varibles = c("RDOsat_percent_5", "RDOsat_percent_9", "EXODOsat_percent_1"))
+
+```
+
+
+## Plot Inverse 
+
+Checking the Winter timeseries for when the difference between the top and the bottom is greater than -0.1. 
+The red line "inverse" is the 1m thermistor minus the 9m thermistor while "inverse 2" is the surface thermistor minus the 9m thermistor. The red dotted line is at -0.1 because the accuracy of the thermistors is 0.075.
+
+After looking at the the timeseries let's break it down for each period and look more closely at the temperature profiles, disolved oxygen profiles, and images from the camera at the catwalk. 
+
+
+```{r, include=TRUE}
+FCR_Catwalk_EDI_2018_2024%>%
+  filter(DateTime>ymd_hms("2024-01-01 00:00:00") & DateTime<ymd_hms("2025-01-10 00:00:00"))%>%
+  mutate(inverse=ThermistorTemp_C_1-ThermistorTemp_C_9)%>%
+  mutate(inverse2=ThermistorTemp_C_surface-ThermistorTemp_C_9)%>%
+  select(DateTime, inverse, inverse2)%>%
+  pivot_longer(!DateTime, names_to = "name", values_to = "obs")%>%
+  ggplot(., aes(DateTime, obs, col=name))+
+  geom_line()+
+  geom_hline(yintercept=-0.1, linetype="dashed", color = "red")+
+  scale_x_datetime(date_breaks = "60 day", date_minor_breaks = "1 day")+
+  theme_bw()
+```
+
+
+
+
+
+
+
+## BVR ICE
+
+
+## ICE ON
+```{r plot recent ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+bvr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) #+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m")
+
+```
+## IDENTIFY ICE TRANSITION DATES
+```{r, include=TRUE}
+## print transition dates for publishing year and December of previous year (capture possible ice duration between years)
+
+bvr_recent_transition <- bvr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  select(Date, IceOn, Method) |> 
+  arrange(Date)
+
+print(bvr_recent_transition)
+
+```
+
+```{r plot full ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+bvr_ice_data |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+## ICE OFF
+
+```{r plot recent ice-off, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+bvr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  ggplot(aes(Date,IceOff)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 month",date_labels = "%m")
+
+```
+
+```{r plot full ice-on, include=TRUE}
+## inspect all ICE-ON transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+bvr_ice_data |> 
+  ggplot(aes(Date,IceOn)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+```{r plot full ice-off, include=TRUE}
+## inspect all ICE-OFF transition dates for FCR ##
+# V = visual obs, T = Temp derived
+
+bvr_ice_data |> 
+  ggplot(aes(Date,IceOff)) +
+  #geom_point() 
+  geom_point(aes(color = factor(Method))) +
+  scale_x_date(date_breaks = "1 year",date_labels = "%Y")
+
+```
+
+
+```{r, include=FALSE}
+## read in directly once catwalk data are staged/published
+#BVR_platform_data_2020_2023 <- read_csv("../MakeEML_BVRplatform/2023/BVR_platform_data_2020_2023.csv")
+
+bvr_current_platform <- read_csv('https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/refs/heads/bvre-platform-data-qaqc/bvre-waterquality_L1.csv')
+bvr_historic_platform <- read_csv('https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12')
+
+BVR_platform_data_2020_2024 <- dplyr::bind_rows(bvr_current_platform, bvr_historic_platform)
+```
+
+## IDENTIFY ICE TRANSITION DATES
+```{r, include=TRUE}
+## print transition dates for publishing year and December of previous year (capture possible ice duration between years)
+
+bvr_recent_transition <- bvr_ice_data |> 
+  filter(Date > as.Date('2023-12-01')) |> 
+  select(Date, IceOn, Method) |> 
+  arrange(Date)
+
+print(bvr_recent_transition)
+
+```
+
+```{r last year, include=TRUE}
+
+profile_plot(DATA=BVR_platform_data_2020_2024,
+           start_time = "2024-01-01 00:00:00",
+           end_time = "2024-02-05 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2024,
+           start_time = "2024-01-01 00:00:00",
+           end_time = "2024-01-31 00:00:00",
+           Varibles = c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+```{r this year, include=TRUE}
+
+profile_plot(DATA=BVR_platform_data_2020_2024,
+           start_time = "2024-12-01 00:00:00",
+           end_time = "2025-01-10 00:00:00",
+           Varibles = starts_with("Thermis"))
+# DO
+profile_plot(DATA=BVR_platform_data_2020_2024,
+           start_time = "2024-12-01 00:00:00",
+           end_time = "2025-01-10 00:00:00",
+           Varibles =  c("RDOsat_percent_6", "RDOsat_percent_13", "EXODOsat_percent_1.5"))
+
+```
+
+
+## Plot Inverse 
+
+Checking the Winter timeseries for when the difference between the top and the bottom is greater than -0.1. 
+The red line "inverse" is the 1m thermistor minus the 9m thermistor while "inverse 2" is the surface thermistor minus the 9m thermistor. The red dotted line is at -0.1 because the accuracy of the thermistors is 0.075.
+
+After looking at the the timeseries let's break it down for each period and look more closely at the temperature profiles, disolved oxygen profiles, and images from the camera at the catwalk. 
+
+
+```{r, include=TRUE}
+BVR_platform_data_2020_2024%>%
+  filter(DateTime>ymd_hms("2024-01-01 00:00:00") & DateTime<ymd_hms("2025-01-10 00:00:00"))%>%
+  mutate(inverse=ThermistorTemp_C_1-ThermistorTemp_C_9)%>%
+  mutate(inverse2=ThermistorTemp_C_surface-ThermistorTemp_C_9)%>%
+  select(DateTime, inverse, inverse2)%>%
+  pivot_longer(!DateTime, names_to = "name", values_to = "obs")%>%
+  ggplot(., aes(DateTime, obs, col=name))+
+  geom_line()+
+  geom_hline(yintercept=-0.1, linetype="dashed", color = "red")+
+  scale_x_datetime(date_breaks = "60 day", date_minor_breaks = "1 day")+
+  theme_bw()
+```

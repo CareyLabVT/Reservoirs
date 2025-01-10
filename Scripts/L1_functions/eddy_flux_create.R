@@ -13,6 +13,7 @@
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
 ## A.Breef-Pilz edits to filter by EDi package and make time conversion section work. 05 Feb 2024
 ## A.Breef-Pilz edits to add in streaming summary files 
+## B.Kandel edits to add in qc for H and LE for extreme values adapted from eddy-flux_post_processing script
 
 ### This function:
 # 1. Reads in the Summary files from the EddyFlux system that is streaming at FCR or from proceesed EddyPro files
@@ -301,6 +302,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     dplyr::mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
            qc_H = ifelse(is.na(H_wm2), 3, qc_H),
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),
+           qc_H = ifelse(H_wm2 >= 200 | H_wm2 <= -200, 4, qc_H), 
+           H_wm2 = ifelse(H_wm2 >= 200 | H_wm2 <= -200, NA, H_wm2),
+           qc_LE = ifelse(LE_wm2 >= 500 | LE_wm2 <= -500, 4, qc_LE),
+           LE_wm2 = ifelse(LE_wm2 >= 500 | LE_wm2 <= -500, NA, LE_wm2),
            qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
            qc_h2o_flux = ifelse(is.na(h2o_flux_umolm2s), 3, qc_h2o_flux),
            qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux),

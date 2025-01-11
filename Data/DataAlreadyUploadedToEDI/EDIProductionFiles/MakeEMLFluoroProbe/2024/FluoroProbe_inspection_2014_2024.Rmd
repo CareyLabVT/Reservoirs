@@ -5,11 +5,7 @@ date: "2025-01-07"
 output: html_document
 ---
 
-## R Markdown Guide
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+## Load packages
 
 ```{r setup packages, include=FALSE}
 
@@ -21,6 +17,8 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
                gridExtra, grid, colorRamps, RColorBrewer, cowplot,
                devtools, EDIutils, xml2, httr)
 ```
+
+## Build dataframe
 
 ```{r Make draft EDI file}
 devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
@@ -44,7 +42,7 @@ start_date <- first_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 
 # Run function
-current_df <- fluoroprobe_qaqc(repo_link = repo_link,
+fp_all <- fluoroprobe_qaqc(repo_link = repo_link,
                  repo_filepath = repo_filepath,
                  example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,
@@ -54,7 +52,14 @@ current_df <- fluoroprobe_qaqc(repo_link = repo_link,
                  out_file = out_file,
                  start_date = start_date,
                  end_date = end_date) 
+
+current_df <- fp_all %>%
+  filter(year(DateTime) == 2024)
+
+#write.csv(fp_all, "./FluoroProbe_2014_2024.csv", row.names = FALSE)
 ```
+
+## Check flags
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
 
@@ -78,11 +83,15 @@ for(f in 1:(ncol(Flags))){
 
 ```
 
+## Plot all casts individually - reviewers should not run this!
 
 ```{r eval = FALSE, echo = FALSE}
+PLOT_ALL_CASTS == FALSE
 #create png plots for every cast for QAQC purposes (algal biomass)
 #these are just written to a file I temporarily create on my desktop
 #for EDI day; reviewers do not need to run this!!!
+if(PLOT_ALL_CASTS == TRUE){
+
 for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   profile = subset(current_df, CastID == unique(current_df$CastID)[i])
   castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
@@ -159,9 +168,13 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   ggsave(filename = filename, plot = profile_plot, device = "png")
   
 }
+  
+}
 ```
 
-```{r Heatmap function; the interpolation here could be improved I think}
+## Define heatmap function
+
+```{r Heatmap function}
 flora_heatmap <- function(fp_data, reservoir, year, site, z){
   
   #subset to relevant data
@@ -171,8 +184,19 @@ flora_heatmap <- function(fp_data, reservoir, year, site, z){
   
   #slice by depth for each reservoir
   if (reservoir == "FCR"){
+    
+    if(site == 50){
+       depths = seq(0.1, 9.3, by = 0.3)
+    } else if(site == 40){
+      depths = seq(0.1, 8.5, by = 0.3)
+    } else if(site == 30){
+      depths = seq(0.1, 7, by = 0.3)
+    } else if(site == 20){
+      depths = seq(0.1, 4.5, by = 0.3)
+    } else if(site == 10){
+      depths = seq(0.1, 3.5, by = 0.3)
+    }
   
-  depths = seq(0.1, 9.3, by = 0.3)
   df.final<-data.frame()
   
   for (i in 1:length(depths)){
@@ -274,18 +298,25 @@ print(p1)
 }
 ```
 
+## Visualize current year at a glance
+
 ```{r visualization of current year at a glance}
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2023, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2023, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2023, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 40, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 30, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 20, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 10, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2024, site = 50, z = "TotalConc_ugL")
 ```
 
+## Visualize a previous year at a glance
+
 ```{r visualization of an historic year at a glance}
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = fp_all, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = fp_all, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = fp_all, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = fp_all, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = fp_all, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
 ```
 
 ## Check to make sure that what is in the maintenance log  was actually removed
@@ -296,7 +327,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv("./Maintenance_Log_FluoroProbe.csv")
+ maint <- read_csv("./Maintenance_Log_FluoroProbe_2014_2024.csv")
 
 # name the data file
 sd <- tail(maint)%>%
@@ -327,14 +358,14 @@ last_row <- tail(sd, n=1)
     if(is.na(end)){
       # If there the maintenance is on going then the columns will be removed until
       # and end date is added
-      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      Time <- fp_all |> filter(DateTime >= start) |> select(DateTime)
       
     }else if (is.na(start)){
       # If there is only an end date change columns from beginning of data frame until end date
-      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      Time <- fp_all |> filter(DateTime <= end) |> select(DateTime)
       
     }else {
-      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+      Time <- fp_all |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
     }
 
 
@@ -344,11 +375,11 @@ last_row <- tail(sd, n=1)
     
     # Make list of just the columns we want 
     
-    test <- colnames(current_df%>%select(Reservoir,DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    test <- colnames(fp_all%>%select(Reservoir,DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
     
     # Print the head of the table to make sure that data are flagged
     
-    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+    knitr::kable((head(fp_all[fp_all$DateTime %in% Time$DateTime, test]))) 
 
 ```
 
@@ -360,7 +391,7 @@ Make sure the observations are flagged
 
 # Print the tail of the table to make sure that data are flagged
     
-    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+    knitr::kable(tail(fp_all[fp_all$DateTime %in% Time$DateTime, test])) 
 
 ```
 
@@ -384,10 +415,11 @@ Make sure the observations are flagged
   # }
   # sites_trimmed = trim_sites(data,sites) 
   # write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
-
-# add section here to download the QAQC function and put it in the folder where the EDI production files are to make sure that it happens and to get the most recent version
-# save qaqc file in the folder
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/eddy_flux_create.R", "EddyFlux_qaqc_2020_2023.R")
-
 ```
 
+## Download the QAQC function 
+
+#### We will put it in the folder where the EDI production files are to make sure that it happens and to get the most recent version
+```{r}
+download.file("https://raw.githubusercontent.com/melofton/Reservoirs/master/Scripts/L1_functions/fluoroprobe_create.R", "FluoroProbe_qaqc_2014_2024.R")
+```

@@ -1,6 +1,6 @@
 ##MakeEMLFluoroProbe
 ##Author: Mary Lofton
-##Date: 03JAN24
+##Date: 10JAN25
 
 #good sites for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -19,20 +19,21 @@ library(EMLassemblyline)
 
 #Step 0: Create new dataset and do visual QAQC
 
-#' Run the visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> FluoroProbe_inspection_2014-2023.Rmd
+#' Run the visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> FluoroProbe -> FluoroProbe_inspection_2014-2024.Rmd
 #' This script will both create plots for you to manually inspect the data 
 #' and create a collated dataset of historic and current year's data
 #' 
 #' Look through the plots; if additional QAQC needs to be done, record that in the
-#' maintenance log, located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> Maintenance_Log_FluoroProbe.csv
+#' maintenance log, located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> FluoroProbe -> Maintenance_Log_FluoroProbe.csv
 #' 
 #' Trigger a run of the automatic workflow to make sure your current year's data 
 #' get updated following any revisions you've made to the maintenance log
 #' This is in Actions in the CareyLabVT/Reservoirs repo
 #' It also runs every day automatically, so alternatively you can just wait 24 h
+#' Or you can also run the qaqc function by re-knitting the visual inspection script
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024
 
 #Step 2: Move your dataset to the directory.
 
@@ -183,22 +184,22 @@ template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Res
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2023",
-  temporal.coverage = c("2014-05-04", "2023-11-14"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2024",
+  temporal.coverage = c("2014-05-04", "2024-11-19"),
   maintenance.description = 'ongoing',
-  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
-  data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
+  data.table = c("FluoroProbe_2014_2024.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2024.csv"),
+  data.table.name = c("FluoroProbe_2014_2024.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2024.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
-  other.entity.name = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
+  other.entity = c("FluoroProbe_qaqc_2014_2024.R","FluoroProbe_inspection_2014_2024.Rmd"),
+  other.entity.name = c("FluoroProbe_qaqc_2014_2024.R","FluoroProbe_inspection_2014_2024.Rmd"),
   other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
   user.id = 'melofton',
   #user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1101.5')
+  package.id = 'edi.1139.2')
   #package.id = 'edi.1112.2')
 
 ## Step 8: Check your data product! ####

@@ -1,0 +1,275 @@
+---
+title: "FilteredChlorophyll_inspection_2014_2023"
+author: "KKH"
+date: "2023-12-05"
+output: html_document
+---
+
+This is the visual inspection script for Filtered Chlorophyll. 
+If running for EDI Dayz, start at line 43 and update the pasta with the most recent staged version.
+
+## R Markdown Guide
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+```
+
+**Read in Historical files from EDI**
+```{r Read in Historical files from EDI}
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/555/3/2f670c8316af634c76effdd205623912" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+ historic <-read_csv(infile1)
+```
+**Read in L1 file**
+Set L1 file to NULL if not yet made.
+Need to change this to the GITHUB Link!!!
+```{r Read in L1 file}
+L1 <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
+```
+**Bind historic and L1 files together**
+```{r Bind historic and L1 files together}
+all_chla <- dplyr::bind_rows(historic, L1)
+```
+START HERE FOR EDI DAYZ
+```{r Read in data from EDI: START HERE}
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/20/4d92727343445ad28046d57ac852b45f" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+all_chla <- read_csv(infile1)
+```
+**Check there are no NAs in Flag columns**
+This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
+There should be no NAs.
+```{r Check there are no NAs in Flag columns}
+#make sure no NAS in the Flag columns
+Flags=all_chla%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags=all_chla%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+**Manipulate Dataset for Plotting**
+Add Year, Month, and Day of Year for plotting. Add depth groups. 
+```{r Manipulate Dataset for Plotting}
+# Altering dataset in order to plot stats 
+chla_YMD <- all_chla %>% 
+  mutate(Year = year(DateTime)) %>% 
+  mutate(Month = month(DateTime)) %>% 
+  mutate(DOY = yday(DateTime)) %>% 
+  mutate(Depth_group = ifelse(Depth_m == 0.1, "surface", ifelse(Depth_m > 0.1 & Depth_m < 4,"epi","hypo")))
+
+#make plots of the data by reservoir and year
+#this is a check to make sure that we have all of the data in the years that we expect to have it
+head(chla_YMD)
+```
+**Time Series for entire data set - Chlorophyll a**
+ENTIRE DATASETS WILL LIKELY DISPAY A MISSING DATA WARNING
+Samples were not collected in 2017
+```{r Time Series for entire data set - chla}
+# Facetted plot of the datapoints within each reservoir over the entire dataset 
+ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("Entire Dataset Timeseries - Chlorophyll a")
+```
+**Time Series for entire data set - Pheophyton**
+```{r Time Series for entire data set - Pheophyton}
+# Facetted plot of the datapoints within each reservoir over the entire dataset 
+ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("Entire Dataset Timeseries - Pheophyton")
+```
+**VALUES BELOW 0 FOR PHAEOPHYTIN**
+DOUBLE CHECK THAT THEY ARE ALL FLAGGED WITH A 1
+```{r PHAEOPHYTIN VALS BELOW 0}
+#check the flag column
+pheo_below0 <- subset(all_chla, Pheo_ugL < 0)
+pheo_below0
+#these are all flagged as 4 or 45, "pigment in extract below detection"
+#Do we want to change these negative values to 0 in the future?
+#Yes, as of 2023
+
+#{r Set all Phaeophytin values that are below 0 to 0}
+all_chla <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
+```
+
+**All Sites, All Years, Monthly Mean - Chlorophyll a**
+```{r All Sites, All Years, Monthly Mean - Chlorophyll a}
+# Facetted plot of the range of each reservoir for each year and the mean of the range
+ggplot(subset(chla_YMD), aes(x = Month, y = Chla_ugL, col = Reservoir))+ 
+  geom_point(size = 1) + 
+  #stat_summary(fun = "mean", geom = "point", pch = 0, size =2, color = 'black') + 
+  stat_summary(fun = "mean", geom = "point", pch = 18, size =2, color = 'black') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') +
+  scale_x_continuous("DateTime", breaks = seq(1, 12, 1)) + 
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
+  ggtitle("Range and Mean of Range - Chlorophyll a")
+```
+```{r All Sites, All Years, Monthly Average - Pheophyton}
+# Facetted plot of the range of each reservoir for each year and the mean of the range
+ggplot(subset(chla_YMD), aes(x = Month, y = Pheo_ugL, col = Reservoir))+ 
+  geom_point(size = 1) + 
+  #stat_summary(fun = "mean", geom = "point", pch = 0, size =2, color = 'black') + 
+  stat_summary(fun = "mean", geom = "point", pch = 18, size =2, color = 'black') + 
+  #facet_grid(Year ~ Reservoir, scales = 'free_y') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') +
+  scale_x_continuous("DateTime", breaks = seq(1, 12, 1)) + 
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
+  ggtitle("Range and Mean of Range - Pheophyton")
+```
+**All Sites, All Years, Monthly Median - Chlorophyll a**
+```{r All Sites, All Years, Monthly Median - Chlorophyll a}
+# Facetted plot of the range of each reservoir for each year and the median of the range
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Reservoir))+ 
+  geom_point(size = 1) + 
+  stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') + 
+  #scale_x_continuous("DateTime", breaks = seq(2014,2022, 1)) + 
+  scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
+  ggtitle("Range and Median of Range - Chlorophyll a")
+```
+**All Sites, All Years, Monthly Median - Pheophyton**
+```{r All Sites, All Years, Monthly Median - Pheophyton}
+# Facetted plot of the range of each reservoir for each year and the median of the range
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Reservoir))+ 
+  geom_point(size = 1) + 
+  stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') + 
+  #scale_x_continuous("DateTime", breaks = seq(2014,2022, 1)) + 
+  scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
+  ggtitle("Range and Median of Range - Pheophyton")
+```
+
+```{r All Sites, All Years, Monthly Median, samples colored by depth - Chlorophyll a}
+# Facetted plot of the range of each reservoir for each year and the median of the range with depth
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Depth_group))+ 
+  geom_point(size = 1) + 
+  stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') + 
+  #scale_x_continuous("DateTime", breaks = seq(2014,2022, 1)) + 
+  scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'left') + 
+  ggtitle("Chla - Median, by depth")
+```
+```{r All Sites, All Years, Monthly Median, samples colored by depth - Pheophyton}
+# Facetted plot of the range of each reservoir for each year and the median of the range with depth
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Depth_group))+ 
+  geom_point(size = 1) + 
+  stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
+  facet_grid(Reservoir~Year, scales = 'free_y') + 
+  #scale_x_continuous("DateTime", breaks = seq(2014,2022, 1)) + 
+  scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
+  scale_y_continuous("Concentration (ugL)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'left') + 
+  ggtitle("Pheophyton - Median, by depth")
+```
+**Flags**
+attributeName	code	definition
+Flag_Chla_ugL	0	    Value acceptable. No flag  
+Flag_Chla_ugL	1	    Sample below detection  
+Flag_Chla_ugL	2	    Sample not taken  
+Flag_Chla_ugL	3	    Duplicate check failed  
+Flag_Chla_ugL	4   Pigment in extract below detection (<34 ug/L)  
+Flag_Chla_ugL	5	    Duplicate values were averaged  
+
+```{r Subset to Current Year Only (2023)}
+#subset data to FCR and BVR
+chla_current <- chla_YMD %>% 
+  subset((Year=="2023")) %>% 
+   mutate(DOY = yday(DateTime)) 
+
+head(chla_current)
+#### Graph ####
+# Current Year Timeseries
+ggplot(subset(chla_current), aes(x = DOY, y = Chla_ugL, pch = as.factor(Flag_Chla_ugL))) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("Current Year Timeseries")
+
+```
+**Flags**
+Flag_Pheo_ugL	0	    Value acceptable. No flag  
+Flag_Pheo_ugL	1	    Sample below detection  
+Flag_Pheo_ugL	2	    Sample not taken  
+Flag_Pheo_ugL	3	    Duplicate check failed  
+Flag_Pheo_ugL	4	    Pigment in extract below detection (<34 ug/L)  
+Flag_Pheo_ugL	45	  Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
+Flag_Pheo_ugL	5	    Duplicate values were averaged  
+```{r Subset to Current Year Only (2023) - Pheophyton}
+#subset data to FCR and BVR
+chla_current <- chla_YMD %>% 
+  subset((Year=="2023")) %>% 
+   mutate(DOY = yday(DateTime)) 
+
+head(chla_current)
+#### Graph ####
+# Current Year Timeseries
+ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Pheo_ugL))) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("Current Year Timeseries")
+
+```
+
+```{r Remove duplicate row}
+all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+```
+
+Set all Phaeophytin values that are below 0 to 0
+This should only affect old (prior to 2023) values that are below 0. Values below 0 should be addressed in the qaqc script from 2023 on. 
+This should have been done previously, but doublecheck here
+```{r Set all Phaeophytin values that are below 0 to 0}
+pheo_below01 <- subset(all_chla, Pheo_ugL < 0)
+# all_chla2 <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
+```
+
+**Make new CSV with current and historic files**
+```{r Make new CSV with current and historic files}
+# Need to decide on a naming convention for this file
+# Variable_startyear_endyear.csv
+write.csv(all_chla, "FiltChla_2014_2023.csv", row.names = F)
+```
+ Make site description file
+```{r, eval = FALSE}
+# These lines of code make the csv of the site descriptions with lat and long
+# Use Gsheet because you don't need to authenticate it.
+ sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+ #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+ #data <- current_df #This is the line you need to modify!
+ trim_sites = function(data,sites){
+   data_res_site=data%>% #Create a Reservoir/Site combo column
+     mutate(res_site = trimws(paste0(Reservoir,Site)))
+   sites_merged = sites%>% #Filter to Sites that are in the dataframe
+     mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+     filter(res_site%in%data_res_site$res_site)%>%
+     select(-res_site)
+ }
+ sites_trimmed = trim_sites(data,sites)
+ write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+```
+

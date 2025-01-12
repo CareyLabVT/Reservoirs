@@ -1,0 +1,35 @@
+keyword	keywordThesaurus
+Virginia Tech	carey lab controlled vocabulary
+Stream Team	carey lab controlled vocabulary
+Carey Lab	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Reservoirs	cuahsi controlled vocabulary
+chlorophyll	lter controlled vocabulary
+chlorophyll a	lter controlled vocabulary
+plankton 	lter controlled vocabulary
+phytoplankton	lter controlled vocabulary
+algae	lter controlled vocabulary
+filtered chlorophyll	carey lab controlled vocabulary
+manual chlorophyll 	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
+Spring Hollow Reservoir	carey lab controlled vocabulary
+Gatewood Reservoir	carey lab controlled vocabulary
+Smith Mountain Lake 	carey lab controlled vocabulary
+Claytor Lake	carey lab controlled vocabulary
+Lake Sunapee	carey lab controlled vocabulary
+Lake Sunapee Protective Association	carey lab controlled vocabulary	
+phaeophytin	lter controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary
+BVR	carey lab controlled vocabulary
+CCR	carey lab controlled vocabulary
+FCR	carey lab controlled vocabulary
+SHR	carey lab controlled vocabulary
+GWR	carey lab controlled vocabulary
+CLY	carey lab controlled vocabulary
+SNP	carey lab controlled vocabulary

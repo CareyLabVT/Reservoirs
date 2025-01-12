@@ -1,0 +1,9 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+SN	4397	CTD serial number 4397 (used from 2013 - 2016)
+SN	7809	CTD serial number 4397 (used from 2017 - present)
+SN	8188	CTD serial number 4397 (used from 2022 - present)

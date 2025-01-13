@@ -6,6 +6,7 @@
 # 22 Oct 24- added in option for a historical file for obs from 2015-2022
 # 02 Jan 25- Changed how MDLs are calculated. Only take the previous 2 years for the observation year.
 # added in a saved data frame of observations that had notes from the Analytical Lab. 
+# 12 Jan 25 - Added in a section to select samples that had re run and flag them
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -64,7 +65,7 @@ ghg_qaqc<-function(directory,
 #  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
 #  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
 # # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
-#  gdrive = F # Are the files on Google Drive. True or False
+#  gdrive = T # Are the files on Google Drive. True or False
 #  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
 #  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
 #                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
@@ -77,8 +78,8 @@ ghg_qaqc<-function(directory,
 #  MDL_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv"
 #  Vial_Number_Check = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv"
 #  Issue_vial = "./Data/DataNotYetUploadedToEDI/Raw_GHG/Issue_obs.csv"
-#  start_date = as.Date("2024-01-01")
-#  end_date = Sys.Date()
+#  start_date = NULL
+#  end_date = NULL
 
   # 
   #### 1. Read in the Maintenance Log and then Raw files ####
@@ -186,6 +187,8 @@ ghg_qaqc<-function(directory,
   all <- all %>%
     filter(!duplicated(date_acquired))
   
+  all2 = all
+  
   # If the headspace_ppm is NA then there was no peak and should be set to Flag 6. 
   # This will happen later but right now want to set to NO_PEAK depending on it is for CO2 or CH4. 
   # This info will live in the notes column until we get to the Flag section
@@ -193,8 +196,8 @@ ghg_qaqc<-function(directory,
   all <- all%>%
     mutate(
       notes = ifelse(is.na(CH4_GC_headspace_ppm) & is.na(CO2_GC_headspace_ppm),"CH4CO2_NO_PEAK", 
-                     ifelse(is.na(CH4_GC_headspace_ppm), "CH4_NO_PEAK",
-                            ifelse(is.na(CO2_GC_headspace_ppm), "CO2_NO_PEAK", notes))))
+                     ifelse(is.na(CH4_GC_headspace_ppm), paste0(notes, " CH4_NO_PEAK"),
+                            ifelse(is.na(CO2_GC_headspace_ppm), paste0(notes," CO2_NO_PEAK"), notes))))
   
     
 
@@ -376,6 +379,7 @@ ghg_qaqc<-function(directory,
   #  4 = The difference between the reps are above the limit of quantification and >50% different from each other. 
   #     Both replicates were retained but flagged
   #  6 = No peak detected and set to 0
+  #  7 = CO2 resampled and took the originial CH4 but the re-sampled CO2
   
   
   
@@ -386,7 +390,45 @@ ghg_qaqc<-function(directory,
     working_final_df[c(which(is.na(working_final_df[, j]))), paste0("Flag_",colnames(working_final_df[j]))] <- 1 #puts in flag 1 if value not collected
   }
   
-  ### 3.2 Flag for No Peak ####
+  ### 3.2 Flag for No Peak and for re-sampledsamples  ####
+  # Let's flag when had to resample and then merge the samples together
+  
+ interfer <- working_final_df|>
+    filter(grepl("Use CO2|Use CH4", Notes))|>
+    mutate(CH4_umolL = ifelse(grepl("Do not use CH4", Notes), NA, CH4_umolL),
+           CO2_umolL = ifelse(grepl("Do not use CO2", Notes), NA, CO2_umolL))
+  
+  if(!is.na(interfer[1,1])){
+    # separate into two data frames and then join the data frames together and take what we want
+    
+    interferco2 <- interfer|>
+      filter(grepl("Use CO2", Notes))
+    
+    interferch4 <- interfer|>
+      filter(grepl("Use CH4", Notes))
+    
+    # merge the two data frames together
+    
+    infer <- merge(interferco2, interferch4, by = c("Reservoir", "Site", "DateTime", "Depth_m", "Vial Number", "Flag_DateTime","Flag_CH4_umolL", "Flag_CO2_umolL"))|>
+      select(Reservoir, Site, DateTime, Depth_m, `Vial Number`, CH4_umolL.y, CO2_umolL.x, Notes.x, Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)|>
+      dplyr::rename("CH4_umolL"=CH4_umolL.y,
+                    "CO2_umolL"=CO2_umolL.x,
+                    "Notes"=Notes.x)
+    
+    # take out the observations from the data frame and then add in the cleaned observations and Flag
+    
+    clean_inter <- working_final_df|>
+      filter(!grepl("Use CO2|Use CH4", Notes))
+    
+    # combine data frames
+    
+    working_final_df <- bind_rows(clean_inter, infer)|>
+      mutate(Flag_CH4_umolL = ifelse(grepl("Use CO2", Notes), 7, Flag_CH4_umolL),
+             Flag_CO2_umolL = ifelse(grepl("Use CO2", Notes), 7, Flag_CO2_umolL))
+    
+  }
+  
+  
   # Let's add the Flag for No peaks and change the NA to 0.
   # I like to bounce back and forth between base R and tidyverse
   
@@ -397,6 +439,9 @@ ghg_qaqc<-function(directory,
       Flag_CH4_umolL = ifelse(grepl("CH4_NO_PEAK|CH4CO2_NO_PEAK", Notes), 
                               6, Flag_CH4_umolL)
     )
+  
+  
+  
   
   #### 3.3  Change negative values to 0 ####
   for(k in colnames(working_final_df %>% select(CH4_umolL:CO2_umolL))) { 

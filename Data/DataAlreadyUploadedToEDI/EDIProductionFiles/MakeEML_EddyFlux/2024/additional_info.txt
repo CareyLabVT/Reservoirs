@@ -1,6 +1,6 @@
 Authorship Statement:
-CCC developed and led the reservoir monitoring program from 2020-present and tested and deployed the EC system in 2020. ABP led the field team, conducted routine maintenance, data downloads, QAQC processing, troubleshooting, and publishing. MSJ provided the EC system, helped with maintenance, and assisted with QA/QC.
 
-Acknowledgments: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Quinn Thomas for providing helpful feedback on data analysis, and Dexter Howard and Bibek Kandel for constructive reviews on this data package.
+CCC developed and led the reservoir monitoring program from 2020-present and tested and deployed the EC system in 2020. ABP, co-point person with BK, led the field team, conducted routine maintenance, data downloads, QAQC processing, troubleshooting, and assisted with publishing. BK, co-point person with ABP, conducted routine maintenance, data downloads, QAQC processing, troubleshooting, and publishing. MSJ provided the EC system, helped with maintenance, and assisted with QA/QC.
 
+Acknowledgments: This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Quinn Thomas for providing helpful feedback on data analysis, and XXX for constructive reviews on this data package.
 

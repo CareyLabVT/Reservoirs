@@ -50,7 +50,9 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
                   ice_check = ifelse(temp_diff < -0.1 & top <= 4, 1, 0), 
                   datetime = as.Date(datetime)) |>
     dplyr::group_by(datetime) |> 
-    dplyr::mutate(ice_presence = ifelse(1 %in% ice_check, 1, 0)) |> 
+    dplyr::mutate(ice_presence = ifelse(1 %in% ice_check, 1, 0),
+                  ice_hour_count = sum(ice_check == 1),
+                  IceOn_hour_index = list(which(ice_check == 1))) |> 
     ungroup() |> 
     distinct(site_id, datetime, ice_presence, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, ice_presence) |> 

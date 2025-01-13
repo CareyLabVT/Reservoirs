@@ -33,7 +33,8 @@ secchi_qaqc <- function(data_file,
   secchi_df$Reservoir <- as.character(secchi_df$Reservoir)
   secchi_df$Site <- as.numeric(secchi_df$Site)
   secchi_df$Secchi_m <- as.numeric(secchi_df$Secchi_m)
-  secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
+  secchi_df$Flag_Secchi_m <- 0
+  #secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
   #secchi_df$Notes <- as.character(secchi_df$Notes)
 
 
@@ -81,7 +82,7 @@ secchi_qaqc <- function(data_file,
 
   secchi_reformat <- secchi_df |>
     #filter(!is.na(Secchi_m) ) |>   # Omit rows where all Secchi values NA (e.g., rows from files with trailing ,'s) ## DO WE WANT TO COMPLETELY REMOVE NAS? IF SO WE NEED TO RETHINK HOW FLAGS ARE ASSIGNED IN NEXT LINE
-    mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, 0)) |>
+    mutate(Flag_Secchi_m = ifelse(is.na(Secchi_m), 1, Flag_Secchi_m)) |>
            #Flag_DateTime = ifelse(Notes=="No time was recorded",1,0))  |> # Add 'flag' columns for each variable; 1 = flag (Flag for night sampling)
     select(Reservoir, Site, DateTime, Secchi_m, Flag_DateTime, Flag_Secchi_m) |>    # Arrange order of columns for final data table
     arrange(Reservoir, DateTime, .by_group = TRUE )

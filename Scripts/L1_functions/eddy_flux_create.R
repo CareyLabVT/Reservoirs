@@ -13,6 +13,8 @@
 ## A.Breef-Pilz edited to just make it the function 26 Jan 2024
 ## A.Breef-Pilz edits to filter by EDi package and make time conversion section work. 05 Feb 2024
 ## A.Breef-Pilz edits to add in streaming summary files 
+## B.Kandel edits to add in qc for H and LE for extreme values adapted from eddy-flux_post_processing script
+## A.Breef-Pilz made a function to read in processed files from EddyPro because the headings had changed
 
 ### This function:
 # 1. Reads in the Summary files from the EddyFlux system that is streaming at FCR or from proceesed EddyPro files
@@ -30,9 +32,6 @@
 
 # Download/load libraries
 #pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)
-
-# library(EDIutils)
-# library(xml2)
 
 
 eddypro_cleaning_function<-function(directory, # Name of the directory where the data folder and the QAQC plot folder lives
@@ -100,12 +99,61 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
       purrr::map_df(~ read.delim(.x, header = TRUE, sep = "\t"))
     
   } else{
+
     # They are .csv and were processed in EddyPro
     
-    myfiles = list.files(path=mydir,pattern= "full_output", recursive = TRUE,full.names=TRUE)
+    # Make a function that reads in EddyFlux files and selects only the columns we want
     
-    b2 <- myfiles%>%
-      purrr::map_df(~read_csv(.x, skip=1,show_col_types = F))
+    read_flux_files<-function(FILES){
+      
+      df <- read_csv(FILES, skip=1, col_names=T)|>
+        select(filename, date,time,DOY,Tau,qc_Tau,H,qc_H,LE,qc_LE,co2_flux,qc_co2_flux,h2o_flux,
+               qc_h2o_flux,`co2_v-adv`,`h2o_v-adv`,
+               co2_molar_density,co2_mole_fraction,co2_mixing_ratio,co2_time_lag,
+               co2_def_timelag,h2o_molar_density,h2o_mole_fraction,h2o_mixing_ratio,
+               h2o_time_lag,h2o_def_timelag,sonic_temperature,
+               air_temperature,air_pressure,air_density,air_heat_capacity,
+               air_molar_volume,ET,water_vapor_density,e,es,specific_humidity,RH,VPD,
+               Tdew,wind_speed,max_wind_speed,wind_dir,`u*`,TKE,L,`(z-d)/L`,bowen_ratio,
+               `T*`,x_peak,x_offset,`x_10%`,`x_30%`,`x_50%`,`x_70%`,`x_90%`,un_Tau,
+               Tau_scf,un_H,H_scf,un_LE,LE_scf,un_co2_flux,co2_scf,un_h2o_flux,
+               h2o_scf,u_var,v_var,w_var,one_of("ch4_flux","qc_ch4_flux",
+                                                  "ch4_molar_density","ch4_mole_fraction",
+                                                  "ch4_v-adv","ch4_mixing_ratio","ch4_time_lag",
+                                                  "ch4_def_timelag",
+                                                  "un_ch4_flux","ch4_scf",
+                                                  "rssi_77_mean","flowrate_mean"))
+      
+      # take out the unit row
+      df <-df|>
+        dplyr::filter(filename!="")|>
+        select(-filename)
+      
+      # print the file that was read in 
+      print(paste0("Read in ", FILES))
+      
+      
+      return(df)
+    }     
+    
+    # use the function above to read in the files and bind them together
+    b2 <- list.files(path=mydir,pattern= "full_output", recursive = TRUE,full.names=TRUE)%>%
+      purrr::map_df(~read_flux_files(.x))
+    
+    b3 <- b2|>
+      # rename some of the file headers because they are different in the streaming .txt file and in the historical file
+      dplyr::rename(
+        "u."=`u*`,
+        "T."=`T*`,
+        "co2_v.adv" = `co2_v-adv`,
+        "h2o_v.adv" = `h2o_v-adv`,
+        "ch4_v.adv" = `ch4_v-adv`,
+        "X.z.d..L" = `(z-d)/L`,
+        "x_10." =`x_10%`, 
+        "x_30." =`x_30%`,
+        "x_50." =`x_50%`,
+        "x_70."=`x_70%`,
+        "x_90."=`x_90%`)
     
     # read in the compiled old file
     
@@ -116,36 +164,39 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
       c <-NULL
     }else{
       
+      print("read old file")
       # read in the old file 
-      c <- readr::read_csv(oldfiles)
+      c <- readr::read_csv(oldfiles)|>
+        dplyr::rename("flowrate_mean"=flowrate_mean_m3s)
       
-      # change columns to numeric instead of character
+      # rename headers so they match
+      
+      
+      
+      # change columns to character instead of numeric
       c[, c(1:166)] <- sapply(c[, c(1:166)], as.character)
       
     }
     
     # combine the old file with the new one
     
-    b <- dplyr::bind_rows(c, b2)
+    b <- dplyr::bind_rows(c, b3)
   }
-
-  print(colnames(b))
-  # Clean up the files 
-  data2 <-b|>
-    dplyr::filter(filename!="")
+  
+  
   
   # Clean up and make it useable for plotting
-  data2[data2 ==-9999] <- NA # Remove -9999 and replace with NAs
+  b[b ==-9999] <- NA # Remove -9999 and replace with NAs
   
   # If there was no flow rate than add that column. It means the 7200-101 flow module wasn't working. 
-  if(!("flowrate_mean" %in% names(data2))) {
-    data2$flowrate_mean<-NA
+  if(!("flowrate_mean" %in% names(b))) {
+    b$flowrate_mean<-NA
     
   }
   
   # select the columns we want 
   
-  data3<-data2%>%
+  data3<-b%>%
     dplyr::select(date,time,DOY,Tau,qc_Tau,H,qc_H,LE,qc_LE,co2_flux,qc_co2_flux,h2o_flux,
                         qc_h2o_flux,ch4_flux,qc_ch4_flux,`co2_v.adv`,`h2o_v.adv`,`ch4_v.adv`,
                         co2_molar_density,co2_mole_fraction,co2_mixing_ratio,co2_time_lag,
@@ -301,6 +352,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     dplyr::mutate(qc_Tau = ifelse(is.na(Tau_kgms2), 3, qc_Tau),
            qc_H = ifelse(is.na(H_wm2), 3, qc_H),
            qc_LE = ifelse(is.na(LE_wm2), 3, qc_LE),
+           qc_H = ifelse(H_wm2 >= 200 | H_wm2 <= -200, 4, qc_H), 
+           H_wm2 = ifelse(H_wm2 >= 200 | H_wm2 <= -200, NA, H_wm2),
+           qc_LE = ifelse(LE_wm2 >= 500 | LE_wm2 <= -500, 4, qc_LE),
+           LE_wm2 = ifelse(LE_wm2 >= 500 | LE_wm2 <= -500, NA, LE_wm2),
            qc_co2_flux = ifelse(is.na(co2_flux_umolm2s), 3, qc_co2_flux),
            qc_h2o_flux = ifelse(is.na(h2o_flux_umolm2s), 3, qc_h2o_flux),
            qc_ch4_flux = ifelse(is.na(ch4_flux_umolm2s), 3, qc_ch4_flux),
@@ -340,15 +395,6 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     dplyr::slice_max(Tau_kgms2, n = 1) %>%
     dplyr::ungroup()%>%
     dplyr::select(-datetime)
-  
-  
-  # ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-  #  package_ID <- 'edi.1061.2'
-  # eml <- read_metadata(package_ID)
-  #  date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-  #  last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
-  
-  # ec_all <- ec_all |> dplyr::filter(date> last_edi_date)
   
   # convert datetimes to characters so that they are properly formatted in the output file
   ec_all$date <- as.character(format(ec_all$date))

@@ -19,13 +19,13 @@ historic_ice_files <- c("https://pasta.lternet.edu/package/data/eml/edi/456/5/eb
 ice_maintenance_log <- c('https://docs.google.com/spreadsheets/d/1viYhCGs3UgstzHEWdmP2Ig6uxyNM3ZC_uisG_R0QNpI/edit?gid=0#gid=0')
 
 
-bvr_ice_data <- target_IceTransition_binary(current_file = current_files[1],
+bvr_ice_data <- ice_transition_binary_create(current_file = current_files[1],
                                             historic_wq_file = historic_wq_files[1],
                                             historic_file = historic_ice_files,
                                             ice_site = 'BVR',
                                             maint_log = NULL)
 
-fcr_ice_data <- target_IceTransition_binary(current_file = current_files[2],
+fcr_ice_data <- ice_transition_binary_create(current_file = current_files[2],
                                             historic_wq_file = historic_wq_files[2],
                                             historic_file = historic_ice_files,
                                             ice_site = "FCR",

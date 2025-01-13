@@ -5,7 +5,6 @@
 
 ### THIS IS ONE OF TWO FILES FOR ICE COVER ###
 # THIS FILE IS MEANT TO SHOW JUST THE DAYS WHEN ICE COVER CHANGES (VISUAL OR CALCULATED)
-# THE OTHER FILE WILL INCLUDE ALL DAYS
 
 ## current and historic = catwalk
 
@@ -57,7 +56,9 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
                   datetime = as.Date(datetime)) |>
     dplyr::group_by(datetime) |> 
     dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
-                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1)) |> 
+                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
+                  IceOn_hour_count = sum(IceOn_hourly == 1),
+                  IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
     ungroup() |> 
     distinct(site_id, datetime, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, IceOn, IceOff) |> 
@@ -113,7 +114,9 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
                   datetime = as.Date(datetime)) |>
     dplyr::group_by(datetime) |> 
     dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
-                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1)) |> 
+                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
+                  IceOn_hour_count = sum(IceOn_hourly == 1),
+                  IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
     ungroup() |> 
     distinct(site_id, datetime, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, IceOn, IceOff) |> 

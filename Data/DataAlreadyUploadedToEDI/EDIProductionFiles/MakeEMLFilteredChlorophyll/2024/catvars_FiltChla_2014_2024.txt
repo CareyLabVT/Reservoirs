@@ -1,0 +1,22 @@
+attributeName	code	definition
+Flag_Chla_ugL	0	Value acceptable. No flag
+Flag_Chla_ugL	1	Sample below detection
+Flag_Chla_ugL	2	Sample not taken
+Flag_Chla_ugL	3	Duplicate check failed
+Flag_Chla_ugL	4	Pigment in extract below detection (<34 ug/L)
+Flag_Chla_ugL	5	Duplicate values were averaged
+Flag_Pheo_ugL	0	Value acceptable. No flag
+Flag_Pheo_ugL	1	Sample below detection
+Flag_Pheo_ugL	2	Sample not taken
+Flag_Pheo_ugL	3	Duplicate check failed
+Flag_Pheo_ugL	4	Pigment in extract below detection (<34 ug/L)
+Flag_Pheo_ugL	45	Pigment in extract below detection (<34 ug/L) and duplicate values were averaged
+Flag_Pheo_ugL	5	Duplicate values were averaged
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	CLY	Claytor Lake Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hollow Reservoir
+Reservoir	SML	Smith Mountain Lake
+Reservoir	SNP	Lake Sunapee

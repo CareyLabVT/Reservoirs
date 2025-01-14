@@ -4,10 +4,12 @@ Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	contact
 Cecelia	E.	Wood	Virginia Tech	cecelia@vt.edu	0000-0003-1488-2174	creator			
 Adrienne	 	Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Carly	E.	Bauer	Virginia Tech	carlyeb@vt.edu	0009-0006-5955-8932	creator			
-George	 	Haynie	Virginia Tech	georgeh0919@vt.edu	0009-0003-2316-2037	creator			
-Ryan		Keverline	Virginia Tech	rkeverline01@vt.edu		creator			
+Matthew	 	Centofanti 	Virginia Tech	mcentofanti@vt.edu	0009-0006-7608-2921	creator			
+Tallory		Wendell	Virginia Tech	talloryw@vt.edu	0009-0000-9634-4788	creator			
 Michael		Kricheldorf	Virginia Tech	mkricheldorf@vt.edu	0009-0009-7898-1957	creator			
 Evelyn		Tipper	Virginia Tech	etipper@vt.edu	0009-0001-5005-0319	creator			
+Sean		Kenny	Virginia Tech	seankenny@vt.edu		creator			
+Sierra		Tannheiser	Virginia Tech	sierrat22@vt.edu		creator			
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI		Western Virginia Water Authority	
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems	National Science Foundation	1753639
 Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	1933016

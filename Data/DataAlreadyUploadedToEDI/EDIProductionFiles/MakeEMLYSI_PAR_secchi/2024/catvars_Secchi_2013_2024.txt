@@ -1,0 +1,10 @@
+attributeName	code	definition
+Flag_DateTime	0	No flag
+Flag_DateTime	1	Time set to 12:00:00 because an exact time was not recorded
+Flag_Secchi_m	0	No flag
+Flag_Secchi_m	2	Multiple observations at a site at the same time are averaged together
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	GWR	Gatewood Reservoir
+Reservoir	SHR	Spring Hallow Reservoir

@@ -752,8 +752,8 @@ ghg_qaqc<-function(directory,
       CH4_GC_headspace_ppm = as.numeric(CH4_tvalue) * as.numeric(CH4_STDEV),
       CO2_GC_headspace_ppm = as.numeric(CO2_tvalue) * as.numeric(CO2_STDEV),
       
-      # add in standard lab temperature and bp
-      lab_temp = 20,
+      # add in standard lab temperature and bp. For 2019 onward the temp for MDL is 40
+      lab_temp = 40,
       weather_station_bp = 29.99
     )
   

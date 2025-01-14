@@ -24,6 +24,7 @@ pacman::p_load(tidyverse, lubridate, gsheet)
 
 # QAQC function
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/manual_discharge_create.R')
+
 ```
 
 
@@ -142,7 +143,7 @@ staged_edi %>%
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(current_df, "ManualDischarge_2019_2024.csv", row.names = F)
+write.csv(staged_edi, "ManualDischarge_2019_2024.csv", row.names = F)
 
 ```
 

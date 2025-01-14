@@ -1,0 +1,8 @@
+Author Contributions
+
+MES has been PI for the sediment trap project for 2014-present and has overseen the development of the sampling, lab protocols and data analysis protocols. CEB and CEW co-led organization, sample filtration, digestion and analysis in 2024. ABP led field crew, contributed significantly to sampling, and assisted substantially with QAQC workflows. MC, ET, and TW assisted with sample collection and sample filtration.
+
+
+Acknowledgments
+
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork. We thank Freya Olsson and ABP for constructive reviews of this data package. 

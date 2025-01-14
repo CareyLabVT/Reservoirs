@@ -1,9 +1,10 @@
 attributeName	code	definition
 flag	0	data not suspect
+flag	1	"Instrument malfunction, values set to NA"
 flag	3	"Value suspect, conditions not well captured by flowmeter method"
 flag	5	"Value suspect, conditions not well captured by velocity float method"
 Reservoir	BVR	Beaverdam Reservoir
-Reservoir	CCR	Carvin's Cove Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
 Site	1	"Outflow site at spillway of Falling Creek Reservoir (37.30247,-79.83692)"
 Site	100	"Inflow stream to Falling Creek Reservoir (37.30858,-79.83494) or Beaverdam Reservoir (37.31957,-79.82437) or Carvin's Cove Reservoir (Horsepen Branch inflow,  37.3646, -79.9733)"

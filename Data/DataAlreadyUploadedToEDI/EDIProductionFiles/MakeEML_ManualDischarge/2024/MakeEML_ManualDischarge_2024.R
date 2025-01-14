@@ -4,9 +4,9 @@ library(devtools)
 
 # Install and load EMLassemblyline, needs devtools
 #also installing two other packages from github needed
-remotes::install_github("ropensci/bold")
-remotes::install_github("ropensci/taxize")
-remotes::install_github("EDIorg/EMLassemblyline")
+# remotes::install_github("ropensci/bold")
+# remotes::install_github("ropensci/taxize")
+# remotes::install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 
@@ -118,19 +118,17 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDisc
 # Make note of this value, as it will be your package.id below
 
 make_eml(path = folder,
-         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2023",
+         dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2024",
          data.table = c("ManualDischarge_2019_2024.csv",
                         "site_descriptions.csv",
-                         # "../../../../../Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.txt"),
-                        "ManualDischarge_maintenancelog_2019_2024.csv"),
+                        "manual_discharge_maintenancelog_2019_2024.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenance Log'),
          temporal.coverage = c("2019-02-08", "2024-12-17"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('ManualDischarge_qaqc_2019_2024.R',
-                          #'../../../../../Scripts/L1_generation_scripts/ManualDischarge_qaqc.R',
+         other.entity = c('manual_discharge_qaqc_2019_2024.R',
                           'ManualDischarge_inspection_2019_2024.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
@@ -138,32 +136,9 @@ make_eml(path = folder,
                                       'Script used to collate 2019-2024 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.11", #### this is the one that I need to change!!!
+         package.id = "edi.1017.12", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
-# make_eml(path = folder,
-#          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2023",
-#          data.table = c("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_2019_2023.csv",
-#                         "Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/site_descriptions.csv",
-#                         # "../../../../DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenace_Log.txt"),
-#                         "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenace_Log.txt"),
-#          data.table.description = c("Manual Discharge Data",
-#                                     'Descriptions of sampling sites',
-#                                     'Manual Discharge Maintenace Log'),
-#          temporal.coverage = c("2019-02-08", "2023-12-04"),
-#          maintenance.description = "ongoing",
-#          user.id =  "ccarey",
-#          other.entity = c('./Scripts/L1_generation_scripts/ManualDischarge_qaqc.R',
-#                          # '../../../../../Scripts/L1_generation_scripts/ManualDischarge_qaqc.R'
-#                           './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/ManualDischarge_inspection_2019_2023.Rmd',
-#                           './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
-#                           './Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-#          other.entity.description = c('Script used to QAQC 2023 data',
-#                                       'Script used to collate 2019-2023 data for publication',
-#                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
-#                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-#          package.id = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2023/edi.1017.5", #### this is the one that I need to change!!!
-#          user.domain = 'EDI')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

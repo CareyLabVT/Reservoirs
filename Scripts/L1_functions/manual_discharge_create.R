@@ -220,7 +220,13 @@ for(i in 1:nrow(log)){
     final_Q[c(which(final_Q[,'Reservoir'] == Reservoir & final_Q[,'Site'] == Site & final_Q$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
     #final_Q[c(which(final_Q[,'Reservoir'] == Reservoir & final_Q[,'Site'] == Site & final_Q$DateTime %in% Time$DateTime)),maintenance_cols] <- as.numeric(update_value) #this was to change value to a new value; keeping for if making a new flag latter on
 
-  }else{
+  } else if(flag %in% c(1)){ ## UPDATE THIS WITH ANY NEW FLAGS
+    # FLAG and remove suspect values that should be set to NA
+    
+    final_Q[c(which(final_Q[,'Reservoir'] == Reservoir & final_Q[,'Site'] == Site & final_Q$DateTime %in% Time$DateTime)),paste0("Flag_",maintenance_cols)] <- as.numeric(flag)
+    final_Q[c(which(final_Q[,'Reservoir'] == Reservoir & final_Q[,'Site'] == Site & final_Q$DateTime %in% Time$DateTime)),maintenance_cols] <- NA #to set value to NA
+    
+  } else{
     warning("Flag not coded in the L1 script. See Austin or Adrienne")
   }
 }

@@ -753,7 +753,7 @@ ghg_qaqc<-function(directory,
       CO2_GC_headspace_ppm = as.numeric(CO2_tvalue) * as.numeric(CO2_STDEV),
       
       # add in standard lab temperature and bp. For 2019 onward the temp for MDL is 40
-      lab_temp = 20,
+      lab_temp = 40,
       weather_station_bp = 29.99
     )
   
@@ -864,33 +864,46 @@ ghg_qaqc<-function(directory,
   
   ### 5.21 Flag based on the difference between the reps ####
   
-  # This section gives a Flag or 3 or 4 depending on how different the reps are.
-  # If the data are already Flagged then we leave previous flag in
+ # If the data are already Flagged then we leave previous flag in
   
-  ghg_all <- ghg_all %>%
-    mutate(Flag_CH4_umolL = ifelse((CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 &Flag_CH4_umolL == 0) | 
-                                      is.na(CH4_pdiff) & Flag_CH4_umolL == 0, 4,
+  # split up the file if there are MDL values or no MDL values
+  ghg3 <- ghg_all|>
+    filter(is.na(CH4_umolL_MDL))
+  
+  ghg4 <- ghg_all|>
+    filter(!is.na(CH4_umolL_MDL))
+  
+  # run only the section of code with MDL values
+  
+  ghg_all2 <- ghg4 %>%
+    mutate(Flag_CH4_umolL = ifelse((CH4_pdiff>=50 & CH4_diff>=CH4_umolL_MDL*3 & Flag_CH4_umolL == 0) | 
+                                     is.na(CH4_pdiff) & Flag_CH4_umolL == 0, 4,
                                    ifelse(CH4_pdiff<=50 & CH4_pdiff>=30 & CH4_diff>=CH4_umolL_MDL*3 &
                                             Flag_CH4_umolL == 0, 3, Flag_CH4_umolL)),
            
            Flag_CO2_umolL = ifelse((CO2_pdiff>=50 & CO2_diff>=CO2_umolL_MDL*3 & Flag_CO2_umolL == 0) |
-                                      is.na(CO2_pdiff) & Flag_CO2_umolL == 0, 4, 
-                                   ifelse(CO2_pdiff<50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
+                                     is.na(CO2_pdiff) & Flag_CO2_umolL == 0, 4,
+                                   ifelse(CO2_pdiff<=50 & CO2_pdiff>=30 & CO2_diff>=CO2_umolL_MDL*3 &
                                             Flag_CO2_umolL == 0,3,Flag_CO2_umolL)))
 
+  
+  # bing data frames back together
+  
+  ghg_aller <- bind_rows(ghg3, ghg_all2)
+  
   
   print("Flagged observations based on MDLs")
   
   ### 5.3 Check that all NA values are flagged ####
   
-  for(m in colnames(ghg_all%>%select(DateTime, CH4_umolL:CO2_umolL))) {
-    ghg_all[c(which(is.na(ghg_all[,m]))), paste0("Flag_",colnames(ghg_all[m]))] <- 1 # puts in flag 1 if value not collected
+  for(m in colnames(ghg_aller%>%select(DateTime, CH4_umolL:CO2_umolL))) {
+    ghg_aller[c(which(is.na(ghg_aller[,m]))), paste0("Flag_",colnames(ghg_aller[m]))] <- 1 # puts in flag 1 if value not collected
   }
   
   ### 6. Save files ####
   
   # Make final data frame with only the columns we want
-  ghg_final <- ghg_all%>%
+  ghg_final <- ghg_aller%>%
     select(Reservoir, Site, DateTime, Depth_m, Rep, CH4_umolL, CO2_umolL,
            Flag_DateTime, Flag_CH4_umolL, Flag_CO2_umolL)|>
     mutate_if(is.numeric, round, digits = 4)|> # round to 4 digits

@@ -230,20 +230,20 @@ for (i in 1:length(unique(fp5$CastID))){
 #ADD FLAGS
 
 fp_final <- fp6 %>%
-  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
+  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
          Flag_YellowSubstances_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_TotalConc_ugL = ifelse(Transmission_perc < 90, 3, 0),
+         Flag_TotalConc_ugL = ifelse(Transmission_perc < 0, 3, 0),
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission_perc = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_525nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_570nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_610nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_370nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_590nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_470nm = ifelse(Transmission_perc < 90, 3, 0)) 
+         Flag_Transmission_perc = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_525nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_570nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_610nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_370nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_590nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_470nm = ifelse(Transmission_perc < 0, 3, 0)) 
 
 
 ### 4. Take out values based on the Maintenance Log 
@@ -359,6 +359,11 @@ for(i in 1:nrow(log)){
     ## Instrument error
     
     fp_final[c(which(fp_final[,'Site'] == Site & fp_final$DateTime %in% Time)),maintenance_cols] <- NA
+    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(4)){ 
+    ## Data suspect due to poor calibration
+    
     fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
     
   }else

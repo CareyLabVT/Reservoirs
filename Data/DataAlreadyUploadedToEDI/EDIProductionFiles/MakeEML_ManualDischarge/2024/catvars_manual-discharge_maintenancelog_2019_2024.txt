@@ -8,7 +8,7 @@ Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
 Site	1	"Outflow site at spillway of Falling Creek Reservoir (37.30247,-79.83692)"
 Site	100	"Inflow stream to Falling Creek Reservoir (37.30858,-79.83494) or Beaverdam Reservoir (37.31957,-79.82437) or Carvin's Cove Reservoir (Horsepen Branch inflow,  37.3646, -79.9733)"
-Site	101	"Upstream site along inflow to Falling Creek Reservoir (37.309653,-79.830467)"
+Site	101	"Upstream site along inflow to Falling Creek Reservoir or Carvins Cove Reservoir"
 Site	102	"Furthest upstream site on inflow stream to Falling Creek Reservoir (37.311678,-79.827357)"
 Site	200	"Secondary inflow (wetland) stream to Falling Creek Reservoir (37.30943,-79.83619) or right arm inflow to Beaverdam Reservoir (37.322851,-79.81721)"
 Site	201	"Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns (37.3958, -79.9937)"

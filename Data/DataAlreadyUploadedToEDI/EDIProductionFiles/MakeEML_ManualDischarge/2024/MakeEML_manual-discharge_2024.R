@@ -119,24 +119,24 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDisc
 
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2024",
-         data.table = c("ManualDischarge_2019_2024.csv",
+         data.table = c("manual-discharge_2019_2024.csv",
                         "site_descriptions.csv",
-                        "manual_discharge_maintenancelog_2019_2024.csv"),
+                        "manual-discharge_maintenancelog_2019_2024.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenance Log'),
-         temporal.coverage = c("2019-02-08", "2024-12-17"),
+         temporal.coverage = c("2016-07-14", "2024-12-17"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('manual_discharge_qaqc_2019_2024.R',
-                          'ManualDischarge_inspection_2019_2024.Rmd',
+         other.entity = c('manual-discharge_qaqc_2019_2024.R',
+                          'manual-discharge_inspection_2019_2024.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
          other.entity.description = c('Script used to QAQC 2019-2024 data',
                                       'Script used to collate 2019-2024 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.12", #### this is the one that I need to change!!!
+         package.id = "edi.1017.14", #### this is the one that I need to change!!!
          user.domain = 'EDI')
 
 

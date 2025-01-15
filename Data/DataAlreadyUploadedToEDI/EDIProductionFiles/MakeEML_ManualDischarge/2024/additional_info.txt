@@ -1,6 +1,5 @@
 Contributions to the 2024 revision:
-CCC developed and led the reservoir monitoring program 2013-present. ABP led the field crew and conducted substantial fieldwork at Falling Creek Reservoir in 2024. DWH led the field crew at Carvins Cove Reservoir, QAQC, data collation, and data publishing in 2024.
+CCC developed and led the reservoir monitoring program 2013-present. ABP led the field crew and conducted substantial fieldwork at Falling Creek Reservoir in 2024. DWH led the field crew at Carvins Cove Reservoir, QAQC, data collation, and data publishing in 2024. CEB led outflow sampling at Falling Creek Reservoir and conducted substantial field work.
 
 Acknowledgments and historical contributions:
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Carly Bauer, Heather Wander, and Freya Olsson for constructive reviews on this data package.
-
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Heather Wander and Freya Olsson for constructive reviews on this data package. We thank Whitney Woelmer for initial development of this data package and associated code.

@@ -1,5 +1,5 @@
 ---
-title: "manualDischarge_inspection_2019_2024"
+title: "manual-discharge_inspection_2019_2024"
 author: "Adrienne and Dexter"
 date: "2023-12-19"
 output: html_document
@@ -67,7 +67,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
  # staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1017/8/702d3b355854211a8dbb587094cfccb7")
 
  # # Force files from EDI to have an EST timestamp
- #  staged_edi$DateTime <- force_tz(as.POSIXct(staged_edi$DateTime), tzone = "American/New_York")
+ #  staged_edi$DateTime <- force_tz(as.POSIXct(staged_edi$DateTime), tzone = "America/New_York")
 
 ```
 

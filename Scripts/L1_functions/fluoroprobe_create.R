@@ -9,7 +9,7 @@
 
 library(tidyverse)
 library(lubridate)
-#library(httr)
+library(httr) 
 
 #rm(list=ls())
 
@@ -27,7 +27,9 @@ library(lubridate)
 #'@param start_date first day of current year (day after last day of data pushed to EDI)
 #'@param end_date last day of current year (last day before we publish a revision to EDI)
 
-fluoroprobe_qaqc <- function(example_file_for_colnames,
+fluoroprobe_qaqc <- function(repo_link,
+                             repo_filepath,
+                             example_file_for_colnames,
                              current_year_data_folder,
                              historic_data_folder,
                              historic_data_2017,
@@ -40,12 +42,19 @@ fluoroprobe_qaqc <- function(example_file_for_colnames,
 col_names <- names(read_tsv(example_file_for_colnames, n_max = 0))
 
 # Load in all txt files from previous years
-historic_fp_casts <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>%
+req <- GET(repo_link)
+stop_for_status(req)
+filelist <- unlist(lapply(content(req)$tree, "[", "path"), use.names = F)
+historic_list0 <- grep(paste0(historic_data_folder,".*.txt"), filelist, value = TRUE)
+historic_list1 <- historic_list0[-grep("recal", historic_list0, value = FALSE)]
+historic_list2 <- paste0(repo_filepath,historic_list1)
+
+historic_fp_casts <- historic_list2 %>%
   map_df(~ data_frame(x = .x), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
-historic_raw_fp <- dir(path = historic_data_folder, pattern = paste0("*.txt")) %>% 
-  map_df(~ read_tsv(file.path(path = historic_data_folder, .), 
+historic_raw_fp <- historic_list2 %>% 
+  map_df(~ read_tsv(., 
                     col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
@@ -59,13 +68,16 @@ historic_fp_casts <- historic_fp_casts %>%
   mutate(CastID = c(1:num_pre_2017_casts,((num_pre_2017_casts+1) + num_2017_casts):(num_historic_casts + num_2017_casts)))
 
 # Load in all txt files from current year
-fp_casts <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>%
+current_list1 <- grep(paste0(current_year_data_folder,".*.txt"), filelist, value = TRUE)
+current_list2 <- paste0(repo_filepath,current_list1)
+
+fp_casts <- current_list2 %>%
   map_df(~ data_frame(x = .x), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 num_current_year_casts <- length(fp_casts$cast)
 
-raw_fp <- dir(path = current_year_data_folder, pattern = paste0("*.txt")) %>% 
-  map_df(~ read_tsv(file.path(path = current_year_data_folder, .), 
+raw_fp <- current_list2 %>% 
+  map_df(~ read_tsv(., 
                     col_types = cols(.default = "c"), col_names = col_names, skip = 2), .id = "cast") %>%
   mutate(cast = as.numeric(cast))
 
@@ -218,20 +230,20 @@ for (i in 1:length(unique(fp5$CastID))){
 #ADD FLAGS
 
 fp_final <- fp6 %>%
-  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
+  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
          Flag_YellowSubstances_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_TotalConc_ugL = ifelse(Transmission_perc < 90, 3, 0),
+         Flag_TotalConc_ugL = ifelse(Transmission_perc < 0, 3, 0),
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission_perc = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_525nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_570nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_610nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_370nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_590nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_470nm = ifelse(Transmission_perc < 90, 3, 0)) 
+         Flag_Transmission_perc = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_525nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_570nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_610nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_370nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_590nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_470nm = ifelse(Transmission_perc < 0, 3, 0)) 
 
 
 ### 4. Take out values based on the Maintenance Log 
@@ -347,6 +359,11 @@ for(i in 1:nrow(log)){
     ## Instrument error
     
     fp_final[c(which(fp_final[,'Site'] == Site & fp_final$DateTime %in% Time)),maintenance_cols] <- NA
+    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(4)){ 
+    ## Data suspect due to poor calibration
+    
     fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
     
   }else

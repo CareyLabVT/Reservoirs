@@ -1,5 +1,5 @@
-# Secchi_qaqc_2023.R
-# QAQC of Secchi data from 2023
+# Secchi_qaqc_2024.R
+# QAQC of Secchi data from 2024
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
 # Last edited: 2024-08-05

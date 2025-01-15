@@ -39,7 +39,7 @@ current_time_end= ymd_hms("2024-12-31 23:59:00", tz = "America/New_York")
 #current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
-REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person.
 
 ```{r READ IN EDI FOR REVIEWER, include=FALSE}
   
@@ -102,6 +102,7 @@ for(f in 1:ncol(Flags)){
 
 ### Check to make sure that what is in the maintenance log was actually removed
 ### Look at the last rows of the maintenance log 
+
 We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}

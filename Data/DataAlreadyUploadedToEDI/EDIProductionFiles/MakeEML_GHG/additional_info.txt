@@ -1,8 +1,0 @@
-Contributions to the 2023 revision:
-
-CCC developed and led the reservoir monitoring program. ABP led the 2023 field crew, contributed substantially to fieldwork, and updated QA/QC workflows and initiated the new workflow. BRN performed sample analyses. ASL contributed to fieldwork, QAQC, and data collation. ET, GH, MK, and RK contributed to fieldwork, data digitization, and field monitoring preparations in 2023. 
-
-Acknowledgments and historical contributions:
-
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Freya Olsson for publishing the data, and Bibek Kandel for a helpful review of this data package.
-

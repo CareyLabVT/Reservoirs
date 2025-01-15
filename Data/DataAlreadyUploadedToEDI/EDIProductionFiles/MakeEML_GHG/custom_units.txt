@@ -1,2 +1,0 @@
-id	unitType	parentSI	multiplierToSI	description
-micromolePerLiter	amountOfSubstanceConcentration	molarity	1.00E-06	micromole per liter

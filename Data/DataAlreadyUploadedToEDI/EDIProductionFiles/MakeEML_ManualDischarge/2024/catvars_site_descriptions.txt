@@ -2,3 +2,16 @@ attributeName	code	definition
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
+Site	1	"Outflow site at spillway of Falling Creek Reservoir (37.30247,-79.83692)"
+Site	100	"Inflow stream to Falling Creek Reservoir (37.30858,-79.83494) or Beaverdam Reservoir (37.31957,-79.82437) or Carvin's Cove Reservoir (Horsepen Branch inflow,  37.3646, -79.9733)"
+Site	101	"Upstream site along inflow to Falling Creek Reservoir (37.309653,-79.830467)"
+Site	102	"Furthest upstream site on inflow stream to Falling Creek Reservoir (37.311678,-79.827357)"
+Site	200	"Secondary inflow (wetland) stream to Falling Creek Reservoir (37.30943,-79.83619) or right arm inflow to Beaverdam Reservoir (37.322851,-79.81721)"
+Site	201	"Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns (37.3958, -79.9937)"
+Site	300	"Sawmill Branch inflow site closest to reservoir at Carvins Cove Reservoir (37.4094, -79.9699)"
+Site	301	"Sawmill Branch inflow upstream of reservoir at Carvins Cove Reservoir (37.4169, -79.9771)"
+Site	400	"Tinker Creek Tunnel inflow at Carvins Cove Reservoir (37.39967489, -79.9471728)"
+Site	400.1	"Inflow site to Carvins Cove Reservoir at Angel Branch; this stream is located right next to the Tinker Creek Tunnel emergence (37.39965998, -79.9472137)"
+Site	500	"Catawaba Creek Tunnel inflow downstream of tunnel emergence at Carvin's Cove Reservoir (37.4073, -79.9852)"
+Site	501	"Catawaba Creek Tunnel inflow at tunnel emergence at Carvin's Cove Reservoir (37.4082, -79.9897)"
+Site	99	"Farthest downstream site on inflow stream to Falling Creek Reservoir (37.307613,-79.8360878)"

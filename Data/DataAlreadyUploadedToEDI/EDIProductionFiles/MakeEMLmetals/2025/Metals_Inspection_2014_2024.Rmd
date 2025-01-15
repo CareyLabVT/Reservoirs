@@ -407,6 +407,43 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
+### FCR 1 - samples from the outflow at FCR
+
+```{r QAQC FCR 1 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
+
+dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
+
+# make the plots
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=1, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly F1, echo=FALSE, warning=FALSE, messages=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <-  lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+
+
 ### BVR 50 - samples from the platform at BVR
 
 ```{r QAQC BVR 50 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
@@ -416,7 +453,7 @@ dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -522,7 +559,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
+```{r Make new CSV with current and historic files, include=FALSE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
@@ -535,14 +572,14 @@ write_csv(current_df, "Metals_2014_2024.csv")
 
 
 
-```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
+```{r Download and save Maintenance Log, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2024.csv")
 
 # qaqc function
 # update link when change the location of the script
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R", "Metals_qaqc_2020_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_generation_scripts/metals_qaqc.R", "Metals_qaqc_2020_2024.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")
@@ -561,13 +598,13 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 Run this if there is not site description file or we have added or updated the sites. Change eval=TRUE to run this chunk. 
 
-```{r Make site description file, eval=FALSE, include=FALSE}
+```{r Make site description file, include=FALSE}
  # These lines of code make the csv of the site descriptions with lat and long
 
   # Use Gsheet because you don't need to authenticate it. 
   sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
   #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
-  data <- final_df #This is the line you need to modify!
+  data <- current_df #This is the line you need to modify!
   trim_sites = function(data,sites){
     data_res_site=data%>% #Create a Reservoir/Site combo column
       mutate(res_site = trimws(paste0(Reservoir,Site)))

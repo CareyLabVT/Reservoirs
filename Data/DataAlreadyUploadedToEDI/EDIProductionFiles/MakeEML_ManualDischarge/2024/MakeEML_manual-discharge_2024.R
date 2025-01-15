@@ -157,6 +157,10 @@ make_eml(path = folder,
 # (e.g., edi.270.1, edi.270.2, etc). Re-upload your fixed files to complete the 
 # evaluation check again, until you receive a message with no errors.
 
+
+
+
+
 ## Step 17: Obtain a package.id. ####
 # this is a revision to an existing data package: already have an identifier: 202.X (x = revision number)
 ## NOTE: Will need to check geographic coordinates!!!

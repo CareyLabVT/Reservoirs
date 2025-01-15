@@ -143,17 +143,17 @@ staged_edi %>%
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(staged_edi, "ManualDischarge_2019_2024.csv", row.names = F)
+write.csv(staged_edi, "manual-discharge_2019_2024.csv", row.names = F)
 
 ```
 
 ```{r Download files into folder}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv", "manual_discharge_maintenancelog_2019_2024.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv", "manual-discharge_maintenancelog_2019_2024.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/manual_discharge_create.R", "manual_discharge_qaqc_2019_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/manual_discharge_create.R", "manual-discharge_qaqc_2019_2024.R")
 
 ```
 

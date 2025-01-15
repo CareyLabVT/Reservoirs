@@ -16,28 +16,39 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet)
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
 ```
 
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI}
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/555/4/4d92727343445ad28046d57ac852b45f" 
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
- historic <-read_csv(infile1)
+filt_chla_qaqc(
+  directory = "../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
+  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
+  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv",
+  final_vol_extract = 6,
+  blank_vol_filt = 500,
+  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
+  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
+  sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps", 
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv",
+  start_date = NULL, # change when we update to read date from EDI
+  end_date = as.Date("2024-12-31"))
 ```
-**Read in L1 file**
-Set L1 file to NULL if not yet made.
-Need to change this to the GITHUB Link!!!
-This is made and good to go
-```{r Read in L1 file}
-L1 <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
-```
-**Bind historic and L1 files together**
-```{r Bind historic and L1 files together}
-all_chla <- dplyr::bind_rows(historic, L1)
-```
+list.files("../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
+
+<!-- **Read in L1 file** -->
+<!-- Set L1 file to NULL if not yet made. -->
+<!-- Need to change this to the GITHUB Link!!! -->
+<!-- This is made and good to go -->
+<!-- ```{r Read in L1 file} -->
+<!-- L1 <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv") -->
+<!-- ``` -->
+<!-- **Bind historic and L1 files together** -->
+<!-- ```{r Bind historic and L1 files together} -->
+<!-- all_chla <- dplyr::bind_rows(historic, L1) -->
+<!-- ``` -->
+
 START HERE FOR EDI DAYZ
 Skip or replace with published version if running for the first time
 ```{r Read in data from EDI: START HERE}

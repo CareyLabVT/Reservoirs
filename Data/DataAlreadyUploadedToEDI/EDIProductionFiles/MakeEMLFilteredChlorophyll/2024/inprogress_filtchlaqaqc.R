@@ -1,86 +1,51 @@
-# Chla Processing L1 script
-# By: Adrienne Breef-Pilz
-# Written: 24 Nov. 23
-
-# READ ME ####
-
-#This QAQC cleaning script was applied to create the data files included in this data package
-#Additional notes: This script is included with this EDI package to show which QAQC has already 
-#been applied to generate these data <and includes additional R scripts available with this package>. 
-#This script is only for internal use by the data creator team and is provided as a reference; it will not 
-#run as-is. 
-
-# Things the script does: 
-# 1. Read in Maintenance log and read in raw chla file from the spec
-# 2. Read in the filtering log and rack map
-# 3. Merge everything together
-# 4. Maintenance log to flag or remove issues
-# 5. Process with a script based on BRN Excel script
-# 6. Further QAQC processing
-# 7. Save files
-
-# Load packages
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(lubridate,tidyverse, gsheet)
-
-
-filt_chla_qaqc <- function(directory, 
-                           rack_map,
-                           filtering_log,
-                           Year,
-                           final_vol_extract = 6, 
-                           blank_vol_filt = 500, 
-                           maintenance_file,
-                           outfile)
+function(directory, 
+         rack_map,
+         filtering_log,
+         final_vol_extract = 6, 
+         blank_vol_filt = 500, 
+         maintenance_file,
+         historic_file,
+         sample_times,
+         outfile,
+         start_date,
+         end_date)
 {
   
-  #### 1. Read in Maintenance file and the Raw files from the spec ####
+  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
+  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
+  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
+  final_vol_extract = 6
+  blank_vol_filt = 500
+  maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
+  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+  sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps"
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  start_date = NULL
+  end_date = NULL
+  
+ # list.files("../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
+  
+  #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
   log_read <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
     Sample_date = col_date("%Y-%m-%d"),
-    flag = col_integer()
-  ))
+    flag = col_integer()))
   
   log <- log_read
   
-  ### 1.2 Select files from current year ####
+  
+  
+  ### 1.2 Select files from current year 
   # Name the directory where the full output files are found. Ours are on GitHub 
   mydir <-directory
   
   # list of raw chla samples for the current year
-  rfiles <- list.files(path=mydir, pattern = Year, full.names=TRUE)
+  files <- list.files(path=mydir, pattern = ".txt", full.names=TRUE)
   
-  # Some of the samples might have been processed in the early part of the year for the last year
-  # Picked April 1st so files after April of the current year should be saved
-  # if process date after April then keep
   
-  filt_date <- as.Date(paste0(Year,"-04-01"))
-  
-  # Create a blank vector to fill using the for loop
-  files = NULL
-  
-  # loop through the files and only select those that happened after April of the selected year
-  for(i in 1:length(rfiles)) {
-    # Get the date from the name of the file
-    sed <- str_extract(rfiles[i], "_\\d+")
-    # Take out the extra underscore
-    Date <- sub("_","",sed)
-    # Get the Date the samples were processed in the right format
-    procces_date <- as.Date(Date, "%Y%m%d")
-    
-    # Only take files that happened after April 1 of the current year 
-    if(procces_date>filt_date){
-      
-      files[i]=rfiles[grepl(Date,rfiles)]
-    }
-    else{
-      
-    }
-  }
-  
-  #### 1.3 Read in files ####
+  #### 1.3 Read in files 
   
   # Create a blank data frame to use in the for loop below
   out.file<-NULL
@@ -112,20 +77,17 @@ filt_chla_qaqc <- function(directory,
   }
   
   
-  ### 1.4  Label observations ####
+  ### 1.4  Label observations 
   
   
   
   # Label the types of samples are so they are easier to sort label
   out.file2<- out.file%>%
-    mutate(
-      samp_type = ifelse(grepl("et|blan", Sample.ID), "eth_blank",NA),
-      samp_type = ifelse(grepl("[0-9]", Sample.ID), "res_samp", samp_type),
-      samp_type = ifelse(grepl("fa", Sample.ID), "fake", samp_type),
-      samp_type = ifelse(grepl("ref", Sample.ID), "ref", samp_type)
-      
-    )
-  
+    mutate(samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",
+                         ifelse(grepl("fa", Sample.ID), "fake",
+                                ifelse(grepl("ref", Sample.ID), "ref", "res_samp")))) 
+
+
   # Create an ethanol blank data frame
   # ethon_blank <- out.file2%>%
   #   filter(samp_type=="eth_blank")
@@ -146,12 +108,17 @@ filt_chla_qaqc <- function(directory,
       Sample_ID = as.numeric(Sample_ID),
       Need_Rep = as.numeric(Need_Rep)
     )
+
   
   ### 2. Get the sample ID number and match with the reservoir and site
   
   ### 2.1 Read in the rack map file ####
   
   rack_map <- gsheet::gsheet2tbl(rack_map)
+  
+  rack_map <- rack_map %>% 
+    mutate(Sample_ID = as.numeric(Sample_ID))%>% 
+    mutate(ResSite = sub("-", "", ResSite))
   
   # Join together by Date_processed and Sample_ID
   # perform full_join based on multiple columns
@@ -161,8 +128,8 @@ filt_chla_qaqc <- function(directory,
   
   df4 <- df3%>%
     mutate(
-      samp_type = ifelse(str_detect(Sample_date, "^et")==T, "eth_blank", samp_type)
-    )
+      samp_type = ifelse(str_detect(Sample_date, "^et")==T, "eth_blank", 
+                         ifelse(str_detect(ResSite, "blank")==T, "eth_blank", samp_type)))
   
   
   # Get sample dates in the right format
@@ -172,25 +139,29 @@ filt_chla_qaqc <- function(directory,
       Sample_date = as.Date(Sample_date2) # put date in format
     )
   
-  ### 2.2 read in filtering log ####
+  ### 2.2 read in filtering log 
   
   filtering_log <- gsheet::gsheet2tbl(filtering_log)
   
+  
   # Clean up the data frame
-  filtering_log2 <- filtering_log%>%
+  filtering_log2 <- filtering_log %>%
     mutate(
-      ResSite = str_remove(ResSite, "-"),
-      #added ResSite mutate to handle Dexters CCR chla sites in 2024
-      Sample_date= parse_date_time(`Sample Date`, orders = c('dBy')),
+      Sample_date = lubridate::ymd(`Sample Date`),
+      #Sample_date = parse_date_time(`Sample Date`, orders = c('dBy')),
       Vol_filt_mL = as.numeric(`Volume filtered (mL)`),
       Final_vol_extract_mL = final_vol_extract
-    )%>%
-    select(ResSite, Depth,Sample_date, Rep, Vol_filt_mL, Final_vol_extract_mL, Comments)
+    ) %>%
+    mutate(ResSite = sub("-", "", ResSite)) %>% 
+    select(ResSite, Depth, Sample_date, Rep, Vol_filt_mL, Final_vol_extract_mL, Comments)
   
-  ### 3. Combine with the filtering log ####
+  ### 3. Combine with the filtering log 
   comb <- left_join(res_samp2, filtering_log2, 
-                    by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep"))
+                    by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep", "Depth"="Depth")) 
   
+  test <- comb %>% 
+    subset(is.na(Vol_filt_mL)) %>% 
+    subset(ResSite != "blank")
   
   # add the vol filt and final vol used for the ethanol samples 
   # We use 500 mL for volume filtered for the ethanol blanks
@@ -200,9 +171,7 @@ filt_chla_qaqc <- function(directory,
       Final_vol_extract_mL = ifelse(samp_type=="eth_blank",final_vol_extract, Final_vol_extract_mL)
     )
   
-  ### 2a. Read in raw data for times
-  
-  ### 4. Take out values based on the Maintenance Log ####
+  ### 4. Take out values based on the Maintenance Log 
   
   ## Define Maintenance Flags HERE:
   
@@ -214,7 +183,7 @@ filt_chla_qaqc <- function(directory,
       Flag_Pheo_ugL  = 0
     )
   
-  ### 4.1 Set up the Values to be used ####
+  ### 4.1 Set up the Values to be used 
   # modify raw_df based on the information in the log   
   
   for(i in 1:nrow(log)){
@@ -271,7 +240,7 @@ filt_chla_qaqc <- function(directory,
                    "Flag_Pheo_ugL")
     
     
-    ### 4.2 Actually remove values in the maintenance log from the data frame ####
+    ### 4.2 Actually remove values in the maintenance log from the data frame 
     ## This is where information in the maintenance log gets removed. 
     # UPDATE THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
     
@@ -280,7 +249,7 @@ filt_chla_qaqc <- function(directory,
       # Sample below detection. Not used in the maintenance log
       
     }else if (flag==2){
-      # This one is below minimum detection level and most likely won't be in the maintenance log
+      # Samples set to NA
       raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
              maintenance_cols] <- NA
       raw_df[c(which(raw_df[,"Date_processed"] == Date_processed & raw_df[,"Sample.ID"] == Sample.ID)), 
@@ -300,7 +269,7 @@ filt_chla_qaqc <- function(directory,
   
   
   
-  ### 5. Get the Chla concentration from wavelengths from Spec ####
+  ### 5. Get the Chla concentration from wavelengths from Spec 
   
   # Re run this because we changed some of Sample.IDs in the maintenance log 
   # because before and after were mixed up
@@ -318,9 +287,9 @@ filt_chla_qaqc <- function(directory,
     )
   
   
-  # The calculations are from BNN Chla processing excel sheet
+  # The calculations are from BRN Chla processing excel sheet
   
-  ### 5.1 Separate the wavelength by before acid and after and then merge together wider ####
+  ### 5.1 Separate the wavelength by before acid and after and then merge together wider 
   
   before_comb2 <- raw_df2%>%
     filter(Flag_Chla_ugL!=2)%>%
@@ -334,6 +303,7 @@ filt_chla_qaqc <- function(directory,
                   "before_acid_abs_490" = "WL490.0",
                   "before_acid_abs_384" = "WL384.0"
     )%>%
+    unique() %>% 
     select(Sample_ID, Date_processed, samp_type, ResSite, Depth, Rep, Sample_date,Vol_filt_mL, Final_vol_extract_mL,
            before_acid_abs_750:before_acid_abs_384, Flag_Chla_ugL, Flag_Pheo_ugL, Notes)
   
@@ -351,6 +321,7 @@ filt_chla_qaqc <- function(directory,
                   "after_acid_abs_490" = "WL490.0",
                   "after_acid_abs_384" = "WL384.0"
     )%>%
+    unique() %>% 
     select(Sample_ID, Date_processed, samp_type, ResSite, Depth, Rep, Sample_date,Vol_filt_mL, Final_vol_extract_mL,
            after_acid_abs_750:after_acid_abs_384,Flag_Chla_ugL, Flag_Pheo_ugL, Notes)
   
@@ -358,9 +329,10 @@ filt_chla_qaqc <- function(directory,
   
   comb3 <- full_join(before_comb2, after_comb2, 
                      by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth","Rep", "Sample_date",
-                          "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes"))
+                          "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes")) %>% 
+    unique()
   
-  ### 5.2 Claculate the concentration of Chla in ugL #### 
+  ### 5.2 Claculate the concentration of Chla in ugL 
   
   comb3_calc <- comb3%>%
     mutate(
@@ -376,7 +348,7 @@ filt_chla_qaqc <- function(directory,
       
       diff_be_af = before_acid-after_acid)
   
-  ### 5.21 Get the average blanks for each processing date ####
+  ### 5.21 Get the average blanks for each processing date 
   
   avg_e_blank <- comb3_calc%>%
     filter(samp_type=="eth_blank")%>%
@@ -390,7 +362,7 @@ filt_chla_qaqc <- function(directory,
   
   comb4_calc <- left_join(comb3_calc, avg_e_blank, by="Date_processed")
   
-  ### 5.22 Now finish the calculations ####
+  ### 5.22 Now finish the calculations 
   
   comb5_calc <- comb4_calc%>%
     
@@ -428,7 +400,7 @@ filt_chla_qaqc <- function(directory,
   
   ### 5.3 Select only the columns of interest and need for EDI and QAQC ###
   # Take out the ethanol blank rows 
-  chla_df<- comb5_calc%>%
+  chla_df<- comb5_calc %>%
     filter(samp_type!="eth_blank")%>%
     select(ResSite,
            Depth,
@@ -450,20 +422,24 @@ filt_chla_qaqc <- function(directory,
       Pheo_ugL = pheo_in_water
     )
   
-  ### 6. Further QAQC ####
+  ### 6. Further QAQC 
   
   chla_new<-chla_df%>%
     #filter(Sample_ID!="")%>%
     # Get Reservoir and Site
-    separate(.,col = ResSite, into = c("Reservoir", "Site"), sep = 1)%>%
+    #separate(.,col = ResSite, into = c("Reservoir", "Site"), sep = 1)%>%
+    mutate(Reservoir = substr(ResSite, 1, 1), 
+           Site = substring(ResSite, 2)) %>% 
     mutate(Reservoir=ifelse(Reservoir=="B","BVR", Reservoir),
            Reservoir=ifelse(Reservoir=="F","FCR", Reservoir),
-           Reservoir=ifelse(Reservoir=="S","SNP", Reservoir))%>%
+           Reservoir=ifelse(Reservoir=="S","SNP", Reservoir),
+           Reservoir=ifelse(Reservoir=="C","CCR", Reservoir)) %>%
     # Add flags for low absorbance and pigment below detection
     mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL),
            Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
            Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL),
-           Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL))%>%
+           Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL),
+           Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL)) %>%
     # Average the dups
     group_by(Reservoir, Site, Date, Depth_m)%>%
     mutate(count = n())%>%
@@ -475,24 +451,90 @@ filt_chla_qaqc <- function(directory,
            Flag_Pheo_ugL=ifelse(Flag_Pheo_ugL==0 & count==2,5,Flag_Pheo_ugL),
            Flag_Pheo_ugL=ifelse(Flag_Pheo_ugL==4 & count==2,45,Flag_Pheo_ugL))%>%
     distinct(Reservoir, Site, Date, Depth_m, .keep_all = T)%>%
-    # convert date and add time
-    #mutate(Date=format(strptime(Date, format = "%d%b%Y"), "%Y-%m-%d"))%>%
-    mutate(Time="12:00:00")%>%
-    mutate(DateTime=paste(Date,Time))%>%
-    mutate(DateTime=ymd_hms(DateTime))%>%
     mutate(Depth_m=as.numeric(Depth_m))%>%
     mutate(Site=as.numeric(Site))%>%
+    dplyr::rename(DateTime=Date)%>%
     select(Reservoir,Site,DateTime, Depth_m, Chla_ugL,Pheo_ugL,Flag_Chla_ugL,Flag_Pheo_ugL)%>%
     mutate(Flag_Chla_ugL=ifelse(is.na(Chla_ugL), 2, Flag_Chla_ugL))%>% #Add a 2 flag if an observation is missing
     mutate(Flag_Pheo_ugL=ifelse(is.na(Pheo_ugL),2,Flag_Pheo_ugL))
   
+  # read in the historical file if start_date is NULL
+  
+  if(is.null(start_date)){
+    hist <- read_csv(historic_file)%>%
+      mutate(DateTime = parse_date_time(DateTime, c("mdy HM")),
+             DateTime = as.Date(DateTime))%>%
+      drop_na(DateTime)
+  }else{
+    hist <- NULL
+  }
+  
+  # combine the historical file and the current file
+  chla_all <- dplyr::bind_rows(hist, chla_new)
+  
+  # read in the sampling times file
+  
+  samp_times <- gsheet::gsheet2tbl(sample_times)%>%
+    mutate(DateTime_samp = parse_date_time(DateTime, c("ymd HMS","ymd HM", "ymd")),
+           DateTime = as.Date(DateTime))%>%
+    select(Reservoir, Site, DateTime, Depth_m, Chla, DateTime_samp)%>%
+    drop_na(Chla)
+  
+  
+  # merge the chla sampel with sample times
+  
+  chla_all2 <- left_join(chla_all, samp_times, by = c("Reservoir", "Site", "Depth_m", "DateTime"))
+  
+  # If there is no sample time then set it to noon and flag as 1 
+  final <- chla_all2%>%
+    mutate(Date = as.Date(DateTime),
+           Flag_DateTime = ifelse(is.na(DateTime_samp), 1, 0),
+           DateTime_samp = ifelse(is.na(DateTime_samp), paste0(Date," ","12:00:00"),as.character(DateTime_samp)),
+           DateTime = ymd_hms(DateTime_samp))%>%
+    select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
+           Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
+    mutate_if(is.numeric, round, digits = 4) # round to 4 digits
+  
+  
   # put in order
-  chla_new <- chla_new[order(chla_new$DateTime),]
+  final <- chla_new[order(final$DateTime),]
   
-  #all_chla <- all_chla[all_chla$DateTime<ymd_hms(end_date),]
+  # subset to make the L1 file 
   
-  ### 7. Save L1 File ####
+  if (!is.null(start_date)){
+    #force tz check
+    start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+    
+    final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
+    
+    final <- final %>%
+      filter(DateTime >= start_date)
+    
+  }
   
-  write.csv(chla_new, outfile, row.names=F)
+  if(!is.null(end_date)){
+    #force tz check
+    end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+    
+    final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
+    
+    final <- final %>%
+      filter(DateTime <= end_date)
+    
+  }
+  
+  
+  
+  ### 7. Save the file. If outfile is NULL then return the file
+  
+  if(is.null(outfile)){
+    
+    return(final)
+  }else{
+    
+    write_csv(final, outfile)
+  }
+  
+  
   
 }

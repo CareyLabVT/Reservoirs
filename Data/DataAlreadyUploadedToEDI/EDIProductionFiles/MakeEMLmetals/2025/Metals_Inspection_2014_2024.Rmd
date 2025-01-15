@@ -56,12 +56,12 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 # Set up the current time end time of the file and the current year for QAQC plots
 
 #current time of QAQC for graphing
-current_time_start=ymd_hms("2023-01-01 00:00:00", tz="America/New_York")
-current_time_end=ymd_hms("2023-12-31 23:59:00", tz="America/New_York")
+current_time_start=ymd_hms("2024-01-01 00:00:00", tz="America/New_York")
+current_time_end=ymd_hms("2024-12-31 23:59:00", tz="America/New_York")
 ```
 
 
-```{r QAQC all files, eval=FALSE, include=FALSE}
+```{r QAQC all files, include=FALSE}
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data #file for EDI. 
 
@@ -71,7 +71,8 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
  MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
-         outfile = NULL, # put Null to return the file
+         metals_save = TRUE,
+         metals_outfile = NULL, # put Null to return the file
          ISCO_outfile = NULL, # put Null to return the file
          start_date = as.Date('2014-01-01'),
          end_date = NULL)
@@ -89,7 +90,7 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
 
-```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+```{r QAQC file or READ IN EDI FOR REVIEWER, eval=FALSE, include=FALSE}
   
 # # If No EDI file exists with all the years you want to look at
 #   current_df <- current_df%>%
@@ -528,7 +529,7 @@ output <- unlist(outputs, recursive = F)
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
 # Need to decide on a naming convention for this file
-write_csv(current_df, "Metals_2014_2023.csv")
+write_csv(current_df, "Metals_2014_2024.csv")
 
 ```
 
@@ -537,11 +538,11 @@ write_csv(current_df, "Metals_2014_2023.csv")
 ```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2023.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "Metals_maintenancelog_2014_2024.csv")
 
 # qaqc function
 # update link when change the location of the script
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R", "Metals_qaqc_2020_2023.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_working.R", "Metals_qaqc_2020_2024.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plot_function.R")

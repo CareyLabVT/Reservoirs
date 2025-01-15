@@ -214,7 +214,24 @@ fp6 = fp5[FALSE,]
 for (i in 1:length(unique(fp5$CastID))){
   profile = subset(fp5, CastID == unique(fp5$CastID)[i])
   if(profile$Reservoir[1] == "FCR"){
-    profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    if(profile$Site[1] == 50){
+      profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    }
+    if(profile$Site[1] == 45){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 40){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 30){
+      profile_trim <- profile %>% filter(Depth_m <= 6.5)
+    }
+    if(profile$Site[1] == 20){
+      profile_trim <- profile %>% filter(Depth_m <= 4.5)
+    }
+    if(profile$Site[1] == 10){
+      profile_trim <- profile %>% filter(Depth_m <= 3.5)
+    }
   } else if (profile$Reservoir[1] == "CCR"){
     profile_trim <- profile %>% filter(Depth_m <= 21)
   } else if (profile$Reservoir[1] == "BVR"){

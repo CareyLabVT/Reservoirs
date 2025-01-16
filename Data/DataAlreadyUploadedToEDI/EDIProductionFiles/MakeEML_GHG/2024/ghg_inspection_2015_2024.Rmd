@@ -43,6 +43,19 @@ current_df <- ghg_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Raw_GHG/
         start_date = NULL, # change when we update to read date from EDI
         end_date = NULL)
 
+current_df <- current_df%>%
+  dplyr::distinct(.)%>% # get rid of dups if they snuck in
+  filter(DateTime<(current_time_end))
+
+# make sure no time duplicates.
+ current_df<-  current_df[!duplicated(current_df$DateTime), ]
+
+#reorder. Just to be certain everything is in order
+  current_df<-current_df[order(current_df$DateTime),]
+  
+  
+
+
 ```
 
 ```{r Reviewers start here, eval=FALSE, include=FALSE}
@@ -50,8 +63,9 @@ current_df <- ghg_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Raw_GHG/
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
  ### CHANGE THIS NUMBER BELOW 
                                                                               ##      
-   current_df <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1069/2/57267535da5ab0687d2fee52083699f8")
- # 
+   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/997/12/98f19e7acae8bea7d127c463b1bb5fbc")
+
+
  # # Force files from EDI to have an EST timestamp
    current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
 

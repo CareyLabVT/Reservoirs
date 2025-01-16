@@ -14,3 +14,9 @@ Virginia Reservoirs 	carey lab controlled vocabulary
 FCR	carey lab controlled vocabulary
 BVR	carey lab controlled vocabulary
 CCR	carey lab controlled vocabulary
+Reservoirs	cuahsi controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Lakes	lter controlled vocabulary
+Stream	cuahsi controlled vocabulary
+Streams	cuahsi controlled vocabulary

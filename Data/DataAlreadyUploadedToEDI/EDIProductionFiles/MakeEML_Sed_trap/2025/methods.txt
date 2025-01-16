@@ -1,0 +1,27 @@
+SAMPLE COLLECTION, SAMPLE FILTRATION, AND EQUIPMENT
+
+We deployed sedimentation traps (KC Denmark A/S) at the deepest sites (site 50) in Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR) to capture settling particulates within the water column. The particulates were collected from the traps approximately fortnightly from April to December from 2018 to 2024. In FCR, two sedimentation traps were deployed at 4m and 8m. Two sedimentation traps were deployed in BVR at 4m and 8m, except for 2021 when they were deployed at 5m and 10m. Each trap contained two tubes with openings of 7.2 cm in diameter. During sampling, the traps were brought to the surface and the mixture of water and particulates was poured into opaque bottles. Sampling was conducted between 9 AM and 4 PM on the date of sampling.
+
+Samples were stored on ice upon transport to the laboratory and were subsequently stored in a refrigerator until sample processing, usually within 48 hours. Samples were processed using vacuum-filtration through pre-weighed glass microfiber filters (47 mm; Whatman 934-AH). The filters containing particulates were then dried at 45 C in a drying oven and the retained mass was calculated by difference from the final and starting mass of the filter.  Data on volumes of sample and mass of dried particulates are included in the filtering log.
+
+BVR has experienced fluctuations in water level throughout the data collection period, including a managed drawdown event in 2022. Sedimentation traps were deployed at the specified depth and remained at a fixed height above the sediment, regardless of water level fluctuation after the day of deployment. Known deployment dates are 19 July 18 at BVR, 15 April 19 at FCR, 08 April 19 at BVR, 24 May 21 in FCR, 12 April 22 in FCR and BVR, 12 April 23 in FCR and BVR, and 01 April 24. Please refer to the BVR catwalk dataset (Package ID: edi.725.4) for more information on water level and depth. 
+
+
+CHEMICAL ANALYSES AND EQUIPMENT
+
+Metals
+
+We determined the particulate metal flux by digesting the dried particulate matter retained on the filters and analyzing the digestion solution for Li, Na, Mg, Al, K, Ca, Fe, Mn, Cu, Sr, and Ba concentrations. In 2018 and 2019, one filter from each trap replicate was combined for digestion and analysis. From 2020 to the present, trap replicates were not combined. Two filters from within each trap replicate were digested and analyzed. The dried particulates were microwave-digested with trace metal grade nitric acid following EPA Method 3051A (United States Environmental Protection Agency, 2007). The digestate solution was diluted and we analyzed the resulting solution for Li, Na, Mg, Al, K, Ca, Fe, Mn, Cu, Sr, and Ba using ICP-MS. The relative proportion of metals in the collected sediment is calculated by multiplying the ICP concentration, corrected for dilution, by the amount of acid used in the digestion and dividing by the combined sediment mass of the two filters. The total amount of each metal in each sedimentation trap is calculated by multiplying the ICP concentration by the amount of acid used in the digestion, multiplying by the ratio of the collection volume to the volume filtered, and correcting for the dilution. The downward metal flux was calculated by dividing the total metal mass by the cross-sectional area of the sedimentation trap tubes and dividing by the deployment duration. 
+
+TOC and TN
+
+Filters for TOC and TN analysis were run on a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA). We used two filters for CN analysis per sampling date. The mass of TOC and TN in the collected sediment is calculated by multiplying the carbon or nitrogen percentage from the CN analyzer by the combined sediment mass of the two filters. The total amount of TOC and TN in each sedimentation trap is calculated by multiplying the CN percentage by ratio of the collection volume to the volume filtered. The downward TOC and TN flux was calculated by dividing the total TOC and TN mass by the cross-sectional area of the sedimentation trap tubes and dividing by the deployment duration. 
+
+
+Erratum
+
+The first revision of this data package incorrectly calculated total masses. Please refrain from using the previous revision of this data package.
+
+
+References
+US EPA 2007  Method 3051A (SW-846): Microwave Assisted Acid Digestion of Sediments, Sludges, and Oils.

@@ -1,0 +1,43 @@
+attributeName	code	definition
+Flag_AvgSedFlux_gm2d	1	No issues
+Flag_AvgSedFlux_gm2d	2	Missing value
+Flag_AvgSedFlux_gm2d	3	Data flags are present for one or more of the variables used to calculate this value. See FilteringLog_EDI.csv or CN_Metals_Flux_EDI.csv
+Flag_TLiFlux_gm2d	1	No issues
+Flag_TLiFlux_gm2d	2	Missing value
+Flag_TLiFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TNaFlux_gm2d	1	No issues
+Flag_TNaFlux_gm2d	2	Missing value
+Flag_TNaFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TMgFlux_gm2d	1	No issues
+Flag_TMgFlux_gm2d	2	Missing value
+Flag_TMgFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TAlFlux_gm2d	1	No issues
+Flag_TAlFlux_gm2d	2	Missing value
+Flag_TAlFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TKFlux_gm2d	1	No issues
+Flag_TKFlux_gm2d	2	Missing value
+Flag_TKFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TCaFlux_gm2d	1	No issues
+Flag_TCaFlux_gm2d	2	Missing value
+Flag_TCaFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TFeFlux_gm2d	1	No issues
+Flag_TFeFlux_gm2d	2	Missing value
+Flag_TFeFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TMnFlux_gm2d	1	No issues
+Flag_TMnFlux_gm2d	2	Missing value
+Flag_TMnFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TCuFlux_gm2d	1	No issues
+Flag_TCuFlux_gm2d	2	Missing value
+Flag_TCuFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TSrFlux_gm2d	1	No issues
+Flag_TSrFlux_gm2d	2	Missing value
+Flag_TSrFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TBaFlux_gm2d	1	No issues
+Flag_TBaFlux_gm2d	2	Missing value
+Flag_TBaFlux_gm2d	3	Values for two replicate sediment traps averaged
+Flag_TNFlux_gm2d	1	No issues
+Flag_TNFlux_gm2d	2	Missing value
+Flag_TOCFlux_gm2d	1	No issues
+Flag_TOCFlux_gm2d	2	Missing value
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir

@@ -2,6 +2,7 @@ attributeName	code	definition
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
+Site	1	Outflow spillway from Falling Creek Reservoir
 Site	40	Pelagic upstream site
 Site	50	Pelagic deep hole site
 Site	100	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located

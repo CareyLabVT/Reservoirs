@@ -57,6 +57,8 @@ infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 all_chla <- read_csv(infile1)
+#for KKH 2025
+all_chla <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
 ```
 **Check there are no NAs in Flag columns**
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
@@ -93,7 +95,7 @@ chla_YMD <- all_chla %>%
 head(chla_YMD)
 ```
 **Time Series for entire data set - Chlorophyll a**
-ENTIRE DATASETS WILL LIKELY DISPAY A MISSING DATA WARNING
+ENTIRE DATASETS WILL LIKELY DISPLAY A MISSING DATA WARNING
 Samples were not collected in 2017
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
@@ -154,7 +156,8 @@ ggplot(subset(chla_YMD), aes(x = Month, y = Pheo_ugL, col = Reservoir))+
   ggtitle("Range and Mean of Range - Pheophyton")
 ```
 **All Sites, All Years, Monthly Median - Chlorophyll a**
-```{r All Sites, All Years, Monthly Median - Chlorophyll a}
+Sunapee EXCLUDED!!! Deep site for SNP is 200, but other reservoirs also have site 200
+```{r Main sampling site, Monthly Median - Chlorophyll a}
 # Facetted plot of the range of each reservoir for each year and the median of the range
 ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Reservoir))+ 
   geom_point(size = 1) + 
@@ -179,7 +182,7 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Reservoi
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
   ggtitle("Range and Median of Range - Pheophyton")
 ```
-
+2024, July 1st seems to have a very high chla value. I am inclined to believe this is real, there was a large cyano bloom that date that was not captured on the EXO but can be seen on Flora - KKH
 ```{r All Sites, All Years, Monthly Median, samples colored by depth - Chlorophyll a}
 # Facetted plot of the range of each reservoir for each year and the median of the range with depth
 ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Depth_group))+ 
@@ -252,17 +255,26 @@ ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Phe
 
 ```
 
-```{r Remove duplicate row}
-all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+
+```{r Time Series for entire data set - chla}
+# Facetted plot of the datapoints within each reservoir over the entire dataset 
+ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Chla_ugL, col = Depth_m)) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("2024Timeseries - Chlorophyll a")
+```
+**Time Series for entire data set - Pheophyton**
+```{r Time Series for entire data set - Pheophyton}
+# Facetted plot of the datapoints within each reservoir over the entire dataset 
+ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("2024 Timeseries - Pheophyton")
 ```
 
-Set all Phaeophytin values that are below 0 to 0
-This should only affect old (prior to 2023) values that are below 0. Values below 0 should be addressed in the qaqc script from 2023 on. 
-This should have been done previously, but doublecheck here
-This check is actually done above, could consider removing
-```{r Set all Phaeophytin values that are below 0 to 0}
-pheo_below01 <- subset(all_chla, Pheo_ugL < 0)
-# all_chla2 <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
+```{r Remove duplicate row}
+all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+#this should be taken care of in the qaqc script as of 2024
 ```
 
 **Make new CSV with current and historic files**

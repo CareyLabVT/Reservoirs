@@ -490,14 +490,15 @@ function(directory,
     mutate(Date = as.Date(DateTime),
            Flag_DateTime = ifelse(is.na(DateTime_samp), 1, 0),
            DateTime_samp = ifelse(is.na(DateTime_samp), paste0(Date," ","12:00:00"),as.character(DateTime_samp)),
-           DateTime = ymd_hms(DateTime_samp))%>%
+           DateTime = ymd_hms(DateTime_samp)) %>%
+    mutate(Site = ifelse(Reservoir == "SNP" & Site == 50, 200, Site),  
+           Site = ifelse(Reservoir == "SNP" & Site == 40, 220, Site)) %>% 
     select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
-  
-  
+    
   # put in order
-  final <- chla_new[order(final$DateTime),]
+  final <- final[order(final$DateTime),]
   
   # subset to make the L1 file 
   

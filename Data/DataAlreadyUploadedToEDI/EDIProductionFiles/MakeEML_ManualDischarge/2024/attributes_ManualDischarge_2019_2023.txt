@@ -1,8 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
-Site	Stream sampling site at each reservoir	categorical			NA	value is missing
-DateTime	"Date of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Flow_cms	"Discharge flow rate derived using flowmeter, salt injection, velocity float, or volumetric bucket methods, see metadata for more information"	numeric	cubicMetersPerSecond		NA	value is missing
-Method	Code for method used to calculate discharge	categorical			NA	value is missing
-Flag_DateTime	"Data flag for datetime; 0=Time recorded, 1= No time recorded, generalized to noon"	categorical			NA	value is missing
-Flag_Flow_cms	Flag for flow	categorical			NA	value is missing

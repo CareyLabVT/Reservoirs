@@ -18,22 +18,24 @@ date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/en
 last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 
-#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/fluoroprobe_create.R')
-source('./Scripts/L1_functions/fluoroprobe_create.R')
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/fluoroprobe_create.R')
+#source('./Scripts/L1_functions/fluoroprobe_create.R')
 
 ## Run Function 
-
-example_file_for_colnames <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
-current_year_data_folder <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe"
-historic_data_folder <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
-historic_data_2017 <- "./Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
-#out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/FluoroProbe_2014_2023.csv"
-out_file <- "./Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv"
+repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
+repo_filepath <- "https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/"
+example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
+historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
+historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+out_file <- "./Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_L1.csv"
 start_date <- last_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 # run the function
-fluoroprobe_qaqc(example_file_for_colnames = example_file_for_colnames,
+fluoroprobe_qaqc(repo_link = repo_link,
+                 repo_filepath = repo_filepath,
+                 example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,
                  historic_data_folder = historic_data_folder,
                  historic_data_2017 = historic_data_2017,

@@ -1,7 +1,7 @@
 ---
 title: "FluoroProbe_inspection_2014_2024"
 author: "Adrienne + Mary"
-date: "2025-01-07"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -18,9 +18,10 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
                devtools, EDIutils, xml2, httr)
 ```
 
-## Build dataframe
+## Build dataframe - reviewers should not run this!
 
-```{r Make draft EDI file}
+REVIEWERS DO NOT RUN THIS CHUNK! THIS IS FOR DATA PRODUCT LEADS ONLY!
+```{r Make draft EDI file, include=FALSE, eval=FALSE, echo=FALSE}
 devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
@@ -52,8 +53,12 @@ fp_all <- fluoroprobe_qaqc(repo_link = repo_link,
                  out_file = out_file,
                  start_date = start_date,
                  end_date = end_date) 
+```
 
-fp_all <- read_csv("./FluoroProbe_2014_2024.csv") %>%
+## Read in built dataframe - reviewers start here!
+REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
+```{r}
+fp_all <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # double-check time zone
@@ -90,7 +95,7 @@ for(f in 1:(ncol(Flags))){
 
 ## Plot all casts individually - reviewers should not run this!
 
-```{r eval = FALSE, echo = FALSE}
+```{r eval = FALSE, echo = FALSE, include = FALSE}
 PLOT_ALL_CASTS == FALSE
 #create png plots for every cast for QAQC purposes (algal biomass)
 #these are just written to a file I temporarily create on my desktop
@@ -332,7 +337,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv("./Maintenance_Log_FluoroProbe_2014_2024.csv")
+ maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv')
 
 # name the data file
 sd <- tail(maint)%>%

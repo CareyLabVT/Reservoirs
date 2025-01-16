@@ -28,10 +28,7 @@ Sensor Issues:
 
 Dissolved Oxygen sondes at 5 and 9 m: 
 
-2024: On 2024-05-13, DO caps were changed on the 5 m and 9 m RDO sensors, but were not calibrated. On 2024-06-17, the 5 m and 9 m RDO sensors were calibrated and the values for the previous month were corrected. For the 5 m RDO sensor mg/L correction was +0.6. and percent saturation correction was +5.7. For the 9 m RDO sensor mg/L correction was +1.01. and percent saturation correction was +9.26. These corrections can be found in the fcre-waterquality_maintenancelog_2018_2024.csv and are applied using the fcre-waterquality_qaqc_2018_2024.R. The 9 m sensor was reading NA on 2024-05-17 and was replaced with a new sensor on 2024-05-22, SN: 1117027."
-
-2024: 2024-05-13, changed the DO cap on the 5 m and 9 m RDO sensors, but did not calibrate them that day. Calibrated them on 2024-06-17 and then corrected the values for the previous month. For 5 m mg/L it was +0.6. for 5 m percent saturation is was +5.7. For 9 m mg/L it was +1.01 and 9 m percent saturation it was +9.26. These corrections can be found in the fcre-waterquality_maintenancelog_2018_2024.csv and are applied using the fcre-waterquality_qaqc_2018_2024.R.
-The 9 m sensor was reading NA on 2024-05-17 and was replaced with a new sensor on 2024-05-22 SN: 1117027. 
+2024: On 2024-05-13, DO caps were changed on the 5 m and 9 m RDO sensors, but were not calibrated. On 2024-06-17, the 5 m and 9 m RDO sensors were calibrated and the values for the previous month were corrected. For the 5 m RDO sensor mg/L correction was +0.6. and percent saturation correction was +5.7. For the 9 m RDO sensor mg/L correction was +1.01. and percent saturation correction was +9.26. These corrections can be found in the fcre-waterquality_maintenancelog_2018_2024.csv and are applied using the fcre-waterquality_qaqc_2018_2024.R. The 9 m sensor was reading NA on 2024-05-17 and was replaced with a new sensor on 2024-05-22, SN: 1117027.
 
 2023: From 2023-07-23 to 2023-07-24, the 5 m DO sensor was not recording any values. After changing cables, the sensor worked again. From 2023-07-23 to 2023-07-28, the 9m DO sensor was not recording any values. After trimming the flying lead wires on the cable, the sensor worked again.
 
@@ -78,7 +75,7 @@ When the oxygenation system is activated, we have observed a rapid fouling of th
 
 Water temperature (thermistors): note that this section is in reverse chronological order
 
-2022: The temperature was tangled from 2022-05-23 to 2022-05-25 and again from 2022-08-08 to 2022-08-09. See fcre-waterquality_maintenancelog_2018_2024.csv for exact times. Data for the thermistors, RDO sensors, and pressure sensor were removed and flagged with 1.
+2022: The temperature string was tangled from 2022-05-23 to 2022-05-25 and again from 2022-08-08 to 2022-08-09. See fcre-waterquality_maintenancelog_2018_2024.csv for exact times. Data for the thermistors, RDO sensors, and pressure sensor were removed and flagged with 1.
 
 2021: Thermistors at 1m (SN 3724) and 4m (SN 3747) were reading higher than normal (see the section below regarding late October-December 2020) and were removed on 2021-07-01 14:30 and replaced on 2021-02-26 12:00 with SN 3966 and SN 4013. No data were recorded at 1m or 4m during that time. The temperature string was tangled after some maintenance on 2021-06-18 10:00 and was fixed on 2021-06-21 at 10:00. It was tangled again on 2021-07-21 13:20 and fixed on 2021-07-26 12:00. Consequently, there was a data gap for all the temperature sensors with a data flag of 1 for those sensors affected. 
 
@@ -138,7 +135,7 @@ Below are flags and the descriptions of the flags.
 
 EXO2 Sonde Maintenance: note that this section is in reverse chronological order
 
-2024: On 2024-03-05, the chlorophyll and phycocyanin sensors were calibrated with the EXO2 which was deployed upstream for the summer. We also put the EXO on a rubber buoy which keeps it at the same depth below the water (~1.6 m),  no matter the water level.  From 2024-08-28 to 2024-09-17, the chlorophyll and phycocyanin observations were very variable during this time. We did clean the sensor weekly and still saw high values so we let these observations in the data set and flagged then as 5 for suspect. 
+2024: On 2024-03-05, the chlorophyll and phycocyanin sensors were calibrated with the EXO2 which was deployed upstream for the summer. We also put the EXO on a rubber buoy which keeps it at the same depth below the water (~1.6 m),  no matter the water level.  From 2024-08-28 to 2024-09-17, the chlorophyll and phycocyanin observations were very variable during this time. We did clean the sensor weekly and still saw high values, so we left these observations in the data set and flagged then as 5 for suspect.
 
 2023: On 2023-03-13, the BVR EXO2 was replaced with the original FCR one, which had been sent back for calibration and maintenance. The DO sensors were calibrated in 100 percent air saturation (DO Gain 1.09). On 2020-07-07, the EXO2 was disconnected and used for surface sampling while collecting data with an ADCP. On 2023-08-07, the wiper was replaced with one from BVR (SN: 19G104137) because it could not complete a full wipe. On 2023-10-03, the program was changed to wipe the sensors every 52 minutes (as opposed to every 5 minutes) to extend the life of the wiper. We did not notice any fouling or unusually high values after this change was implemented. On 2020-12-12, the DO sensor was calibrated with 100 percent air saturation (DO Gain 1.04).
 

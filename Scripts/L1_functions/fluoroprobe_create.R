@@ -116,9 +116,9 @@ fp3 <- fp2 %>%
          TotalConc_ugL, Transmission, Depth_m, Temp_degC, RFU_525nm, RFU_570nm, RFU_610nm,
          RFU_370nm, RFU_590nm, RFU_470nm) %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
-  filter(Depth_m >= 0.2) |> 
-  dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
-                DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
+  filter(Depth_m >= 0.2) #|> 
+  #dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
+                #DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
 
 # #eliminate upcasts 
 fp_downcasts <- fp3[0,]
@@ -265,7 +265,7 @@ fp_final <- fp6 %>%
 
 ### 4. Take out values based on the Maintenance Log 
 
-#maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
 
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),

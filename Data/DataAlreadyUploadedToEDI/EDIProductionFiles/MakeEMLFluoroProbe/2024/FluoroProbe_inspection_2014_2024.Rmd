@@ -21,7 +21,7 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
 ## Build dataframe
 
 ```{r Make draft EDI file}
-devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
+devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.272.8'
@@ -30,14 +30,14 @@ date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/be
 first_edi_date <- as.Date(xml_text(date_attribute)) - lubridate::days(1)
 
 ## Run Function 
-repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
-repo_filepath <- "https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/"
+repo_link <- "https://api.github.com/repos/CareyLabVT/Reservoirs/git/trees/master?recursive=1"
+repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
 example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
-out_file <- NULL
+maintenance_file <- 'https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
+out_file <- "./Data/DataAlreadyUploadedtoEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv"
 start_date <- first_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 
@@ -53,10 +53,15 @@ fp_all <- fluoroprobe_qaqc(repo_link = repo_link,
                  start_date = start_date,
                  end_date = end_date) 
 
-current_df <- fp_all %>%
-  filter(year(DateTime) == 2024)
+fp_all <- read_csv("./FluoroProbe_2014_2024.csv") %>%
+  mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
-#write.csv(fp_all, "./FluoroProbe_2014_2024.csv", row.names = FALSE)
+# double-check time zone
+head(fp_all$DateTime)
+hist(hour(fp_all$DateTime))
+
+current_df <- fp_all %>%
+  filter(year(DateTime) == 2024) 
 ```
 
 ## Check flags

@@ -8,6 +8,7 @@ editor: visual
 created: 23 April 2024
 ---
 
+
 ## Overview
 
 This visualization script has two purposes:
@@ -19,6 +20,7 @@ This visualization script has two purposes:
 If you are a reviewer, you can skip some of the first sections focused on compiling data (see notes below)
 
 ## STEP 1: Load required packages
+
 
 ```{r load packages}
 library(akima)
@@ -35,6 +37,7 @@ source("../CTD_code/ctd_QAQC.R")
 THIS_YEAR <- 2024 #Latest year of data
 ```
 
+
 ## STEP 2: Collate all CTD files and run QAQC
 
 **Note: reviewers can skip this chunk**
@@ -42,6 +45,7 @@ THIS_YEAR <- 2024 #Latest year of data
 This chunk will take a long time to run, because it involves QAQCing literally all historical CTD data
 
 KKH notes: This needs to be run in R version 4.3.2 in order to work, running in 4.3.3 throws an error. Possibly something with the oce package
+
 
 ```{r Combine and qaqc all files}
 # Combine all the CTD files and QAQC them. If you want to reprocess all the files then set force_reprocessing to T. 
@@ -58,7 +62,9 @@ ctd_reprocessed <- ctd_QAQC(raw_downloads = here(ctd_folder, "RawDownloads"),
 
 ```
 
+
 ## STEP 3: Quick gut checks for reprocessing
+
 
 ```{r Check all files have been processed}
 #Make sure all files have been processed
@@ -72,16 +78,20 @@ unique(ctd_reprocessed$Site)
 unique(ctd_reprocessed$Reservoir)
 ```
 
+
 ## STEP 4: REVIEWERS- load data from EDI
 
 REVIEWERS START HERE. Double check you have the right pasta link for the data package you are reviewing.
+
 
 ```{r read in EDI data}
 # Read in Data from GitHub
 ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/0432a298a90b2b662f26c46071f66b8a")
 ```
 
+
 ## STEP 5: Visualize data
+
 
 ```{r}
 #Choose which data you want to visualize
@@ -216,3 +226,4 @@ qaqc %>%
   facet_wrap(~SN)
 
 ```
+

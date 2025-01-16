@@ -1,6 +1,6 @@
 Authorship Contribution Statement: 
 
-"CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2024. HLW led data publication and QAQC from 2019-2024. ABP led the field crew and contributed substantially to sampling. ADD automated the datastream and developed the QAQC and visual inspection scripts. DWH led the field crew at Carvins Cove Reservoir, QAQC, and data collation in 2024. GH, MK, ET, and ET contributed to data digitization and fieldwork."
+"CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2024. HLW led data publication and QAQC from 2019-2024. ABP led the field crew and contributed substantially to sampling. DWH led the field crew at Carvins Cove Reservoir, QAQC, and data collation in 2024. GH, MK, ET, and ET contributed to data digitization and fieldwork."
 
 Acknowledgments and historical contributions:
 

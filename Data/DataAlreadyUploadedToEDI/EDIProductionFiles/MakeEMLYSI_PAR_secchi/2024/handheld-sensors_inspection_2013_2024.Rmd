@@ -1,58 +1,64 @@
 ---
-title: "Secchi_inspection_2013_2024"
+title: "YSI PAR inspection 2013_2024"
 author: "Austin Delany and Adrienne Breef-Pilz"
 date: "2023-12-08"
-edit: "2025-01-14"
+edit: "2025-01-13"
 output: html_document
 ---
 
 This script is the data visualization script that:
-1) Makes QAQC file of all Secchi data from a digitized google sheet
+1) Makes QAQC file of all YSI and PAR data from a digitized google sheet
 2) Checks to make sure there are no duplicate in the file
-3) Makes sure the maintenance log is working
-4) generates figures to visualize both this past year and all combined years of data
-5) Save the final EDI file
-6) Downloads the qaqc function and the maintenance log for publication
+3) Look at the sites in the file
+4) Make sure we don't have observations deeper than the reservoirs
+5) Makes sure the maintenance log is working
+6) generates figures to visualize both this past year and all combined years of data
+7) Save the final EDI file
+8) Downloads the qaqc function and the maintenance log for publication
+9) Make a site description file 
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "QAQC file or READ IN EDI FOR REVIEWER". Make sure to comment out "Create the file for EDI" section. In addition, make sure eval=FALSE is in the chunk header for "Create the file for EDI", "Make current csv" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+When you are making the data frame make sure all of the files that you uncomment "Create the file for EDI", "save the data", and "save maintlog and function". In the top of each chunk, make sure eval=TRUE. Turn off the review chunk. 
 
 ```{r setup packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, plotly)
-# Set up the current time end time of the file and the current year for QAQC plots
+pacman::p_load(tidyverse, lubridate, gsheet, plotly)
 #current time of QAQC for graphing
 current_time_start=ymd_hms("2024-01-01 00:00:00", tz = "America/New_York")
 current_time_end= ymd_hms("2024-12-31 23:59:00", tz = "America/New_York")
 ```
 
-```{r Create the file for EDI, eval = FALSE, include=FALSE}
+```{r Create the file for EDI, eval=FALSE, include=FALSE}
 # #source L1 function to run all data through QAQC process
-# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R")
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
 # 
 # 
 # # read in the Google sheet with all of the observations and QAQC them
-# current_df <- secchi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1EXxvt4zke3M-RdJIG5wWB-1KVTSM7DOAx2Xnng5NXbI/edit?gid=0#gid=0',
+# current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
 #             gsheet_data = TRUE,
-#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
+#             maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
 #             outfile = NULL,
 #             start_date = as.Date("2013-01-01"),
 #             end_date = as.Date(current_time_end))
-#current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+#
+# current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person.
 
-```{r READ IN EDI FOR REVIEWER, include=FALSE}
+```{r READ IN EDI FOR REVIEWER, eval=TRUE, include=FALSE}
   
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
-                                                                   ### CHANGE THIS NUMBER BELOW
-                                                                              ##
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/1/54bda3bdebca2d1488221371a0c4ab8a" )
- # Force files from EDI to have an EST timestamp
+                                                                        ### CHANGE THIS BELOW 
+                                                                              #########   
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/1/9857a854092ae932ba81008fd574f631" )
+ # Force files from EDI to have an Daylight savings observed timestamp
  current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
-## Check for duplicates and  gaps in the data frame
+## Check for duplicates and gaps in the data frame
 This section identifies if there are any duplicates. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function to see how they were missed. 
 ### Are there any duplicates?
 
@@ -62,7 +68,7 @@ This section identifies if there are any duplicates. If there are duplicates. Lo
  dups<- current_df[duplicated(current_df), ]
 dups <- dups%>%
   select(Reservoir, Site, DateTime,  
-         Secchi_m)
+         Depth_m)
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
 ```
@@ -74,15 +80,23 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  0: no flag
  
  1: Time set to 12:00:00 because an exact time was not recorded
- Flag values for Secchi_m
+ Flag values for other variables: Temp, DO, Cond, PAR, ORP, pH
  
- 0: no flag
+ 0 - NOT SUSPECT
  
- 1: value missing or removed and set to NA
+ 1 - SAMPLE NOT TAKEN
  
- 2: multiple observations at a site at the same time are averaged together
+ 2 - INSTRUMENT MALFUNCTION
  
- 3: value changed through the maintenance log
+ 3 - SAMPLE BELOW DETECTION LIMIT
+ 
+ 4 - NEGATIVE VALUE SET TO ZERO
+ 
+ 5 - SUSPECT SAMPLE
+ 
+ 6 - HUMAN ERROR
+ 
+ 7 - TEMP MEASURED USING PH PROBE
  
  
 ```{r Check out the flags, echo=FALSE}
@@ -102,13 +116,10 @@ for(f in 1:ncol(Flags)){
 
 ### Check to make sure that what is in the maintenance log was actually removed
 ### Look at the last rows of the maintenance log 
-
 We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
- maint <- read_csv(#"../../../../../DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
-   "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv",
-                    show_col_types = FALSE)
+ maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", show_col_types = FALSE)
 # parse datetime depending on the format it is in
  maint <- maint |>
    mutate(
@@ -167,101 +178,240 @@ Make sure the observations are flagged
     knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
 ```
 
-### QAQC Plots
+### List of Reservoirs and Site in the data frame
+Make sure we have all the correct site names
 
-```{r make df longer, include=FALSE}
-#------------------------------------------------------------------------------#
-#### Secchi diagnostic plots #### 
-secchi_long <- current_df %>%
-  mutate(year = as.factor(year(DateTime)), day = yday(DateTime))
+```{r List of Sites in df, echo=FALSE}
+sites <- current_df|>
+  dplyr::distinct(Reservoir, Site)
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((sites))
 ```
 
-```{r Plot range, echo=FALSE}
-# Plot range of values per year for each reservoir; 
-# annual mean value indicated with large black dot
-ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
-  geom_point(size=1) +
-  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
-  facet_grid(Reservoir~., scales= 'free_x') +
-  scale_x_discrete("Date", breaks=seq(2013,2024,1)) +
-  #scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1), limits=c(0,5.1)) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
-  theme_bw()
-#trim to see lower values 
-ggplot(secchi_long, aes(x = year, y = Secchi_m, col=Reservoir)) +
-  geom_point(size=1) +
-  stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
-  facet_grid(Reservoir~., scales= 'free_x') +
-  scale_x_discrete("Date", breaks=seq(2013,2024,1)) +
-  scale_y_continuous("Secchi depth (m)", breaks=seq(0,4,1), limits=c(0,4.1)) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
-  theme_bw()
+### Check that we don't have measurements deeper than the reservoirs
+Add a section to check on the max depth for each site. 
+Falling Creek at Site 50 should be 11m
+Beaverdam at Site 50 should be 13m at max but I am not sure if we have seen this
+Carvins Cove Site 50 should be 19m 
+
+```{r Check depth, echo=FALSE}
+deep <- current_df|>
+  group_by(Reservoir, Site) |>
+  slice(which.max(Depth_m)) |>
+  filter(Depth_m>0.1)|>
+  select(Reservoir, Site, DateTime, Depth_m)
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((deep))
 ```
 
-```{r All reservoir plots, echo=FALSE}
-# All reservoirs time series 
-ggplot(secchi_long, aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
-  geom_point(size=1) +
-  facet_grid(Reservoir~., scales= 'free_y') +
-  scale_x_datetime("Date", date_breaks= "12 months", date_labels = "%Y") +
-  #scale_y_continuous("Secchi depth (m)", breaks=seq(0,5,1)) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
-  theme_bw()
-#ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_months.jpg"),width=3.5, height=4)
+```{r make data long, include=FALSE}
+#### YSI diagnostic plots #### 
+profiles_long <- current_df |>
+  ungroup() |>
+  mutate(year = year(DateTime)) |> 
+  select(-c(Flag_DateTime:Flag_pH)) |>
+  gather(metric, value, c(Temp_C:pH)) |>
+  drop_na(value)
+#value as numeric
+profiles_long$value<- as.numeric(profiles_long$value)
+profiles_long$Depth_m<- as.numeric(profiles_long$Depth_m)
 ```
 
-```{r sites plot, echo=FALSE}
-# Time series for each reservoir by site, just to see what other sites have been sampled over time and if we need to check current years
-ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
-  geom_point(size=2) + 
-  facet_grid(Reservoir ~ Site, scales= 'free_y') +
-  scale_x_continuous("Julian day", limits=c(10,315), breaks=seq(50,300,50))+
-  scale_y_reverse("Secchi depth (m)") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='bottom')+
-  theme_bw()
+```{r ORP vs DO, eval=FALSE, include=FALSE}
+# Plot ORP as a function of DO
+# ggplot(subset(current_df, Reservoir == "BVR" | Reservoir=="FCR"), aes(x = DO_mgL, y = ORP_mV, col = Reservoir)) + 
+#   geom_point() + 
+#   facet_grid(Reservoir ~., scales= 'free_y')+
+#   theme_bw()
 ```
 
-```{r DOY plot, echo=FALSE}
-# Time series for each reservoir by julian day (see interannual varaibility)
-#jpeg("Secchi_JulianDay.jpg", width = 6, height = 5, units = "in",res = 300)
-ggplot(secchi_long, aes(x = day, y = Secchi_m)) +
-  geom_point(size=2) + 
-  facet_grid(Reservoir ~ ., scales= 'free_y') +
-  scale_x_continuous("Julian day", limits=c(10,315), breaks=seq(50,300,50))+
-  scale_y_reverse("Secchi depth (m)") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='bottom')+
-  theme_bw()
-#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_JulianDay.jpg"),width=3.5, height=4)
+```{r All res mean, eval=FALSE, include=FALSE}
+# Plot all values
+# ggplot(profiles_long, aes(x = DateTime, y = value, col=Reservoir)) +
+#   geom_point(size=1) +
+#   stat_summary(fun="mean", geom="point",pch=21,  size=3, fill='black') +
+#   facet_grid(metric ~ Reservoir, scales= 'free_y') +
+#   scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+#   scale_y_continuous("") +
+#   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
+#   theme_bw()
 ```
 
-```{r current plot, echo=FALSE}
-#look at 2024 secchi
-a <- ggplot(data = subset(secchi_long, year(DateTime) %in% c(2024)), 
-       aes(x = DateTime, y = Secchi_m, col=Reservoir)) +
-  geom_line()+
-  geom_point(size=1) +
-  facet_grid(Reservoir~., scales= 'free_x') +
-  scale_x_datetime("Date", date_breaks= "1 month", date_labels = "%b") +
-  scale_y_continuous("Secchi depth (m)", breaks=seq(0,6,1), limits=c(0,6.1)) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')+
-  theme_bw()
-#ggsave(file.path("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/Secchi_2023.jpg"),width=3.5, height=4)
+### All profiles from Beaverdam Reservoir 
+```{r All BVR, echo=FALSE}
+# BVR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='BVR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Beaverdam at Site 50 
+```{r BVR 50, echo=FALSE}
+# Deep hole time series for BVR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+  
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_bvr.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Falling Creek 
+```{r All FCR, echo=FALSE}
+# FCR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='FCR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Falling Creek at Site 50 
+```{r All FCR 50, echo=FALSE}
+# Deep hole time series for FCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="FCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+  
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Carvins Cove
+```{r All CCR, echo=FALSE}
+# CCR only; all sampling sites 
+ggplot(subset(profiles_long, Reservoir=='CCR'), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("Concentration") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSIbySite_2023.jpg"),width=3.5, height=4)
+```
+
+### All profiles from Carvins at Site 50 
+```{r CCR 50, echo=FALSE}
+# Deep hole time series for CCR
+ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y = value, col=Depth_m)) +
+  geom_point(cex=2) +
+  facet_wrap(~metric, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 year", date_labels = "%Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_ccr.jpg"),width=3.5, height=4)
+```
+
+## Current Profiles
+Let's look at the profiles at the Reservoirs at each of the sites. These plots are created by ggplotly so they are interactive. If you hover over the point you will see when it was collected. This helps for qaqc. 
+### Current profiles for Falling Creek
+
+```{r current FCR, echo=FALSE}
+#just look at current year - fcr
+a <- profiles_long|>
+  #filter(Reservoir=="FCR")|>
+  filter(Reservoir=="FCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+# print plot and make it interactive
+ggplotly(a)
+```
+
+### Current profiles for Beaverdam
+```{r current BVR, echo=FALSE}
+#just look at current year - bvr (just temp)
+a <- profiles_long|>
+  filter(Reservoir=="BVR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/BVR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+# print the plot
+ggplotly(a)
+```
+
+### Current profiles for Carvins Cove
+```{r current CCR, echo=FALSE}
+#just look at current year - ccr
+a <- profiles_long|>
+  filter(Reservoir=="CCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
+ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/CCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+# print the plot and make it interactive
 ggplotly(a)
 ```
 
 ```{r save the data, eval=FALSE, include=FALSE}
+# 
 # # convert DateTime to character
 # current_df$DateTime <- as.character(format(current_df$DateTime))
 # 
 # 
-# write_csv(current_df, 'Secchi_2013_2024.csv')
+# write_csv(current_df, 'YSI_PAR_profiles_2013_2024.csv')
 # #list.files()
 ```
 
-```{r Save maintlog and function, include=FALSE, eval=FALSE}
+```{r Save maintlog and function, eval=FALSE, include=FALSE}
 # Maintenance Log
-# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv", "Secchi_maintenancelog_2013_2024.csv")
-# 
-# # qaqc function
-# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/secchi_create.R", "Secchi_qaqc_2013_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv", "YSI_PAR_profiles_maintenancelog_2013_2024.csv")
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R", "YSI_PAR_profiles_qaqc_2013_2024.R")
+```
+
+```{r Site description, eval=FALSE, include=FALSE}
+# # These lines of code make the csv of the site descriptions with lat and long
+# # Use Gsheet because you don't need to authenticate it.
+#  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
+#  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+#  data <- current_df #This is the line you need to modify!
+#  trim_sites = function(data,sites){
+#    data_res_site=data%>% #Create a Reservoir/Site combo column
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))
+#    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+#      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+#      filter(res_site%in%data_res_site$res_site)%>%
+#      select(-res_site)
+#  }
+#  sites_trimmed = trim_sites(data,sites)
+#  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
 ```

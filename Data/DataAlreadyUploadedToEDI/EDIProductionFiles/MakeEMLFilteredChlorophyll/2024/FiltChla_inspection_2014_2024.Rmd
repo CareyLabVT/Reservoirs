@@ -34,6 +34,7 @@ filt_chla_qaqc(
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv",
   start_date = NULL, # change when we update to read date from EDI
   end_date = as.Date("2024-12-31"))
+
 ```
 list.files("../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
 
@@ -299,5 +300,7 @@ write.csv(all_chla, "FiltChla_2014_2024.csv", row.names = F)
  }
  sites_trimmed = trim_sites(data, sites)
  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+ maint_file <- read.csv(maintenance_file)
+ write.csv(maint_file, "FiltChla_maintenancelog_2014_2024.csv", row.names = F)
 ```
 

@@ -11,6 +11,8 @@ water quality	lter controlled vocabulary
 water temperature	lter controlled vocabulary
 dissolved oxygen	lter controlled vocabulary
 conductivity	lter controlled vocabulary
+turbidity	lter controlled vocabulary
+total dissolved solids	lter controlled vocabulary
 specific conductance	lter controlled vocabulary
 chlorophyll a	lter controlled vocabulary
 fDOM	carey lab controlled vocabulary

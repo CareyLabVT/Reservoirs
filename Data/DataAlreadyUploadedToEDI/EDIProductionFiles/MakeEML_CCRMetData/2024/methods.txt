@@ -73,6 +73,7 @@ Rotronic Hydroclip2 HC2A-S3 Temperature and Relative Humidity Probe with RM Youn
 
 CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. S3450174 https://s.campbellsci.com/documents/us/manuals/cs106.pdf
 
-LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q112618 https://s.campbellsci.com/documents/us/manuals/li190sb.pdf
+LI-COR LI190SB-L Quantum Sensor:
+SERIAL NO. Q112618 (March 29, 2021 - July 1, 2022) and NO. Q52912 (January 24, 2023 - current) https://s.campbellsci.com/documents/us/manuals/li190sb.pdf
 
 Hukseflux NR01 4-Component Net Radiometer SERIAL NO. 3528 https://s.campbellsci.com/documents/us/manuals/nr01.pdf

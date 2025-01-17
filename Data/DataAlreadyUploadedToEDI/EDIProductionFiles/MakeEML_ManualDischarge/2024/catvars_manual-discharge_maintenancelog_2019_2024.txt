@@ -1,0 +1,8 @@
+attributeName	code	definition
+flag	0	Data not suspect
+flag	1	"Instrument malfunction, values set to NA"
+flag	3	"Value suspect, conditions not well captured by flowmeter method"
+flag	5	"Value suspect, conditions not well captured by velocity float method"
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir

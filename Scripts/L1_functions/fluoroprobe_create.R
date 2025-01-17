@@ -116,9 +116,9 @@ fp3 <- fp2 %>%
          TotalConc_ugL, Transmission, Depth_m, Temp_degC, RFU_525nm, RFU_570nm, RFU_610nm,
          RFU_370nm, RFU_590nm, RFU_470nm) %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
-  filter(Depth_m >= 0.2) |> 
-  dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
-                DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
+  filter(Depth_m >= 0.2) #|> 
+  #dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
+                #DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
 
 # #eliminate upcasts 
 fp_downcasts <- fp3[0,]
@@ -214,7 +214,24 @@ fp6 = fp5[FALSE,]
 for (i in 1:length(unique(fp5$CastID))){
   profile = subset(fp5, CastID == unique(fp5$CastID)[i])
   if(profile$Reservoir[1] == "FCR"){
-    profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    if(profile$Site[1] == 50){
+      profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    }
+    if(profile$Site[1] == 45){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 40){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 30){
+      profile_trim <- profile %>% filter(Depth_m <= 6.5)
+    }
+    if(profile$Site[1] == 20){
+      profile_trim <- profile %>% filter(Depth_m <= 4.5)
+    }
+    if(profile$Site[1] == 10){
+      profile_trim <- profile %>% filter(Depth_m <= 3.5)
+    }
   } else if (profile$Reservoir[1] == "CCR"){
     profile_trim <- profile %>% filter(Depth_m <= 21)
   } else if (profile$Reservoir[1] == "BVR"){
@@ -248,7 +265,7 @@ fp_final <- fp6 %>%
 
 ### 4. Take out values based on the Maintenance Log 
 
-#maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
 
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),

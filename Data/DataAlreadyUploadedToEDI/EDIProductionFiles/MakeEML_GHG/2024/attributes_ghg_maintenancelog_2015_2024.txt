@@ -2,7 +2,7 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
 Depth	Water depth where the sample was collected or sensor reading was measured	character			NA	value is missing
-Reps	Number assigned during processing.	numeric	dimensionless		NA	value is missing
+Reps	Number assigned during processing	numeric	dimensionless		NA	value is missing
 DataStream	Nickname for each data package; for this package it is GHG	character			NA	value is missing
 TIMESTAMP_start	The starting time for the observation or observations to be removed or changed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 TIMESTAMP_end	The ending time for the observation or observation to be removed or changed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing

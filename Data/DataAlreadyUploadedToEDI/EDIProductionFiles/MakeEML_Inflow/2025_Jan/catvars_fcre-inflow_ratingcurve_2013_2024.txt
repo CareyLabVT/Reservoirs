@@ -1,0 +1,3 @@
+attributeName	code	definition
+Sensor	VT_Flow_cms	Rating curve information for the VT sensor
+Sensor	WVWA_Flow_cms	Rating curve information for the WVWA sensor

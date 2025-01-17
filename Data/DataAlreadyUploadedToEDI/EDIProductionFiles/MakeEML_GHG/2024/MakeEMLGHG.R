@@ -194,7 +194,7 @@ make_eml(
                                'script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.15') #package id for staging
+  package.id = 'edi.997.16') #package id for staging
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -2,6 +2,9 @@ keyword	keywordThesaurus
 greenhouse gas	carey lab controlled vocabulary
 reservoir	cuahsi controlled vocabulary
 reservoirs	cuahsi controlled vocabulary
+stream	cuahsi controlled vocabulary
+streams	cuahsi controlled vocabulary
+water quality	cuahsi controlled vocabulary
 depth	lter controlled vocabulary
 methane	lter controlled vocabulary
 carbon dioxide	lter controlled vocabulary
@@ -20,6 +23,3 @@ Virginia Reservoirs	carey lab controlled vocabulary
 FCR	carey lab controlled vocabulary
 BVR	carey lab controlled vocabulary
 GHGs	carey lab controlled vocabulary
-water quality lter controlled vocabulary	
-Stream  cuahsi controlled vocabulary	
-Streams  cuahsi controlled vocabulary	

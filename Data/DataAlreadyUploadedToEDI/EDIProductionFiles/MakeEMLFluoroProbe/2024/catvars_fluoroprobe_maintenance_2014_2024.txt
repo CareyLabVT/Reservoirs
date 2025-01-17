@@ -30,6 +30,12 @@ end_parameter	RFU_525nm	Relative fluorescence units of excitation in response to
 end_parameter	RFU_570nm	Relative fluorescence units of excitation in response to light wavelength of 570 nm
 end_parameter	RFU_590nm	Relative fluorescence units of excitation in response to light wavelength of 590 nm
 end_parameter	RFU_610nm	Relative fluorescence units of excitation in response to light wavelength of 610 nm
+flag	0	no flag
+flag	1	data re-calibrated post-collection
+flag	2	instrument malfunction
+flag	3	negative transmission value
+flag	4	data suspect due to poor calibration
+flag	5	negative RFU value
 
 
 

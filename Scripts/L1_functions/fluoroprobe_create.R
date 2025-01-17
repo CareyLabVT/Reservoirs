@@ -255,12 +255,12 @@ fp_final <- fp6 %>%
          Flag_TotalConc_ugL = 0,
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
          Flag_Transmission_perc = ifelse(Transmission_perc < 0, 3, 0),
-         Flag_RFU_525nm = ifelse(Flag_RFU_525nm < 0, 5, 0),
-         Flag_RFU_570nm = ifelse(Flag_RFU_570nm < 0, 5, 0),
-         Flag_RFU_610nm = ifelse(Flag_RFU_610nm < 0, 5, 0),
-         Flag_RFU_370nm = ifelse(Flag_RFU_370nm < 0, 5, 0),
-         Flag_RFU_590nm = ifelse(Flag_RFU_590nm < 0, 5, 0),
-         Flag_RFU_470nm = ifelse(Flag_RFU_470nm < 0, 5, 0)) 
+         Flag_RFU_525nm = ifelse(RFU_525nm < 0, 5, 0),
+         Flag_RFU_570nm = ifelse(RFU_570nm < 0, 5, 0),
+         Flag_RFU_610nm = ifelse(RFU_610nm < 0, 5, 0),
+         Flag_RFU_370nm = ifelse(RFU_370nm < 0, 5, 0),
+         Flag_RFU_590nm = ifelse(RFU_590nm < 0, 5, 0),
+         Flag_RFU_470nm = ifelse(RFU_470nm < 0, 5, 0)) 
 
 
 ### 4. Take out values based on the Maintenance Log 

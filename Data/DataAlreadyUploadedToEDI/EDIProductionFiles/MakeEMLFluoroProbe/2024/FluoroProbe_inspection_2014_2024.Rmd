@@ -58,7 +58,8 @@ current_df <- fluoroprobe_qaqc(repo_link = repo_link,
 ## Read in built dataframe - reviewers start here!
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
-current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/fluoroprobe_2014_2024.csv') %>%
+# THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
+current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # double-check time zone
@@ -329,6 +330,27 @@ flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z
 flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
 ```
 
+## Code to check for negative RFUs
+```{r}
+current_df |>
+  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
+  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
+  filter(RFU < 0) |> 
+  ggplot(aes(x=DateTime, y= Depth_m, colour = as_factor(wavelength))) + 
+  facet_wrap(Reservoir~Site) + 
+  geom_point()
+
+
+current_df |>
+  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
+  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
+  filter(RFU < 0) |> 
+  reframe(.by = wavelength, 
+          n = n())
+
+```
+
+
 ## Check to make sure that what is in the maintenance log  was actually removed
 
 ### Look at the last rows of the maintenance log 
@@ -337,7 +359,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv')
+ maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
 
 # name the data file
 sd <- tail(maint)%>%

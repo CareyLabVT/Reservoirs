@@ -1,7 +1,7 @@
 ---
 title: "ghg_inspection_2015_2024"
-author: "Freya Olsson"
-date: "2023-11-30"
+author: "Freya Olsson + Adrienne Breef-Pilz"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -44,14 +44,14 @@ current_df <- ghg_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Raw_GHG/
         end_date = NULL)
 
 current_df <- current_df%>%
-  dplyr::distinct(.)%>% # get rid of dups if they snuck in
-  filter(DateTime<(current_time_end))
+  dplyr::distinct(.)# get rid of dups if they snuck in
+ 
 
 # make sure no time duplicates.
- current_df<-  current_df[!duplicated(current_df$DateTime), ]
+# current_df<-  current_df[!duplicated(current_df$DateTime), ]
 
 #reorder. Just to be certain everything is in order
-  current_df<-current_df[order(current_df$DateTime),]
+#  current_df<-current_df[order(current_df$DateTime),]
   
   
 
@@ -63,11 +63,11 @@ current_df <- current_df%>%
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
  ### CHANGE THIS NUMBER BELOW 
                                                                               ##      
-   current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/997/12/98f19e7acae8bea7d127c463b1bb5fbc")
-
-
- # # Force files from EDI to have an EST timestamp
-   current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
+ #   current_df <-read_csv("https://portal-s.edirepository.org/nis/dataviewer?packageid=edi.997.14&entityid=98f19e7acae8bea7d127c463b1bb5fbc")
+ # 
+ # 
+ # # # Force files from EDI to have an EST timestamp
+ #   current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
 
 
 ```
@@ -102,7 +102,8 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
-maint <- read_csv("../../../../DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv")
+#reviewers change this link to pull in most current maintenance log
+maint <- read_csv("https://portal-s.edirepository.org/nis/dataviewer?packageid=edi.997.14&entityid=6cdfbc8686ed2ff234b00add92865fec")
 
 # name the data file
 sd <- tail(maint) %>%
@@ -126,8 +127,8 @@ last_row <- tail(sd, n=1)
 
 # Get starttime and end time
 ### get start and end time of one maintenance event
-start <- as_datetime(last_row$TIMESTAMP_start)
-end <- as_datetime(last_row$TIMESTAMP_end)
+start <- as_datetime(last_row$TIMESTAMP_start, tz = "America/New_York")
+end <- as_datetime(last_row$TIMESTAMP_end, tz = "America/New_York")
     
 # Get the time of the maintenance
 if(is.na(end)){

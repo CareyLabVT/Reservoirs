@@ -179,6 +179,8 @@ filt_chla_qaqc <- function(directory,
   # Clean up the data frame
   filtering_log2 <- filtering_log%>%
     mutate(
+      ResSite = str_remove(ResSite, "-"),
+      #added ResSite mutate to handle Dexters CCR chla sites in 2024
       Sample_date= parse_date_time(`Sample Date`, orders = c('dBy')),
       Vol_filt_mL = as.numeric(`Volume filtered (mL)`),
       Final_vol_extract_mL = final_vol_extract

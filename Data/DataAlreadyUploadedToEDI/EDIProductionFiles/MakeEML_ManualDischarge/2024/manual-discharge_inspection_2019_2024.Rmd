@@ -1,5 +1,5 @@
 ---
-title: "manualDischarge_inspection_2019_2024"
+title: "manual-discharge_inspection_2019_2024"
 author: "Adrienne and Dexter"
 date: "2023-12-19"
 output: html_document
@@ -67,7 +67,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
  # staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1017/8/702d3b355854211a8dbb587094cfccb7")
 
  # # Force files from EDI to have an EST timestamp
- #  staged_edi$DateTime <- force_tz(as.POSIXct(staged_edi$DateTime), tzone = "American/New_York")
+ #  staged_edi$DateTime <- force_tz(as.POSIXct(staged_edi$DateTime), tzone = "America/New_York")
 
 ```
 
@@ -143,17 +143,17 @@ staged_edi %>%
 ```{r Make new CSV with current and historic files}
 
 # Need to decide on a naming convention for this file
-write.csv(staged_edi, "ManualDischarge_2019_2024.csv", row.names = F)
+write.csv(staged_edi, "manual-discharge_2019_2024.csv", row.names = F)
 
 ```
 
 ```{r Download files into folder}
 
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv", "manual_discharge_maintenancelog_2019_2024.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv", "manual-discharge_maintenancelog_2019_2024.csv")
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/manual_discharge_create.R", "manual_discharge_qaqc_2019_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/manual_discharge_create.R", "manual-discharge_qaqc_2019_2024.R")
 
 ```
 

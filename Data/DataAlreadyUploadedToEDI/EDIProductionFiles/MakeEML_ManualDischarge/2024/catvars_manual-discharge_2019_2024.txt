@@ -1,0 +1,14 @@
+attributeName	code	definition
+Flag_DateTime	0	Data not suspect
+Flag_DateTime	1	"Time of sampling not recorded, set to noon"
+Flag_Flow_cms	0	data not suspect
+Flag_Flow_cms	1	"Instrument malfunction, values set to NA"
+Flag_Flow_cms	3	"Value suspect, conditions not well captured by flowmeter method"
+Flag_Flow_cms	5	"Value suspect, conditions not well captured by velocity float method"
+Method	B	Bucket volumetric
+Method	F	Flowmeter
+Method	S	Salt injection
+Method	V	Velocity float
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir

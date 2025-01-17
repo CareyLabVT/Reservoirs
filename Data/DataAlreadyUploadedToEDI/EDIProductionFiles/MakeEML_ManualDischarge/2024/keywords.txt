@@ -5,6 +5,8 @@ Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
 discharge	lter controlled vocabulary
 streamflow	lter controlled vocabulary
+inflow	carey lab controlled vocabulary
+outflow	carey lab controlled vocabulary
 water balance	lter controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary
 Carvins Cove Reservoir	carey lab controlled vocabulary
@@ -20,3 +22,4 @@ Lake	cuahsi controlled vocabulary
 Lakes	lter controlled vocabulary
 Stream	cuahsi controlled vocabulary
 Streams	cuahsi controlled vocabulary
+Virginia Tech Center for Ecosystem Forecasting 	carey lab controlled vocabulary

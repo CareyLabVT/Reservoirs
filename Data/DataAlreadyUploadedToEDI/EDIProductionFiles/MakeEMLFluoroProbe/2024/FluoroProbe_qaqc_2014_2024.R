@@ -116,9 +116,9 @@ fp3 <- fp2 %>%
          TotalConc_ugL, Transmission, Depth_m, Temp_degC, RFU_525nm, RFU_570nm, RFU_610nm,
          RFU_370nm, RFU_590nm, RFU_470nm) %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
-  filter(Depth_m >= 0.2) |> 
-  dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
-                DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
+  filter(Depth_m >= 0.2) #|> 
+  #dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
+                #DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
 
 # #eliminate upcasts 
 fp_downcasts <- fp3[0,]
@@ -214,7 +214,24 @@ fp6 = fp5[FALSE,]
 for (i in 1:length(unique(fp5$CastID))){
   profile = subset(fp5, CastID == unique(fp5$CastID)[i])
   if(profile$Reservoir[1] == "FCR"){
-    profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    if(profile$Site[1] == 50){
+      profile_trim <- profile %>% filter(Depth_m <= 9.5)
+    }
+    if(profile$Site[1] == 45){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 40){
+      profile_trim <- profile %>% filter(Depth_m <= 8.5)
+    }
+    if(profile$Site[1] == 30){
+      profile_trim <- profile %>% filter(Depth_m <= 6.5)
+    }
+    if(profile$Site[1] == 20){
+      profile_trim <- profile %>% filter(Depth_m <= 4.5)
+    }
+    if(profile$Site[1] == 10){
+      profile_trim <- profile %>% filter(Depth_m <= 3.5)
+    }
   } else if (profile$Reservoir[1] == "CCR"){
     profile_trim <- profile %>% filter(Depth_m <= 21)
   } else if (profile$Reservoir[1] == "BVR"){
@@ -230,25 +247,25 @@ for (i in 1:length(unique(fp5$CastID))){
 #ADD FLAGS
 
 fp_final <- fp6 %>%
-  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_YellowSubstances_ugL = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_TotalConc_ugL = ifelse(Transmission_perc < 90, 3, 0),
+  mutate(Flag_GreenAlgae_ugL = 0,
+         Flag_Bluegreens_ugL = 0,
+         Flag_BrownAlgae_ugL = 0,
+         Flag_MixedAlgae_ugL = 0,
+         Flag_YellowSubstances_ugL = 0,
+         Flag_TotalConc_ugL = 0,
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
-         Flag_Transmission_perc = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_525nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_570nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_610nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_370nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_590nm = ifelse(Transmission_perc < 90, 3, 0),
-         Flag_RFU_470nm = ifelse(Transmission_perc < 90, 3, 0)) 
+         Flag_Transmission_perc = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_525nm = ifelse(RFU_525nm < 0, 5, 0),
+         Flag_RFU_570nm = ifelse(RFU_570nm < 0, 5, 0),
+         Flag_RFU_610nm = ifelse(RFU_610nm < 0, 5, 0),
+         Flag_RFU_370nm = ifelse(RFU_370nm < 0, 5, 0),
+         Flag_RFU_590nm = ifelse(RFU_590nm < 0, 5, 0),
+         Flag_RFU_470nm = ifelse(RFU_470nm < 0, 5, 0)) 
 
 
 ### 4. Take out values based on the Maintenance Log 
 
-#maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
 
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),
@@ -359,6 +376,11 @@ for(i in 1:nrow(log)){
     ## Instrument error
     
     fp_final[c(which(fp_final[,'Site'] == Site & fp_final$DateTime %in% Time)),maintenance_cols] <- NA
+    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    
+  }else if (flag %in% c(4)){ 
+    ## Data suspect due to poor calibration
+    
     fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
     
   }else

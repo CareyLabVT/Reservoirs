@@ -22,7 +22,7 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
 
 REVIEWERS DO NOT RUN THIS CHUNK! THIS IS FOR DATA PRODUCT LEADS ONLY!
 ```{r Make draft EDI file, include=FALSE, eval=FALSE, echo=FALSE}
-devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
+devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.272.8'
@@ -37,8 +37,8 @@ example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reser
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
-out_file <- "./Data/DataAlreadyUploadedtoEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/fluoroprobe_2014_2024.csv"
+maintenance_file <- 'https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
+out_file <- "./Data/DataAlreadyUploadedtoEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv"
 start_date <- first_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 
@@ -58,7 +58,6 @@ current_df <- fluoroprobe_qaqc(repo_link = repo_link,
 ## Read in built dataframe - reviewers start here!
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
-# THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
 current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
@@ -330,27 +329,6 @@ flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z
 flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
 ```
 
-## Code to check for negative RFUs
-```{r}
-current_df |>
-  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
-  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
-  filter(RFU < 0) |> 
-  ggplot(aes(x=DateTime, y= Depth_m, colour = as_factor(wavelength))) + 
-  facet_wrap(Reservoir~Site) + 
-  geom_point()
-
-
-current_df |>
-  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
-  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
-  filter(RFU < 0) |> 
-  reframe(.by = wavelength, 
-          n = n())
-
-```
-
-
 ## Check to make sure that what is in the maintenance log  was actually removed
 
 ### Look at the last rows of the maintenance log 
@@ -359,7 +337,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
+ maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv')
 
 # name the data file
 sd <- tail(maint)%>%

@@ -247,25 +247,25 @@ for (i in 1:length(unique(fp5$CastID))){
 #ADD FLAGS
 
 fp_final <- fp6 %>%
-  mutate(Flag_GreenAlgae_ugL = 0,
-         Flag_Bluegreens_ugL = 0,
-         Flag_BrownAlgae_ugL = 0,
-         Flag_MixedAlgae_ugL = 0,
-         Flag_YellowSubstances_ugL = 0,
-         Flag_TotalConc_ugL = 0,
+  mutate(Flag_GreenAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_Bluegreens_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_BrownAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_MixedAlgae_ugL = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_YellowSubstances_ugL = ifelse(Transmission_perc < 90, 3, 0),
+         Flag_TotalConc_ugL = ifelse(Transmission_perc < 0, 3, 0),
          Flag_Temp_C = 0, # example: ifelse(date(DateTime) %in% bad_temp_days,2,0),
          Flag_Transmission_perc = ifelse(Transmission_perc < 0, 3, 0),
-         Flag_RFU_525nm = ifelse(RFU_525nm < 0, 5, 0),
-         Flag_RFU_570nm = ifelse(RFU_570nm < 0, 5, 0),
-         Flag_RFU_610nm = ifelse(RFU_610nm < 0, 5, 0),
-         Flag_RFU_370nm = ifelse(RFU_370nm < 0, 5, 0),
-         Flag_RFU_590nm = ifelse(RFU_590nm < 0, 5, 0),
-         Flag_RFU_470nm = ifelse(RFU_470nm < 0, 5, 0)) 
+         Flag_RFU_525nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_570nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_610nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_370nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_590nm = ifelse(Transmission_perc < 0, 3, 0),
+         Flag_RFU_470nm = ifelse(Transmission_perc < 0, 3, 0)) 
 
 
 ### 4. Take out values based on the Maintenance Log 
 
-#maintenance_file <- 'Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
+#maintenance_file <- 'Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/Maintenance_Log_FluoroProbe.csv'
 
 log_read <- read_csv(maintenance_file, col_types = cols(
   .default = col_character(),

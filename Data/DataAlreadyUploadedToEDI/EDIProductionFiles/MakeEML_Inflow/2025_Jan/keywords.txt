@@ -13,6 +13,8 @@ Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
 weir	carey lab controlled vocabulary
 streamflow	lter controlled vocabulary
+stream	lter controlled vocabulary
+streams	lter controlled vocabulary
 water balance	lter controlled vocabulary
 time series	carey lab controlled vocabulary
 discharge	lter controlled vocabulary

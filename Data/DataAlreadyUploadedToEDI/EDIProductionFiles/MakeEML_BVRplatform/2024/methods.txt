@@ -1,0 +1,355 @@
+###################################################
+
+Methods for bvre-waterquality_2020_2024.csv: This is the methods section for observations in the dataset from 2020-2024. The dataset is ongoing and will be appended to each year. 
+
+Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir (37.31288, -79.8159) in 2020-2024 using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were collected every ten minutes from the initial sensor deployment on 18 June 2020 to 31 December 2024. All observations were collected in Eastern Standard Time with daylight savings not observed. We deployed the 13 thermistors on a chain from a fixed platform, with the deepest thermistor located about 0.5 m above the sediments. Because the water level in Beaverdam Reservoir varied during the monitoring period, we refer to the thermistors, dissolved oxygen, and pressure sensor by their position on the fixed thermistor chain as opposed to a specific depth, which roughly corresponds to the depth of the sensors at full pond in Beaverdam Reservoir (13.4 m). The thermistor closest to the top is labeled 1 and the deepest is labeled 13, with the intervening thermistors located at approximately ~1 m intervals. The dissolved oxygen sensors were deployed at positions 6 and 13, and the pressure sensor at position 13. 
+
+This reservoir experiences substantial water level changes due to its position at the headwaters of its catchment as well as management, and reservoir maximum depth ranged from 8.19-12.48 m (mean=10.46 m, median=10.5 m) during the monitoring period. Depth profiles of water temperature were measured by thermistors on ~1-meter intervals at the surface of the reservoir to 0.5 m above the sediments, complemented by dissolved oxygen and pressure sensors deployed at depth. These sensors (thermistor temperature, dissolved oxygen, and pressure) were held stationary as the water depth fluctuated from 8.19-12.48 m. A YSI EXO2 sonde measuring temperature, conductivity, specific conductance, chlorophyll a, phycocyanin, total dissolved solids, dissolved oxygen, fluorescent dissolved organic matter, and turbidity was attached to a buoy that moved with the changing water level and thus was kept at a constant ~1.5 m depth. Dissolved oxygen was monitored at three different positions: 1.5 m from the EXO2, in the mid-water column at 0.361-4.65 m depth, and bottom waters at 8.19-12.48 m depth. In 2022, the Western Virginia Water Authority (WVWA) lowered the water level for management purposes from 2022-05-19 - 2022-07-01, which resulted in a water level decrease of about ~2 m. In the summer of 2024, the WVWA started a major construction project on the dam, thus water levels were altered based on the needs of construction.
+
+In 2024, from 2024-11-19 - 2024-12-03, the temperature string, which includes: Thermistors, RDOs, and the pressure transducer, was deployed about 0.7 m higher than it should be. Because the reservoir was mixed, we kept all observations from the Thermistors and the RDOs in the data set and flagged them with a 5, for questionable. We corrected the pressure and the depth of the pressure transducer in order to accuratley reflect the water level. On 2024-12-03, the temperature string was brough to the surface for cleaning and redeployed in the correct position.  
+
+
+Missing Data: Gaps due to maintenance on the data logger program occurred on 2020-08-13, 2020-10-05, 2020-12-07, 2021-04-05, 2021-05-31, and 2021-08-24, so no data were recorded during these times: 2020-08-13 05:20-05:50, 2020-10-05 09:20-12:00, 2020-12-07 10:10-10:40, 2021-04-05 13:20:00-14:40:00, 2021-05-31 08:50:00-09:10:00, and 2021-08-24 07:30:00-07:50:00, 2023-06-27 08:00-09:50, 2024-04-05 08:50-09:50. 
+
+Missing Gaps in the EXO2 data longer than 30 minutes:
+These are usually due to instrument malfunction or maintenance.
+2020-10-05 09:20:00 - 12:00:00, 2021-01-09 23:00:00 - 2021-01-10 00:00:00, 2021-05-04 02:40:00 - 03:30:00, 2021-11-22 11:20:00 - 2021-12-06 11:00:00, 2022-04-09 09:40:00 - 10:30:00, 2022-07-14 14:30:00 - 15:10:00, 2022-09-05 10:40:00 - 2022-09-06 14:40:00, 2022-12-11 18:50:00 - 19:30:00, 2022-12-16 10:20:00 - 11:00:00, 2023-06-27 08:00:00 - 2023-06-27 09:50:00, 2024-02-19 04:00:00 - 06:30:00, 2024-04-01 21:40:00 - 2024-04-05 10:00:00.
+
+Calibration:
+
+EXO Depth: On 2020-08-13 11:30, the EXO2 was redeployed 0.41 m lower than before and stayed at this lower position for the rest of the year of 2020. On 2021-04-05 13:40, the EXO2 was redeployed because the original floating buoy had filled with water and sunk just below the surface. We recalibrated the depth sensor on the EXO2 and deployed the buoy at 1.5 m using a boat fender and multipurpose cable. On 2021-11-09, the water level had dropped so the EXO2 cable was taut and not supported by the buoy, so more cable was let out until the buoy was floating again. Because the EXO2 was vented but the cable was not, changes in barometric pressure were not accounted for. The EXO2 was deployed on a buoy and hung at 1.5 m below the water unless there were issues with the buoy, such as the buoy was missing or filled with water, and these observations were flagged in the dataset. See bvre-waterquality_maintenancelog_2020_2024.csv for times and descriptions when there were issues with the depth of the EOX2 sensor.
+   
+
+DO Maintenance: In-situ RDO Pro-X Dissolved Oxygen Sensors were calibrated in a 100% staturated air solution on: 2020-09-16, 2020-10-26, 2021-03-08, 2021-10-26, 2022-03-03, and 2022-09-05.  The caps to the DO sensors were replaced on 2021-10-26 and the sensors were checked in 100% saturated air solution. They were found to be reading 100 % and thus were not calibrated. The antifouling guard was removed on 2021-10-26 due to concerns of lack of water exchange with the sensor. The sensors were not re-calibrated in 2023 because they passed QAQC checks periodically administered throughout the season. Observations that were affected by maintenance or calibration were flagged and removed from the data set. These observations can be found in the bvre-waterquality_maintenancelog_2020_2024.csv. Problematic data, as defined by the QAQC methods described in the QAQC section, were flagged and/or removed.  
+
+The EXO2 DO sensor was calibrated on 2020-09-16, 2020-10-26, 2021-03-08, 2021-07-12, 2022-12-17, and 2024-04-13  with air-saturated water. The DO cap was changed on 2021-07-12. We did see an increase in DO saturation when the cap was changed. The sensors were not calibrated in 2023 but were checked periodically throughout the season and passed QAQC checks. The RDO caps were replaced on 2024-05-06. Observations that were affected by maintenance or calibration were flagged and removed from the dataset. These observations can be found in the bvre-waterquality_maintenancelog_2020_2024.csv. Problematic data, as defined by the QAQC methods described in the QAQC section, were flagged and or removed.
+
+Turbidity Sensor: The turbidity sensor was added to the EXO2 on 2021-04-05.
+
+QAQC Methods:
+
+All QAQC was applied to the data as described in the bvre-waterquality_qaqc_2020_2024.R script. This script used the bvre-waterquality_maintenancelog_2020_2024.csv to remove maintenance times, outliers, and other events. The script also checked for extreme outliers and removed observations when the sensors were out of the water. To ensure we  removed all erroneous data, all data were plotted before publishing, and additional outliers that were visually identified were included in the maintenance log. If any additional corrections were made, they were subsequently added to the maintenance log.
+
+In addition to recorded maintenance issues, we also removed all observations from the EXO when it was out of position. For example, the EXO2 normally is positioned at 1.5 m, so when the depth of the sensor was above 0.2 m for maintenance, we set all of those EXO2 observations to NA and flagged those times with a 2 (for outlier set to NA). We also remove EXO2 values when the wiper was malfunctioning. This occurred when the wiper voltage was greater than 0 but less than 0.7, or if the voltage was greater than 1.6. We did this because we could not be certain that the wiper was not incorrectly preventing a sensor from taking its scheduled reading.  
+
+Lastly, we identified and removed extreme outliers by using what we call the 'leading and lagging method.' For each individual observation, we looked at the previous observations taken 10 minutes before, and the lagging observation taken 10 minutes after the focal observation. If the observation was 2 standard deviations above or below either of those two points, then the observation was flagged and set to NA. For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL, we defined outliers as values 4 standard deviations above or below the focal observation, as opposed to 2 standard deviations for the other sensors, given there is lots of variablility in observations of those variables. 
+
+As part of the QAQC process, we plotted all of the observation in the bvre-waterquality_inspection_2020_2024.Rmd. In the R markdown file, we downloaded data, identified duplicates and  gaps in the data, checked that the maintenanc log flagged values, produced plots to visually check for outliers, saved the current data file, and downloaded the maintenance log, qaqc function, and other functions needed for publishing. 
+
+Maintenance Log:
+
+For the bvre-mainteancelog_2020_2024.csv, if maintenance is ongoing then TIMESTAMP_end is an arbitrary date in the future and will be modified once the mainteance is complete. This is why the TIMESTAMP_end has date for 2025.
+
+
+EXO Maintenance and QAQC:
+
+The EXO2 was removed from the reservoir 2021-12-06 11:00 and sent back to YSI (Yellow Springs, OH, USA) for winter maintenance. The sensor was returned to the reservoir on 2022-01-26 15:10:00 after a factory calibration.
+
+In December 2022, the Beaverdam EXO2 was brought into the lab for maintenance and calibration and then re-deployed at Falling Creek Reservoir (FCR) while that EXO2 went back for maintenance. The EXO2 from Carvins Cove Reservoir (CCR) was put out in its place at Beaverdam Reservoir after being calibrated. See bvre-waterquality_maintenancelog_2020_2024.csv for more information.
+
+In 2023, the CCR EXO2 was reading higher BGAPC (Blue Green Algae phycocyanin) RFUs. These observations were put in the maintenance log and flagged as 5 for questionable. In addition, the 2023 wiper voltage was erratic until it was replaced, so we flagged all EXO2 sensor observations with a 5 because we could not be sure the wiper did not interfere with the reading. We also removed higher than normal observations for fDOM, specific conductivity, and turbidity when the wiper could have been covering the sensors during a reading. We defined these outliers differently among variables: e.g., outliers for fDOM observations were determined to be less than 3 RFU, specific conductivity observations less than 29.5 uScm, and turbidity observations greater than 5 FNU. See bvre-waterquality_maintenancelog_2020_2024.csv. Also in 2023, the wiper was removed from 2023-06-19 19 - 2023-09-26, so it could replace the one at FCR, resulting in no wiper on the EXO2 at BVR during this time period. The field crew cleaned the sensor every week and we did not see major changes after cleaning. The wiper was replaced on 2023-09-26 with wiper unit SN:23J101214. From 2023-12-11 - 2023-12-18, the EXO2 broke away from the float and was ~1.5 m deeper than normal. We flagged observations as 5, but the reservoir was fully mixed, so measuring at a different depth should not result in very different observations.
+
+In 2024, the EXO2 was returned for calibration from 2024-04-01 - 2024-04-15. In its places was the backup EXO2, SN23J102731. The replacement EXO2 did not have a turbidity sensor, so we are missing the observations for that time.  The EXO2, was removed for lab cleaning and calibration on 2024-12-03 and again replaced with SN23J102731. The Algae sensor, which measures chlorophyll and phycocyanin, turbidity, and fDOM sensor were reading higher, so they were down corrected. See the bvre-waterquality_maintenancelog_2020_2024.csv for the correction for each variable. 
+
+Dissolved Oxygen and QAQC:
+
+After the sensors were pulled up, DO values were changed to NA and flagged up to 2 hours after the sensors were back in the water. This long flagging period ensured that the sensors properly equilibrated after a cleaning and being in air.
+
+Thermistors and QAQC:
+
+When thermistors were out of the water, their readings were changed to NA and given a “flag 2”. When the temperature string was first deployed, Thermistors 11, 12, and 13 were not programmed until 2020-10-05, so all readings prior to that time were set to NA and given a “flag 1” for maintenance issues.  On 2023-10-06, we removed the top 2 thermistors because they have not been in the water for the past 2 years. After the thermistors were removed, the temperature string was deployed at the same depth.
+
+EXO conductivity, Specific Conductance, and Total Dissolved Solids and QAQC:
+
+In 2022, the conductivity sensor came back from winter maintenance with a bad factory calibration, which we did not realize until the end of 2022. We corrected this by establishing the linear relationship between conductivity on the CTD (https://portal.edirepository.org/nis/mapbrowse?packageid=edi.200.12) and the EXO2 with data from 01 January - 16 December 2022 ((EXOCond_uScm*0.69)+4.99). The EXO2 conductivity was corrected to the CTD. Based on the corrected conductivity, the specific conductance was calculated with Corrected Conductivity/(1+(0.02*(Temperature-25)). The Total Dissolved Solids calibration was also affected, so using the TDS constant of 0.65 (from the EXO manual) multiplied by the correct specific conductance values. Flag_EXOCond_uScm_1.5, Flag_EXOSpCond_uScm_1.5, and Flag_TDS_ugL_1.5 were flagged with 6 values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor.
+
+
+Instruments, manual, and serial numbers used in 2021-current:
+
+Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+
+NexSens T-Node FR Thermistors (2020-06 - current); https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf Serial No. 03903; 1 (2020-06 - 2020-10-22). Serial No.; 1 (2020-12-02 - 2023-10-06). Serial No. 04034; 2. Serial No. 04043 (2020-06 - 2023-10-06); 3. Serial No. 04052; 4. Serial No. 04053; 5. Serial No. 04058; 6. Serial No. 04072; 7. Serial No. 04075; 8. Serial No. 04080; 9. Serial No. 04091; 10. Serial No. 04092; 11. Serial No. 04102; 12. Serial No. 04169; 13.
+
+InSitu RDO Pro-X Dissolved Oxygen Sensor (2020-06 - current); https://in-situ.com/wp-content/uploads/2014/11/RDO_PRO-X_Manual.pdf
+
+Serial No. 733819; 6:
+
+Calibration from 2020-09-16 - 2020-10-26; slope = 1.1209, offset = 0.00.
+
+Calibration from 2020-10-26 - 2021-03-08; slope = 1.0897, offset = 0.00.
+
+Calibration from 2021-03-08 - 2021-10-26; slope=1.1217, offset=0.00. DO cap changed on 2021-10-26-DO checked but not calibrated.
+
+Calibration from 2022-03-03 - 2022-09-05; slope= 1.0737, offset=0 Calibration from 2022-09-05 to current; slope= 1.1063
+
+Serial No. 733787; 13:
+
+Calibration from 2020-09-16 - 2020-10-26; slope = 1.1664, offset = 0.00.
+
+Calibration from 2020-10-26 - 2020-12-31; slope = 1.1370, offset = 0.00.
+
+Calibration from 2021-03-08 - 2021-10-26; slope=1.1392, offset=0.00.
+
+DO cap changed on 2021-10-26 - DO checked but not calibrated.
+
+Calibration from 2022-03-03 - 2022-09-05; slope=1.0903, slope=0.00
+
+Calibration from 2022-09-05 to current; slope=1.1588, slope=0.00
+
+YSI EXO2 Sonde Serial No. 19H103086 (June 2020 - current);
+
+https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf Wiped Conductivity/Temperature Sensor Serial No. 19G100537.
+
+Central Wiper Sensor Serial No. 19G104137 (2020-06 - 2023-06-19). SN: 23J101214 (2023-09-26 - current)
+
+Wiped cond/temp sensor SN: 19G100537 (2020-06 - current).
+
+Calibration on 2022-12-17; pre: 99.7 uScm, post:100.0 uScm- Before calibrating and took a sensor reading and it was off by about ~3 uScm but before calibrating the sensor. We factory-reset the sensor and that is why the post calibration is less than 1 uScm from the pre-calibration values.
+
+Total Algae Sensor Serial No. 18F103685.
+
+Chlorophyll-
+
+Calibration on 2022-12-17; pre:-0.18 RFU, 16.74 RFU; post: 0.00 RFU, 16.40 RFU
+
+Calibration on 2024-04-13; pre: 0.06 RFU, post: 0 and 16.4
+
+Phycocyanin-
+
+Calibration on 2022-12-17; pre: -0.92 RFU, 16.88 RFU; post: 0.00 RFU, 16.00 RFU
+
+Calibration on 2024-04-13; pre: 0.15 RFU, post: 0 and 16.0
+
+
+fDOM Sensor Serial No. 18E105388.
+
+Calibration on 2021-04-05; pre:-0.10 RFU; post:0.00 RFU.
+
+Calibration on 2022-12-17; pre:0.03 RFU, 0.12 QSU; post: 0.00RFU, 0.00 QSU
+
+Calibration on 2024-04-13; pre: 3.09 RFU; post: 0, 100 RFU
+
+Turbidity Sensor Serial No.19H101145.
+
+Calibrated on 2024-04-13; pre: 2.15; post: 0 , 124 FNU
+ 
+Pressure Transducer Serial No. 19A103659.
+
+Dissolved Oxygen Sensor Serial No. 19H101129. YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (2020-06- July 2021).
+
+Calibration from 2020-09-16 - 2020-10-26; DO Gain=1.09. 
+
+Calibration from 2020-10-26 - 2021-03-08; DO Gain=1.08.
+
+Calibration from 2021-03-08 - 2021-07-12; DO Gain=1.06.
+
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 21D103611 (2021-07 - current).
+
+Calibration from 2021-07-12 - 2022-12-17; DO gain=1.11. - We did see an increase in DO when the cap was changed.
+
+Calibration from 2022-12-17 - 2024-04-13; DO gain=1.16; pre: 1.3% Sat,92.5% Sat post: -0.2% Sat, 98.3% Sat
+
+Calibration from 2024-04-13 - current; Post 2.6% in 0% and 98%. 
+
+Campbell Scientific Stainless-Steel Pressure Transducer CS451 (June 2020-current); https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf Serial No. 29010796
+
+######################################################################################
+
+Determining Sensor Depths:
+
+To determine the depths of each sensor over time, we used the pressure sensor at position 13 (which was fixed at about 0.5 m above the sediments) to get the actual depth of the sensor when it is at the surface of the water. We determined sensors to be out of the water based on temperature observations. We then converted the pressure readings from psi to depth in meters using the conversion 1 psi=0.70544 m, which is found in the pressure gauge manual (Campbell Scientific CS451,https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). We then determined the date and time when the thermistor was at the surface of the water and recorded the depth reading in the offset table (bvre-waterquality_depth_offsets_2020_2024.csv). For the positions that were never out of the water, we assumed they were equidistant from each other and divided the length of the temp string when the deepest thermistor was at the surface by the number of postions still under the water. This number was the distance between the thermistors underwater. We took the depth of the deepest thermistor when it was at the surface and subtracted the distance between the positions to get the rest of the offsets. The offset is used to calculate the depth of the sensor below the water. In 2020, for thermistor 1, the sensor was at the surface on 2020-07-02 12:40, whereas thermistor 2 was out of the water on 2020-07-14 20:00. For the other sensors that were never out of the water in 2020, we subtracted the offset of position 2 (the deepest thermistor that was at the surface) from the offset of position 13, where the offset of position 13 was the difference between the pressure transducer and the thermistor at position 13 (6 cm). We then divided that number by the number of sensors below position 2 (11), which was equal to 1.038 m, the distance between the sensors at position 3-13. This number (1.038) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (11.478) and subtracted 1.038 to get 10.44, which is the distance of the sensor at position 3 from the pressure sensor. 
+
+On 2021-04-05 13:30, we secured the pressure sensor so it was in line with the thermistor at position 13; therefore, the offset at position 13 was 0. At the end of the year in 2021 we recalculated the depth offsets for sensors at positions 3-13 because we moved the pressure sensor and the thermistor at position 3 was out of the water. The thermistor at position 3 was at the surface on 2021-09-10 11:10. Because no other sensors below position 3 were out of the water we assume they were equidistant from each other and calculate the distance between sensors to be 1.047 m. When or if other sensors are at the surface of the water, we can confirm the depth of the sensors at more positions. In 2022, the Western Virginia Water Authority lowered the water so the thermistor in position 4 was out of the water on 2022-06-06 18:00:00 and thermistor in position 5 was out of the water on 2022-06-25 11:20:00. 
+
+The EXO2 is currently deployed on a buoy at 1.5 m regardless of the depth reading and usually sits at this depth unless there were issues with the buoy. Thus, to calculate the depth from the surface of the other sensors, first subtract the unique offset for each sensor from column LvlDepth_m_13, which is the depth of the pressure transducer at position 13 in meters. Below is a table with the position of the sensor, the offset before and after the pressure sensor was moved in 2021-04, and the distance above the sediments.  
+ 
+
+Offset Table:
+
+The table below is the position of the sensor, offset to find the depth of the position from the surface of the water at a given time, and the distance above the sediments when the sensors were deployed. The function find_depths in the find_depths.R script attached to this package will calculate a depth for each sensor reading. If you would like the observations returned in the wide format, use the argument wide_depth =T.
+
+Offset Table 2020_2024
+
+Position; Offset_before_05APR21; Offset_after_05APR21; Distance from sediments.
+
+Position_1; 11.82m; 11.82m; 12.5m.
+
+Position_2; 11.478m; 11.478m; 11.5m.
+
+Position_3; 10.44m; 10.47m; 10.5m.
+
+Position_4; 9.402m; 9.423m; 9.5m.
+
+Position_5; 8.364m; 8.376m; 8.5m.
+
+Position_6; 7.326m; 7.329m; 7.5m.
+
+Position_7; 6.288m; 6.282m; 6.5m.
+
+Position_8; 5.25m; 5.235m; 5.5m.
+
+Position_9; 4.212m; 4.188m; 4.5m.
+
+Position_10; 3.174m; 3.141m; 3.5m.
+
+Position_11; 2.136m; 2.094m; 2.5m.
+
+Position_12; 1.098m; 1.047m; 1.5m.
+
+Position_13; 0.06m; 0m; 0.5m.
+
+
+
+######################################################################################
+
+Methods for bvre-sensorstring_2016_2020: This is the methods section for observations in the data set from 2016-2020. This dataset is complete and will not be added to after 2020. 
+
+Depth profiles of multiple water quality variables were collected at the deep hole of Beaverdam Reservoir in 2016-2020 using water temperature HOBO pendent loggers, a dissolved oxygen sensor (MiniDot Logger), and a YSI EXO2 sonde. Various sensor data were collected every fifteen minutes from 2016-07-21 11:00 EST - 2017-11-07 15:30 EST, and every ten minutes from 2018-06-12 13:40 EST - 2020-07-09 11:50 EST. We deployed the HOBOs on a chain with a float, and sensors were about 1 m apart from 0.1 m to 10.5 m. Because the water level in Beaverdam Reservoir varied, the HOBOs were approximately at the assigned depth. All measurements when the sensors were out of the water were not included in the dataset or if the values were in the dataset, they were changed to NA and flagged with a “flag 2", for outlier set to NA. According to the QAQC plots, the HOBO at 0.1 m was out of the water after 2019-08-30 10:00 EST and changed to NA and flagged with a 2, for outlier set to NA. The dissolved oxygen sensor was deployed at 10 m until dissolved oxygen was 0 mg/L and then moved to 5 m. The dissolved oxygen sensor was moved back to 10 m when the reservoir started to mix in the fall, and then when the hypolimnetic dissolved oxygen was at 0 mg/L again the following summer, the sensor was moved back to 5 m. The YSI sonde was deployed consistently at 1.5 m.
+
+Sensor Deployments:
+
+1) Hobos were deployed from:
+
+2016-07-21 - 2017-05-05 at 1m, 4m and 10m.
+
+2017-07-07 - 2017-11-07 at 0.1m, 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m, 10.5m.
+
+2018- 12-06 - 2019-05-16 at 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m.
+
+2019-06-27 - 2019-11-15 at 0.1m, 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m, 10m.
+
+2020-05-14 - 2020-07-09 at 1m, 2m, 3m, 7m.
+
+2) The dissolved oxygen MiniDot was deployed from:
+
+2018-12-06 - 2019-06-27 at 10m.
+
+2019-06-27 - 2020-03-16 at 5m.
+
+2020-03-16 - 2020-05-14 at 10m.
+
+2020-05-14 - 2020-06-11 at 5m.
+
+3) The EXO2 was deployed at 1.5m on:
+
+2019-10-07 - 2020-02-19.
+
+2020-03-16 - 2020-05-14.
+
+No sensors were deployed on 2017-05-05 11:00:00-2017-07-07 11:00:00, 2017-11-07 15:30:00-2018-12-06 13:40:00, 2019-05-16 12:00:00-2019-06-27 14:10:00.
+
+Calibration:
+
+The Hobos were factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 Sonde sensors, except for temperature, were factory-calibrated before being deployed on 2019-10-07.
+
+QAQC Methods:
+
+All measurements collected when the sensors were out of the water were not included in the dataset or if the values were in the dataset, they were changed to NA and flagged with a 2 for outlier set to NA. According to the QAQC plots, the HOBO at 0.1 m was out of the water after 2019-08-30 10:00 EST and changed to NA and flagged with a 2, for outlier set to NA.
+
+All dates and times were changed to EST. Times were rounded to every 15 minutes from 2016-07-21 EST - 2017-11-07 15:30 EST, and rounded to every 10 minutes from 2018-06-12 13:40 EST - 2020-07-09 11:50 EST. During the 2017-07-07 - 2017-11-07 HOBO deployment, the sensor at 5 m was set to record every ten seconds as opposed to every 10 minutes, therefore it stopped recording on 2017-07-13 12:00:00 EST. To match the other readings, data were averaged over the fifteen-minute period and flagged with a 4. 
+
+Negative values for variables (other than water temperature) were changed to 0 and flagged with a 3 for negative value set to 0.
+
+EXO Chlorophyll-a and Phycocyanin: The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove extreme outliers (see chla and phycocyanin qaqc section of bvre-sensorstring_qaqc_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than four standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOChla_ugL_1.5, Flag_EXOChla_RFU_1.5, EXOBGAPC_RFU_1.5, or EXOBGAPC_ugL_1.5 column as a value of 2.
+
+EXO fDOM: The fDOM sensor data underwent a QAQC process to remove extreme outliers (see fdom qaqc section of bvre-sensorstring_qaqc_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2, for outlier set to NA.
+
+EXO conductivity, Specific Conductivity and Total Dissolved Solids: These sensors underwent a QAQC process to remove extreme outliers (see conductivity, specific conductance, and TDS qaqc sensor information in the bvre-sensorstring_qaqc_2016_2020.R script) following established protocols originally for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2.
+
+EXO Turbidity: These sensors underwent a QAQC process to remove extreme outliers (see turbidity qaqc sensor information in the bvre-sensorstring_qaqc_2016_2020.R script) following established protocols for Falling Creek Reservoir. Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_EXOfDOM_RFU_1.5 or Flag_EXOfDOM_QSU_1.5 column as a value of 2, for outlier set to NA.
+
+Instruments, manual, and serial numbers used in 2016-2020: Multiple sensors and instruments were added over time; below, we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+
+HOBO Pendant Temperature/Light 64K Data Logger (Bourne, MA), https://www.onsetcomp.com/files/manual_pdfs/9556-M%20UA-002%20Manual.pdf:
+
+Serial No. 10789305; 1m (2016-07 - 2017-05, 2017-07 - 2017-11)
+
+Serial No. 10789306; 4m (2016-07 - 2017-05, 2017-07 - 2017-11)
+
+Serial No. 10789308; 10m (2016-07 - 2017-05, 2017-07 - 2017-11), 1m (2018-12 - 2019-06)
+
+Serial No. 10523600; 0.1m (2017-07 - 2017-11)
+
+Serial No. 2413143; 2m (2017-07 - 2017-11)
+
+Serial No. 890815; 3m (2017-07 - 2017-11)
+
+Serial No. 874433; 5m (2017-07 - 2017-11)
+
+Serial No. 2413148; 6m (2017-07 - 2017-11)
+
+Serial No. 874430; 7m (2017-07 - 2017-11)
+
+Serial No. 890800; 8m (2017-07 - 2017-11)
+
+Serial No. 10523605; 9m (2017-07 - 2017-11)
+
+Serial No. 874426; 10.5m (2017-07 - 2017-11)
+
+Serial No. 874434; 0.1m (2019-06 - 2019-11)
+
+Serial No. 10789315; 0.1m (2020-05 - 2020-07), 1m (2019-06 - 2019-11)
+
+Serial No. 9860323; 2m (2018-12 - 2019-06, 2019-06 - 2019-11, 2020-05 - 2020-07)
+
+Serial No. 2413147; 3m (2018-12 - 2019-06, 2019-06 - 2019-11, 2020-05 - 2020-07)
+
+Serial No. 10647210; 4m (2019-06 - 2019-11)
+
+Serial No. 10789311; 4m (2018-12 - 2019-06)
+
+Serial No. 2407065; 5m (2019-06 - 2019-11)
+
+Serial No. 874439; 5m (2018-12 - 2019-06)
+
+Serial No. 10647214; 6m (2018-12 - 2019-06)
+
+Serial No. 10647217; 6m (2019-06 - 2019-11)
+
+Serial No. 10647209; 7m (2018-12 - 2019-06, 2019-06 - 2019-11, 2020-05 - 2020-07)
+
+Serial No. 10789313; 8m (2018-12 - 2019-06, 2019-06 - 2019-11)
+
+Serial No. 10523598; 9m (2018-12 - 2019-06)
+
+Serial No. 2413142; 9m (2019-06 - 2019-11)
+
+Serial No. 2413140; 10m (2019-06 - 2019-11)
+
+Serial No. 2407063: 10m (2018-12 - 2019-06)
+
+miniDOT Logger Precision Measurment Engineering, Inc. (Vista, CA), Serial No. 7392-024261 (2018-12 - 2020-05); https://www.pme.com/wp-content/uploads/PME-miniDOT-Manual-2021.pdf
+
+YSI EXO2 Sonde Serial No. 19H101129 (2019-10 - 2020-05); https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf Wiped Conductivity/Temperature Sensor Serial No. 19G100537.
+
+Central Wiper for Conductivity/Temperature Sensor Serial No. 19G104137.
+
+Dissolved Oxygen Sensor Serial No. 19H101129.
+
+Total Algae Sensor Serial No. 18F103685.
+
+fDOM Sensor Serial No. 18E105388.
+
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 19G102726 (2019-10 - 2020-05)
+
+###############################################################################################
+
+Methods for bvre-waterlevel_2009_2024.csv: This is the methods section for recording water level observations from the staff gauge at Beaverdam Reservoir. The dataset is ongoing and will be appended to each year.
+
+This file contains observations from the staff gauge from 2009 to 2023 as observed by the Western Virginia Water Authority and the Virginia Tech Reservoir Group LTREB Field Crew. The staff gauge is measured in decimal feet with zero on the staff gauge and recorded in the Obs_waterlevel_from_full_pond_ft. Observations from the staff gauge were converted to water level in meters. Full pond is 13.4 meters, so we converted staff gauge observation from feet to meters (1 ft = 0.3048 m) and then added 13.4 meters to estimate the current water level.
+
+Before publishing this file, we used the bvre-waterlevel_qaqc_2009_2024.R script, which reads in the digitized file from Google Sheets, checks for duplicates, adds flags of 1 for the DateTime column when time was not recorded, and adds a flag of 2 in the Obs_waterlevel_from_full_pond_ft and Flag_WaterLevel_m columns when the water level was below the staff gauge. 
+
+
+###############################################################################################
+
+Description of bvre_daily_waterlevel_vol_2015_2022_Rmd, which is used internally for calibrating our model of Beaverdam Reservoir:
+
+The bvre_daily_waterlevel_vol_2015_2022.Rmd is used to create a file of daily water level and volume, which contains daily water level and volume associated with each date from 7 July 2015 - 4 May 2022 in Beaverdam Reservoir. This script uses EDI-published BVR sensor data from 2020-2022 to calculate daily water level using the pressure sensor, and water level observations from both the Western Virginia Water Authority and the Virginia Tech LTREB Reservoir Group field crew from 2015-2020 (bvre-waterlevel_2009_2024.csv, before high-frequency sensors were deployed) to interpolate water level and obtain daily values. We then used bathymetry data (Carey et al. 2022) to associate a volume to the variable water level observations for each day.
+
+
+###############################################################################################
+
+References
+
+Carey, C.C., A.S. Lewis, D.W. Howard, W.M. Woelmer, P.A. Gantzer, K.A. Bierlein, J.C. Little, and WVWA. 2022. Bathymetry and watershed area for Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir ver 1. Environmental Data Initiative. https://doi.org/10.6073/pasta/352735344150f7e77d2bc18b69a22412 (Accessed 2024-04-20).

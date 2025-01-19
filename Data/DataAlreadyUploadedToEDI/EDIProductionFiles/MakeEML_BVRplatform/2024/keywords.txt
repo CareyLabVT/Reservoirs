@@ -17,7 +17,7 @@ chlorophyll	lter controlled vocabulary
 pressure	lter controlled vocabulary
 fDOM	carey lab controlled vocabulary
 dissolved organic matter	carey lab controlled vocabulary
-total dissolved organic solids	carey lab controlled vocabulary
+total dissolved solids	carey lab controlled vocabulary
 phycocyanin	carey lab controlled vocabulary
 lake physics	carey lab controlled vocabulary
 water chemistry	lter controlled vocabulary

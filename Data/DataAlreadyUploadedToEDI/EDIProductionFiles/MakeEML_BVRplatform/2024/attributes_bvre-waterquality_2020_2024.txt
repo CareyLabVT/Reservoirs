@@ -2,7 +2,7 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir 	categorical			NA	value is missing
 DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (highest elevation above sediments)	numeric	celsius		NA	value is missing
+ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (the highest elevation above the sediments)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	Water temperature measured by thermistor at position 2	numeric	celsius		NA	value is missing
 ThermistorTemp_C_3	Water temperature measured by thermistor at position 3	numeric	celsius		NA	value is missing
 ThermistorTemp_C_4	Water temperature measured by thermistor at position 4	numeric	celsius		NA	value is missing

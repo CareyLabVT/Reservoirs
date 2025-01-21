@@ -11,7 +11,7 @@ Created: 20 December 2023
 Last edit: 17 October 2024 (ABP)
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = FALSE)
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse,lubridate, plotly, knitr, gsheet)
 
@@ -24,7 +24,7 @@ current_endtime = as.Date("2024-12-31")
 ```
 
 
-```{r Make the qaqced data frame}
+```{r Make the qaqced data frame, eval=FALSE, include=FALSE}
 # Use the qaqc function to make the current data frame
 
 current_df <- ugga_qaqc(
@@ -36,6 +36,22 @@ current_df <- ugga_qaqc(
 
 ```
 
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+```{r READ IN EDI FOR REVIEWER, include=FALSE}
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
+                                                                ### CHANGE THIS NUMBER BELOW 
+                                                                             ##      
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/30/9adadd2a7c2319e54227ab31a161ea12")
+
+ # Force files from EDI to have an EST timestamp
+  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
+
+```
+
+
 
 ```{r QAQC plots}
 #Plot all CH4
@@ -44,7 +60,7 @@ current_df%>%
              color = as.factor(Site),
              y=CH4Flux_umolCm2s))+
   geom_point()+
-  ylab("CH4 flux (µumol/m2/s)")+
+  ylab("CH4 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -56,7 +72,7 @@ current_df%>%
              shape = as.factor(Flag_CH4Flux_umolCm2s),
              y=CH4Flux_umolCm2s))+
   geom_point()+
-  ylab("CH4 flux (µumol/m2/s)")+
+  ylab("CH4 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -70,7 +86,7 @@ current_df%>%
              color = as.factor(Site),
              y=CO2Flux_umolCm2s))+
   geom_point()+
-  ylab("CO2 flux (µumol/m2/s)")+
+  ylab("CO2 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -82,7 +98,7 @@ current_df%>%
              shape = as.factor(Flag_CO2Flux_umolCm2s),
              y=CO2Flux_umolCm2s))+
   geom_point()+
-  ylab("CO2 flux (µumol/m2/s)")+
+  ylab("CO2 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -97,7 +113,7 @@ current_CH4 <- current_df%>%
              color = as.factor(Site),
              y=CH4Flux_umolCm2s))+
   geom_point()+
-  ylab("CH4 flux (µumol/m2/s)")+
+  ylab("CH4 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -112,7 +128,7 @@ Current_C02 <- current_df%>%
              color = as.factor(Site),
              y=CO2Flux_umolCm2s))+
   geom_point()+
-  ylab("C02 flux (µumol/m2/s)")+
+  ylab("C02 flux (umol/m2/s)")+
   facet_wrap(~Reservoir)+
   theme_bw()
 
@@ -122,20 +138,20 @@ plotly::ggplotly(Current_C02)
 
 ```
 
-```{r Save the data frame}
+```{r Save the data frame, eval=FALSE, include=FALSE}
 
 # Double Check naming convention
 # Variable_StartYear_EndYear
 
 # convert datetimes to characters so that they are properly formatted in the output file
-# current_df$DateTime <- as.character(format(current_df$Date))
+ #current_df$DateTime <- as.character(format(current_df$Date)) this file does not have a datetime column
 
 write.csv(current_df, "ugga_2018_2024.csv", row.names = FALSE)
 
 
 ```
 
-```{r Download relavant files}
+```{r Download relavant files, eval=FALSE, include=FALSE}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv", "ugga_maintenancelog_2018_2024.csv")
@@ -148,7 +164,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/head
 
 ```
 
-```{r Site description file}
+```{r Site description file, eval=FALSE, include=FALSE}
 #Install the required googlesheets4 package
 #install.packages('googlesheets4')
 #Load the library

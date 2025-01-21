@@ -130,7 +130,7 @@ make_eml(path = folder,
      #                        "Sample site descriptions"),
          data.table.description = c("UGGA diffusive flux dataset from FCR and BVR",
                                     "Descriptions of sampling sites, including lat/long",
-                                    "UGGA maitenance log to flag and/or remove erronious casts"),
+                                    "UGGA maintenance log to flag and/or remove erroneous casts"),
          other.entity = c('RawData.zip', 
                           "ugga_inspection_2018_2024.Rmd", 
                           "ugga_qaqc_2018_2024.R", 
@@ -147,5 +147,5 @@ make_eml(path = folder,
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.5") # this is for staging !
+         package.id = "edi.1103.1") # this is for staging !
      #package.id = "edi.1082.3") #edi.1082.2 is the most recent published version

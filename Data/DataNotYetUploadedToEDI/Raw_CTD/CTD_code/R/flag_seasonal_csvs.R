@@ -111,7 +111,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     # Get the sequence of rows in the low spike which we want to remove  
     low <- as.numeric(gfg[d])-6
-    high <- as.numeric(gfg[d])+11
+    high <- as.numeric(gfg[d])+22
     
     # change those rows in Conductivity and specific conductance to NA
     ctd[c(low:high), c("Cond_uScm", "SpCond_uScm")] <- NA

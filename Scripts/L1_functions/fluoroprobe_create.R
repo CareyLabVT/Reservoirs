@@ -306,7 +306,7 @@ for(i in 1:nrow(log)){
 
   ### Get the Site Number
 
-  Site <- as.numeric(log$Site)
+  Site <- as.numeric(log$Site[i])
 
   ### Get the depth if it is not NA
 
@@ -370,18 +370,18 @@ for(i in 1:nrow(log)){
   if(flag %in% c(1)){
     # Data re-calibrated by bbe moldaenke post collection
 
-    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    fp_final[c(which(fp_final$Reservoir == Reservoir & fp_final$Site == Site & fp_final$DateTime %in% Time)), paste0("Flag_",maintenance_cols)] <- flag
     
   }else if (flag %in% c(2)){ 
     ## Instrument error
     
-    fp_final[c(which(fp_final[,'Site'] == Site & fp_final$DateTime %in% Time)),maintenance_cols] <- NA
-    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    fp_final[c(which(fp_final$Reservoir == Reservoir & fp_final$Site == Site & fp_final$DateTime %in% Time)),maintenance_cols] <- NA
+    fp_final[c(which(fp_final$Reservoir == Reservoir & fp_final$Site == Site & fp_final$DateTime %in% Time)), paste0("Flag_",maintenance_cols)] <- flag
     
   }else if (flag %in% c(4)){ 
     ## Data suspect due to poor calibration
     
-    fp_final[fp_final$DateTime %in% Time, paste0("Flag_",maintenance_cols)] <- flag
+    fp_final[c(which(fp_final$Reservoir == Reservoir & fp_final$Site == Site & fp_final$DateTime %in% Time)), paste0("Flag_",maintenance_cols)] <- flag
     
   }else
   {

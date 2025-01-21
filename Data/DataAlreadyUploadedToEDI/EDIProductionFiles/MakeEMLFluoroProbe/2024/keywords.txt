@@ -19,6 +19,10 @@ algae	lter controlled vocabulary
 water temperature	lter controlled vocabulary
 water quality	lter controlled vocabulary
 profiler	carey lab controlled vocabulary
+cyanobacteria	carey lab controlled vocabulary
+green algae	carey lab controlled vocabulary
+diatoms	carey lab controlled vocabulary
+brown algae	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary

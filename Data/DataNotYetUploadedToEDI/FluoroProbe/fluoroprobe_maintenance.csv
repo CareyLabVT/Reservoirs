@@ -9,10 +9,10 @@ CCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2017-12-31 23:59:59 EDT, GreenA
 SHR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2017-12-31 23:59:59 EDT, GreenAlgae_ugL, RFU_470nm,1, NA, bbe moldaenke posthoc recalibration
 GWR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2017-12-31 23:59:59 EDT, GreenAlgae_ugL, RFU_470nm,1, NA, bbe moldaenke posthoc recalibration
 FCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
-FCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
-FCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
-FCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
-FCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
+FCR,45, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
+FCR,30, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
+FCR,20, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
+FCR,10, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
 BVR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
 CCR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data
 SHR,50, NA,fluoroprobe, 2017-01-01 00:00:00 EDT, 2018-12-31 23:59:59 EDT,Temp_C,Temp_C,2, NA,bad temperature data

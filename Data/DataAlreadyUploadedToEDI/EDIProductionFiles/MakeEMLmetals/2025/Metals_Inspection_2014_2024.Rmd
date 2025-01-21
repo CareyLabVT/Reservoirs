@@ -341,7 +341,7 @@ The plots are broken down by reservoir and site
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -453,7 +453,7 @@ dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 

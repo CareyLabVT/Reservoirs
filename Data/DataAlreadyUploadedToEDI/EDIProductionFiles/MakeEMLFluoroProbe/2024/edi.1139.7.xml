@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1139.6" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1139.7" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=melofton,o=EDI,dc=edirepository,dc=org</principal>
@@ -41,7 +41,7 @@
       <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
     </creator>
-    <pubDate>2025-01-17</pubDate>
+    <pubDate>2025-01-21</pubDate>
     <abstract>
       <para>Depth profiles of fluorescence-based phytoplankton biomass were sampled using a bbe Moldaenke FluoroProbe (Schwentinental, Germany) during 2014 to 2024 in five drinking water reservoirs in southwestern Virginia, USA. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the town of Pulaski, Virginia. The dataset consists of depth profiles of fluorescence-based phytoplankton biomass measured at the deepest site of each reservoir adjacent to the dam, except in Falling Creek Reservoir, where depth profiles were also taken at four upstream sites ranging from the riverine to the lacustrine zone during 2016-2019 and 2024. Casts were taken approximately weekly from May-October and monthly from November-April. Casts were collected at Beaverdam and Falling Creek Reservoirs during all years (2014-2024); casts were collected at Carvins Cove Reservoir during 2014-2016 and 2018-2023; casts were collected at Spring Hollow Reservoir during 2014-2016 and 2019; and casts were collected at Gatewood Reservoir in 2015-2016.</para>
     </abstract>
@@ -56,6 +56,10 @@
       <keyword>Carvins Cove Reservoir</keyword>
       <keyword>Gatewood Reservoir</keyword>
       <keyword>profiler</keyword>
+      <keyword>cyanobacteria</keyword>
+      <keyword>green algae</keyword>
+      <keyword>diatoms</keyword>
+      <keyword>brown algae</keyword>
       <keyword>LTREB</keyword>
       <keyword>Virginia Reservoirs LTREB</keyword>
       <keyword>Virginia Reservoirs</keyword>
@@ -170,24 +174,22 @@ This data package has been iteratively updated over time and builds on the many 
           <para>DATA PACKAGE CONTENTS
 This data package includes a data file (FluoroProbe_2014_2024.csv), QAQC R script (FluoroProbe_qaqc_2014_2024.R), maintenance log (Maintenance_Log_FluoroProbe_2014_2024.csv), visual inspection R script (FluoroProbe_inspection_2014_2024.Rmd), and sampling sites description file (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data files included in the package, and the visual inspection script provides code for plotting the data files.  </para>
           <para>SAMPLING TIMES
-Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately March to November in 2014-2024. All date times are reported in local time. </para>
+Sampling times are indicated in the DateTime column, and were collected in the America/New_York Eastern Time Zone, which observed daylight savings time from approximately March to November and standard time in the intervening months in 2014-2024. All date times are reported in local time. </para>
           <para>SAMPLING INSTRUMENT
-Sampling was conducted using a bbe Moldaenke FluoroProbe. Casts were taken by slowly lowering the instrument on a rope to the bottom of the sampling site and then pulling it back up, with the aim of lowering at a velocity of ~0.1 m every three seconds (which is the measurement frequency of the FluoroProbe), resulting in a depth profile with a spatial resolution of ~0.1 m. The FluoroProbe was sent to bbe Moldaenke for calibration and maintenance yearly according to the standards and practices of bbe Moldaenke between December-April in 2016/2017, 2017/2018, 2019/2020, and between Jan-June 2024. The probe was not sent for calibration during the winters of 2018/2019, 2020/2021, 2021/2022, or 2022/2023. The FluoroProbe uses fluorescence from six LED wavelengths (525 nm, 570 nm, 610 nm, 370 nm, 590 nm, 470 nm) to calculate biomass of four phytoplankton spectral groups (green algae, brown algae, bluegreen algae, and mixed assemblages) by comparing the sample spectrum to the fluorescence spectra of individual algal divisions measured during calibration. See Beutler et al. 2002 for an explanation of the principles of operation of the FluoroProbe. In 2017, all casts were reprocessed because of a bad calibration after the instrument was sent away for maintenance. These observations are flagged with the code 1 = data re-calibrated post-collection. </para>
-          <para>Beutler, M. et al. A fluorometric method for the differentiation of algal populations in vivo and in situ. Photosynth. Res. 72, 39–53 (2002).</para>
+Sampling was conducted using a bbe Moldaenke FluoroProbe. Casts were taken by slowly lowering the instrument on a rope to the bottom of the sampling site and then pulling it back up, with the aim of lowering at a velocity of ~0.1 m every three seconds (which is the measurement frequency of the FluoroProbe), resulting in a depth profile with a spatial resolution of ~0.1 m. The FluoroProbe was sent to bbe Moldaenke for calibration and maintenance yearly according to the standards and practices of bbe Moldaenke between December-April in 2016/2017, 2017/2018, 2019/2020, and between Jan-June 2024. The probe was not sent for calibration during the winters of 2018/2019, 2020/2021, 2021/2022, or 2022/2023. The FluoroProbe uses fluorescence from six LED wavelengths (525 nm, 570 nm, 610 nm, 370 nm, 590 nm, 470 nm) to calculate biomass of four phytoplankton spectral groups (green algae, brown algae, blue-green algae, and mixed assemblages) by comparing the sample spectrum to the fluorescence spectra of individual algal divisions measured during calibration. See Beutler et al. (2002) for an explanation of the principles of operation of the FluoroProbe. In 2017, all casts were reprocessed because of a bad calibration after the instrument was sent away for maintenance. These observations are flagged with the code 1 = data re-calibrated post-collection. </para>
+          <para>Beutler, M. et al. (2002) A fluorometric method for the differentiation of algal populations in vivo and in situ. Photosynth. Res. 72, 39–53.</para>
           <para>CAVEATS OF FLUORESCENCE-BASED DATA
 Measurements taken near the water's surface may be less accurate due to quenching of photosynthetic pigments at high light intensities, such as might be experienced at shallow depths.</para>
-          <para>Due to differences in water color among different water bodies, a universal yellow substances offset may not be appropriate for all sampled water bodies. Dissolved organic carbon (DOC) in these reservoirs tends to be low (2-5 mgL), but direct comparisons of phytoplankton biomass values among reservoirs should be treated with caution.
-Measurements taken near the bottom of the water column or during high-turbidity events may be less accurate due to interference of high amounts of particulate matter with the fluorescence signal.</para>
+          <para>Due to differences in water color among different water bodies, a universal yellow substances offset may not be appropriate for all sampled water bodies. Dissolved organic carbon (DOC) in our study reservoirs tends to be low (2-5 mgL), but direct comparisons of phytoplankton biomass values among reservoirs should be treated with caution. Measurements taken near the bottom of the water column or during high-turbidity events may be less accurate due to interference of high amounts of particulate matter with the fluorescence signal.</para>
           <para>TEMPERATURE DATA
-The temperature sensor was malfunctioning in 2017-2018 and so the 2017-2018 temperature data are not reported for these years. In addition, three days of data in 2019 and one day in 2020 have compromised temperature data: 02Sept19, 04Sept19, 11Sept19, and 24Aug20.
-Note that temperatures at shallow depths may be less accurate as the sensor adjusts to the water temperature. It is recommended that temperature values in the first ~1 m of the water column be treated with caution.</para>
+The temperature sensor was malfunctioning in 2017-2018 and so the 2017-2018 temperature data are not reported for these years. In addition, three days of data in 2019 and one day in 2020 have compromised temperature data: 02Sept19, 04Sept19, 11Sept19, and 24Aug20. Note that temperatures at shallow depths may be less accurate as the sensor adjusts to the water temperature. It is recommended that temperature values in the first ~1 m of the water column be treated with caution.</para>
           <para>TRANSMISSION DATA
 From 2014-2023, the transmission sensor was incorrectly calibrated. These data are retained in the dataset but flagged with the code 4 = data suspect due to poor calibration. We have no reason to think the transmission sensor calibration affected the quality of other variables measured by the FluoroProbe. In addition, on 28Aug19, the transmission sensor malfunctioned and so values from this point on in 2019 are not reported. These observations are flagged with the code 2 = instrument malfunction. </para>
           <para>WORKFLOW FOR QUALITY ASSURANCE AND QUALITY CONTROL OF DATA
-The file FluoroProbe_qaqc_2014_2024.R includes code for collating and conducting quality checks on FluoroProbe data. Quality checks include ensuring that sampling location information is included with each cast and trimming the cast to eliminate observations that are compromised due to quenching at the water's surface or interference by particulate matter near the sediments. All QAQC is automated. Data issues due to maintenance or instrument malfunction are recorded as they arise in the Maintenance_Log_FluoroProbe_2014_2024.csv file, and this file is read in by the FluoroProbe_qaqc_2014_2024.R to execute the QAQC as specified in the maintenance log. The file FluoroProbe_inspection_2014_2024 combines historic data (prior to the most recent calendar year) with the current year's data into a single dataframe, as well as writes visualizations of each FluoroProbe cast collected during the most recent calendar year and summary visualizations of the data over multiple years. These visualizations may be used to manually check biomass, temperature, and transmission profiles.</para>
+The file FluoroProbe_qaqc_2014_2024.R includes code for collating and conducting quality checks on FluoroProbe data. Quality checks include ensuring that sampling location information is included with each cast and trimming the cast to eliminate observations that are compromised due to quenching at the water's surface or interference by particulate matter near the sediments. All QAQC is automated. Data issues due to maintenance or instrument malfunction are recorded as they arise in the Maintenance_Log_FluoroProbe_2014_2024.csv file, and this file is read in by the FluoroProbe_qaqc_2014_2024.R to execute the QAQC as specified in the maintenance log. The file FluoroProbe_inspection_2014_2024 combines historical data (prior to the most recent calendar year) with the current year's data into a single dataframe, as well as writes visualizations of each FluoroProbe cast collected during the most recent calendar year and summary visualizations of the data over multiple years. These visualizations may be used to manually check biomass, temperature, and transmission profiles.</para>
           <para>SITE DESCRIPTIONS
 The site_descriptions.csv provides details about each sampling site where FluoroProbe data are collected.</para>
-          <para>Beaverdam Reservoir has variable water level, so variable maximum depths for FluoroProbe casts taken at Beaverdam Reservoir are expected. Field crew personnel halt the downcast when they feel a loss of resistance on the profiling rope attached to the sensor, and often several rows of the deepest observations are manually trimmed from the profile by field crew personnel while uploading the profile from the sensor to the field computer due to interference by suspended sediment at the bottom of the reservoir. Finally, profiles are occasionally truncated due to loss of battery power or other reasons. Thus, the maximum depth reported for any given profile should not be considered the maximum depth of the reservoir, but if there is no profile collection error, the maximum depth for the profile is likely within 0.5 m of the maximum reservoir depth.</para>
+          <para>Among the sample reservoirs, Beaverdam Reservoir has the most variable water level, so variable maximum depths for FluoroProbe casts taken at Beaverdam Reservoir are to be expected. Field crew personnel halt the downcast when they feel a loss of resistance on the profiling rope attached to the sensor, and often several rows of the deepest observations are manually trimmed from the profile by field crew personnel while uploading the profile from the sensor to the field computer due to interference by suspended sediment at the bottom of the reservoir. Finally, profiles are occasionally truncated due to loss of battery power or other reasons. Thus, the maximum depth reported for any given profile should not be considered the maximum depth of the reservoir, but if there is no profile collection error, the maximum depth for the profile is likely within 0.5 m of the maximum reservoir depth.</para>
           <para>WHOLE-ECOSYSTEM EXPERIMENTS
 Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.</para>
         </description>
@@ -220,7 +222,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
           <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
           <role>Principal Investigator</role>
         </personnel>
-        <funding>Virginia Tech Center for Ecosystem Forecasting 34211</funding>
+        <funding>Virginia Tech Center for Ecosystem Forecasting 034211</funding>
       </relatedProject>
       <relatedProject>
         <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
@@ -288,8 +290,8 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <entityDescription>Reservoir FluoroProbe dataset</entityDescription>
       <physical>
         <objectName>fluoroprobe_2014_2024.csv</objectName>
-        <size unit="bytes">16347006</size>
-        <authentication method="MD5">ad53dc33ffd0385a3d9e6bca7424c896</authentication>
+        <size unit="bytes">16303444</size>
+        <authentication method="MD5">99048da9c73f58a97773ae61b9555cfe</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -574,7 +576,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
                 <numberType>real</numberType>
                 <bounds>
                   <minimum exclusive="false">3.82</minimum>
-                  <maximum exclusive="false">58.81</maximum>
+                  <maximum exclusive="false">30.96</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1413,8 +1415,8 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <entityDescription>FluoroProbe maintenance log</entityDescription>
       <physical>
         <objectName>fluoroprobe_maintenance_2014_2024.csv</objectName>
-        <size unit="bytes">3837</size>
-        <authentication method="MD5">4b59ed59f6a631a32bae67508d345760</authentication>
+        <size unit="bytes">4437</size>
+        <authentication method="MD5">6eee6421ef4625c53a4fbb5ca43314ff</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -1751,15 +1753,15 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>28</numberOfRecords>
+      <numberOfRecords>32</numberOfRecords>
     </dataTable>
     <otherEntity>
       <entityName>fluoroprobe_qaqc_2014_2024.R</entityName>
       <entityDescription>data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log</entityDescription>
       <physical>
         <objectName>fluoroprobe_qaqc_2014_2024.R</objectName>
-        <size unit="bytes">15983</size>
-        <authentication method="MD5">4a026e30b33e214fb4adf0b302d4521a</authentication>
+        <size unit="bytes">16220</size>
+        <authentication method="MD5">eae2465e8f26d168be33436e47e721a2</authentication>
         <dataFormat>
           <externallyDefinedFormat>
             <formatName>text/plain</formatName>

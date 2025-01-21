@@ -199,7 +199,7 @@ make_eml(
   user.id = 'melofton',
   #user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1139.6')
+  package.id = 'edi.1139.7')
   #package.id = 'edi.1112.2')
 
 ## Step 8: Check your data product! ####

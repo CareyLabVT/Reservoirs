@@ -22,7 +22,7 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(lubridate,tidyverse, gsheet)
 
 
-function(directory, 
+filt_chla_qaqc <- function(directory, 
          rack_map,
          filtering_log,
          final_vol_extract = 6, 

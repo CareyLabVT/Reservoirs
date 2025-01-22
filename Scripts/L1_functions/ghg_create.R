@@ -495,7 +495,7 @@ ghg_qaqc<-function(directory,
     
     ### Get the Rep from the observation
     
-    Rep <- as.numeric(log$Reps[i])
+    Rep <- as.numeric(log$Rep[i])
     
     ### Get the vial number
     

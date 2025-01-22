@@ -190,16 +190,16 @@ make_eml(
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2024",
   temporal.coverage = c("2014-05-04", "2024-11-19"),
   maintenance.description = 'ongoing',
-  data.table = c("FluoroProbe_2014_2024.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2024.csv"),
-  data.table.name = c("FluoroProbe_2014_2024.csv", "site_descriptions.csv","Maintenance_Log_FluoroProbe_2014_2024.csv"),
+  data.table = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
+  data.table.name = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("FluoroProbe_qaqc_2014_2024.R","FluoroProbe_inspection_2014_2024.Rmd"),
-  other.entity.name = c("FluoroProbe_qaqc_2014_2024.R","FluoroProbe_inspection_2014_2024.Rmd"),
-  other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
+  other.entity = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
+  other.entity.name = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
+  other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2024.csv before publishing"),
   user.id = 'melofton',
   #user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1139.3')
+  package.id = 'edi.1139.6')
   #package.id = 'edi.1112.2')
 
 ## Step 8: Check your data product! ####
@@ -243,12 +243,12 @@ make_eml(
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2023",
   temporal.coverage = c("2014-05-04", "2023-11-14"),
   maintenance.description = 'ongoing',
-  data.table = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
+  data.table = c("fluoroprobe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
   data.table.name = c("FluoroProbe_2014_2023.csv", "site_descriptions.csv","FluoroProbe_maintenancelog_2014_2023.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
   other.entity = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
   other.entity.name = c("FluoroProbe_qaqc_2014_2023.R","FluoroProbe_inspection_2014_2023.Rmd"),
-  other.entity.description = c("data aggregation and quality control script","data visual inspection script"),
+  other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2024.csv before publishing"),
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.272.8')

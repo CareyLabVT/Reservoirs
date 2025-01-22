@@ -22,7 +22,7 @@ pacman::p_load(tidyverse, lubridate, akima, reshape2,
 
 REVIEWERS DO NOT RUN THIS CHUNK! THIS IS FOR DATA PRODUCT LEADS ONLY!
 ```{r Make draft EDI file, include=FALSE, eval=FALSE, echo=FALSE}
-devtools::source_url("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
+devtools::source_url("https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Scripts/L1_functions/fluoroprobe_create.R")
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.272.8'
@@ -37,13 +37,13 @@ example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reser
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv'
-out_file <- "./Data/DataAlreadyUploadedtoEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv"
+maintenance_file <- 'https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
+out_file <- "./Data/DataAlreadyUploadedtoEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/fluoroprobe_2014_2024.csv"
 start_date <- first_edi_date
 end_date <- Sys.Date() + lubridate::days(1)
 
 # Run function
-fp_all <- fluoroprobe_qaqc(repo_link = repo_link,
+current_df <- fluoroprobe_qaqc(repo_link = repo_link,
                  repo_filepath = repo_filepath,
                  example_file_for_colnames = example_file_for_colnames,
                  current_year_data_folder = current_year_data_folder,
@@ -58,14 +58,15 @@ fp_all <- fluoroprobe_qaqc(repo_link = repo_link,
 ## Read in built dataframe - reviewers start here!
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
-fp_all <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
+# THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
+current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # double-check time zone
-head(fp_all$DateTime)
-hist(hour(fp_all$DateTime))
+head(current_df$DateTime)
+hist(hour(current_df$DateTime))
 
-current_df <- fp_all %>%
+this_year <- current_df %>%
   filter(year(DateTime) == 2024) 
 ```
 
@@ -322,12 +323,33 @@ flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2024, site = 50, z
 ## Visualize a previous year at a glance
 
 ```{r visualization of an historic year at a glance}
-flora_heatmap(fp_data = fp_all, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = fp_all, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = fp_all, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = fp_all, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = fp_all, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
 ```
+
+## Code to check for negative RFUs
+```{r}
+current_df |>
+  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
+  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
+  filter(RFU < 0) |> 
+  ggplot(aes(x=DateTime, y= Depth_m, colour = as_factor(wavelength))) + 
+  facet_wrap(Reservoir~Site) + 
+  geom_point()
+
+
+current_df |>
+  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
+  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
+  filter(RFU < 0) |> 
+  reframe(.by = wavelength, 
+          n = n())
+
+```
+
 
 ## Check to make sure that what is in the maintenance log  was actually removed
 
@@ -337,7 +359,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/Maintenance_Log_FluoroProbe.csv')
+ maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
 
 # name the data file
 sd <- tail(maint)%>%
@@ -368,14 +390,14 @@ last_row <- tail(sd, n=1)
     if(is.na(end)){
       # If there the maintenance is on going then the columns will be removed until
       # and end date is added
-      Time <- fp_all |> filter(DateTime >= start) |> select(DateTime)
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
       
     }else if (is.na(start)){
       # If there is only an end date change columns from beginning of data frame until end date
-      Time <- fp_all |> filter(DateTime <= end) |> select(DateTime)
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
       
     }else {
-      Time <- fp_all |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
     }
 
 
@@ -385,11 +407,11 @@ last_row <- tail(sd, n=1)
     
     # Make list of just the columns we want 
     
-    test <- colnames(fp_all%>%select(Reservoir,DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    test <- colnames(current_df%>%select(Reservoir,DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
     
     # Print the head of the table to make sure that data are flagged
     
-    knitr::kable((head(fp_all[fp_all$DateTime %in% Time$DateTime, test]))) 
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
 
 ```
 
@@ -401,7 +423,7 @@ Make sure the observations are flagged
 
 # Print the tail of the table to make sure that data are flagged
     
-    knitr::kable(tail(fp_all[fp_all$DateTime %in% Time$DateTime, test])) 
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
 
 ```
 

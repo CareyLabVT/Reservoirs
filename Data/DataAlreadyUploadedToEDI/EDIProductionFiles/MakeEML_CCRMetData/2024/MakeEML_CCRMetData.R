@@ -143,13 +143,13 @@ make_eml(path = folder,
          data.table = c('ccre-met_2021_2024.csv','ccre-met_maintenancelog_2021_2024.csv'),
          #data.table.name = c('CCRMet_2021_2023', 'CCRMet_maintenancelog_2021_2023'),
          data.table.description = c('All meteorological parameters measured at Carvins Cove Reservoir during 2021-2024',
-                                    'Log for maintenance and outliers for the Met station at Carvins Cove from 2021-2024'),
+                                    'Log for maintenance and outliers for the met station at Carvins Cove from 2021-2024'),
          other.entity = c('ccre-met_qaqc_2021_2024.R', 
                           'ccre-met_inspection_2021_2024.Rmd', 'Plotting_function.R'),
         # other.entity.name = c('CCRMet_qaqc_2023_2023', 
         #                       'CCRMet_inspection_2021_2023',
         #                       'Plotting_function'),
-         other.entity.description = c('QAQC function used to take out observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
+         other.entity.description = c('QAQC function used to modify and/or observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
                                       'Script that creates QAQC plots for visual inspection and downloads files.',
                                       'A function used to create the QAQC plots in the ccre-met_inspection_2021_2024.Rmd script.'),   
          temporal.coverage = c("2021-03-29", "2024-12-31"),
@@ -168,21 +168,21 @@ make_eml(path = folder,
 #  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK
 # ??!!! SO AM COPYING & PASTING THE .XML FILE BACK INTO THE GITHUB DIRECTORY. WORTH A TRY TO RUN IT OUT OF THERE
 # NEXT TIME WE UPDATE THE MET DATA IN THE FUTURE. I ALSO DELETED THE ZIP FILES 
-setwd("/Users/cayelan/Desktop/MakeEML_MetData")
-make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2018",
-         data.table = c('Met_final_2015_2018.csv', 'Met_Maintenance_2015_2018.csv'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2018',
-                                    'The log of all maintenance applied to the meteorological station'),
-         other.entity = 'Met_QAQC.R',
-         other.entity.description = 'Data aggregation and QA/QC R script',
-         temporal.coverage = c("2015-07-07", "2018-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
-         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
-         maintenance.description = "ongoing", 
-         user.id = "ccarey",
-         user.domain = 'EDI',
-         package.id = "edi.389.2") # Put your package.id here, followed by .1 (for 1st version)
+#setwd("/Users/cayelan/Desktop/MakeEML_MetData")
+# make_eml(path = "/Users/cayelan/Desktop/MakeEML_MetData",
+#          dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2018",
+#          data.table = c('Met_final_2015_2018.csv', 'Met_Maintenance_2015_2018.csv'),
+#          data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2018',
+#                                     'The log of all maintenance applied to the meteorological station'),
+#          other.entity = 'Met_QAQC.R',
+#          other.entity.description = 'Data aggregation and QA/QC R script',
+#          temporal.coverage = c("2015-07-07", "2018-12-31"),
+#          #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"),#have it in a .txt file
+#          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
+#          maintenance.description = "ongoing", 
+#          user.id = "ccarey",
+#          user.domain = 'EDI',
+#          package.id = "edi.389.2") # Put your package.id here, followed by .1 (for 1st version)
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

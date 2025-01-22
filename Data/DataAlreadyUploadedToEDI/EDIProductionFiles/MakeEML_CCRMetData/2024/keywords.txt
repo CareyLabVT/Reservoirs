@@ -4,6 +4,7 @@ reservoir	cuahsi controlled vocabulary
 lakes	cuahsi controlled vocabulary
 reservoirs	cuahsi controlled vocabulary
 meteorology	cuahsi controlled vocabulary
+weather	cuahsi controlled vocabulary
 high-frequency	cuahsi controlled vocabulary
 air temperature	cuahsi controlled vocabulary
 relative humidity	cuahsi controlled vocabulary
@@ -20,6 +21,7 @@ wind velocity	cuahsi controlled vocabulary
 barometric pressure	cuahsi controlled vocabulary
 Carey Lab	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
+Virginia Tech Center for Ecosystem Forecasting	carey lab controlled vocabulary
 Smart Reservoir	carey lab controlled vocabulary
 Carvins Cove Reservoir	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
@@ -27,4 +29,5 @@ Virginia Reservoirs 	carey lab controlled vocabulary
 LTREB 	carey lab controlled vocabulary
 Virginia Reservoirs LTREB 	carey lab controlled vocabulary
 CCR 	carey lab controlled vocabulary
+CCR met 	carey lab controlled vocabulary
 ccre-met	carey lab controlled vocabulary

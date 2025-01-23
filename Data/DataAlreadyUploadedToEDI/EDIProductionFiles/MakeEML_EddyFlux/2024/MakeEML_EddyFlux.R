@@ -60,7 +60,7 @@ library(EMLassemblyline)
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "EddyFlux_2020_2024.csv",
+                          data.table = "eddy-flux_2020_2024.csv",
                           write.file = TRUE)
 
 
@@ -145,18 +145,18 @@ make_eml(
   dataset.title = "Time series of carbon dioxide and methane fluxes measured with eddy covariance for Falling Creek Reservoir in southwestern Virginia, USA during 2020-2024",
   temporal.coverage = c("2020-04-04", "2024-12-31"),
   maintenance.description = 'ongoing',
-  data.table = c("EddyFlux_2020_2024.csv"),
-  data.table.description = c("EC data processed with EddyPro and cleaned with EddyFlux_qaqc_2020_2024.R, but not further post-processed with EddyFlux_post_processing.Rmd"),
+  data.table = c("eddy-flux_2020_2024.csv"),
+  data.table.description = c("EC data processed with EddyPro and cleaned-up from the default EddyPro output (customize the default error code -9999 to NA, remove outliers, and select variables) using the script eddy-flux_qaqc_2020_2024.R, but not further post-processed (additional qaqc and gap-filling) with eddy-flux_post_processing.Rmd"),
   #data.table.name = "EC Data for 2020 to 2022",
-  other.entity= c("EddyFlux_qaqc_2020_2024.R","EddyFlux_inspection_2020_2024.Rmd","EddyFlux_processing_2020_2024.Rmd","despike.R"),
-  other.entity.description = c("R script to clean-up Eddy Pro output",
-                               "R Markdown script for using the qaqc script and making qaqc plots",
-                               "R Markdown script for post-processing of EC data and not used in EddyFlux_2020_2024.csv",
-                               "Depsike function for post-processing"),
+  other.entity= c("eddy-flux_qaqc_2020_2024.R","eddy-flux_inspection_2020_2024.Rmd","eddy-flux_processing_2020_2024.Rmd","despike.R"),
+  other.entity.description = c("R script to clean-up (customize the default error code -9999 to NA, remove outliers, and select variables) Eddy Pro output",
+                               "R Markdown script for using the sourced qaqc script and making qaqc plots",
+                               "R Markdown script for post-processing (additional qaqc and gap-filling) of EC data and not used in eddy-flux_2020_2024.csv",
+                               "Despike function for post-processing in the script eddy-flux_processing_2020_2024.Rmd"),
   #other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.692.12') # FOR STAGING
+  package.id = 'edi.692.20') # FOR STAGING
   #package.id = 'edi.1061.3') # FOR FINAL PRODUCTION
 
 ## Step 8: Check your data product! ####

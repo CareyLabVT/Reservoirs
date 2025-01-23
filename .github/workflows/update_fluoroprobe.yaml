@@ -32,7 +32,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git add Data/DataNotYetUploadedToEDI/Raw_fluoroprobe/fluoroprobe_L1.csv
+          git add Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_L1.csv
           git commit -m "Updating Manual Files" || echo "No changes to commit"
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY} 
           

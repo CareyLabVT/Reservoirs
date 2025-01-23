@@ -55,7 +55,7 @@ template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFile
 
 template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
                           data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-                          data.table = c("Metals_2014_2024.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2024.csv'),
+                          data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
                           write.file = TRUE)
 
 
@@ -64,7 +64,7 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
                              data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-                             data.table = c("Metals_2014_2024.csv", 'site_descriptions.csv'),
+                             data.table = c("metals_2014_2024.csv", 'site_descriptions.csv'),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -141,15 +141,15 @@ make_eml(
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2024",
-  temporal.coverage = c("2014-04-01", "2024-12-03"),
+  temporal.coverage = c("2014-04-01", "2024-12-16"),
   maintenance.description = 'ongoing',
-  data.table = c("Metals_2014_2024.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2024.csv'),
+  data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
   data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
-  other.entity = c('Metals_qaqc_2020_2024.R', 'Metals_Inspection_2014_2024.Rmd', 'Plot_function.R'),
-  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses Metals_qaqc_2020_2023.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+  other.entity = c('metals_qaqc_2014_2024.R', 'metals_inspection_2014_2024.Rmd', 'Plotting_function.R'),
+  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.8') # This package identifier is only for the staging environment
+  package.id = 'edi.718.9') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -602,7 +602,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 # qaqc function
 # update link when change the location of the script
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R", "metals_qaqc_2020_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R", "metals_qaqc_2014_2024.R")
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plotting_function.R")

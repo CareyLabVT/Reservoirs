@@ -12,15 +12,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 
 # Install and load devtools (used for install_github() function below)
-#install.packages("devtools")
-#library(devtools)
+install.packages("devtools")
+library(devtools)
 
 # Install and load EMLassemblyline
-#install_github("EDIorg/EMLassemblyline")
+install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 #Install the required googlesheets4 package
-#install.packages('googlesheets4')
+install.packages('googlesheets4')
 #Load the library 
 library(googlesheets4)
 ```
@@ -29,7 +29,7 @@ Run some manual QAQC (consider adding this to automation in the future)
 NOTE: We decided at the last minute in 2024 to systematically remove excessively high turbidity and PAR. I am leaving this here because you may want to change these thresholds or change how this is implemented in the future
 
 ```{r}
-ctd <- read.csv("../CTD_2013_2023.csv")
+ctd <- read.csv("CTD_2013_2024.csv")
 ctd_fix <- ctd %>%
   mutate(
     #remove and flag excessively high turbidity
@@ -41,7 +41,11 @@ ctd_fix <- ctd %>%
     PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s)
          )
 
-write.csv(ctd_fix, "CTD_2013_2023.csv", row.names = FALSE)
+write.csv(ctd_fix, "ctd_2013_2024.csv", row.names = FALSE)
+
+ctd_maintlog <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/62d78f19fc8a8520da6f9c81619a2d651c569f97/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv")
+
+write.csv(ctd_maintlog, "ctd_Maintenance_Log.csv", row.names = F)
 ```
 
 Refresh site list
@@ -67,30 +71,30 @@ Make EML
 ```{r}
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 make_eml(path = getwd(),
-         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
-         data.table = c("CTD_2013_2023.csv",
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2024",
+         data.table = c("ctd_2013_2024.csv",
                         "site_descriptions.csv", 
-                        "CTD_Maintenance_Log.csv"),
-         data.table.name = c("CTD dataset 2013-2023",
-                             "Descriptions of sample sites",
-                             "Maintenance log 2013 - 2023"),
+                        "ctd_Maintenance_Log.csv"),
+         data.table.name = c("ctd_2013_2024",
+                             "site_descriptions",
+                             "ctd_Maintenance_Log"),
          data.table.description = c("Reservoir CTD dataset",
                                     "Sample site descriptions",
                                     "Log of data issues that have been flagged or addressed in the final data publication"),
-         other.entity = c('CTD_QAQC_2013_2023.R', 
-                          'CTD_Visualization_2023.qmd',
+         other.entity = c('ctd_QAQC_2013_2024.R', 
+                          'ctd_inspection_2014_2024.qmd',
                           "helper_scripts.zip"),
-         other.entity.name = c('QAQC script', 
-                               "Visualization script",
-                               "Helper scripts"),
-         other.entity.description = c('High-level QAQC script used to process data from 2018-2023: references scripts in helper_scripts.zip', 
+         other.entity.name = c('ctd_QAQC_2013_2024', 
+                               "ctd_inspection_2014_2024",
+                               "helper_scripts.zip"),
+         other.entity.description = c('High-level QAQC script used to process data from 2018-2024: references scripts in helper_scripts.zip', 
                                       'Script that plots the data for visual inspection during the publishing process',
-                                      "Scripts used to compile casts and apply QAQC, 
-                                      as referenced by CTD_QAQC_2018_2023.R"),
-         temporal.coverage = c("2013-03-07", "2023-12-04"),
+                                      "Scripts used to compile casts and apply QAQC as referenced by CTD_QAQC_2018_2024.R"),
+         temporal.coverage = c("2013-03-07", "2024-12-31"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.200.14") #2024
+         package.id = "edi.1113.9")
+         #package.id = "edi.200.14") #2024 #publishing
 ```
 

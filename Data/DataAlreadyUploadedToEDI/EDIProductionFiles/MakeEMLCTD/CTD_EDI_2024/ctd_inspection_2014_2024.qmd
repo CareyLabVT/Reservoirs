@@ -6,6 +6,7 @@ format:
     embed-resources: true
 editor: visual
 created: 23 April 2024
+updated: 16 January 2025
 ---
 
 ## Overview
@@ -30,7 +31,7 @@ library(plotly)
 library(here)
 source("../CTD_code/ctd_QAQC.R")
 
-THIS_YEAR <- 2023 #Latest year of data
+THIS_YEAR <- 2024 #Latest year of data
 ```
 
 ## STEP 2: Collate all CTD files and run QAQC
@@ -41,6 +42,7 @@ This chunk will take a long time to run, because it involves QAQCing literally a
 
 ```{r Combine and qaqc all files}
 # Combine all the CTD files and QAQC them. If you want to reprocess all the files then set force_reprocessing to T. 
+ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
 ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
 ctd_reprocessed <- ctd_QAQC(raw_downloads = here(ctd_folder, "RawDownloads"),
                             ctd_cast_csvs = here(ctd_folder, "csv_outputs"),
@@ -81,8 +83,10 @@ ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/043
 
 ```{r}
 #Choose which data you want to visualize
-#qaqc <- ctd_edi
-qaqc <- ctd_reprocessed
+#FOR EDI reviewers
+qaqc <- ctd_edi
+#ONLY IF YOU ARE REPROCESSING
+# qaqc <- ctd_reprocessed
 
 # Basic checks
 unique(qaqc$Site)
@@ -110,8 +114,7 @@ plot_var <- function(var_name,
 }
 
 
-vars_to_plot <- c("Turbidity_NTU")
-
+vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "Turbidity_NTU", "SpCond_uScm", "Chla_ugL", "pH", "PAR_umolm2s", "CDOM_ugL", "Phycoerythrin_ugL", "Phycocyanin_ugL", "DescRate_ms")
 qaqc %>%
   filter(as.Date(DateTime) == as.Date("2021-07-28"))
 
@@ -125,6 +128,11 @@ qaqc %>%
 ```{r plots}
 
 # If you try to render the file with all of plots for every year, it will run out of memory. I have run it in 3 year chunks and run 2016-2013 at one time. You can also just make the plots in the qmd with out rendering them. 
+
+y2024 <-vars_to_plot %>%
+  map(plot_var, year = 2024)
+
+htmltools::tagList(list(y2024))
 
 a <-vars_to_plot %>%
   map(plot_var, year = 2023)
@@ -179,19 +187,19 @@ htmltools::tagList(list(c))
 
 ```{r SHR and GWR}
 
-# Check that Spring Hollow and Gateweood Reservoir data look good
-
-aa <- vars_to_plot %>%
-  map(plot_var, year= c(2013:2017, 2019), reservoirs="SHR")
-
-# when you render the document then the interactive plots will work
-htmltools::tagList(list(aa))
-
-bb <- vars_to_plot %>%
-  map(plot_var, year=2016, reservoirs="GWR")
-
-# when you render the document then the interactive plots will work
-htmltools::tagList(list(bb))
+# # Check that Spring Hollow and Gatewood Reservoir data look good
+# 
+# aa <- vars_to_plot %>%
+#   map(plot_var, year= c(2013:2017, 2019), reservoirs="SHR")
+# 
+# # when you render the document then the interactive plots will work
+# htmltools::tagList(list(aa))
+# 
+# bb <- vars_to_plot %>%
+#   map(plot_var, year=2016, reservoirs="GWR")
+# 
+# # when you render the document then the interactive plots will work
+# htmltools::tagList(list(bb))
 
 ```
 
@@ -201,7 +209,7 @@ htmltools::tagList(list(bb))
 qaqc %>%
   select(DateTime, SN) %>%
   unique() %>%
-  filter(year(DateTime) == 2023) %>%
+  filter(year(DateTime) == 2024) %>%
   ggplot(aes(x = hour(DateTime))) +
   geom_histogram()+
   facet_wrap(~SN)

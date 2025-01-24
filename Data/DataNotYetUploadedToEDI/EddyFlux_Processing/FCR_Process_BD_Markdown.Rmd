@@ -1,7 +1,7 @@
 ---
 title: "FCR_Process_BD"
 author: "Brenda D'Achuna, Alex Hounshell, Adrienne Breef-Pilz"
-date: "`r sys.Date()`"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -10,6 +10,7 @@ output: html_document
  
  Original code from Brenda D'Achuna, 21 May 2021
  Modified by Alex Hounshell on 21 May 2021
+ Updated by Bibek Kandel on 24 Jan 2025
  
  1. Compile data
  
@@ -45,18 +46,21 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
 
-dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
+#dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
 
 # Check here on EDI an make sure you are using the most up to date file.
 # https://portal.edirepository.org/nis/mapbrowse?packageid=edi.1061.2 
-# if not pulll in the file path from EDI
+# if not pull in the file path from EDI
 
 
 # read in the data file downloaded from EDI
-dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/2/f837d12dc12ab37a6772598578875e00") 
+dt2 <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/14/311d766dd7275d578699380f8996f089") 
 
-ec <- dt2%>%
-  bind_rows(.,dt1)
+#ec <- dt2%>%
+#  bind_rows(.,dt1)
+
+#FOR USING YEAR-ROUND UPLOADED DATA FROM EDI
+ec <- dt2
 ```
 
 ```{r format time, echo=FALSE}
@@ -105,7 +109,7 @@ ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)
 sta<-ec2 %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100-sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# 70% data for CO2; 72% data for CH4
+# 72.2% data for CO2; 74.8% data for CH4
 
 # Check data availability by month
 ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -144,7 +148,7 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 
 
 # Read in Met file from EDI
-met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/8/d4c74bbb3b86ea293e5c52136347fbb0",
+met_all <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/33/62647ecf8525cdfc069b8aaee14c0478",
                     col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",
                                  "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",
@@ -214,7 +218,7 @@ ggplot()+
   
 
 # Calculate percent of missing wind data
-# 14% missing
+# 10.4% missing
 miss_ws<-ec2 %>% select(datetime, wind_speed_ms) %>% 
   summarise(wnd_na = sum(is.na(wind_speed_ms))/n()*100)
 ```
@@ -225,10 +229,10 @@ We are missing `r round(miss_ws$wnd_na, digits=1)` % of the windspeed observatio
 # Use linear model to convert from Met to EC for missing time point
 linearMod <- lm(ec2$wind_speed_ms ~ met2$WS_ms_Avg)
 summary(linearMod)
-cor(ec2[[49]],met2[[10]],use = "complete.obs",method=c("pearson"))
+cor(ec2[[49]],met2[[11]],use = "complete.obs",method=c("pearson"))
 
 # UPDATE EVERY YEAR WITH NEW RELATIONSHIP
-# For data period: EC = Met*0.500243+0.214460
+# For data period: EC = Met*0.541570+0.154306
 
 # Check conversion - UPDATE EVERY YEAR WITH NEW RELATIONSHIP
 plot(ec2$datetime, ec2$wind_speed_ms)
@@ -274,7 +278,7 @@ met4 <- left_join(ts2, met3)
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100- sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# Now have 59% CO2 data and 51% CH4 data
+# Now have 50.34% CO2 data and 53.35% CH4 data
 
 # Count number of timepoints that have data
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -287,7 +291,7 @@ ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>%
 # Remove large CO2 values
 # Visualize data that is above/below abs(100)
 plot(ec_filt$datetime, ec_filt$co2_flux_umolm2s)+
-abline(h=200, col="red") +
+abline(h=100, col="red") +
 abline(h=-100, col="red")
 
 # Remove values that are greater than abs(100)
@@ -363,7 +367,7 @@ plot(ec_filt$ch4_flux_umolm2s, type = 'o')
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100- sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# Now have 39% CO2 data and 33% CH4 data
+# Now have 32.62% CO2 data and 30.31% CH4 data
 
 # Count number of timepoints that have data
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -390,7 +394,7 @@ eddy_fcr <- left_join(ts2, ec_filt, by = 'datetime')
 eddy_fcr %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100-sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# 39% CO2 data; 30% CH4 data
+# 32.62% CO2 data; 29.86% CH4 data
 
 # Number of timepoints available
 eddy_fcr %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -405,7 +409,7 @@ eddy_fcr %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_
 
 ```{r Use Despike function}
 ########################################################################
-# Despike data using dspike.R function
+# Despike data using despike.R function
 
 # Despike NEE (CO2 flux)
 
@@ -493,15 +497,15 @@ ggplot()+
   theme_classic(base_size = 15)
 
 # Calculate percent of missing air temp data
-# 39% missing
+# 37.57% missing
 eddy_fcr %>% select(datetime, air_temp_celsius) %>% 
   summarise(temp_na = sum(is.na(air_temp_celsius))/n()*100)
 
 # Use linear model to estimate EC temp from Met temp
 linearMod_Air <- lm(eddy_fcr$air_temp_celsius ~ met2$AirTC_Avg)
 summary(linearMod_Air)
-cor(eddy_fcr[[88]],met2[[3]],use = "complete.obs",method=c("pearson"))
-# EC = Met*0.946533-0.871847
+cor(eddy_fcr[[88]],met2[[4]],use = "complete.obs",method=c("pearson"))
+# EC = Met*0.9753170-0.9595196
 # UPDATE RELATIONSHIP EACH YEAR!!
 
 eddy_fcr$air_temp_celsius <- ifelse(is.na(eddy_fcr$air_temp_celsius),
@@ -519,15 +523,15 @@ ggplot()+
   theme_classic(base_size = 15)
 
 # Calculate percent of missing sonic temp data
-# 39% missing
+# 37.57% missing
 eddy_fcr %>% select(datetime, sonic_temp_celsius) %>% 
   summarise(temp_na = sum(is.na(sonic_temp_celsius))/n()*100)
 
 # Use linear model to estimate EC temp and Met temp
 linearMod_Air2 <- lm(eddy_fcr$sonic_temp_celsius ~ met2$AirTC_Avg)
 summary(linearMod_Air2)
-cor(eddy_fcr[[89]],met2[[3]],use = "complete.obs",method=c("pearson"))
-# EC = Met*1.027966-0.502685
+cor(eddy_fcr[[89]],met2[[4]],use = "complete.obs",method=c("pearson"))
+# EC = Met*1.0395534-0.7605165
 # UPDATE RELATIONSHIP EACH YEAR!!
 
 eddy_fcr$sonic_temp_celsius <- ifelse(is.na(eddy_fcr$sonic_temp_celsius),
@@ -545,16 +549,16 @@ ggplot()+
   geom_point(aes(x=eddy_fcr$RH,y=met2$RH))+
   theme_classic(base_size = 15)
 
-# Calculate percent of missing sonic temp data
-# 41% missing
+# Calculate percent of missing RH
+# 47.27% missing
 eddy_fcr %>% select(datetime, RH) %>% 
   summarise(RH_na = sum(is.na(RH))/n()*100)
 
 # Use linear model to estimate EC RH from Met RH
 linearMod_RH <- lm(eddy_fcr$RH ~ met2$RH)
 summary(linearMod_RH)
-cor(eddy_fcr[[46]],met2[[4]],use = "complete.obs",method=c("pearson"))
-# EC = Met*0.845661 + 7.712944
+cor(eddy_fcr[[46]],met2[[5]],use = "complete.obs",method=c("pearson"))
+# EC = Met*0.838366 + 9.891706
 # UPDATE EACH YEAR!!
 
 eddy_fcr$RH <- ifelse(is.na(eddy_fcr$RH),
@@ -652,7 +656,7 @@ eddy_fcr3 <- eddy_fcr_footprint_full %>%
 eddy_fcr3 %>% select(DateTime, NEE, ch4_flux) %>% 
   summarise(co2_available = 100-sum(is.na(NEE))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux))/n()*100)
-# 29% CO2 data; 23% CH4 data
+# 24% CO2 data; 22.87% CH4 data
 
 # Total number of available time points
 eddy_fcr3 %>% select(DateTime, NEE, ch4_flux) %>% 
@@ -694,6 +698,7 @@ Eproc$sPlotFingerprintY('NEE',Year = '2020')
 Eproc$sPlotFingerprintY('NEE',Year = '2021')
 Eproc$sPlotFingerprintY('NEE',Year = '2022')
 Eproc$sPlotFingerprintY('NEE',Year = '2023')
+Eproc$sPlotFingerprintY('NEE',Year = '2024')
 ```
 
 ###Let's look at the Data Availability for CH4
@@ -703,6 +708,7 @@ Eproc$sPlotFingerprintY('ch4_flux',Year = '2020')
 Eproc$sPlotFingerprintY('ch4_flux',Year = '2021')
 Eproc$sPlotFingerprintY('ch4_flux',Year = '2022')
 Eproc$sPlotFingerprintY('ch4_flux',Year = '2023')
+Eproc$sPlotFingerprintY('ch4_flux',Year = '2024')
 ```
 
 ```{r gapfill}
@@ -719,7 +725,7 @@ Eproc$sMDSGapFill('LE', V1 = 'Rg', V2 = 'VPD', V3 = 'Tair', FillAll = TRUE)
 ```{r ustar distribution}
 # Estimate ustar threshold distribution by bootstrapping the data
 Eproc$sEstimateUstarScenarios(UstarColName = 'Ustar', NEEColName = 'NEE', RgColName= 'Rg',
-                              nSample = 200L, probs = c(0.05, 0.7, 0.95))
+                              nSample = 200L, probs = c(0.05, 0.5, 0.95))
 ```
 
 ```{r Bootstrap uncertainity beefed up}

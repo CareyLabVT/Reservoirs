@@ -149,19 +149,19 @@ make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2023",
-  temporal.coverage = c("2014-04-18", "2024-12-31"),
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2024",
+  temporal.coverage = c("2014-04-18", "2024-12-17"),
   maintenance.description = 'ongoing',
-  data.table = c("FiltChla_2014_2024.csv", 'site_descriptions.csv'),
-  data.table.name = c("FiltChla_2014_2024", 'site_descriptions'), 
+  data.table = c("filt-chla_2014_2024.csv", 'site_descriptions.csv'),
+  data.table.name = c("filt-chla_2014_2024", 'site_descriptions'), 
   data.table.description = c("Filtered chlorophyll a data at multiple sites","Sampling site descriptions with latitude and longitude" ),
-  other.entity = c('FiltChla_qaqc_2023_2024.R', 'FiltChla_inspection_2014_2024.Rmd', 'FiltChla_maintenancelog_2014_2024.csv'),
-  other.entity.name = c("FiltChla_qaqc_2023_2024", 'FiltChla_inspection_2014_2024', 'FiltChla_maintenancelog_2014_2024'),
+  other.entity = c('filt-chla_qaqc_2023_2024.R', 'filt-chla_inspection_2014_2024.Rmd', 'filt-chla_maintenancelog_2014_2024.csv'),
+  other.entity.name = c("filt-chla_qaqc_2023_2024", 'filt-chla_inspection_2014_2024', 'filt-chla_maintenancelog_2014_2024'),
   other.entity.description = c('Script used to collate and flag data for publication', 'Markdown file used to visualize data for QA/QC', 
                                'Maintenance Log through 2024'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.26') #THIS IS FOR STAGING
+  package.id = 'edi.52.30') #THIS IS FOR STAGING
   #package.id = 'edi.555.4') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",

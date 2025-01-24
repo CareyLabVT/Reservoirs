@@ -21,7 +21,6 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/maste
 
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI}
-
 filt_chla_qaqc(
   directory = "../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
   rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
@@ -29,12 +28,11 @@ filt_chla_qaqc(
   final_vol_extract = 6,
   blank_vol_filt = 500,
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
-  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
+  historic_file = "../../../../DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
   sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps", 
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv",
   start_date = NULL, # change when we update to read date from EDI
   end_date = as.Date("2024-12-31"))
-
 ```
 list.files("../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
 
@@ -50,10 +48,16 @@ list.files("../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw dat
 <!-- all_chla <- dplyr::bind_rows(historic, L1) -->
 <!-- ``` -->
 
+```{r run L1 script}
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_generation_scripts/filt_chla_qaqc.R")
+```
+
+
 START HERE FOR EDI DAYZ
 Skip or replace with published version if running for the first time
 ```{r Read in data from EDI: START HERE}
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/555/4/4d92727343445ad28046d57ac852b45f" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/29/d321a924e9d6a839366647a8f942204e" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")

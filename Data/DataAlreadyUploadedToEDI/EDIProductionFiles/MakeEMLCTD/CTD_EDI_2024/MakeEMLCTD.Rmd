@@ -41,7 +41,7 @@ ctd_fix <- ctd %>%
     PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s)
          )
 
-write.csv(ctd_fix, "CTD_2013_2024.csv", row.names = FALSE)
+write.csv(ctd_fix, "ctd_2013_2024.csv", row.names = FALSE)
 
 ctd_maintlog <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/62d78f19fc8a8520da6f9c81619a2d651c569f97/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv")
 
@@ -75,27 +75,26 @@ make_eml(path = getwd(),
          data.table = c("ctd_2013_2024.csv",
                         "site_descriptions.csv", 
                         "ctd_Maintenance_Log.csv"),
-         data.table.name = c("CTD dataset 2013-2024",
-                             "Descriptions of sample sites",
-                             "Maintenance log 2013 - 2024"),
+         data.table.name = c("ctd_2013_2024",
+                             "site_descriptions",
+                             "ctd_Maintenance_Log"),
          data.table.description = c("Reservoir CTD dataset",
                                     "Sample site descriptions",
                                     "Log of data issues that have been flagged or addressed in the final data publication"),
          other.entity = c('ctd_QAQC_2013_2024.R', 
                           'ctd_inspection_2014_2024.qmd',
                           "helper_scripts.zip"),
-         other.entity.name = c('QAQC script', 
-                               "Visualization script",
-                               "Helper scripts"),
+         other.entity.name = c('ctd_QAQC_2013_2024', 
+                               "ctd_inspection_2014_2024",
+                               "helper_scripts.zip"),
          other.entity.description = c('High-level QAQC script used to process data from 2018-2024: references scripts in helper_scripts.zip', 
                                       'Script that plots the data for visual inspection during the publishing process',
-                                      "Scripts used to compile casts and apply QAQC, 
-                                      as referenced by CTD_QAQC_2018_2024.R"),
+                                      "Scripts used to compile casts and apply QAQC as referenced by CTD_QAQC_2018_2024.R"),
          temporal.coverage = c("2013-03-07", "2024-12-31"),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1113.8")
+         package.id = "edi.1113.9")
          #package.id = "edi.200.14") #2024 #publishing
 ```
 

@@ -6,7 +6,7 @@ format:
     embed-resources: true
 editor: visual
 created: 23 April 2024
-updated: 16 January 2025
+updated: 26 January 2025
 ---
 
 ## Overview
@@ -29,7 +29,11 @@ library(tidyverse)
 library(lubridate)
 library(plotly)
 library(here)
-source("../CTD_code/ctd_QAQC.R")
+library(RCurl)
+
+source("../../../../DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
+
+#list.files("../../../../DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
 
 THIS_YEAR <- 2024 #Latest year of data
 ```
@@ -42,6 +46,7 @@ This chunk will take a long time to run, because it involves QAQCing literally a
 
 ```{r Combine and qaqc all files}
 # Combine all the CTD files and QAQC them. If you want to reprocess all the files then set force_reprocessing to T. 
+
 ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
 ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
 ctd_reprocessed <- ctd_QAQC(raw_downloads = here(ctd_folder, "RawDownloads"),
@@ -68,7 +73,28 @@ raw_files[!raw_files %in% processed_files]
 min(ctd_reprocessed$DateTime) # we've re-processed files since 2018 (but also added historical files above)
 unique(ctd_reprocessed$Site)
 unique(ctd_reprocessed$Reservoir)
+
+# rename file
+qaqc <- ctd_reprocessed
 ```
+```{r Save file in the EDI folder}
+
+write_csv(ctd_reprocessed, "ctd_2013_2024.csv")
+
+```
+
+
+```{r Download files for EDI}
+
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv", "ctd_maintenancelog_2013_2024.csv")
+
+# download QAQC file
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R", "ctd_qaqc_2013_2024.R")
+
+# The helper scripts need to be downloaded and zipped. Not sure how to do this in R
+
+```
+
 
 ## STEP 4: REVIEWERS- load data from EDI
 
@@ -76,15 +102,17 @@ REVIEWERS START HERE. Double check you have the right pasta link for the data pa
 
 ```{r read in EDI data}
 # Read in Data from GitHub
-ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/6/0432a298a90b2b662f26c46071f66b8a")
+ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/9/bbd126d40b44abaeeb0d734009da9ae4")
+
+#FOR EDI reviewers
+qaqc <- ctd_edi
 ```
 
 ## STEP 5: Visualize data
 
 ```{r}
 #Choose which data you want to visualize
-#FOR EDI reviewers
-qaqc <- ctd_edi
+
 #ONLY IF YOU ARE REPROCESSING
 # qaqc <- ctd_reprocessed
 
@@ -96,33 +124,58 @@ unique(qaqc$Reservoir)
 plot_var <- function(var_name, 
                      year, 
                      reservoirs = c("FCR", "BVR", "CCR"),
-                     data = qaqc){
+                     data = qaqc,
+                     site = c(10,20,30,40,50,88,90)){
   
   var <- sym(var_name)
   flag <- sym(paste0("Flag_", var_name))
   qaqc_plotly <- data %>%
-    filter(Reservoir %in% reservoirs, Site == 50, year(DateTime) %in% year) %>%
+    filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
     ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
     scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
     scale_y_reverse() +
     geom_point() +
     ggtitle(year) +
-    facet_grid(cols = vars(Reservoir), rows = vars(SN))
+    facet_grid(cols = vars(Reservoir),rows = vars(SN))
+  ggplotly(qaqc_plotly)
+  #print(qaqc_plotly)
+}
+
+plot_var_sites <- function(var_name, 
+                     year, 
+                     reservoirs = c("FCR", "BVR", "CCR"),
+                     data = qaqc,
+                     site = c(10,20,30,40,50,88,90)){
+  
+  var <- sym(var_name)
+  flag <- sym(paste0("Flag_", var_name))
+  qaqc_plotly <- data %>%
+    filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
+    sample_frac(.1) %>%
+    ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_y_reverse() +
+    geom_point() +
+    ggtitle(year) +
+    facet_grid(cols = vars(Reservoir),rows = vars(Site))
   ggplotly(qaqc_plotly)
   #print(qaqc_plotly)
 }
 
 
 vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "Turbidity_NTU", "SpCond_uScm", "Chla_ugL", "pH", "PAR_umolm2s", "CDOM_ugL", "Phycoerythrin_ugL", "Phycocyanin_ugL", "DescRate_ms")
-qaqc %>%
-  filter(as.Date(DateTime) == as.Date("2021-07-28"))
+#qaqc %>%
+#  filter(as.Date(DateTime) == as.Date("2021-07-28"))
 
-qaqc %>%
-  filter(Turbidity_NTU>100)
+#qaqc %>%
+#  filter(Turbidity_NTU>100)
 
-qaqc %>%
-  filter(Flag_DO_mgL == 2, !is.na(DO_mgL))
+#qaqc %>%
+#  filter(Flag_DO_mgL == 2, !is.na(DO_mgL))
+
+wer <-qaqc|>
+  filter(DateTime>as.Date("2024-01-01"))
 ```
 
 ```{r plots}
@@ -130,9 +183,16 @@ qaqc %>%
 # If you try to render the file with all of plots for every year, it will run out of memory. I have run it in 3 year chunks and run 2016-2013 at one time. You can also just make the plots in the qmd with out rendering them. 
 
 y2024 <-vars_to_plot %>%
-  map(plot_var, year = 2024)
+  map(plot_var, year = 2024, site = 20)
 
 htmltools::tagList(list(y2024))
+
+# Plot the upstream sites in FCR
+
+yy2024 <- vars_to_plot %>%
+  map(plot_var_sites, reservoirs = "FCR", year = 2024, site = c(10,20,30,40))
+
+htmltools::tagList(list(yy2024))
 
 a <-vars_to_plot %>%
   map(plot_var, year = 2023)

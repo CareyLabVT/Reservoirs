@@ -17,10 +17,11 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                output_file_name = "ctd_L1.csv",
                                historical_files = F, 
                                CTD_FOLDER = "../",
-                               maintenance_file = paste0(CTD_FOLDER, "CTD_Maintenance_Log.csv")){
+                               maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv"){
   
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
+  
   ctd = ctd1 %>%
     mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
            Reservoir = ifelse(Reservoir == "BRV", "BVR", Reservoir), #Fix typo
@@ -84,7 +85,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     ctd[c(which(is.na(ctd[,j]) & ctd[,"SN"] ==8188 & (j %in% only_old))), paste0("Flag_",j)]<-5
     
     # puts in flag 2 if value not collected
-    ctd[c(which(is.na(ctd[,j])) & paste0("Flag_",j)==0),paste0("Flag_",j)] <- 2
+    ctd[c(which(is.na(ctd[,j]) & paste0("Flag_",j)==0)),paste0("Flag_",j)] <- 2
   }
   
   ## Take out the negative conductivity spike in casts
@@ -122,9 +123,8 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
   }
   
-  
   # Now back to flagging more things. 
-  for(j in flag_cols){
+  for(j in flag_cols[!grepl("DateTime", flag_cols)]){
     
     # Flag values less than 0 with a flag 4 except: Temp, ORP and Decent rate
     ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
@@ -181,6 +181,13 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                              7,0)) #Flag times that are missing time (date is meaningful but not time)
   
   # Fix times
+  # CTD times in June 2024 are incorrect by ~3 hr after the CTD came back from the spa
+  ctd_flagged[ctd_flagged$DateTime>as.Date("2024-06-01") &
+                         ctd_flagged$DateTime<as.Date("2024-06-21") & ctd_flagged$SN == 8188, "DateTime"] = 
+    ctd_flagged[ctd_flagged$DateTime>as.Date("2024-06-01") &
+                           ctd_flagged$DateTime<as.Date("2024-06-21") & ctd_flagged$SN == 8188, "DateTime"] + 60*60*3 #to align with actual date of cast
+  
+  
   # CTD times in 2022 are incorrect by ~2 hr
   ctd_flagged$DateTime[ctd_flagged$DateTime>as.Date("2021-12-01") &
                          ctd_flagged$DateTime<as.Date("2023-01-01")] = 
@@ -239,6 +246,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   # order the DateTime on the CTD casts
   CTD_fix_renamed <- CTD_fix_renamed[order(CTD_fix_renamed$DateTime),]
   
+  print(maintenance_file)
   
   # ## ADD MAINTENANCE LOG FLAGS 
   # The maintenance log includes manual edits to the data for suspect samples or human error

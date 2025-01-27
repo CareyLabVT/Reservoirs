@@ -2,7 +2,6 @@
 #' @title QAQC script
 #' @description This function runs QAQC for any new CTD files and re-processes seasonal CSVs
 #' @author Abigail Lewis
-#' Created in May 2024
 #' 
 #' @param raw_downloads directory where raw cnvs are stored
 #' @param ctd_cast_csvs directory where output csvs for individual casts are stored

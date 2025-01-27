@@ -2,6 +2,7 @@ keyword	keywordThesaurus
 Carey Lab	carey lab
 Virginia Tech	carey lab
 Lake	cuahsi
+Lakes	cuahsi
 Reservoir	cuahsi
 Reservoirs	cuahsi
 High-frequency sensors	cuahsi
@@ -33,3 +34,4 @@ Virginia Reservoirs LTREB	carey lab
 LTREB	carey lab
 CTD	carey lab
 Virginia Reservoirs	carey lab
+Virginia Tech Center for Ecosystem Forecasting	carey lab

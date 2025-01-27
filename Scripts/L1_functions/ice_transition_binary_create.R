@@ -51,24 +51,26 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
     # Ice defined as when the top is cooler than the bottom, and temp below 4 oC
     dplyr::mutate(temp_diff = top - bottom,
                   variable = ifelse(temp_diff < -0.1 & top <= 4, 'IceOn', 'IceOff'), 
-                  IceOn_hourly = ifelse(variable == "IceOn", 1, 0), 
-                  IceOff_hourly = ifelse(variable == "IceOff", 1, 0), 
-                  datetime = as.Date(datetime)) |>
-    dplyr::group_by(datetime) |> 
-    dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
-                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
-                  IceOn_hour_count = sum(IceOn_hourly == 1),
-                  IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
-    ungroup() |> 
+                  IceOn = ifelse(variable == "IceOn", 1, 0), 
+                  IceOff = ifelse(variable == "IceOff", 1, 0)) |> #, 
+                  #datetime = as.Date(datetime)) |>
+    #dplyr::group_by(datetime) |> 
+    # dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
+    #               IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
+    #               IceOn_hour_count = sum(IceOn_hourly == 1),
+    #               IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
+    # ungroup() |> 
     distinct(site_id, datetime, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, IceOn, IceOff) |> 
-    dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
+    #dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
     dplyr::mutate(Site = 50, 
                   Year = lubridate::year(datetime), 
                   DayOfYear = lubridate::yday(datetime),
                   Method = 'T', 
-                  Flag_IceValue = 0) |> 
-    select(Reservoir, Site, Date = datetime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
+                  Flag_IceValue = 0,
+                  datetime = lubridate::as_datetime(datetime)) |> #,
+                  #DateTime = force_tz(datetime, tzone = 'America/New_York')) |> 
+    select(Reservoir, Site, DateTime = datetime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
   
   
   message('Current file ready')
@@ -109,24 +111,26 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
     # Ice defined as when the top is cooler than the bottom, and temp below 4 oC
     dplyr::mutate(temp_diff = top - bottom,
                   variable = ifelse(temp_diff < -0.1 & top <= 4, 'IceOn', 'IceOff'), 
-                  IceOn_hourly = ifelse(variable == "IceOn", 1, 0), 
-                  IceOff_hourly = ifelse(variable == "IceOff", 1, 0), 
-                  datetime = as.Date(datetime)) |>
-    dplyr::group_by(datetime) |> 
-    dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
-                  IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
-                  IceOn_hour_count = sum(IceOn_hourly == 1),
-                  IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
-    ungroup() |> 
+                  IceOn = ifelse(variable == "IceOn", 1, 0), 
+                  IceOff = ifelse(variable == "IceOff", 1, 0)) |> #, 
+                  #datetime = as.Date(datetime)) |>
+    # dplyr::group_by(datetime) |> 
+    # dplyr::mutate(IceOn = ifelse(1 %in% IceOn_hourly, 1, 0),
+    #               IceOff = ifelse(1 %in% IceOn_hourly, 0, 1),
+    #               IceOn_hour_count = sum(IceOn_hourly == 1),
+    #               IceOn_hour_index = list(which(IceOn_hourly == 1))) |> 
+    # ungroup() |> 
     distinct(site_id, datetime, .keep_all = TRUE) |> 
     select(Reservoir, site_id, datetime, IceOn, IceOff) |> 
-    dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
+    #dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
     dplyr::mutate(Site = 50, 
                   Year = lubridate::year(datetime), 
                   DayOfYear = lubridate::yday(datetime),
                   Method = 'T', 
-                  Flag_IceValue = 0) |> 
-    select(Reservoir, Site, Date = datetime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
+                  Flag_IceValue = 0, 
+                  #DateTime = force_tz(datetime, tzone = 'America/New_York'
+                                      ) |> 
+    select(Reservoir, Site, DateTime = datetime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
   
   
   # read in historical data file
@@ -139,10 +143,47 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
     dplyr::mutate(site_id = ifelse(Reservoir == 'FCR', 'fcre',
                                    ifelse(Reservoir == 'BVR', 'bvre', NA))) |>
     dplyr::filter(site_id == current_wq_df$site_id[1], 
-                  Date < '2018-07-05')
+                  Date < '2018-07-05') |> 
+    mutate(DateTime = as.POSIXct(paste(Date, '12:00'), format="%Y-%m-%d %H:%M"),
+           DateTime = force_tz(DateTime, tzone = 'America/New_York')) |> 
+    select(-Date)
+  
+  # combine available data and then join onto daily dataframe
+  if (nrow(historic_ice_df) == 0){
+    combined_df <- dplyr::bind_rows(historic_wq_ice_df, current_ice_df) |> 
+      select(Reservoir, Site, DateTime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
+  } else{
+    combined_df <- dplyr::bind_rows(historic_ice_df, historic_wq_ice_df, current_ice_df) |> 
+      select(Reservoir, Site, DateTime, Year, DayOfYear, IceOn, IceOff, Method, Flag_IceValue, site_id)
+    
+  }
+  
+  if(is.na(max(as.POSIXct(combined_df$DateTime)))){
+    message('DATE CONVERSION ISSUE...QUITTING')
+    stop()
+  }
+  
+  ice_df_build <- data.frame(DateTime = seq.POSIXt(min(as.POSIXct(combined_df$DateTime)), 
+                                                 max(as.POSIXct(combined_df$DateTime)), 
+                                                 by = 'hour'))
+  
+  reservoir_name <- combined_df$Reservoir[1]
+  site_identifier <- combined_df$site_id[1]
+  
+  ice_df_hourly <- ice_df_build |> 
+    dplyr::full_join(combined_df, by = c('DateTime')) |> 
+    dplyr::mutate(Reservoir = ifelse(is.na(Reservoir), reservoir_name, Reservoir), 
+                  IceOn = ifelse(is.na(IceOn), zoo::na.locf(IceOn), IceOn), ## fill in gaps for ice-on using available data
+                  Method = ifelse(is.na(Method), 'T', Method), 
+                  site_id = ifelse(Reservoir == 'FCR', 'fcre',
+                                                 ifelse(Reservoir == 'BVR', 'bvre', NA)),
+                  Flag_IceValue= 0,
+                  Site = 50, 
+                  Year = lubridate::year(DateTime), 
+                  DayOfYear = lubridate::yday(DateTime))
   
   
-  combined_df <- dplyr::bind_rows(historic_ice_df, historic_wq_ice_df, current_ice_df)
+  #combined_df <- dplyr::bind_rows(historic_ice_df, historic_wq_ice_df, current_ice_df)
   
   
   if(!is.null(maint_log)){ # only run this file if the maint file argument is non-null
@@ -150,27 +191,71 @@ ice_transition_binary_create <- function(current_file, historic_wq_file, histori
     # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
     
     log_read <- gsheet::gsheet2tbl(maint_log) |> 
+      mutate(TIMESTAMP_start = force_tz(lubridate::as_datetime(TIMESTAMP_start), tzone = 'America/New_York'),
+             TIMESTAMP_end = force_tz(lubridate::as_datetime(TIMESTAMP_end)), tzone = 'America/New_York') |> 
       filter(Reservoir == ice_site) |> 
-      select(Reservoir, Date = DateTime, Ice_Presence, Site, Flag_Ice_Presence)
+      select(Reservoir, TIMESTAMP_start, TIMESTAMP_end, Ice_Presence, Site, Flag_Ice_Presence)
     
-    combined_df <- combined_df |> 
-      full_join(log_read, by = c('Date', 'Reservoir', "Site")) |> 
-      mutate(Method = ifelse(is.na(IceOn),'V', Method), 
-             IceOn = ifelse(is.na(IceOn),Ice_Presence, IceOn), 
-             IceOff = ifelse(is.na(IceOff) & Ice_Presence == 0, 1, IceOff),
-             IceOff = ifelse(is.na(IceOff) & Ice_Presence == 1, 0, IceOff), 
-             Year = lubridate::year(Date), 
-             DayOfYear = lubridate::yday(Date), 
-             Flag_IceValue = ifelse(is.na(Flag_Ice_Presence), 0, Flag_Ice_Presence), 
-             site_id = site_id[1]) |> 
-      select(-Ice_Presence, -Flag_Ice_Presence)
+    log <- log_read
     
+    for(i in 1:nrow(log)){
+      ### get start and end time of one maintenance event
+      start <- log$TIMESTAMP_start[i]
+      end <- log$TIMESTAMP_end[i]
+      
+      
+      ## GET THE ICE INDICATION
+      ice_indication <- log$Ice_Presence[i]
+      
+      ## GET THE ICE INDICATION
+      ice_method <- log$Flag_Ice_Presence[i]
+      
+
+      ### Getting the start and end time vector to fix. If the end time is NA then it will put NAs 
+      # until the maintenance log is updated
+      
+      if(is.na(end)){
+        # If there the maintenance is on going then the columns will be removed until
+        # and end date is added
+        Time <- ice_df_hourly$DateTime >= start
+        
+      }else if (is.na(start)){
+        # If there is only an end date change columns from beginning of data frame until end date
+        Time <- ice_df_hourly$DateTime <= end
+        
+      }else {
+        
+        Time <- ice_df_hourly$Date >= start & ice_df_hourly$Date <= end
+        
+      }
+      
+      # update dataset with ice value from maint log
+      ice_df_hourly$ice_value_update <- NA
+      ice_df_hourly[Time, "ice_value_update"] <- ice_indication
+      
+      # update with maint log values
+      ice_df_hourly$IceOn <- ifelse(!is.na(ice_df_hourly$ice_value_update), ice_df_hourly$ice_value_update, ice_df_hourly$IceOn)
+      
+      # update data with ice method from maint log
+      ice_df_hourly[Time, "Method"] <- ice_method
+    }
+      
+    transition_ice_df <- ice_df_hourly |> 
+      mutate(IceOff = ifelse(is.na(IceOff) & IceOn == 0, 1, IceOff),
+             Flag_IceValue = ifelse(is.na(Flag_IceValue), 0, Flag_IceValue), 
+             DateTime = lubridate::with_tz(DateTime, tzone = "America/Los_Angeles")) |>
+      dplyr::filter(IceOn != dplyr::lag(IceOn))  |> # only select rows where ice condition changes
+      select(-Flag_IceValue, -ice_value_update)
+    
+  } else {
+    message('No maintenance log used....')
+    transition_ice_df <- ice_df_hourly |> select(-Flag_IceValue)
   }
   
   message('EDI file ready')
   
   ## return dataframe formatted to match FLARE targets
-  return(combined_df)
+  return(transition_ice_df)
 }
 
 ## CODE TO RUN FUNCTION IF NEEDED ##

@@ -28,7 +28,10 @@ update_seasonal_csvs <- function(ctd_cast_csvs = "../csv_outputs",
   
   files_to_load <- files[dates >= as.Date(start_date)]
   
-  ctd <- map(files_to_load, load_file) %>% #see function below. Using map() makes loading files faster
+  
+  # added in the ctd_cast_csvs file path
+  
+  ctd <- map(files_to_load, load_file, ctd_cast_csvs = ctd_cast_csvs) %>% #see function below. Using map() makes loading files faster
     dplyr::bind_rows()
   
   write_csv(ctd, paste0(ctd_season_csvs, "/", intermediate_file_name))
@@ -46,6 +49,8 @@ load_file <- function(file,
               DOsat_percent = "DO_pSat",
               SpCond_uScm = "Spec_Cond_uScm",
               Turbidity_NTU = "Turb_NTU")
+  
+  #print(ctd_cast_csvs)
   
   ctd = read_csv(paste0(ctd_cast_csvs, "/", file), show_col_types = F) 
   location <- sub("^[0-9]*_","",sub("\\.csv","",file))

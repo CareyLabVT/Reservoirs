@@ -1,5 +1,5 @@
 #' 
-#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024, ABP 07 Jan 2024
+#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024, ABP 07 Jan 2024 and 26 Jan 25
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year (or multiple years) and adds data flags
 #' 
@@ -149,6 +149,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     # NOTE: I THINK we do NOT want to change this link in future revisions, given our decision in 2024 to 
     # Re-process all casts 2018-present rather than pulling the most recent data on EDI
     ctd_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
+    
+    # Force time to New York with daylight savings observed to merge with the current file
+      ctd_edi$DateTime <- force_tz(ctd_edi$DateTime, tzone = "America/New_York")
     
     #Add SN to historical EDI data
     ctd_edi <- ctd_edi %>%

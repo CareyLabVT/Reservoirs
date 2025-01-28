@@ -19,52 +19,39 @@ library(devtools)
 install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-#Install the required googlesheets4 package
-install.packages('googlesheets4')
-#Load the library 
-library(googlesheets4)
 ```
 
-Run some manual QAQC (consider adding this to automation in the future)
-NOTE: We decided at the last minute in 2024 to systematically remove excessively high turbidity and PAR. I am leaving this here because you may want to change these thresholds or change how this is implemented in the future
+```{r Make the Atributes file}
 
-```{r}
-ctd <- read.csv("CTD_2013_2024.csv")
-ctd_fix <- ctd %>%
-  mutate(
-    #remove and flag excessively high turbidity
-    Flag_Turbidity_NTU = ifelse(!is.na(Turbidity_NTU) & Turbidity_NTU > 200, 2, Flag_Turbidity_NTU),
-    Turbidity_NTU = ifelse(!is.na(Turbidity_NTU) & Turbidity_NTU > 200, NA, Turbidity_NTU),
-    
-    #remove and flag excessively high PAR
-    Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, 2, Flag_PAR_umolm2s),
-    PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s)
-         )
+# This makes the attributes files. Most of ours have already been made
 
-write.csv(ctd_fix, "ctd_2013_2024.csv", row.names = FALSE)
+#Prepare metadata file templates using the 
+?template_table_attributes
 
-ctd_maintlog <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/62d78f19fc8a8520da6f9c81619a2d651c569f97/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv")
+# This will make a blank template with all of the columns. You need to add the definition. 
+template_table_attributes(
+ path = folder,
+ data.path = folder,
+ data.table = c('ctd_2013_2024.csv','site_descriptions.csv', 'ctd_maintenancelog_2013_2024.csv') ,
+ write.file=TRUE)
 
-write.csv(ctd_maintlog, "ctd_Maintenance_Log.csv", row.names = F)
 ```
 
-Refresh site list
 
-```{r}
-sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+```{r Make the catvars file from the attributes file}
 
-trim_sites = function(data,sites){
-  data_res_site=data %>% #Create a Reservoir/Site combo column
-    mutate(res_site = trimws(paste0(Reservoir,Site)))
-  sites_merged = sites %>% #Filter to Sites that are in the dataframe
-    mutate(res_site = trimws(paste0(Reservoir,Site))) %>%
-    filter(res_site %in% data_res_site$res_site) %>%
-    select(-res_site)
-}
+# This is already done, but you need to update when you add a new flag.
 
-sites_trimmed = trim_sites(ctd_fix, sites) 
-write.csv(sites_trimmed,"site_descriptions.csv", row.names=F) #Write to file
+?template_categorical_variables
+
+# Run this function for your dataset
+
+template_categorical_variables(path = folder,
+                               data.path = folder,
+                               write.file = TRUE)
+
 ```
+
 
 Make EML
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1139.7" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1139.9" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
   <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
     <allow>
       <principal>uid=melofton,o=EDI,dc=edirepository,dc=org</principal>
@@ -41,7 +41,7 @@
       <electronicMailAddress>melofton@vt.edu</electronicMailAddress>
       <userId directory="https://orcid.org">https://orcid.org/0000-0003-3270-1330</userId>
     </creator>
-    <pubDate>2025-01-21</pubDate>
+    <pubDate>2025-01-28</pubDate>
     <abstract>
       <para>Depth profiles of fluorescence-based phytoplankton biomass were sampled using a bbe Moldaenke FluoroProbe (Schwentinental, Germany) during 2014 to 2024 in five drinking water reservoirs in southwestern Virginia, USA. These reservoirs are: Beaverdam Reservoir (Vinton, Virginia), Carvins Cove Reservoir (Roanoke, Virginia), Falling Creek Reservoir (Vinton, Virginia), Gatewood Reservoir (Pulaski, Virginia), and Spring Hollow Reservoir (Salem, Virginia). Beaverdam, Carvins Cove, Falling Creek, and Spring Hollow Reservoirs are owned and operated by the Western Virginia Water Authority as primary or secondary drinking water sources for Roanoke, Virginia, and Gatewood Reservoir is a drinking water source for the town of Pulaski, Virginia. The dataset consists of depth profiles of fluorescence-based phytoplankton biomass measured at the deepest site of each reservoir adjacent to the dam, except in Falling Creek Reservoir, where depth profiles were also taken at four upstream sites ranging from the riverine to the lacustrine zone during 2016-2019 and 2024. Casts were taken approximately weekly from May-October and monthly from November-April. Casts were collected at Beaverdam and Falling Creek Reservoirs during all years (2014-2024); casts were collected at Carvins Cove Reservoir during 2014-2016 and 2018-2023; casts were collected at Spring Hollow Reservoir during 2014-2016 and 2019; and casts were collected at Gatewood Reservoir in 2015-2016.</para>
     </abstract>
@@ -290,8 +290,8 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
       <entityDescription>Reservoir FluoroProbe dataset</entityDescription>
       <physical>
         <objectName>fluoroprobe_2014_2024.csv</objectName>
-        <size unit="bytes">16303444</size>
-        <authentication method="MD5">99048da9c73f58a97773ae61b9555cfe</authentication>
+        <size unit="bytes">16306751</size>
+        <authentication method="MD5">3424a536c195bfcf654ffba6cc86853f</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
@@ -392,7 +392,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
                 <numberType>natural</numberType>
                 <bounds>
                   <minimum exclusive="false">1</minimum>
-                  <maximum exclusive="false">1269</maximum>
+                  <maximum exclusive="false">1270</maximum>
                 </bounds>
               </numericDomain>
             </ratio>
@@ -1266,19 +1266,19 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>118502</numberOfRecords>
+      <numberOfRecords>118524</numberOfRecords>
     </dataTable>
     <dataTable>
       <entityName>site_descriptions.csv</entityName>
       <entityDescription>Sampling site descriptions</entityDescription>
       <physical>
         <objectName>site_descriptions.csv</objectName>
-        <size unit="bytes">1524</size>
-        <authentication method="MD5">89da35a16a070052cdecfbe7ef4c3625</authentication>
+        <size unit="bytes">1579</size>
+        <authentication method="MD5">2ab9da7f91d38cb288dfaf08d51d73fe</authentication>
         <dataFormat>
           <textFormat>
             <numHeaderLines>1</numHeaderLines>
-            <recordDelimiter>\n</recordDelimiter>
+            <recordDelimiter>\r\n</recordDelimiter>
             <attributeOrientation>column</attributeOrientation>
             <simpleDelimited>
               <fieldDelimiter>,</fieldDelimiter>
@@ -1373,7 +1373,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">37.0443528070071</minimum>
+                  <minimum exclusive="false">37.04435281</minimum>
                   <maximum exclusive="false">37.3706</maximum>
                 </bounds>
               </numericDomain>
@@ -1396,7 +1396,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
               <numericDomain>
                 <numberType>real</numberType>
                 <bounds>
-                  <minimum exclusive="false">-80.8632991493157</minimum>
+                  <minimum exclusive="false">-80.86329915</minimum>
                   <maximum exclusive="false">-79.8159</maximum>
                 </bounds>
               </numericDomain>
@@ -1408,7 +1408,7 @@ Multiple whole-ecosystem experiments have been conducted at Falling Creek Reserv
           </missingValueCode>
         </attribute>
       </attributeList>
-      <numberOfRecords>10</numberOfRecords>
+      <numberOfRecords>11</numberOfRecords>
     </dataTable>
     <dataTable>
       <entityName>fluoroprobe_maintenance_2014_2024.csv</entityName>

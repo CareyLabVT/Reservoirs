@@ -1,5 +1,5 @@
 #' 
-#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024, ABP 07 Jan 2024 and 26 Jan 25
+#' @author Abigail Lewis. Updated by ABP 26 April 2024, ASL 30 April 2024, ABP 07 Jan 2025 and 26 Jan 25
 #' @title flag_seasonal_csvs
 #' @description This function loads the saved CTD csv from this year (or multiple years) and adds data flags
 #' 
@@ -148,6 +148,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     # Read the files from before 2018 and add them to the current file
     # NOTE: I THINK we do NOT want to change this link in future revisions, given our decision in 2024 to 
     # Re-process all casts 2018-present rather than pulling the most recent data on EDI
+    # NOTE: With the new EDI protocols, we might need to change this link. 
     ctd_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/200/13/27ceda6bc7fdec2e7d79a6e4fe16ffdf")
     
     # Force time to New York with daylight savings observed to merge with the current file
@@ -368,6 +369,19 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
       }
     }  
   } # end for loop
+  
+  ### Filter out high Turbidity and PAR values
+  
+  CTD_fix_renamed <- CTD_fix_renamed|>
+  mutate(
+    #remove and flag excessively high turbidity
+    Flag_Turbidity_NTU = ifelse(!is.na(Turbidity_NTU) & Turbidity_NTU > 200, 2, Flag_Turbidity_NTU),
+    Turbidity_NTU = ifelse(!is.na(Turbidity_NTU) & Turbidity_NTU > 200, NA, Turbidity_NTU),
+    
+    #remove and flag excessively high PAR
+    Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, 2, Flag_PAR_umolm2s),
+    PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s)
+  )
  
   # Check if there are any casts that were duplicated
   

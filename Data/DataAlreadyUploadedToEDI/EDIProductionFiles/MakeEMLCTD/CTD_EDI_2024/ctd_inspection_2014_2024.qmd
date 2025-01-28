@@ -86,6 +86,9 @@ write_csv(ctd_reprocessed, "ctd_2013_2024.csv")
 
 ```{r Download files for EDI}
 
+# add text here to include the chunk when you render the html
+#| eval: false
+
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv", "ctd_maintenancelog_2013_2024.csv")
 
 # download QAQC file
@@ -93,6 +96,26 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 # The helper scripts need to be downloaded and zipped. Not sure how to do this in R
 
+```
+```{r Reprocess sites to check for new ones}
+# add text here to include the chunk when you render the html
+#| eval: false
+
+### Run this chunk to create the site description file. 
+
+sites <- read_sheet('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=124442383')
+
+trim_sites = function(data,sites){
+  data_res_site=data %>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites %>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site))) %>%
+    filter(res_site %in% data_res_site$res_site) %>%
+    select(-res_site)
+}
+
+sites_trimmed = trim_sites(ctd_fix, sites) 
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F) #Write to file
 ```
 
 
@@ -103,6 +126,11 @@ REVIEWERS START HERE. Double check you have the right pasta link for the data pa
 ```{r read in EDI data}
 # Read in Data from GitHub
 ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/9/bbd126d40b44abaeeb0d734009da9ae4")
+
+# Force the time zone to Eastern with Daylight savings observed
+
+ # Force files from EDI to have an EST timestamp
+  ctd_edi$DateTime <- force_tz(as.POSIXct(ctd_edi$DateTime), tzone = "America/New_York")
 
 #FOR EDI reviewers
 qaqc <- ctd_edi

@@ -54,7 +54,7 @@ dt1 <-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-
 # Update the file path if the previous version is out of date 
 
 # read in the data file downloaded from EDI. This is the package from 2020-2023 data. When you update this link, update the date range for the data. 
-dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/3/e0976e7a6543fada4cbf5a1bb168713b") 
+dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/4/311d766dd7275d578699380f8996f089") 
 
 # Bind the current and the historical data together
 ec <- dt2%>%

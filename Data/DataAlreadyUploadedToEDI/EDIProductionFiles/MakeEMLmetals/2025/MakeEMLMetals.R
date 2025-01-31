@@ -140,7 +140,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2024",
+  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
   temporal.coverage = c("2014-04-01", "2024-12-16"),
   maintenance.description = 'ongoing',
   data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),

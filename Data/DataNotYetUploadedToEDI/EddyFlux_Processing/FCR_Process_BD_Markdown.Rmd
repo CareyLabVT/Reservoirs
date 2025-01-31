@@ -151,7 +151,7 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 
 
 # Read in Met file from EDI. Data from 2015-2024. Update the date range when you update the link. 
-met_all <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/33/62647ecf8525cdfc069b8aaee14c0478",
+met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/9/62647ecf8525cdfc069b8aaee14c0478",
                     col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",
                                  "ShortwaveRadiationUp_Average_W_m2", "ShortwaveRadiationDown_Average_W_m2",

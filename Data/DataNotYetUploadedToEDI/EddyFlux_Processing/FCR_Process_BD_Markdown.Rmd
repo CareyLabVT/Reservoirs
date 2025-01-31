@@ -46,20 +46,21 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 # Original file from Brenda on 11 May 2021
 # Light data cleaning using EddyPro_CleanUp.R
 
-#dt1 <-read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv")
+# Read in the L1 file which is the summary files from the EddyFlux system
+dt1 <-read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-eddyflux-data-qaqc/EddyFlux_streaming_L1.csv")
 
 # Check here on EDI an make sure you are using the most up to date file.
 # https://portal.edirepository.org/nis/mapbrowse?packageid=edi.1061.2 
-# if not pull in the file path from EDI
+# Update the file path if the previous version is out of date 
 
+# read in the data file downloaded from EDI. This is the package from 2020-2023 data. When you update this link, update the date range for the data. 
+dt2 <-read_csv("https://pasta.lternet.edu/package/data/eml/edi/1061/3/e0976e7a6543fada4cbf5a1bb168713b") 
 
-# read in the data file downloaded from EDI
-dt2 <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/14/311d766dd7275d578699380f8996f089") 
+# Bind the current and the historical data together
+ec <- dt2%>%
+ bind_rows(.,dt1)
 
-#ec <- dt2%>%
-#  bind_rows(.,dt1)
-
-#FOR USING YEAR-ROUND UPLOADED DATA FROM EDI
+#FOR USING YEAR-ROUND UPLOADED DATA FROM EDI. This overwrites the bind above. 
 ec <- dt2
 ```
 
@@ -68,7 +69,7 @@ ec <- dt2
 # make a datetime column and read in with original timezone
 ec$datetime <- paste0(ec$date, " ",ec$time)
 
-# Set timezone as America/New_York because that's what it is in and then conver to EST
+# Set timezone as America/New_York because that's what it is in and then convert to EST
   ec$datetime <- force_tz(ymd_hms(ec$datetime), tzone = "America/New_York")
 
 # convert from Eastern/US with daylight savings observed to EST which does not. 
@@ -146,8 +147,10 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 # Reading in data from the Met Station for gap-filling purposes
 # Load data Meteorological data from EDI
 
+## Double check that you have the most up to date 
 
-# Read in Met file from EDI
+
+# Read in Met file from EDI. Data from 2015-2024. Update the date range when you update the link. 
 met_all <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/33/62647ecf8525cdfc069b8aaee14c0478",
                     col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",

@@ -6,6 +6,7 @@
 # 24 Sep. 24 Round numeric columns to 4 digits
 # 22 Oct. 24 Changed the flipped metals to look at just Fe and Mn
 # 23 Oct. 24 Added more arguments so you can save or return the ISCO and or the metals data frame
+# 04 Feb. 25 Specified the columns when reading in the historical file and added a step to get times for ISCO observations. For now they are the same as the weir samples. 
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -36,8 +37,8 @@ metals_qaqc <- function(directory,
                         
 {
   
-  # # These are so I can run the function one step at a time and figure everything out.
-  # # Leave for now while still in figuring out mode
+ # These are so I can run the function one step at a time and figure everything out.
+ # Leave for now while still in figuring out mode
  #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
  #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
  #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
@@ -435,6 +436,15 @@ metals_qaqc <- function(directory,
        Site = as.numeric(Site),
        Depth_m = as.numeric(Depth_m))
    #select(-VT_Metals)
+   
+   # Make a data frame with just weir samples and then change to ISCO times. This is a crude way of doing it because we don't always collect metals samples when we collect ISCO samples, but it works for now. 
+   
+   weir <- time_sheet|>
+     filter(Site==100)|>
+     mutate(Site = ifelse(Site==100, 100.1, Site))
+   
+   time_sheet <- bind_rows(time_sheet, weir)|>
+     arrange(Date)
    
    
    # add the time the sample was collected. Use Natural join to override NAs

@@ -9,7 +9,7 @@ pacman::p_load(tidyverse, lubridate, dplyr,
                EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-package_ID <- 'edi.198.12'
+package_ID <- 'edi.198.13'
 eml <- read_metadata(package_ID)
 date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
 data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit?gid=1787819257#gid=1787819257'

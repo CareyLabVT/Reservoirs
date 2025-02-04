@@ -6,7 +6,7 @@ output: html_document
 date:  "`r Sys.Date()`"
 ---
 
-TThis script is the visual inspection script. 
+This script is the visual inspection script. 
 
 1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
 
@@ -84,7 +84,7 @@ current_time_end=ymd_hms("2024-12-31 23:59:00", tz="America/New_York")
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data #file for EDI. 
 
-current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2024",
+current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
 historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
  sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
@@ -503,7 +503,7 @@ dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=40, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "BVR", res_site=40, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -541,7 +541,7 @@ dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=F, Heatmap = F)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
 
 output <- unlist(outputs, recursive = F)
 
@@ -571,7 +571,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, eval=TRUE, include=FALSE}
+```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
@@ -584,7 +584,7 @@ write_csv(current_df, "metals_2014_2024.csv")
 
 
 
-```{r Download and save Maintenance Log, eval=TRUE, include=FALSE}
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
 
 # This chunkt to download files needs to be run by itself. Just click on the green arrow to download the files. 
 
@@ -617,7 +617,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 ```
 
-### Make a site desctiption file
+### Make a site description file
 
 ```{r Make site description file, eval=FALSE, include=FALSE}
  # These lines of code make the csv of the site descriptions with lat and long. To generate the site description file, click the green arrow on the right. 

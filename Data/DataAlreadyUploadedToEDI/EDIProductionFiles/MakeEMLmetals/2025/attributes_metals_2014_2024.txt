@@ -3,30 +3,30 @@ Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	
 Site	Sampling site within each reservoir	categorical			NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Depth_m	Depth of sample collection (from surface)	numeric	meter		NA	value is missing
-TLi_mgL	total lithium concentration	numeric	milligramsPerLiter		NA	value is missing
-SLi_mgL	soluble lithium concentration	numeric	milligramsPerLiter		NA	value is missing
-TNa_mgL	total sodium concentration	numeric	milligramsPerLiter		NA	value is missing
-SNa_mgL	soluble sodium concentration	numeric	milligramsPerLiter		NA	value is missing
-TMg_mgL	total magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
-SMg_mgL	soluble magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
-TAl_mgL	total aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
-SAl_mgL	soluble aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
-TSi_mgL	total silicon concentration	numeric	milligramsPerLiter		NA	value is missing
-SSi_mgL	soluble silicon concentration	numeric	milligramsPerLiter		NA	value is missing
-TK_mgL	total potassium concentration	numeric	milligramsPerLiter		NA	value is missing
-SK_mgL	soluble potassium concentration	numeric	milligramsPerLiter		NA	value is missing
-TCa_mgL	total calcium concentration	numeric	milligramsPerLiter		NA	value is missing
-SCa_mgL	soluble calcium concentration	numeric	milligramsPerLiter		NA	value is missing
-TFe_mgL	total iron concentration	numeric	milligramsPerLiter		NA	value is missing
-SFe_mgL	soluble iron concentration	numeric	milligramsPerLiter		NA	value is missing
-TMn_mgL	total manganese concentration	numeric	milligramsPerLiter		NA	value is missing
-SMn_mgL	soluble manganese concentration	numeric	milligramsPerLiter		NA	value is missing
-TCu_mgL	total copper concentration	numeric	milligramsPerLiter		NA	value is missing
-SCu_mgL	soluble copper concentration	numeric	milligramsPerLiter		NA	value is missing
-TSr_mgL	total strontium concentration	numeric	milligramsPerLiter		NA	value is missing
-SSr_mgL	soluble strontium concentration	numeric	milligramsPerLiter		NA	value is missing
-TBa_mgL	total barium concentration	numeric	milligramsPerLiter		NA	value is missing
-SBa_mgL	soluble barium concentration	numeric	milligramsPerLiter		NA	value is missing
+TLi_mgL	Total lithium concentration	numeric	milligramsPerLiter		NA	value is missing
+SLi_mgL	Soluble lithium concentration	numeric	milligramsPerLiter		NA	value is missing
+TNa_mgL	Total sodium concentration	numeric	milligramsPerLiter		NA	value is missing
+SNa_mgL	Soluble sodium concentration	numeric	milligramsPerLiter		NA	value is missing
+TMg_mgL	Total magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
+SMg_mgL	Soluble magnesium concentration	numeric	milligramsPerLiter		NA	value is missing
+TAl_mgL	Total aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
+SAl_mgL	Soluble aluminum concentration	numeric	milligramsPerLiter		NA	value is missing
+TSi_mgL	Total silicon concentration	numeric	milligramsPerLiter		NA	value is missing
+SSi_mgL	Soluble silicon concentration	numeric	milligramsPerLiter		NA	value is missing
+TK_mgL	Total potassium concentration	numeric	milligramsPerLiter		NA	value is missing
+SK_mgL	Soluble potassium concentration	numeric	milligramsPerLiter		NA	value is missing
+TCa_mgL	Total calcium concentration	numeric	milligramsPerLiter		NA	value is missing
+SCa_mgL	Soluble calcium concentration	numeric	milligramsPerLiter		NA	value is missing
+TFe_mgL	Total iron concentration	numeric	milligramsPerLiter		NA	value is missing
+SFe_mgL	Soluble iron concentration	numeric	milligramsPerLiter		NA	value is missing
+TMn_mgL	Total manganese concentration	numeric	milligramsPerLiter		NA	value is missing
+SMn_mgL	Soluble manganese concentration	numeric	milligramsPerLiter		NA	value is missing
+TCu_mgL	Total copper concentration	numeric	milligramsPerLiter		NA	value is missing
+SCu_mgL	Soluble copper concentration	numeric	milligramsPerLiter		NA	value is missing
+TSr_mgL	Total strontium concentration	numeric	milligramsPerLiter		NA	value is missing
+SSr_mgL	Soluble strontium concentration	numeric	milligramsPerLiter		NA	value is missing
+TBa_mgL	Total barium concentration	numeric	milligramsPerLiter		NA	value is missing
+SBa_mgL	Soluble barium concentration	numeric	milligramsPerLiter		NA	value is missing
 Flag_DateTime	Data flag for DateTime	categorical			NA	value is missing
 Flag_TLi_mgL	Data flag for total lithium (TLi)	categorical			NA	value is missing
 Flag_SLi_mgL	Data flag for soluble lithium (SLi)	categorical			NA	value is missing

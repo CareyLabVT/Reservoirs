@@ -3,13 +3,14 @@
 # Author: Adrienne Breef-Pilz
 # First developed: 28 December 24
 # Last edited: 19 May 24 - changed the timeseries with depth to y=Depth not concentration 
+# 03 Jan 24- commented out line 121 because we don't need to deal with multiple sites for streaming sensors. 
 
 all_plot<-function(
     Var,
     data,
     raw_data=NULL, 
-    reservoir,
-    res_site,
+    reservoir=NULL,
+    res_site = NULL,
     y_lab,  # This label can take an expression aka have the proper degrees C, 
     y_lab2, # This label is for the plotly function which can not handle expression argument. 
     Depth=F,  # Do you want depth as a factor
@@ -118,7 +119,7 @@ all_plot<-function(
     switch_raw=T
     
   current_raw <- raw_data%>%
-    filter(Reservoir %in% reservoir & Site %in% res_site) %>% 
+    #filter(Reservoir %in% reservoir & Site %in% res_site) %>% 
   filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
   mutate(type = "raw")
 

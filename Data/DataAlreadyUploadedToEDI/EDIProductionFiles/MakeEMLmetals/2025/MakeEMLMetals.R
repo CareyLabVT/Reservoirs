@@ -140,7 +140,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2024",
+  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
   temporal.coverage = c("2014-04-01", "2024-12-16"),
   maintenance.description = 'ongoing',
   data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
@@ -149,7 +149,7 @@ make_eml(
   other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.10') # This package identifier is only for the staging environment
+  package.id = 'edi.718.12') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -186,19 +186,19 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2024",
-  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014 through 2023",
-  temporal.coverage = c("2014-04-01", "2023-12-04"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
+  temporal.coverage = c("2014-04-01", "2024-12-16"),
   maintenance.description = 'ongoing',
-  data.table = c("Metals_2014_2023.csv", 'site_descriptions.csv', 'Metals_maintenancelog_2014_2023.csv'),
+  data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
   data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
-  other.entity = c('Metals_qaqc_2020_2023.R', 'Metals_Inspection_2014_2023.Rmd', 'Plotting_function.R'),
-  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses Metals_qaqc_2020_2023.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+  other.entity = c('metals_qaqc_2014_2024.R', 'metals_inspection_2014_2024.Rmd', 'Plotting_function.R'),
+  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.455.8') # This is the package identifer for the production environment
+  package.id = 'edi.455.9') # This is the package identifer for the production environment
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

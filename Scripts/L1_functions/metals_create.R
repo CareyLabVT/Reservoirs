@@ -184,7 +184,15 @@ metals_qaqc <- function(directory,
 
  if (is.null(start_date) & !is.null(historic)|| start_date<as.Date("2020-01-01") & !is.null(historic)){
    
-   hist <- read_csv(historic, show_col_types = F)
+   hist <- read_csv(historic, col_types = list(Reservoir = "c",
+                                               Site = "d",
+                                               Date = "T",
+                                               Time = "t",
+                                               Filter = 'c',
+                                               Fe_mgL = 'd',
+                                               Mn_mgL = 'd',
+                                               count_Fe_mgL = 'd',
+                                               count_Mn_mgL = 'd'))
    
    print("Added historic file")
  }else{

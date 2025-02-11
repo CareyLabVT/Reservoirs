@@ -31,4 +31,4 @@ NA,NA,NA,CTD,2023-10-17 00:00:00 EST,2023-10-17 23:59:00 EST,Temp_C,SpCond_uScm,
 NA,NA,NA,CTD,2023-12-04 00:00:00 EST,2023-12-04 23:59:00 EST,Temp_C,SpCond_uScm,2,NA,8188,Temp issue. Downcast is very different from upcast and differs substantially from the other CTD
 NA,NA,NA,CTD,2021-07-28 00:00:00 EST,2021-07-28 23:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,7809,Crazy high turbidity
 NA,NA,NA,CTD,2022-07-07 00:00:00 EST,2021-07-07 23:59:00 EST,Chla_ugL,Turbidity_NTU,2,NA,7809,Crazy high turbidity
-NA,NA,NA,CTD,2024-10-15 00:00:00 EST,2024-12-15 23:59:00 EST, Temp_C,DescRate_ms,2,NA,7809, Very short cast probably a battery issue
+NA,NA,NA,CTD,2024-10-15 00:00:00 EST,2024-10-15 23:59:00 EST, Temp_C,DescRate_ms,2,NA,7809, Very short cast probably a battery issue

@@ -39,6 +39,17 @@ ctd_QAQC <- function(raw_downloads = here(code_folder,"../RawDownloads"),
                      intermediate_file_name = "ctd_L0.csv"){
   
   
+  # raw_downloads = here(ctd_folder,"RawDownloads")
+  # ctd_cast_csvs = here(ctd_folder,"csv_outputs")
+  # ctd_season_csvs = here(ctd_folder,"CTD_season_csvs")
+  # CTD_FOLDER = here(code_folder, "/")
+  # start_date = as.Date(paste0("2018","-01-01"))
+  # force_reprocessing = FALSE
+  # historical_files = FALSE
+  # output_file_name = "ctd_L1.csv"
+  # intermediate_file_name = "ctd_L0_2018-2024.csv"
+  
+  
   ## Identify files new files
   file_names <- identify_new_files(raw_downloads = raw_downloads,
                                    ctd_cast_csvs = ctd_cast_csvs,

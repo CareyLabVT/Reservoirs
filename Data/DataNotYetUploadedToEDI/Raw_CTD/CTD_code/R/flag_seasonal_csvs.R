@@ -22,11 +22,19 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   
+ #ctd1 <- read.csv("Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_season_csvs/ctd_L0_2018-2024.csv")
+  
   ctd = ctd1 %>%
-    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
+    mutate(
+      DateTime = as.POSIXct(DateTime, format = "%Y-%m-%dT%H:%M:%SZ"),
            Reservoir = ifelse(Reservoir == "BRV", "BVR", Reservoir), #Fix typo
            Reservoir = sub("_", "", Reservoir), #Remove underscore
            Reservoir = as.factor(Reservoir))
+  
+  # convert everything to EDT so we can fix times later
+  
+  ctd$DateTime <- force_tz(ctd$DateTime, tzone = "Etc/GMT+4")
+ 
   
   #Flag codes
   #0=Not suspect, 
@@ -142,6 +150,48 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
   }  
   
+  
+  # Fix times
+  # CTD times in June 2024 are incorrect by ~3 hr after the CTD came back from the spa
+  ctd[ctd$DateTime>as.Date("2024-06-01") &
+                ctd$DateTime<as.Date("2024-06-21") & ctd$SN == 8188, "DateTime"] = 
+    ctd[ctd$DateTime>as.Date("2024-06-01") &
+                  ctd$DateTime<as.Date("2024-06-21") & ctd$SN == 8188, "DateTime"] + 60*60*3 #to align with actual date of cast
+  
+  
+  # CTD times in 2022 are incorrect by ~3 hr
+  ctd$DateTime[ctd$DateTime>as.Date("2021-12-01") &
+                         ctd$DateTime<as.Date("2023-03-01")] = 
+    ctd$DateTime[ctd$DateTime>as.Date("2021-12-01") &
+                           ctd$DateTime<as.Date("2023-03-01")] + lubridate::hours(3) #to align with published data
+  
+  # CTD times in 2020 and 2021 are incorrect by ~13 hr
+  ctd$DateTime[ctd$DateTime > as.Date("2020-01-01") & 
+                         ctd$DateTime < as.Date("2021-08-02")] = 
+    ctd$DateTime[ctd$DateTime > as.Date("2020-01-01") & 
+                           ctd$DateTime < as.Date("2021-08-02")] + lubridate::hours(13) #to align with published data
+  
+  # fix a month in 2023 after the old CTD came back 
+  ctd[ctd$DateTime>as.Date("2023-07-03") &
+                ctd$DateTime<as.Date("2023-08-01") & ctd$SN == 7809, "DateTime"] = 
+    ctd[ctd$DateTime>as.Date("2023-08-01") &
+                  ctd$DateTime<as.Date("2023-07-03") & ctd$SN == 7809, "DateTime"] + 60*60*4
+  
+  # CTD times in 2018 are incorrect by ~4 hr
+  ctd$DateTime[lubridate::year(ctd$DateTime) == 2018] = 
+    ctd$DateTime[lubridate::year(ctd$DateTime) == 2018] - lubridate::hours(4) #to align with published data
+  
+  # final = ctd%>%
+  #   mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
+  # 
+  
+  # convert to time to America/New_York with daylight savings observed
+  
+  ctd$DateTime <- with_tz(ctd$DateTime, tz = "America/New_York")
+  
+  # Double check the all the times
+  
+  
   # Add in historical files
   if(historical_files==T){
     
@@ -181,32 +231,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                lubridate::seconds(DateTime)==0,
                              7,0)) #Flag times that are missing time (date is meaningful but not time)
   
-  # Fix times
-  # CTD times in June 2024 are incorrect by ~3 hr after the CTD came back from the spa
-  ctd_flagged[ctd_flagged$DateTime>as.Date("2024-06-01") &
-                         ctd_flagged$DateTime<as.Date("2024-06-21") & ctd_flagged$SN == 8188, "DateTime"] = 
-    ctd_flagged[ctd_flagged$DateTime>as.Date("2024-06-01") &
-                           ctd_flagged$DateTime<as.Date("2024-06-21") & ctd_flagged$SN == 8188, "DateTime"] + 60*60*3 #to align with actual date of cast
-  
-  
-  # CTD times in 2022 are incorrect by ~2 hr
-  ctd_flagged$DateTime[ctd_flagged$DateTime>as.Date("2021-12-01") &
-                         ctd_flagged$DateTime<as.Date("2023-01-01")] = 
-    ctd_flagged$DateTime[ctd_flagged$DateTime>as.Date("2021-12-01") &
-                           ctd_flagged$DateTime<as.Date("2023-01-01")] + lubridate::hours(2) #to align with published data
-  
-  # CTD times in 2020 and 2021 are incorrect by ~13 hr
-  ctd_flagged$DateTime[ctd_flagged$DateTime > as.Date("2020-01-01") & 
-                         ctd_flagged$DateTime < as.Date("2021-12-01")] = 
-    ctd_flagged$DateTime[ctd_flagged$DateTime > as.Date("2020-01-01") & 
-                           ctd_flagged$DateTime < as.Date("2021-12-01")] + lubridate::hours(13) #to align with published data
-  
-  # CTD times in 2018 are incorrect by ~4 hr
-  ctd_flagged$DateTime[lubridate::year(ctd_flagged$DateTime) == 2018] = 
-    ctd_flagged$DateTime[lubridate::year(ctd_flagged$DateTime) == 2018] - lubridate::hours(4) #to align with published data
-  
-  final = ctd_flagged%>%
-    mutate(DateTime = as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S"))
+ 
   
   #Fix for CTD when conductivity and specific conductivity columns were switched
   #spec_Cond_uScm=Cond_uScm/(1+(0.02*(Temp_C-25)))) so if temp is less than 25 conductivity is
@@ -216,7 +241,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   
   #ABP 10 DEC 21
   
-  CTD_fix=final%>%
+  CTD_fix=ctd_flagged%>%
     add_column(CTD_check = NA)%>% #create the CTD_check column
     #sets up criteria for the CTD_check column either "good","bad" or "NA"(if no data)
     mutate(
@@ -386,6 +411,9 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   # Check if there are any casts that were duplicated
   
   dup <- nrow(CTD_fix_renamed[duplicated(CTD_fix_renamed),])
+  
+  
+  # Dups after 2017 are from NAs for maintenance and the CTD depth and temp are the same
   
   if(dup > 0){
     warning(paste0("There were ", dup, " rows that were duplicated and will be removed"))

@@ -160,8 +160,8 @@ make_eml(
   maintenance.description = 'ongoing',
   user.id = 'ccarey',
   user.domain = 'EDI',
-   package.id = 'edi.923.18') # USed for staging the data package 
-  #package.id = 'edi.202.11') # Used in the production enviornement for final publication
+   package.id = 'edi.923.21') # USed for staging the data package 
+ # package.id = 'edi.202.13') # Used in the production enviornement for final publication
 
 
 

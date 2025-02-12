@@ -159,7 +159,7 @@ make_eml(path = folder,
          user.id = "ccarey",
          user.domain = 'EDI',
          package.id = "edi.143.33") # FOR STAGING ENVIORNMENT THE PACKAGE ID IS "edi.143.#"
-         #package.id = 'edi.389.8') #FOR THE PRODUCTION ENVIORNMET THE PACKAGE ID IS "edi.389.#"
+         #package.id = 'edi.389.9') #FOR THE PRODUCTION ENVIORNMET THE PACKAGE ID IS "edi.389.#"
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

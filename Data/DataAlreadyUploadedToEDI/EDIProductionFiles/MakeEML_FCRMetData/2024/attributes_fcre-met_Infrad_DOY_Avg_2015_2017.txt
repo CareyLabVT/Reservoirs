@@ -1,0 +1,4 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+DOY	Day of year	numeric	dimensionless  		NA	No value found
+infradavg	average infrared radiation down measurment on that day of year	numeric	wattsPerSquareMeter		NA	No value found
+infradsd	Standard deviation of infrared radiation down measurments on that day of year	numeric	wattsPerSquareMeter		NA	No value found

@@ -2,6 +2,8 @@
 #This QAQC cleaning script was applied to create the data files included in this data package
 ## Authors: Austin Delany and Abby Lewis
 ## Last edited: 09-05-2024 A. Breef-Pilz did major updates and added in a maintenance log, combine historical files, and subset data
+## 12 Feb 2025- added a statement to end the script if no new data for the year. 
+
 ## Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data. This script is only for internal use by the data creator team and is provided as a reference; it may not run as-is.
 
 ugga_qaqc <- function(files, 
@@ -11,9 +13,9 @@ ugga_qaqc <- function(files,
                       end_date){
   
   # files <- "./Data/DataNotYetUploadedToEDI/UGGA/"
-  # maintenance_file <- "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/UGGA_Maintenance_Log.csv"
+  # maintenance_file <- "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv"
   # outfile <- "test_UGGA.csv"
-  # start_date <- as.Date("2022-04-01")
+  # start_date <- last_edi_date
   # end_date <- Sys.Date()
   
   # add in historic files for EDI
@@ -68,6 +70,14 @@ ugga_qaqc <- function(files,
         filter(TIMESTAMP_end >= start_date)
       
     }
+    
+    # Check if there are any files for the L1. If not then end the script
+    
+    if(nrow(all)==0){
+      
+      print("No new files for the current year")
+      
+    }else{
   
   # Reorder the data frame
 
@@ -306,7 +316,7 @@ ugga_qaqc <- function(files,
     final$Date <- as.character(format(final$Date)) # convert DateTime to character
     
     write_csv(final, outfile)
+    }
   }
-
 }
 

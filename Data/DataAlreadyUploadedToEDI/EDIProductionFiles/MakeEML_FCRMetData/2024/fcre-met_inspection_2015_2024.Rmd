@@ -7,41 +7,67 @@ original date made: 04 Jan 2024
 date: "`r Sys.Date()`"
 ---
 
-This script is the visual inspection scripts:
+This script is the visual inspection scripts which does a lot:
 
 1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. IF YOU ARE QAQCING ALL FILES IT WILL TAKE OVER 20 MINUTES FOR THE SCRIPT TO RUN. 
 
-2. Then the script checks for daily and subdaily gaps in the current file. 
+2. Then the script checks for daily and sub-daily gaps in the current file. 
 
 3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
 
 4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
 
-5. If necessary can QAQC data already on EDI using the QAQC function
+5. Creates plots
 
-6. Creates plots
+6. Writes data to new csv
 
-7. Writes data to new csv
-
-8. Downloads necessary files for EDI publishing
-
-For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+7. Downloads necessary files for EDI publishing
 
 
 All files are from GitHub or EDI and the source scripts are from GitHub as well. 
 
-If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and uncomment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Get raw files", "QAQC all files", "Write CSV" and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together and save you LOTTTS of time. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+If you are REVIEWING this data package, add the pasta URL from EDI in the "READ IN EDI FOR REVIEWER". Make sure eval=FALSE is in the chunk header for "Get raw files", "QAQC all files", "Write CSV" and "Download and save Maintenance Log". You don't need to remake the data files when you are reviewing the data package. These chunks of code will not be run when the R markdown is knitted together and saves you LOTTTS of time. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+If you are running the code chunk by chunk you mind need to make some adjustments to the code. To make the plots this markdown uses a function called "all_plots". In the function it creates a plots of the most current year, the whole times series, as well as, density and box plots for daily averages. You can also specify if you would like to produce a heat map. Note that heat maps are only produced if your data has a depth column. The function also allows you to choose if you want interactive plots, using plotly, for the most recent year of data. For the met data, I do not use plotly because the files are too big and it will take too long to produce. The plotly plots are designed to be in order with the other plots when knit to together. Therefore if you are running the ploting section, chunk by chunk, then you need to specify the plotly plot from the list of plots labeled "output"
+
+FOR DATA PRODUCT LEAD:
+
+If you are the data product lead and making the data package then:
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "READ IN EDI FOR REVIEWER". Make sure eval=FALSE is in the chunk header for "Get raw files", "QAQC all files", "Write CSV" and "Download and save Maintenance Log". You don't need to remake the data files when you are reviewing the data package. These chunks of code will not be run when the R markdown is knitted together and saves you LOTTTS of time. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+If you are the data product lead and making the data package then:
+
+1. Make sure all the date ranges are up to date especially current_time_start and current_time_end.
+
+2. Change the years in the saved data files in "Write CSV" and "Download and save Maintenance Log" chunk.
+
+3. Make sure to un comment and change the settings for the "Get raw files", "QAQC all files",  and "Write CSV" chunks. Also check the settings for the chunk eval=TRUE or it shouldn't be there. 
+
+4. Comment out the Reviewer section and make sure for the settings eval = FALSE.
+
+5. Update the data frame in "Get raw files" to include the most recent file on GitHub.
+
+6. Knit the file. This will take a long time. 
+
+7. Look over the plots and see if there are any issues that need to be added to the maintenance log. I will usually read in the file you just made and make smaller plots with the variable and month in question. Once I have the dates, add them to the maintenance log. 
+
+8. Re-run the inspection script until you have found all of the issues. 
+
+9. Run the "Download and save Maintenance Log" chunk to have the most up to date files in the EDI folder.
+
+10. Make sure large maintenance issues are also documented in the methods.txt file. 
 
 
 ```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander, suncalc)
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander, suncalc, openair)
 
 # Source scripts from GitHub
 source("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/R/edi_qaqc_function.R")
-#source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
-source("./../../Plotting_function.R")
+#source("./../../Plotting_function.R")
 
 
  #turn off pander auto asis
@@ -56,55 +82,12 @@ current_time_end= force_tz(as.POSIXct("2025-01-01 00:00:00"), tzone = "EST")
 
 ```{r Get raw files, eval=FALSE, include=FALSE}
 
-# # This section creates a list of the raw files and the manual files 
+# # DATA PRODUCT LEAD START HERE
 # 
-# # For the point person for this EDI package publishing. The code for this section is in RAW_FILES_for_inspection_rmd.R, which is in the MakeEML_FCRMetData. The code in that script needs to be copied here and to include the most recent year of data. When you are making the data file for the new year, make sure eval=TRUE and that eval= TRUE in the QAQC all files chunk. 
+# # This section creates a list of the raw files and the manual files
 # 
-# # List of the streaming raw data files from the Gateway. Since they are so large we have to make raw files for each year
-# # Make sure you have a legacy file for 2023 as 2024 will be in the FCRmet.csv file
+# # For the point person for this EDI package publishing. The code for this section is in RAW_FILES_for_inspection_rmd.R, which is in the MakeEML_FCRMetData. The code in that script needs to be copied here and to include the most recent year of data. When you are making the data file for the new year, make sure eval=TRUE and that eval= TRUE in the QAQC all files chunk.
 # 
-# ds <- c(
-#   'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2015_2016.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/MetData/RawMetData_2017.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2018.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2019.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2020.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2021.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCRmet_legacy_2022.csv',
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-metstation-data-qaqc/FCRmet_legacy_2023.csv',
-#   # THE CURRENT YEARS FILE
-#   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv'
-# )
-# 
-# 
-# # Read in and make a data frame of the manual downloaded files. I make these each year with the raw files we have downloaded.
-# # See ManualDownloadsSCCData for the script on making the file for each year. 
-# # Link here : https://github.com/CareyLabVT/ManualDownloadsSCCData/tree/master/MetStation
-# 
-# man_files <- c(
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2015_2016.csv','https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2017.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2018.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2019.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2020.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2021.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2022.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2023.csv',
-#   'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/MetStation/FCRMet_ManualDownloads_2023.csv'
-# )
-# 
-# # Make a tibble of the arguments going into the function. Each row are the arguments that will go into the function. 
-# #Make sure you have the correct raw files that go with the manual files. 
-# #If you want the same argument just repeat it each time. 
-# # Each row must be filled, even if it is just a NULL.
-# 
-# state_met <- tibble(data_file = ds, 
-#                     data2_file = man_files,
-#                     maintenance_file = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/MET_maintenancelog_new.csv',each=9),
-#                     met_infrad = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/FCR_Met_Infrad_DOY_Avg_2018.csv', each=9),
-#                     output_file = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
-#                     start_date = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
-#                     end_date = I(list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)),
-#                     notes = rep(TRUE, each=9))
 
 
 # This script will run as it takes the data file from EDI and produces the qaqc plots. 
@@ -113,18 +96,12 @@ current_time_end= force_tz(as.POSIXct("2025-01-01 00:00:00"), tzone = "EST")
 ```{r QAQC all files, eval=FALSE, include=FALSE}
 
 # Use the tibble above to use pmap and run each row through the qaqc_fcrmet function.
-# This creates a data frame for each or the raw files. Then we bind everything together below. 
+# This creates a data frame for each or the raw files. Then we bind everything together below.
 
-# fcrmet_files <- state_met%>% 
+# fcrmet_files <- state_met%>%
 #   pmap(qaqc_fcrmet)
-
-```
-
-
-REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. 
-
-```{r Bind files together or READ IN EDI FOR REVIEWER, include=FALSE}
-  
+# 
+# 
 # # Bind all the QAQC files from above
 #   current_df <- dplyr::bind_rows(fcrmet_files)
 # 
@@ -140,23 +117,25 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 #   current_df<-current_df[order(current_df$DateTime),]
 
 
-# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data
-# All you have to do is change the revision number. That is the number after 
-# 143/Look at this number/d4c74bbb3b86ea293e5c52136347fbb0
+```
 
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it. 
+
+```{r READ IN EDI FOR REVIEWER, include=FALSE}
+
+## REVIEWERS START HERE!!! Replace the link and then either knit the file or run this chunk and the ones below it. 
                                                                  
  
     # This is the link to the files in the staging environment
                                                                  ### CHANGE THIS NUMBER BELOW 
     # For staging environment                                                   ##   
-  current_df <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/29/d4c74bbb3b86ea293e5c52136347fbb0")
+  current_df2 <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/143/33/62647ecf8525cdfc069b8aaee14c0478")
 
 
  
  # # Force files from EDI to have an EST timestamp
    current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
- 
-
 
 ```
 
@@ -174,7 +153,8 @@ CATPRES_COL_NAMES =  c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp
  
 # read in the raw file
   raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv", skip = 4, col_names = CATPRES_COL_NAMES,
-                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))|>
+    select(-NetRadio_Temp_C)
   
   
   # convert NaN to NAs in the dataframe
@@ -187,15 +167,17 @@ CATPRES_COL_NAMES =  c("DateTime","Record", "CR3000Battery_V", "CR3000Panel_Temp
 
 ## Check for duplicates and  gaps in the data frame
 
-This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. 
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. If there is nothing printed then there are no duplicates or missing files. 
 
 
 ### Are there any duplicates?
 
+Check to see there are no duplicates in the data file. If there are then they need to be removed. 
+
 
 ```{r Check duplicates, echo=FALSE}
 
- # Make sure there are no duplicated dates. Do this here because the file is too large for Data Explore.
+ # Make sure there are no duplicated dates. 
 # Print them if there are
  dups<- current_df[duplicated(current_df$DateTime), ]
 
@@ -225,20 +207,22 @@ catwalk <- current_df
       print(c(catwalk$DateTime[i-1],catwalk$DateTime[i]))
     }
  }
+ 
+ print("Note if there are no data here then there are no daily gaps")
 ```
 
 ### Are there any subdaily gaps?
 
 This identifies if there are any sub-daily gaps in the current record which gets recorded in the methods section. 
 
-The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata and are also noted in the maintenance log.
+The first row is the time for the first observation and then the subsequent observation. Each observation should be 1 minute apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata.
 
 ```{r Check for sub daily gaps, echo=FALSE}
 
 # Because we can't have NAs for this for loop let's make a new df
  cat2 <- current_df%>%
-  filter(!is.na(Record))
-  #%>%filter(DateTime>current_time_start)
+  filter(!is.na(Record))|>
+  filter(DateTime>current_time_start)
 
   for(i in 2:length(cat2$Record)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
     if(abs(cat2$Record[i]-cat2$Record[i-1])>1 & difftime(cat2$DateTime[i], cat2$DateTime[i-1], units="mins")>1){
@@ -247,12 +231,15 @@ The first row is the time for the first observation and then the subsequent obse
     }
   }
 
+print("Note, if there are no data here, then there are no missing observations for the current year.")
+
 ```
 
 
 ### Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
 
-Let's look at the flag Frequency for each variable. 
+Let's look at the flag Frequency for each variable. Make sure there are 0s under the NA for each Flag column. We want to make sure
+every observation has a flag. 
 
 As a reminder here are the flag codes Flag values 
 
@@ -368,61 +355,27 @@ Make sure the observations are flagged
 
 ```
 
-### Subset and rename the files
-This section will subset the files so you can make plots of the whole time series and the current year. 
-Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
-
-
-```{r Filter for current year and daily average, include=FALSE}
-
-# Raw files
-current_raw <- raw%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "raw")
-
-current <- current_df%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "qaqc")%>%
-  select(DateTime:Albedo_Average_W_m2,type, -contains("adjusted"))
-
-
-# Let's only keep values that are different instead of plotting the raw and the qaqc value
-current_plot_df <- bind_rows(current, current_raw)%>%
-  dplyr::distinct(across(DateTime:Albedo_Average_W_m2), .keep_all = T)
-    
-
-daily <- current_df%>% 
-  group_by( Date = as.Date(DateTime)) %>% 
-  summarise_if(is.numeric, mean, na.rm=T)%>%
-  mutate(Year = as.factor(year(Date)),
-         Month = month(Date),
-         Time = "12:00:00")%>%
-  mutate(DateTime= paste0(Date, Time, sep=" "))%>%
-  mutate(DateTime=ymd_hms(DateTime))
-
-  
-catdata <- current_df%>%
-  mutate(Year=year(DateTime))
-
-colors <- c("raw" = "red", "qaqc" = "black")
-# colors for comparing Thermistor, RDO and Pressure sensor
-
-#colors2 <- c("Therm"="magenta","RDO"="dodgerblue2" ,"Pressure"="black")
-```
-
 ## QAQC Plots
 
 ##### QAQC plot information and all_plot function information
 
-For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want interactive plots for the current data. You can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument. Then look at the list of plots you have made under "output". If you click on the "output" object in your environment it will list all of the plots and which ones are interactive plotly plots. To view the plots run "output[[number of the plot in the list you want to run]]". Eg. If you want to see the 4th plot in the list write output[[4]] then run that line and the plot should appear. 
 
-The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The argumenst are:
-Var # The column you want to plot. Make sure it is in quotes
+If you would like to look at one variable then in the function below replace "dx" with the variable column. The object "dx" is just a list of variables so we don't have to list out all of the variables we want to plot. This is used to speed up the process. 
+
+The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The arguments are:
+Var, # the variable you would like to plot
+data, # the data frame to use
+raw_data=NULL, # Is there raw data to compare with. Usually is NULL
+reservoir, # the name of the reservoir you would like to filter by 
+res_site, # the reservoir Site or Sites you would like to filter by
 y_lab,  # This label can take an expression aka have the proper degrees C, 
 y_lab2, # This label is for the plotly function which can not handle expression argument. 
-Water=T, # Are these plots for inwater streaming sensors?
-Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
-Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+Depth=F,  # Do you want depth as a factor
+Water=T, # Are these plots for streaming sensors with RDO and temperature sensors
+Use_plotly = F, # Do you want to produce interactive plots for observations of the current year?
+Heatmap = F) # Do you want to make a heat maps? This only works if there are multiple depths at the same site
+
 
 The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
   
@@ -430,6 +383,7 @@ The arguments with = followed by a True means that they are the defaults and you
 
 The plots below are:
 The first 2 plots are the ones you should focus on for the QAQC chec. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+
 1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
 
 2. A time series of the historical and the current data just the qaqced values. 
@@ -440,12 +394,19 @@ The next two plots are just fun to see trends over time with the data.
 
 4. The box plots look at the spread of the data within the year and we can look at the median and see how that is changing or not. 
 
-Do not over think the last 2 plots. 
+Do not over think the last 2 plots, although they are good to look at historical trends to ensure relative data quality consistency. 
 
 ## All Met Variables
+
+Note the red raw observations are not included in the final data frame. They are just for comparison, so we can see which values have been removed. 
+
+#### PAR and Temperature Plots
+
 ```{r Temp, echo=FALSE, results='asis'}
 
 dx <- colnames(raw |> select(PAR_umolm2s_Average:AirTemp_C_Average))
+
+# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
 
 # make the plots
 outputs <- lapply(dx, all_plot, data = current_df, raw_data= raw , y_lab = 'Var Unit', y_lab2 = "Var Unit", Water = FALSE, Use_plotly = F)
@@ -454,11 +415,11 @@ output <- unlist(outputs, recursive = F)
 
 ```
 
-```{r Print plotly temp, echo=FALSE, messages=FALSE, warning=FALSE}
+```{r Print plotly temp, echo=FALSE, warning=FALSE, messages=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
-  # since the do not get included with renderTags(...)$html
+  # since they do not get included with renderTags(...)$html
   deps <- lapply(
     Filter(function(x){inherits(x,"htmlwidget")},output),
     function(hw){
@@ -474,10 +435,13 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
+#### Relative Humidity, Wind Speed, and Wind Direction Plots
 
 ```{r RH, echo=FALSE}
 
 dx <- colnames(raw |> select(RH_percent:WindDir_degrees))
+
+# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
 
 # make the plots
 outputs <- lapply(dx, all_plot, data = current_df, raw_data= raw , y_lab = 'Var Unit', y_lab2 = "Var Unit", Water = FALSE, Use_plotly = F)
@@ -486,9 +450,37 @@ outputs <- lapply(dx, all_plot, data = current_df, raw_data= raw , y_lab = 'Var 
 ```
 
 
+#### Wind Rose plots by Year
+
+```{r Wind Rose plots, echo=FALSE}
+
+
+   daily <- current_df%>% 
+  select(DateTime, WindDir_degrees, WindSpeed_Average_m_s)|>
+  mutate(Date = as.Date(DateTime))|>
+  group_by(Date)|>
+  #summarise_if(is.numeric, mean, na.rm=T)|>
+  mutate(Year = year(Date))|>
+  filter(Year<year(Sys.Date()))
+      
+      
+ # Visualize wind directions for all obs by Year     
+      chicago_wind <- daily%>%
+        dplyr::rename(date = Date, ws = WindSpeed_Average_m_s, wd = WindDir_degrees)
+      
+      # Make plot
+      pollutionRose(chicago_wind, pollutant="ws", type = "year")
+
+
+```
+
+#### Shortwave, Longwave, and Albedo Plots
+
 ```{r Shortwave, echo=FALSE}
 
 dx <- colnames(raw |> select(ShortwaveRadiationUp_Average_W_m2:Albedo_Average_W_m2))
+
+# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function.
 
 # make the plots
 outputs <- lapply(dx, all_plot, data = current_df, raw_data= raw , y_lab = 'Var Unit', y_lab2 = "Var Unit", Water = FALSE, Use_plotly = F)
@@ -512,6 +504,8 @@ outputs <- lapply(dx, all_plot, data = current_df, raw_data= raw , y_lab = 'Var 
 ### Download and save Maintenance Log, Plotting function, and QAQC function
 
 ```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
+
+## Run this right before you are ready to stage the data. You will have to re-run this section if you change the maintenace log or the qaqc script. 
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data-qaqc/MET_maintenancelog_new.csv", "fcre-met_maintenancelog_2015_2024.csv")

@@ -81,9 +81,9 @@ current_time_end=ymd_hms("2024-12-31 23:59:00", tz="EST")
 ```{r QAQC all files, eval=FALSE, include=FALSE}
 
 # DATA PRODUCT LEAD START HERE
-# Un comment this section and if you are going to knit the document together make sure the eval=TRUE or is not in the brackets above. 
-# Update the argument with the new links to make the data file. This might take some other scripts to combine all the years of data for the manual downloads for the VT sensors and the WVWA sensors. Note that if you are testing/fixing some data files you can adjust them locally and link to the local ones until you are ready to push them to GitHub. 
-# 
+# Un comment this section and if you are going to knit the document together make sure the eval=TRUE or is not in the brackets above.
+# Update the argument with the new links to make the data file. This might take some other scripts to combine all the years of data for the manual downloads for the VT sensors and the WVWA sensors. Note that if you are testing/fixing some data files you can adjust them locally and link to the local ones until you are ready to push them to GitHub.
+
 # ds <- c(
 #   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-catwalk-data-qaqc/fcre-waterquality_legacy_2018_2019_2020_2021_2022_2023.csv',
 #   # THE CURRENT YEARS FILE
@@ -117,13 +117,13 @@ current_time_end=ymd_hms("2024-12-31 23:59:00", tz="EST")
 # 
 # fcrcat_files <- state_cat%>%
 #   pmap(qaqc_fcr)
-
-# # Bind the different data files that you made to get one large data frame. 
+# 
+# # Bind the different data files that you made to get one large data frame.
 # 
 #   current_df <- dplyr::bind_rows(fcrcat_files)
-
-
-# # Remove dups that were introduced abbove. 
+# 
+# 
+# # Remove dups that were introduced abbove.
 #   current_df <- current_df%>%
 #   dplyr::distinct(.)%>% # get rid of dups if they snuck in
 #   filter(DateTime<(current_time_end))

@@ -26,7 +26,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatfor
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('BVRPlatform_2020_2023.csv','BVRPlatform_maintenancelog_2020_2023.csv',
+ data.table = c('BVRPlatform_2020_2023.csv','BVRPlatform_MaintenanceLog_2020_2023.csv',
                 'BVRSensorString_2016_2020.csv', "BVR_WaterLevel_2009_2023.csv") ,
  write.file=TRUE)
   
@@ -139,7 +139,7 @@ template_categorical_variables(path = folder,
 
 make_eml(path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, turbidity at discrete depths, and water level in Beaverdam Reservoir, Virginia, USA in 2009-2023",
-         data.table = c('BVRPlatform_2020_2023.csv', 'BVRPlatform_maintenancelog_2020_2023.csv', 'BVRPlatform_Depth_offsets_2020_2023.csv',
+         data.table = c('BVRPlatform_2020_2023.csv', 'BVRPlatform_MaintenanceLog_2020_2023.csv', 'BVRPlatform_Depth_offsets_2020_2023.csv',
                         'BVRSensorString_2016_2020.csv', 'BVR_WaterLevel_2009_2023.csv'),
          # data.table.name = c('BVRPlatform_2020_2023', 'BVRPlatform_maintenancelog_2020_2023', 'BVRPlatform_Depth_offsets_2020_2023',
          #                     'BVR_sensor_string_2016_2020', 'BVR_WaterLevel_2009_2023'), 
@@ -169,8 +169,8 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         #package.id = "edi.157.30") # Put your package.id here, followed by .1 (for 1st version). This is for staging
-         package.id = "edi.725.4") # This is for the final version
+         package.id = "edi.157.31") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         #package.id = "edi.725.4") # This is for the final version
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

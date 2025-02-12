@@ -71,6 +71,6 @@ Replaced HC23S-L with HC2A-S (2024- current) SERIAL NO. 20743870;
 
 CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. L1130362 https://s.campbellsci.com/documents/us/manuals/cs106.pdf;
 
-LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q52912 (Uuly 2015 - July 2022) LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q112618 (July 2022- current) https://s.campbellsci.com/documents/us/manuals/li190sb.pdf;
+LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q52912 (July 2015 - July 2022) LI-COR LI190SB-L Quantum Sensor SERIAL NO. Q112618 (July 2022- current) https://s.campbellsci.com/documents/us/manuals/li190sb.pdf;
 
 Hukseflux NR01 4-Component Net Radiometer SERIAL NO. 2383 https://s.campbellsci.com/documents/us/manuals/nr01.pdf.

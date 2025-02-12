@@ -159,9 +159,9 @@ make_eml(path = folder,
          user.id = "ccarey",
          user.domain = 'EDI',
          #STAGGING
-         package.id = "edi.779.29") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
+        # package.id = "edi.779.29") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
          # FINAL ID FOR THE PRODUCTION ENVIRONMENT 
-         #package.id = "edi.1105.2") # edi.1105.1 for final product
+         package.id = "edi.1105.3") # edi.1105.1 for final product
 
 
 #PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS

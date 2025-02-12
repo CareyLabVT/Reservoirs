@@ -20,7 +20,6 @@
 
 pacman::p_load(oce, ocedata, tidyverse, lubridate, here)
 code_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD", "CTD_code")
-#ctd_folder <- here("Data", "DataNotYetUploadedToEDI", "Raw_CTD")
 # Load Carey Lab ctd functions
 source(here(code_folder,"/R/ctd_functions_automated.R") )
 source(here(code_folder,"/R/flag_seasonal_csvs.R"))
@@ -68,7 +67,7 @@ ctd_QAQC <- function(raw_downloads = here(code_folder,"../RawDownloads"),
       message(file)
       process_CTD_file(file, 
                        raw_downloads = raw_downloads,
-                       CTD_FOLDER = paste0(ctd_folder, "/")) 
+                       CTD_FOLDER = CTD_FOLDER) 
     }
   }
   

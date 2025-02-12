@@ -21,10 +21,12 @@ identify_new_files <- function(raw_downloads = "../RawDownloads",
   #Load all files in RawDownloads and csv_output folders
   downloads <- sub(".cnv","",list.files(raw_downloads, pattern = ".cnv"))
   outputs <- sub(".csv","",list.files(ctd_cast_csvs))
+  donotuse <- sub(".cnv","", list.files(paste0(raw_downloads, "/DO_NOT_RUN")))
   
   #Files that are in downloads but not outputs have not yet been processed
   if(force_reprocessing){missing <- downloads} else {
     missing <- downloads[!downloads%in%outputs]
+    missing <- missing[downloads %in% donotuse]
   }
   
   if(length(missing)==0){return()}

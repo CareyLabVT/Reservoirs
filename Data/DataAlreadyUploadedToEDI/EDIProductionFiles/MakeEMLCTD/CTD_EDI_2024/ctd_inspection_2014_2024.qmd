@@ -77,12 +77,12 @@ unique(ctd_reprocessed$Reservoir)
 # rename file
 qaqc <- ctd_reprocessed
 ```
+
 ```{r Save file in the EDI folder}
 
 write_csv(ctd_reprocessed, "ctd_2013_2024.csv")
 
 ```
-
 
 ```{r Download files for EDI}
 
@@ -97,6 +97,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 # The helper scripts need to be downloaded and zipped. Not sure how to do this in R
 
 ```
+
 ```{r Reprocess sites to check for new ones}
 # add text here to include the chunk when you render the html
 #| eval: false
@@ -117,7 +118,6 @@ trim_sites = function(data,sites){
 sites_trimmed = trim_sites(ctd_fix, sites) 
 write.csv(sites_trimmed,"site_descriptions.csv", row.names=F) #Write to file
 ```
-
 
 ## STEP 4: REVIEWERS- load data from EDI
 

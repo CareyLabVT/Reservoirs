@@ -34,6 +34,12 @@ process_CTD_file <- function(file,
   #These are in ctd_functions_automated.R
   #trim ctd
   ctdTrimmed <- trim_ctd(file, raw_downloads) 
+  
+  # Trying to figure out where the duplicates get introduced
+  print(paste0("Name of the file ", file))
+  
+  print(paste0("The date of the CTD cast ", ctdTrimmed@metadata$startTime))
+  
   #do the rest of the processing. This does NOT add SN to file
   epic_ctd_function(ctdTrimmed, file, SN, AUTO_FOLDER, 
                     CSV_FOLDER_OVERRIDE, MAX_DEPTH, CTD_FOLDER)

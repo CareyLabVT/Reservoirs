@@ -520,6 +520,7 @@ ghg_qaqc<-function(directory,
   ### 4.1 Set up the Values to be used ####
   # modify raw_df based on the information in the log
   
+  if (nrow(log) != 0){
   for(i in 1:nrow(log)){
     
     ### get start and end time of one maintenance event
@@ -648,6 +649,9 @@ ghg_qaqc<-function(directory,
   
   print("Took out values in the maintenance log")
   
+  } else{
+    print('No Maintenance Values...')
+  }
   #### 5. Additional Maintenance ####
   
   # clean up columns we no longer need

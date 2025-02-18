@@ -15,6 +15,7 @@
 ## A.Breef-Pilz edits to add in streaming summary files 
 ## B.Kandel edits to add in qc for H and LE for extreme values adapted from eddy-flux_post_processing script
 ## A.Breef-Pilz made a function to read in processed files from EddyPro because the headings had changed
+## A.Breef-Pilz added an if statement when no new observations for the year. 18 Feb 2025
 
 ### This function:
 # 1. Reads in the Summary files from the EddyFlux system that is streaming at FCR or from proceesed EddyPro files
@@ -346,6 +347,14 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   }
   
   
+  # Check if there are any files for the L1. If not then end the script
+  
+  if(nrow(current.ec)==0){
+    
+    print("No new files for the current year")
+    
+  }else{
+  
   ## Add flag for missing data: 3 = missing data, 4= instrument malfunction 
   # For: qc_tau, qc_H, qc_LE, qc_co2_flux, qc_h2o_flux, qc_ch4_flux
   ec_all <- current.ec %>% 
@@ -409,20 +418,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     readr::write_csv(ec_all, output_file)
   }
   
-}
+  } # ends the if statement when no new observations for the year
+} # ends the function
 
-# ## Function Example
-# eddypro_cleaning_function(
-#   directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
-#   gdrive = F, # Are the files on Google Drive. True or False
-#   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-#   #current_year = 2023,
-#   output_file = "/EddyPro_Cleaned_L1.csv",
-#   start_date = as.Date("2022-12-31") + lubridate::days(1),
-#   end_date = Sys.Date() + lubridate::days(1))
-
-# 
-# ## Call healthcheck
-# RCurl::url.exists("https://hc-ping.com/f0ba1278-7b06-4b3b-b8aa-5486e778abc3", timeout = 5)
 
 

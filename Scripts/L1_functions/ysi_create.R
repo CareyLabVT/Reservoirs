@@ -2,7 +2,9 @@
 # QAQC of YSI and PAR data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-08-05 changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight
+# Last edited: 2025-02-18 
+# changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight
+# 2025-02-18 added an if statement to end the function if there were no observations for the year
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate, dplyr,
@@ -57,7 +59,13 @@ raw_profiles$Notes <- NULL
       filter(DateTime <= end_date)
   }
  
+#  # Check if there are any files for the L1. If not then end the script
 
+if(nrow( raw_profiles)==0){
+  
+  print("No new files for the current year")
+  
+}else{
 
 ## AUTOMATED FLAGS THAT CAN BE APPLIED TO ENTIRE TABLE BY INDEX ##
 for(j in colnames(raw_profiles%>%select(DateTime,Temp_C:pH))) { 
@@ -359,7 +367,8 @@ write_csv(ysi, outfile)
 }
 
 return(ysi)
-}
+  } # ends if statement
+} # ends function
 
 # maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
 # data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'

@@ -2,7 +2,10 @@
 ## AUTOMATED L1 QAQC SCRIPT FOR UGGA 
 #This QAQC cleaning script was applied to create the data files included in this data package
 ## Authors: Dexter Howard and Adrienne Breef-Pilz
-## Last edited: 12-19-2024 A. Breef-Pilz did major updates and added in a combine historical files, and subset data
+## Last edited: 02-18-2025 - A. Breef-Pilz added an if statement when no observations for the year
+## 12-19-2024 A. Breef-Pilz did major updates and added in a combine historical files, and subset data
+
+
 ## Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data. This script is only for internal use by the data creator team and is provided as a reference; it may not run as-is.
 
 
@@ -28,6 +31,32 @@ discharge_df <- gsheet::gsheet2tbl(gsheet_url)
 
 discharge_df$DateTime = lubridate::parse_date_time(discharge_df$Date, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HMS', 'mdy HM'))
 
+# subset the file if there are start and end dates
+
+### identify the date subsetting for the data
+if (!is.null(start_date)){
+  #force tz check 
+  start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+  
+  discharge_df <- discharge_df %>% 
+    filter(DateTime >= start_date)
+}
+
+if(!is.null(end_date)){
+  #force tz check 
+  end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+  
+  discharge_df <- discharge_df %>% 
+    filter(DateTime <= end_date)
+}
+
+# Check if there are any files for the L1. If not then end the script
+
+if(nrow( discharge_df)==0){
+  
+  print("No new files for the current year")
+  
+}else{
 
 ## calculate Q from flowmate 
 flowmate_Q <- discharge_df %>% 
@@ -101,24 +130,7 @@ curr_file <- bind_rows(his, final_Q)|>
     Flag_Flow_cms = 0) 
 
 
-# subset the file if there are start and end dates
 
-### identify the date subsetting for the data
-if (!is.null(start_date)){
-  #force tz check 
-  start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
-  
-  curr_file <- curr_file %>% 
-    filter(DateTime >= start_date)
-}
-
-if(!is.null(end_date)){
-  #force tz check 
-  end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
-  
-  curr_file <- curr_file %>% 
-    filter(DateTime <= end_date)
-}
 
 # subset the maintenance log if there are start and end dates
 
@@ -253,6 +265,6 @@ return(final_Q)
 # Don't need to save the maintenance log here 
 #write.csv(log, output_file, row.names = FALSE)
 
-
-}
+ } # ends the if statement if there are no new observations
+} # ends the function
 

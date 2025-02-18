@@ -7,6 +7,7 @@
 # 22 Oct. 24 Changed the flipped metals to look at just Fe and Mn
 # 23 Oct. 24 Added more arguments so you can save or return the ISCO and or the metals data frame
 # 04 Feb. 25 Specified the columns when reading in the historical file and added a step to get times for ISCO observations. For now they are the same as the weir samples. 
+# 18 Feb. 25 Added a function when there were no observations for the year
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -152,6 +153,12 @@ metals_qaqc <- function(directory,
     map_df(~ read_metals_files(.x))
     #drop_na(Date) # when NA in DateTime column. Maybe a warning?
   
+  # Take out dup observations when ISCO samples were run without digestion and then with digestion. The smaller values are the correct samples. Need to remove them before we average dups
+  
+  
+  
+  
+  
   print("Read in files and combined them together")
  
 #set up data frame with Reservoir, Site, Depth, and filter
@@ -211,7 +218,34 @@ metals_qaqc <- function(directory,
 
  # Reorder the date
  frame2 <- frame22[order(frame22$Date),]
-
+ 
+ # Subset the data for the start and end time 
+ ### identify the date subsetting for the data
+ if (!is.null(start_date)){
+   #force tz check
+   start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+   
+   frame2 <- frame2 %>%
+     filter(DateTime >= start_date)
+   
+ }
+ 
+ if(!is.null(end_date)){
+   #force tz check
+   end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+   
+   frame2 <- frame2 %>%
+     filter(DateTime <= end_date)
+   
+ }
+ 
+ # Check if there are any files for the L1. If not then end the script
+ 
+ if(nrow(frame2)==0){
+   
+   print("No new files for the current year")
+   
+ }else{
 
  # Establish flag columns and add ones for missing values
  for(j in colnames(frame2|>select(Li_mgL:Ba_mgL))) {
@@ -577,27 +611,6 @@ metals_qaqc <- function(directory,
  # Remove the ISCO samples
  final <- frame4|>
    filter(Site != 100.1)
-
-
- ### identify the date subsetting for the data
- if (!is.null(start_date)){
-   #force tz check
-   start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
-
-   final <- final %>%
-     filter(DateTime >= start_date)
-
- }
-
- if(!is.null(end_date)){
-   #force tz check
-   end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
-
-   final <- final %>%
-     filter(DateTime <= end_date)
-
- }
-
  
 
  # Do we want to get ISCO oput up 
@@ -665,8 +678,8 @@ if(metals_save==T){
    
    print("Data frames are in a list with the metals data frame being first and then the ISCO data frame")
  
- }
- 
+  }
+ } # ends the if statement when there are no new observations
 } # closes the function
 
 

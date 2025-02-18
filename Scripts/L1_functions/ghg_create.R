@@ -1,12 +1,14 @@
 # Title: GHG L1 generation (QA/QC) script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov 23, 
-# Last updated: 20 Jun 24 (ABP)- read in multiple air pressure files
+# Last updated: 
+# 20 Jun 24 (ABP)- read in multiple air pressure files
 # 24 Sep 24- round numeric columns to 4 digits
 # 22 Oct 24- added in option for a historical file for obs from 2015-2022
 # 02 Jan 25- Changed how MDLs are calculated. Only take the previous 2 years for the observation year.
 # added in a saved data frame of observations that had notes from the Analytical Lab. 
 # 12 Jan 25 - Added in a section to select samples that had re run and flag them
+# 18 Feb 25 - Added a if statement when no new files for the year then the function stops
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -165,6 +167,8 @@ ghg_qaqc<-function(directory,
   all<-list.files(path= mydir,pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
+  print("Files combined")
+  
    # Filter for just the unprocessed files
   ### identify the date subsetting for the data
   if (!is.null(start_date)){
@@ -177,7 +181,15 @@ ghg_qaqc<-function(directory,
       dplyr::filter(date_acquired <= end_date)
   }
   
-  print("Files combined")
+ 
+  # Check if there are any files for the L1. If not then end the script
+  
+  if(nrow(all)==0){
+    
+    print("No new files for the current year")
+    
+  }else{
+  
   
   # some timestamps are duplicated between files. Inspect:
   duplicate_timestamps <- all[duplicated(all$date_acquired), ]
@@ -937,6 +949,7 @@ ghg_qaqc<-function(directory,
     
     print(paste0("saved ", output_file))
   } 
-}
+  } # ends the if statement when no new observations for the year
+} # ends the function
 
 

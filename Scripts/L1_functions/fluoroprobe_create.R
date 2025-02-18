@@ -2,7 +2,8 @@
 #Author: Mary Lofton
 #Updated version: Austin Delany
 #Date created: 16DEC19
-#Last updated: 2024-06-16 ABP- add in start and end dates to subset L1 file
+#Last updated: 2025-02-18 ABP- added in an if statement when no observations for the current year
+## 2024-06-16 ABP- add in start and end dates to subset L1 file
 #Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data <and includes additional R scripts available with this package>. This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
 
 
@@ -394,7 +395,7 @@ for(i in 1:nrow(log)){
 
 ## Subset L1 file 
 
-# subset to make the L1 file 
+# subset to make the L1 file. Maybe move this earlier at some point so we can end the function earlier for no new observations for the new year. 
 
 if (!is.null(start_date)){
   #force tz check
@@ -418,7 +419,14 @@ if(!is.null(end_date)){
   
 }
 
+# Check if there are any files for the L1. If not then end the script
 
+if(nrow(fp_final)==0){
+  
+  print("No new files for the current year")
+  
+}else{
+  
 # save the file or if Null return the file
 
 if(is.null(out_file)){
@@ -428,9 +436,9 @@ if(is.null(out_file)){
 }else{
   
     write.csv(fp_final, out_file, row.names = FALSE)
-}
+  }
 
+ } # ends the if statement when no new observations
 
-
-}
+} # ends the function
 

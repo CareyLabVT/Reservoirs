@@ -2,7 +2,7 @@
 # QAQC of Secchi data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-08-05
+# Last edited: 2025-02-18
 
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate,
@@ -63,6 +63,12 @@ secchi_qaqc <- function(data_file,
     secchi_df <- secchi_df %>% 
       filter(DateTime <= end_date)
   }
+  
+  if(nrow(secchi_df)==0){
+    
+    print("No new files for the current year")
+    
+  }else{
 
   ## fill in any missing datetimes with noon
   secchi_df <- secchi_df %>%
@@ -269,7 +275,8 @@ secchi_qaqc <- function(data_file,
   }
 
   return(secchi_reformat)
-}
+  } # ends the if statement
+} # ends the function
 #
 #data_file = 'https://docs.google.com/spreadsheets/d/1fvM0fDRliuthicQWZT7c9RYErikI5DwrzbOC7TCoMGI/edit#gid=1172894977'
 #maintenance_file <- 'Data/DataNotYetUploadedToEDI/Secchi/maintenance_log.csv'

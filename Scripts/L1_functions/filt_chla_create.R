@@ -1,11 +1,14 @@
 # Chla Processing L1 script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
-# Edit: 16 Jun 24- add in historical file, add a start and end date filter, add in time of sample
-# 24 Sept 24 - round all numeric columns to 4 digits
-# KKH Updated Jan 24 - rename SNP sites to be consistent with LSPA sites 
+# Edit: 18 Feb. 25 - added an if statement for when we don't have new observations for the year. The function ends
+# KKH Updated Jan 25 - rename SNP sites to be consistent with LSPA sites 
 # (40 (Hedgehog) > 220 (LSPA code for Hedgehog), 50 (buoy) > 200)
 # updated script to handle other possible spec sample ID naming conventions
+# 16 Jun 24- add in historical file, add a start and end date filter, add in time of sample
+# 24 Sept 24 - round all numeric columns to 4 digits
+# 
+# 
 
 # Things the script does: 
 # 1. Read in Maintenance log and read in raw chla file from the spec
@@ -524,7 +527,7 @@ filt_chla_qaqc <- function(directory,
   # put in order
   final <- final[order(final$DateTime),]
   
-  # subset to make the L1 file 
+  # subset to make the L1 file. Maybe look at moving this earlier. 
   
   if (!is.null(start_date)){
     #force tz check
@@ -548,6 +551,13 @@ filt_chla_qaqc <- function(directory,
     
   }
   
+  # Check if there are any files for the L1. If not then end the script
+  
+  if(nrow(final)==0){
+    
+    print("No new files for the current year")
+    
+  }else{
   
   
   ### 7. Save the file. If outfile is NULL then return the file
@@ -560,6 +570,6 @@ filt_chla_qaqc <- function(directory,
     write_csv(final, outfile)
   }
   
+  } # ends the if statement if there are no new observations
   
-  
-}
+} # ends the function

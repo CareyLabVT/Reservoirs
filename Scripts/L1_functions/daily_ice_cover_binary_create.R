@@ -145,15 +145,63 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
     # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
     
     log_read <- gsheet::gsheet2tbl(maint_log) |> 
+      mutate(TIMESTAMP_start = lubridate::force_tz(lubridate::as_datetime(TIMESTAMP_start), tzone = 'America/New_York'),
+             TIMESTAMP_end = lubridate::force_tz(lubridate::as_datetime(TIMESTAMP_end)), tzone = 'America/New_York') |> 
       filter(Reservoir == ice_site) |> 
-      select(Reservoir, Date = DateTime, Maint_Ice_Presence = Ice_Presence, Flag_Ice_Presence)
+      select(Reservoir, TIMESTAMP_start, TIMESTAMP_end, Ice_Presence, Site, Flag_Ice_Presence)
     
-    daily_ice_df <- daily_ice_df |> 
-      full_join(log_read, by = c('Date', 'Reservoir')) |> 
+    log <- log_read
+    
+    ice_maintenance_update_df <- data.frame()
+    
+    for(i in 1:nrow(log)){
+      start <- as.Date(log$TIMESTAMP_start[i])
+      end <- as.Date(log$TIMESTAMP_end[i])
+      
+      
+      ## GET THE ICE INDICATION
+      ice_indication <- log$Ice_Presence[i]
+      
+      ## GET THE ICE INDICATION
+      ice_method <- log$Flag_Ice_Presence[i]
+      
+      maint_site <- log$Reservoir[i]
+      
+      
+      if(is.na(end)){
+        # If there the maintenance is on going then the columns will be removed until
+        # and end date is added
+        Time <- daily_ice_df |> 
+          filter(Date >= start) |> 
+          pull(Date)
+        
+      }else if (is.na(start)){
+        # If there is only an end date change columns from beginning of data frame until end date
+        Time <- daily_ice_df |> 
+          filter(Date <= end) |> 
+          pull(Date)        
+      }else {
+        Time <- daily_ice_df |> 
+          filter(Date <= end & Date >= start) |> 
+          pull(Date)  
+      }
+      
+      log_event_df <- data.frame(Date = Time, Reservoir = maint_site, Maint_Ice_Presence = ice_indication, Maint_Ice_Method = ice_method)
+      
+      ice_maintenance_update_df <- bind_rows(ice_maintenance_update_df, log_event_df)
+      
+    }
+    
+    ice_maintenance_update_df <- ice_maintenance_update_df |> distinct(Date, .keep_all = TRUE)
+    
+    
+    
+    daily_ice_maint_join <- daily_ice_df |> 
+      full_join(ice_maintenance_update_df, by = c('Date', 'Reservoir')) |> 
       dplyr::mutate(ice_presence = ifelse((!is.na(Maint_Ice_Presence) & (ice_presence != Maint_Ice_Presence)), Maint_Ice_Presence, ice_presence),
-                    Method = ifelse(!is.na(Maint_Ice_Presence), 'V', Method),
-                    Flag = ifelse(is.na(Flag_Ice_Presence), 0, Flag_Ice_Presence)) |> 
-      select(-Maint_Ice_Presence, -Flag_Ice_Presence, -site_id)
+                    Method = ifelse(!is.na(Maint_Ice_Presence), Maint_Ice_Method, Method),
+                    Flag = ifelse(is.na(Flag), 0, Flag)) |> 
+      select(-Maint_Ice_Presence, -site_id, -Maint_Ice_Method)
     
   }
   

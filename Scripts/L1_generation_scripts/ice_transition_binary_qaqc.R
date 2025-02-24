@@ -5,6 +5,7 @@
 
 library(dplyr)
 library(readr)
+library(lubridate)
 
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ice_transition_binary_create.R')
 

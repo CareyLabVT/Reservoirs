@@ -226,7 +226,7 @@ metals_qaqc <- function(directory,
    start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
    
    frame2 <- frame2 %>%
-     filter(DateTime >= start_date)
+     filter(Date >= start_date)
    
  }
  
@@ -235,7 +235,7 @@ metals_qaqc <- function(directory,
    end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
    
    frame2 <- frame2 %>%
-     filter(DateTime <= end_date)
+     filter(Date <= end_date)
    
  }
  

@@ -31,6 +31,7 @@ fcr_ice_data <- daily_ice_cover_binary(current_file = current_files[2],
                                        historic_file = historic_ice_files,
                                        maint_log = ice_maintenance_log,
                                        ice_site = 'FCR')
+fcr_ice_data$site_id <- 'fcre'
 
 combined_ice_data <- dplyr::bind_rows(bvr_ice_data, fcr_ice_data)
 

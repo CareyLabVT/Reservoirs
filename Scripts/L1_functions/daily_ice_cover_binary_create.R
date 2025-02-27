@@ -140,6 +140,7 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
     dplyr::rename(Date = datetime)
   
   
+  
   if(!is.null(maint_log)){ # only run this file if the maint file argument is non-null
     
     # ## ADD MAINTENANCE LOG FLAGS (manual edits to the data for suspect samples or human error)
@@ -203,13 +204,17 @@ daily_ice_cover_binary <- function(current_file, historic_wq_file, historic_file
                     Flag = ifelse(is.na(Flag), 0, Flag)) |> 
       select(-Maint_Ice_Presence, -site_id, -Maint_Ice_Method)
     
+    return(daily_ice_maint_join)
+    
+  } else{
+    return(daily_ice_df)
   }
   
-  message('EDI file ready')
+  #message('EDI file ready')
   
   
   ## return dataframe formatted to match FLARE targets
-  return(daily_ice_df)
+  #return(daily_ice_maint_join)
 }
 
 ## USE CODE BELOW TO TEST FUNCTION ##

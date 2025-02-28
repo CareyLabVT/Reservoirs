@@ -2,13 +2,14 @@
 # Author: Adrienne Breef-Pilz
 # Created: 16 June 2024
 # Edited: 
+# 27 Feb 25 - changed the repo links from Mary's repo to the main repo
 
 # This script uses the fluoroprobe_qaqc function saved as the fluoroprobe_create.R
 
 rm(list=ls())
 
 # Download/load libraries
-pacman::p_load(tidyverse, lubridate, EDIutils, xml2)
+pacman::p_load(tidyverse, lubridate, EDIutils, xml2, httr)
 
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
@@ -22,8 +23,8 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 #source('./Scripts/L1_functions/fluoroprobe_create.R')
 
 ## Run Function 
-repo_link <- "https://api.github.com/repos/melofton/Reservoirs/git/trees/master?recursive=1"
-repo_filepath <- "https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/"
+repo_link <- "https://api.github.com/repos/CareyLabVT/Reservoirs/git/trees/master?recursive=1"
+repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
 example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"

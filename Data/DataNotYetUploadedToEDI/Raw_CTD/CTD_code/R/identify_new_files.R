@@ -26,7 +26,7 @@ identify_new_files <- function(raw_downloads = "../RawDownloads",
   #Files that are in downloads but not outputs have not yet been processed
   if(force_reprocessing){missing <- downloads} else {
     missing <- downloads[!downloads%in%outputs]
-    missing <- missing[downloads %in% donotuse]
+    missing <- missing[!missing %in% donotuse]
   }
   
   if(length(missing)==0){return()}

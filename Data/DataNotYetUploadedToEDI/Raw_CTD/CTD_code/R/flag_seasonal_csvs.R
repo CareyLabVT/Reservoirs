@@ -100,6 +100,8 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   # Make an array of the rows that have a negative conductivity, which indicates a spike
   
   row <- which(ctd$Cond_uScm<0,arr.ind = TRUE)
+
+  if(length(row) != 0) {
   
   # Make a blank array
   gfg <- NULL
@@ -129,6 +131,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     ctd[c(low:high), c("Flag_Cond_uScm", "Flag_SpCond_uScm")] <- 4
     
+   }
   }
   
   # Now back to flagging more things. 

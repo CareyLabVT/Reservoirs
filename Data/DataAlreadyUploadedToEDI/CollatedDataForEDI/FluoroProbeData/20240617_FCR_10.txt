@@ -1,0 +1,5 @@
+Date/Time	Green Algae	Bluegreen	Diatoms	Cryptophyta	#5	#6	#7	Yellow substances	Total conc.	Transmission	Depth	Temp. Sample	Green Algae	Bluegreen	Diatoms	Cryptophyta	#5	#6	#7	Yellow substances	Total cell count	Trans. 700 nm	LED 3 [525 nm]	LED 4 [570 nm]	LED 5 [610 nm]	LED 6 [370 nm]	LED 7 [590 nm]	LED 8 [470 nm]	Pressure	Temp. LEDs	Temp. Sensor
+date	µg/l	µg/l	µg/l	µg/l	µg/l	µg/l	µg/l	r.u.	µg/l	%	m	°C	cells/ml	cells/ml	cells/ml	cells/ml	cells/ml	cells/ml	cells/ml	r.u.	cells/ml	digits	digits	digits	digits	digits	digits	digits	bar	°C	°C
+6/17/2024 1:02:32 PM	36.33	10.49	0.00	3.13	0.00	0.00	0.00	0.00	49.95	77.94	0.33	25.90	19257	10488	0	94	0	0	0	0	29839	142.15	33.90	13.65	78.52	91.13	81.08	142.55	1.03	26.90	27.73
+6/17/2024 1:02:35 PM	47.59	8.96	0.00	5.40	0.00	0.00	0.00	0.00	61.95	78.85	0.62	25.63	25222	8965	0	162	0	0	0	0	34348	143.82	43.63	19.68	89.61	115.70	92.30	192.41	1.06	26.94	27.78
+6/17/2024 1:02:38 PM	51.76	11.08	0.24	4.25	0.00	0.00	0.00	0.00	67.33	81.02	0.92	24.75	27432	11083	110	127	0	0	0	0	38753	147.78	45.28	18.70	100.05	122.28	97.69	205.03	1.09	26.94	27.80

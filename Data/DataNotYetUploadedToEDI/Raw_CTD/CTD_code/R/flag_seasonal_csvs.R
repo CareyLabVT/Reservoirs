@@ -20,6 +20,8 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
                                maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv"){
   
   
+  intermediate_file_name = "ctd_L0.csv"
+  
   ctd1 <- read.csv(paste0(ctd_season_csvs, "/", intermediate_file_name)) #Load saved data
   
  #ctd1 <- read.csv("Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_season_csvs/ctd_L0_2018-2024.csv")
@@ -102,6 +104,8 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   row <- which(ctd$Cond_uScm<0,arr.ind = TRUE)
 
   if(length(row) != 0) {
+  
+  if(length(row) != 0){
   
   # Make a blank array
   gfg <- NULL

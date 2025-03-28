@@ -117,17 +117,22 @@ fp3 <- fp2 %>%
          TotalConc_ugL, Transmission, Depth_m, Temp_degC, RFU_525nm, RFU_570nm, RFU_610nm,
          RFU_370nm, RFU_590nm, RFU_470nm) %>%
   mutate(DateTime = as.POSIXct(as_datetime(DateTime, tz = "", format = "%m/%d/%Y %I:%M:%S %p"))) %>%
-  filter(Depth_m >= 0.2) #|> 
+  filter(Depth_m >= 0.2) %>%
+  mutate(x = sapply(strsplit(x, "/"), "[", 13))
   #dplyr::mutate(DateTime = lubridate::force_tz(DateTime, tzone = "EST"),
                 #DateTime = lubridate::with_tz(DateTime, tzone = "UTC"))
 
-# #eliminate upcasts 
+# #eliminate upcasts except when all we have is the upcast
 fp_downcasts <- fp3[0,]
-upcasts <- c("20160617_FCR_50.txt","20180903_BVR_50.txt")
+upcasts <- c("20160617_FCR_50.txt","20180907_BVR_50.txt")
 
 for (i in 1:length(unique(fp3$CastID))){
 
-  if(unique(fp3$x)[i] %in% upcasts){}else{
+  if(unique(fp3$x)[i] %in% upcasts){
+    profile = subset(fp3, CastID == unique(fp3$CastID)[i])
+    fp_downcasts <- bind_rows(fp_downcasts, profile)
+    
+  }else{
   profile = subset(fp3, CastID == unique(fp3$CastID)[i])
 
   bottom <- max(profile$Depth_m)

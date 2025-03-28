@@ -124,7 +124,7 @@ fp3 <- fp2 %>%
 
 # #eliminate upcasts except when all we have is the upcast
 fp_downcasts <- fp3[0,]
-upcasts <- c("20160617_FCR_50.txt","20180907_BVR_50.txt")
+upcasts <- c("20160617_FCR_50.txt","20180903_BVR_50.txt")
 
 for (i in 1:length(unique(fp3$CastID))){
 

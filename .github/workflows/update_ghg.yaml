@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GDRIVE_PAT: ${{ secrets.CAREYLABVT_GOOGLEDRIVE }}
     container:
       image: rocker/tidyverse:4.2
     steps:
@@ -30,6 +31,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
+          git add Data/DataNotYetUploadedToEDI/Raw_GHG/data/*
           git add Data/DataNotYetUploadedToEDI/Raw_GHG/L1_manual_GHG.csv
           git add Data/DataNotYetUploadedToEDI/Raw_GHG/MDL_GHG_file.csv
           git add Data/DataNotYetUploadedToEDI/Raw_GHG/Vial_Number_Check.csv

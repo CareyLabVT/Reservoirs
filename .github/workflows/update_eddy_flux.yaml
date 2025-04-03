@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GDRIVE_PAT: ${{ secrets.CAREYLABVT_GOOGLEDRIVE }}
     container:
       image: rocker/tidyverse:4.2
     steps:
@@ -32,6 +33,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
+          git add Data/DataNotYetUploadedToEDI/EddyFlux_Processing/data/*.csv
           git add Data/DataNotYetUploadedToEDI/EddyFlux_Processing/EddyPro_Cleaned_L1.csv
           git add "Data/DataNotYetUploadedToEDI/EddyFlux_Processing/QAQC plots/eddypro*.pdf"          
           git commit -m "Updating Manual Files" || echo "No changes to commit"

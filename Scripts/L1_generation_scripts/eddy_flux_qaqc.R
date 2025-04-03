@@ -31,7 +31,7 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 ## Function 
 eddypro_cleaning_function(
-  directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/",
+  directory = "./Data/DataNotYetUploadedToEDI/EddyFlux_Processing/data/",
   gdrive = F, # Are the files on Google Drive. True or False
   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
   #current_year = 2024,

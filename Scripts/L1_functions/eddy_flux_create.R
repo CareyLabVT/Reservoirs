@@ -16,6 +16,7 @@
 ## B.Kandel edits to add in qc for H and LE for extreme values adapted from eddy-flux_post_processing script
 ## A.Breef-Pilz made a function to read in processed files from EddyPro because the headings had changed
 ## A.Breef-Pilz added an if statement when no new observations for the year. 18 Feb 2025
+## A.Breef-Pilz added an if statement to just download files or process files. 02 Apr 2025
 
 ### This function:
 # 1. Reads in the Summary files from the EddyFlux system that is streaming at FCR or from proceesed EddyPro files
@@ -39,6 +40,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
                                     text_file=F, # Are you using the text file which is generated from the streaming summary files? If it is an EddyPro file then it is FALSE
                                     gdrive, # Are the files on Google Drive. True or False
                                     gshared_drive, # Name of the shared drive where the files are held or use as_id()and the ID of the folder
+                                    process_files = T, 
                                     #current_year, # Current Year. Must be numeric
                                     output_file,
                                     start_date, # date the EDI file ends
@@ -85,6 +87,8 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
     }
     
   }
+  
+  if (process_files == T) {
   
   ## Now bind files together
   
@@ -419,6 +423,9 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   }
   
   } # ends the if statement when no new observations for the year
+  } else {
+    print ("Did not process files and create an L1 file. If you want to create a processed L1 file change process_files = T")
+  }
 } # ends the function
 
 

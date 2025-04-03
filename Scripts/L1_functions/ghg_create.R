@@ -9,6 +9,8 @@
 # added in a saved data frame of observations that had notes from the Analytical Lab. 
 # 12 Jan 25 - Added in a section to select samples that had re run and flag them
 # 18 Feb 25 - Added a if statement when no new files for the year then the function stops
+# 28 Feb 25 - Added code to look for all GHG files in the ALC folder on Google
+# 01 Apr 25 - Added code to authenticate GoogleDrive
 
 # Additional notes: This script is included with this EDI package to show which QAQC has already
 # been applied to generate these data along with the ghg_functions_for_L1.R which are used here.
@@ -64,11 +66,12 @@ ghg_qaqc<-function(directory,
                    start_date,
                    end_date){
 
-#  directory = "./Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
+#  directory = "Data/DataNotYetUploadedToEDI/Raw_GHG/data/"
 #  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
 # # maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv"
 #  gdrive = T # Are the files on Google Drive. True or False
-#  gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+#  ##gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn")
+#  gshared_drive = as_id("1ZQOO-h29KS1j3fpBWGjkAesBa0m7aSaD")
 #  Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG",
 #                                  "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg")
 #  vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008/edit#gid=1256821207"
@@ -111,12 +114,9 @@ ghg_qaqc<-function(directory,
   }
   
   
-  
-  # Name the directory where the full output files are found. Ours are on GitHub 
-  mydir <- directory
-  
+
   # list of GHG files on Github
-  rfiles <- list.files(path= mydir, pattern="", full.names=TRUE)
+  rfiles <- list.files(path= directory, pattern="", full.names=TRUE)
   
   
   ### 1.2 Get Files off of Google Drive ####
@@ -126,27 +126,49 @@ ghg_qaqc<-function(directory,
   # authentication
   
   if(gdrive==T){
+    
+    # authenticate Google Drive to download the files from the ACL folder.
+   
+    googledrive::drive_auth(path = Sys.getenv('GDRIVE_PAT'))
+    
+    
     # Get the file info of the GHG spreadsheets from GoogleDrive
     gdrive_files<-googledrive::drive_ls(path = gshared_drive, 
                                         pattern = "GC", 
-                                        type = "xlsx")
+                                        type = "xlsx",
+                                        recursive = T)
     
+    # we only want GHG files after 
+    
+    times <- unlist(lapply(gdrive_files$drive_resource, "[", "createdTime"), use.names = F)
+    
+    # make a data frame of the times the files were created
+    gh <- as.data.frame(times)
+    
+    # we just want the Date when the sheet was created
+    gh$Date <- as.Date(gh$times)
+    
+    # bind the names of the files and the dates the files were created. Select only files after 2022 because the rest are in the historical EDI files
+    
+    ghgfiles <- bind_cols(gdrive_files, gh)|>
+      select(name, id, Date)|>
+      filter(Date>as.Date("2023-01-01"))
     
     
     # download output files and put them on GitHub
     
-    for(i in 1:nrow(gdrive_files)){
+    for(i in 1:nrow(ghgfiles)){
       
       #extract the beginning of the file name to see if a qaqc plot has been made
-      dfile<-sub("\\_full.*", "",sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(gdrive_files$name[i])))
+      dfile<-sub("\\_full.*", "",sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(ghgfiles$name[i])))
       
       
       if(any(grepl(dfile,rfiles))==F){
         # download and put on GitHub
         
-        name<-gdrive_files$name[i]
+        name<-ghgfiles$name[i]
         
-        googledrive::drive_download(gdrive_files$id[i], path = paste0(mydir,name))
+        googledrive::drive_download(ghgfiles$id[i], path = paste0(directory,name), overwrite = F)
         
       }else{
         
@@ -161,10 +183,10 @@ ghg_qaqc<-function(directory,
   
   # First make sure to include the newly downloaded files if necessary
   # list of GHG files on Github
-  rfiles <- list.files(path=mydir, pattern="", full.names=TRUE)
+  rfiles <- list.files(path=directory, pattern="", full.names=TRUE)
   
   # use purr to read in all the files using the function above
-  all<-list.files(path= mydir,pattern="", full.names=TRUE)%>%
+  all<-list.files(path= directory,pattern="", full.names=TRUE)%>%
     map_df(~ read_ghg_files(.x))
   
   print("Files combined")

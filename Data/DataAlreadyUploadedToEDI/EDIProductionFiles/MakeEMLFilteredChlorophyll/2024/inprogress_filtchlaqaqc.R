@@ -1,4 +1,4 @@
-function(directory, 
+filt_chla_qaqc <- function(directory, 
          rack_map,
          filtering_log,
          final_vol_extract = 6, 
@@ -8,8 +8,7 @@ function(directory,
          sample_times,
          outfile,
          start_date,
-         end_date)
-{
+         end_date){
   
   directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
   rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
@@ -17,9 +16,10 @@ function(directory,
   final_vol_extract = 6
   blank_vol_filt = 500
   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
-  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
   sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps"
-  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  outfile = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2024/filt-chla_2023_2024.csv"
+  #outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
   start_date = NULL
   end_date = NULL
   
@@ -539,3 +539,4 @@ function(directory,
   
   
 }
+

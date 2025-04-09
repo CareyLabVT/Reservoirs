@@ -38,6 +38,7 @@ ctd_QAQC <- function(raw_downloads = here(code_folder,"../RawDownloads"),
                      output_file_name = "ctd_L1.csv",
                      intermediate_file_name = "ctd_L0.csv"){
   
+  
   ## Identify files new files
   file_names <- identify_new_files(raw_downloads = raw_downloads,
                                    ctd_cast_csvs = ctd_cast_csvs,
@@ -70,7 +71,8 @@ ctd_QAQC <- function(raw_downloads = here(code_folder,"../RawDownloads"),
   l1 <- flag_seasonal_csvs(ctd_season_csvs = ctd_season_csvs,
                            intermediate_file_name = intermediate_file_name,
                            output_file_name = output_file_name,
-                           historical_files = historical_files)
+                           historical_files = historical_files,
+                           CTD_FOLDER = CTD_FOLDER)
   
   return(l1)
 }

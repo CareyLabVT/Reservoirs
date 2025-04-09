@@ -5,6 +5,7 @@ Flag_Chla_ugL	2	Sample not taken
 Flag_Chla_ugL	3	Duplicate check failed
 Flag_Chla_ugL	4	Pigment in extract below detection (<34 ug/L)
 Flag_Chla_ugL	5	Duplicate values were averaged
+Flag_Chla_ugL	6	The ratio of the concentration before acid addition to the concentration after acid addition was greater than 1.72
 Flag_Pheo_ugL	0	Value acceptable. No flag
 Flag_Pheo_ugL	1	Sample below detection
 Flag_Pheo_ugL	2	Sample not taken

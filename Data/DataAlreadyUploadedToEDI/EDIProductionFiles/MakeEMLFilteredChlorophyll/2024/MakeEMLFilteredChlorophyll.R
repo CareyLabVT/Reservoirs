@@ -161,7 +161,7 @@ make_eml(
                                'Maintenance Log through 2024'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.30') #THIS IS FOR STAGING
+  package.id = 'edi.52.33') #THIS IS FOR STAGING
   #package.id = 'edi.555.4') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",

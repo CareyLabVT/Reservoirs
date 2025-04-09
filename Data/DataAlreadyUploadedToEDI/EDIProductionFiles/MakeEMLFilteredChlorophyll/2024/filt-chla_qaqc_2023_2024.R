@@ -25,7 +25,7 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(lubridate,tidyverse, gsheet)
 
 
-function(directory, 
+filt_chla_qaqc <- function(directory, 
          rack_map,
          filtering_log,
          final_vol_extract = 6, 
@@ -36,7 +36,7 @@ function(directory,
          outfile,
          start_date,
          end_date){
-  
+  # 
   directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
   rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
@@ -150,6 +150,7 @@ function(directory,
   # perform full_join based on multiple columns
   df3 <- full_join(res_samp, rack_map, by=c('Date_processed'='Date_processed', 'Sample_ID'='Sample_ID'))
   
+  
   # label ethanol blank samples so we can find them later
   
   df4 <- df3%>%
@@ -187,7 +188,17 @@ function(directory,
   
   test <- comb %>% 
     subset(is.na(Vol_filt_mL)) %>% 
-    subset(ResSite != "blank")
+    subset(ResSite != "blank") %>% 
+    filter(Sample_date > "2023-12-31")
+  
+  test2 <- right_join(res_samp2, filtering_log2, 
+                     by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep", "Depth"="Depth")) %>% 
+    subset(is.na(WL750.0)) %>% 
+    subset(ResSite != "blank") %>% 
+    filter(Sample_date > "2023-12-31") %>% 
+    filter(is.na(Rep))
+  
+  ### add code to print out missing samples here ####
   
   # add the vol filt and final vol used for the ethanol samples 
   # We use 500 mL for volume filtered for the ethanol blanks
@@ -358,7 +369,7 @@ function(directory,
                           "Vol_filt_mL", "Final_vol_extract_mL", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes")) %>% 
     unique()
   
-  ### 5.2 Claculate the concentration of Chla in ugL 
+  ### 5.2 Calculate the concentration of Chla in ugL 
   
   comb3_calc <- comb3%>%
     mutate(
@@ -437,7 +448,8 @@ function(directory,
            chla_in_water,
            pheo_in_water,
            Flag_Chla_ugL,
-           Flag_Pheo_ugL)%>%
+           Flag_Pheo_ugL, 
+           ratio_be_af)%>%
     dplyr::rename( # rename the columns for below
       Date = Sample_date,
       Depth_m = Depth,
@@ -461,9 +473,9 @@ function(directory,
            Reservoir=ifelse(Reservoir=="S","SNP", Reservoir),
            Reservoir=ifelse(Reservoir=="C","CCR", Reservoir)) %>%
     # Add flags for low absorbance and pigment below detection
-    mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL),
+    mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL), #this is a "might be a problem" flag
            Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
-           Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL),
+           Flag_Chla_ugL=ifelse(Check_chla<34,4,Flag_Chla_ugL), #this is a "this IS a problem" flag, will overwrite previous
            Flag_Pheo_ugL=ifelse(Check_pheo<34,4,Flag_Pheo_ugL),
            Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL)) %>%
     # Average the dups
@@ -475,7 +487,11 @@ function(directory,
     mutate(Flag_Chla_ugL=ifelse(Flag_Chla_ugL==0 & count==2,5,Flag_Chla_ugL),
            Flag_Chla_ugL=ifelse(Flag_Chla_ugL==4 & count==2,45,Flag_Chla_ugL), 
            Flag_Pheo_ugL=ifelse(Flag_Pheo_ugL==0 & count==2,5,Flag_Pheo_ugL),
-           Flag_Pheo_ugL=ifelse(Flag_Pheo_ugL==4 & count==2,45,Flag_Pheo_ugL))%>%
+           Flag_Pheo_ugL=ifelse(Flag_Pheo_ugL==4 & count==2,45,Flag_Pheo_ugL), 
+           Flag_Chla_ugL=ifelse(ratio_be_af>1.72|ratio_be_af<1&Flag_Chla_ugL==0, 6, 
+                        ifelse(ratio_be_af>1.72|ratio_be_af<1&Flag_Chla_ugL==1, 16, 
+                               ifelse(ratio_be_af>1.72|ratio_be_af<1&Flag_Chla_ugL==2, 26,
+                                      ifelse(ratio_be_af>1.72|ratio_be_af<1&Flag_Chla_ugL==5, 56, Flag_Chla_ugL)))))%>%
     distinct(Reservoir, Site, Date, Depth_m, .keep_all = T)%>%
     mutate(Depth_m=as.numeric(Depth_m))%>%
     mutate(Site=as.numeric(Site))%>%
@@ -507,7 +523,7 @@ function(directory,
     drop_na(Chla)
   
   
-  # merge the chla sampel with sample times
+  # merge the chla sample with sample times
   
   chla_all2 <- left_join(chla_all, samp_times, by = c("Reservoir", "Site", "Depth_m", "DateTime"))
   
@@ -518,10 +534,10 @@ function(directory,
            DateTime_samp = ifelse(is.na(DateTime_samp), paste0(Date," ","12:00:00"),as.character(DateTime_samp)),
            DateTime = ymd_hms(DateTime_samp)) %>%
     mutate(Site = ifelse(Reservoir == "SNP" & Site == 50, 200, Site),  
-           Site = ifelse(Reservoir == "SNP" & Site == 40, 220, Site)) %>% 
+           Site = ifelse(Reservoir == "SNP" & Site == 40, 210, Site)) %>% 
     select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
-    mutate_if(is.numeric, round, digits = 4) # round to 4 digits
+    mutate_if(is.numeric, round, digits = 2) # round to 2 digits, was 4
   
   # put in order
   final <- final[order(final$DateTime),]

@@ -1,6 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
-Depth_m	Depth from surface	numeric	meter			
-SA_m2	Total surface area of the reservoir at this depth	numeric	squareMeter			
-Volume_layer_L	Volume of water between this depth and the next (deeper) depth below it	numeric	liter			
-Volume_below_L	Total volume of water below this depth	numeric	liter			

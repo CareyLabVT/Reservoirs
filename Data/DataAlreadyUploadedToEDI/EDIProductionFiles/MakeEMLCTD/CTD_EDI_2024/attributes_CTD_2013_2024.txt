@@ -12,7 +12,7 @@ SpCond_uScm	Specific conductance; conductivity normalized to 25 degrees celsius	
 Chla_ugL	Chlorophyll a	numeric	microgramsPerLiter		NA	No data
 Turbidity_NTU	Turbidity	numeric	dimensionless		NA	No data
 pH	Water pH	numeric	dimensionless		NA	No data
-ORP_mV	Reduction potential	numeric	millivolt		NA	No data
+ORP_mV	Oxidation reduction potential	numeric	millivolt		NA	No data
 PAR_umolm2s	Photosynthetically active radiation	numeric	micromolePerMeterSquaredPerSecond		NA	No data
 CDOM_ugL	Colored dissolved organic matter	numeric	microgramsPerLiter		NA	No data
 Phycoerythrin_ugL	Phycoerythrin	numeric	microgramsPerLiter		NA	No data
@@ -23,7 +23,7 @@ Flag_Temp_C	Data flag for temperature	categorical
 Flag_DO_mgL	Data flag for dissolved oxygen (DO) concentration	categorical				
 Flag_DOsat_percent	Data flag for dissolved oxygen (DO) saturation	categorical				
 Flag_Cond_uScm	Data flag for conductivity	categorical				
-Flag_SpCond_uScm	Data flag for specific conductivity	categorical				
+Flag_SpCond_uScm	Data flag for specific conductance	categorical				
 Flag_Chla_ugL	Data flag for chlorophyll a	categorical				
 Flag_Turbidity_NTU	Data flag for turbidity	categorical				
 Flag_pH	Data flag for pH	categorical				

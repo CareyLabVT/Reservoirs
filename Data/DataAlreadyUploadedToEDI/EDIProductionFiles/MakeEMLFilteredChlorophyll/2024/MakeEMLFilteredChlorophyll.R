@@ -161,8 +161,8 @@ make_eml(
                                'Maintenance Log through 2024'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.33') #THIS IS FOR STAGING
-  #package.id = 'edi.555.4') # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  package.id = 'edi.52.35') #THIS IS FOR STAGING
+  #package.id = 'edi.555.6') # ONLY USE THIS FOR ACTUAL PUBLISHING 
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
 #          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",

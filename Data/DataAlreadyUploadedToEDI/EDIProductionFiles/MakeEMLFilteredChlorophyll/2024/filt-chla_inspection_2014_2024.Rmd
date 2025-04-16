@@ -53,6 +53,7 @@ if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 all_chla <- read_csv(infile1)
 #for KKH 2025
 all_chla <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
+all_chla <- read_csv("filt-chla_2014_2024_2.csv")
 ```
 **Check there are no NAs in Flag columns**
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
@@ -267,7 +268,7 @@ ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Pheo_ugL, col = Dep
 ```
 
 ```{r Remove duplicate row}
-all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
+#all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
 #this should be taken care of in the qaqc script as of 2024
 ```
 

@@ -1,14 +1,18 @@
-filt_chla_qaqc <- function(directory, 
-         rack_map,
-         filtering_log,
-         final_vol_extract = 6, 
-         blank_vol_filt = 500, 
-         maintenance_file,
-         historic_file,
-         sample_times,
-         outfile,
-         start_date,
-         end_date){
+#filt_chla_qaqc from L1 script 17 April 2025
+#updating code and adding a section to return mismatches as needed
+#also adding a section to handle dilutions as needed
+filt_chla_qaqc_test <- function(directory, 
+                           rack_map,
+                           filtering_log,
+                           final_vol_extract = 6, 
+                           blank_vol_filt = 500, 
+                           maintenance_file,
+                           historic_file,
+                           sample_times,
+                           outfile,
+                           start_date,
+                           end_date)
+{
   
   directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
   rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
@@ -16,14 +20,13 @@ filt_chla_qaqc <- function(directory,
   final_vol_extract = 6
   blank_vol_filt = 500
   maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
-  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+  historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
   sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps"
-  outfile = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2024/filt-chla_2023_2024.csv"
-  #outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
   start_date = NULL
   end_date = NULL
   
- # list.files("../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
+  # list.files("../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
   
   #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
@@ -33,6 +36,9 @@ filt_chla_qaqc <- function(directory,
     Sample_date = col_date("%Y-%m-%d"),
     flag = col_integer()))
   
+print(("Warning! the following rows from the maintenance log may cause you trouble"))
+print(problems(log_read))
+
   log <- log_read
   
   
@@ -84,10 +90,10 @@ filt_chla_qaqc <- function(directory,
   # Label the types of samples are so they are easier to sort label
   out.file2<- out.file%>%
     mutate(samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",
-                         ifelse(grepl("fa", Sample.ID), "fake",
-                                ifelse(grepl("ref", Sample.ID), "ref", "res_samp")))) 
-
-
+                              ifelse(grepl("fa", Sample.ID), "fake",
+                                     ifelse(grepl("ref", Sample.ID), "ref", "res_samp")))) 
+  
+  
   # Create an ethanol blank data frame
   # ethon_blank <- out.file2%>%
   #   filter(samp_type=="eth_blank")
@@ -101,14 +107,13 @@ filt_chla_qaqc <- function(directory,
       timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
       timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
                       ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
-      Sample_ID = sub("_", "", gsub("[a-z]+", "", Sample.ID))
-    )%>%
+      Sample_ID = sub("_", "", gsub("[A-Za-z]+", "", Sample.ID)), 
+      dilution = ifelse(str_detect(Sample.ID,"DIL|dil")==T,"diluted", NA))%>%
     separate(Sample_ID, c("Sample_ID", "Need_Rep"))%>%
     mutate(
       Sample_ID = as.numeric(Sample_ID),
       Need_Rep = as.numeric(Need_Rep)
     )
-
   
   ### 2. Get the sample ID number and match with the reservoir and site
   
@@ -143,7 +148,6 @@ filt_chla_qaqc <- function(directory,
   
   filtering_log <- gsheet::gsheet2tbl(filtering_log)
   
-  
   # Clean up the data frame
   filtering_log2 <- filtering_log %>%
     mutate(
@@ -155,6 +159,9 @@ filt_chla_qaqc <- function(directory,
     mutate(ResSite = sub("-", "", ResSite)) %>% 
     select(ResSite, Depth, Sample_date, Rep, Vol_filt_mL, Final_vol_extract_mL, Comments)
   
+  print("The following samples do not have a filtered volume in the filtering log")
+  print(filtering_log2 |> subset(is.na(Vol_filt_mL)))
+  
   ### 3. Combine with the filtering log 
   comb <- left_join(res_samp2, filtering_log2, 
                     by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep", "Depth"="Depth")) 
@@ -162,6 +169,8 @@ filt_chla_qaqc <- function(directory,
   test <- comb %>% 
     subset(is.na(Vol_filt_mL)) %>% 
     subset(ResSite != "blank")
+  print("The following samples do not have a matching volume filtered in the filtering log")
+  print(test |> select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth)))
   
   # add the vol filt and final vol used for the ethanol samples 
   # We use 500 mL for volume filtered for the ethanol blanks
@@ -278,14 +287,18 @@ filt_chla_qaqc <- function(directory,
       timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
       timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
                       ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
-      Sample_ID = sub("_", "", gsub("[a-z]+", "", Sample.ID))
-    )%>%
+      Sample_ID = sub("_", "", gsub("[A-za-z]+", "", Sample.ID)), 
+      Dilution = ifelse(str_detect(Sample.ID,"DIL|dil")==T,"diluted", NA))%>%
     separate(Sample_ID, c("Sample_ID", "Need_Rep"))%>%
     mutate(
       Sample_ID = as.numeric(Sample_ID),
       Need_Rep = as.numeric(Need_Rep)
     )
-  
+
+print("The following samples were diluted. Ensure the dilution factor is recorded in the ...")
+print(raw_df2 |>
+        filter(Dilution == "diluted") |> 
+        select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth)))
   
   # The calculations are from BRN Chla processing excel sheet
   
@@ -382,11 +395,11 @@ filt_chla_qaqc <- function(directory,
       
       # Chlorophyll a Conc of original water sample in ug/L (or mg/m3-same thing- APHA)
       
-      chla_in_water = (chla_extract*Final_vol_extract_mL/1000)/((Vol_filt_mL/1000)*1),
+      chla_in_water = (chla_extract*dil_factor*Final_vol_extract_mL/1000)/((Vol_filt_mL/1000)*1),
       
       # Pheopigment Conc of original water sample in ug/L (or mg/m3-same thing- APHA)
       
-      pheo_in_water = (pheo_extract*Final_vol_extract_mL/1000)/((Vol_filt_mL/1000)*1),
+      pheo_in_water = (pheo_extract*dil_factor*Final_vol_extract_mL/1000)/((Vol_filt_mL/1000)*1),
       
       # Ratio before and after (1 = all pheo, 1.72 = all chla)problems if not between 1 and 1.72
       
@@ -496,11 +509,11 @@ filt_chla_qaqc <- function(directory,
     select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
-    
+  
   # put in order
   final <- final[order(final$DateTime),]
   
-  # subset to make the L1 file 
+  # subset to make the L1 file. Maybe look at moving this earlier. 
   
   if (!is.null(start_date)){
     #force tz check
@@ -524,19 +537,26 @@ filt_chla_qaqc <- function(directory,
     
   }
   
+  # Check if there are any files for the L1. If not then end the script
   
-  
-  ### 7. Save the file. If outfile is NULL then return the file
-  
-  if(is.null(outfile)){
+  if(nrow(final)==0){
     
-    return(final)
+    print("No new files for the current year")
+    
   }else{
     
-    write_csv(final, outfile)
-  }
+    
+    ### 7. Save the file. If outfile is NULL then return the file
+    
+    if(is.null(outfile)){
+      
+      return(final)
+    }else{
+      
+      write_csv(final, outfile)
+    }
+    
+  } # ends the if statement if there are no new observations
   
-  
-  
-}
+} # ends the function
 

@@ -1,4 +1,4 @@
-pacman::p_load(oce, ocedata, tidyverse, lubridate)
+pacman::p_load(oce, ocedata, tidyverse, lubridate, EDIutils, xml2)
 
 setwd("./Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/")
 source("ctd_QAQC.R") #Load Carey Lab ctd functions

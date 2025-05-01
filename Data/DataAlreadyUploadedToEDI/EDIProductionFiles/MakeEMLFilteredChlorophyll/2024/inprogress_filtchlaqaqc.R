@@ -14,18 +14,18 @@ filt_chla_qaqc_test <- function(directory,
                            end_date)
 {
   
-  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
-  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
-  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
-  final_vol_extract = 6
-  blank_vol_filt = 500
-  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
-  #maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
-  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
-  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg"
-  outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
-  start_date = NULL
-  end_date = NULL
+  # directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
+  # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
+  # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
+  # final_vol_extract = 6
+  # blank_vol_filt = 500
+  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
+  # #maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
+  # historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+  # sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg"
+  # outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
+  # start_date = NULL
+  # end_date = NULL
   
  #packages
   pacman::p_load(tidyverse, gsheet,arsenal)
@@ -208,7 +208,7 @@ min_samp_date <- min(a$Sample_date)
   check_filt_dup <- filt_dup[duplicated(filt_dup), ]
   
   if(nrow(check_filt_dup)>0){
-    warning("There are duplicates in the filtering log. See below:")
+    warning("There are unlabeled duplicates in the filtering log. See below:")
     print(check_filt_dup)
   }
   
@@ -234,7 +234,7 @@ min_samp_date <- min(a$Sample_date)
   ## the following reservoir samples don't have a filtered volume. 
   
   if(nrow(comb|>filter(samp_type == 'res_samp' & is.na(Vol_filt_mL)))>0){
-    warning("The following Reservoir samples are missing the amount of water filtered. Check the filtering log and check if the sample has been mislabeld")
+    warning("The following Reservoir samples are missing the amount of water filtered. Check the filtering log and check if sample has been mislabeled. If missing, volume filtered should also have been recorded on the frozen filter.")
     
     print(comb |>
             filter(samp_type == 'res_samp' & is.na(Vol_filt_mL))|>
@@ -252,9 +252,12 @@ min_samp_date <- min(a$Sample_date)
   
   # List the Sample.IDs with no observations from the spec
   
-  if(nrow(comb2|>filter(is.na(WL750.0)))>0){
-    print("The following Rows have no observations from the spec and will be removed")
-    print(comb2|>filter(is.na(WL750.0)))
+  no_obs <- comb2 |> 
+    select(c(Sample.ID, WL750.0, Date_processed)) 
+    
+  if(nrow(no_obs|>filter(is.na(WL750.0)))>0){
+    print("The following rows have no observations from the spec and will be removed")
+    print(no_obs|>filter(is.na(WL750.0)))
     
     comb2 <- comb2|>
       drop_na(WL750.0)
@@ -276,7 +279,7 @@ min_samp_date <- min(a$Sample_date)
     
     
     comb2 <- comb2 |>
-      filter(Date_processed<= processed_date_max)
+      filter(Date_processed <= processed_date_max)
   }
   
   # get the first date the samples were processed. This way we can keep the right ethanol blanks
@@ -299,7 +302,7 @@ min_samp_date <- min(a$Sample_date)
   
   # Add Flag columns
   
-  raw_df<-comb2%>%
+  raw_df<-comb2 %>%
     mutate(
       Flag_Chla_ugL  = 0,
       Flag_Pheo_ugL  = 0
@@ -342,7 +345,7 @@ min_samp_date <- min(a$Sample_date)
     colname_start <- log$start_parameter[i]
     colname_end <- log$end_parameter[i]
     
-    ### if it is only one parameter parameter then only one column will be selected
+    ### if it is only one parameter then only one column will be selected
     
     if(is.na(colname_start)){
       
@@ -353,7 +356,7 @@ min_samp_date <- min(a$Sample_date)
       maintenance_cols <- colnames(raw_df%>%select(all_of(colname_start)))
       
     }else{
-      maintenance_cols <- colnames(raw_df%>%select(colname_start:colname_end))
+      maintenance_cols <- colnames(raw_df %>% select(colname_start:colname_end))
     }
     
     ### Get the vector with the Date Processed as True or False to use below
@@ -382,10 +385,9 @@ min_samp_date <- min(a$Sample_date)
              flag_cols] <- flag
       
     }else if (flag==99){
-      # Rename the Sample.ID if there were messed up while processing
+      # Rename the Sample.ID if they were messed up while processing
       raw_df[c(which(Time & raw_df[,"Sample.ID"] == Sample.ID)), 
              maintenance_cols] <- Updated_value
-      
       
     }else {
       warning("Flag used not defined in the L1 script. Talk to Austin and Adrienne if you get this message")
@@ -412,7 +414,7 @@ min_samp_date <- min(a$Sample_date)
  #                                   ifelse(grepl("ref", Sample.ID), "ref", "res_samp")))
  
 
-print("The following samples were diluted. Ensure the dilution factor is recorded in the ...")
+print("The following samples were diluted. Ensure the dilution factor is recorded in the rack map")
 print(raw_df2 |>
         filter(dilution == "diluted") |> 
         select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth)))
@@ -446,7 +448,7 @@ ert <- raw_df2[raw_df2$Sample_date %in% sd_raw$Sample_date & raw_df2$ResSite %in
                  raw_df2$Sample_ID %in% sd_raw$Sample_ID, ]
 
 if(nrow(ert)>0){
-  warning("There are duplicates and mistyped Sample.IDs that need to be added to the maintenance log. See above for the duplicated files. Make sure there are only on before and after acid for each sampling date and site.")
+  warning("There are duplicates and mistyped Sample.IDs that need to be added to the maintenance log. See above for the duplicated files. Make sure there are only one before and one after acid for each sampling date and site.")
   
   print(ert|>
           select(Sample.ID, ResSite, Depth, Date_processed, Sample_date, timing, WL750.0))
@@ -457,12 +459,15 @@ if(nrow(ert)>0){
 
 check_turbidity <- raw_df2|>
   drop_na(WL750.0)|>
-  filter(WL750.0 >0.005 | WL750.0 < (-0.005))
+  filter(WL750.0 >0.005 | WL750.0 < (-0.005)) |> 
+  select(c(Sample.ID, Sample_date, WL750.0, ResSite, Depth, timing, Date_processed)) |> 
+  filter(timing == "b")
 
 if (nrow(check_turbidity)>0){
-  warning("The trubidity in some of the sample was high. They will be flagged and a data frame will be saved for further inspection.")
+  warning("The turbidity in some of the samples was high. They will be flagged. If the duplicate has not yet been run, the dup should be run.")
+  print(n = nrow(check_turbidity), check_turbidity)
 }
-  
+
   # The calculations are from BRN Chla processing excel sheet
   
   ### 5.1 Separate the wavelength by before acid and after and then merge together wider 
@@ -525,7 +530,7 @@ if (nrow(check_turbidity)>0){
                      by=c("Sample_ID","Date_processed", "samp_type", "ResSite", "Depth","Rep", "Sample_date",
                           "Vol_filt_mL", "Final_vol_extract_mL", "dil_factor", "Flag_Chla_ugL", "Flag_Pheo_ugL", "Notes")) 
   
-  ### 5.2 Claculate the concentration of Chla in ugL 
+  ### 5.2 Calculate the concentration of Chla in ugL 
   
   comb3_calc <- comb3%>%
     mutate(
@@ -557,7 +562,7 @@ if (nrow(check_turbidity)>0){
   
   ### 5.22 Now finish the calculations 
   
-  comb5_calc <- comb4_calc%>%
+  comb5_calc <- comb4_calc %>%
     
     mutate(
       # Chlorophyll a in extract (ug/L from Arar) BD if <~65
@@ -605,6 +610,7 @@ if (nrow(check_turbidity)>0){
            pheo_extract,
            chla_in_water,
            pheo_in_water,
+           ratio_be_af_eth_corr,
            Flag_Chla_ugL,
            Flag_Pheo_ugL)%>%
     dplyr::rename( # rename the columns for below
@@ -635,12 +641,13 @@ if (nrow(check_turbidity)>0){
            Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
            Flag_Chla_ugL=ifelse(Check_chla<34,paste0(Flag_Chla_ugL, 4),Flag_Chla_ugL),
            Flag_Pheo_ugL=ifelse(Check_pheo<34,paste0(Flag_Pheo_ugL, 4),Flag_Pheo_ugL),
-           Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL))|>
+           Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL), 
+           Flag_Chla_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Chla_ugL, 6), Flag_Chla_ugL),
+           Flag_Pheo_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Pheo_ugL, 6), Flag_Pheo_ugL))|>
     # flag high turbidity values as anything above 0.005. Maybe change later to 0.01
-    mutate(Flag_Chla_ugL = ifelse(Chek_Turb_750>0.005, paste0(Flag_Chla_ugL, 6),Flag_Chla_ugL),
-           Flag_Pheo_ugL = ifelse(Chek_Turb_750>0.005, paste0(Flag_Pheo_ugL, 6),Flag_Pheo_ugL))
-   
-    
+    mutate(Flag_Chla_ugL = ifelse(Chek_Turb_750>0.005, paste0(Flag_Chla_ugL, 7),Flag_Chla_ugL),
+           Flag_Pheo_ugL = ifelse(Chek_Turb_750>0.005, paste0(Flag_Pheo_ugL, 7),Flag_Pheo_ugL))
+
   
   
   ## Print samples that have more than 2 samples per a sampling date, site, and depth. One probably needs to be added to the maintenance log
@@ -679,8 +686,6 @@ if (nrow(check_turbidity)>0){
           # convert to numeric to eliminate leading 0 when pasting flags to each other
           Flag_Chla_ugL = as.numeric(Flag_Chla_ugL),
           Flag_Pheo_ugL = as.numeric(Flag_Pheo_ugL))|>
-   
-   # Average the dups. Do we want to leave the dups as seperate? 
    
     #mutate(Chla_ugL = mean(Chla_ugL)) %>%
     #mutate(Pheo_ugL = mean(Pheo_ugL))%>%
@@ -729,7 +734,7 @@ if (nrow(check_turbidity)>0){
     mutate(Flag_DateTime = ifelse(is.na(Time), 1, 0),
            Time = ifelse(is.na(Time), "12:00:00", as.character(Time)),
            DateTime = ymd_hms(paste0(DateTime," ",Time))) %>%
-    mutate(Site = ifelse(Reservoir == "SNP" & Site == 50, 200, Site),  
+    mutate(Site = ifelse(Reservoir == "SNP" & Site == 50, 205, Site),  
            Site = ifelse(Reservoir == "SNP" & Site == 40, 220, Site)) %>% 
     select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>

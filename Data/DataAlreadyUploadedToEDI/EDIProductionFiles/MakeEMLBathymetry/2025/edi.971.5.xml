@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.971.5" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Bathymetry and watershed area for Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Dexter</givenName>
+        <givenName>W.</givenName>
+        <surName>Howard</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dwh1998@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6118-2149</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Michael</givenName>
+        <givenName>K.</givenName>
+        <surName>Kricheldorf</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>mkricheldorf@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0009-7898-1957</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Evelyn</givenName>
+        <givenName>M.</givenName>
+        <surName>Tipper</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>etipper@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0001-5005-0319</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Ryan</givenName>
+        <givenName>L.</givenName>
+        <surName>Keverline</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>rkeverline01@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0009-2916-319X</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Whitney</givenName>
+        <givenName>M.</givenName>
+        <surName>Woelmer</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>wwoelmer@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-5147-3877</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Kevin</givenName>
+        <givenName>A.</givenName>
+        <surName>Bierlein</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>kabierle@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>John</givenName>
+        <givenName>C.</givenName>
+        <surName>Little</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>jcl@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0003-2965-9557</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <surName>WVWA</surName>
+      </individualName>
+      <organizationName>Western Virginia Water Authority</organizationName>
+      <electronicMailAddress>info@westernvawater.org</electronicMailAddress>
+    </creator>
+    <pubDate>2025-05-01</pubDate>
+    <abstract>
+      <para>This data package includes bathymetric data and watershed delineations for Falling Creek (FCR), Beaverdam (BVR), and Carvins Cove (CCR) Reservoirs, all located near Roanoke, VA, USA. Bathymetric data were collected using an Acoustic Doppler Current Profiler (ADCP) and processed using WinRiver II, USGS Velocity Mapping Toolbox, and ArcGIS. Water level can vary in these reservoirs; at the time of ADCP measurement, maximum depth was ~10.1 m in FCR, ~11 m in BVR, and ~23 m in CCR. Bathymetric data are presented in two forms: (1) as hypsometric summaries of surface area and volume for 0.5 m depth intervals (for all three reservoirs) and (2) as 2 m contour spatially-explicit shapefiles and triangular irregular networks (TIN) files for all three reservoirs. Watershed areas are included as shapefiles for each reservoir. </para>
+    </abstract>
+    <keywordSet>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Carey Lab</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keyword>Carvins Cove Reservoir</keyword>
+      <keyword>Surface area</keyword>
+      <keyword>Volume</keyword>
+      <keyword>Hypsometry</keyword>
+      <keyword>Hypsography</keyword>
+      <keyword>FCR</keyword>
+      <keyword>BVR</keyword>
+      <keyword>CCR</keyword>
+      <keyword>Virginia Reservoirs LTREB</keyword>
+      <keyword>LTREB</keyword>
+      <keyword>Virginia Reservoirs</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Bathymetry</keyword>
+      <keyword>Liter</keyword>
+      <keyword>Square meter</keyword>
+      <keyword>Lake</keyword>
+      <keyword>Reservoir</keyword>
+      <keyword>Area</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Depth</keyword>
+      <keyword>Watershed</keyword>
+      <keywordThesaurus>LTER controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Author contributions</para>
+      <para>The WVWA oversaw and supported bathymetry collection in its three reservoirs. MKK, EMT, and RLK led ADCP measurement and analysis in BVR and FCR with guidance from DWH and ABP. KAB led ADCP measurements and analysis in CCR with help from JCL, CCC, and DWH. Watershed delineations were led by DWH (CCR) and WMW (FCR + BVR). CCC, DWH, and ABP led coordinated data documentation and publication.</para>
+      <para>Acknowledgements </para>
+      <para>We thank George Haynie for help with field ADCP measurements in BVR and Paul Gantzer for previous help with ADCP data collection in the reservoirs. Abby Lewis help with the initial publication of this data set in 2022.</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.&#13;
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.409127</northBoundingCoordinate>
+          <southBoundingCoordinate>37.365345</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2012-07-12</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2024-04-14</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>completed</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Bathymetry</para>
+          <para>Bathymetric data for Falling Creek Reservoir, Beaverdam Reservoir (Vinton, VA, USA), and Carvins Cove Reservoir (Roanoke, VA, USA) were estimated following standard methods (e.g., Wahl and Vermeyen 1998). All three reservoirs are owned and operated as either primary (FCR and CCR) or secondary (BVR) drinking water supplies by the Western Virginia Water Authority (WVWA). The data were collected using an Acoustic Doppler Current Profiler (ADCP; RD Instruments, San Diego, CA, USA) operated from a moving boat when both reservoirs were at full pond: ~10.1 m for Falling Creek Reservoir, ~11 m for Beaverdam Reservoir, and ~23 m for Carvins Cove Reservoir. Global positioning system (DSM 232 GPS Receiver, Trimble) data were collected simultaneously with the ADCP data collection over multiple transects across both waterbodies. Data from Carvins Cove Reservoir were collected in summer/fall 2012. Data from Falling Creek Reservoir were collected in July 2023 and from Beaverdam Reservoir in April 2024.  The ADCP and GPS data were processed using WinRiver II software (RD Instruments) and USGS Velocity Mapping Toolbox. To determine hypsometric contours, summary statistics were generated using the Surface Volume (3D Analyst) tool in the 3D Analyst Toolbox in ArcGIS (Esri, Redlands, CA, USA). The data are presented as hypsometric relationships of surface area and volume for 0.3-1.0 m depth intervals in the two reservoirs, as well as in spatially-explicit shapefiles and triangular irregular networks (TIN) files. FCR and BVR spatial bathymetry files use the D North American 1983 coordinate system. CCR spatial bathymetry files use the WGS 1984 UTM Zone 17N coordinate system. &#13;
+A comprehensive document outlining the standard operating procedure for the ADCP - from ADCP setup to post data processing - is available (file ADCP_SOP.pdf). &#13;
+A script, titled Bathymetry Map and Calculation, is included and can be used to produce a bathymetric map in leaflet in RStudio. It uses ADCP depth data that has been processed in VMT, converts the points to NAD 1983 UTM zone 17N, and generates a raster. The raster is then used to create the map, as well as calculate surface area and volume according to equations from Manual of Fisheries Survey Methods II (Taube, 2000). &#13;
+The ArcGIS files included in this package, allow users to create a detailed bathymetric map of all three reservoirs from various shapefiles and TIN files. Note that the Virginia Rivers and Streams shapefiles were retrieved from the NHDPlus dataset from the USGS TNM Downloader V2, and Digital Elevation Model (DEM) data was obtained through Virginia LiDAR download application. </para>
+          <para>&#13;
+Watershed</para>
+          <para>Watershed delineation for CCR was conducted using the StreamStats basin delineation tool provided by the United States Geological Survey (USGS; https://streamstats.usgs.gov/ss/). Watershed delineation for FCR and BVR was conducted within ArcGIS Pro using the National Aeronautics and Space Administration's Advanced Spaceborne Thermal Emission and Reflection Radiometer 15 second global digital elevation mode (NASA ASTER GDEM) and the HydroSHEDS stream network layer (Lehner et al. 2008) following the method outlined in Merwade (2012). FCR and BVR watershed files use the D North American 1983 coordinate system. CCR watershed files use the WGS 1984 coordinate system. </para>
+          <para>&#13;
+References</para>
+          <para>Lehner B, Verdin K, Jarvis A. 2008. New global hydrography derived from spaceborne elevation data. Eos Trans AGU. 89:93–94.</para>
+          <para>Merwade V. 2012. Watershed and stream network delineation using ArcHydro tools. Purdue (IN): University of Purdue, School of Civil Engineering, Printed Lecture Note.</para>
+          <para>Taube, C. M. 2000. Instructions for winter lake mapping. Chapter 12 in J. C. Schneider, editor. Manual of fisheries survey methods II: with periodic updates. Michigan Department of Natural Resources, Fisheries Special Report 25, Ann Arbor, Michigan, USA. https://www2.dnr.state.mi.us/publications/pdfs/DNRFishLibrary/Special-ManagementReports/SR25.pdf</para>
+          <para>U.S. Environmental Protection Agency (EPA). 2024. NHDPlus dataset. https://www.epa.gov/waterdata/get-nhdplus-national-hydrography-dataset-plus-data.</para>
+          <para>U.S. Geological Survey, 2016, The StreamStats program, online at http://streamstats.usgs.gov, accessed on (27 October 2022).</para>
+          <para>Virginia Geographic Information Network (VGIN). 2024. DEM data. Virginia LiDAR Download Application. https://vgin.vdem.virginia.gov/apps/VGIN::virginia-lidar-download-application/explore.</para>
+          <para>Wahl, T. and T. Vermeyen (1998). Acoustic Doppler Current Profiler (ADCP) Measurements of Velocity Fields on Upper Klamath Lake Approaching the A-Canal Intake. USBR Report.</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+    </project>
+    <dataTable>
+      <entityName>Bathymetric summary statistics</entityName>
+      <entityDescription>Data table including bathymetric summary statistics for the three reservoirs</entityDescription>
+      <physical>
+        <objectName>Bathymetry_comb.csv</objectName>
+        <size unit="bytes">3951</size>
+        <authentication method="MD5">dcc0d12ae07d27b8d59eb433b3171190</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>BVR</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>FCR</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>Depth from surface</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">23</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>SA_m2</attributeName>
+          <attributeDefinition>Total surface area of the reservoir at this depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>squareMeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2475798.959</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Volume_layer_L</attributeName>
+          <attributeDefinition>Volume of water between this depth and the next (deeper) depth below it</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1219051257</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Volume_below_L</attributeName>
+          <attributeDefinition>Total volume of water below this depth</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>liter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">23011636613</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>91</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>Bathymetry spatial data</entityName>
+      <entityDescription>Spatial data for bathymetry from all reservoirs</entityDescription>
+      <physical>
+        <objectName>Bathymetry_Spatial_Data.zip</objectName>
+        <size unit="bytes">10650703</size>
+        <authentication method="MD5">6692cec57c4e49585262abcdec322bf1</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>application/zip</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>ADCP SOP</entityName>
+      <entityDescription>SOP for ADCP operation and post-processing of data and GIS file generation</entityDescription>
+      <physical>
+        <objectName>ADCP SOP.pdf</objectName>
+        <size unit="bytes">19701705</size>
+        <authentication method="MD5">da755a5c5a319f590ec3910c37fe2b27</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>application/pdf</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

@@ -1,3 +1,7 @@
 Author contributions
 
-The WVWA oversaw and supported bathymetry collection in its three reservoirs. PAG led ADCP measurements and analysis in FCR. KAB led ADCP measurements and analysis in BVR and CCR with help from JCL, CCC, and DWH. CCC and ASL coordinated data documentation and publication. Watershed delineations were led by DWH (CCR) and WMW (FCR + BVR).
+The WVWA oversaw and supported bathymetry collection in its three reservoirs. MKK, EMT, and RLK led ADCP measurement and analysis in BVR and FCR with guidance from DWH and ABP. KAB led ADCP measurements and analysis in CCR with help from JCL, CCC, and DWH. Watershed delineations were led by DWH (CCR) and WMW (FCR + BVR). CCC, DWH, and ABP led coordinated data documentation and publication.
+
+Acknowledgements 
+
+We thank George Haynie for help with field ADCP measurements in BVR and Paul Gantzer for previous help with ADCP data collection in the reservoirs. Abby Lewis help with the initial publication of this data set in 2022.

@@ -39,7 +39,7 @@ filt_chla_qaqc(
   blank_vol_filt = 500,
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
   historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
-  sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps", 
+  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg", 
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv",
   start_date =last_edi_date, # change when we update to read date from EDI
   end_date = Sys.Date() + lubridate::days(1))

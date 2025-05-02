@@ -18,11 +18,11 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2023-12-05,F50, FiltChla, NA,2_a,2023-11-14,WL750.0,WL384.0,2, NA,ran too early for acid; rerun again after acid sat for 2 minutes
 2023-12-05,B50, FiltChla, NA,6_b,2023-11-14,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
 2023-12-05,F50, FiltChla, NA,19_b,2023-10-09,WL750.0,WL384.0,2, NA, didn't put the sample in! reran sample
-2024-08-22,NA,FiltChla,NA,21a,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
-2024-08-22,NA,FiltChla,NA,21b,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
-2024-08-22,NA,FiltChla,NA,bufferedethanol,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
-2024-08-22,NA,FiltChla,NA,bufferedethanol2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
-2024-08-22,NA,FiltChla,NA,filteredblank2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
+2024-08-22,NA,FiltChla,NA,21a,NA,WL750.0,WL384.0,2,NA,"high blank value; probably filter residue in sample"
+2024-08-22,NA,FiltChla,NA,21b,NA,WL750.0,WL384.0,2,NA,"high blank value; probably filter residue in sample"
+2024-08-22,NA,FiltChla,NA,bufferedethanol,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
+2024-08-22,NA,FiltChla,NA,bufferedethanol2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
+2024-08-22,NA,FiltChla,NA,filteredblank2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
 2024-08-22, F50, FiltChla, NA, 13b, 2024-01-29, WL750.0,WL384.0,2, NA, removed because sample didn't get acidified
 2024-08-22, F50, FiltChla, NA, 13_b_2, 2024-01-29, WL750.0,WL384.0,2, NA, removed because sample didn't get acidified 
 2024-08-22, F50, FiltChla, NA, 5b, 2024-04-01, WL750.0,WL384.0,2, NA, removed because reran the sample 

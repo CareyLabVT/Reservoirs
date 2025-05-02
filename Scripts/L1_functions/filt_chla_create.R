@@ -23,7 +23,7 @@
 #filt_chla_qaqc from L1 script 17 April 2025
 #updating code and adding a section to return mismatches as needed
 #also adding a section to handle dilutions as needed
-filt_chla_qaqc_test <- function(directory, 
+filt_chla_qaqc <- function(directory, 
                            rack_map,
                            filtering_log,
                            final_vol_extract = 6, 

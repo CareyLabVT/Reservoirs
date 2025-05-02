@@ -1,0 +1,4 @@
+attributeName	code	definition
+Rep	DUP	duplicate sample
+flag	2	Sample not taken
+flag	99	Sample name recorded incorrectly and corrected in the maintenance log

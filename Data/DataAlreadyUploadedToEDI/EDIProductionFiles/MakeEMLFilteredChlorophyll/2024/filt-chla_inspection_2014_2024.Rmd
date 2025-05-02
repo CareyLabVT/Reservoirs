@@ -87,7 +87,7 @@ current_time_end=ymd_hms("2024-12-31 23:59:00", tz="America/New_York")
 
 file_name <- "filt-chla_2014_2024.csv"
 
-qaqc_function <- "filt-chla_qaqc_2014_2024.R"
+qaqc_function <- "filt-chla_qaqc_2023_2024.R"
 
 maintenance_log <- "filt-chla_maintenancelog_2014_2024.csv"
 
@@ -113,7 +113,7 @@ if(role=="publisher"){
 
 
 **Make data frame using the filt chla function**
-```{r Read in Historical files from EDI, eval = make_data}
+```{r Read in Historical files from EDI, eval=make_data, message=TRUE, warning=TRUE, paged.print=FALSE}
 all_chla <- filt_chla_qaqc(
   directory = "../../../../DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
   rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
@@ -122,7 +122,7 @@ all_chla <- filt_chla_qaqc(
   blank_vol_filt = 500,
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
   historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
-  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg", 
+  sample_times = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg", 
   outfile = NULL, 
   #outfile = "../../../../Data/DataAlreadyUploadedToEDI/MakeEMLFilteredChlorophyll/2024/filt-chla_2014_2024_test.csv",
   start_date = NULL, # change when we update to read date from EDI
@@ -167,8 +167,9 @@ chla_YMD <- all_chla %>%
   mutate(Year = year(DateTime)) %>% 
   mutate(Month = month(DateTime)) %>% 
   mutate(DOY = yday(DateTime)) %>% 
+  mutate(DateTime = ymd_hms(DateTime)) |> 
   mutate(Depth_group = ifelse(Depth_m == 0.1, "surface", ifelse(Depth_m > 0.1 & Depth_m < 4,"epi","hypo")))
-
+str(chla_YMD)
 #make plots of the data by reservoir and year
 #this is a check to make sure that we have all of the data in the years that we expect to have it
 head(chla_YMD)
@@ -176,15 +177,17 @@ head(chla_YMD)
 **Time Series for entire data set - Chlorophyll a**
 ENTIRE DATASETS WILL LIKELY DISPLAY A MISSING DATA WARNING
 Samples were not collected in 2017
-```{r Time Series for entire data set - chla}
+```{r Time Series for entire data set - chla ugL}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
+  scale_x_datetime(date_breaks = "1 year", date_minor_breaks = "3 months", date_labels = "%Y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
   ggtitle("Entire Dataset Timeseries - Chlorophyll a")
 ```
 **Time Series for entire data set - Pheophyton**
-```{r Time Series for entire data set - Pheophyton}
+```{r Time Series for entire data set - Pheophyton ugL}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
   geom_point(size = 1) + 
@@ -193,7 +196,7 @@ ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
 ```
 **VALUES BELOW 0 FOR PHAEOPHYTIN**
 DOUBLE CHECK THAT THEY ARE ALL FLAGGED WITH A 1
-All values below 0 have been set to 0. This check should return a tibble with 0 rows
+All values below 0 have been set to 0. This check should return a tibble with 0 rows. This check is taken care of in the qaqc script, but good to check. 
 ```{r PHAEOPHYTIN VALS BELOW 0}
 #check the flag column
 pheo_below0 <- subset(all_chla, Pheo_ugL < 0)
@@ -286,6 +289,8 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Depth_gr
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'left') + 
   ggtitle("Pheophyton - Median, by depth")
 ```
+
+
 **Flags**
 attributeName	code	definition
 Flag_Chla_ugL	0	    Value acceptable. No flag  
@@ -294,6 +299,9 @@ Flag_Chla_ugL	2	    Sample not taken
 Flag_Chla_ugL	3	    Duplicate check failed  
 Flag_Chla_ugL	4   Pigment in extract below detection (<34 ug/L)  
 Flag_Chla_ugL	5	    Duplicate values were averaged  
+Flag_Chla_ugL	6	    ratio >1.72
+Flag_Chla_ugL	7	    Turbidity too high!
+
 
 ```{r Subset to Current Year Only (2024)}
 #subset data to FCR and BVR
@@ -304,10 +312,14 @@ chla_current <- chla_YMD %>%
 head(chla_current)
 #### Graph ####
 # Current Year Timeseries
-ggplot(subset(chla_current), aes(x = DOY, y = Chla_ugL, pch = as.factor(Flag_Chla_ugL))) +
+colors <- c("0" = "black", "1" = "gray","4" = "green", "5" = "red", "6" = "lightblue", "7" = "blue", "15" = "gray", "16" = "gray", "17" = "gray", "146" = "gray", "165" = "gray")
+
+ggplot(subset(chla_current), aes(x = DOY, y = Chla_ugL, color = as.factor(Flag_Chla_ugL))) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
-  ggtitle("Current Year Timeseries")
+  ggtitle("Current Year Timeseries") + 
+  scale_color_manual(values = colors) + 
+  theme_bw()
 
 ```
 **Flags**
@@ -318,6 +330,7 @@ Flag_Pheo_ugL	3	    Duplicate check failed
 Flag_Pheo_ugL	4	    Pigment in extract below detection (<34 ug/L)  
 Flag_Pheo_ugL	45	  Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
 Flag_Pheo_ugL	5	    Duplicate values were averaged  
+
 ```{r Subset to Current Year Only (2023) - Pheophyton}
 #subset data to FCR and BVR
 chla_current <- chla_YMD %>% 
@@ -325,12 +338,15 @@ chla_current <- chla_YMD %>%
    mutate(DOY = yday(DateTime)) 
 
 head(chla_current)
-#### Graph ####
-# Current Year Timeseries
-ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Pheo_ugL))) +
+
+colors <- c("0" = "black", "1" = "gray", "5" = "red", "4" = "green", "6" = "lightblue", "7" = "blue", "14" = "gray", "15" = "gray", "16" = "gray", "17" = "gray", "146" = "gray", "165" = "gray")
+
+ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, color = as.factor(Flag_Pheo_ugL))) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
-  ggtitle("Current Year Timeseries")
+  ggtitle("Current Year Timeseries") + 
+  scale_color_manual(values = colors) + 
+  theme_bw()
 
 ```
 
@@ -388,10 +404,10 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Sc
 ```
 
  Make site description file
-```{Make site description file, eval = make_data}
+```{r Make site description file, eval = make_data}
 # These lines of code make the csv of the site descriptions with lat and long
 # Use Gsheet because you don't need to authenticate it.
- sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+ sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
  data <- all_chla #This is the line you need to modify!
  trim_sites = function(data,sites){
@@ -403,8 +419,8 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Sc
      select(-res_site)
  }
  sites_trimmed = trim_sites(data, sites)
- write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
- maint_file <- read.csv(maintenance_file)
- write.csv(maint_file, "filt-chla_maintenancelog_2014_2024.csv", row.names = F)
+ write_csv(sites_trimmed,"site_descriptions.csv")# Write to file
+ #maint_file <- read.csv(maintenance_file)
+ #write.csv(maint_file, "filt-chla_maintenancelog_2014_2024.csv", row.names = F)
 ```
 

@@ -1,23 +1,23 @@
 Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_parameter, end_parameter,  flag,  updated_value, notes
-2023-09-28,B50, FiltChla, NA,21_b,2023-07-24,WL750.0,WL384.0,2, NA, Not enough sample so remove
-2023-09-28,B50, FiltChla, NA,21_b_2,2023-07-24,WL750.0,WL384.0,2, NA, Not enough sample so remove
-2023-09-28,F50, FiltChla, NA,7_b,2023-07-10,WL750.0,WL384.0,2, NA,750 wave length too high so reran sample again and removed observation
-2023-09-28,B50, FiltChla, DUP,32_b,2023-09-05,WL750.0,WL384.0,2, NA,750 wave length too high was a duplicate so removed
-2023-09-28,B50, FiltChla, DUP,32_a,2023-09-05,WL750.0,WL384.0,2, NA,750 wave length too high was a duplicate so removed
-2023-09-28,B50, FiltChla, NA,31_b,2023-04-13,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
-2023-09-28,F50, FiltChla, NA,6_b,2023-07-03,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and ran the duplicate
-2023-09-28,F50, FiltChla, NA,6_a,2023-07-03,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and ran the duplicate
-2023-09-28,F50, FiltChla, NA,46_a,2023-04-04,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
-2023-09-28,F50, FiltChla, NA,46_b,2023-04-04,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
-2023-09-28,F50, FiltChla, NA,20_b,2023-05-22,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
-2023-09-28,F50, FiltChla, NA,20_a,2023-05-22,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
-2023-12-05,F50, FiltChla, NA,15_a,2023-12-04, Sample.ID, NA,99,15_b, sample ID recorded wrong
-2023-12-05,F50, FiltChla, NA,15_a_2,2023-12-04, Sample.ID, NA,99,15_a, sample ID recorded wrong
-2023-12-05,F50, FiltChla, NA,22_a,2023-10-17, Sample.ID, NA,99,22_b, sample ID recorded wrong
-2023-12-05,F50, FiltChla, NA,22_a_2,2023-10-17, Sample.ID, NA,99,22_a, sample ID recorded wrong
-2023-12-05,F50, FiltChla, NA,2_a,2023-11-14,WL750.0,WL384.0,2, NA,ran too early for acid; rerun again after acid sat for 2 minutes
-2023-12-05,B50, FiltChla, NA,6_b,2023-11-14,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
-2023-12-05,F50, FiltChla, NA,19_b,2023-10-09,WL750.0,WL384.0,2, NA, didn't put the sample in! reran sample
+2023-09-28,B50, FiltChla, NA,21_b,7/24/23,WL750.0,WL384.0,2, NA, Not enough sample so remove
+2023-09-28,B50, FiltChla, NA,21_b_2,7/24/23,WL750.0,WL384.0,2, NA, Not enough sample so remove
+2023-09-28,F50, FiltChla, NA,7_b,7/10/23,WL750.0,WL384.0,2, NA,750 wave length too high so reran sample again and removed observation
+2023-09-28,B50, FiltChla, DUP,32_b,9/5/23,WL750.0,WL384.0,2, NA,750 wave length too high was a duplicate so removed
+2023-09-28,B50, FiltChla, DUP,32_a,9/5/23,WL750.0,WL384.0,2, NA,750 wave length too high was a duplicate so removed
+2023-09-28,B50, FiltChla, NA,31_b,4/13/23,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
+2023-09-28,F50, FiltChla, NA,6_b,7/3/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and ran the duplicate
+2023-09-28,F50, FiltChla, NA,6_a,7/3/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and ran the duplicate
+2023-09-28,F50, FiltChla, NA,46_a,4/4/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
+2023-09-28,F50, FiltChla, NA,46_b,4/4/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
+2023-09-28,F50, FiltChla, NA,20_b,5/22/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
+2023-09-28,F50, FiltChla, NA,20_a,5/22/23,WL750.0,WL384.0,2, NA,750 wave length too high so removed this sample and kept the duplicate
+2023-12-05,F50, FiltChla, NA,15_a,12/4/23, Sample.ID, NA,99,15_b, sample ID recorded wrong
+2023-12-05,F50, FiltChla, NA,15_a_2,12/4/23, Sample.ID, NA,99,15_a, sample ID recorded wrong
+2023-12-05,F50, FiltChla, NA,22_a,10/17/23, Sample.ID, NA,99,22_b, sample ID recorded wrong
+2023-12-05,F50, FiltChla, NA,22_a_2,10/17/23, Sample.ID, NA,99,22_a, sample ID recorded wrong
+2023-12-05,F50, FiltChla, NA,2_a,11/14/23,WL750.0,WL384.0,2, NA,ran too early for acid; rerun again after acid sat for 2 minutes
+2023-12-05,B50, FiltChla, NA,6_b,11/14/23,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
+2023-12-05,F50, FiltChla, NA,19_b,10/9/23,WL750.0,WL384.0,2, NA, didn't put the sample in! reran sample
 2024-08-22,NA,FiltChla,NA,21a,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
 2024-08-22,NA,FiltChla,NA,21b,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
 2024-08-22,NA,FiltChla,NA,bufferedethanol,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
@@ -29,5 +29,5 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2025-01-09, F50, FiltChla, DUP, a4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample
 2025-01-09, F50, FiltChla, DUP, b4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample 
 2025-01-10,NA,FiltChla, NA, b10, NA, WL750.0, WL384.0,2,NA, sample diluted and rerun
-2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0, 2, NA, remove because reran sample
-2025-01-13, S200, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label
+2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0,2, NA, remove because reran sample
+2025-01-13, S205, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label

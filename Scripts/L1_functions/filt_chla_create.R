@@ -659,10 +659,10 @@ if (nrow(check_turbidity)>0){
            Reservoir=ifelse(Reservoir=="S","SNP", Reservoir),
            Reservoir=ifelse(Reservoir=="C","CCR", Reservoir)) %>%
     # Add flags for low absorbance and pigment below detection
-    mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03,1, Flag_Chla_ugL),
-           Flag_Pheo_ugL=ifelse(Check_Absorb<0.03,1, Flag_Pheo_ugL),
-           Flag_Chla_ugL=ifelse(Check_chla<34,paste0(Flag_Chla_ugL, 4),Flag_Chla_ugL),
-           Flag_Pheo_ugL=ifelse(Check_pheo<34,paste0(Flag_Pheo_ugL, 4),Flag_Pheo_ugL),
+    mutate(Flag_Chla_ugL=ifelse(Check_Absorb<0.03, 1, Flag_Chla_ugL),
+           Flag_Pheo_ugL=ifelse(Check_Absorb<0.03, 1, Flag_Pheo_ugL),
+           Flag_Chla_ugL=ifelse(Check_chla<34, 4, Flag_Chla_ugL),
+           Flag_Pheo_ugL=ifelse(Check_pheo<34, 4, Flag_Pheo_ugL),
            Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL), 
            Flag_Chla_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Chla_ugL, 6), Flag_Chla_ugL),
            Flag_Pheo_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Pheo_ugL, 6), Flag_Pheo_ugL))|>

@@ -29,5 +29,5 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2025-01-09, F50, FiltChla, DUP, a4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample
 2025-01-09, F50, FiltChla, DUP, b4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample 
 2025-01-10,NA,FiltChla, NA, b10, NA, WL750.0, WL384.0,2,NA, sample diluted and rerun
-2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0, 2, NA, remove because reran sample
-2025-01-13, S200, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label
+2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0,2, NA, remove because reran sample
+2025-01-13, S205, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label

@@ -63,7 +63,7 @@ filt_chla_qaqc_test <- function(directory,
     Sample_date = col_date("%Y-%m-%d"),
     flag = col_integer()))
   
-print(("Warning! the following rows from the maintenance log may cause you trouble"))
+print(("Warning! the following rows from the maintenance log may cause you trouble. Do you have something other than NA or a date in the SampleDate column?"))
 print(problems(log_read))
 
   log <- log_read

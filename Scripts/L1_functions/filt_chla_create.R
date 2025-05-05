@@ -249,7 +249,7 @@ min_samp_date <- min(a$Sample_date)
     mutate(
       ResSite = ifelse(samp_type == 'eth_blank', NA, ResSite),
       Sample_date = ifelse(samp_type == 'eth_blank', NA, Sample_date),
-      Sample_date = as.Date(Sample_date)
+      Sample_date = as.Date(Sample_date, origin="1970-01-01")
     )
     
   print("There will be multiple matches and that is ok")

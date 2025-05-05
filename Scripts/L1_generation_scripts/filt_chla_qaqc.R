@@ -17,7 +17,7 @@
 # 7. Save files
 
 # Download/load libraries
-pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2)
+pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2, arsenal)
 
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)

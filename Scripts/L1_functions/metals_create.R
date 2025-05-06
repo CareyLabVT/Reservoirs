@@ -155,6 +155,19 @@ metals_qaqc <- function(directory,
   
   # Take out dup observations when ISCO samples were run without digestion and then with digestion. The smaller values are the correct samples. Need to remove them before we average dups
   
+   ## This is a quick fix until we figure out what to do/where the other metals dups came from 
+  
+  ICP_ISCO <- ICP|>
+    filter(Sample_ID %in% c(29,30))|> # just ISCO samples for now
+    group_by(Date, Sample_ID)|>
+    dplyr::slice_min(Fe_mgL, n=1)|>
+    ungroup()
+  
+  ICP_notISCO <- ICP|>
+    filter(Sample_ID != 29)|>
+    filter(Sample_ID != 30)
+  
+  ICP2 <- bind_rows(ICP_notISCO, ICP_ISCO)
   
   
   
@@ -163,7 +176,7 @@ metals_qaqc <- function(directory,
  
 #set up data frame with Reservoir, Site, Depth, and filter
   # then pivot longer so we can get the mean of any samples that had to be rerun
- frame1 <- left_join(ICP, metals_key, by = c('Sample_ID'))|>
+ frame1 <- left_join(ICP2, metals_key, by = c('Sample_ID'))|>
    select(-Sample_ID)|>
    distinct(Date, Reservoir, Depth_m, Site, Filter, .keep_all = TRUE) |>
    select(Reservoir, Site, Depth_m, Filter, Date, everything()) |>

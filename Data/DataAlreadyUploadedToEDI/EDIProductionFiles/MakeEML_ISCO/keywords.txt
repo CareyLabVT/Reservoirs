@@ -1,0 +1,35 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab controlled vocabulary
+Schreiber Lab	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Reservoirs	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Lakes	lter controlled vocabulary
+Stream	cuahsi controlled vocabulary
+Streams	cuahsi controlled vocabulary
+total iron	cuahsi controlled vocabulary
+total manganese	cuahsi controlled vocabulary
+total sodium	cuahsi controlled vocabulary
+total lithium	cuahsi controlled vocabulary
+total magnesium	cuahsi controlled vocabulary
+total aluminum	cuahsi controlled vocabulary
+total silicon	cuahsi controlled vocabulary
+total potassium	cuahsi controlled vocabulary
+total calcium	cuahsi controlled vocabulary
+total copper	cuahsi controlled vocabulary
+total strontium	cuahsi controlled vocabulary
+total barium	cuahsi controlled vocabulary
+Virginia Reservoirs LTREB	carey lab controlled vocabulary
+LTREB	carey lab controlled vocabulary
+Virginia Reservoirs	carey lab controlled vocabulary
+FCR	carey lab controlled vocabulary
+Virginia Tech Center for Ecosystem Forecasting	carey lab controlled vocabulary
+water quality	lter controlled vocabulary
+load	carey lab controlled vocabulary
+loads	carey lab controlled vocabulary
+ISCO	carey lab controlled vocabulary
+cumulative	cuahsi controlled vocabulary
+hydrology	cuahsi controlled vocabulary

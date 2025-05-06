@@ -1,0 +1,38 @@
+ISCO SAMPLING: An automated ISCO sampler was deployed at the weir approximately from April to November in 2019-2023. The ISCO collects flow-proportional composite samples representative of about two-weeks of inflow to FCR. The ISCO has an INW Aquistar PT2x pressure sensor (INW, Kirkland, WA) that it uses to calculate discharge using the equation:
+
+V-notch weir discharge equation: Q = 2.391 * H^2.5 
+
+The ISCO is programmed to collect a 200mL sample when 600m3 of flow is calculated to have passed through the V-notch weir. The water samples collect into a 1L bottle stored within the ISCO where they are homogenized over the duration of the sampling period (approximately 2 weeks). For collection, samples are poured into 15 mL centrifuge tubes, preserved in the field using 0.5 mL trace metal grade nitric acid to pH less than 2. 
+
+
+SAMPLING TIMES: Most sampling occurred between the hours of 9:00 and 15:00. Some sampling occurred outside of these hours, including some overnight sampling; these instances are noted by the actual sampling time within the DateTime column. Samples with no exact sampling time recorded are reported as 12:00 in the DateTime column and flagged with a '1' in the Flag_DateTime column. Samples were collected in the America/New York Eastern Time Zone, which observed daylight savings time from approximately March to November in 2019-2023.
+
+
+CHEMICAL ANALYSIS: In 2019, samples were analyzed for Fe and Mn using an Inductively Coupled Plasma Optical Emission Spectrometer (ICP-OES) using a Spectro ARCOS SOP (Side-On Plasma interface) instrument using methods similar to EPA 200.7 (EPA, 1994). Detection limits for Fe and Mn were 0.004 mg/L and 0.001 mg/L, respectively. Starting in 2020, samples were analyzed for Li, Na, Mg, Al, Si, K, Ca, Fe, Mn, Cu, Sr, and Ba using an Inductively Coupled Plasma-Mass Spectrometer (ICP-MS; Thermo Electron iCAP-RQ) following APHA Standard Method 3125-B (American Public Health Association et al., 1998). Please see the list  at the bottom of the methods for the minimum reporting levels for Fe, Mn, Li, Na, Mg, Al, Si, K, Ca, Cu, Sr, and Ba from 2020-2023. We used the minimum reporting levels as the lower threshold for data in 2020-2023. Values that were below the minimum detection limit (for 2019) or minimum reporting level (for 2020-2023) were flagged as '3' and set to the value of the minimum detection limit or minimum reporting level. Negative values were flagged as '4' and set to 0 in 2019 and were set to the minimum reporting level in 2020-2023. Abnormally high concentrations were defined as greater than three standard deviations above the mean, were flagged as '8', and the value was retained. As a result, some soluble samples reported higher concentrations than the total samples.
+
+	 
+	Occasionally, unfiltered samples contain particulates. As particulates cannot be analyzed using ICPMS, samples with particulates were first microwave-digested with concentrated trace metal grade nitric acid (modified from EPA 3015a) prior to analysis and are flagged with a '6'. Please see metals_maintenancelog_2014_2024.csv for more information about specific samples.
+
+LOAD CALCULATIONS:
+*****
+
+OTHER FLAG DESCRIPTIONS: If a sample was analyzed multiple times, then the values are averaged and flagged as '7'. If the authors identified samples that were processed improperly, values were set to NA and flagged as '10'. All flags are either defined in the maintenance log or identified with the QAQC script. Please contact the authors of the data package for more information. 
+
+DATA PACKAGE CONTENTS: This data package includes one data file (metals_2014_2024.csv), a QAQC R script (metals_qaqc_2014_2024.R), a maintenance log (metals_maintenancelog_2014_2024.csv), a visual inspection R script (metals_Inspection_2014_2024.Rmd), and a sampling sites file (site_descriptions.csv). The QAQC script includes functions to process data, remove outliers, and apply the maintenance log to clean the data file included in the package; the visual inspection script provides code for plotting the data file.
+
+
+	Multiple whole-ecosystem experiments have been conducted at Falling Creek Reservoir, including intermittent operation of hypolimnetic oxygenation (HOx) and pulsed epilimnetic mixing (EM) engineering systems. We encourage you to contact the lead author of the data package for more information.
+
+2020-2023 Minimum Reporting Levels (mg/L):
+Al_mgL - 0.001,
+Ba_mgL - 0.00005,
+Ca_mgL - 0.05,
+Cu_mgL - 0.001,
+Fe_mgL - 0.01,
+Li_mgL - 0.0005,
+Mg_mgL - 0.001,
+Mn_mgL - 0.0001,
+K_mgL - 0.01,
+Si_mgL - 0.1,
+Na_mgL - 0.05,
+Sr_mgL - 0.00005

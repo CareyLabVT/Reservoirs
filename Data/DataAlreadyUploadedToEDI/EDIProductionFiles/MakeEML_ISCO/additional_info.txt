@@ -1,0 +1,5 @@
+Contributions to the 2024 revision:
+MES oversaw the ISCO sampling program at Falling Creek Reservoir 2019 - 2023. CEB and ABP served as the point people for data cleaning, analysis, and QAQC in 2023. ABP led field crew, contributed significantly to sampling, and assisted substantially with QAQC workflows. CEW contributed with sampling and processing samples. NWH created the initial workflow for these scripts. 
+
+Acknowledgments and historical contributions:
+We thank the Western Virginia Water Authority for providing access to these sites, Jeff Parks for analytical chemistry, and the Reservoir Group for contributing to fieldwork. 

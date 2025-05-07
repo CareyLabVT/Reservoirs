@@ -383,9 +383,9 @@ Calc_dis_metals2 <- Calc_dis_metals|>
   mutate(
     Flag_Cumulative_flow_L = ifelse(cum_flow==0, 1, 0),
     # if any waterlevel reading is over the weir flag as water over top of weir
-    Flag_Cumulative_flow_L = ifelse(Flag_high>0, paste0(Flag_cumulative_flow_L, 2), Flag_Cumulative_flow_L),
+    Flag_Cumulative_flow_L = ifelse(Flag_high>0, paste0(Flag_Cumulative_flow_L, 2), Flag_Cumulative_flow_L),
     # flag if there were more than 1000 missing water level observations. Maybe this isn't right. 
-    Flag_Cumulative_flow_L = ifelse(missing_waterlevel_obs>1000, paste0(Flag_cumulative_flow_L,3), 
+    Flag_Cumulative_flow_L = ifelse(missing_waterlevel_obs>1000, paste0(Flag_Cumulative_flow_L,3), 
                                     Flag_Cumulative_flow_L),
     # reflag one because 1 overrides everything else since value was not collected.
     Flag_Concentration_mgL = ifelse(is.na(concentration), 1, Flag_Concentration_mgL),

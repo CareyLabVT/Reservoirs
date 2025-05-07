@@ -33,3 +33,6 @@ loads	carey lab controlled vocabulary
 ISCO	carey lab controlled vocabulary
 cumulative	cuahsi controlled vocabulary
 hydrology	cuahsi controlled vocabulary
+nutrients	lter controlled vocabulary
+total phosphorus	cuahsi controlled vocabulary
+total nitrate	cuahsi controlled vocabulary

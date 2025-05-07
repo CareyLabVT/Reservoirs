@@ -1,0 +1,16 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir	categorical			NA	value is missing
+Start_time	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+End_time	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+variable	Metal Name	categorical			NA	value is missing
+observation	Total metal concentration	numeric	milligramsPerLiter		NA	value is missing
+cum_flow	cumulative flow 	numeric	cubicMetersPerSecond		NA	value is missing
+load_kg	Metal load	numeric	kilograms		NA	value is missing
+load_kgd	Metal load per day	numeric	kilogramsPerDay		NA	value is missing
+Flag_Start_time	Data flag for Start_time	categorical			NA	value is missing
+Flag_End_time	Data flag for End_time	categorical			NA	value is missing
+Flag_observation	Data flag for observation	categorical			NA	value is missing
+Flag_cum_flow	Data flag for cumulative flow	categorical			NA	value is missing
+Flag_load_kg	Data flag for metal load	categorical			NA	value is missing
+Flag_load_kgd	Data flag for metal load per day	categorical			NA	value is missing

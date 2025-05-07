@@ -1,0 +1,5 @@
+Author Contributions: 
+MES has been PI for this project, installed the ISCO in 2019 along with its programming, and has overseen ISCO operation from  2019-present. NWH organized data, authored processing scripts, and led QAQC in 2019-2023. ABP and CEB automated the data processing from 2023-2024. ABP led field crew, maintenance, and sampling efforts. CEW and CEB contributed to fieldwork and digested select samples with assistance from MES.
+
+Acknowledgments:
+We thank the Western Virginia Water Authority for providing access to these sites, Jeff Parks for analytical chemistry, and the Reservoir Group for contributing to fieldwork. 

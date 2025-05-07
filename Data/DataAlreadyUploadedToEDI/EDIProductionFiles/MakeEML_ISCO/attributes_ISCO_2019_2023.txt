@@ -1,16 +1,14 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir	categorical			NA	value is missing
-Start_time	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-End_time	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-variable	Metal Name	categorical			NA	value is missing
-observation	Total metal or nutrient concentration	numeric	milligramsPerLiter		NA	value is missing
-cum_flow	cumulative flow 	numeric	cubicMetersPerSecond		NA	value is missing
-load_kg	Metal or nutrient load	numeric	kilograms		NA	value is missing
-load_kgd	Metal or nutrient load per day	numeric	kilogramsPerDay		NA	value is missing
-Flag_Start_time	Data flag for Start_time	categorical			NA	value is missing
-Flag_End_time	Data flag for End_time	categorical			NA	value is missing
-Flag_observation	Data flag for observation	categorical			NA	value is missing
-Flag_cum_flow	Data flag for cumulative flow	categorical			NA	value is missing
-Flag_load_kg	Data flag for metal or nutrient load	categorical			NA	value is missing
-Flag_load_kgd	Data flag for metal or nutrient load per day	categorical			NA	value is missing
+Depth_m	Depth of sample collection (from surface)		meter		NA	value is missing
+Collection_start_time	"Date and time of when the ISCO started and the start of the cumulative flow. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Collection_end_time	"Date and time of the end of the ISCO sampling period when the sample was collected and the cumulative flow ended. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Cumulative_flow_L	cumulative flow 	numeric	Liter		NA	value is missing
+Total_waterlevel_obs	The number of water level observations collected over the sampling period	numeric			NA	value is missing
+Element_name	name of element	categorical			NA	value is missing
+Concentration_mgL	The concentration of the element in mgL	numeric	milligramsPerLiter		NA	value is missing
+Load_kg	element load	numeric	kilograms		NA	value is missing
+Load_kgD	element load per day	numeric	kilogramsPerDay		NA	value is missing
+Flag_Cumulative_flow_L	Data flag for Cumulative_flow_L	categorical			NA	value is missing
+Flag_Concentration_mgL	Data flag for Concentration_mgL	categorical			NA	value is missing

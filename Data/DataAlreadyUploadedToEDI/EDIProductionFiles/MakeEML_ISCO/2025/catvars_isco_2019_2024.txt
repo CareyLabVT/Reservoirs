@@ -1,0 +1,28 @@
+attributeName	code	definition
+Flag_Cumulative_flow_L	0	no issues
+Flag_Concentration_mgL	0	no issues
+Flag_Cumulative_flow_L	1	sample not taken
+Flag_Concentration_mgL	1	sample not taken
+Flag_Cumulative_flow_L	2	flow over top of weir
+Flag_Concentration_mgL	3	sample below MRL and set to MRL 
+Flag_Cumulative_flow_L	3	more than 1000 missing water level observations
+Flag_Concentration_mgL	6	non-standard method 
+Flag_Concentration_mgL	7	sample run multiple times and values averaged
+Flag_Concentration_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_Concentration_mgL	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Reservoir	FCR	Falling Creek Reservoir
+Site	100.1	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; where ISCO is located
+Element_name	TN_mgL	Total nitrogen
+Element_name	TP_mgL	Total phosphorus
+Element_name	TLi_mgL	Total lithium
+Element_name	TNa_mgL	Total sodium
+Element_name	TMg_mgL	Total magnesium 
+Element_name	TAl_mgL	Total aluminum 
+Element_name	TSi_mgL 	Total silicon 
+Element_name	TK_mgL	Total potassium 
+Element_name	TCa_mgL	Total calcium 
+Element_name	TFe_mgL	Total iron 
+Element_name	TMn_mgL	Total manganese
+Element_name	TCu_mgL	Total copper
+Element_name	TSr_mgL	Total strontium 
+Element_name	TBa_mgL	Total barium 

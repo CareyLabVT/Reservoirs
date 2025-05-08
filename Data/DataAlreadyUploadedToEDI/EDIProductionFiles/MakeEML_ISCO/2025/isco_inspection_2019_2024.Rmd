@@ -18,33 +18,40 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet)
+pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr)
 ```
 
 
 
 ```{r Read in Historical files from EDI}
-
-inUrl1  <- ADD PASTA FROM EDI HERE
-infile1 <- tempfile()
-try(download.file(inUrl1,infile1,method="curl"))
-if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-
-                   
- historic <-read_csv(infile1)
+# 
+# inUrl1  <- ADD PASTA FROM EDI HERE
+# infile1 <- tempfile()
+# try(download.file(inUrl1,infile1,method="curl"))
+# if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+# 
+#                    
+#  historic <-read_csv(infile1)
 
 ```
 
 
 ```{r Read in L1 file}
 
-L1 <- read_csv(LINK TO L1 FILE HERE)
+# L1 <- read_csv(LINK TO L1 FILE HERE)
 
 ```
 
 ```{r Bind historic and L1 files together}
 
-current_df <- dplyr::bind_rows(historic, L1)
+# current_df <- dplyr::bind_rows(historic, L1)
+
+```
+
+
+```{r Load csv}
+
+current_df <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_2019_2024.csv")
 
 ```
 
@@ -54,7 +61,7 @@ This section checks to make sure each observation has a data flag. It also check
 
 #make sure no NAS in the Flag columns
 Flags=current_df%>%
-  select(DateTime, starts_with("Flag"))
+  select(Collection_start_time, starts_with("Flag"))
 
 RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
 
@@ -70,34 +77,190 @@ for(f in 1:(ncol(Flags))){
 
 ```
 
-```{r Plots}
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+# The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
+ maint <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_maintenancelog_2019_2023.csv",
+                    show_col_types = FALSE)
+
+
+# name the data file for just the tail of the maintenance log
+
+sd <- tail(maint)
+
+
+knitr::kable((tail(sd)))
+
+```
+
+```{r Plots load_kg}
+# Filter data with valid loads
+plot_df <- current_df %>%
+  mutate(Year = lubridate::year(Collection_start_time))
+
+# Get list of unique elements
+elements <- unique(plot_df$Element_name)
+
+# Loop over each element and plot
+for (el in elements) {
+  p <- plot_df %>%
+    filter(Element_name == el) %>%
+    ggplot(aes(x = Collection_start_time, y = Load_kg)) +
+    geom_point() +
+    facet_wrap(~ Year, scales = "free_x") +  # allow each year to have its own x-axis
+    labs(
+      title = paste("Load Over Time for", el),
+      x = "Date",
+      y = "Load (kg)"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      strip.text = element_text(face = "bold")
+    )
+  
+  print(p)
+}
+
+
+```
+```{r Plots load_kgD}
+# Filter data with valid loads
+plot_df <- current_df %>%
+  mutate(Year = lubridate::year(Collection_start_time))
+
+# Get list of unique elements
+elements <- unique(plot_df$Element_name)
+
+# Loop over each element and plot
+for (el in elements) {
+  p <- plot_df %>%
+    filter(Element_name == el) %>%
+    ggplot(aes(x = Collection_start_time, y = Load_kgD)) +
+    geom_point() +
+    facet_wrap(~ Year, scales = "free_x") +  # allow each year to have its own x-axis
+    labs(
+      title = paste("Load Over Time for", el),
+      x = "Date",
+      y = "Load (kg/day)"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      strip.text = element_text(face = "bold")
+    )
+  
+  print(p)
+}
+
+
+```
+
+```{r Plot loads with discharge}
+#load discharge data 
+discharge <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/202/12/aae7888d68753b276d1623680f81d5de")
+
+# separate DateTime column so you can grab just year of interest
+discharge <- mutate(discharge, 
+                    DateTime = ymd_hms(DateTime),
+                    Year = year(DateTime),
+                    Date = date(DateTime),
+                    Hour = hour(DateTime))
+
+# filter to just look at years we have sed trap data for
+discharge <- discharge %>% 
+  filter(Year>=2019)
+
+
+# mean flow for every hour: first groups by the date
+# so we get mean flow for everyday of 2020s and every hour of that day
+discharge_mean <- discharge %>% 
+  group_by(Date) %>% 
+  summarise(mean_WVWA_cms = mean(coalesce(WVWA_Flow_cms, VT_Flow_cms), na.rm = TRUE)) %>% 
+  mutate(Year = year(Date)) %>% 
+  ungroup() 
+
+# Load data prep
+load_df <- current_df %>%
+  mutate(Date = as.Date(Collection_start_time)) %>%
+  select(Date, Element_name, Load_kg)
+
+# Restrict discharge to overlap with load data 
+## This isn't working 
+discharge_trimmed <- discharge_mean %>%
+  filter(Date >= min(load_df$Date),
+         Date <= max(load_df$Date))
+
+# List of elements to plot
+elements <- unique(load_df$Element_name)
+
+# Loop to plot
+for (el in elements) {
+  
+  # Filter load data for element
+  df_el <- load_df %>% filter(Element_name == el)
+  
+  # Merge discharge with load (for shared x-axis)
+  plot_data <- discharge_trimmed %>%
+    left_join(df_el, by = "Date")
+  
+  # Scale factor for dual axis (adjust as needed)
+  scaleFactor <- max(plot_data$Load_kg, na.rm = TRUE) / max(plot_data$mean_WVWA_cms, na.rm = TRUE)
+  
+  # Plot
+  p <- ggplot(plot_data, aes(x = Date)) +
+        geom_point(aes(y = mean_WVWA_cms * scaleFactor), color = "blue", alpha = 0.7) +
+    geom_point(aes(y = Load_kg), color = "red", size = 1, na.rm = TRUE) +
+    scale_y_continuous(
+      name = "Load (kg)",
+      sec.axis = sec_axis(~ . / scaleFactor, name = "Discharge (cms)")
+    ) +
+    labs(
+      title = paste("Load and Discharge Over Time:", el),
+      x = "Date") +
+        facet_wrap(~ Year, scales = "free_x") +  # facet by year
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      legend.position = "none"
+    )
+  
+  print(p)
+}
+
 
 ```
 
 ```{r Make new CSV with current and historic files}
 
-# Need to decide on a naming convention for this file
-write.csv(current_df, "Variable_startYear_EndYear.csv", row.names = F)
+# # Need to decide on a naming convention for this file
+# write.csv(current_df, "Variable_startYear_EndYear.csv", row.names = F)
 
 ```
 
 ```{r Make site description file}
  # These lines of code make the csv of the site descriptions with lat and long
 
-  # Use Gsheet because you don't need to authenticate it. 
-  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
-  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
-  data <- current_df #This is the line you need to modify!
-  trim_sites = function(data,sites){
-    data_res_site=data%>% #Create a Reservoir/Site combo column
-      mutate(res_site = trimws(paste0(Reservoir,Site)))
-    sites_merged = sites%>% #Filter to Sites that are in the dataframe
-      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-      filter(res_site%in%data_res_site$res_site)%>%
-      select(-res_site)
-  }
-  sites_trimmed = trim_sites(data,sites) 
-  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+  # # Use Gsheet because you don't need to authenticate it. 
+  # sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  # #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  # data <- current_df #This is the line you need to modify!
+  # trim_sites = function(data,sites){
+  #   data_res_site=data%>% #Create a Reservoir/Site combo column
+  #     mutate(res_site = trimws(paste0(Reservoir,Site)))
+  #   sites_merged = sites%>% #Filter to Sites that are in the dataframe
+  #     mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+  #     filter(res_site%in%data_res_site$res_site)%>%
+  #     select(-res_site)
+  # }
+  # sites_trimmed = trim_sites(data,sites) 
+  # write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
 
 ```
 

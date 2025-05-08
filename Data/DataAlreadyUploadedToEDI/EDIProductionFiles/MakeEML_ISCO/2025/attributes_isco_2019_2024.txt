@@ -5,10 +5,10 @@ Depth_m	Depth of sample collection (from surface)	numeric	meter		NA	value is mis
 Collection_start_time	"Date and time of when the ISCO started and the start of the cumulative flow. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Collection_end_time	"Date and time of the end of the ISCO sampling period when the sample was collected and the cumulative flow ended. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Cumulative_flow_L	cumulative flow 	numeric	liter		NA	value is missing
-Total_waterlevel_obs	The number of water level observations collected over the sampling period	numeric			NA	value is missing
+Total_waterlevel_obs	The number of water level observations collected over the sampling period	numeric	dimensionless		NA	value is missing
 Element_name	name of element	categorical			NA	value is missing
 Concentration_mgL	The concentration of the element in mgL	numeric	milligramsPerLiter		NA	value is missing
 Load_kg	element load	numeric	kilogram		NA	value is missing
-Load_kgD	element load per day	numeric	kilogramsPerDay		NA	value is missing
+Load_kgD	element load per day	numeric	kilogramPerDay		NA	value is missing
 Flag_Cumulative_flow_L	Data flag for Cumulative_flow_L	categorical			NA	value is missing
 Flag_Concentration_mgL	Data flag for Concentration_mgL	categorical			NA	value is missing

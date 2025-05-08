@@ -1,0 +1,10 @@
+attributeName	code	definition
+DataStream	Metals	
+Filter	T	
+Reservoir	FCR	
+end_parameter	Ba_mgL	
+notes	Sample had particulates and was microwave digested. See digestion notebook	
+notes	Sample was originally labelled; '03/24/2020 - 30 (decant)'; name was edited for ease of automation	
+notes	Sample was originally labelled; '04/20/2020 - 29 (decant)'; name was edited for ease of automation	
+notes	Sample was originally labelled; '04/20/2020 - 30 (decant)'; name was edited for ease of automation	
+start_parameter	Li_mgL	

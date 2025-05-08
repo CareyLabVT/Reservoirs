@@ -86,7 +86,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
 # The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
- maint <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_maintenancelog_2019_2023.csv",
+ maint <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_maintenancelog_2019_2024.csv",
                     show_col_types = FALSE)
 
 

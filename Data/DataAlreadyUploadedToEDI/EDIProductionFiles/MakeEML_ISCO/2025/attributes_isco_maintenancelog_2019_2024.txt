@@ -1,0 +1,12 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site within each reservoir	categorical			NA	value is missing
+Depth_m	Depth of sample collection (from surface)	numeric	meter		NA	value is missing
+Filter	Code corresponding to a filtered or non filtered sample	categorical			NA	value is missing
+DataStream	Code corresponding to a data set nickname.	categorical			NA	value is missing
+Sample_ID	"Code corresponding to the reservoir, depth, and filter status of each sample"	numeric	dimensionless		NA	value is missing
+Sample_Date	Date of sampling	Date		YYYY-MM-DD	NA	value is missing
+start_parameter	Name of start variable in sequence corresponding to name in the data table	categorical			NA	value is missing
+end_parameter	Name of end variable in sequence corresponding to name in the data table	categorical			NA	value is missing
+flag	Data flag applied to associated variable	categorical			NA	value is missing
+notes	Notes from data manager on the maintenance or reason for changing the data	character			NA	value is missing

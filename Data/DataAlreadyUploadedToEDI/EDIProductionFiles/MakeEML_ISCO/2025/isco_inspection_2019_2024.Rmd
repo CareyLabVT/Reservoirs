@@ -351,7 +351,7 @@ for (el in elements) {
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
 # Need to decide on a naming convention for this file
-write_csv(current_df, "metals_2014_2024.csv")
+write_csv(current_df, "isco_2019_2024.csv")
 
 ```
 
@@ -375,7 +375,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 
 # qaqc function
 # update link when change the location of the script
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R", "metals_qaqc_2014_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R", "isco_qaqc_2014_2024.R")
 
 
 # Anything else that needs to be added? MDL file?

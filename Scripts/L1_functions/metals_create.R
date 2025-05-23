@@ -8,6 +8,7 @@
 # 23 Oct. 24 Added more arguments so you can save or return the ISCO and or the metals data frame
 # 04 Feb. 25 Specified the columns when reading in the historical file and added a step to get times for ISCO observations. For now they are the same as the weir samples. 
 # 18 Feb. 25 Added a function when there were no observations for the year
+# 23 May 25 Changed the ISCO to take the higher of the duplicated values
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -153,14 +154,14 @@ metals_qaqc <- function(directory,
     map_df(~ read_metals_files(.x))
     #drop_na(Date) # when NA in DateTime column. Maybe a warning?
   
-  # Take out dup observations when ISCO samples were run without digestion and then with digestion. The smaller values are the correct samples. Need to remove them before we average dups
+  # Take out dup observations when ISCO samples when we were able to run samples without needing a digestion
   
    ## This is a quick fix until we figure out what to do/where the other metals dups came from 
   
   ICP_ISCO <- ICP|>
     filter(Sample_ID %in% c(29,30))|> # just ISCO samples for now
     group_by(Date, Sample_ID)|>
-    dplyr::slice_min(Fe_mgL, n=1)|>
+    dplyr::slice_max(Al_mgL, n=1)|> # take the higher of the two values
     ungroup()
   
   ICP_notISCO <- ICP|>
@@ -168,9 +169,6 @@ metals_qaqc <- function(directory,
     filter(Sample_ID != 30)
   
   ICP2 <- bind_rows(ICP_notISCO, ICP_ISCO)
-  
-  
-  
   
   print("Read in files and combined them together")
  

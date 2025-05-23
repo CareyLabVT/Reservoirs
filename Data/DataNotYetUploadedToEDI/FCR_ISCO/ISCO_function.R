@@ -3,16 +3,17 @@
 ## Adapter from ISCO_load_calcs.Rmd
 ## Date: 17 Oct 2024
 ## Updated: 07 May 2025 updated for staging but still need to make it a function
+##          23 May 2025 added code to pull in VT weir sensor data when missing more than an hour of flow obs. 
 
 
-# isco_qaqc <- function(
-#     water_level_dir,
-#     weir_staff_gauge,
-#     chem_dir,
-#     metals_dir,
-#     maintenance_log,
-#     start_date,
-#     end_date){
+isco_qaqc <- function(
+    water_level_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Raw_water_level/",
+    ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/isco_2019_2024.csv",
+    chem_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Chem_ISCO_files/",
+    metals_dir = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+    VT_sensor_flow,
+    start_date,
+    end_date){
 
  # load packages
   pacman::p_load(tidyverse, readxl)
@@ -23,18 +24,18 @@
   
   
   # named variables for running the function manually and QAQCing
-  water_level_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Raw_water_level/"
-  chem_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Chem_ISCO_files/"
-  ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/isco_2019_2024.csv"
-  #metals_dir
-  #maintenance_log
-  #start_date
-  #end_date
+  # water_level_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Raw_water_level/"
+  # chem_dir = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/Chem_ISCO_files/"
+  # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/isco_2019_2024.csv"
+  # metals_dir = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+  # VT_sensor_flow = "https://pasta.lternet.edu/package/data/eml/edi/202/13/da4beae4df936f513ac7600d44871c07"
+  # #metals_dir
+  # #maintenance_log
+  # start_date = NULL
+  # end_date = NULL
   
   
- 
-  
-
+ # combine all the water level files together
 waterlevel <- list.files(path = water_level_dir, pattern = "", full.names = T)%>% 
   map_df(~ read_csv(.x,
                     col_names = c("DateTime", "WaterLevel_m"), col_types = cols(.default = "c"), skip = 6))
@@ -53,6 +54,36 @@ waterlevel_2<-waterlevel%>%
   #filter(DOY>50)%>%
   drop_na()%>%
   distinct()
+
+# Filter out the dates we want for 
+
+# Subset the data for the start and end time 
+### identify the date subsetting for the data
+if (!is.null(start_date)){
+  #force tz check
+  start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+  
+  waterlevel_2 <- waterlevel_2 %>%
+    filter(Date >= start_date)
+  
+}
+
+if(!is.null(end_date)){
+  #force tz check
+  end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+  
+  waterlevel_2 <- waterlevel_2 %>%
+    filter(Date <= end_date)
+  
+}
+
+# Check if there are any files for the L1. If not then end the script
+
+if(nrow(waterlevel_2)==0){
+  
+  print("No new waterlevel observations for the current year")
+  
+}else{
 
 ### This will be added to the maintenance log. Clearing out the weir. 
 # SHOULD MAKE A MAINTENANCE LOG OF TIMES TO EXCLUDE WATER LEVEL? Maybe we are all set by setting time to 0?
@@ -141,7 +172,7 @@ waterlevel_ISCO3 <- waterlevel_ISCO2|>
 
 # Use the function from the metals files that is sourced from GitHub
 
-sed <-metals_qaqc(directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+sed <-metals_qaqc(directory =  metals_dir,
                   historic = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/FCR_ISCO/Data/ISCO_metals_2019.csv',
                   sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv",
                   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
@@ -232,6 +263,35 @@ nuts_mets <- merge(sedf, mean_nuts, by="Date", all = T)|>
          DateTime = ifelse(is.na(DateTime), paste0(Date, " 12:00:00"), DateTime),
          DateTime = ymd_hms(DateTime))
 
+}
+
+# Subset the data for the start and end time 
+### identify the date subsetting for the data
+if (!is.null(start_date)){
+  #force tz check
+  start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+  
+  nuts_mets <- nuts_mets %>%
+    filter(Date >= start_date)
+  
+}
+
+if(!is.null(end_date)){
+  #force tz check
+  end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+  
+  nuts_mets <- nuts_mets %>%
+    filter(Date <= end_date)
+  
+}
+
+# Check if there are any files for the L1. If not then end the script
+
+if(nrow(nuts_mets)==0){
+  
+  print("No new metals or nutrients observations for the current year")
+  
+}else{
 
 # Make a data frame of when samples were taken
 
@@ -364,18 +424,12 @@ long_df2 <- full_join(long_metals, long_flag, by=c("Reservoir", "DateTime", "Dep
 Calc_dis_metals <- full_join(time2, long_df2, by="Date_end")|>
   mutate(
     diff_time = difftime(End_time, Start_time, units='mins') -1,
-    missing_waterlevel_obs = as.numeric(diff_time) - count
+    missing_waterlevel_obs = as.numeric(diff_time) - count,
+    percent_missing_obs = (Flag_high/count)*100, 
   )|>
   # drop the samples if there was no waterlevel file for now
   drop_na(cum_flow)|>
   dplyr::rename("Flag_Concentration_mgL" = Flag)
-
-# make a data frame of observations that are greater than a 1000 obs missing
-
-# low_cal_flow <- Calc_dis_metals|>
-#   select(Start_time, End_time, cum_flow, count, exp_count, dif)|>
-#   distinct()
-#   filter(dif > 1000)
   
 
 # add in the flags
@@ -383,19 +437,74 @@ Calc_dis_metals2 <- Calc_dis_metals|>
   mutate(
     Flag_Cumulative_flow_L = ifelse(cum_flow==0, 1, 0),
     # if any waterlevel reading is over the weir flag as water over top of weir
-    Flag_Cumulative_flow_L = ifelse(Flag_high>0, paste0(Flag_Cumulative_flow_L, 2), Flag_Cumulative_flow_L),
+    Flag_Cumulative_flow_L = ifelse(percent_missing_obs>10, paste0(Flag_Cumulative_flow_L, 2), Flag_Cumulative_flow_L),
     # flag if there were more than 1000 missing water level observations. Maybe this isn't right. 
-    Flag_Cumulative_flow_L = ifelse(missing_waterlevel_obs>1000, paste0(Flag_Cumulative_flow_L,3), 
+    Flag_Cumulative_flow_L = ifelse(missing_waterlevel_obs>60 & cum_flow>0, paste0(Flag_Cumulative_flow_L,4), 
                                     Flag_Cumulative_flow_L),
     # reflag one because 1 overrides everything else since value was not collected.
     Flag_Concentration_mgL = ifelse(is.na(concentration), 1, Flag_Concentration_mgL),
-    Flag_Cumulative_flow_L = as.numeric(Flag_Cumulative_flow_L)
+    Flag_Cumulative_flow_L = as.numeric(Flag_Cumulative_flow_L),
+    cum_flow = ifelse(cum_flow==0, NA, cum_flow),
+    Flag_Cumulative_flow_L = ifelse(is.na(cum_flow), 1, Flag_Cumulative_flow_L),
   )
 
+# 
+
+# read in the data from EDI
+weir <- read_csv(VT_sensor_flow)|>
+  filter(DateTime>as.Date("2019-01-01"))
+
+# get the average of the two sensors
+
+weir_avg<- weir|>
+  select(DateTime, WVWA_Flow_cms, VT_Flow_cms)|>
+  pivot_longer(!DateTime, names_to = "sensor", values_to = "Weir_Flow_cms")|>
+  group_by(DateTime)|>
+  summarise(Weir_Flow_avg_cms = mean(Weir_Flow_cms, na.rm = T))|>
+  ungroup()
+
+# get a data frame of just the observations that are missing over 60 minutes of data
+obs_mis <- Calc_dis_metals2|>
+  filter(Flag_Cumulative_flow_L %in% c(4, 14, 24))|>
+  select(Start_time, End_time)|>
+  distinct()
+
+# get cumulative flows for those time periods where we are missing water level observations
+sample = list()
+for(i in 1:nrow(obs_mis)){
+  sample[[i]] = weir_avg[weir_avg$DateTime>obs_mis[i,1] & weir_avg$DateTime<obs_mis[i,2],]
+}
+
+# Multiply each minute Q by 60 s to get a cumulative volume of flow per minute and then by 15 because we only sample every 15 minutes
+for(i in 1:length(sample)){
+  sample[[i]]$cum_flow_weir = sample[[i]]$Weir_Flow_avg_cms*60*15
+}
+
+# Sum up all cum_flow for each sampling period to get a total cumulative flow
+for(i in 1:nrow(obs_mis)){
+  obs_mis$cum_flow_weir[i] = sum(sample[[i]]$cum_flow_weir, na.rm = T)
+  #obs_mis$count_weir[i] = nrow(sample[[i]]) # number of flow observations in the cumulative flow
+  #time2$Flag_high[i] = sum(sample[[i]]$Flag_WaterLevel_m, na.rm=T) # sum the number of flags to see how many obs over topped the weir
+  
+}
+
+# Calculate the flow for the ISCO based on the flow from the weir. The adjusted R2 on the linear relationship is 0.9281 with a slope of 1.1566 and an intercept of -1859
+
+obs_mis$calc_cum_flow <- (obs_mis$cum_flow_weir*1.1566)+1859
+
+# combine together with the main data frame. Note there are multiple rows for the observation in the obs_miss data frame. 
+
+Calc_dis_metals3 <- left_join(Calc_dis_metals2, obs_mis, by=c("Start_time", "End_time"))
+
+
+# replace the cumulative flow value for the ISCO with the calculated value from the weir if we are missing more than 60 minutes of observations. This is flagged as a 4 
+
+Calc_dis_metals3 <- Calc_dis_metals3|>
+  mutate(cum_flow = ifelse(Flag_Cumulative_flow_L %in% c(4,14,24), calc_cum_flow, cum_flow))
 
 # Calculate loads
 
-calc_load <- Calc_dis_metals2%>%
+calc_load <- Calc_dis_metals3%>%
   # convert m3 to L
   mutate(cum_v_L = cum_flow * 1000,
          # cumulative volume (L) * metals concentration (mg/L) = load (mg)/ divide by 1000000 to get (kg)
@@ -421,20 +530,29 @@ final_df <- calc_load|>
     "Element_name" = variable,
     "Concentration_mgL" = concentration,
     "Total_waterlevel_obs" = count)|>
-  select(Reservoir, Site, Depth_m, Collection_start_time, Collection_end_time, Cumulative_flow_L, Total_waterlevel_obs, Element_name, Concentration_mgL, Load_kg, Load_kgD, Flag_Cumulative_flow_L, Flag_Concentration_mgL)
+  mutate(Flag_Load_kg = as.numeric(paste0(Flag_Cumulative_flow_L, Flag_Concentration_mgL)),
+         Flag_Load_kgD = Flag_Load_kg)|>
+  mutate_if(is.numeric, round, digits = 4)|> # round to 4 digits
+  select(Reservoir, Site, Depth_m, Collection_start_time, Collection_end_time, Cumulative_flow_L, Total_waterlevel_obs, Element_name, Concentration_mgL, Load_kg, Load_kgD, Flag_Cumulative_flow_L, Flag_Concentration_mgL, Flag_Load_kg, Flag_Load_kgD)
 
+# Save the file or return it as a data frame
 
-# save date time columns as characters and save the file
+if (!is.null(ISCO_outfile)){
+  # save date time columns as characters and save the file
+  
+  # If there is an outfile argument, that is where the data are saved
+  final_df$Collection_start_time <- as.character(format(final_df$Collection_start_time)) # convert DateTime to character
+  final_df$Collection_end_time <- as.character(format(final_df$Collection_end_time))
+  
+  # Write the L1 file
+  write_csv(final_df, ISCO_outfile)
+} else{
 
-# If there is an outfile argument, that is where the data are saved
-final_df$Collection_start_time <- as.character(format(final_df$Collection_start_time)) # convert DateTime to character
-final_df$Collection_end_time <- as.character(format(final_df$Collection_end_time))
-
-# Write the L1 file
-write_csv(final_df, ISCO_outfile)
+return(final_df)
+}
 
         
-
-#}
+}
+}
 
 

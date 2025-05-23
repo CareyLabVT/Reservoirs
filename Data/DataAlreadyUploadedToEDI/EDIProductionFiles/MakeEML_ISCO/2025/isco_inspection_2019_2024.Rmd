@@ -18,7 +18,7 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr)
+pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr, plotly)
 ```
 
 
@@ -270,6 +270,7 @@ for (el in elements) {
 
 ```{r Plot loads with discharge}
 #load discharge data 
+# this will change based on the most recent discharge package published 
 discharge <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/202/12/aae7888d68753b276d1623680f81d5de")
 
 # separate DateTime column so you can grab just year of interest
@@ -339,6 +340,24 @@ for (el in elements) {
   
   print(p)
 }
+
+
+```
+
+```{r Plots Cumulative_flow_L}
+# Filter data with valid loads
+plot_df <- current_df %>%
+  mutate(Year = lubridate::year(Collection_start_time))
+
+p <- ggplot(plot_df, aes(x = Collection_start_time, y = Cumulative_flow_L)) +
+  geom_point() +
+  facet_wrap(~ Year, scales = "free_x") +
+  labs(x = "Collection Start Time", y = "Cumulative Flow (L)",
+       title = "Cumulative Flow") +
+  theme_minimal()
+
+ggplotly(p)
+
 
 
 ```

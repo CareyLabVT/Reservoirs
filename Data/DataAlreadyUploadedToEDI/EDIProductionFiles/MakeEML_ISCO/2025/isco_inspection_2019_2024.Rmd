@@ -1,7 +1,7 @@
 ---
 title: "isco_inspection_2019_2024"
 author: "Carly Bauer - edited from ABP"
-date: "2023=5-05-07"
+date: "2025-05-07"
 output: html_document
 ---
 
@@ -19,41 +19,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr, plotly)
-```
 
-
-
-```{r Read in Historical files from EDI}
-# 
-# inUrl1  <- ADD PASTA FROM EDI HERE
-# infile1 <- tempfile()
-# try(download.file(inUrl1,infile1,method="curl"))
-# if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-# 
-#                    
-#  historic <-read_csv(infile1)
+# source the ISCO qaqc script
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_function.R")
 
 ```
 
 
-```{r Read in L1 file}
+```{r QAQC the raw files, include=FALSE}
 
-# L1 <- read_csv(LINK TO L1 FILE HERE)
-
-```
-
-```{r Bind historic and L1 files together}
-
-# current_df <- dplyr::bind_rows(historic, L1)
+current_df <- isco_qaqc(
+  water_level_dir = "./../../../../DataNotYetUploadedToEDI/FCR_ISCO/Raw_water_level/",
+   chem_dir = "./../../../../DataNotYetUploadedToEDI/FCR_ISCO/Chem_ISCO_files/",
+  metals_dir = "./../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+  VT_sensor_flow = "https://pasta.lternet.edu/package/data/eml/edi/202/13/da4beae4df936f513ac7600d44871c07", ISCO_outfile = NULL, start_date = NULL, end_date = NULL)
 
 ```
 
-
-```{r Load csv}
-
-current_df <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_2019_2024.csv")
-
-```
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
 
@@ -205,6 +187,7 @@ last_row <- tail(sd, n=1)
 
 ## QAQC Plots
 
+
 ```{r Plots load_kg}
 # Filter data with valid loads
 plot_df <- current_df %>%
@@ -236,6 +219,9 @@ for (el in elements) {
 
 
 ```
+
+
+
 ```{r Plots load_kgD}
 # Filter data with valid loads
 plot_df <- current_df %>%
@@ -295,7 +281,7 @@ discharge_mean <- discharge %>%
 
 # Load data prep
 load_df <- current_df %>%
-  mutate(Date = as.Date(Collection_start_time)) %>%
+  mutate(Date = as.Date(Collection_end_time)) %>%
   select(Date, Element_name, Load_kg)
 
 # Restrict discharge to overlap with load data 

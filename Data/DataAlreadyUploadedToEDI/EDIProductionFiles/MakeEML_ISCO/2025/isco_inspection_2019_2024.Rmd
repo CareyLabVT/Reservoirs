@@ -18,7 +18,7 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr)
+pacman::p_load(tidyverse, lubridate, gsheet, ggplot2, dplyr, plotly)
 ```
 
 
@@ -86,8 +86,9 @@ We want to make sure that our maintenance log actually worked and took out the v
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
 # The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
- maint <- read_csv("https://raw.githubusercontent.com/carlybauer/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ISCO/2025/isco_maintenancelog_2019_2024.csv",
-                    show_col_types = FALSE)
+ maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+                    show_col_types = FALSE)|>
+  filter(Site == 100.1)
 
 
 # name the data file for just the tail of the maintenance log
@@ -98,6 +99,111 @@ sd <- tail(maint)
 knitr::kable((tail(sd)))
 
 ```
+
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after are flagged.
+Some of the flags are added to in the script so the value was flagged with 6 in the maintenance log 
+but in the script it was added to because the value was lower than the Minimum reporting level. 
+Just make sure that one of the values is in the mainteance log.
+
+#### Look at the first row in the maintenance time. Is the correct observation flagged?
+
+Make sure the observations are flagged
+
+```{r Print the tails, echo=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+
+last_row <- head(sd, n=1)
+
+# Get parameters for subsetting
+### get start and end time of one maintenance event
+    start <- as.Date(last_row$Sample_Date)
+    
+    # Reservoir 
+    Res <- last_row$Reservoir
+    
+    # Site 
+    Sit <- as.numeric(last_row$Site)
+    
+    # Depth
+    Dep <- as.numeric(last_row$Depth_m)
+    
+    # Filter
+    Filt <- last_row$Filter
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+     # What we want to filter from 
+    
+    check <- (as.Date(current_df$DateTime) %in% start & 
+            current_df$Reservoir %in% Res & 
+              current_df$Site %in% Sit &
+              current_df$Depth_m %in% Dep) 
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
+    
+    
+
+# Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[check, test])))
+
+```
+
+#### Look at the last row of the maintenance log. Are the columns flagged?
+
+```{r Did the maint log work head, echo=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get parameters for subsetting
+### get start and end time of one maintenance event
+    start <- as.Date(last_row$Sample_Date)
+    
+    # Reservoir 
+    Res <- last_row$Reservoir
+    
+    # Site 
+    Sit <- as.numeric(last_row$Site)
+    
+    # Depth
+    Dep <- as.numeric(last_row$Depth_m)
+    
+    # Filter
+    Filt <- last_row$Filter
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+    
+    # What we want to filter from 
+    
+    check <- (as.Date(current_df$DateTime) %in% start & 
+            current_df$Reservoir %in% Res & 
+              current_df$Site %in% Sit &
+              current_df$Depth_m %in% Dep) 
+    
+    # Make list of just the columns we want 
+    
+    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[check, test]))) 
+
+```
+
+
+## QAQC Plots
 
 ```{r Plots load_kg}
 # Filter data with valid loads
@@ -164,6 +270,7 @@ for (el in elements) {
 
 ```{r Plot loads with discharge}
 #load discharge data 
+# this will change based on the most recent discharge package published 
 discharge <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/202/12/aae7888d68753b276d1623680f81d5de")
 
 # separate DateTime column so you can grab just year of interest
@@ -237,30 +344,83 @@ for (el in elements) {
 
 ```
 
-```{r Make new CSV with current and historic files}
+```{r Plots Cumulative_flow_L}
+# Filter data with valid loads
+plot_df <- current_df %>%
+  mutate(Year = lubridate::year(Collection_start_time))
 
-# # Need to decide on a naming convention for this file
-# write.csv(current_df, "Variable_startYear_EndYear.csv", row.names = F)
+p <- ggplot(plot_df, aes(x = Collection_start_time, y = Cumulative_flow_L)) +
+  geom_point() +
+  facet_wrap(~ Year, scales = "free_x") +
+  labs(x = "Collection Start Time", y = "Cumulative Flow (L)",
+       title = "Cumulative Flow") +
+  theme_minimal()
+
+ggplotly(p)
+
+
 
 ```
 
-```{r Make site description file}
- # These lines of code make the csv of the site descriptions with lat and long
 
-  # # Use Gsheet because you don't need to authenticate it. 
-  # sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
-  # #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
-  # data <- current_df #This is the line you need to modify!
-  # trim_sites = function(data,sites){
-  #   data_res_site=data%>% #Create a Reservoir/Site combo column
-  #     mutate(res_site = trimws(paste0(Reservoir,Site)))
-  #   sites_merged = sites%>% #Filter to Sites that are in the dataframe
-  #     mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-  #     filter(res_site%in%data_res_site$res_site)%>%
-  #     select(-res_site)
-  # }
-  # sites_trimmed = trim_sites(data,sites) 
-  # write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
+
+# Convert DateTime to a character
+# convert datetimes to characters so that they are properly formatted in the output file
+ current_df$DateTime <- as.character(format(current_df$DateTime))
+
+# Need to decide on a naming convention for this file
+write_csv(current_df, "isco_2019_2024.csv")
+
+```
+
+
+
+```{r Download and save Maintenance Log, eval=FALSE, include=FALSE}
+
+# This chunkt to download files needs to be run by itself. Just click on the green arrow to download the files. 
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv", "metals_maintenancelog_2014_2024.csv")
+
+## Maybe we want to take out the ISCO observations in the maintenance log
+ maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+                    show_col_types = FALSE)|>
+  filter(Site == 100.1)
+ 
+ # save the csv without ISCO samples in maint log
+ 
+ write.csv(maint, "isco_maintenancelog_2019_2024.csv")
+
+# qaqc function
+# update link when change the location of the script
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R", "isco_qaqc_2014_2024.R")
+
+
+# Anything else that needs to be added? MDL file?
+
+
+```
+
+### Make a site description file
+
+```{r Make site description file, eval=FALSE, include=FALSE}
+ # These lines of code make the csv of the site descriptions with lat and long. To generate the site description file, click the green arrow on the right. 
+
+  # Use Gsheet because you don't need to authenticate it. 
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
+  data <- current_df #This is the line you need to modify!
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  sites_trimmed = trim_sites(data,sites) 
+  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
 
 ```
 

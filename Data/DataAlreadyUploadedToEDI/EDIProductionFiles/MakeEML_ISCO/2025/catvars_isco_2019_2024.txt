@@ -3,9 +3,9 @@ Flag_Cumulative_flow_L	0	no issues
 Flag_Concentration_mgL	0	no issues
 Flag_Cumulative_flow_L	1	sample not taken
 Flag_Concentration_mgL	1	sample not taken
-Flag_Cumulative_flow_L	2	flow over top of weir
+Flag_Cumulative_flow_L	2	over 10% of observations were over top of weir 
 Flag_Concentration_mgL	3	sample below MRL and set to MRL 
-Flag_Cumulative_flow_L	3	more than 1000 missing water level observations
+Flag_Cumulative_flow_L	4	more than 60 missing water level observations
 Flag_Concentration_mgL	6	non-standard method 
 Flag_Concentration_mgL	7	sample run multiple times and values averaged
 Flag_Concentration_mgL	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
@@ -26,3 +26,65 @@ Element_name	TMn_mgL	Total manganese
 Element_name	TCu_mgL	Total copper
 Element_name	TSr_mgL	Total strontium 
 Element_name	TBa_mgL	Total barium 
+Flag_Load_kg	0	no issues
+Flag_Load_kg	1	sample not taken
+Flag_Load_kg	2	over 10% of observations were over top of weir 
+Flag_Load_kg	3	sample below MRL and set to MRL 
+Flag_Load_kg	4	more than 60 missing water level observations
+Flag_Load_kg	6	non-standard method 
+Flag_Load_kg	7	sample run multiple times and values averaged
+Flag_Load_kg	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_Load_kg	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_Load_kg	12	sample not taken and over 10% of observations were over top of weir
+Flag_Load_kg	14	sample not taken and more than 60 missing water level observations
+Flag_Load_kg	23	over 10% of observations were over top of weir  and sample below MRL and set to MRL
+Flag_Load_kg	236	"over 10% of observations were over top of weir , sample below MRL and set to MRL, and non-standard method"
+Flag_Load_kg	2368	"over 10% of observations were over top of weir , sample below MRL and set to MRL, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kg	7	sample run multiple times and values averaged
+Flag_Load_kg	3	sample below MRL and set to MRL 
+Flag_Load_kg	2	over 10% of observations were over top of weir 
+Flag_Load_kg	6	non-standard method
+Flag_Load_kg	46	more than 60 missing water level observations and non-standard method
+Flag_Load_kg	34	sample below MRL and set to MRL and more than 60 missing water level observations
+Flag_Load_kg	36	sample below MRL and set to MRL and non-standard method
+Flag_Load_kg	468	"more than 60 missing water level observations, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kg	26	over 10% of observations were over top of weir and non-standard method
+Flag_Load_kg	268	"over 10% of observations were over top of weir, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kg	246	"over 10% of observations were over top of weir, more than 60 missing water level observations, and non-standard method"
+Flag_Load_kg	2468	"over 10% of observations were over top of weir, more than 60 missing water level observations, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kg	24	over 10% of observations were over top of weir and more than 60 missing water level observations
+Flag_Load_kg	13	sample not taken and sample below MRL and set to MRL
+Flag_Load_kg	463	"more than 60 missing water level observations, non-standard method, and sample below MRL and set to MRL"
+Flag_Load_kg	243	"over 10% of observations were over top of weir, more than 60 missing water level observations, and sample below MRL and set to MRL"
+Flag_Load_kg	163	"sample not taken, non-standard method, and sample below MRL and set to MRL"
+Flag_Load_kgD	0	no issues
+Flag_Load_kgD	1	sample not taken
+Flag_Load_kgD	2	over 10% of observations were over top of weir 
+Flag_Load_kgD	3	sample below MRL and set to MRL 
+Flag_Load_kgD	4	more than 60 missing water level observations
+Flag_Load_kgD	6	non-standard method 
+Flag_Load_kgD	7	sample run multiple times and values averaged
+Flag_Load_kgD	8	abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_Load_kgD	68	non-standard method and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset
+Flag_Load_kgD	12	sample not taken and over 10% of observations were over top of weir
+Flag_Load_kgD	14	sample not taken and more than 60 missing water level observations
+Flag_Load_kgD	23	over 10% of observations were over top of weir  and sample below MRL and set to MRL
+Flag_Load_kgD	236	"over 10% of observations were over top of weir , sample below MRL and set to MRL, and non-standard method"
+Flag_Load_kgD	2368	"over 10% of observations were over top of weir , sample below MRL and set to MRL, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kgD	7	sample run multiple times and values averaged
+Flag_Load_kgD	3	sample below MRL and set to MRL 
+Flag_Load_kgD	2	over 10% of observations were over top of weir 
+Flag_Load_kgD	6	non-standard method
+Flag_Load_kgD	46	more than 60 missing water level observations and non-standard method
+Flag_Load_kgD	34	sample below MRL and set to MRL and more than 60 missing water level observations
+Flag_Load_kgD	36	sample below MRL and set to MRL and non-standard method
+Flag_Load_kgD	468	"more than 60 missing water level observations, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kgD	26	over 10% of observations were over top of weir and non-standard method
+Flag_Load_kgD	268	"over 10% of observations were over top of weir, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kgD	246	"over 10% of observations were over top of weir, more than 60 missing water level observations, and non-standard method"
+Flag_Load_kgD	2468	"over 10% of observations were over top of weir, more than 60 missing water level observations, non-standard method, and abnormally high concentration that is greater than 3 sd above the mean but is kept in the dataset"
+Flag_Load_kgD	24	over 10% of observations were over top of weir and more than 60 missing water level observations
+Flag_Load_kgD	13	sample not taken and sample below MRL and set to MRL
+Flag_Load_kgD	463	"more than 60 missing water level observations, non-standard method, and sample below MRL and set to MRL"
+Flag_Load_kgD	243	"over 10% of observations were over top of weir, more than 60 missing water level observations, and sample below MRL and set to MRL"
+Flag_Load_kgD	163	"sample not taken, non-standard method, and sample below MRL and set to MRL"

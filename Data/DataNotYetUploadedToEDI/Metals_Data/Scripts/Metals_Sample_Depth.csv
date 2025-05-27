@@ -71,3 +71,7 @@ Sample,Reservoir,Sample Depth (m),Filter,Site
 70,BVR,8.0,S,50
 71,FCR,0.1,T,1
 72,FCR,0.1,S,1
+73,BVR,7.0,T,50
+74,BVR,7.0,S,50
+75,BVR,5.0,T,50
+76,BVR,5.0,S,50

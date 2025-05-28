@@ -353,7 +353,8 @@ ggplotly(p)
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file
- current_df$DateTime <- as.character(format(current_df$DateTime))
+ current_df$Collection_start_time <- as.character(format(current_df$Collection_start_time))
+ current_df$Collection_end_time <- as.character(format(current_df$Collection_end_time))
 
 # Need to decide on a naming convention for this file
 write_csv(current_df, "isco_2019_2024.csv")

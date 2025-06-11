@@ -149,7 +149,7 @@ make_eml(
   other.entity.description = c("QAQC script which takes the output from sample collection and analysis, cleans data, and flags errant data", 'Script that uses isco_qaqc_2019_2024.R script to create the final dataframe and plots the data'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1308.8') # This package identifier is only for the staging environment
+  package.id = 'edi.1308.9') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

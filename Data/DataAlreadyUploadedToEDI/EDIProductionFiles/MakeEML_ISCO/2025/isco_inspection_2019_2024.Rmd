@@ -112,25 +112,30 @@ last_row <- head(sd, n=1)
     # Depth
     Dep <- as.numeric(last_row$Depth_m)
     
-    # Filter
-    Filt <- last_row$Filter
+     # Filter
+     Filt <- last_row$Filter
 
-
-### Get the names of the columns affected by maintenance
-    colname_start <- last_row$start_parameter
-    colname_end <- last_row$end_parameter
+    ### Get the names of the columns affected by maintenance
+    # Add the correct prefix (e.g., "T") to match current_df$Element_name
+    colname_start <- paste0(Filt, last_row$start_parameter)
+    colname_end   <- paste0(Filt, last_row$end_parameter)
     
      # What we want to filter from 
-    
-    check <- (as.Date(current_df$DateTime) %in% start & 
+    check <- (as.Date(current_df$Collection_start_time) %in% start & 
             current_df$Reservoir %in% Res & 
               current_df$Site %in% Sit &
-              current_df$Depth_m %in% Dep) 
+              current_df$Depth_m %in% Dep &
+              current_df$Element_name %in% c(colname_start, colname_end)) 
+    
+    # # Make list of just the columns we want 
+    # 
+    # test <- colnames(current_df%>%select(Reservoir,Site, Collection_start_time, Depth_m, Element_name, Concentration_mgL, paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
     
     # Make list of just the columns we want 
-    
-    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
-    
+test <- c("Reservoir", "Site", "Collection_start_time", "Depth_m",
+          "Element_name", "Concentration_mgL", "Flag_Concentration_mgL",
+          "Load_kg", "Flag_Load_kg",
+          "Load_kgD", "Flag_Load_kgD")
     
 
 # Print the head of the table to make sure that data are flagged
@@ -163,20 +168,32 @@ last_row <- tail(sd, n=1)
 
 
 ### Get the names of the columns affected by maintenance
-    colname_start <- last_row$start_parameter
-    colname_end <- last_row$end_parameter
+# Add the correct prefix (e.g., "T") to match current_df$Element_name
+colname_start <- paste0(Filt, last_row$start_parameter)
+colname_end   <- paste0(Filt, last_row$end_parameter)
     
     
-    # What we want to filter from 
+    # What we want to filter from
+    # check <- (as.Date(current_df$Collection_start_time) %in% start & 
+    #         current_df$Reservoir %in% Res & 
+    #           current_df$Site %in% Sit &
+    #           current_df$Depth_m %in% Dep &
+    #           current_df$Element_name %in% c(colname_start, colname_end))
     
-    check <- (as.Date(current_df$DateTime) %in% start & 
-            current_df$Reservoir %in% Res & 
-              current_df$Site %in% Sit &
-              current_df$Depth_m %in% Dep) 
+    check <- (current_df$Reservoir == Res &
+          current_df$Site == Sit &
+          current_df$Depth_m == Dep &
+          current_df$Element_name %in% c(colname_start, colname_end))
     
-    # Make list of just the columns we want 
+    # # Make list of just the columns we want 
+    # 
+    # test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
     
-    test <- colnames(current_df%>%select(Reservoir,Site, DateTime, Depth_m,paste0(Filt, colname_start), paste0("Flag_",Filt,colname_start), paste0(Filt,colname_end), paste0("Flag_", Filt,colname_end)))
+        # Make list of just the columns we want 
+test <- c("Reservoir", "Site", "Collection_start_time", "Depth_m",
+          "Element_name", "Concentration_mgL", "Flag_Concentration_mgL",
+          "Load_kg", "Flag_Load_kg",
+          "Load_kgD", "Flag_Load_kgD")
     
     # Print the head of the table to make sure that data are flagged
     

@@ -188,7 +188,7 @@ last_row <- tail(sd, n=1)
 ## QAQC Plots
 
 
-```{r Plots load_kg}
+```{r Plots concentration}
 # Filter data with valid loads
 plot_df <- current_df %>%
   mutate(Year = lubridate::year(Collection_start_time))
@@ -200,7 +200,7 @@ elements <- unique(plot_df$Element_name)
 for (el in elements) {
   p <- plot_df %>%
     filter(Element_name == el) %>%
-    ggplot(aes(x = Collection_start_time, y = Load_kg)) +
+    ggplot(aes(x = Collection_start_time, y = Concentration_mgL, color = as.factor(Flag_Concentration_mgL))) +
     geom_point() +
     facet_wrap(~ Year, scales = "free_x") +  # allow each year to have its own x-axis
     labs(
@@ -234,7 +234,7 @@ elements <- unique(plot_df$Element_name)
 for (el in elements) {
   p <- plot_df %>%
     filter(Element_name == el) %>%
-    ggplot(aes(x = Collection_start_time, y = Load_kgD)) +
+    ggplot(aes(x = Collection_start_time, y = Load_kgD, color = Flag_Load_kgD)) +
     geom_point() +
     facet_wrap(~ Year, scales = "free_x") +  # allow each year to have its own x-axis
     labs(
@@ -389,25 +389,4 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Sc
 
 ```
 
-### Make a site description file
-
-```{r Make site description file, eval=FALSE, include=FALSE}
- # These lines of code make the csv of the site descriptions with lat and long. To generate the site description file, click the green arrow on the right. 
-
-  # Use Gsheet because you don't need to authenticate it. 
-  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
-  #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
-  data <- current_df #This is the line you need to modify!
-  trim_sites = function(data,sites){
-    data_res_site=data%>% #Create a Reservoir/Site combo column
-      mutate(res_site = trimws(paste0(Reservoir,Site)))
-    sites_merged = sites%>% #Filter to Sites that are in the dataframe
-      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
-      filter(res_site%in%data_res_site$res_site)%>%
-      select(-res_site)
-  }
-  sites_trimmed = trim_sites(data,sites) 
-  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
-
-```
 

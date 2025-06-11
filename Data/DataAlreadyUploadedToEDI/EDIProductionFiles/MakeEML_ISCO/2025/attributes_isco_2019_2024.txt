@@ -3,7 +3,7 @@ Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	
 Site	Sampling site within each reservoir	categorical			NA	value is missing
 Depth_m	Depth of sample collection (from surface)	numeric	meter		NA	value is missing
 Collection_start_time	"Date and time of when the ISCO started and the start of the cumulative flow. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Collection_end_time	"Date and time of the end of the ISCO sampling period when the sample was collected and the cumulative flow ended. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+Collection_end_time	Date and time of the end of the ISCO sampling period when the sample was collected and the cumulative flow ended. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Cumulative_flow_L	cumulative flow 	numeric	liter		NA	value is missing
 Total_waterlevel_obs	The number of water level observations collected over the sampling period	numeric	dimensionless		NA	value is missing
 Element_name	name of element	categorical			NA	value is missing

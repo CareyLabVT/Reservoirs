@@ -149,7 +149,7 @@ make_eml(
   other.entity.description = c("QAQC script which takes the output from sample collection and analysis, cleans data, and flags errant data", 'Script that uses isco_qaqc_2019_2024.R script to create the final dataframe and plots the data'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1308.8') # This package identifier is only for the staging environment
+  package.id = 'edi.1308.10') # This package identifier is only for the staging environment
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -192,13 +192,13 @@ make_eml(
   dataset.title = "Time series of total metal and nutrient loads into Falling Creek Reservoir in southwestern Virginia, USA from 2019-2024",
   temporal.coverage = c("2019-06-06", "2024-11-19"),
   maintenance.description = 'ongoing',
-  data.table = c("isco_2019_2024.csv", 'site_descriptions.csv', 'isco_maintenancelog_2019_2024.csv'),
-  data.table.description = c("Cumulative flow and total metal and nutrient loads","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
+  data.table = c("isco_2019_2024.csv", "isco_maintenancelog_2019_2024.csv"),
+  data.table.description = c("Cumulative flow and total metal and nutrient loads", 'Log describing dataset maintenance'),
   other.entity = c('isco_qaqc_2019_2024.R', 'isco_inspection_2019_2024.Rmd'),
-  other.entity.description = c("QAQC script which takes the output from sample collection and analysis, cleans data, and flags errant data", 'Script that uses isco_qaqc_2019_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+  other.entity.description = c("QAQC script which takes the output from sample collection and analysis, cleans data, and flags errant data", 'Script that uses isco_qaqc_2019_2024.R script to create the final dataframe and plots the data'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.455.9') # This is the package identifer for the production environment
+  package.id = 'edi.2035.1') # This is the package identifer for the production environment
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

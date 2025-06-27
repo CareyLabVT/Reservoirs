@@ -68,14 +68,7 @@ processed_files <- sub(".csv", ".txt", list.files("processed_csvs"))
 #Compare these two to figure out which files still need to be processed
 files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
-files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0112.txt",
-                                                              "gga_2001-12-31_f0113.txt",
-							                                                "gga_2001-12-31_f0114.txt",
-                                                              "gga_2001-12-31_f0116.txt",
-                                                              "gga_2001-12-31_f0119.txt",
-                                                              "gga_2001-12-31_f0123.txt",
-                                                              "gga_2001-12-31_f0136.txt",
-                                                              "gga_2001-12-31_f0161.txt")] # very messy and doesn't seem usable
+files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0202.txt")] # very messy and doesn't seem usable
 
 
 ## RUN THE PROCESSING!!

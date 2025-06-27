@@ -1,16 +1,18 @@
-﻿file,Reservoir,Date,Time,Site,Note
-gga_2001-12-31_f0187,FCR,2/24/25,11:30,50,
-gga_2001-12-31_f0189,FCR,3/10/25,12:59,50,
-gga_2001-12-31_f0190,FCR,3/17/25,10:33,50,didn’t save?
-gga_2001-12-31_f0192,FCR,3/17/25,11:10,50,
-gga_2001-12-31_f0194,FCR,3/24/25,11:20,50,
-gga_2001-12-31_f0195,FCR,3/31/25,14:20,50,
-gga_2001-12-31_f0196,FCR,4/7/25,,50,"inferred filename from order, was orignially blank"
-gga_2001-12-31_f0197,FCR,4/14/25,11:40,50,windy
-gga_2001-12-31_f0198,FCR,4/21/25,11:17,50,windy
-gga_2001-12-31_f0199,FCR,4/28/25,11:25,50,
-gga_2001-12-31_f0200,FCR,5/5/25,11:24,50,
-gga_2001-12-31_f0201,FCR,5/19/25,12:49,50,breezy
-gga_2001-12-31_f0202,FCR,5/26/25,,50,"no time marked, file name may also be f0203, ratchet strap gone"
-gga_2001-12-31_f0205,FCR,6/2/25,9:26,50,still no ratchet strap
-gga_2001-12-31_f0209,FCR,6/9/25,11:14,50,still no ratchet strap
+file,Reservoir,Date,Time,Site,Note
+gga_2001-12-31_f0187,FCR,2/24/2025,11:30,50,
+gga_2001-12-31_f0189,FCR,3/10/2025,12:59,50,
+gga_2001-12-31_f0190,FCR,3/17/2025,10:33,50,didn’t save?
+gga_2001-12-31_f0192,FCR,3/17/2025,11:10,50,
+gga_2001-12-31_f0194,FCR,3/24/2025,11:20,50,
+gga_2001-12-31_f0195,FCR,3/31/2025,14:20,50,
+gga_2001-12-31_f0196,FCR,4/7/2025,,50,"inferred filename from order, was orignially blank"
+gga_2001-12-31_f0197,FCR,4/14/2025,11:40,50,windy
+gga_2001-12-31_f0198,FCR,4/21/2025,11:17,50,windy
+gga_2001-12-31_f0199,FCR,4/28/2025,11:25,50,
+gga_2001-12-31_f0200,FCR,5/5/2025,11:24,50,
+gga_2001-12-31_f0201,FCR,5/19/2025,12:49,50,breezy
+gga_2001-12-31_f0203,FCR,5/26/2025,,50,"no time marked, file name may also be f0203, ratchet strap gone"
+gga_2001-12-31_f0205,FCR,6/2/2025,9:26,50,still no ratchet strap
+gga_2001-12-31_f0209,FCR,6/9/2025,11:14,50,still no ratchet strap
+gga_2001-12-31_f0210,FCR,6/16/2025,11:30,50,
+gga_2001-12-31_f0217,FCR,6/23/2025,10:35,50,

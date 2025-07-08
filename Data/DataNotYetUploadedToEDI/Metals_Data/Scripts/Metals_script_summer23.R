@@ -1,4 +1,4 @@
-
+#this is out of date! :)
 ##MODIFY FOR EACH DATASHEET**
 #after receiving the Excel sheet from Jeff, save only the Schreiber lab data in a csv file
 #the sheet with reservoir data should be named after the person who submitted samples

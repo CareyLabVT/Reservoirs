@@ -1,0 +1,190 @@
+---
+title: "WVWA_FCR_cells_concentration"
+author: "Adrienne"
+date: "2025-07-10"
+output: html_document
+---
+
+Let's try to relate the algae counts from the WVWA to the Fluoroprobe because we have overlapping observations from 2014 and 2015. Then we can relate flora to EXO. It isn't great but it is something
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, gsheet)
+```
+
+
+```{r load data}
+
+# load in the WVWA data from FCR
+
+FCR_WVWA_cells <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1d1WL4bh-2NnXICuJo0CB8YrMrUwxZ-L7oIr0CgLNIao/")
+
+# load in the Flora data 
+
+flora <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/272/9/f246b36c591a888cc70ebc87a5abbcb7")
+
+# Load EXO data 
+
+# read in the EXO data and select the columns we want
+
+EXO_chla <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/271/9/f23d27b67f71c25cb8e6232af739f986")|>
+  select(DateTime, EXOChla_RFU_1, EXOChla_ugL_1)
+
+# Make a vector of the column names in Flora for averaging
+cols <- c("GreenAlgae_ugL", "Bluegreens_ugL", "BrownAlgae_ugL", "MixedAlgae_ugL", "TotalConc_ugL",       "YellowSubstances_ugL", "Transmission_perc", "RFU_370nm", "RFU_470nm", "RFU_525nm",           "RFU_570nm", "RFU_590nm", "RFU_610nm")
+
+```
+
+```{r clean data}
+
+# Just the cell counts from 2014 and 2015 when we have the Flora
+FCR_cells_14_15 <- FCR_WVWA_cells|>
+  select(`Sample date`, `Depth (m)`, `Algae (cells/mL)`)|>
+   mutate(Date = as.Date(lubridate::parse_date_time(`Sample date`, orders = c('mdy'))),
+         Algae_cells_mL = as.numeric(`Algae (cells/mL)`),
+         Depth_m = round(`Depth (m)`, digits = 1))|>
+  select(Date, Depth_m, Algae_cells_mL)|>
+  filter(Date > as.Date("2014-01-01") & Date < as.Date("2020-01-01") & Depth_m > 1)
+  
+
+# Clean the Flora data so it is just 2014 and 2015
+
+Flora_FCR_14_15 <- flora|>
+  filter(Reservoir == "FCR" & Site == 50 & DateTime > as.Date("2014-01-01") & DateTime < as.Date("2018-04-01"))|>
+  select(-starts_with("Flag"))|>
+  mutate(Date = as.Date(DateTime),
+         Depth_m = round(Depth_m, digits = 1))|>
+  filter(Depth_m %in% c(1.5, 3.7, 6.1))|>
+  group_by(Date, Depth_m, Reservoir, Site)|>
+  summarise(across(all_of(cols), mean, .names = "mean_{.col}"))|>
+  ungroup()
+  
+
+
+```
+
+```{r Line up depths}
+
+# Lets just see what we have for possible sample over lap
+
+Date_flora <- Flora_FCR_14_15|>
+  mutate(Date = as.Date(DateTime))|>
+  select(Date)|>
+  unique()|>
+  mutate(type = "FLORA",
+         start = Date -3, 
+         end = Date + 3)
+
+Date_counts <- FCR_cells_14_15|>
+  select(Date)|>
+  unique()|>
+  mutate(type = "COUNT",
+         start = Date -3, 
+        end = Date + 3)
+
+overlap <- merge(Date_flora, Date_counts, by = "Date", all = T) # Looks like there is some overlap
+
+```
+
+```{r Find the closet counts and Flora reads}
+
+# Merge the data frames by closest date
+
+ by <- join_by(closest(x$Date >= y$Date), Depth_m)
+Flora_cells <- full_join(FCR_cells_14_15, Flora_FCR_14_15, by)
+
+Flora_cells$sum <- Flora_cells$Date.x- Flora_cells$Date.y
+
+Flora_cells2 <- Flora_cells|>
+  filter(sum < 5 & mean_GreenAlgae_ugL<45)# remove observations that were over 5 days apart and the high value on the Flora that we didn't see in the cell counts. 
+
+```
+
+```{r Plots}
+
+# Let's look at Total Concentration first
+
+ ggplot(Flora_cells2, aes(x= TotalConc_ugL, y = Algae_cells_mL))+
+   geom_point()+
+   theme_bw()
+  
+# Does Green Algae look any better? 
+ ggplot(Flora_cells2, aes(x= mean_GreenAlgae_ugL, y = Algae_cells_mL))+
+   geom_point()+
+   theme_bw()
+ 
+ # linear relationship
+ 
+ lm_cells <- lm(Flora_cells2$Algae_cells_mL ~ Flora_cells2$mean_GreenAlgae_ugL)
+ 
+ summary(lm_cells)
+ 
+ # This is just with 2014-2015 data.  There is a decent R squared (0.44)to give us something to go on. The R squared for Total concentration was 0.1.# cells = (green_algae*264792) + 790291
+ 
+ # Updated it with 2014-2018 data. The R squared adjusted is 0.308.  
+ # cells = (green_algae*16562) + 1109473
+ 
+ 
+
+```
+
+```{r Flora and the EXO}
+# Now determine the relationship between green algae and the EXO 
+# Green_Algae = (EXO_ugL*x)+ int
+
+# let's go from the EXO chla concentration to Flora concentration and then can get Flora concentration to cells per L or mL concentration
+
+# get Flora probe observation closest to 1.6m after "2019-05-21"
+
+flora_1.6 <- flora|>
+  filter(Reservoir=="FCR" & Site ==50)|>
+  mutate(round_depth = plyr::round_any(Depth_m, 0.1))|>
+  filter(DateTime>as.Date("2018-05-21") & round_depth ==1.6)|>
+  mutate(DateTime = round_date(DateTime, unit="10 mins"))|>
+  select(-CastID, CastID, Depth_m, Temp_C)|>
+  group_by(DateTime, round_depth, Reservoir, Site)|>
+  summarise(across(all_of(cols), mean, .names = "mean_{.col}"))|>
+  ungroup()
+
+
+# merge the flora data with the EXO data
+
+flora_EXO <- merge(flora_1.6, EXO_chla, by = "DateTime")|>
+  mutate(Year = year(DateTime))
+```
+
+```{r EXO to Flora Plots and lm}
+
+
+# Plot the green algae 
+ggplot(flora_EXO, aes(x = EXOChla_ugL_1, y = mean_GreenAlgae_ugL, color = as.factor(Year)))+
+  geom_point()+
+  theme_bw()
+
+# linear relationship between the EXO and the Green Algae from the Flora
+lm <- lm(flora_EXO$mean_GreenAlgae_ugL ~ flora_EXO$EXOChla_ugL_1)
+
+summary(lm)
+
+# R squared (0.41) not bad 
+
+# GreenAlgae = (EXO_ugL* 0.707) + 2.51
+
+# old one using data from 2014-2015 
+#cells = (((EXO_ugL* 0.707) + 2.51)*264792) + 790291
+
+# updated with data from 2014-2018 
+
+# cells = (((EXO_ugL* 0.707) + 2.51)*16562) + 1109473
+
+```
+
+```{r data frame with Concentration and cells}
+
+# Make a data frame with Cells
+
+EXO_chla_cells <- EXO_chla|>
+  mutate(Cells_mL = (((EXOChla_ugL_1* 0.707) + 2.51)*16562) + 1109473)
+
+```

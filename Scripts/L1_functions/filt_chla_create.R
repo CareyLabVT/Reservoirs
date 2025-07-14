@@ -47,7 +47,7 @@ filt_chla_qaqc <- function(directory,
   # sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg"
   # outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
   # start_date = NULL
-  # end_date = NULL
+  #  end_date = NULL
   
  #packages
   pacman::p_load(tidyverse, gsheet,arsenal)
@@ -333,6 +333,9 @@ min_samp_date <- min(a$Sample_date)
   ### 4.1 Set up the Values to be used 
   # modify raw_df based on the information in the log   
   
+  # Skip the maintenance log if there are no observations in it for the current year. 
+  if(nrow(log)>0){
+  
   for(i in 1:nrow(log)){
     
     ### Get the date the samples were processed
@@ -417,7 +420,9 @@ min_samp_date <- min(a$Sample_date)
     next
   }
   
-  
+  } else{
+    print("No items in the maintenance log during the current period. If you expect items in the maintenanc log, stop and check the maintenance log and script.")
+  } 
   
   ### 5. Get the Chla concentration from wavelengths from Spec 
   print("Check the samples before calculating chla concentration.")

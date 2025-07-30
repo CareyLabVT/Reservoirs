@@ -188,3 +188,137 @@ EXO_chla_cells <- EXO_chla|>
   mutate(Cells_mL = (((EXOChla_ugL_1* 0.707) + 2.51)*16562) + 1109473)
 
 ```
+```{r Check surface cell counts}
+# Just the cell counts from 2014 and 2015 when we have the Flora
+FCR_cells_14_18_surface <- FCR_WVWA_cells|>
+  select(`Sample date`, `Depth (m)`, `Algae (cells/mL)`)|>
+   mutate(Date = as.Date(lubridate::parse_date_time(`Sample date`, orders = c('mdy'))),
+         Algae_cells_mL = as.numeric(`Algae (cells/mL)`),
+         Depth_m = round(`Depth (m)`, digits = 1))|>
+  select(Date, Depth_m, Algae_cells_mL)|>
+  filter(Date > as.Date("2014-01-01") & Date < as.Date("2020-01-01") & Depth_m == 0)
+  
+
+# Clean the Flora data so it is just 2014 and 2015
+
+Flora_FCR_14_18 <- flora|>
+  filter(Reservoir == "FCR" & Site == 50 & DateTime > as.Date("2014-01-01") & DateTime < as.Date("2018-04-01"))|>
+  select(-starts_with("Flag"))|>
+  mutate(Date = as.Date(DateTime),
+         Depth_m = round(Depth_m, digits = 1))|>
+  #filter(Depth_m %in% c(0))|>
+  group_by(Date, Depth_m, Reservoir, Site)|>
+  summarise(across(all_of(cols), mean, .names = "mean_{.col}"))|>
+  ungroup()
+
+# get the minimum depth for each cast
+Flora_FCR_14_18_surface <- Flora_FCR_14_18|>
+  group_by(Date, Reservoir, Site) |>
+  slice(1, n())|>
+  ungroup()|>
+  filter(Depth_m<1)
+
+# combine data frames with the closest date. 
+  
+ by <- join_by(closest(x$Date >= y$Date))
+Flora_cells_surface <- full_join(FCR_cells_14_18_surface, Flora_FCR_14_18_surface, by)
+
+Flora_cells_surface$sum <- Flora_cells_surface$Date.x- Flora_cells_surface$Date.y
+
+Flora_cells2_surface <- Flora_cells_surface|>
+  filter(sum < 5)# remove observations that were over 5 days apart and the high value on the Flora that we didn't see in the cell counts. 
+
+# Let's look at the plot. Chose Total Concentration since the surface bloom in FCR in 2024 was all classified as BlueGreen Algae on the Fluoroprobe, so we were not able to capture it with using just the Green Algae. 
+
+ggplot(Flora_cells2_surface, aes(x = mean_TotalConc_ugL, y = Algae_cells_mL))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)+
+  theme_bw()
+
+ # linear relationship for surface concentrations on Fluoroprobe to cells/mL
+ 
+ lm_cells_surface <- lm(Flora_cells2_surface$Algae_cells_mL ~ Flora_cells2_surface$mean_TotalConc_ugL)
+ 
+ summary(lm_cells_surface)
+ 
+ # R squared is 0.1 but it will do
+ 
+ #Algae = (GreenAlgae*121443) + 1210652
+
+```
+
+```{r Get cell counts for the surface}
+
+ # Get the surface concentrations from the Flora for 
+ # 1. July 1, 2015
+ # 2. July 1, 2019
+ # 3. July 1, 2024
+ 
+ # 1. July 1, 2015
+ 
+ July_2015_surface<- Flora_cells2_surface|>
+   filter(Date.x == as.Date("2015-06-30"))
+
+print("2015-07-01 from the WVWA counted cells and the closest Fluoroprobe cast.")
+ 
+ print(c(July_2015_surface$Algae_cells_mL, July_2015_surface$mean_TotalConc_ugL))
+ 
+ # 2. July 1, 2019 
+ 
+ # Find the closest FLoroprobe cast to the date
+ 
+ flora_FCR_date <- flora|>
+   filter(Reservoir == "FCR" & Site ==50)|>
+   mutate(Date = as.Date(DateTime))|>
+   select(Date)|>
+   unique()
+ 
+ # date closest to
+ x = as.Date("2019-07-01")
+ 
+ b <- which(abs(flora_FCR_date$Date-x) == min(abs(flora_FCR_date$Date - x)))
+ 
+ date_close <- flora_FCR_date$Date[b]
+ 
+ flora_close_2019 <- flora|>
+   filter(Reservoir == "FCR" & Site == 50)|>
+   mutate(Date = as.Date(DateTime))|>
+   filter(Date == date_close)|>
+   filter(Depth_m<0.4)
+ 
+ # put in regression to get cells
+ 
+  total <-  mean(flora_close_2019$TotalConc_ugL, rm.na = T)
+  
+  print("2019-07-01 total algae concentration and cell counts")
+  
+  print(total)
+  
+ print((total*121443) +  1210652)
+ 
+  # 3. July 1, 2024 
+ 
+ # date closest to
+ x = as.Date("2024-07-01")
+ 
+ b <- which(abs(flora_FCR_date$Date-x) == min(abs(flora_FCR_date$Date - x)))
+ 
+ date_close <- flora_FCR_date$Date[b]
+ 
+ flora_close_2019 <- flora|>
+   filter(Reservoir == "FCR" & Site == 50)|>
+   mutate(Date = as.Date(DateTime))|>
+   filter(Date == date_close)|>
+   filter(Depth_m<0.4)
+ 
+ # put in regression to get cells
+ 
+   total <-  mean(flora_close_2019$TotalConc_ugL, rm.na = T)
+   
+  print("2024-07-01") 
+  
+  print(total)
+  
+ print((total*121443) +  1210652)
+
+```

@@ -749,6 +749,7 @@ if (nrow(check_turbidity)>0){
     drop_na(Chla)|>
     select(Reservoir, Site, DateTime, Time, Depth_m)
   
+  samp_times$Site <-as.numeric(samp_times$Site)
   
   # merge the chla sample with sample times
   

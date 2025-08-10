@@ -17,11 +17,11 @@
 # 7. Save files
 
 # Download/load libraries
-pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2)
+pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2, arsenal)
 
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
-package_ID <- 'edi.555.4'
+package_ID <- 'edi.555.5'
 eml <- read_metadata(package_ID)
 date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
 last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
@@ -39,7 +39,7 @@ filt_chla_qaqc(
   blank_vol_filt = 500,
   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
   historic_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
-  sample_times =  "https://docs.google.com/spreadsheets/d/1NKnIM_tjMxMO0gVxzZK_zVlUSQrdi3O7KqnyRiXo4ps", 
+  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg", 
   outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv",
   start_date =last_edi_date, # change when we update to read date from EDI
   end_date = Sys.Date() + lubridate::days(1))

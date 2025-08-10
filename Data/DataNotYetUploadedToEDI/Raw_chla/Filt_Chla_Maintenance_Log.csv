@@ -18,16 +18,16 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2023-12-05,F50, FiltChla, NA,2_a,2023-11-14,WL750.0,WL384.0,2, NA,ran too early for acid; rerun again after acid sat for 2 minutes
 2023-12-05,B50, FiltChla, NA,6_b,2023-11-14,WL750.0,WL384.0,2, NA,750 wave length too low so reran sample again and removed observation
 2023-12-05,F50, FiltChla, NA,19_b,2023-10-09,WL750.0,WL384.0,2, NA, didn't put the sample in! reran sample
-2024-08-22,NA,FiltChla,NA,21a,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
-2024-08-22,NA,FiltChla,NA,21b,NA,WL750.0,WL384.0,2,NA,"high blank value, probably filter residue in sample"
-2024-08-22,NA,FiltChla,NA,bufferedethanol,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
-2024-08-22,NA,FiltChla,NA,bufferedethanol2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
-2024-08-22,NA,FiltChla,NA,filteredblank2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol, remove completely"
+2024-08-22,NA,FiltChla,NA,21a,NA,WL750.0,WL384.0,2,NA,"high blank value; probably filter residue in sample"
+2024-08-22,NA,FiltChla,NA,21b,NA,WL750.0,WL384.0,2,NA,"high blank value; probably filter residue in sample"
+2024-08-22,NA,FiltChla,NA,bufferedethanol,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
+2024-08-22,NA,FiltChla,NA,bufferedethanol2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
+2024-08-22,NA,FiltChla,NA,filteredblank2,NA,WL750.0,WL384.0,2,NA,"buffered ethanol; remove completely"
 2024-08-22, F50, FiltChla, NA, 13b, 2024-01-29, WL750.0,WL384.0,2, NA, removed because sample didn't get acidified
 2024-08-22, F50, FiltChla, NA, 13_b_2, 2024-01-29, WL750.0,WL384.0,2, NA, removed because sample didn't get acidified 
 2024-08-22, F50, FiltChla, NA, 5b, 2024-04-01, WL750.0,WL384.0,2, NA, removed because reran the sample 
 2025-01-09, F50, FiltChla, DUP, a4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample
 2025-01-09, F50, FiltChla, DUP, b4, 2024-06-10,WL750.0,WL384.0,2, NA, removed because diluted and reran the sample 
 2025-01-10,NA,FiltChla, NA, b10, NA, WL750.0, WL384.0,2,NA, sample diluted and rerun
-2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0, 2, NA, remove because reran sample
-2025-01-13, S200, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label
+2025-01-10, C88, FiltChla, NA, b28, 2024-08-24, WL750.0, WL384.0,2, NA, remove because reran sample
+2025-01-13, S205, FiltChla, NA, a64a, 2024-07-25, WL750.0,WL384.0,2, NA, ran sample twice with the same values but different label

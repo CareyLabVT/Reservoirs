@@ -9,7 +9,7 @@ Script developed by HLW in 2023, edited by DWH in 2024-2025.
 NOTE! This script does not knit because it incorporates many steps of QAQC that will be
 moved in subsequent years to the maintenance log/Level 1 generation script
 
-NOTE TO REVIEWERS!!! After loading packages on lines 16-19 go to line 163 to begin data review
+NOTE TO REVIEWERS!!! After loading packages on lines 16-19 go to line 145 to begin data review
 
 
 ```{r setup, include=FALSE}
@@ -91,7 +91,12 @@ new_chem <- new_chem |>
   select(-Year)
 
 ##bind all chem together
-allchem <- rbind(old_chem, new_chem)
+allchem <- rbind(old_chem, new_chem) |> 
+  mutate(Flag_DIC_mgL = as.numeric(Flag_DIC_mgL),
+         Flag_DC_mgL = as.numeric(Flag_DC_mgL))
+
+#check no NAs in flags
+summary(allchem)
 
 ```
 
@@ -99,6 +104,9 @@ allchem <- rbind(old_chem, new_chem)
 
 
 ```{r remove suspect values from 2024 that need to be rerun}
+
+### Fix off flag for 2019 NO3 
+allchem$Flag_NO3NO2_ugL[as.Date(allchem$DateTime)=="2019-07-03" & allchem$Reservoir=="FCR" & allchem$Depth_m==1.6 & allchem$Site==50] <- 0
 
 ### manually remove samples from 2024 data pub to be published at a later date after reruns
 
@@ -121,40 +129,6 @@ allchem <- rbind(old_chem, new_chem)
 # allchem$Flag_DOC_mgL[as.Date(allchem$DateTime)=="2023-05-29" & allchem$Reservoir=="FCR" & allchem$Depth_m==0.1 & allchem$Site==100] <- 9
 
 
-###Flag udpates in case any were missed in edits
-
-#   # for loop to create flag columns
-  for(j in colnames(allchem%>%select(TNugL:DN_mgL))) { 
-    #for loop to create new columns in data frame
-    #catdata[,paste0("Flag_",colnames(catdata[j]))] <- 0 #creates flag column + name of variable
-    allchem[c(which(is.na(allchem[,j]))),paste0("Flag_",colnames(allchem[j]))] <-1 #puts in flag 1 if value not collected
-  }
-  
- 
-
-# ####replace NA flags with 0
-# allchem$Flag_DateTime[is.na(allchem$Flag_DateTime)] <- 0
-# allchem$Flag_TN_ugL[is.na(allchem$Flag_TN_ugL)] <- 0
-# allchem$Flag_TP_ugL[is.na(allchem$Flag_TP_ugL)] <- 0
-# allchem$Flag_NH4_ugL[is.na(allchem$Flag_NH4_ugL)] <- 0
-# allchem$Flag_NO3NO2_ugL[is.na(allchem$Flag_NO3NO2_ugL)] <- 0
-# allchem$Flag_SRP_ugL[is.na(allchem$Flag_SRP_ugL)] <- 0
-# allchem$Flag_DOC_mgL[is.na(allchem$Flag_DOC_mgL)] <- 0
-# allchem$Flag_DIC_mgL[is.na(allchem$Flag_DIC_mgL)] <- 0
-# allchem$Flag_DC_mgL[is.na(allchem$Flag_DC_mgL)] <- 0
-# allchem$Flag_DN_mgL[is.na(allchem$Flag_DN_mgL)] <- 0
-# 
-# 
-# #add a 1 flag for all NA samples
-# allchem$Flag_TN_ugL[is.na(allchem$TN_ugL)] <- 1
-# allchem$Flag_TP_ugL[is.na(allchem$TP_ugL)] <- 1
-# allchem$Flag_NH4_ugL[is.na(allchem$NH4_ugL)] <- 1
-# allchem$Flag_NO3NO2_ugL[is.na(allchem$NO3NO2_ugL)] <- 1
-# allchem$Flag_SRP_ugL[is.na(allchem$SRP_ugL)] <- 1
-# allchem$Flag_DOC_mgL[is.na(allchem$DOC_mgL)] <- 1
-# allchem$Flag_DIC_mgL[is.na(allchem$DIC_mgL)] <- 1
-# allchem$Flag_DC_mgL[is.na(allchem$DC_mgL)] <- 1
-# allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
 
 ```
 
@@ -164,11 +138,7 @@ allchem <- rbind(old_chem, new_chem)
 allchem <- allchem |> 
   arrange(Reservoir, DateTime, Site, Depth_m, Rep)
 
-write.csv(allchem, "Chemistry_2013_2024.csv", row.names = FALSE)
-
-#date format for 
-allchem$DateTime <- as.POSIXct(strptime(allchem$DateTime, "%Y-%m-%d %H:%M:%S"), tz = 'America/New_York')
-allchem$DateTime <- as.Date(allchem$DateTime, "%y-%m-%d %H:%M:%S")
+write.csv(allchem, "chemistry_2013_2024.csv", row.names = FALSE)
 
 ```
 
@@ -179,6 +149,7 @@ REVIEWERS START HERE!!!!!!
 ######## UPDATE LINK ###############
 #read in the most recent version on EDI staging to work with this version to check on data
 allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/16/2f8aea4de75a13fe6fde26f0d601fc70"  , col_types = cols())
+
 
 ```
 
@@ -270,7 +241,7 @@ bvr2024
 ```{r CCR plots current year}
 
 y2024 <-vars_to_plot %>%
-  map(plot_var, year = c(2024,2025), reservoirs = "CCR", data = allchem, site = c(50,51,88,90, 92,96,99,101,301))
+  map(plot_var, year = c(2024,2025), reservoirs = "CCR", data = allchem, site = c(50,51,88,90, 92,96,98,100,101,301))
 
 y2024
 

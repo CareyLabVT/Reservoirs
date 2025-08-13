@@ -16,7 +16,7 @@ NOTE TO REVIEWERS!!! After loading packages on lines 16-19 go to line 163 to beg
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, scales, viridis, plotly)
+pacman::p_load(tidyverse, lubridate, scales, viridis, plotly, gsheet)
 ```
 
 
@@ -123,29 +123,38 @@ allchem <- rbind(old_chem, new_chem)
 
 ###Flag udpates in case any were missed in edits
 
-####replace NA flags with 0
-allchem$Flag_DateTime[is.na(allchem$Flag_DateTime)] <- 0
-allchem$Flag_TN_ugL[is.na(allchem$Flag_TN_ugL)] <- 0
-allchem$Flag_TP_ugL[is.na(allchem$Flag_TP_ugL)] <- 0
-allchem$Flag_NH4_ugL[is.na(allchem$Flag_NH4_ugL)] <- 0
-allchem$Flag_NO3NO2_ugL[is.na(allchem$Flag_NO3NO2_ugL)] <- 0
-allchem$Flag_SRP_ugL[is.na(allchem$Flag_SRP_ugL)] <- 0
-allchem$Flag_DOC_mgL[is.na(allchem$Flag_DOC_mgL)] <- 0
-allchem$Flag_DIC_mgL[is.na(allchem$Flag_DIC_mgL)] <- 0
-allchem$Flag_DC_mgL[is.na(allchem$Flag_DC_mgL)] <- 0
-allchem$Flag_DN_mgL[is.na(allchem$Flag_DN_mgL)] <- 0
+#   # for loop to create flag columns
+  for(j in colnames(allchem%>%select(TNugL:DN_mgL))) { 
+    #for loop to create new columns in data frame
+    #catdata[,paste0("Flag_",colnames(catdata[j]))] <- 0 #creates flag column + name of variable
+    allchem[c(which(is.na(allchem[,j]))),paste0("Flag_",colnames(allchem[j]))] <-1 #puts in flag 1 if value not collected
+  }
+  
+ 
 
-
-#add a 1 flag for all NA samples
-allchem$Flag_TN_ugL[is.na(allchem$TN_ugL)] <- 1
-allchem$Flag_TP_ugL[is.na(allchem$TP_ugL)] <- 1
-allchem$Flag_NH4_ugL[is.na(allchem$NH4_ugL)] <- 1
-allchem$Flag_NO3NO2_ugL[is.na(allchem$NO3NO2_ugL)] <- 1
-allchem$Flag_SRP_ugL[is.na(allchem$SRP_ugL)] <- 1
-allchem$Flag_DOC_mgL[is.na(allchem$DOC_mgL)] <- 1
-allchem$Flag_DIC_mgL[is.na(allchem$DIC_mgL)] <- 1
-allchem$Flag_DC_mgL[is.na(allchem$DC_mgL)] <- 1
-allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
+# ####replace NA flags with 0
+# allchem$Flag_DateTime[is.na(allchem$Flag_DateTime)] <- 0
+# allchem$Flag_TN_ugL[is.na(allchem$Flag_TN_ugL)] <- 0
+# allchem$Flag_TP_ugL[is.na(allchem$Flag_TP_ugL)] <- 0
+# allchem$Flag_NH4_ugL[is.na(allchem$Flag_NH4_ugL)] <- 0
+# allchem$Flag_NO3NO2_ugL[is.na(allchem$Flag_NO3NO2_ugL)] <- 0
+# allchem$Flag_SRP_ugL[is.na(allchem$Flag_SRP_ugL)] <- 0
+# allchem$Flag_DOC_mgL[is.na(allchem$Flag_DOC_mgL)] <- 0
+# allchem$Flag_DIC_mgL[is.na(allchem$Flag_DIC_mgL)] <- 0
+# allchem$Flag_DC_mgL[is.na(allchem$Flag_DC_mgL)] <- 0
+# allchem$Flag_DN_mgL[is.na(allchem$Flag_DN_mgL)] <- 0
+# 
+# 
+# #add a 1 flag for all NA samples
+# allchem$Flag_TN_ugL[is.na(allchem$TN_ugL)] <- 1
+# allchem$Flag_TP_ugL[is.na(allchem$TP_ugL)] <- 1
+# allchem$Flag_NH4_ugL[is.na(allchem$NH4_ugL)] <- 1
+# allchem$Flag_NO3NO2_ugL[is.na(allchem$NO3NO2_ugL)] <- 1
+# allchem$Flag_SRP_ugL[is.na(allchem$SRP_ugL)] <- 1
+# allchem$Flag_DOC_mgL[is.na(allchem$DOC_mgL)] <- 1
+# allchem$Flag_DIC_mgL[is.na(allchem$DIC_mgL)] <- 1
+# allchem$Flag_DC_mgL[is.na(allchem$DC_mgL)] <- 1
+# allchem$Flag_DN_mgL[is.na(allchem$DN_mgL)] <- 1
 
 ```
 
@@ -157,6 +166,10 @@ allchem <- allchem |>
 
 write.csv(allchem, "Chemistry_2013_2024.csv", row.names = FALSE)
 
+#date format for 
+allchem$DateTime <- as.POSIXct(strptime(allchem$DateTime, "%Y-%m-%d %H:%M:%S"), tz = 'America/New_York')
+allchem$DateTime <- as.Date(allchem$DateTime, "%y-%m-%d %H:%M:%S")
+
 ```
 
 
@@ -165,15 +178,13 @@ REVIEWERS START HERE!!!!!!
 ```{r}
 ######## UPDATE LINK ###############
 #read in the most recent version on EDI staging to work with this version to check on data
-allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/15/8cd729706327d142934758219537dbdc" , col_types = cols())
+allchem <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1025/16/2f8aea4de75a13fe6fde26f0d601fc70"  , col_types = cols())
 
 ```
 
 
 ```{r 2024 diagnostic plots - all sites}
-#date format
-allchem$DateTime <- as.POSIXct(strptime(allchem$DateTime, "%Y-%m-%d %H:%M:%S"), tz = 'America/New_York')
-allchem$DateTime <- as.Date(allchem$DateTime, "%y-%m-%d %H:%M:%S")
+
 
 new_chem <- allchem |> 
   filter(year(DateTime) >= 2024 )
@@ -207,8 +218,66 @@ ggplot(aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
 
 ```
 
+```{r Function to make plots}
 
-```{r 2023 diagnostic plots - FCR 50}
+# Make individual plots of each variable with depth as color
+
+# make a function
+
+#Function to plot all data for a given year as a heatmap
+plot_var <- function(var_name, 
+                     year, 
+                     reservoirs = c("FCR", "BVR", "CCR"),
+                     data = qaqc,
+                     site = c(10,20,30,40,50,88,90)){
+  
+  var <- sym(var_name)
+  flag <- sym(paste0("Flag_", var_name))
+  qaqc_plotly <- data %>%
+    filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
+    ggplot(aes(x = DateTime, y = !!var, color = as.factor(Depth_m), shape = as.factor(!!flag))) +
+    geom_point() +
+    #ggtitle(year)+
+    facet_grid(cols = vars(Reservoir),rows = vars(Site), scales = "free_y")+         
+    theme_bw()
+    #facet_grid(cols = vars(Reservoir))
+  ggplotly(qaqc_plotly)
+  #print(qaqc_plotly)
+}
+
+# list of variables
+vars_to_plot <- c("TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL", "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL")
+
+```
+
+
+```{r FCR plots current year}
+
+fcr2024 <-vars_to_plot %>%
+  map(plot_var, year = c(2024, 2025), reservoirs = "FCR", data = allchem, site = c(20,50,100,200))
+
+fcr2024
+
+```
+
+```{r BVR plots current year}
+bvr2024 <-vars_to_plot %>%
+  map(plot_var, year = 2024,reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
+
+bvr2024
+```
+
+```{r CCR plots current year}
+
+y2024 <-vars_to_plot %>%
+  map(plot_var, year = c(2024,2025), reservoirs = "CCR", data = allchem, site = c(50,51,88,90, 92,96,99,101,301))
+
+y2024
+
+```
+
+
+```{r Diagnostic plots - FCR 50}
 
 # FCR deep hole data time series
 ggplot(subset(chemistry_long, Reservoir=='FCR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
@@ -341,7 +410,7 @@ ggplot(all_chem_long, aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
   geom_point(size=1) +
   stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
   facet_grid(metric ~ Reservoir, scales= 'free_y') +
-  scale_x_date("Date", date_breaks="2 months", date_labels = "%b %Y") +
+  scale_x_date("Date", date_breaks="6 months", date_labels = "%b %Y") +
   scale_y_continuous("") +
   theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
 
@@ -349,31 +418,33 @@ ggplot(all_chem_long, aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
 
 ```
 
-```{r all data plots}
+```{r}
 
-# Deep hole time series for each reservoir
-ggplot(subset(all_chem_long, Site=="50" & Reservoir=="BVR"), aes(x = as.Date(DateTime), y = value, col=Depth_m)) +
+plot_chem_vars <- function(
+    data,
+    reservoir, 
+    site){
+ggplot(subset(data, Reservoir %in% reservoir & Site %in% site), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
   geom_point(cex=2) +
-  facet_grid(metric ~ Reservoir, scales='free') +
-  scale_x_date("Date", date_breaks="1 month", date_labels = "%b %Y") +
-  scale_y_continuous("") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
-  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_date("Date", date_breaks = "6 months" ,date_labels = "%b %y") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+}
+```
 
-#ggsave("./Figures/BVR_Chem_depths_2013_2023.jpg",width=3.5, height=4)
+
+```{r all data plots BVR}
+
+plot_chem_vars(data = all_chem_long, reservoir = "BVR", site = 50)
 
 ```
 
-```{r all data plots}
+```{r all data plots FCR}
 
 # FCR only; all sampling sites 
-ggplot(subset(all_chem_long, Reservoir=='FCR' & Site =='50'), aes(x = as.Date(DateTime), y = value, col=Depth_m)) +
-  geom_point(cex=2) +
-  facet_grid(metric ~ Site, scales='free') +
-  scale_x_date("Date", date_labels = "%b %y") +
-  scale_y_continuous("Concentration") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
-  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+plot_chem_vars(data = all_chem_long, reservoir = "FCR", site = 50)
 
 #ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
 
@@ -382,13 +453,7 @@ ggplot(subset(all_chem_long, Reservoir=='FCR' & Site =='50'), aes(x = as.Date(Da
 ```{r all data plots}
 
 # CCR only; site 50
-ggplot(subset(all_chem_long, Reservoir=='CCR' & Site =='50'), aes(x = as.Date(DateTime), y = value, col=Depth_m)) +
-  geom_point(cex=2) +
-  facet_grid(metric ~ Site, scales='free') +
-  scale_x_date("Date", date_labels = "%b %y") +
-  scale_y_continuous("Concentration") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
-  scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+plot_chem_vars(data = all_chem_long, reservoir = "CCR", site = 50)
 
 #ggsave("./Figures/CCR_Site50_2013_2023.jpg",width=3.5, height=4)
 

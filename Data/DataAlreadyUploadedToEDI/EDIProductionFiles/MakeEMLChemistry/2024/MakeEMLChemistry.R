@@ -9,9 +9,10 @@
 
 
 # (install and) Load EMLassemblyline #####
-# install.packages('devtools')
+ install.packages('devtools')
+ install.packages('Rtools')
 
-#devtools::install_github("EDIorg/EMLassemblyline")
+devtools::install_github("EDIorg/EMLassemblyline")
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
@@ -108,9 +109,9 @@ library(EMLassemblyline)
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-# template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-#                                data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2022",
-#                                write.file = TRUE)
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
+                               write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
 
@@ -136,14 +137,14 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2025",
   temporal.coverage = c("2013-04-04", "2025-04-16"),
   maintenance.description = 'ongoing',
-  data.table = c("Chemistry_2013_2024.csv", 
+  data.table = c("chemistry_2013_2024.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("Chemistry_QAQC_2024_2024.R", "Chemistry_inspection_2013_2024.Rmd"),
+  other.entity = c("chemistry_qaqc_2024_2024.R", "chemistry_inspection_2013_2024.Rmd"),
   other.entity.description = c("Nutrient QAQC script for 2024 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',

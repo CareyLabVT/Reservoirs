@@ -148,7 +148,7 @@ make_eml(
   other.entity.description = c("Nutrient QAQC script for 2024 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.17') #reserve new staging environment package id each year
+  package.id = 'edi.1025.18') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

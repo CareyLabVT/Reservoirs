@@ -77,7 +77,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
-  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
+  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2025",
   temporal.coverage = c("2014-04-04", "2025-06-30"),
   maintenance.description = 'ongoing',
   data.table = c("zoop_summary_2014_2025.csv", "zoop_raw_dens_2019_2025.csv",

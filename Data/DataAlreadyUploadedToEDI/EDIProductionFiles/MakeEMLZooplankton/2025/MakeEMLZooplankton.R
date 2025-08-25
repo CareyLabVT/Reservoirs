@@ -91,29 +91,30 @@ make_eml(
                                "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2025"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1090.43') 
+  package.id = 'edi.1090.44') 
 
 #------------------------------------------------------------------------------#
 # Make eml for production environment
 #https://portal.edirepository.org/nis/logout
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2024",
-  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2022",
-  temporal.coverage = c("2014-04-04", "2022-07-01"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2025",
+  dataset.title = "Crustacean and rotifer density and biomass for Beaverdam Reservoir, Falling Creek Reservoir, Carvins Cove Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2025",
+  temporal.coverage = c("2014-04-04", "2025-06-30"),
   maintenance.description = 'ongoing',
-  data.table = c("zoop_summary_2014_2022.csv", "zoop_raw_dens_2019_2022.csv",
-                 "zoop_raw_biom_2019_2022.csv", "site_descriptions.csv"),
+  data.table = c("zoop_summary_2014_2025.csv", "zoop_raw_dens_2019_2025.csv",
+                 "zoop_raw_biom_2019_2025.csv", "site_descriptions.csv"),
   data.table.description = c("Reservoir zooplankton dataset", "Zooplankton counts used to calculate density",
                              "Micrometer measurements, microscope objectives, and taxonomic identification of individual zooplankton used to calculate biomass",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("zoop_qaqc_2014_2022_v4.R",
-                   "zoop_length_weight_conversions_2019_2022.zip"),
+  other.entity = c("zoop_qaqc_2014_2025_v5.R",
+                   "zoop_length_weight_conversions_2019_2025.zip"),
   other.entity.description = c("Zooplankton QAQC and visualization script",
-                               "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2022"),
+                               "Length-weight conversion parameters used to calculate crustacean and rotifer biomass during 2019-2025"),
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.197.4') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
   # 197.3 for 2024 pub
   # 197.4 for Oct 2024 pub
+  # 197.5 for Aug 2025 pub

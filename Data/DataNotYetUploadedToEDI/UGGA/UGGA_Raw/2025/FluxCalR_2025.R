@@ -68,7 +68,7 @@ processed_files <- sub(".csv", ".txt", list.files("processed_csvs"))
 #Compare these two to figure out which files still need to be processed
 files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
-files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0202.txt")] # very messy and doesn't seem usable
+files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0202.txt", "gga_2001-12-31_f0284.txt")] # very messy and doesn't seem usable
 
 
 ## RUN THE PROCESSING!!
@@ -82,8 +82,7 @@ for (file in files_to_process) {
 
 # QAQC: there were a few times that there was only one peak but we still had to click twice. 
 # Here, we manually remove the second peak from these files
-one_peak <- c("processed_csvs/gga_2001-12-31_f0139.csv", # specify casts with one peak. Can still use them. 
-  "processed_csvs/gga_2001-12-31_f0177.csv")
+one_peak <- c("processed_csvs/gga_2001-12-31_f0227.csv") # specify casts with one peak. Can still use them. 
 #Filter to only the first peak in these files
 for (file in one_peak) {
   data <- read.csv(file) %>%

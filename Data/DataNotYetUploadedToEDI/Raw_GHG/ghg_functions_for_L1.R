@@ -1,6 +1,7 @@
 # Functions for processing GHG files
 # By: Adrienne Breef-Pilz
 # Created on 22 Nov 23
+# Edited: 29 Aug 2025
 
 # This is the source script for the functions used in the L1 script to process the GHG files. 
 
@@ -20,7 +21,7 @@ read_ghg_files<-function(FILES){
                   "CH4_GC_headspace_ppm"="Season specific ranged CAL Measured headspace CH4  in ppm from GC in ppm",
                   "CO2_GC_headspace_ppm"="Season specific CAL Measured headspace CO2 in ppm from GC in ppm")%>%
     filter(grepl("^[0-9]", vial_number))%>%
-    mutate(clean_vial_number=as.numeric(gsub(" .*$", "", vial_number)),
+    mutate(clean_vial_number=as.numeric(gsub(" .*$|_.*$|[a-z]", vial_number)), # take out letters in vial number
            notes_from_vial_number= gsub("\\d+", "", vial_number),
            CH4_GC_headspace_ppm = as.numeric(gsub("nd", NA, CH4_GC_headspace_ppm)), # if headspace labeled nd change it to NA
            CO2_GC_headspace_ppm = as.numeric(gsub("nd", NA, CO2_GC_headspace_ppm)),

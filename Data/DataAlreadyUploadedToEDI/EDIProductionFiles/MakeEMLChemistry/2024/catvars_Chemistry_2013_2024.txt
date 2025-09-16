@@ -5,13 +5,13 @@ Flag_DC_mgL	0	No flag
 Flag_DC_mgL	1	Sample not taken
 Flag_DC_mgL	7	Sample run multiple times and values averaged
 Flag_DC_mgL	9	Suspect sample
-Flag_DC_mgL	79	Sample run multiple times and values averaged and suspect sample
+Flag_DC_mgL	79	Sample run multiple times and values averaged and is a suspect sample
 Flag_DIC_mgL	0	No flag
 Flag_DIC_mgL	1	Sample not taken
 Flag_DIC_mgL	3	Sample below detection
 Flag_DIC_mgL	7	Sample run multiple times and values averaged
 Flag_DIC_mgL	9	Suspect sample
-Flag_DIC_mgL	79	Sample run multiple times and values averaged and suspect sample
+Flag_DIC_mgL	79	Sample run multiple times and values averaged and is a suspect sample
 Flag_DN_mgL	0	No flag
 Flag_DN_mgL	1	Sample not taken
 Flag_DN_mgL	3	Sample below detection
@@ -60,7 +60,7 @@ Flag_TN_ugL	6	Non-standard method
 Flag_TN_ugL	7	Sample run multiple times and values averaged
 Flag_TN_ugL	9	Suspect sample
 Flag_TN_ugL	43	Negative value set to zero and sample below detection
-Flag_TN_ugL	67	Non-standard method and sample run multiple times and values averages
+Flag_TN_ugL	67	Non-standard method and sample run multiple times and values averaged
 Flag_TN_ugL	73	Sample run multiple times and values averaged and sample below detection
 Flag_TP_ugL	0	No flag
 Flag_TP_ugL	1	Sample not taken
@@ -70,7 +70,7 @@ Flag_TP_ugL	6	Non-standard method
 Flag_TP_ugL	7	Sample run multiple times and values averaged
 Flag_TP_ugL	9	Suspect sample
 Flag_TP_ugL	43	Negative value set to zero and sample below detection
-Flag_TP_ugL	67	Non-standard method and sample run multiple times and values averages
+Flag_TP_ugL	67	Non-standard method and sample run multiple times and values averaged
 Flag_TP_ugL	73	Sample run multiple times and values averaged and sample below detection
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvins Cove Reservoir

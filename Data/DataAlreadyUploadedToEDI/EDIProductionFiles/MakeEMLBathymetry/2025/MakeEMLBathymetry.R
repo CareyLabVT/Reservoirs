@@ -3,7 +3,7 @@ library(EMLassemblyline)
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBathymetry/2025"
 
 
-### OLD 
+### FIRST EDI publication
 # make_eml(
 #   path = ".",
 #   dataset.title = "Bathymetry and watershed area for Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir",
@@ -18,9 +18,9 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLBathymetry/
 #   user.id = 'ccarey',
 #   user.domain = 'EDI',
 #   package.id = 'edi.1254.1')
+ 
 
-
-### 2025 updates 
+### 2025 updates; STAGING
 make_eml(
   path = folder,
   dataset.title = "Bathymetry and watershed area for Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir",
@@ -29,9 +29,11 @@ make_eml(
   data.table = c("Bathymetry_comb.csv"),
   data.table.name = c("Bathymetric summary statistics"),
   data.table.description = c("Data table including bathymetric summary statistics for the three reservoirs"),
-  other.entity = c("Bathymetry_Spatial_Data.zip", "ADCP SOP.pdf"),
-  other.entity.name = c("Bathymetry spatial data", "ADCP SOP"),
-  other.entity.description = c("Spatial data for bathymetry from all reservoirs", "SOP for ADCP operation and post-processing of data and GIS file generation"),
+  other.entity = c("Bathymetry_Spatial_Data.zip", "ADCP SOP.pdf", "Bathymetry_Maps_in_R.Rmd"),
+  other.entity.name = c("Bathymetry spatial data", "ADCP SOP", "R markdown to make bathymetry maps"),
+  other.entity.description = c("Spatial data for bathymetry from all reservoirs",
+                               "SOP for ADCP operation and post-processing of data and GIS file generation",
+                               "Rmd script that makes bathymetry maps in R for FCR and BVR using VMT processed ADCP data"),
   user.id = 'ccarey',
   user.domain = 'EDI',
   package.id = 'edi.971.5') #971 is the staging number

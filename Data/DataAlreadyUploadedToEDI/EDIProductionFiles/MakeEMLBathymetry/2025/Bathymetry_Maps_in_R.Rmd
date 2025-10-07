@@ -1,0 +1,200 @@
+---
+title: "Bathymetry Map and Calculations"
+author: "Evelyn Tipper"
+date: "2023-09-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(plotly)
+library(marmap)
+library(leaflet)
+library(dplyr)
+library(mapview)
+library(webshot)
+library(sp)
+library(rLakeAnalyzer)
+library(sf)
+
+```
+
+# IMPORT DATA
+
+## Upload Data
+```{r}
+#Read in CSV files
+
+#VMT processed ADCP data can be found in the 'Bathymetry_Spatial_Data' folder then FCR or BVR then "VMT_Processed..."
+
+#read in either FCR an rename to adcpdata to run script
+
+fcr_vmt <- read.delim("./Bathymetry_Spatial_Data/Bathymetry_Spatial_Data/FCR/VMT_Processed_Temp_Corrected_Data/FCR_2023.csv", header=TRUE, sep=",")
+
+bvr_vmt <- read.delim("./Bathymetry_Spatial_Data/Bathymetry_Spatial_Data/BVR_April2024_10m/VMT_Processed_Data/BVR_14APR24_Reprocessed.csv", header=TRUE, sep=",")
+
+adcpdata <- fcr_vmt
+
+
+```
+
+
+## Create Function to Convert to Lat/Long Coordinates
+```{r}
+#Create function to convert coordinates from WGS84 UTM Zone 17 to WGS84 long/lat if needed:
+
+coords_utm <- function(df,zone){
+
+#Selects data in order of long (easting), lat (northing), and depth (elev)
+df <- dplyr::select(df, Easting_WGS84_m, Northing_WGS84_m, Elev_m)
+
+#Rename these horrendous column headers
+colnames(df) <- c("long", "lat", "depth")
+
+#Extract UTM coordinates
+adcpdata_coords <- df[c("long", "lat")]
+
+#Assign the coordinates to UTM, WGS84, and zone, measured in units of meters
+
+a <- "+proj=utm +zone="
+b <- " +datum=WGS84 +units=m"
+
+adcpdata_coords_utm <- SpatialPoints(adcpdata_coords, proj4string=CRS(paste(a ,zone , b , sep = "")))
+
+
+#Convert the coordinates to Long/Lat in WGS84
+adcpdata_coords_geo <- spTransform(adcpdata_coords_utm, CRS("+proj=longlat +datum=WGS84"))
+
+#Re-insert converted coordinates
+adcpdata_coords <- coordinates(adcpdata_coords_geo)
+adcpdata_coords <- as.data.frame(adcpdata_coords)
+df$long <- adcpdata_coords$coords.x1
+df$lat <- adcpdata_coords$coords.x2
+return(df)
+}
+
+```
+
+
+## Use Function to Convert to Lat/Long
+```{r}
+
+if( "Easting_WGS84_m" %in% colnames(adcpdata)) {
+ adcpdata <- coords_utm(df = adcpdata, zone = 17)
+}
+
+```
+
+
+## Tidy data
+```{r}
+
+#Filter data to remove any extraneous points
+adcpdata <- adcpdata %>% 
+  dplyr::filter(depth > -12, depth < 0) #Set to lowest known depth 
+
+#Combine ADCP data and point depth data
+adcpdata_combined <- adcpdata
+
+#Display simple stats about the reservoir
+summary(adcpdata_combined$depth)
+
+```
+
+# CREATE BATHYMETRY MAP
+
+## Generate Bathymetric Map
+```{r}
+#Note that nlon and nlat set the number of pixels in the map; adjust for site
+data_grid <- griddify(adcpdata_combined, nlon = 75, nlat = 80) 
+
+#Classifies the data as "bathy"
+bathy <- as.bathy(data_grid) 
+
+#Creates a bathymetric map
+bathy_map <- plot(bathy, image = TRUE, lwd = 0.1) 
+bathy_map 
+
+#Save figure to working directory
+png(filename="bathy.png",  width = 4, height = 5.6, units = "in", res = 300)
+plot(bathy, image = TRUE, lwd = 0.1)
+dev.off()
+
+```
+
+
+## Place Map onto OpenStreetMap
+```{r}
+#Converts data into raster image
+b <- marmap::as.raster(bathy)
+
+#Map color palette
+pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), 
+                    domain = adcpdata$depth,
+                    na.color = "transparent")
+
+#Creates variable with only depth data
+depth <- unique(adcpdata$depth)
+
+webshot::install_phantomjs(force = TRUE)
+
+#Places map onto OpenStreetMap
+map <- leaflet() %>% 
+  addProviderTiles(providers$CartoDB.VoyagerNoLabels) %>%
+  setView(mean(adcpdata$long),mean(adcpdata$lat), zoom = 16.4) %>% #setview is used to set the viewing screen of leaflet; it is currently set to find the center of longitude and latitude values
+  addRasterImage(b, colors = pal) %>% 
+  addLegend("bottomright", pal = pal, values = depth, title = "Depth (m)")
+map
+
+#Saves image of map
+mapshot(map, file = "leafletbathy.png")
+```
+
+
+# MAKE SURFACE AREA AND VOLUME CALCULATIONS
+
+## Calculate Surface Area
+```{r}
+
+#Creates grid of area
+area_grid <- raster::area(data_grid, na.rm = TRUE, weights = FALSE)
+area_grid
+
+#Filters out cells with no data
+area_grid <- area_grid[!is.na(area_grid)] 
+
+#Multiplies the length of vector with the average size of the raster cells
+surface_area <- length(area_grid)*mean(area_grid) 
+
+#Gives total lake surface area in km^2
+paste("Surface Area (km^2):", surface_area) 
+
+```
+
+## Calculate Volume
+```{r}
+
+ #Gives area at each layer in m^2
+area_layers <- approx.bathy(Zmax = abs(min(adcpdata$depth)), 
+                              surface_area*1000000,
+                              Zmean= mean(adcpdata$depth), method = "cone",
+                              zinterval = 1,
+                              depths = seq(0, abs(min(adcpdata$depth)), by = 1))
+area_layers
+
+#Volume Calculation
+volume_m3 <- function(area_layers,h,n){
+  volume <- (1/3)*h*(area_layers[n,"Area.at.z"] + 
+                       area_layers[(n+1), "Area.at.z"] +
+             sqrt(area_layers[n,"Area.at.z"] *
+                    area_layers[(n+1),"Area.at.z"]))
+  sum(volume)
+}
+  
+paste("Volume (m^3):", volume_m3(area_layers, h = 1, n = seq(0,abs(min(adcpdata$depth)),1)))
+```
+# CITATIONS
+## Lake Volume Calculations: 
+Taube, Clarence M. 2000. Instructions for winter lake mapping. Chapter 12 in Schneider,James C. (ed.) 2000. Manual of fisheries survey methods II: with periodic updates.Michigan Department of Natural Resources, Fisheries Special Report 25, Ann Arbor

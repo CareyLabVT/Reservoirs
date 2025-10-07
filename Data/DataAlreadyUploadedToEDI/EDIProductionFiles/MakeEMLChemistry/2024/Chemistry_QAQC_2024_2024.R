@@ -648,7 +648,7 @@ chem_final <-chem %>% mutate(SRP_ugL = round(SRP_ugL, 0),
                 DOC_mgL = round(DOC_mgL, 1),
                 DIC_mgL = round(DIC_mgL, 1),
                 DC_mgL = round(DC_mgL, 1),
-                DN_mgL = round(DN_mgL, 3))
+                DN_mgL = round(DN_mgL, 2))
 
 chem_final <- chem_final %>% 
   rename(Flag_TP_ugL = Flag_TP,

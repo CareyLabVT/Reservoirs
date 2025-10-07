@@ -148,7 +148,7 @@ make_eml(
   other.entity.description = c("Nutrient QAQC script for 2024 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1025.17') #reserve new staging environment package id each year
+  package.id = 'edi.1025.20') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -187,24 +187,25 @@ make_eml(
 # in step 7
 
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2023",
-  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2023",
-  temporal.coverage = c("2013-04-04", "2023-12-04"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2024",
+  dataset.title = "Water chemistry time series for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2024",
+  temporal.coverage = c("2013-04-04", "2025-04-16"),
   maintenance.description = 'ongoing',
-  data.table = c("Chemistry_2013_2023.csv", 
+  data.table = c("chemistry_2013_2024.csv", 
                  "reservoir_site_descriptions.csv"),
   data.table.description = c("Reservoir water chemistry dataset",
                              "Description, latitude, and longitude of reservoir sampling sites"),
-  other.entity = c("Chemistry_QAQC_2023_2023.R", "Chemistry_inspection_2013_2023.Rmd"),
-  other.entity.description = c("Nutrient QAQC script for 2023 data", "Data compilation and visualization script"),
+  other.entity = c("chemistry_qaqc_2024_2024.R", "chemistry_inspection_2013_2024.Rmd"),
+  other.entity.description = c("Nutrient QAQC script for 2024 data", "Data compilation and visualization script"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.199.12') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+  package.id = 'edi.199.13') #DO NOT REQUEST A NEW PACKAGE ID, SIMPLY INCREASE THE LAST DIGIT HERE BY 1 TO UPDATE THE CURRENT PUBLICATION
+
+# 2025 data pub = 199.13
 
 # 2024 data pub = 199.12
-
 # 2023 data pub = 199.11
 
 

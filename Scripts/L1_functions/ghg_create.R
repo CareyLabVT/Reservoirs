@@ -129,7 +129,7 @@ ghg_qaqc<-function(directory,
     
     # authenticate Google Drive to download the files from the ACL folder.
    
-    googledrive::drive_auth(path = Sys.getenv('GDRIVE_PAT'))
+    #googledrive::drive_auth(path = Sys.getenv('GDRIVE_PAT'))
     
     
     # Get the file info of the GHG spreadsheets from GoogleDrive
@@ -975,3 +975,4 @@ ghg_qaqc<-function(directory,
 } # ends the function
 
 
+## Hi Adrienne

@@ -2,7 +2,9 @@
 # QAQC of YSI and PAR data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2024-09-12
+# Last edited: 2025-11-12
+
+# 2025-11-12 updated the file path for the raw data
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate, dplyr,
@@ -12,14 +14,13 @@ pacman::p_load(tidyverse, lubridate, dplyr,
 package_ID <- 'edi.198.13'
 eml <- read_metadata(package_ID)
 date_attribute <- xml_find_all(eml, xpath = ".//temporalCoverage/rangeOfDates/endDate/calendarDate")
-data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit?gid=1787819257#gid=1787819257'
 last_edi_date <- as.Date(xml_text(date_attribute)) + lubridate::days(1)
 
 
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R')
 
 maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/'
+data_file <- 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok/'
 outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
 
 ysi_qaqc(data_file = data_file,

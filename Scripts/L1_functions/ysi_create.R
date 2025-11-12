@@ -2,9 +2,10 @@
 # QAQC of YSI and PAR data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2025-02-18 
+# Last edited: 2025-11-12 
 # changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight
 # 2025-02-18 added an if statement to end the function if there were no observations for the year
+# 2025-11-12 added a print statement for the dups and condensed some of the file type renaming 
 
 #install.packages('pacman') ## Run this line if you don't have "pacman" package installed
 pacman::p_load(tidyverse, lubridate, dplyr,
@@ -17,6 +18,7 @@ ysi_qaqc <- function(data_file,
                      outfile,
                     start_date = NULL,
                     end_date = NULL){
+  
 
   if(is.character(data_file) & gsheet_data == FALSE){
     # read catwalk data and maintenance log
@@ -35,8 +37,9 @@ ysi_qaqc <- function(data_file,
 # gsheet_url <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
 # raw_profiles <- gsheet::gsheet2tbl(gsheet_url)
 
-#date format
-raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy HM', 'mdy HMS'), tz = "America/New_York")
+#date format. Check warnings about parsing and figure out the issue. 
+raw_profiles$DateTime = lubridate::parse_date_time(raw_profiles$DateTime, orders = c('ymd HMS','ymd HM','ymd', 'mdy','mdy HM', 'mdy HMS', 'mdy HM'), tz = "America/New_York")
+
 
 # remove notes column
 raw_profiles$Notes <- NULL
@@ -93,22 +96,12 @@ raw_profiles <- raw_profiles %>%
          # DateTime = as_datetime(DateTime, tz = "America/New_York"))%>% # time is in seconds put it in ymd_hms
   select(-c(Time, Date))
 
-#make sure other columns are the correct type
-raw_profiles$Reservoir <- as.character(raw_profiles$Reservoir)
-raw_profiles$Site <- as.numeric(raw_profiles$Site)
-raw_profiles$Temp_C <- as.numeric(raw_profiles$Temp_C)
-raw_profiles$Depth_m <- as.numeric(raw_profiles$Depth_m)
-raw_profiles$DO_mgL <- as.numeric(raw_profiles$DO_mgL)
-raw_profiles$DOsat_percent <- as.numeric(raw_profiles$DOsat_percent)
-raw_profiles$Cond_uScm <- as.numeric(raw_profiles$Cond_uScm)
-raw_profiles$SpCond_uScm <- as.numeric(raw_profiles$SpCond_uScm)
-raw_profiles$PAR_umolm2s <- as.numeric(raw_profiles$PAR_umolm2s)
-raw_profiles$ORP_mV <- as.numeric(raw_profiles$ORP_mV)
-raw_profiles$pH <- as.numeric(raw_profiles$pH)
+#make sure other columns are the correct type and update raw data into new table to make rerunnig easier
 
+update_profiles <- raw_profiles |>
+  mutate(Reservoir = as.character(Reservoir),
+         across(c(Site, Depth_m:pH), as.numeric))
 
-## update raw data into new table to make rerunnig easier
-update_profiles <- raw_profiles
 
 ## ADD FLAGS (note that only flags 2, 5, and 6 can come from the maintenance file)
 # 0 - NOT SUSPECT
@@ -348,8 +341,13 @@ dup_check <- ysi |>
 
 if (nrow(dup_check) > 0){
   warning('DUPLICATE DATA FOUND - removing duplicates')
+  
+  #print the duplicated rows
+  print(dup_check)
+  
   duplicates_df <- ysi
 
+  # remove duplicated rows
   deduped_df <- duplicates_df |>
     distinct(Reservoir, Site, DateTime,Depth_m, .keep_all = TRUE)
 
@@ -371,10 +369,10 @@ return(ysi)
 } # ends function
 
 # maintenance_file <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv'
-# data_file <- 'https://docs.google.com/spreadsheets/d/1HbSBEFjMuK4Lxit5MRbATeiyljVAB-cpUNxO3dKd8V8/edit#gid=1787819257'
+# data_file <- 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok/'
 # outfile <- 'Data/DataNotYetUploadedToEDI/YSI_PAR/ysi_L1.csv'
-
-#ysi_qaqc(data_file = data_file,
+# 
+# ysi_qaqc(data_file = data_file,
 #         maintenance_file = maintenance_file,
 #         gsheet_data = TRUE,
 #         outfile = outfile)

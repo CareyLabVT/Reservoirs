@@ -2,7 +2,10 @@
 # QAQC of Secchi data from 2023
 # Created by ADD, modified by HLW
 # First developed: 2023-12-04
-# Last edited: 2025-02-18
+# Last edited: 2025-11-13
+
+# Edit:
+# 2025-11-13 consolidating column types
 
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate,
@@ -30,18 +33,18 @@ secchi_qaqc <- function(data_file,
     secchi_df <- data_file
   }
 
-  secchi_df$Reservoir <- as.character(secchi_df$Reservoir)
-  secchi_df$Site <- as.numeric(secchi_df$Site)
-  secchi_df$Secchi_m <- as.numeric(secchi_df$Secchi_m)
-  secchi_df$Flag_Secchi_m <- 0
-  #secchi_df$Flag_Secchi_m <- as.numeric(secchi_df$Flag_Secchi_m)
-  #secchi_df$Notes <- as.character(secchi_df$Notes)
 
+#make sure other columns are the correct type and update raw data into new table to make rerunnig easier
 
-  # fix dates and set the timezone
-  secchi_df$DateTime = lubridate::parse_date_time(secchi_df$DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM'))
-  secchi_df$DateTime <- force_tz(as.POSIXct(secchi_df$DateTime), tzone = "America/New_York") ## need to fix dates that don't have timestamp
-  secchi_df$Flag_DateTime <- 0
+secchi_df <- secchi_df |>
+  mutate(Reservoir = as.character(Reservoir),
+         across(c(Site, Secchi_m), as.numeric),
+        Flag_Secchi_m = 0,
+        DateTime = lubridate::parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')), # fix dates and set the timezone
+        DateTime <- force_tz(as.POSIXct(secchi_df$DateTime), tzone = "America/New_York"), ## need to fix dates that don't have timestamp
+        Flag_DateTime =0)
+  
+
   
   # filter so you just have current data
   

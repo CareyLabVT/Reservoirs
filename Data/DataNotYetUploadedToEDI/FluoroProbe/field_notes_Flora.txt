@@ -3,3 +3,4 @@ Notes from the field crew about wonky or missing casts
 
 2025:
 2025-03-17 FCR 50 - deleted most of the cast when processing the file in bbe+ software, so just calling this missing. 
+2025-11-13 - looking at the casts after daylight savings, I don't think the instrument changed and is still in EDT

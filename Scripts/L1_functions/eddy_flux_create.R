@@ -60,7 +60,7 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
   
   if(gdrive==T){
     # authenticate Google Drive to download the files from the EC folder.
-    googledrive::drive_auth(path = Sys.getenv('GDRIVE_PAT'))
+    # googledrive::drive_auth(path = Sys.getenv('GDRIVE_PAT'))
     
     # Get the file info of the EddyPro Full output files
     gdrive_files<-googledrive::drive_find(pattern = "_full_output_", 

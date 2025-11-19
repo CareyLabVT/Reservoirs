@@ -75,8 +75,8 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/Data
 # Set up the current time end time of the file and the current year for QAQC plots
 
 #current time of QAQC for graphing
-current_time_start=ymd_hms("2024-01-01 00:00:00", tz="America/New_York")
-current_time_end=ymd_hms("2024-12-31 23:59:00", tz="America/New_York")
+current_time_start=ymd_hms("2025-01-01 00:00:00", tz="America/New_York")
+current_time_end=ymd_hms("2025-12-31 23:59:00", tz="America/New_York")
 ```
 
 

@@ -1,14 +1,14 @@
 ---
-title: "ghg_inspection_2015_2024"
+title: "ghg_inspection_2015_2025"
 author: "Freya Olsson + Adrienne Breef-Pilz"
 date: "2025-01-16"
 output: html_document
 ---
 
-This is the visualisation script for the greenhouse gas data product which was used in the QA/QC process and review of the data package
+This is the visualization script for the greenhouse gas data product which was used in the QA/QC process and review of the data package
 1. It takes the data file on EDI and combines it with the L1 file which has already been QAQCed. 
 3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
-5. Creates plots to visualise all variables and sites
+5. Creates plots to visualize all variables and sites
 6. Writes the new combined data to new csv
 
 ```{r setup packages, include=FALSE}
@@ -20,11 +20,65 @@ pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly)
 
 # source the qaqc code for GHG from GitHub
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R")
+
+
+
 ```
 
+REVIEWERS and DATA PUBLISHERS START HERE BEFORE KNITTING. 
+If you run this markdown file chunk by chunk then make sure to only run the chunks labeled with your role or All. 
 
+1.  Update your role
 
-```{r QAQC all files, include=FALSE}
+2.  Update dates for current year plots
+
+3.  If you are a reviewer, update the edi link
+
+```{r All EDIT HERE, include=FALSE}
+
+# 1. How would you like to use this script. If you are a data publisher write "publisher" if you are a reviewer write "reviewer"
+
+role <- "reviewer"
+
+# 2. DATA PUBLISHERS UPDATE DATES HERE
+# Set up the current time end time of the file and the current year for QAQC plots
+#current time of QAQC for graphing
+
+# Set up the current start and end date for just looking at the current year files
+current_start <- as.Date("2024-01-01")
+
+current_end <- as.Date("2024-12-31")
+
+# 3. DATA PUBLISHERS UPDATE FILE NAMES
+# Update the name of the data files, maintenance log, and qaqc function. Double check the name of the file matches the naming convention and the start and end date of the data file. 
+
+file_name <- "ghg_2015_2025.csv"
+
+qaqc_function <- "ghg_qaqc_2015_2025.R"
+
+maintenance_log <- "ghg_maintenancelog_2015_2025.csv"
+
+# 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+edi_link <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/18/98f19e7acae8bea7d127c463b1bb5fbc" 
+
+```
+
+```{r set chunks on or off, echo=FALSE}
+### Code to determine which chunks are turned on and off
+
+if(role=="publisher"){
+  make_data = TRUE
+  edi_stage = FALSE
+}else if(role == "reviewer"){
+  make_data = FALSE
+  edi_stage = TRUE
+}
+
+```
+
+```{r Publisher QAQC all files, eval=make_data, message=TRUE, warning=TRUE, echo=FALSE}
 
 current_df <- ghg_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Raw_GHG/data/",
          maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",
@@ -32,7 +86,7 @@ current_df <- ghg_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Raw_GHG/
          gdrive = F, # Are the files on Google Drive. True or False
          gshared_drive = as_id("1OMx7Bq9_8d6J-7enC9ruPYuvE43q9uKn"),
          Air_Pressure = c("https://docs.google.com/spreadsheets/d/1YH9MrOVROyOgm0N55WiMxq2vDexdGRgG", 
-             "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg"),
+             "https://docs.google.com/spreadsheets/d/1ON3ZxDqfkFm65Xf5bbeyNFQGBjqYoFQg", "https://docs.google.com/spreadsheets/d/152KzTG9sHB1QEiwwSo2Do_Zq4IFfWZzf"),
          vial_digitized_sheet = "https://docs.google.com/spreadsheets/d/1HoBeXWUm0_hjz2bmd-ZmS0yhgF1WvLenpvwEa8dL008",
          Rolling_MDL = "https://docs.google.com/spreadsheets/d/1AcqbdwbogWtO8QnLH1DmtZd47o323hG9",
          historical_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/historical_GHG_2015_2022.csv",
@@ -47,37 +101,29 @@ current_df <- current_df%>%
   dplyr::distinct(.)# get rid of dups if they snuck in
 
 
-
+# force the time to Eastern Time with daylight savings observed. 
+ current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
  
-
-# make sure no time duplicates.
-# current_df<-  current_df[!duplicated(current_df$DateTime), ]
-
-#reorder. Just to be certain everything is in order
-#  current_df<-current_df[order(current_df$DateTime),]
-  
-  
-
-
+ print("Role = publisher and using QAQC data from GitHub")
+ 
 ```
 
-```{r Reviewers start here, eval=FALSE, include=FALSE}
+```{r Reviewers start here, eval = edi_stage, echo=FALSE}
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
-# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
- ### CHANGE THIS NUMBER BELOW 
-                                                                              ##      
- #   current_df <-read_csv("https://portal-s.edirepository.org/nis/dataviewer?packageid=edi.997.14&entityid=98f19e7acae8bea7d127c463b1bb5fbc")
- # 
- # 
- # # # Force files from EDI to have an EST timestamp
- #   current_df$DateTime <- ymd_hms(current_df$DateTime, tz = "EST")
 
+   current_df <-read_csv(edi_link)
+
+
+ # # Force files from EDI to have an EST timestamp
+   current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+
+   print("Role = reviewer and using data from EDI")
 
 ```
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
 
-```{r Check there are no NAs in Flag columns}
+```{r All Check there are no NAs in Flag columns, echo=FALSE}
 
 #make sure no NAS in the Flag columns
 Flags <- current_df |> 
@@ -103,7 +149,7 @@ for(f in 1:(ncol(Flags))){
 
 We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
 
-```{r Read in the maintenance log and look at the tail, echo=FALSE}
+```{r All Read in the maintenance log and look at the tail, echo=FALSE}
 
 #reviewers change this link to pull in most current maintenance log
 maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv")
@@ -124,7 +170,7 @@ Look at the first few rows of the data frame and check that the observations aft
 
 #### Look at the first 5 rows for that time
 
-```{r Did the maint log work head, echo=FALSE}
+```{r All Did the maint log work head, echo=FALSE}
 # get the last row of the data file
 last_row <- tail(sd, n=1)
 
@@ -167,284 +213,140 @@ tail(current_df[current_df$DateTime %in% Time$DateTime, test])
 
 ```
 
-```{r Plots}
-# Plot CH4 at Site 50 in FCR
-current_df |>  
-  filter(Depth_m<100,  Site == 50,
-         Reservoir == "FCR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'FCR CH4')
+```{r All Plots function, include=FALSE}
 
-# Plot CO2 at Site 50 in FCR
-current_df |>  
-  filter(Depth_m<100, Site == 50,
-         Reservoir == "FCR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
-  geom_point()+
-  labs(title = 'FCR CO2')
-
-# Plot CH4 at Site 50 in BVR
-current_df |>  
-  filter(Depth_m<100, Site == 50,
-         Reservoir == "BVR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point()+
-  labs(title = 'BVR CH4')
-
-# Plot CO2 at Site 50 in BVR
-current_df |>  
-  filter(Depth_m<100, Site == 50,
-         Reservoir == "BVR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'BVR CO2')
-
-
-
-# FCR NOT Site 50 - CH4
-current_df |>  
-  filter(Reservoir == "FCR", Site != 50) |> 
-  ggplot(aes(x=DateTime, y=CH4_umolL, colour=as.factor(Site)))+
-  geom_point() +
-  labs(title = 'FCR CH4 other sites')
-
-
-current_df |>  
-  filter(Reservoir == "FCR", Site != 50) |> 
-  ggplot(aes(x=DateTime, y=CO2_umolL, colour=as.factor(Site)))+
-  geom_point() +
-  labs(title = 'FCR CO2 other sites')
-
-
-# BVR NOT Site 50 
-current_df %>% 
-  filter(Reservoir == "BVR", Site != 50) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = as.factor(Site)))+
-  geom_point() +
-  labs(title = 'BVR CH4 other sites')
-
-current_df %>% 
-  filter(Reservoir == "BVR", Site != 50) |>  
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = as.factor(Site)))+
-  geom_point() +
-  labs(title = 'BVR CO2 other sites')
-
-# Plot CH4 at Site 50 in CCR
-current_df |>  
-  filter(Depth_m<100,  Site == 50|Site==51,
-         Reservoir == "CCR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'CCR CH4')
-
-# Plot CO2 at Site 50 in CCR
-current_df |>  
-  filter(Depth_m<100, Site == 50|Site==51,
-         Reservoir == "CCR") |> 
-    mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
-  geom_point()+
-  labs(title = 'CCR CO2')
-
-# CCR NOT Site 50 - CH4
-current_df |>  
-  filter(Reservoir == "CCR", Site != 50) |> 
-  ggplot(aes(x=DateTime, y=CH4_umolL, colour=as.factor(Site)))+
-  geom_point() +
-  labs(title = 'CCR CH4 other sites')
-
-
-current_df |>  
-  filter(Reservoir == "CCR", Site != 50) |> 
-  ggplot(aes(x=DateTime, y=CO2_umolL, colour=as.factor(Site)))+
-  geom_point() +
-  labs(title = 'CCR CO2 other sites')
-
-
-```
-
-Look at this year only:
-
-```{r plots-current-year}
-# CH4 plots current year
-ghgplotting <- function(data,
+ghgplotting <- function(data_df,
+                        var,
                         reservoir,
                         site,
-                        depth,
-                        starttime,
-                        endtime,
-                        title,
-                        var){
+                        starttime = NULL,
+                        endtime = NULL,
+                        plotly = T){
   
+  # Let's first split the data frame if we need to 
   
- # data= current_df
- #  reservoir = c("BVR", "FCR", "CCR")
- #  site = c(50, 200, 100)
- #  depth = c(0.1, 1.6, 3.8, 5, 6.2, 8, 9, 21)
- #  starttime = as.Date("2025-01-01")
- #  endtime = Sys.Date()
- #  var = "CH4_umolL"
- #  title = "Reservoir CH4 concentration"
+  if(!is.null(starttime)){
+    data_df <- data_df|>
+      filter(DateTime >= starttime & DateTime <= endtime)
+  }
 
+# Filter the data frame based on the arguments
+  a <- data_df |>  
+  filter(Reservoir %in% reservoir,
+         Site %in% site) 
+  
 
-  a = data |>  
-  filter(Depth_m %in% depth,
-         Reservoir %in% reservoir,
-         Site %in% site,
-         DateTime >= starttime & DateTime <= endtime) |>
-  mutate(Site = as.factor(Site)) |> 
-  ggplot(aes(x = DateTime, y = .data[[var]], colour = Site))+
+  
+# make the plot  
+ b <-  ggplot(a, aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
   geom_point() +
-  labs(title = title)
+   {if(length(site)>0)facet_grid(Site ~ ., scales="free_y")}+
+  labs(title = paste0(reservoir," "," ",var))+
+   theme_bw()
+  
+ if (plotly == T){
+   ggplotly(b)
+ }else{
+   return(b)
+ }
  
- print(a)
 
   }
 
+```
 
-ghgplotting(data=current_df, reservoir= "FCR",site = 50, depth = c(0.1, 1.6, 3.8, 5, 6.2, 8, 9), starttime =
-              as.Date("2025-01-01"), endtime = Sys.Date(), var = "CH4_umolL", title = "FCR CH4 concentration"  )
+```{r All FCR Site 50 Plots All data, echo=FALSE, warning=FALSE}
 
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50, starttime = NULL, endtime = NULL, plotly = F)
 
-a <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "FCR", Site != 50, 
-         DateTime >= '2025-01-01') |>
-  mutate(Site = as.factor(Site)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
-  geom_point() +
-  labs(title = 'FCR CH4')
-print(a)
-}
-  ggplotly(a)
+outputs
 
-b<- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "FCR", Site == 50, 
-         DateTime >= '2025-01-01') |> 
-  mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'FCR Site 50, CH4')
+```
 
-  ggplotly(b)
+```{r All Other FCR Sites, echo=FALSE, warning=FALSE}
 
+# make a list of Sites in FCR except for Site 50 
 
-c <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "BVR", Site != 50, 
-         DateTime >= '2025-01-01') |>
-  mutate(Site = as.factor(Site)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Site))+
-  geom_point() +
-  labs(title = 'BVR CH4')
+fcr_sites <- current_df|> 
+  filter(Reservoir == "FCR" & Site != 50)|>
+  select(Site)|>
+  unique()
 
-ggplotly(c)
+fgh <- fcr_sites$Site
 
-d <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "BVR", Site == 50, 
-         DateTime >= '2025-01-01') |> 
-  mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'BVR Site 50, CH4')
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = fgh, starttime = NULL, endtime = NULL, plotly = F)
 
-ggplotly(d)
-
-e <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "CCR", Site == 50, 
-         DateTime >= '2025-01-01') |> 
-  mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CH4_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'CCR Site 50, CH4')
-
-ggplotly(c)
-# CO2 plots current year
-e<- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "FCR", Site != 50, 
-         DateTime >= '2025-01-01') |>
-  mutate(Site = as.factor(Site)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
-  geom_point() +
-  labs(title = 'FCR CO2')
-
-ggplotly(e)
-
-f <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "FCR", Site == 50, 
-         DateTime >= '2025-01-01') |> 
-  mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'FCR Site 50, CO2')
-
-ggplotly(f)
-
-g <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "BVR", Site != 50, 
-         DateTime >= '2025-01-01') |>
-  mutate(Site = as.factor(Site)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Site))+
-  geom_point() +
-  labs(title = 'BVR CO2')
-
-ggplotly(g)
-
-h <- current_df |>  
-  filter(Depth_m<100,
-         Reservoir == "BVR", Site == 50, 
-         DateTime >= '2025-01-01') |> 
-  mutate(Depth_m = as_factor(Depth_m)) |> 
-  ggplot(aes(x = DateTime, y = CO2_umolL, colour = Depth_m))+
-  geom_point() +
-  labs(title = 'BVR Site 50, CO2')
-
-ggplotly(h)
+outputs
 
 ```
 
 
-```{r Make new CSV with current and historic files}
+```{r All Current FCR Site 50 Plots All data, echo=FALSE}
+
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50, starttime = current_start, endtime = current_end, plotly = F)
+
+outputs
+
+```
+
+```{r All Current other FCR Sites, echo=FALSE}
+
+# make a list of Sites in FCR except for Site 50 
+
+fcr_sites <- current_df|> 
+  filter(Reservoir == "FCR" & Site != 50 &
+           DateTime >= current_start & DateTime <= current_end)|>
+  select(Site)|>
+  unique()
+
+fgh <- fcr_sites$Site
+
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), 
+                  ghgplotting, 
+                  data_df = current_df, 
+                  reservoir = "FCR", 
+                  site = fgh, 
+                  starttime = current_start, 
+                  endtime = current_end, 
+                  plotly = F)
+
+outputs
+
+
+```
+
+```{r Publisher Make new CSV with current and historic files, eval = make_data, include=FALSE}
 
 # convert datetimes to characters so that they are properly formatted in the output file
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
 # Need to decide on a naming convention for this file
-write.csv(current_df, "ghg_2015_2024.csv", row.names = F)
+write.csv(current_df, file_name, row.names = F)
 
 
 
 ```
 
-```{r download files, eval=FALSE, include=FALSE}
+```{r Publisher download files, eval = make_data, echo = FALSE}
 
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv","ghg_maintenancelog_2015_2024.csv")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/GHG_Maintenance_Log.csv",maintenance_log)
 
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R", "ghg_qaqc_2015_2024.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R", qaqc_function)
 
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Raw_GHG/ghg_functions_for_L1.R", "ghg_functions_for_L1.R")
 
 ```
 
 
-
-```{r Make site description file, eval=FALSE, include=FALSE}
+```{r Publisher Make site description file, eval = make_data, echo = FALSE}
  # These lines of code make the csv of the site descriptions with lat and long
 
   # Use Gsheet because you don't need to authenticate it. 
-  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+  sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8")
   #data<- read_csv("YOUR DATA.csv")# Use this if you read in a csv
   data <- current_df #This is the line you need to modify!
   trim_sites = function(data,sites){

@@ -41,7 +41,7 @@ secchi_df <- secchi_df |>
          across(c(Site, Secchi_m), as.numeric),
         Flag_Secchi_m = 0,
         DateTime = lubridate::parse_date_time(DateTime, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HM')), # fix dates and set the timezone
-        DateTime <- force_tz(as.POSIXct(secchi_df$DateTime), tzone = "America/New_York"), ## need to fix dates that don't have timestamp
+        DateTime = lubridate::force_tz(DateTime, tzone = "America/New_York"), ## need to fix dates that don't have timestamp
         Flag_DateTime =0)
   
 

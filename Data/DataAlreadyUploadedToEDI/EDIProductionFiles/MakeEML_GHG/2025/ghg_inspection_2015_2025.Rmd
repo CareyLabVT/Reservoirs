@@ -21,8 +21,6 @@ pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly)
 # source the qaqc code for GHG from GitHub
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R")
 
-
-
 ```
 
 REVIEWERS and DATA PUBLISHERS START HERE BEFORE KNITTING. 
@@ -38,16 +36,16 @@ If you run this markdown file chunk by chunk then make sure to only run the chun
 
 # 1. How would you like to use this script. If you are a data publisher write "publisher" if you are a reviewer write "reviewer"
 
-role <- "reviewer"
+role <- "publisher"
 
 # 2. DATA PUBLISHERS UPDATE DATES HERE
 # Set up the current time end time of the file and the current year for QAQC plots
 #current time of QAQC for graphing
 
 # Set up the current start and end date for just looking at the current year files
-current_start <- as.Date("2024-01-01")
+current_start <- as.Date("2025-01-01")
 
-current_end <- as.Date("2024-12-31")
+current_end <- as.Date("2025-12-31")
 
 # 3. DATA PUBLISHERS UPDATE FILE NAMES
 # Update the name of the data files, maintenance log, and qaqc function. Double check the name of the file matches the naming convention and the start and end date of the data file. 
@@ -62,6 +60,8 @@ maintenance_log <- "ghg_maintenancelog_2015_2025.csv"
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
 edi_link <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/18/98f19e7acae8bea7d127c463b1bb5fbc" 
+
+edi_site_description_file <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/18/5a1454801605a1237489e9c14d10ff2c" 
 
 ```
 
@@ -218,17 +218,8 @@ tail(current_df[current_df$DateTime %in% Time$DateTime, test])
 ghgplotting <- function(data_df,
                         var,
                         reservoir,
-                        site,
-                        starttime = NULL,
-                        endtime = NULL,
-                        plotly = T){
+                        site){
   
-  # Let's first split the data frame if we need to 
-  
-  if(!is.null(starttime)){
-    data_df <- data_df|>
-      filter(DateTime >= starttime & DateTime <= endtime)
-  }
 
 # Filter the data frame based on the arguments
   a <- data_df |>  
@@ -238,17 +229,31 @@ ghgplotting <- function(data_df,
 
   
 # make the plot  
- b <-  ggplot(a, aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
+  
+# All data plots  
+ all_data_plots <-  ggplot(a, aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
   geom_point() +
    {if(length(site)>0)facet_grid(Site ~ ., scales="free_y")}+
-  labs(title = paste0(reservoir," "," ",var))+
+  labs(title = paste0("All data"," ",reservoir," "," ",var))+
    theme_bw()
   
- if (plotly == T){
-   ggplotly(b)
- }else{
-   return(b)
- }
+  
+  # actually make the all data plots
+  
+current_data_plots <-  a|>
+     filter(DateTime>=as.Date(current_start) & DateTime<=as.Date(current_end))|>
+     ggplot( aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
+  geom_point() +
+   {if(length(site)>0)facet_grid(Site ~ ., scales="free_y")}+
+  labs(title = paste0("Current data"," ",reservoir," "," ",var))+
+   theme_bw()
+   
+  c <- ggplotly(current_data_plots) 
+ # list the plots from above 
+   
+ all_plots <- list(all_data_plots,c)
+ 
+ return(all_plots)
  
 
   }
@@ -258,7 +263,7 @@ ghgplotting <- function(data_df,
 ```{r All FCR Site 50 Plots All data, echo=FALSE, warning=FALSE}
 
 # make the plots
-outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50, starttime = NULL, endtime = NULL, plotly = F)
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50)
 
 outputs
 
@@ -276,47 +281,63 @@ fcr_sites <- current_df|>
 fgh <- fcr_sites$Site
 
 # make the plots
-outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = fgh, starttime = NULL, endtime = NULL, plotly = F)
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = fgh)
 
 outputs
 
 ```
 
 
-```{r All Current FCR Site 50 Plots All data, echo=FALSE}
+```{r All BVR Site 50 Plots All data, echo=FALSE}
 
 # make the plots
-outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50, starttime = current_start, endtime = current_end, plotly = F)
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = 50)
 
 outputs
 
 ```
 
-```{r All Current other FCR Sites, echo=FALSE}
+```{r All BVR other Sites, echo=FALSE}
 
 # make a list of Sites in FCR except for Site 50 
 
 fcr_sites <- current_df|> 
-  filter(Reservoir == "FCR" & Site != 50 &
-           DateTime >= current_start & DateTime <= current_end)|>
+  filter(Reservoir == "BVR" & Site != 50)|> 
   select(Site)|>
   unique()
 
 fgh <- fcr_sites$Site
 
 # make the plots
-outputs <- lapply(c("CH4_umolL", "CO2_umolL"), 
-                  ghgplotting, 
-                  data_df = current_df, 
-                  reservoir = "FCR", 
-                  site = fgh, 
-                  starttime = current_start, 
-                  endtime = current_end, 
-                  plotly = F)
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = fgh)
+
+outputs
+```
+
+```{r All BVR Site 50 Plots All data, echo=FALSE}
+
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = c(50,51))
 
 outputs
 
+```
 
+```{r All CCR other Sites, echo=FALSE}
+
+# make a list of Sites in CCR except for Site 50 
+
+fcr_sites <- current_df|> 
+  filter(Reservoir == "CCR" & Site != 50)|> 
+  select(Site)|>
+  unique()
+
+fgh <- fcr_sites$Site
+
+# make the plots
+outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = fgh)
+
+outputs
 ```
 
 ```{r Publisher Make new CSV with current and historic files, eval = make_data, include=FALSE}
@@ -341,6 +362,24 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/head
 
 ```
 
+```{r Reviewer Check the Site Description file, echo=FALSE}
+# Check that all the sites in the data frame are in the site description file
+
+df_site_des <- current_df|>
+  select(Reservoir,Site)|>
+  unique()
+
+# list of reservoirs and sites in the files
+
+site_des <- read_csv(edi_site_description_file)|>
+  select(Reservoir, Site)
+
+# compare 
+all.equal(site_des, df_site_des)
+
+print("If there are differences then tell the data publisher they need to make a new site description file.")
+
+```
 
 ```{r Publisher Make site description file, eval = make_data, echo = FALSE}
  # These lines of code make the csv of the site descriptions with lat and long

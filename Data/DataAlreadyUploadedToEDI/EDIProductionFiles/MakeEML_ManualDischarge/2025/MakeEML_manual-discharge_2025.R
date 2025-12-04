@@ -11,7 +11,7 @@ library(EMLassemblyline)
 
 
 ##Set folder 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2024"
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2025"
 
 
 
@@ -119,20 +119,20 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDisc
 
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2024",
-         data.table = c("manual-discharge_2019_2024.csv",
+         data.table = c("manual-discharge_2019_2025.csv",
                         "site_descriptions.csv",
-                        "manual-discharge_maintenancelog_2019_2024.csv"),
+                        "manual-discharge_maintenancelog_2019_2025.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenance Log'),
-         temporal.coverage = c("2016-07-14", "2024-12-17"),
+         temporal.coverage = c("2016-07-14", "2025-12-02"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('manual-discharge_qaqc_2019_2024.R',
-                          'manual-discharge_inspection_2019_2024.Rmd',
+         other.entity = c('manual-discharge_qaqc_2019_2025.R',
+                          'manual-discharge_inspection_2019_2025.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-         other.entity.description = c('Script used to QAQC 2019-2024 data',
+         other.entity.description = c('Script used to QAQC 2019-2025 data',
                                       'Script used to collate 2019-2024 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
@@ -178,21 +178,21 @@ make_eml(path = folder,
 # Check to make sure everything looks okay on EDI Website
 make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2024",
-         data.table = c("manual-discharge_2019_2024.csv",
+         data.table = c("manual-discharge_2019_2025.csv",
                         "site_descriptions.csv",
-                        "manual-discharge_maintenancelog_2019_2024.csv"),
+                        "manual-discharge_maintenancelog_2019_2025.csv"),
          data.table.description = c("Manual Discharge Data",
                                     'Descriptions of sampling sites',
                                     'Manual Discharge Maintenance Log'),
-         temporal.coverage = c("2016-07-14", "2024-12-17"),
+         temporal.coverage = c("2016-07-14", "2025-12-02"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         other.entity = c('manual-discharge_qaqc_2019_2024.R',
-                          'manual-discharge_inspection_2019_2024.Rmd',
+         other.entity = c('manual-discharge_qaqc_2019_2025.R',
+                          'manual-discharge_inspection_2019_2025.Rmd',
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-         other.entity.description = c('Script used to QAQC 2019-2024 data',
-                                      'Script used to collate 2019-2024 data for publication',
+         other.entity.description = c('Script used to QAQC 2019-2025 data',
+                                      'Script used to collate 2019-2025 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
          package.id = "edi.454.8", #### this is the one that I need to change!!!

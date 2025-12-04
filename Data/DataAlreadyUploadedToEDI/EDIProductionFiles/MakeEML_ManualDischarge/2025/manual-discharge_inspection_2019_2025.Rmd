@@ -153,7 +153,8 @@ staged_edi %>%
   ggtitle("All data in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
   coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
-  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 staged_edi %>% 
   filter(Reservoir == 'BVR') %>% 
@@ -162,7 +163,8 @@ staged_edi %>%
   ggtitle("BVR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
   coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
-  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 staged_edi %>% 
   filter(Reservoir == 'FCR') %>% 
@@ -171,7 +173,8 @@ staged_edi %>%
   ggtitle("FCR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
   coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
-  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 staged_edi %>% 
   filter(Reservoir == 'FCR',
@@ -181,7 +184,8 @@ staged_edi %>%
   ggtitle("FCR 200 in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
   coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
-  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 staged_edi %>% 
   filter(Reservoir == 'CCR') %>% 
@@ -190,7 +194,8 @@ staged_edi %>%
   ggtitle("CCR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
   coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
-  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 

@@ -144,6 +144,52 @@ staged_edi %>%
 
 
 ```
+```{r}
+### Look at data
+
+staged_edi %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("All data")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'BVR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("BVR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'FCR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("FCR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'FCR',
+         Site ==200) %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("FCR 200")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+staged_edi %>% 
+  filter(Reservoir == 'CCR') %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("CCR")+
+  scale_x_datetime(date_labels = "%b %y")+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
+
+
+
+```
 
 ```{r Make new CSV with current and historic files}
 

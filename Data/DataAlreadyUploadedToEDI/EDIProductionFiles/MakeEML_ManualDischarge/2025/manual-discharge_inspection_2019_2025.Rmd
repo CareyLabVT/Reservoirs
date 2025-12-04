@@ -46,6 +46,11 @@ staged_edi <- ManualDischarge_qaqc(gsheet_url = gsheet_url,
                      start_date = NULL,
                      end_date = NULL)
 
+## Date trimming variables
+start_date <- min(staged_edi$DateTime)
+end_date <- max(staged_edi$DateTime)
+start_trim_date <- as.POSIXct("2025-01-01")
+end_trim_date <- as.POSIXct("2025-12-31")
 
 
 ```

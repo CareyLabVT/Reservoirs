@@ -145,29 +145,32 @@ staged_edi %>%
 
 ```
 ```{r}
-### Look at data
+### Look at data for specified date range
 
 staged_edi %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
-  ggtitle("All data")+
+  ggtitle("All data in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'BVR') %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
-  ggtitle("BVR")+
+  ggtitle("BVR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'FCR') %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
-  ggtitle("FCR")+
+  ggtitle("FCR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
@@ -175,16 +178,18 @@ staged_edi %>%
          Site ==200) %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
-  ggtitle("FCR 200")+
+  ggtitle("FCR 200 in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 staged_edi %>% 
   filter(Reservoir == 'CCR') %>% 
   ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
   geom_point(aes(color = Site)) +
-  ggtitle("CCR")+
+  ggtitle("CCR in specified date range")+
   scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')
 
 

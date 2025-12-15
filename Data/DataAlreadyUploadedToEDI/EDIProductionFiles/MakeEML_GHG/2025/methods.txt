@@ -14,7 +14,7 @@ Surface samples from Falling Creek Reservoir were also collected at a gauged wei
 
 In summer 2019, additional surface samples were collected approximately monthly along the stream and reservoir continuum for both Falling Creek Reservoir and Beaverdam Reservoir as part of the Reservoir Continuum project (Falling Creek Reservoir: Creek Sites = 99, 100, 101, 102, 200; Reservoir Sites = 20, 30, 45, 50; Reservoir Outflow = 1 and Beaverdam Reservoir: Creek Sites = 100, 200; Reservoir Sites = 20, 30, 45, 50; Mid-Reservoir Outflow Pipe = 40); see Woelmer et al. (2023) for more information. Surface samples were collected via grab samples for all stream and up-stream reservoir locations. All samples were stored on ice and analyzed within 24 hours of collection following McClure et al. (2018).
 
-Ii summer 2025, additional samples were collected approximately monthly at 9 littoral sites around the perimeter of FCR as part of a macrophyte survey project (Littoral Sites = 199.8, 199.9, 10.1, 10.2, 20.1, 20.9, 30.1, 30.9, 45.1). Surface samples were collected via grab samples for all littoral reservoir locations. All samples were stored on ice and analyzed within 24 hours of collection following McClure et al. (2018).
+In summer 2025, additional samples were collected approximately monthly at 9 littoral sites around the perimeter of FCR as part of a macrophyte survey project (Littoral Sites = 199.8, 199.9, 10.1, 10.2, 20.1, 20.9, 30.1, 30.9, 45.1). Surface samples were collected via grab samples for all littoral reservoir locations. All samples were stored on ice and analyzed within 24 hours of collection following McClure et al. (2018).
 
 All sites are described with geographic coordinates in the site_descriptions.csv data file.
 

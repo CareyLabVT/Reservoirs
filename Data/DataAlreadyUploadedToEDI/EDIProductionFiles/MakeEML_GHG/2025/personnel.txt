@@ -15,3 +15,4 @@ George	K.	Haynie	Virginia Tech	georgeh0919@vt.edu	0009-0003-2316-2037	creator
 Michael	K.	Kricheldorf	Virginia Tech	mkricheldorf@vt.edu	0009-0009-7898-1957	creator			
 Sierra		Tannheiser	Virginia Tech	sierrat22@vt.edu		creator			
 Evelyn	M.	Tipper	Virginia Tech	etipper@vt.edu	0009-0001-5005-0319	creator			
+Dominique	X.	Edwards	Virginia Tech	dominique@vt.edu	0009-0005-1265-8429	creator			

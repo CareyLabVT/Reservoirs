@@ -9,3 +9,4 @@ Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborati
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales	National Science Foundation	DEB-2327030
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management	National Science Foundation	DEB-2318861
 Cayelan 	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4477	PI	N/A	Virginia Tech Ecosystem Forecasting	034211
+Dominique	X.	Edwards	Virginia Tech	dominique@vt.edu	0009-0005-1265-8429	creator			

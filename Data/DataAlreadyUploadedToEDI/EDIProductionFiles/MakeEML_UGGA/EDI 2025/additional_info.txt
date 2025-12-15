@@ -1,6 +1,6 @@
-Contributions to the 2024 revision:
+Contributions to the 2025 revision:
 
-CCC developed and led the reservoir monitoring program. ABP led the field crew and contributed substantially to fieldwork and sensor maintenance in 2024. ASL updated code from 2023 for data processing and processed data in 2024.
+CCC developed and led the reservoir monitoring program. ABP led the field crew and contributed substantially to fieldwork and sensor maintenance in 2025. ABP and DXE updated code and processed data in 2025.
 
 Acknowledgments and historical contributions:
 

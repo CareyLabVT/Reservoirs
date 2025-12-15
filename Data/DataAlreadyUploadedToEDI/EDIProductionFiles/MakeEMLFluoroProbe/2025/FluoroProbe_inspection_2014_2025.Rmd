@@ -32,13 +32,18 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 
 ## Run Function 
 repo_link <- "https://api.github.com/repos/CareyLabVT/Reservoirs/git/trees/master?recursive=1"
-repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
-example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+#repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
+repo_filepath <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/"
+# example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+example_file_for_colnames <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
-historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
-out_file <- "/fluoroprobe_2014_2025.csv"
+# historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+historic_data_2017<- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+# maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
+maintenance_file <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv"
+out_file <- NULL
 start_date <- as.Date("2014-05-03")
 end_date <- Sys.Date() + lubridate::days(1)
 
@@ -53,14 +58,19 @@ current_df <- fluoroprobe_qaqc(repo_link = repo_link,
                  out_file = out_file,
                  start_date = start_date,
                  end_date = end_date) 
+
+write.csv(current_df, "./fluoroprobe_2014_2025.csv", row.names = FALSE)
 ```
 
 ## Read in built dataframe - reviewers start here!
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
 # THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
-current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
-  mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
+# current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
+#   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
+
+current_df <- read_csv("C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/fluoroprobe_2014_2025.csv") %>%
+   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # double-check time zone
 head(current_df$DateTime)
@@ -97,7 +107,7 @@ for(f in 1:(ncol(Flags))){
 ## Plot all casts individually - reviewers should not run this!
 
 ```{r eval = FALSE, echo = FALSE, include = FALSE}
-PLOT_ALL_CASTS == FALSE
+PLOT_ALL_CASTS = TRUE
 #create png plots for every cast for QAQC purposes (algal biomass)
 #these are just written to a file I temporarily create on my desktop
 #for EDI day; reviewers do not need to run this!!!
@@ -105,8 +115,22 @@ if(PLOT_ALL_CASTS == TRUE){
 
 for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   profile = subset(current_df, CastID == unique(current_df$CastID)[i])
-  castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
-                   sep = "-")
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+ 
+  #maria added this too 
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
+
+# remove anything else sketchy just in case
+castname <- str_replace_all(castname, "[^A-Za-z0-9_-]", "")
   
   profile2 = profile %>%
     select(Depth_m, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)%>%
@@ -118,8 +142,18 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     ggtitle(castname)+
     theme_bw()
   
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/biomass/",castname,".png")
-  ggsave(filename = filename, plot = profile_plot, device = "png")
+  #filename = paste0("C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/profiles/",castname,".png")
+  #ggsave(filename = filename, plot = profile_plot, device = "png")
+  
+  #Maria commented out above and added this to address saving issue
+  outpath = "C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/profiles/"
+  ggsave(
+  filename = file.path(outpath, paste0(castname, ".png")),
+  plot = profile_plot,
+  width = 6,
+  height = 8,
+  dpi = 300
+)
 
 }
 
@@ -128,8 +162,19 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
 #for EDI day
 for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   profile = subset(current_df, CastID == unique(current_df$CastID)[i])
-  castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
-                   sep = "-")
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+  
+    #maria added this too 
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
   
   profile2 = profile %>%
     select(Depth_m, RFU_525nm, RFU_570nm, RFU_610nm, RFU_370nm, RFU_590nm, RFU_470nm)%>%
@@ -141,8 +186,16 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
     ggtitle(castname)+
     theme_bw()
   
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/RFUs/",castname,".png")
-  ggsave(filename = filename, plot = profile_plot, device = "png")
+  # filename = paste0("C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/RFU/",castname,".png")
+  # ggsave(filename = filename, plot = profile_plot, device = "png")
+   #Maria commented out above and added this to address saving issue
+  outpath = "C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/RFU/"
+  ggsave(
+  filename = file.path(outpath, paste0(castname, ".png")),
+  plot = profile_plot,
+  width = 6,
+  height = 8,
+  dpi = 300)
 
 }
 
@@ -151,33 +204,68 @@ for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
 #for EDI day
 for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   profile = subset(current_df, CastID == unique(current_df$CastID)[i])
-  castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
-                   sep = "-")
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+
+    #maria added this too 
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
   
+    
   profile_plot <- ggplot(data = profile, aes(x = Temp_C, y = Depth_m))+
     geom_path(linewidth = 1)+
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/temperature/",castname,".png")
-  ggsave(filename = filename, plot = profile_plot, device = "png")
+  # filename = paste0("C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/temperature",castname,".png")
+  # ggsave(filename = filename, plot = profile_plot, device = "png")
+   #Maria commented out above and added this to address saving issue
+  outpath = "C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/temperature/"
+  ggsave(
+  filename = file.path(outpath, paste0(castname, ".png")),
+  plot = profile_plot)
   
 }
 
 #create png plots for every cast for QAQC purposes (transmission)
 for (i in 1:length(unique(current_df$CastID))){ #for every unique FP cast
   profile = subset(current_df, CastID == unique(current_df$CastID)[i])
-  castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
-                   sep = "-")
-  
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+
+####maria edit
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
+    
   profile_plot <- ggplot(data = profile, aes(x = Transmission_perc, y = Depth_m))+
     geom_path(linewidth = 1)+
     scale_y_reverse()+
     ggtitle(castname)+
     theme_bw()
-  filename = paste0("/Users/MaryLofton/Desktop/FP_plots_2024/transmission/",castname,".png")
-  ggsave(filename = filename, plot = profile_plot, device = "png")
-  
+  # filename = paste0("C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/transmission/",castname,".png")
+  # ggsave(filename = filename, plot = profile_plot, device = "png")
+ 
+  #Maria commented out above and added this to address saving issue
+  outpath = "C:/Users/maria/OneDrive/2023 Rtudio/EDI_cast_review/transmission/"
+  ggsave(
+  filename = file.path(outpath, paste0(castname, ".png")),
+  plot = profile_plot)
+
+   
 }
   
 }
@@ -312,12 +400,12 @@ print(p1)
 ## Visualize current year at a glance
 
 ```{r visualization of current year at a glance}
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 50, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 40, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 30, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 20, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2024, site = 10, z = "TotalConc_ugL")
-flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2024, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 50, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 40, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 30, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 20, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 10, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2025, site = 50, z = "TotalConc_ugL")
 ```
 
 ## Visualize a previous year at a glance

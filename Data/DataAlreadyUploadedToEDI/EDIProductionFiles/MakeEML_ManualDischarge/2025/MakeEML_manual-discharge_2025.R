@@ -133,7 +133,7 @@ make_eml(path = folder,
                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
          other.entity.description = c('Script used to QAQC 2019-2025 data',
-                                      'Script used to collate 2019-2024 data for publication',
+                                      'Script used to collate 2019-2025 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
          package.id = "edi.1017.18", #### this is the one that I need to change!!!

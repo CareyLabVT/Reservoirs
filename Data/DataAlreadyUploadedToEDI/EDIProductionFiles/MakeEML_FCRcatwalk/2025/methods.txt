@@ -2,7 +2,7 @@
 
 DESCRIPTION OF DATASET AND ASSOCIATED SCRIPTS:
 
-Data from multiple water quality sensors were collected from a fixed platform at the deep hole of Falling Creek Reservoir (located at 37.30325, -79.8373 and referred to as Site 50) in 2018-2024. Data were collected using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were recorded every ten minutes from 2018-07-05 to 2024-12-31. We deployed the thermistors and 5 and 9 m dissolved oxygen sensors in 2018-07-05 and the EXO2 sonde at 1 m depth was deployed in August 2018. The EXO2 sonde was moved from 1.0 m to 1.6 m depth on 2019-05-20 at 12:40 (1.6 m is the depth of one of the outtake valves for drinking water treatment). As the EXO2 sonde has been moored near the outtake valve at 1.6 m (assuming full pond), the exact depth of the EXO2 sonde has slightly varied over time due to small water level changes in the reservoir and changes in the deployed depth. We deployed a pressure transducer at 9 m in 2020-05-15 to help track water level changes. All observations are in EST and daylight savings is not observed. 
+Data from multiple water quality sensors were collected from a fixed platform at the deep hole of Falling Creek Reservoir (located at 37.30325, -79.8373 and referred to as Site 50) in 2018-2024. Data were collected using water temperature thermistors, dissolved oxygen sensors, pressure sensors, and a YSI EXO2 sonde. Profiles were recorded every ten minutes from 2018-07-05 to 2024-12-31. We deployed the thermistors and 5 and 9 m dissolved oxygen sensors on 2018-07-05 and the EXO2 sonde at 1 m depth was deployed in August 2018. The EXO2 sonde was moved from 1.0 m to 1.6 m depth on 2019-05-20 at 12:40 (1.6 m is the depth of one of the outtake valves for drinking water treatment). As the EXO2 sonde has been moored near the outtake valve at 1.6 m (assuming full pond), the exact depth of the EXO2 sonde has slightly varied over time due to small water level changes in the reservoir and changes in the deployed depth. We deployed a pressure transducer at 9 m in 2020-05-15 to help track water level changes. All observations are in EST and daylight savings is not observed. 
 
 
 This data package includes a data file (fcre-waterquality_2018_2024), QAQC R script (fcre-waterquality_qaqc_2018_2024), maintenance log (fcre-waterquality_maintenancelog_2018_2024), visual inspection R script (fcre-waterquality_inspection_2018_2024), and an additional data visualization script (Plotting_function). The QAQC script removes outliers and applies the maintenance log to clean the data files included in the package; the visual inspection script provides code for plotting the data files; and the Plotting_function provides the function necessary for the inspection script. 
@@ -94,7 +94,7 @@ Pressure Transducer at 9 m:
 
 EXO2 Depth sensor:
 
-The EXO2 sonde we have is vented but the cable is not, so its depth reading is not always accurate. To correct for this issue, we have attempted to moor the sonde at the same level, but due to changes in water and deployment practices, the sonde is not always exactly 1.6 m below the surface. We try to keep the sonde no more than 2.5 meters below the surface, but if we see that it has slipped, then we reposition the sonde. In 2024, we put the EXO2 on a float to ensure that it was consistently located at 1.6 m depth below the surface.
+The EXO2 sonde we have is vented but the cable is not, so its depth reading is not always accurate. To correct for this issue between 2018 and 2024, we attempted to moor the sonde at the same level, but due to changes in water and deployment practices, the sonde was not always exactly 1.6 m below the surface. We tried to keep the sonde no more than 2.5 meters below the surface, but if we saw that it had slipped, then we repositioned the sonde. In 2024, we put the EXO2 on a float to ensure that it was consistently located at 1.6 m depth below the surface.
 
 EXO2 Chlorophyll-a and Phycocyanin QAQC:
 
@@ -102,13 +102,13 @@ The chlorophyll-a and phycocyanin sensor data underwent a QAQC process to remove
 
 EXO2 fDOM:
 
-The fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2024.R script). Outliers were defined as absolute values greater than two standard deviations from leading or  lagging measurements for each individual observation. These outliers were set to NA and identified in the Flag column with a value of 2.
+The fDOM sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2025.R script). Outliers were defined as absolute values greater than two standard deviations from leading or  lagging measurements for each individual observation. These outliers were set to NA and identified in the Flag column with a value of 2.
 
 EXO2 Conductivity, Specific conductance, and Total Dissolved Solids (TDS): 
 
-Conductivity, specific conductance, and TDS sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2024.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. During the summer of 2020, there were some high conductivity events. Any values above 42 microsiemens/cm for specific conductance were flagged as 5 (questionable value), with the corresponding conductivity and TDS values for those data points flagged as 5 but not removed from the dataset.
+Conductivity, specific conductance, and TDS sensor data underwent a QAQC process to remove extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2025.R script). Outliers were defined as absolute values greater than two standard deviations from previous and subsequent measurements for each individual observation. These outliers were set to NA and identified in the Flag_fDOM column as a value of 2. During the summer of 2020, there were some high conductivity events. Any values above 42 microsiemens/cm for specific conductance were flagged as 5 (questionable value), with the corresponding conductivity and TDS values for those data points flagged as 5 but not removed from the dataset.
 
-All other observations went through the same QAQC processing for extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2024.R script).
+All other observations went through the same QAQC processing for extreme outliers (see ‘Leading and Lagging QAQC’ section of fcre-waterquality_qaqc_2018_2025.R script).
 
 
 ################
@@ -156,7 +156,7 @@ EXO2 Sonde Maintenance
 
 CALIBRATION INFORMATION-
 
-Instruments, manual, and serial numbers used 2018 - 2024: Multiple sensors and instruments were added over time. Below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+Instruments, manual, and serial numbers used 2018 - 2025: Multiple sensors and instruments were added over time. Below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
 
 NexSens T-Node FR Thermistors (2018-07 - current) https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf Serial No. 3718; Depth 0.1m (2018-07 - 2020-10-19) Serial No. 3741; Depth 0.1m (2020-10-20 to 2020-10-22) Serial No. 3903; Depth 0.1m (2020-10-22 - current) Serial No. 3724; Depth 1m (2018-07 - 2021-01-07) Serial No. 3966; Depth 1m (2021-02-26 - current) Serial No. 3741; Depth 2m (2018-07 - 2020-10-20; 2020-10-22 - current) Serial No. 3746; Depth 3m Serial No. 3747; Depth 4m (2018-07 - 2021-01-07) Serial No. 4013; Depth 4m (2021-12-26 - current) Serial No. 3751; Depth 5m Serial No. 3786; Depth 6m Serial No. 3823; Depth 7m Serial No. 3851; Depth 8m Serial No. 3857; Depth 9m
 

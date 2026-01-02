@@ -1,6 +1,7 @@
 # Chla Processing L1 script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
+# Edit: 2 Jan. 26 - using "here" for pathing
 # Edit: 18 Feb. 25 - added an if statement for when we don't have new observations for the year. The function ends
 # KKH Updated Jan 25 - rename SNP sites to be consistent with LSPA sites 
 # (40 (Hedgehog) > 220 (LSPA code for Hedgehog), 50 (buoy) > 200)
@@ -23,6 +24,7 @@
 #filt_chla_qaqc from L1 script 17 April 2025
 #updating code and adding a section to return mismatches as needed
 #also adding a section to handle dilutions as needed
+
 filt_chla_qaqc <- function(directory, 
                            rack_map,
                            filtering_log,
@@ -36,7 +38,7 @@ filt_chla_qaqc <- function(directory,
                            end_date)
 {
   
-  # directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
+  # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
   # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
   # final_vol_extract = 6
@@ -50,14 +52,14 @@ filt_chla_qaqc <- function(directory,
   #  end_date = NULL
   
  #packages
-  pacman::p_load(tidyverse, gsheet,arsenal)
+  pacman::p_load(tidyverse, gsheet, arsenal, here)
   
   #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
   
  
   ## check how maintenance log is read in/entered
-  log_read <- read_csv(maintenance_file, col_types = cols(
+  log_read <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv", col_types = cols(
     .default = col_character(),
     Date_processed = col_date("%Y-%m-%d"),
     Sample_date = col_date("%Y-%m-%d"),
@@ -88,59 +90,60 @@ print(problems(log_read))
   
   #### 1.2 Read in files from the spec that are in a folder. 
   
-  print("compiled data frame of absorbances from spec")
+  print("Part 1.2. compiled data frame of absorbances from spec")
   
   # make a function that reads in the file, extract the processing date, label the observation if it was before acid was added or after, get the number of the sample to match with rack map, and indicate if the sample was diluted. 
   
+    
   read_raw_chla_files<-function(FILES){
     
-      # print file names to see where errors occur
-      print(paste0("Read in ", FILES))
-      
-      # Get the date the samples were processed on the spec
-      sed <- str_extract(FILES, "_\\d+")
-      
-      # Take out the extra underscore
-      Date <- sub("_","",sed)
-      
-      # Put the date in the proper format
-      Date_processed <- as.Date(Date, "%Y%m%d")
-      
-      # read in the files
-      data <- read_csv(FILES)|>
-        dplyr::rename("Sample.ID" = `Sample ID`)
-      
-      # Add the date processed to the files
-      data$Date_processed <- as.Date(Date, "%Y%m%d")
-      
-      
-      
-      data2 <- data|>
-        # Label the samples either eth_blank, fake samples, reservoir samples 
-        # Some samples aren't labeled as eth_blanks in the ID so need to be labeled later in the script as well
-        mutate(samp_type = ifelse(grepl("et|bl|buff|filt", Sample.ID), "eth_blank",
-                                  ifelse(grepl("fa", Sample.ID), "fake",
-                                         ifelse(grepl("ref", Sample.ID), "ref", "res_samp"))),
-          # # samples are labeled "B" for abosorbance before adding acid to the sample. "A" is the absorbance after acid has been added. Label the samples so we can pick them out later. 
-          #      timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
-          #      timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
-          #                      ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
-               # remove the _2 for the Num_ID. _2 means the sample was rerun, but for determining
-               # the id to link with the field info this number should be ignored. 
-               Num_ID = gsub("_2", "", Sample.ID),
-               # this ensures there are no letters in the ID so we can use as.numeric below
-               Num_ID = gsub("[aA-zZ]", "", Num_ID),
-               # indicates samples that were diluted 
-               dilution = ifelse(str_detect(Sample.ID,"DIL|dil")==T,"diluted", NA),
-               Num_ID = as.numeric(Num_ID)) 
-      
-      return(data2)
-      }
+    # print file names to see where errors occur
+    print(paste0("Read in ", FILES))
+    
+    # Get the date the samples were processed on the spec
+    sed <- str_extract(FILES, "_\\d+")
+    
+    # Take out the extra underscore
+    Date <- sub("_","",sed)
+    
+    # Put the date in the proper format
+    Date_processed <- as.Date(Date, "%Y%m%d")
+    
+    # read in the files
+    data <- read_csv(FILES)|>
+      dplyr::rename("Sample.ID" = `Sample ID`)
+    
+    # Add the date processed to the files
+    data$Date_processed <- as.Date(Date, "%Y%m%d")
+    
+    
+    
+    data2 <- data|>
+      # Label the samples either eth_blank, fake samples, reservoir samples 
+      # Some samples aren't labeled as eth_blanks in the ID so need to be labeled later in the script as well
+      mutate(samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",
+                                ifelse(grepl("fa", Sample.ID), "fake",
+                                       ifelse(grepl("ref", Sample.ID), "ref", "res_samp"))),
+             # # samples are labeled "B" for abosorbance before adding acid to the sample. "A" is the absorbance after acid has been added. Label the samples so we can pick them out later. 
+             #      timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
+             #      timing = ifelse(str_detect(Sample.ID,"b|B")==T,"b", 
+             #                      ifelse(str_detect(Sample.ID, "a|A")==T, "a", timing)),
+             # remove the _2 for the Num_ID. _2 means the sample was rerun, but for determining
+             # the id to link with the field info this number should be ignored. 
+             Num_ID = gsub("_2", "", Sample.ID),
+             # this ensures there are no letters in the ID so we can use as.numeric below
+             Num_ID = gsub("[aA-zZ]", "", Num_ID),
+             # indicates samples that were diluted 
+             dilution = ifelse(str_detect(Sample.ID,"DIL|dil")==T,"diluted", NA),
+             Num_ID = as.numeric(Num_ID)) 
+    
+    return(data2)
+  }
       
     
    # Use the function to make a data frame of raw absorbance from the spec
   # use purr to read in all the files using the function above
-  files<-list.files(path= directory,pattern=".txt", full.names=TRUE)
+  files<-list.files(path= here(directory), pattern=".txt", full.names=TRUE)
     
     if(length(files)==0){
       
@@ -155,7 +158,7 @@ print(problems(log_read))
   ### 2. Get the sample ID number and match with the reservoir and site
   
   ### 2.1 Read in the rack map file ####
-  print("Read in rack map and join by Date Processed, Num_ID and dilution")
+  print("Part 2. Read in rack map and join by Date Processed, Num_ID and dilution")
   
   # read in the rack map from Google Drive
   rack_map <- gsheet::gsheet2tbl(rack_map)
@@ -165,7 +168,7 @@ print(problems(log_read))
     mutate(
       Num_ID = sub("_", "", gsub("[aA-zZ]+", "", Sample_ID)),
       Num_ID = as.numeric(Num_ID),
-      ResSite = sub("-", "", ResSite),
+      ResSite = toupper(sub("-", "", ResSite)),
       dilution = ifelse(dil_factor>0,"diluted", NA),
       dil_factor = ifelse(is.na(dil_factor), 1, dil_factor))
       #samp_type = ifelse(Sample_date=="ethanol_blank"),"eth_blank", "res_samp")
@@ -190,7 +193,7 @@ print(problems(log_read))
   # relabel ethanol blank samples so we can find them later
     mutate(
       samp_type = ifelse(str_detect(Sample_date, "^et")==T, "eth_blank", 
-                         ifelse(str_detect(ResSite, "blank")==T, "eth_blank", samp_type)))
+                         ifelse(str_detect(ResSite, "BLANK")==T, "eth_blank", samp_type)))
   
   
   # Get sample dates in the right format
@@ -205,7 +208,8 @@ print(problems(log_read))
     drop_na(Sample_date)
   
 min_samp_date <- min(a$Sample_date)
-
+print("minimum sample date is")
+print(min_samp_date)
   ### 2.2 read in filtering log 
   
   filtering_log <- gsheet::gsheet2tbl(filtering_log)
@@ -242,7 +246,7 @@ min_samp_date <- min(a$Sample_date)
   }
   
   ### 3. Combine with the filtering log 
-  print("combine samples with the filtering log")
+  print("Part 3. combining samples with the filtering log")
   
   comb <- left_join(res_samp2, filtering_log2, 
                     by=c("Sample_date"="Sample_date", "ResSite"="ResSite", "Rep"="Rep", "Depth"="Depth", "samp_type"="samp_type")) |>
@@ -260,7 +264,7 @@ min_samp_date <- min(a$Sample_date)
     
     print(comb |>
             filter(samp_type == 'res_samp' & is.na(Vol_filt_mL))|>
-            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL))
+            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL), n = 100)
   }
   
   
@@ -273,13 +277,16 @@ min_samp_date <- min(a$Sample_date)
     )
   
   # List the Sample.IDs with no observations from the spec
-  
+
   no_obs <- comb2 |> 
     select(c(Sample.ID, WL750.0, Date_processed)) 
     
   if(nrow(no_obs|>filter(is.na(WL750.0)))>0){
     print("The following rows have no observations from the spec and will be removed")
-    print(no_obs|>filter(is.na(WL750.0)))
+    print(no_obs|>filter(is.na(WL750.0)), n = 100)
+    print("If the above list is longer than ~10, check that the dates listed below match the run dates on the spec data and in the rack map. You may be missing a run and/or have mislabeled the date processed.")
+   
+    print(unique(no_obs|>filter(is.na(WL750.0))))
     
     comb2 <- comb2|>
       drop_na(WL750.0)
@@ -657,7 +664,7 @@ if (nrow(check_turbidity)>0){
     #filter(Sample_ID!="")%>%
     # Get Reservoir and Site
     #separate(.,col = ResSite, into = c("Reservoir", "Site"), sep = 1)%>%
-    mutate(Reservoir = substr(ResSite, 1, 1), 
+    mutate(Reservoir = toupper(substr(ResSite, 1, 1)), 
            Site = substring(ResSite, 2)) %>% 
     mutate(Reservoir=ifelse(Reservoir=="B","BVR", Reservoir),
            Reservoir=ifelse(Reservoir=="F","FCR", Reservoir),

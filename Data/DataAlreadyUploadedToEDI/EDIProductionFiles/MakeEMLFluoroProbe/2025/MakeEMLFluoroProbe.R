@@ -80,31 +80,31 @@ library(EMLassemblyline)
 #'the maintenance log (csv)
 #'the qaqc script (R)
 #'the visualization script (R)
-template_core_metadata(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+template_core_metadata(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                          data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
                           data.table = "FluoroProbe.csv",
                           write.file = TRUE)
 
-template_table_attributes(path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
-                          data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
                           data.table = "site_descriptions.csv",
                           write.file = TRUE)
 
-template_table_attributes(path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-                          data.path = "/Users/MaryLofton/RProjects/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
                           data.table = "Maintenance_Log_FluoroProbe_2014_2023.txt",
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                             data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+template_geographic_coverage(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+                             data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
                              data.table = "FluoroProbe.csv",
                              empty = TRUE,
                              write.file = TRUE)
@@ -154,8 +154,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-                               data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+template_categorical_variables(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+                               data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -184,22 +184,22 @@ template_categorical_variables(path = "C:/Users/Mary Lofton/Documents/Github/Res
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2024",
-  temporal.coverage = c("2014-05-04", "2024-11-19"),
+  path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
+  data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
+  eml.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
+  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2025",
+  temporal.coverage = c("2014-05-04", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
-  data.table.name = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
+  data.table = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2025.csv"),
+  data.table.name = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2025.csv"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
-  other.entity.name = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
-  other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2024.csv before publishing"),
-  user.id = 'melofton',
-  #user.id = 'ccarey',
+  other.entity = c("FluoroProbe_qaqc_2014_2025.R","FluoroProbe_inspection_2014_2025.Rmd"),
+  other.entity.name = c("FluoroProbe_qaqc_2014_2025.R","FluoroProbe_inspection_2014_2025.Rmd"),
+  other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2025.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2025.csv before publishing"),
+  #user.id = 'melofton',
+  user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1139.9')
+  package.id = 'edi.1139.10')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

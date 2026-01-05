@@ -5,11 +5,12 @@ output: html_document
 theme: null
 created: "Jan. 2023" 
 date: "`r Sys.Date()`"
-edited: "Dec. 2025"
+edited: "Jan. 2026"
 ---
 Updates: 
 Created Jan. 2023
 Dec. 2025- Added a section to update all the values needed in the markdown and made it so certain chunks will knit depending on if you are the data publisher or data reviewer. 
+Jan. 2026 - Updated the arguments in the qaqc function. Didn't need the other data argument. 
 
 
 This script is the visual inspection script. 
@@ -120,7 +121,7 @@ maintenance_log <- "fcre-waterquality_maintenancelog_2018_2025.csv"
 # 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
-edi_link <-"https://pasta-s.lternet.edu/package/data/eml/edi/518/34/814580ebec0385c66f0a0a97c38e9136"  
+edi_link <-"https://pasta-s.lternet.edu/package/data/eml/edi/518/36/814580ebec0385c66f0a0a97c38e9136"  
 
 ```
 
@@ -148,46 +149,29 @@ ds <- c(
   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_legacy_2018_2019_2020_2021_2022_2023.csv',
   'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_legacy_2024.csv',
   # THE CURRENT YEARS FILE
-  'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv'
-)
-
-# Read in and make a data frame of the manual downloaded files. I make these each year with the raw files we have downloaded.
+  'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv',
+  
+  # manual files
+  # Read in and make a data frame of the manual downloaded files. I make these each year with the raw files we have downloaded.
 # See ManualDownloadsSCCData for the script on making the file for each year.
 # Link here : https://github.com/CareyLabVT/ManualDownloadsSCCData/tree/master/MetStation
-
-man_files <- c("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2018_2023.csv",
+  "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2018_2023.csv",
                "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRCatwalk_manual_2024.csv",
-               "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/FCRCatwalk_L1.csv")
+               "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/FCRCatwalk_L1.csv"
+)
 
 
-# Make a tibble of the arguments going into the function. Each row are the arguments that will go into the function.
-#Make sure you have the correct raw files that go with the manual files.
-#If you want the same argument just repeat it each time.
-# Each row must be filled, even if it is just a NULL.
-
-state_cat <- tibble(data_file = ds,
-                    data2_file = man_files,
-                    maintenance_file = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv',each=3),
-                    output_file = I(list(NULL, NULL, NULL)),
-                    start_date = c(ymd_hms("2018-07-05 14:45:00", tz="EST"), ymd_hms("2023-12-31 23:59:00", tz="EST"), ymd_hms("2024-12-31 23:59:00", tz="EST")),
-                    end_date = c(ymd_hms("2023-12-31 23:59:00", tz="EST"), ymd_hms("2024-12-31 23:59:00", tz="EST"), Sys.Date() + lubridate::days(1)),
-                    dir = rep(here::here(), each = 3))
-
-
-# Use the tibble above to use pmap and run each row through the qaqc_fcrmet function.
-# This creates a data frame for each or the raw files. Then we bind everything together below.
-
-fcrcat_files <- state_cat%>%
-  pmap(qaqc_fcr)
-
-# Bind the different data files that you made to get one large data frame.
-
-  current_df <- dplyr::bind_rows(fcrcat_files)
+current_df <- qaqc_fcr(data_file = ds,
+                    maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv',
+                    output_file = NULL,
+                    start_date = ymd_hms("2018-07-05 14:45:00", tz="EST"),
+                    end_date = Sys.Date() + lubridate::days(1),
+                    dir = here::here())
 
 
 # Remove dups that were introduced abbove.
-  current_df <- current_df%>%
-  dplyr::distinct(.)%>% # get rid of dups if they snuck in
+  current_df <- current_df|>
+  dplyr::distinct()%>% # get rid of dups if they snuck in
   filter(DateTime<(current_time_end))
 
 # make sure no time duplicates.

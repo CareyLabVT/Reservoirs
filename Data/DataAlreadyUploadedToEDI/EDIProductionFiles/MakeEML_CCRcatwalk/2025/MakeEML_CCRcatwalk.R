@@ -1,5 +1,4 @@
-# 11-Jan-2021 
-# edit 02 NOV 2021 by ABP
+# 13-01-2022
 # Script written by WW
 
 
@@ -17,11 +16,11 @@
 #    and output file for EDI is Catwalk_EDI_2018_2021.csv
 
 library(devtools)
-#install_github("EDIorg/EMLassemblyline")
+install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2025")
-folder
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2025/"
+
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020
@@ -57,7 +56,7 @@ folder
 #?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-#template_core_metadata(path = folder,
+#template_core_metadata(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
 #                       license = "CCBY",
 #                       file.type = ".txt",
 #                       write.file = TRUE)
@@ -65,8 +64,8 @@ folder
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-#template_geographic_coverage(path = folder,
-#                             data.path = folder,
+#template_geographic_coverage(path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+#                             data.path = "C:/Users/Mary Lofton/Documents/Github/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
 #                             data.table = "FluoroProbe.csv",
 #                             empty = TRUE,
 #                             write.file = TRUE)
@@ -113,16 +112,16 @@ view_unit_dictionary()
 # function below to create a template
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = c("fcre-waterquality_2018_2025.csv",
-                                         "fcre-waterquality_maintenancelog_2018_2025.csv"),
+                          data.table = c("ccre-waterquality_2021_2025.csv", "ccre-waterquality_depth_offsets_2021_2025.csv",
+                                         "ccre-waterquality-hobos_2020_2021.csv", "ccre-waterquality_maintenancelog_2021_2025.csv", 
+                                         "reservoir_site_descriptions.csv"),
                           write.file = TRUE)
-
-
 
 # edit this file in excel
 
 #if you need to make custom units that aren't in the unit dictionary,
 #use the customunits.txt file and the directions on the EMLassemblyline Github to do so
+#taken from other dataframes
 
 #Step 13: Close files
 #if all your files aren't closed, sometimes functions don't work
@@ -130,12 +129,10 @@ template_table_attributes(path = folder,
 #Step 14: Categorical variables
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
-#identified which variables are categorical
-??template_categorical_variables
+#identified which variables are categorical which you did above
 template_categorical_variables(path = folder,
                                data.path = folder,
                                write.file = TRUE)
-## THIS WILL FAIL IF YOU HAVE MORE THAN ONE ATTRIBUTES FILE IN YOUR DIRECTORY
 # edit this file in excel
 
 
@@ -143,6 +140,7 @@ template_categorical_variables(path = folder,
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
 
 ## Step 16: Obtain a package.id.  ####
+###DWH need to do this #######
 # Go to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
 # then login using one of the Carey Lab usernames and passwords.
 # These are found in the Google Drive folder regarding making EMLs in the 
@@ -158,33 +156,45 @@ template_categorical_variables(path = folder,
 # View documentation for this function
 ??make_eml
 
-# Run this function
+# Run this function. 
 make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
-         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
-         specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths 
-         in Falling Creek Reservoir, Virginia, USA in 2018-2025",
-         data.table = c("fcre-waterquality_2018_2025.csv", 
-                        'fcre-waterquality_maintenancelog_2018_2025.csv'),
-         data.table.description = c("Data file of sensor observations from fcre-waterquality", 
-                                    "Maintenance log for fcre-waterquality sensors"),
-         other.entity = c('fcre-waterquality_qaqc_2018_2025.R', 
-                          'fcre-waterquality_inspection_2018_2025.Rmd',
-                          'Plotting_function.R'),
-         other.entity.description = c('Automated function for QAQC. Also known as L1 function', 
-                                      'Visual inspection script to check the data before writing to csv',
-                                      'Function to create plots for streaming sensors'),
-         temporal.coverage = c("2018-07-05", "2025-12-31"),
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
+         total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2025",
+         data.table = c("ccre-waterquality_2021_2025.csv","ccre-waterquality_maintenancelog_2021_2025.csv","ccre-waterquality_depth_offsets_2021_2025.csv",  
+                        "ccre-waterquality-hobos_2020_2021.csv", "reservoir_site_descriptions.csv"),
+         #data.table.name = c("CCRCatwalk_2021_2023","CCRCatwalk_maintenancelog_2021_2023","CCRCatwalk_Depth_offsets_2021_2023",  
+          #                    "CCR_hobos_2020_2021","reservoir_site_descriptions"),
+         data.table.description = c("ccre-waterquality data at CCR for sensors off the dam for 2021 to 2025",
+                                    "Maintenace log for waterquality sensors",
+                                    "Offsets for sensor depths",
+                                    "HOBO Temperature String 2020-2021 deployed about 500 ft. from the dam",
+                                    "Sampling site descriptions"),
+         other.entity = c('ccre-waterquality_qaqc_2021_2025.R', 
+                          'ccre-waterquality_inspection_2021_2025.Rmd', 
+                          'find_depths.R', 
+                          'Plotting_function.R',
+                          "ccre-waterquality-hobo_compilation_2020_2021.R"),
+         #other.entity.name = c('CCRCatwalk_qaqc_2021_2023', 
+        #                       'CCRCatwalk_inspection_2021_2023', 
+        #                      'find_depths',
+        #                       'Plotting_function',
+        #                      'ccre-waterhobo_compilation_2020_2021'),
+         other.entity.description = c('Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function.',
+                                      'Inspection script creates QAQC plots and downloads the necessary files for publication.', 
+                                      'Function to get a depth for each observation',
+                                      'Function used to create the QAQC plots in the inspection script',
+                                      'Script used to collate the HOBO files from 2020-2021'),          
+         temporal.coverage = c("2020-07-29", "2025-12-31"),
          #geographic.description = "Southwestern Virginia, USA, North America",
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.36", #### this is the one that I need to change and the one for staging!!!
-        # package.id = "edi.271.9", #### this is the one for the production enviornment
+         package.id = "edi.719.33", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         #package.id = "edi.1069.3", #### THIS IS USED FOR PUBLISHING
          user.domain = 'EDI')
-
-i## Step 8: Check your data product! ####
+## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
 # then login using one of the Carey Lab usernames and passwords. 
 
@@ -215,19 +225,22 @@ i## Step 8: Check your data product! ####
 #          data.path = folder,
 #          eml.path = folder,
 #          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
-#          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths 
-#          in Falling Creek Reservoir, Virginia, USA in 2018-2022",
-#          data.table = c("FCR_Catwalk_EDI_2018_2022.csv", 'FCR_CAT_MaintenanceLog_2018_2022.csv'),
-#          data.table.description = c("FCR Catwalk Sensor String", "Maintenance log for catwalk sensors"),
-#          other.entity = c('FCR_catwalk_QAQC_function_2018_2022.R', 'QAQC_catwalk_2018_2022.Rmd' ),
-#          other.entity.description = c('automated function to do QAQC which is sourced in final QAQC script', 'Final script to run QAQC'),
-#          temporal.coverage = c("2018-07-05", "2022-12-31"),
+#          specific conductance, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths 
+#          in Carvins Cove Reservoir, Virginia, USA in 2021",
+#          data.table = c("CCR_Catwalk_EDI_2021.csv","CCR_Depth_offsets_2021.csv"),
+#          data.table.description = c("CCR Catwalk Sensor String","CCR offsets for sensor depths"),
+#          other.entity = c('CCR_catwalk_QAQC_function_2021.R', 'CCR_catwalk_QAQC_Plots_2021.R','CCRW_maintenance_log_2021.txt', 'CCR_sort_by_depth_2021.R' ),
+#          other.entity.description = c('Automated QAQC script', 'Final script to run QAQC', 'Maintenance log for catwalk sensors', 'Applying the depth offset and sorting by sensor depth' ),          
+#          temporal.coverage = c("2021-04-09", "2021-12-31"),
 #          #geographic.description = "Southwestern Virginia, USA, North America",
 #          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
 #          maintenance.description = "ongoing",
 #          user.id =  "ccarey",
-#          package.id = "edi.271.7", #### make sure this matches the original catwalk file, which you are just updating, DO NOT RESERVE NEW PACKAGE ID
+#          package.id = "edi.1069.1", #### make sure this matches the original catwalk file, which you are just updating, DO NOT RESERVE NEW PACKAGE ID
 #          user.domain = 'EDI')
+# 
+
+
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)
@@ -249,16 +262,5 @@ i## Step 8: Check your data product! ####
 # Click the package.id hyperlink to view your final product! HOORAY!
 
 
-
-# make_eml(path = "C:/Users/wwoel/Desktop/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCatwalk",
-#          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductivity, total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Falling Creek Reservoir, Virginia, USA in 2018",
-#          data.files = "Catwalk_EDI_2020.csv",
-#          data.files.description = "Catwalk Sensor String",
-#          temporal.coverage = c("2018-07-05", "2018-12-18"),
-#          geographic.description = "Southwestern Virginia, USA, North America",
-#          maintenance.description = "ongoing",
-#          user.id = c("carylab1", "ccarey"),
-#          package.id = "edi.271.2", #### this is the one that I need to change!!!
-#          affiliation = c("EDI", "EDI"))
 
 

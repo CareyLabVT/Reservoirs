@@ -1,16 +1,11 @@
 ---
-title: "FCR Catwalk Plots for EDI"
+title: "CCR Catwalk Plots for EDI"
 author: "Adrienne Breef-Pilz"
 output: html_document
 theme: null
-created: "Jan. 2023" 
+original date: Jan. 2023
 date: "`r Sys.Date()`"
-edited: "Dec. 2025"
 ---
-Updates: 
-Created Jan. 2023
-Dec. 2025- Added a section to update all the values needed in the markdown and made it so certain chunks will knit depending on if you are the data publisher or data reviewer. 
-
 
 This script is the visual inspection script. 
 
@@ -31,60 +26,51 @@ This script is the visual inspection script.
 
 All files are from GitHub or EDI and the source scripts are from GitHub as well. 
 
-INFORMATION:
-
-There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it.
-
-If you are REVIEWING this data package, add the pasta URL from EDI in the "EDIT HERE" chunk and you change the role, as well. If you are knitting the document, only the specified chunks of code will be run depending on your role.  Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+If you are REVIEWING this data package, add the pasta URL from EDI in the "READ IN EDI FOR REVIEWER". Make sure eval=FALSE is in the chunk header for "Get raw files", "QAQC all files", "Write CSV" and "Download and save Maintenance Log". You don't need to remake the data files when you are reviewing the data package. These chunks of code will not be run when the R markdown is knitted together and saves you LOTTTS of time. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
 If you are running the code chunk by chunk you mind need to make some adjustments to the code. To make the plots this markdown uses a function called "all_plots". In the function it creates a plots of the most current year, the whole times series, as well as, density and box plots for daily averages. You can also specify if you would like to produce a heat map. Note that heat maps are only produced if your data has a depth column. The function also allows you to choose if you want interactive plots, using plotly, for the most recent year of data. The plotly plots are designed to be in order with the other plots when knit to together. Therefore if you are running the ploting section, chunk by chunk, then you need to specify the plotly plot from the list of plots labeled "output". For this data package do not use plotly for all plots at one time. I usually use it for depth, oxygen, and chla. 
-
-
-
-If you are REVIEWING this data package, got to the "EDIT HERE" chunk
-
-1.  Update your role
-
-2.  Update the pasta link from EDI
-
-If you are running the code chunk by chunk you might need to make some adjustments to the code. 
 
 FOR DATA PRODUCT LEAD:
 
 If you are the data product lead and making the data package then:
 
-1.  Make sure all the date ranges are up to date especially current_time_start and current_time_end.
+1. Make sure all the date ranges are up to date especially current_time_start and current_time_end.
 
-2.  Change the years in the saved data files in "Write CSV" and "Download and save Maintenance Log" chunk.
+2. Change the years in the saved data files in "Write CSV" and "Download and save Maintenance Log" chunk.
 
-3.  Comment out the Reviewer section and make sure for the settings eval = FALSE.
+3. Make sure to un comment and change the settings for the "Get raw files", "QAQC all files",  and "Write CSV" chunks. Also check the settings for the chunk eval=TRUE or it shouldn't be there. 
 
-4.  Update the data frame in "Get raw files" to include the most recent file on GitHub.
+4. Comment out the Reviewer section and make sure for the settings eval = FALSE.
 
-5.  Knit the file. This is up to you. 
+5. Update the data frame in "Get raw files" to include the most recent file on GitHub.
 
-6.  Look over the plots and see if there are any issues that need to be added to the maintenance log. I will usually read in the file you just made and make smaller plots with the variable and month in question. Once I have the dates, add them to the maintenance log.
+6. Knit the file. This will take a long time. 
 
-7.  Re-run the inspection script until you have found all of the issues.
+7. Look over the plots and see if there are any issues that need to be added to the maintenance log. I will usually read in the file you just made and make smaller plots with the variable and month in question. Once I have the dates, add them to the maintenance log. 
 
-8.  Run the "Download and save Maintenance Log" chunk to have the most up to date files in the EDI folder.
+8. Re-run the inspection script until you have found all of the issues. 
 
-9.  Make sure large maintenance issues are also documented in the methods.txt file.
+9. Run the "Download and save Maintenance Log" chunk to have the most up to date files in the EDI folder.
 
-```{r setup packages, include=FALSE}
+10. Make sure large maintenance issues are also documented in the methods.txt file.
+
+```{r Set Up, include=FALSE}
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander, rquery)
 
 # Source scripts from GitHub
-# QAQC function
-source("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/R/edi_qaqc_function.R")
+# Function to make the QAQC . This is called CCRCatwalk_qaqc_2023_2023.R in the EDI data package. 
+source('https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R')
 
-# Plotting function
+
+# Function to make the plots below
 source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
 
-#source("./../../Plotting_function.R")
- #turn off pander auto asis
+
+ #turn off pander auto asis. Used for making the ploty functions show up in the knitted markdown HTML
         pander::panderOptions('knitr.auto.asis', FALSE)
+
+
 ```
 
 REVIEWERS and DATA PUBLISHERS START HERE BEFORE KNITTING
@@ -95,27 +81,32 @@ REVIEWERS and DATA PUBLISHERS START HERE BEFORE KNITTING
 
 3.  If you are a reviewer, update the edi link
 
+
 ```{r EDIT HERE, include=FALSE}
 
 # 1. How would you like to use this script. If you are a data publisher write "publisher" if you are a reviewer write "reviewer"
 
 role <- "publisher"
 
+
 # 2. DATA PUBLISHERS UPDATE DATES HERE
 # Set up the current time end time of the file and the current year for QAQC plots
 #current time of QAQC for graphing
+
+# current publishing year
+
+year <- 2025
 
 current_time_start=ymd_hms("2025-01-01 00:00:00", tz="EST")
 current_time_end=ymd_hms("2025-12-31 23:59:00", tz="EST")
 
 # 3. DATA PUBLISHERS UPDATE FILE NAMES
-# Update the name of the data files, maintenance log, and qaqc function. Double check the name of the file matches the naming convention and the start and end date of the data file. 
+# Update the name of the data package. This should stay the same year to year. If you need to change names of the downloaded files go to chunk 33. 
 
-file_name <- "fcre-waterquality_2018_2025.csv"
+# data package name
 
-qaqc_function <- "fcre-waterquality_qaqc_2018_2025.R"
+data_package <- "ccre-waterquality"
 
-maintenance_log <- "fcre-waterquality_maintenancelog_2018_2025.csv"
 
 # 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
@@ -138,57 +129,26 @@ if(role=="publisher"){
 ```
 
 
-```{r QAQC all files, eval=make_data, message=TRUE, warning=TRUE, echo=FALSE}
+```{r QAQC all Files, eval=make_data, message=TRUE, warning=TRUE, echo=FALSE}
 
-# DATA PRODUCT LEAD START HERE
-# Un comment this section and if you are going to knit the document together make sure the eval=TRUE or is not in the brackets above.
-# Update the argument with the new links to make the data file. This might take some other scripts to combine all the years of data for the manual downloads for the VT sensors and the WVWA sensors. Note that if you are testing/fixing some data files you can adjust them locally and link to the local ones until you are ready to push them to GitHub.
+# QAQC all the raw files using the QAQC function which is sourced above. It is also the same function CCRCatwalk_qaqc_2021_2023.R which is included in the data package
 
-ds <- c(
-  'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_legacy_2018_2019_2020_2021_2022_2023.csv',
-  'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/fcre-waterquality_legacy_2024.csv',
-  # THE CURRENT YEARS FILE
-  'https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv'
+current_df <-qaqc_ccr(
+    data_file = c('https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/refs/heads/ccre-dam-data/ccre-waterquality.csv', 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality2.csv'),
+    EXO2_manual_file = 'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/refs/heads/master/CCR_manual_downloads/CCRWaterquality_manual_2021_2025.csv.csv',
+   # maintenance_file = 'ccre-waterquality_depth_offsets_2021_2024.csv',
+    maintenance_file = 'https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv',
+    output_file = NULL,
+    start_date = ymd_hms("2021-04-09 15:20:00", tz="EST"), # This is when we want the file to start
+    end_date = Sys.Date()
 )
 
-# Read in and make a data frame of the manual downloaded files. I make these each year with the raw files we have downloaded.
-# See ManualDownloadsSCCData for the script on making the file for each year.
-# Link here : https://github.com/CareyLabVT/ManualDownloadsSCCData/tree/master/MetStation
 
-man_files <- c("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRcatwalk_manual_2018_2023.csv",
-               "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CR6_Files/FCRCatwalk_manual_2024.csv",
-               "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/FCRCatwalk_L1.csv")
-
-
-# Make a tibble of the arguments going into the function. Each row are the arguments that will go into the function.
-#Make sure you have the correct raw files that go with the manual files.
-#If you want the same argument just repeat it each time.
-# Each row must be filled, even if it is just a NULL.
-
-state_cat <- tibble(data_file = ds,
-                    data2_file = man_files,
-                    maintenance_file = rep('https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/refs/heads/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv',each=3),
-                    output_file = I(list(NULL, NULL, NULL)),
-                    start_date = c(ymd_hms("2018-07-05 14:45:00", tz="EST"), ymd_hms("2023-12-31 23:59:00", tz="EST"), ymd_hms("2024-12-31 23:59:00", tz="EST")),
-                    end_date = c(ymd_hms("2023-12-31 23:59:00", tz="EST"), ymd_hms("2024-12-31 23:59:00", tz="EST"), Sys.Date() + lubridate::days(1)),
-                    dir = rep(here::here(), each = 3))
-
-
-# Use the tibble above to use pmap and run each row through the qaqc_fcrmet function.
-# This creates a data frame for each or the raw files. Then we bind everything together below.
-
-fcrcat_files <- state_cat%>%
-  pmap(qaqc_fcr)
-
-# Bind the different data files that you made to get one large data frame.
-
-  current_df <- dplyr::bind_rows(fcrcat_files)
-
-
-# Remove dups that were introduced abbove.
+#Make sure no dups and that we cut off the observations at
   current_df <- current_df%>%
   dplyr::distinct(.)%>% # get rid of dups if they snuck in
   filter(DateTime<(current_time_end))
+
 
 # make sure no time duplicates.
  current_df<-  current_df[!duplicated(current_df$DateTime), ]
@@ -201,66 +161,74 @@ fcrcat_files <- state_cat%>%
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it. 
 
-```{r READ IN EDI FOR REVIEWER, eval = edi_stage, include = FALSE}
+```{r READ IN EDI FOR REVIEWER, eval = edi_stage}
+  
 
-# # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
-# # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+  
+   
+   current_df <-read_csv(edi_link)
+ # 
+ # # Force files from EDI to have an EST timestamp
+ current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
 
-                                                                ### CHANGE THIS NUMBER BELOW
- #                                                                             ##
- current_df <-read_csv(edi_link)
-
- # Force files from EDI to have an EST timestamp
-  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
 
 ```
 
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for CCR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(current_df$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(current_df$LvlDepth_m_13, na.rm=T)`.
+
+
 ```{r Download Raw data for plotting, include=FALSE}
 
-# Get the raw files from the current year to compare with the QAQC file. I like having both on the same plot.
+# This is the raw files from the data logger before qaqc. I like to plot this with the qaqc values so we can see what has been removed by the qaqc function and maint log and what has been missed. 
 
-CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
+CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR3000Battery_V", "CR3000Panel_Temp_C", 
                         "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",
                         "ThermistorTemp_C_5", "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8",
-                        "ThermistorTemp_C_9", "RDO_mgL_5", "RDOsat_percent_5", "RDOTemp_C_5", "RDO_mgL_9",
-                        "RDOsat_percent_9", "RDOTemp_C_9", "EXO_Date", "EXO_Time", "EXOTemp_C_1", "EXOCond_uScm_1",
+                        "ThermistorTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11", "ThermistorTemp_C_12",
+                        "ThermistorTemp_C_13","EXO_Date_1", "EXO_Time_1", "EXOTemp_C_1", "EXOCond_uScm_1",
                         "EXOSpCond_uScm_1", "EXOTDS_mgL_1", "EXODOsat_percent_1", "EXODO_mgL_1", "EXOChla_RFU_1",
-                        "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1","EXOTurbidity_FNU_1",
-                        "EXOPressure_psi", "EXODepth_m", "EXOBattery_V", "EXOCablepower_V", "EXOWiper_V","LvlPressure_psi_9", "LvlTemp_C_9")
+                        "EXOChla_ugL_1", "EXOBGAPC_RFU_1", "EXOBGAPC_ugL_1", "EXOfDOM_RFU_1", "EXOfDOM_QSU_1", "EXOTurbidity_FNU_1", "EXOTSS_mgL_1",
+                        "EXOPressure_psi_1", "EXODepth_m_1", "EXOBattery_V_1", "EXOCablepower_V_1", "EXOWiper_V_1",
+                        "EXO_Date_9", "EXO_Time_9", "EXOTemp_C_9", "EXOCond_uScm_9",
+                        "EXOSpCond_uScm_9", "EXOTDS_mgL_9", "EXODOsat_percent_9", "EXODO_mgL_9", 
+                        "EXOfDOM_RFU_9", "EXOfDOM_QSU_9","EXOPressure_psi_9", "EXODepth_m_9", "EXOBattery_V_9",
+                        "EXOCablepower_V_9", "EXOWiper_V_9","LvlPressure_psi_13", "LvlTemp_C_13")
   
  
   # read catwalk data and maintenance log
-  # NOTE: date-times throughout this script are processed as UTC
-  raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv", skip = 1, col_names = CATPRES_COL_NAMES,
+  # NOTE: date-times throughout this script are not specified but they are all processed in the same timezone 
+  raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality2.csv", skip = 1, col_names = CATPRES_COL_NAMES,
                       col_types = cols(.default = col_double(), DateTime = col_datetime()))
   
-  # Take out EXO_Date and EXO_Time
-  raw <- raw%>%select(-c("EXO_Date", "EXO_Time"))
   
-  #create depth column
-  raw <- raw%>%mutate(LvlDepth_m_9=LvlPressure_psi_9*0.70455)#1psi=2.31ft, 1ft=0.305m
-  
-  
+  # Take out extremly high values, EXO_Date and Time, and create depth column
+   raw <- raw%>%
+     select(-c("EXO_Date_1", "EXO_Time_1", "EXO_Date_9", "EXO_Time_9"))%>%
+      mutate(across(ThermistorTemp_C_1:LvlTemp_C_13, ~ifelse(.x >180, NA, .x)))%>%
+       mutate(LvlDepth_m_13=LvlPressure_psi_13*0.70455)#1psi=2.31ft, 1ft=0.305m
+
   # convert NaN to NAs in the dataframe
   raw[sapply(raw, is.nan)] <- NA
   
-   # Force historical file timestamp to EST
+  # Force historical file timestamp to EST
   raw$DateTime <- force_tz(as.POSIXct(raw$DateTime), tzone = "EST")
-  
-  current <- raw%>%
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
-  mutate(type = "raw")
+ 
 
 ```
 
 ## Check for duplicates and  gaps in the data frame
 
-This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. If there is nothing printed then there are no duplicates or missing files. 
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. 
 
 
 ### Are there any duplicates?
-
-Check to see there are no duplicates in the data file. If there are then they need to be removed. 
 
 
 ```{r Check for dups , echo=FALSE}
@@ -270,8 +238,8 @@ Check to see there are no duplicates in the data file. If there are then they ne
  dups<- current_df[duplicated(current_df$DateTime), ]
 
 dups <- dups%>%
-  select(DateTime, RECORD, ThermistorTemp_C_7,  RDO_mgL_5,
-         EXOTemp_C_1, LvlPressure_psi_9) 
+  select(DateTime, RECORD, ThermistorTemp_C_7,  
+         EXOTemp_C_1, EXOTemp_C_9, LvlPressure_psi_13)
 
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
@@ -280,46 +248,88 @@ knitr::kable((dups))
 
 ### Are there any gaps in the data file?
 
+#### Check for daily gaps
 
 When gaps are found in the data file, check that you do not have new gaps in the previous years' publication. For the current year, if you find gaps check that you have all of the manually downloaded files. If the data are truly missing then record the dates and times in the methods section. 
 
-```{r Check for daily gaps, echo=FALSE}
 
+```{r Check for Gaps larger than a day, echo=FALSE}
+# Check if there are daily gaps in the data. If there are record them in the 
 # Get DOY
-bvrdata <- current_df
- bvrdata$DOY=yday(bvrdata$DateTime)
+ccrwater <- current_df
+ ccrwater$DOY=yday(ccrwater$DateTime)
 
- for(i in 2:nrow(bvrdata)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if(bvrdata$DOY[i]-bvrdata$DOY[i-1]>1){
-      print(c(bvrdata$DateTime[i-1],bvrdata$DateTime[i]))
+ for(i in 2:nrow(ccrwater)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(ccrwater$DOY[i]-ccrwater$DOY[i-1]>1){
+      print(c(ccrwater$DateTime[i-1],ccrwater$DateTime[i]))
     }
  }
 ```
 
-### Are there any subdaily gaps?
+
+#### Check for sub-daily gaps
 
 This identifies if there are any sub-daily gaps in the current record which gets recorded in the methods section. 
 
-The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata.
+The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata and are also noted in the maintenance log.
 
 ```{r Check for sub daily gaps, echo=FALSE}
 
 # Because we can't have NAs for this for loop let's make a new df
- bvr2 <- current_df%>%
-  filter(!is.na(RECORD)) %>%
+ ccr2 <- current_df%>%
+  filter(!is.na(RECORD))%>%
   filter(DateTime>current_time_start)
 
-  for(i in 2:length(bvr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
-    if( abs(bvr2$RECORD[i]-bvr2$RECORD[i-1])>1 & difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>10){
+  for(i in 2:length(ccr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if( abs(ccr2$RECORD[i]-ccr2$RECORD[i-1])>1 & difftime(ccr2$DateTime[i], ccr2$DateTime[i-1], units="mins")>10){
+      print(c(ccr2$DateTime[i-1], ccr2$DateTime[i]))
+      print(c(ccr2$RECORD[i-1], ccr2$RECORD[i]))
+    }
+  }
+```
+ 
+#### Gaps in EXO2 Data
+These are gaps in the EXO2 data longer than 30 minutes
+
+```{r EXO gaps, echo=FALSE}
+
+# Check for any gaps longer than 30 minutes in the record for the current year
+
+ bvr2 <- current_df%>%
+  select(DateTime, , starts_with("EXO"), Flag_EXOTemp_C_1)|>
+  select(DateTime, ends_with("_1"))|>
+  filter(Flag_EXOTemp_C_1!=7)
+  #filter(DateTime>current_time_start)
+
+  for(i in 2:length(bvr2$EXOTemp_C_1)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(abs(difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>30)){
       print(c(bvr2$DateTime[i-1], bvr2$DateTime[i]))
-      print(c(bvr2$RECORD[i-1], bvr2$RECORD[i]))
     }
   }
 
-print("If there are no observations here that means there are no gaps in the data for the current year.")
 ```
 
+#### Gaps in EXO3 Data at 9 m
 
+These are gaps in the EXO3 data longer than 30 minutes
+
+```{r EXO3 gaps, echo=FALSE}
+
+# Check for any gaps longer than 30 minutes in the record for the current year
+
+ bvr2 <- current_df%>%
+  select(DateTime, , starts_with("EXO"), Flag_EXOTemp_C_9)|>
+  select(DateTime, ends_with("_9"))|>
+  filter(Flag_EXOTemp_C_9!=7)
+  #filter(DateTime>current_time_start)
+
+  for(i in 2:length(bvr2$EXOTemp_C_9)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(abs(difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>30)){
+      print(c(bvr2$DateTime[i-1], bvr2$DateTime[i]))
+    }
+  }
+
+```
 ### Flag Frequency
 Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
  Flag values
@@ -332,15 +342,17 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  
  3: negative values set to 0 except for temperature
  
- 4: value removed due to fouling and set to NA
+ 4: value greater than 2 or 4 standard deviations from closets points and set to NA
  
  5: questionable value but left in the dataset
  
- 6: Values adjusted using a linear or square root function to match high-resolution CTD profiles and corrected other affected observations on the same sensor
+ 6: Values adjusted, see ccre-maintenancelog for specific adjustments
  
  7: missing data
  
 ```{r Check out the flags, echo=FALSE}
+
+
 
 #make sure no NAS in the Flag columns
 Flags <- current_df%>%
@@ -368,9 +380,10 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
-# The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
- maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv",
-                    show_col_types = FALSE)
+ maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv",
+                    show_col_types = FALSE)|>
+  filter(TIMESTAMP_end<(current_time_end))
+  
 
 
 # name the data file for just the tail of the maintenance log
@@ -438,6 +451,22 @@ Make sure the observations are flagged
 
 ```
 
+### Subset and rename the files
+This section will subset the files so you can make plots of the whole time series and the current year. 
+Here we also get the daily average for each variable so we can make box plots and density plots to look at the data over time. 
+
+```{r Filter for current year and daily average, include=FALSE}
+
+# Raw files
+current_raw <- raw%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+  mutate(type = "raw")
+
+current <- current_df%>%
+  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+  mutate(type = "qaqc")%>%
+  select(DateTime:CR3000Panel_Temp_C,type, -contains("adjusted"))
+```
 
 ## QAQC Plots
 
@@ -489,14 +518,14 @@ There are additional plots for depths that have more than one sensor such as at 
 
 dx <- colnames(current%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
 
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly=F)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
 
 ```
@@ -521,40 +550,47 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
+##### All of the temperature plots
 
-```{r All Temperature, echo=FALSE, warning=FALSE, results='hide'}
+```{r All Temperature, echo=FALSE, warning = FALSE, results='hide'}
 
-colors3 <-c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1.5m"="yellow","2m"="gold", 
-                                  "3m"="greenyellow", "4m"="medium sea green", "5m"="sea green",
-                                  "6m"="DeepSkyBlue4", "7m"="blue2", "8m"="darkslateblue", "9m"="darkmagenta")
+colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold", 
+                                  "4"="greenyellow", "5"="medium sea green", "6"="sea green",
+                                  "7"="DeepSkyBlue4", "8"="blue2", "9"="cornflowerblue", "EXO_9m"="blue4",
+            "10"="darkslateblue","11"="magenta2", "12"="darkmagenta", "13"="black")
+
 
 # Take out Temperature values 
 
   All_temp<-current_df%>%
-    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"))%>%
+    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"), "LvlTemp_C_13")%>%
     pivot_longer(-c(DateTime), names_to="Sensor", values_to="Reading", values_drop_na=TRUE)%>%
     mutate(DateTime=ymd_hms(DateTime))
   
   
   ggplot(All_temp)+
     geom_scattermore(aes(x=DateTime, y=Reading))+
-    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_surface","ThermistorTemp_C_1","EXOTemp_C_1", "ThermistorTemp_C_2",  "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","RDOTemp_C_5","ThermistorTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9", "RDOTemp_C_9","LvlTemp_C_9")))+
+    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_1", "ThermistorTemp_C_2", "EXOTemp_C_1", "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","ThermistorTemp_C_9","EXOTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13", "LvlTemp_C_13")))+
     theme_bw()
   
   
 # This is all the temps and just the current year
     ggplot(current,aes(x = DateTime))+
-    geom_line(aes(y=ThermistorTemp_C_surface, color="0.1m"))+
-    geom_line(aes(y=ThermistorTemp_C_1, color="1m"))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="2"))+
     geom_line(aes(y=EXOTemp_C_1, color="EXO_1.5m")) +
-    geom_line(aes(y=ThermistorTemp_C_2, color="2m"))+
-    geom_line(aes(y=ThermistorTemp_C_3, color="3m"))+
-    geom_line(aes(y=ThermistorTemp_C_4, color="4m"))+
-    geom_line(aes(y=ThermistorTemp_C_5, color="5m"))+
-    geom_line(aes(y=ThermistorTemp_C_6, color="6m"))+
-    geom_line(aes(y=ThermistorTemp_C_7, color="7m"))+
-    geom_line(aes(y=ThermistorTemp_C_8, color="8m"))+
-    geom_line(aes(y=ThermistorTemp_C_9, color="9m"))+
+    geom_line(aes(y=ThermistorTemp_C_3, color="3"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9"))+
+    geom_line(aes(y=EXOTemp_C_9, color = "EXO_9m"))+
+    geom_line(aes(y=ThermistorTemp_C_10, color="10"))+
+    geom_line(aes(y=ThermistorTemp_C_11, color="11"))+
+    geom_line(aes(y=ThermistorTemp_C_12, color="12"))+
+    geom_line(aes(y=ThermistorTemp_C_13, color="13"))+
     ggtitle("Current Temperature Profile") +
     labs(y = expression(''*~degree*C*''),
            color = "Legend") +
@@ -563,21 +599,20 @@ colors3 <-c("0.1m"="firebrick1", "1m"="DarkOrange1", "EXO_1.5m"="yellow","2m"="g
   
 ```
 
-### Depth
+### Depth QAQC Plots
 
 ```{r Pressure Sensor, echo=FALSE, results='asis'}
 ### Plotting depth from pressure sensor 
    
 dx <- colnames(current%>%select(grep("Depth_m",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
-
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = "Meters", y_lab2 = "Meters", Use_plotly=F)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "Meters", y_lab2 = "Meters", Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
 
 ```
@@ -601,22 +636,22 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Dissolved Oxygen
+### Dissolved Oxygen QAQC Plots
 
 ```{r DO, echo=FALSE, results='asis'}
 
 
 dx <- colnames(current%>%select(grep("DO_mgL|sat_percent",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
-
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Use_plotly=T)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "mg/L or % Sat", y_lab2 = "mg/L or % Sat", Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
 ```
 
 ```{r Print plotly DO, echo=FALSE, messages=FALSE, warning=FALSE}
@@ -639,21 +674,21 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Chlorophyll and Phycocanin
+### Chlorophyll and Phycocanin QAQC Plots
 
 ```{r Check the EXO Chla and Blue Greens, echo=FALSE, results='asis'}
 
 dx <- colnames(current%>%select(grep("Chla|BGAPC",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
-
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L", Use_plotly = T)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L", Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
 ```
 
 ```{r Print plotly algae, echo=FALSE, warning=FALSE, messages=FALSE}
@@ -676,20 +711,19 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### fDOM
+### fDOM QAQC Plots
 
 ```{r fdom EXO sensor, echo=FALSE, results='asis'}
 
 dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
-
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = "RFU or QSU", y_lab2 = "RFU or QSU", Use_plotly=T)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "RFU or QSU", y_lab2 = "RFU or QSU", Use_plotly=T)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
 ```
 
@@ -713,21 +747,22 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Conductivity, Specific Conductivity, TDS
+### Conductivity, Specific Conductivity, TDS QAQC Plots
 
 ```{r Cond Spcond and TDS, echo=FALSE, results='asis'}
 
 dx <- colnames(current%>%select(grep("^EXOSpCond|^EXOCond|^EXOTDS",colnames(current))))
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
-
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Use_plotly=F)
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
+
 ```
 
 ```{r Print plotly cond, echo=FALSE, messages=FALSE, warning=FALSE}
@@ -752,20 +787,23 @@ output <- unlist(outputs, recursive = F)
 
 ### Turbidity
 
-```{r turbidity, echo=FALSE, results='asis'}
+```{r Turbidity, echo=FALSE, results='asis'}
 
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
+dx <- colnames(current%>%select(grep("EXOTurbidity_FNU_1",colnames(current))))
 
 # make the plots
-outputs <- lapply("EXOTurbidity_FNU_1", all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab="FNU", y_lab2="FNU")
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. 
+
 #output[[1]]
+
+
 ```
 
-```{r Print plotly tur, echo=FALSE, messages=FALSE, warning=FALSE}
+```{r Print plotly turb, echo=FALSE, messages=FALSE, warning=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
@@ -785,21 +823,21 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Wiper, Battery, and CablePower
+### Wiper, Battery, and CablePower QAQC Plots
 
 ```{r Wiper, echo=FALSE, results='asis'}
 
-dx <- colnames(current%>%select(grep("Wiper_V|Battery_V|power_V",colnames(current))))
-
-# If you would like to see the plots for one data column. Replace "dx" with the variable name and run the function. 
+dx <- colnames(current%>%select(grep("Wiper_V|EXOBattery_V|power_V",colnames(current))))
 
 # make the plots
-outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "FCR", y_lab="Volts", y_lab2="Volts")
+outputs <- lapply(dx, all_plot, data= current_df, raw_data = raw, reservoir = "CCR", y_lab = "volts", y_lab2 = "volts", Use_plotly=F)
 
 output <- unlist(outputs, recursive = F)
 
-# If you are running this chunk by chunk uncomment the line to make the interactive plot. Note that "output" lists 16 different plots
+# Use this if you want to look at the plotly plot in the Markdown document. Make sure that Use_plotly = T in the all_plot function above. The only plotly function for this chunk is the Wiper. We don't need to have interactive plots for the others. 
+
 #output[[1]]
+
 ```
 
 ```{r Print plotly power, echo=FALSE, messages=FALSE, warning=FALSE}
@@ -822,35 +860,43 @@ output <- unlist(outputs, recursive = F)
   }  
 ```
 
-### Write to CSV
-Make the data frame here and it will save where your inspection script is saved. 
 
 ```{r Make current csv, eval = make_data, include=FALSE}
+
 # Double Check naming convention
 # Variable_StartYear_EndYear
 
 # convert datetimes to characters so that they are properly formatted in the output file
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
-write_csv(current_df, file_name)
+write_csv(current_df, paste0(data_package,"_2021_",year,".csv"))
 
 ```
 
-### Download and save Maintenance Log, Plotting function, and QAQC function
 
 ```{r Download and save Maintenance Log, eval = make_data, inclue = FALSE}
 
-# Download the most recent maintenance log, qaqc file, and plotting function from GitHub. 
-
 # Maintenance Log
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/FCR_CAT_MaintenanceLog.csv", maintenance_log)
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", paste0(data_package,"_maintenancelog_2021_",year,".csv"))
 
 # qaqc function
-download.file("https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data-qaqc/R/edi_qaqc_function.R", qaqc_function)
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/R/edi_qaqc_function.R", paste0(data_package,"_qaqc_2021_",year,".R"))
 
 # streaming plots function
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plotting_function.R")
 
+# Depth offsets
+download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCR_Depth_offsets.csv",
+              paste0(data_package,"_depth_offsets_2021_",year,".csv"))
+
+# Finding depth function
+download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R","find_depths.R")
+
+# Download HOBO files from GitHub
+download.file("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/refs/heads/master/CCR_manual_downloads/CCR_Hobos/Site50_water_temp/CCR_hobos_20_21.csv", "ccre-waterquality-hobos_2020_2021.csv")
+
+# Download the HOBO compilation script from GitHub
+download.file("https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/refs/heads/master/CCR_manual_downloads/CCR_Hobos/Site50_water_temp/CCR_hobo_compilation.R", "ccre-waterquality-hobo_compilation_2020_2021.R")
 
 ```
 

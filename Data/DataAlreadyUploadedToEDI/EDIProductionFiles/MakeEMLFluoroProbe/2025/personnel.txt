@@ -7,5 +7,5 @@ Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborati
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting	National Science Foundation	DBI-1933016
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	LTREB: Integrating real-time open data pipelines and forecasting to quantify ecosystem predictability at day to decadal scales	National Science Foundation	DEB-2327030
 Cayelan	C.	Carey	Virginia Tech	cayelan@vt.edu	0000-0001-8835-4476	PI	Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management	National Science Foundation	DEB-2318861
-Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
-Mary	E.	Lofton	Virginia Tech	melofton@vt.edu	0000-0003-3270-1330	creator	
+Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator
+Maria		Popescu	Virginia Tech	mariapopescu100@vt.edu	0009-0001-5848-471X	creator

@@ -1,0 +1,188 @@
+This data package contains five different data tables: ccre-waterqaulity_2021_2025.csv, ccre-waterqaulity_maintenancelog_2021_2025.csv, ccre-waterqaulity_depth_offsets_2021_2025.csv, ccre-waterquality_hobos_2020_2021.csv, reservoir_site_descriptions.csv. They are described below in the order they appear on EDI.
+
+First, in data file ccre-waterquality_2021_2025.csv, we measured depth profiles of multiple water quality variables off of the dam at Carvins Cove Reservoir (37.3697 -79.958) from 2021-2025 using water temperature thermistors, a pressure transducer, a YSI EXO2 sonde, and a YSI EXO3 sonde. Profiles were collected every ten minutes from the initial sensor deployment to 2025-12-31. The YSI EXO3 sonde was deployed at 9 m on 2021-04-09 at 14:00. The temperature string and pressure transducer were first deployed on 2021-05-11. There were 13 NexSens thermistors on a chain and when the reservoir was at full pond, the deepest thermistor was at 19 meters. Because the water level in Carvins Cove Reservoir has varied from 15.4-20.0 m (mean=18.4 m, median=18.5 m) during the monitoring period, we refer to the thermistors and the pressure transducer by their position on the fixed thermistor chain as opposed to a specific depth. These positions were selected based on the depth when the reservoir was at full pond. The thermistor closest to the surface (when at full pond) was labeled 1, the 8 m thermistor (when at full pond) was labeled 9, with the intervening thermistors located approximately 1 m apart. Thermistors 10 and 11 were deployed to represent 10 m and 11 m when at full pond, respectively. Thermistors 12 and 13 were deployed to represent 15 m and 19 m when at full pond, respectively. The pressure transducer was deployed 0.15 m below the thermistor at position 13. To access the depth associated with each observation, use the 'find_depths' function in the find_depths.R file (see the ccre-waterquality_depth_offsets_2021_2025 section below for more information on how to use the function). The EXO2 was deployed on a buoy from 2021-2022 and remained at 1.5 m depth as the water level fluctuated. However, in 2023, we lost the buoy in a storm and the EXO2 was deployed at a stationary, fixed elevation as the water level fluctuated around the sensor. The EXO2 buoy redeployed in 2024 and remained at approximately 1.5 m depth for the majority of the year. In 2025 the reservoir experienced major water level changes so the EXO2 was not consistently 1.5 below the water. We have kept all observation less than 0.1 m and flagged those between 0.1 m and 0.75 m. There is a depth sensor if you should need to filter for specific depths. 
+
+In 2023, the Western Virginia Water Authority lowered the water in the reservoir to do maintenance on the dam. Because of this, the sensors,mostly the EXOs, were at different depths than they would be normally. All sensors have a depth reading associated with them (See ccre-waterquality_depth_offsets_2021_2025.csv for how to get depth readings for sensors on the temperature string). On 2023-09-18 and again on 2025-11-25, the water level was so low due to the reservoir's management that the EXO2 sonde was almost out of the water, so we redeployed the sensor at ~1.5 m. When EXOs were too far out of position (defined as less than 0.1 m for the EXO2 near the surface and less than 6 m for the EXO3, which sits at 9 m when the reservoir is at full pond), we flagged observations as 2 and values were set to NA. We added a questionable flag for EXO2 observations that were at 0.1 m to 0.75 m. These observations were retained in the data set but users can choose to remove them. See the ccre-waterqaulity_maintenancelog_2021_2025.csv for exact times.
+
+On 2024-01-23 we pulled up and cleaned the temperature string, however it was put back about 0.75 m shallower than before. So, we added new offsets to the ccre-waterquality_depth_offsets_2021_2025.csv to include the shallower depths of the sensor. For more information see ccre-waterquality_depth_offsets_2021_2025.csv section, below. 
+
+On 2025-03-04, the temperature string was caught on a log and all thermistors were out of position. The string was fixed on 2025-03-13. We removed all observations where the temperature string was caught and flagged with a 2. On 2025-04-03, we fixed the position of the temperatre string and had to create an offset for the pressure observations from 2025-03-13 - 2025-04-03, see ccre-waterquality_maintenancelog_2021_2025.csv for all information. On 2025-11-25 because of the lower water level, we moved both EXOs down to their intended postion of ~1.5 m and 9 m. 
+
+##############################################################################
+
+Data Gaps:
+
+The following dates and times listed below are gaps in the dataset when no observations were recorded. When there were missing observations for all the sensors, the data time stamp was missing from the file. During the data gaps for EXO2 and the EXO3 sondes listed below, the sensors were removed or not recording for more than 30 minutes.
+
+For all sensors (these times are not listed in the data frame): 2021-07-02 14:00:00 - 2021-07-02 14:50:00; 2022-04-05 12:00:00 - 2022-04-05 14:00:00; 2022-04-20 13:00:00 - 2022-04-20 13:40:00; 2022-04-20 14:00:00 - 2022-04-20 15:00:00; 2022-05-12 10:00:00 - 2022-05-12 10:30:00; 2022-09-29 14:00:00 - 2022-09-29 15:00:00; 2022-10-17 17:30:00 - 2022-10-17 18:10:00; 2023-08-08 12:20:00 - 2023-08-14 11:30:00;2023-08-19 04:20:00 - 2023-08-21 09:30:00; 2024-04-03 04:50:00 - 2024-04-03 05:10:00;2025-04-05 14:40:00 - 2025-04-05 15:00:00;2025-06-19 18:20:00 - 2025-06-19 18:40:00;2025-07-28 09:50:00 - 2025-07-28 14:40:00;2025-07-30 23:10:00 - 2025-07-31 00:20:00;2025-08-21 14:20:00 - 2025-08-21 16:20:00;2025-09-04 18:20:00 - 2025-09-04 20:20:00;2025-10-05 06:00:00 - 2025-10-05 06:40:00;2025-10-11 15:40:00 - 2025-10-11 16:00:00;2025-10-30 12:30:00 - 2025-10-30 15:20:00;2025-11-05 20:30:00 - 2025-11-05 22:10:00;2025-11-12 22:00:00 - 2025-11-12 22:30:00;2025-11-20 14:00:00 - 2025-11-20 14:20:00;2025-11-23 04:00:00 - 2025-11-23 04:20:00;2025-12-12 11:10:00 - 2025-12-12 15:10:00;2025-12-20 07:40:00 - 2025-12-20 08:00:00;2025-12-26 00:50:00 - 2025-12-26 01:10:00. 
+
+The EXO2 data at ~1.5m (these times are most likely in the data file but are NAs and flagged as a 7 for observation not recorded.): 2021-07-02 13:30 - 2021-07-14 10:20; 2021-07-28 11:40 - 2021-08-19 09:10; 2021-11-18 23:00 - 2021-11-23 09:30; 2022-04-05 12:20 - 2022-04-05 14:10; 2022-04-20 13:00 - 2022-04-20 13:50; 2022-04-20 14:00 - 2022-04-20 15:00; 2022-05-12 10:00 - 2022-05-12 10:40; 2022-09-12 11:20 - 2022-09-12 12:30; 2022-09-29 14:00 - 2022-09-29 15:30; 2022-10-17 17:30; 2022-10-17 18:10; 2022-12-16 14:20 - 2023-03-13 14:20; 2023-03-21 08:00 - 2023-03-21 15:00; 2023-05-04 12:50 - 2023-05-04 14:20; 2023-05-09 04:30 - 2023-05-09 10:40; 2023-05-09 12:20 - 2023-05-09 16:50; 2023-05-09 17:30 - 2023-05-09 19:30; 2023-05-10 04:30 - 2023-05-10 11:20; 2023-06-07 12:00 - 2023-06-07 12:40; 2023-07-07 11:00 - 2023-07-07 13:10; 2023-07-08 04:00 - 2023-07-10 21:20; 2023-07-10 22:20 - 2023-07-11 12:20; 2023-07-11 12:40 - 2023-07-14 10:10; 2023-08-08 12:20 - 2023-08-14 11:30; 2023-08-19 04:20 - 2023-08-21 09:30; 2024-02-07 06:20 - 2024-02-07 07:30; 2024-02-07 07:30 - 2024-02-07 08:20; 2024-05-03 03:30 - 2024-05-03 05:30; 2024-07-31 04:00 - 2024-08-05 14:40; 2024-12-05 16:10 -2024-12-05 17:00; 2024-12-26 04:30 - 2024-12-26 17:10; 2024-12-26 17:10 - 2024-12-27 12:50; 2025-04-03 09:50 - 2025-04-03 11:10; 2025-07-28 09:50 - 2025-07-28 14:40; 2025-07-30 23:10 - 2025-07-31 00:20; 2025-08-21 14:20 - 2025-08-21 16:20; 2025-09-04 18:20 - 2025-09-04 20:20; 2025-10-05 06 - 2025-10-05 06:40; 2025-10-30 12:30 - 2025-10-30 15:20; 2025-11-05 20:30 - 2025-11-05 22:10; 2025-12-12 11:10 - 2025-12-12 15:10.
+
+The EXO3 data at 9m (these times are most likely in the data file but are NAs and flagged as a 7 for observation not recorded.): 2021-07-02 14:00 - 2021-07-02 15:00; 2021-12-02 03:40 - 2021-12-02 04:20; 2021-12-03 14:00 - 2021-12-04 12:30;2022-04-05 12:20 - 2022-04-05 14:00; 2022-04-20 13:00 - 2022-04-20 13:40; 2022-04-20 14:00 - 2022-04-20 15:00; 2022-05-12 10:00 - 2022-05-12 10:40; 2022-08-27 07:00 - 2022-08-27 09:10; 2022-09-29 14:00 - 2022-09-29 15:00; 2022-10-17 17:30 - 2022-10-17 18:10; 2023-01-09 21:20 - 2023-01-09 22:00; 2023-05-04 14:10 - 2023-05-04 18:10; 2023-06-01 18:40 - 2023-06-01 20:00; 2023-06-07 12:00 - 2023-06-07 12:40; 2023-08-08 12:20 - 2023-08-14 11:30; 2023-08-19 04:20 - 2023-08-21 09:30; 2023-09-23 04:50 - 2023-09-23 07:00; 2023-11-20 12:00 - 2024-01-23 13:10; 2024-03-30 13:30 - 2024-03-30 14:30; 2024-11-10 10:20 - 2024-11-10 14:00; 2024-12-03 07:20- 2024-12-05 16:30; 2024-12-05 16:50- 2024-12-06 09:50; 2025-01-07 23:50 - 2025-01-08 13:20;
+2025-01-17 23:10 - 2025-01-18 00:40; 2025-01-18 01:20 - 2025-01-23 13:30; 2025-01-23 20:30 - 2025-01-23 21:10; 2025-01-24 03:50 - 2025-01-27 14:40; 2025-01-27 15:20 - 2025-04-03 08:50; 2025-04-03 09:50 - 2025-04-03 11:10; 2025-06-06 14:20 - 2025-06-11 08:20; 2025-07-28 09:50 - 2025-07-28 14:40; 2025-07-30 23:10 - 2025-07-31 00:20; 2025-08-21 14:20 - 2025-08-21 16:20; 2025-09-04 18:20 - 2025-09-04 20:20; 2025-10-05 06:00 - 2025-10-05 06:40; 2025-10-30 12:30 - 2025-10-30 15:20; 2025-11-05 20:30 - 2025-11-05 22:10; 2025-12-12 11:10 - 2025-12-12 15:10.
+
+Sensor Maintenance Issues:
+
+Thermistor Issues:
+
+The data from the thermistors and other sensors were influenced by nightly management interventions between 3 am (EST) - 4:30 am (EST). On most nights, there were slight changes in water temperature values caused by blow-offs of air from water intake valves used to clear debris from intake pipes. This release of air can lead to short-term changes in thermal stratification patterns. These events seem to only affect the temperature values around 3:00 am to 4:30 am and occur predominantly in the summer months.
+
+Pressure Transducer Issues:
+
+After maintenance on 2024-03-30 the power to the pressure transducer was disconnected, so we do not have pressure readings from 2024-03-30 - 2024-05-16, when it was fixed. To have a depth reading for our observations, we made a linear regression between the 9m EXO3 and the pressure transducer from February - March 2024. The linear relationship was ('EXODepth_m_9'*1.654)+4.246 which has an r2 of 0.95. These values were flagged with 6 for a corrected value.
+
+
+EXO Sonde Issues: 
+
+In 2025, EXO3 at 9 m was returned for calibration and was returned to the reservoir on 2025-04-03. We added a turbidity sensor to the surface EXO2 on 2025-04-03. The surface EXO2 was updating values every 40 minutes which was fixed on 2025-04-05. Observations from 2025-01-08 - 2025-04-05 were flagged with 5 for questionable. The Temperature/Conductivity sensor on the EXO3 at 9 m malfucntioned and was reading 0 for all values. We replaced it on 2025-04-16. All observations during that time were flagged because there was no temperature sensor. On 2025-07-23 the EX03 9 m had issues transmitting data so it was set to internally log until it was fixed. The data were added in the ccre-waterquality_qaqc_2021_2025.R. The wiper was not enabled in the program until 2025-11-25 so we flagged high EXO2 surface observations when the observations were lower after a cleaning for cholorphyll, fDOM, and turbidity readings. See ccre-maintenancelog_2021_2025.csv for more information.  
+
+In 2024, both EXOs were returned to the reservoir after maintenance and calibration for the EXO2 on 2024-01-23. The EXO2 got caught in the intake on 2024-12-23 and was fixed on 2024-12-24. The EXO2 stopped transmitting data to the data logger on 2024-12-26. We started internally recording the observations on 2024-12-27, but the EXO2 only recorded observations from 2024-12-27 - 2024-12-28 23:00. The power issue was fixed on 2025-01-08 and observations were streaming normally.
+
+In 2023, the 1.5 m EXO2 was returned to the reservoir after maintenance on 2023-03-13 14:50:00. The EXO2 experienced issues with the battery compartment and was not streaming data from 2023-07-14 10:10:00 - 2023-10-16 14:00:00. During the times data were not streaming, they were downloaded periodically and added to the file using the ccre-waterqaulity_qaqc_2021_2024.R. The EXO2 was removed on 16 October 2023 and sent back for maintenance and replaced with a backup EXO2 (SN: 23J102731, other sensors listed below). The back up optical sensors measured observations a little lower than the original so these observations are flagged with 5 for questionable. The 9 m EXO3 sonde experienced wiper issues, so when data were impacted by the wiper they were removed using the ccre-waterqaulity_maintenancelog_2021_2025.csv. The EXO3 was removed and sent back for major repairs on 20 November 2023 12:05:00 after the battery compartment flooded.
+
+In 2022, both of the EXOs were removed for cleaning and calibration on 2022-12-12. The EXO3 was returned on 2022-12-16 while the EXO2 was moved and placed at Beaverdam Reservoir for the winter. The central wiper (SN: 21A100323) on the EXO3 malfunctioned during September 2021, thus we removed all observations from 2021-09-07 15:30 - 2021-09-27 8:30. While the central wiper was sent back for maintenance, we took the central wiper (SN: 21A100324) from the EXO2 at 1.5 m and installed it on the EXO3 at 9 m. This left the EXO2 at 1.5 m without a central wiper, so we cleaned and downloaded data fortnightly to monthly until we installed a new wiper (SN: 21M102801) on the EXO2 on 2022-02-09 10:30. The central wiper (21A100324) on the EXO3 failed again, so we removed data from 2022-01-14 - 2022-01-26 due to interference in the readings from the wiper. We returned the EXO3 and the sonde for maintenance since this was the second wiper that failed. On 2022-04-20, we redeployed the EXO3 with a new wiper (SN: 22B106313). These wiper issues were all documented in the maintenance log ccre-waterqaulity_maintenancelog_2021_2025.csv.
+
+EXO Chlorophyll-a and Phycocyanin Issues: 
+
+When the EXO2 was not streaming data, it only recorded chlorophyll-a and phycocyanin in RFU and not micrograms per liter (µg/L). Once the EXO2 data were streaming again, there were observations in both RFU and micrograms per liter. To fill in the gaps for µg/L data, we back-calculated the missing observations for micrograms per liter using a linear relationship of RFU to micrograms per liter. For chlorophyll, the relationship was µg/L = 4*RFU -0.63 and for phycocyanin it was µg/L=1*RFU-0.59. These calculated values were flagged with a 6 (corrected with a linear relationship).
+
+############################################################################
+
+QAQC scripts:
+
+We used a QAQC function to remove maintenance times and outliers from the data before publishing this EDI data package. The function is included in the data package as an R script, ccre-waterqaulity_qaqc_2021_2024.R. In this function, we flag and remove observations that took place during sensor maintenance or when a sensor malfunctioned, when the sensors were out of place, and when there were extreme outliers. For removing and flagging maintenance issues, all maintenance is recorded in the maintenance log (ccre-waterqaulity_maintenancelog_2021_2025.csv). This file is used in the QAQC function to identify dates and times during recorded events, change the observations affected, and add a flag to indicate the issues. See ccre-waterqaulity_maintenancelog_2021_2025.csv section below for more information on the maintenance log.
+
+In addition to recorded maintenance issues, we also removed all observations from the EXOs when they are out of position. For example, the EXO2 normally is positioned at 1.5 m, so when the depth of the sensor was above 0.75 m, we set all of those EXO2 observations to NA and flagged those times with a 2 (for outlier set to NA). This routinely happened for one observation per day, when the Water Authority purged their intake pipes. This also happened in 2023-08 - 2023-09 because the water level was lowered due to maintenance at the reservoir. The EXO3 normally sits at 9 m, so when it is above 6 m, the data are changed to NA and flagged with a 2 (for outlier set to NA). In the past, this happened when the sensor was tangled on debris (especially floating logs).
+
+Lastly, we identified and removed extreme outliers by using what we call the 'leading and lagging method.' For each individual observation in the time series, we looked at the previous observation taken 10 minutes before, and the lagging observation, taken 10 minutes after the focal observation. If the observation was 2 standard deviations above or below either of those two points, then the observation was flagged and set to NA. For EXOChla_ugL, EXOChla_RFU, EXOBGAPC_RFU, and EXOBGAPC_ugL, we defined outliers as values 4 standard deviations above or below the focal observation, as opposed to 2 standard deviations for the other sensors, given there is lots of variability in the observations of those variables.
+
+As part of the QAQC process, we plotted all of the observations in the ccre-waterqaulity_inspection_2021_2025.Rmd. In the R markdown, the user downloaded data, identified duplicates and gaps in the data, checked that the maintenance log flagged values, produced plots to visually check for outliers, saved the current data file, and downloaded the maintenance log, qaqc function, and other functions needed for publishing.
+
+Flags: 
+
+ 0: no flag
+ 
+ 1: value removed due to maintenance and set to NA
+ 
+ 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+ 
+ 3: negative values set to 0 except for temperature
+ 
+ 4: value greater than 2 or 4 standard deviations from closets points and set to NA
+ 
+ 5: questionable value but left in the dataset
+ 
+ 6: Values adjusted, see ccre-maintenancelog for specific adjustments
+ 
+ 7: missing data
+ 
+############################################################################ 
+
+Instruments, manuals, calibration, and serial numbers used 2021-2025:
+
+Multiple sensors and instruments were added over time; below we note serial numbers of sensors with accompanying depths and provide links to the accompanying instrument manuals.
+
+NexSens T-Node FR Thermistors (2021-05 - current): https://www.fondriest.com/pdf/nexsens_t-node_fr_manual.pdf Serial No. 03882; 1. Serial No. 03884; 2. Serial No. 03893; 3. Serial No. 03979; 4. Serial No. 03989; 5. Serial No. 03998; 6. Serial No. 04002; 7. Serial No. 04014; 8. Serial No. 04028; 9. Serial No. 04031; 10. Serial No. 04039; 11. Serial No. 04086; 12. Serial No. 04151; 13.
+
+Calibration: The thermistor string was factory-calibrated and verified against a NIST-traceable thermistor to meet measurement precision. The YSI EXO2 and EXO3 Sonde sensors were factory-calibrated before being deployed on 2021-07-01 and 2021-04-09, respectively. Below are dates of calibration with pre- and post-calibration values.
+
+YSI EXO2 Sonde Serial No. 21A102475 (1 July 2021-07-01 - 16 October 2023-10-16 13:55, 23 January 2024-01-23 - current) Serial No. 23J102731 (2023-10-16 13:55 - 2024-01-23) https://www.ysi.com/File%20Library/Documents/Manuals/EXO-User-Manual-Web.pdf Wiped Conductivity/Temperature Sensor Serial No. 20M101642 (2021-07-01 - 2023-10-16 13:55) Serial No. 23H106207 (2023-10-16 13:55 - current) 
+Calibrated on 2022-12-15; pre: 98.0 uScm; post: 100 uScm 
+Service maintenance and calbration 2023-12 
+Calibrated on 2024-12-15; pre: 99.5 uScm, post: 100 uScm
+
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324 (2021-07-01 - 2021-09-23)
+Central Wiper for Conductivity/Temperature Sensor Serial No.21M102801 (2022-02-09 - current)
+
+Total Algae Sensor Serial No. 21A100782 (2021-07-01 - 2023-10-16 13:55) Serial No. 23H100548 (2023-10-16 13:55 - current) 
+Chlorophyll: Calibrated on 2021-07-01; pre: -0.18 RFU, post: 0.00 RFU 
+Calibrated on 2021-11-21; pre: -0.16 RFU, post: 0.00 RFU 
+Calibrated on 2022-12-15; pre: -0.21 RFU, post: 0.00 RFU; pre: 13.93 RFU, post: 16.40 RFU 
+Service maintenance and calibration 2023-12 
+Calibrated on 2024-12-15; pre; -0.21 RFU, post: 0.00 RFU, pre: 15.77 RFU, post: 17.00 RFU 
+Calibrated on 2024-12-15; pre; -0.77 ugL, post: 0.00 ugL, pre: 62.78 ugL, post: 68.42 ugL
+
+Phycocyanin: Calibrated on 2022-07-01; pre:-0.8 RFU , post: 0.00 RFU 
+Calibrated on 2021-11-21; pre: -0.57 RFU, post: 0.00 RFU 
+Calibrated on 2022-12-15; pre: -1.30 RFU, post: 0.00 RFU, pre: 16.31 RFU, post: 16.00 RFU 
+Service maintenance and calibration 2023-12 
+Calibrated on 2024-12-15; pre: -1.69 RFU, post: 0.00 RFU, pre: 16.86 RFU, post: 17.10 RFU 
+Calibrated on 2024-12-15; pre: 1.65 RFU, post: 0.00 RFU, pre: 16.98 ugL, post: 17.10 ugL
+
+fDOM Sensor Serial No. 21A100961 
+Calibration on 2022-12-15; pre: -0.26 RFU, -0.67 QSU; post: 0.00 RFU, 0.00 QSU 
+Service maintenance and calibration 2023-12
+
+Dissolved Oxygen Sensor Serial No.21A100459 (2021-07-01 - 2023-10-16 13:55) 
+Serial No. 23G100708 (2023-10-16 13:55 - current)
+
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103493 (2021-04 - 2024-12) 
+Calibrated on 2021-07-01; pre: 93.2% Sat, post: 102.0% Sat; DO Gain: 1.09 
+Calibrated on 2021-11-23; pre: 96.6% Sat, post: 96.6% Sat; DO Gain: 1.00 
+Calibrated on 2022-12-14; pre: -1.0% Sat, post: -0.2% Sat; pre: 94.4% Sat, post: 100.1% Sat, DO Gain= 1.01 Service maintenance and calbration 2023-12
+
+YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No.23G104669 (2024-12-15 - current) 
+Calibrated on 2024-12-15: pre: 86.2% Sat, post: 100.3% Sat; DO Gain = 1.17
+
+YSI EXO Turbidity Smart Sensor Serial No. XXXX (2025-04-03 - current)
+
+
+
+YSI EXO3 Sonde Serial No. 21A102218(2021-04 - current) 
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100323(2021-04 - 2021-09-23) 
+Central Wiper for Conductivity/Temperature Sensor Serial No.21A100324(2021-09-23 - 2022-04-20) 
+Central Wiper for Conductivity/Temperature Sensor Serial No.22B106313(2022-04-20 - current)
+
+Wiped Conductivity/Temperature Sensor Serial No. 20M101641 (2021-04 - 2025-04)
+Calibrated on 2022-12-15; pre: 97.8 uScm; post: 100 uScm 
+Calibrated in 2024-01 at certified YSI service center
+Calibrated in 2025-02 at certified YSI service center
+
+Wiped Conductivity/Temperature Sensor Serial No. XXXXX (2025-04 - current)
+
+fDOM Sensor Serial No. 21A100960 
+Calibration on 2022-12-15; pre: 0.17 RFU, 0.07 QSU; post: 0.00 RFU, 0.00 QSU 
+Calibrated in 2024-01 at certified YSI service center
+Calibrated in 2025-02 at certified YSI service center
+
+Pressure Transducer Serial No. 20M102610
+
+Dissolved Oxygen Sensor Serial No. 21A100458 YSI EXO Optical Dissolved Oxygen Sensor Cap Serial No. 20M103492 (2021-04 - 2025-02)
+Calibrated on 2021-04-09; pre: 94.9% Sat, post: 96.3% Sat; DO Gain: 1.01 
+Calibrated on 2021-07-02; pre: 96.4% Sat, post: 95.6% Sat, DO Gain: 0.99 
+Calibrated on 2022-04-20; pre: 93.7% Sat, post: 100% Sat, DO Gain: 1.07 
+Calibrated on 2022-12-14; pre: -0.1% Sat, Post: -0.2% Sat, pre: 92.1% Sat, post : 99.3% Sat, DO Gain: 1.08 
+Calibrated in 2024-01 at certified YSI service center
+Calibrated in 2025-02 at certified YSI service center. DO cap was replaced. 
+
+Campbell Scientific Stainless-Steel Pressure Transducer CS451 (May 2021-current) https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf Serial No. 29010839
+
+##############################################################
+
+The data file ccre-waterqaulity_maintenancelog_2021_2025.csv contains dates and times when the sensors were above the water's surface for maintenance. Here, we recorded when sensors were cleaned, removed for maintenance, or other issues that should be noted. This file is used in the QAQC function which indexes the dates and times recorded in the maintenance log to set the affected data to NA and/or set the appropriate flags (ccre-waterqaulity_qaqc_2021_2025.R). A description of the columns is in the Detailed Metadata under Data Entries. A description of how to use the function is at the top of the ccre-waterqaulity_qaqc_2021_2025.R script.
+
+###############################################################
+
+ccre-waterquality_depth_offsets_2021_2025.csv
+
+The data file ccre-waterquality_depth_offsets_2021_2025.csv contains the depth offsets for each position on the temperature string. These offsets are used to calculate the depth of the sensors below the surface of the water. We used this method to ensure we removed observations when the sensors were out of the water or properly removed/flagged observations when sensors moved positions. To do this, we created a function find_depths which can be found in find_depths.R script. This function uses the ccre-waterquality_depth_offsets_2021_2025 file and the depth of the pressure sensor to determine the depth of an observation.
+
+To determine the variable depths of each sensor over time, we converted the pressure readings to depth readings, in meters, using the relationship 1 psi=0.70544 m from the pressure gauge manual (Campbell Scientific CS451, https://s.campbellsci.com/documents/us/manuals/cs451-cs456.pdf). The offset values for positions 1 and 2 were determined to be the depth of the pressure transducer when each thermistor was first at the surface of the water. For thermistor 1, the offset was equal to the depth of the pressure transducer on 25 May 2021 16:50, whereas the offset for thermistor 2 was equal to the depth of the pressure transducer on 30 November 2021 16:20. Since the other sensors were equidistant from each other and the water level was never low enough to expose them out of the water, we subtracted the offset of position 2 from the offset of position 13, which is 17.915 m. We divided that number (17.915) by the number of whole meters below position 2 (18 m), which was equal to 0.995 m. This means sensors we assumed were 1 meter apart are 0.995 meters apart. This number (0.995) was subtracted from the offset of each thermistor to find the subsequent offset of the thermistor in the position below. For example, to find the offset for position 3, we took the offset for position 2 (18.065) and subtracted 0.995 to get 17.07 m, which is the depth reading from the pressure transducer when position 3 is out of the water. The offset for position 13 is the distance of the thermistor from the pressure transducer. 
+
+On 2024-01-23, the temperature string was deployed about ~0.75m shallower after cleaning. Because of this, we had to create new offsets for the sensors. Temperature sensors in positions 1 and 2 were the only ones out of the water, so using the temperature data, we found when the sensors were out of the water. For the thermistor at position 1 is was at 2024-07-19 07:10:00 EST at 18.305 m and for position 2 it was at 2024-09-15 18:00:00 EST at 17.29 m. For the other thermistors, since we could not use the depth when the sensor was out of the water as the new offset. We subtracted 0.75 m from the original offset depth, however the thermistor in position 13, had the same offset. We added new offsets everytime the temperature string was moved. 
+
+To calculate the depth below the water for each sensor’s position, first subtract the unique offset for each sensor from column LvlDepth_m_13, which is the depth of the pressure transducer. Below is a table with the position of the sensor, the offset, and the distance above the sediments.
+
+This only needs to happen for sensors deployed on the temperature sting. The EXO2 at ~1.5 m and the EXO3 at ~9 m have their own pressure transducer/depth sensors, so each of these instruments have their own individually-determined depths associated with each measurement.
+
+Offset: The offset table is ccre-waterquality_depth_offsets_2021_2025.csv. To find the depth of the position from the top of the water at a given time, and the depth of the sensors when the reservoir depth is at full pond. To determine the depth of each position at a given time, you find the depth of the pressure transducer in column LvlDepth_m_13, and subtract the offset for that position during the given time period. The R function, find_depths.R, attached to this package, will do this for you and sort the depths into columns by 0.5 meter increments and variable (Temperature and Pressure).
+
+
+#############################################################
+
+Data file ccre-waterquality-hobos_2020_2021.csv contains measurements of depth profiles of water temperature at Carvins Cove Reservoir from July 2020 - August 2021 using HOBO temperature pendant loggers (HOBO Pendant Temperature/Light Data Logger, Onset, Bourne, MA, USA) at site 50 and site 300 (see reservoir_site_description.csv). We deployed the loggers from a buoy at 1-meter intervals from just below the surface to 10 m depth and additionally at 15 and 20 m depth. After the streaming sensors from ccre-waterquality_2021_2025.csv were installed, we removed the HOBO pendants from the reservoir. We also deployed a HOBO temperature pendant in the Sawmill Branch inflow (site 300) from 2020-07 - 2021-04 at approximately 0.5 m depth. There were no maintenance or other issues flagged in this data file. The HOBO files were compiled for publication in ccre-waterqaulity-hobo_compilation_2020_2021.R. The HOBO temperature pendant manual from the manufacturer can be found here: https://www.onsetcomp.com/sites/default/files/resources-documents/9556-M%20UA-002%20Manual.pdf.
+
+#############################################################
+
+The data file reservoir_site_descriptions.csv contains the site number and the coordinates for each sampling site in this data package.
+

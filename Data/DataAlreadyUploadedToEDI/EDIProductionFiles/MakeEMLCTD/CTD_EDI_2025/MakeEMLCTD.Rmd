@@ -1,0 +1,87 @@
+---
+title: "MakeEMLCTD"
+author: "Abby Lewis"
+date: "12/16/2019"
+output: html_document
+---
+
+Load packages 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+# Install and load devtools (used for install_github() function below)
+install.packages("devtools")
+library(devtools)
+
+# Install and load EMLassemblyline
+install_github("EDIorg/EMLassemblyline")
+library(EMLassemblyline)
+
+```
+
+```{r Make the Atributes file}
+
+# This makes the attributes files. Most of ours have already been made
+
+#Prepare metadata file templates using the 
+?template_table_attributes
+
+# This will make a blank template with all of the columns. You need to add the definition. 
+template_table_attributes(
+ path = folder,
+ data.path = folder,
+ data.table = c('ctd_2013_2024.csv','site_descriptions.csv', 'ctd_maintenancelog_2013_2024.csv') ,
+ write.file=TRUE)
+
+```
+
+
+```{r Make the catvars file from the attributes file}
+
+# This is already done, but you need to update when you add a new flag.
+
+?template_categorical_variables
+
+# Run this function for your dataset
+
+template_categorical_variables(path = folder,
+                               data.path = folder,
+                               write.file = TRUE)
+
+```
+
+
+Make EML
+
+```{r}
+# Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make_eml(path = getwd(),
+         dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2024",
+         data.table = c("ctd_2013_2024.csv",
+                        "site_descriptions.csv", 
+                        "ctd_maintenancelog_2013_2024.csv"),
+         data.table.name = c("ctd_2013_2024",
+                             "site_descriptions",
+                             "ctd_maintenancelog_2013_2024"),
+         data.table.description = c("Reservoir CTD dataset",
+                                    "Sample site descriptions",
+                                    "Log of data issues that have been flagged or addressed in the final data publication"),
+         other.entity = c('ctd_QAQC_2013_2024.R', 
+                          'ctd_inspection_2014_2024.qmd',
+                          "helper_scripts.zip"),
+         other.entity.name = c('ctd_QAQC_2013_2024', 
+                               "ctd_inspection_2014_2024",
+                               "helper_scripts"),
+         other.entity.description = c('High-level QAQC script used to process data from 2018-2024: references scripts in helper_scripts.zip', 
+                                      'Script that plots the data for visual inspection during the publishing process',
+                                      "Scripts used to compile casts and apply QAQC as referenced by CTD_QAQC_2018_2024.R"),
+         temporal.coverage = c("2013-03-07", "2024-12-31"),
+         maintenance.description = "ongoing",
+         user.domain = "EDI",
+         user.id = "ccarey",
+         package.id = "edi.1113.19")
+         #package.id = "edi.200.14") #2024 #publishing
+```
+

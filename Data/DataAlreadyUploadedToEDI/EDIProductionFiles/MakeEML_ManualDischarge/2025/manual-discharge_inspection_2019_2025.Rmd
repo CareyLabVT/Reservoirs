@@ -197,6 +197,17 @@ staged_edi %>%
   facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
+staged_edi %>% 
+  filter(Reservoir == 'CCR',
+         Site ==301) %>% 
+  ggplot(aes(x = DateTime, y = Flow_cms, color = as.factor(Site), shape = as.factor(Flag_Flow_cms))) + 
+  geom_point(aes(color = Site)) +
+  ggtitle("CCR in specified date range")+
+  scale_x_datetime(date_labels = "%b %y")+
+  coord_cartesian(xlim = c(start_trim_date, end_trim_date))+
+  facet_grid(rows = vars(Reservoir), cols = vars(Site), scale = 'free')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
 
 
 ```

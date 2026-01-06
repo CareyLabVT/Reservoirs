@@ -4,6 +4,7 @@
 #Date created: 16DEC19
 #Last updated: 2025-02-18 ABP- added in an if statement when no observations for the current year
 ## 2024-06-16 ABP- add in start and end dates to subset L1 file
+## 2026-01-04 ABP- changed the start date and end tz to UTC because everything is and was messing with cast times
 #Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data <and includes additional R scripts available with this package>. This script is only for internal use by the data creator team and is provided as a reference; it will not run as-is. 
 
 
@@ -403,8 +404,8 @@ for(i in 1:nrow(log)){
 # subset to make the L1 file. Maybe move this earlier at some point so we can end the function earlier for no new observations for the new year. 
 
 if (!is.null(start_date)){
-  #force tz check
-  start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
+  #force tz check. Put in UTC because everything else is. 
+  start_date <- force_tz(as.POSIXct(start_date), tzone = "UTC")
   
   #final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
   
@@ -414,8 +415,8 @@ if (!is.null(start_date)){
 }
 
 if(!is.null(end_date)){
-  #force tz check
-  end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
+  #force tz check. Put in UTC because everything else is
+  end_date <- force_tz(as.POSIXct(end_date), tzone = "UTC")
   
   #fp_final$DateTime <- as.character(format(fp_final$DateTime)) # convert DateTime to character
   

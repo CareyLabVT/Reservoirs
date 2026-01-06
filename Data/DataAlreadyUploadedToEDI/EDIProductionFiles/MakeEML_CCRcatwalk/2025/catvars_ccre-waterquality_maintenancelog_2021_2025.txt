@@ -1,0 +1,31 @@
+attributeName	code	definition
+DataStream	CCRW	Nickname of the water quality sensors off of the dam at Carvins Cove Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+end_parameter	EXOBGAPC_ugL_1	Blue-Green Algae in RFU at 1.5 mas measured by the EXO2 Sonde
+end_parameter	EXOTDS_mgL_9	Total Dissolved Solids (TDS) at 9 m as measured by the EXO3 Sonde
+end_parameter	EXOTurbidity_FNU_1	Turbidity in FNU at 1.5m as measured by the EXO2 Sonde
+end_parameter	EXOWiper_V_1	Wiper brush cleaning system activation signal as measured by the EXO2 sonde at 1.5 m
+end_parameter	EXOWiper_V_9	Wiper brush cleaning system activation signal as measured by the EXO3 sonde at 9 m
+end_parameter	EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter in QSU at 1.5 m as measured by the EXO2 Sonde
+end_parameter	EXOfDOM_QSU_9	Fluorescent Dissolved Organic Matter in QSU at 9 m as measured by the EXO3 Sonde
+end_parameter	LvlTemp_C_13	Water temperature measrued by the pressure transducer at position 13
+end_parameter	ThermistorTemp_C_13	Water temperature measured by thermistor at position 13 (19 meters below thermistor 1)
+flag	1	Value removed due to maintenance and set to NA
+flag	2	Negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+flag	5	Questionable value but left in the dataset
+flag	6	Adjusted values
+flag	7	Missing data
+start_parameter	EXOBGAPC_RFU_1	Blue-Green Algae in RFU at 1.5 mas measured by the EXO2 Sonde
+start_parameter	EXOChla_RFU_1	Cholophyll in RFU at 1.5 m as measured by the EXO2 Sonde
+start_parameter	EXOCond_uScm_9	Conductivity at 9 m as measured by the EXO3 Sonde
+start_parameter	EXODO_mgL_9	Dissolved Oxygen concentration in milligrams per liter at 9 m as measured by the EXO3 Sonde
+start_parameter	EXODOsat_percent_9	Dissolved Oxygen percent saturation at 9 m as measured by the EXO3 Sonde
+start_parameter	EXOTemp_C_1	Water temperature at 1.5 m as measured by the EXO2 Sonde
+start_parameter	EXOTemp_C_9	Water temperature at 9 m as measured by the EXO3 Sonde
+start_parameter	EXOfDOM_QSU_1	Fluorescent Dissolved Organic Matter in QSU at 1.5 m as measured by the EXO2 Sonde
+start_parameter	EXOfDOM_RFU_1	Fluorescent Dissolved Organic Matter in RFU at 1.5 m as measured by the EXO2 Sonde
+start_parameter	EXOfDOM_RFU_9	Fluorescent Dissolved Organic Matter in RFU at 9 m as measured by the EXO3 Sonde
+start_parameter	LvlDepth_m_13	Depth of the pressure transducer converted from pressure to meters
+start_parameter	LvlPressure_psi_13	Pressure at the bottom of the temperature string at position 13, measured relative to ambient atmospheric pressure
+start_parameter	ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)
+start_parameter	ThermistorTemp_C_2	Water temperature measured by thermistor at position 2 (position second closest to surface when reservoir is at full pond)

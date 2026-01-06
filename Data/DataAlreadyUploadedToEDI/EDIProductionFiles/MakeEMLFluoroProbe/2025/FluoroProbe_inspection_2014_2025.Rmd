@@ -447,7 +447,7 @@ We want to make sure that our maintenance log actually worked and took out the v
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
 
- maint <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
+ maint <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
 
 # name the data file
 sd <- tail(maint)%>%

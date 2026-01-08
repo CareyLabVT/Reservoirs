@@ -35,9 +35,9 @@ filt_chla_qaqc <- function(directory,
                            sample_times,
                            outfile,
                            start_date,
-                           end_date)
+                           end_date, 
+                           outputcheck_folder)
 {
-  
   # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"
   # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
@@ -53,7 +53,11 @@ filt_chla_qaqc <- function(directory,
   
  #packages
   pacman::p_load(tidyverse, gsheet, arsenal, here)
-  
+ 
+   if(!file.exists(outputcheck_folder)){
+    #make the folder
+    dir.create(file.path(outputcheck_folder))
+  }
   #### 1. Read in Maintenance file and the Raw files from the spec 
   ### 1.1 Read in Maintenance file #### 
   
@@ -66,7 +70,9 @@ filt_chla_qaqc <- function(directory,
     flag = col_integer()))
   
 print(("Warning! the following rows from the maintenance log may cause you trouble. Do you have something other than NA or a date in the SampleDate column?"))
+
 print(problems(log_read))
+write.csv(log_read, paste0(outputcheck_folder, "/maintlog_problems.csv"))
 
   log <- log_read
   
@@ -110,7 +116,7 @@ print(problems(log_read))
     Date_processed <- as.Date(Date, "%Y%m%d")
     
     # read in the files
-    data <- read_csv(FILES)|>
+    data <- read_csv(FILES, show_col_types = FALSE)|>
       dplyr::rename("Sample.ID" = `Sample ID`)
     
     # Add the date processed to the files
@@ -143,7 +149,7 @@ print(problems(log_read))
     
    # Use the function to make a data frame of raw absorbance from the spec
   # use purr to read in all the files using the function above
-  files<-list.files(path= here(directory), pattern=".txt", full.names=TRUE)
+  files<-list.files(path= directory, pattern=".txt", full.names=TRUE)
     
     if(length(files)==0){
       
@@ -183,6 +189,7 @@ print(problems(log_read))
   if(nrow(check_rack_dup)>0){
     warning("There are duplicates in the rack map and the duplicate might not be labeled. See below:")
     print(check_rack_dup)
+    write.csv(check_rack_dup, paste0(outputcheck_folder, "/check_rack_dup.csv"))
   }
   
   
@@ -212,7 +219,7 @@ print("minimum sample date is")
 print(min_samp_date)
   ### 2.2 read in filtering log 
   
-  filtering_log <- gsheet::gsheet2tbl(filtering_log)
+filtering_log <- gsheet::gsheet2tbl(filtering_log)
   
   # Clean up the data frame
   filtering_log2 <- filtering_log %>%
@@ -236,6 +243,7 @@ print(min_samp_date)
   if(nrow(check_filt_dup)>0){
     warning("There are unlabeled duplicates in the filtering log. See below:")
     print(check_filt_dup)
+    write.csv(check_filt_dup, paste0(outputcheck_folder, "/check_filt_dup.csv"))
   }
   
   
@@ -261,10 +269,13 @@ print(min_samp_date)
   
   if(nrow(comb|>filter(samp_type == 'res_samp' & is.na(Vol_filt_mL)))>0){
     warning("The following Reservoir samples are missing the amount of water filtered. Check the filtering log and check if sample has been mislabeled. If missing, volume filtered should also have been recorded on the frozen filter.")
-    
-    print(comb |>
+    filter_check <- comb |>
             filter(samp_type == 'res_samp' & is.na(Vol_filt_mL))|>
-            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL), n = 100)
+            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL)
+    
+    print(filter_check)
+    write.csv(filter_check, paste0(outputcheck_folder, "/filtervol_check.csv"))
+    
   }
   
   
@@ -437,10 +448,17 @@ print(min_samp_date)
   # Label the samples. 
   # samples are labeled "B" for abosorbance before adding acid to the sample. "A" is the absorbance after acid has been added. Label the samples so we can pick them out later. 
   
+  #Things to change in this script!
+  
+  #We should pull out all the blanks before we reach this point, calculate the blank value for each run date, and then apply those in this step!
+  #output the run date and the averaged blank for each run date as a file in the output_check folder.
+  
   raw_df2 <- raw_df|>
     mutate(
   timing = gsub("_","", gsub("[[:digit:]]", "", Sample.ID)),
   # check letter in Sample.ID. b is before acid. It can be at the beginning of the name, the end of the name, or after an underscore. Change here for if there is a different pattern. 
+  
+
   timing = ifelse(str_detect(Sample.ID,"^b|^B|b$|B$|_b|_B")==T,"b", 
                   ifelse(str_detect(Sample.ID,"^a|^A|a$|A$|_a|_A")==T, "a", timing)))
  # samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",
@@ -449,9 +467,11 @@ print(min_samp_date)
  
 
 print("The following samples were diluted. Ensure the dilution factor is recorded in the rack map")
-print(raw_df2 |>
+dils <- raw_df2 |>
         filter(dilution == "diluted") |> 
-        select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth)))
+        select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth))
+print(dils)
+write.csv(dils, paste0(outputcheck_folder, "/dilutedsamples.csv"))
 
  ## The following Samples don't have a numeric ID and will be dropped
 
@@ -459,9 +479,11 @@ if(nrow(raw_df2|>filter(is.na(Num_ID)))>0){
 
 warning("The following samples don't have a numeric ID and will be dropped")
 
-print(raw_df2 |> 
+no_num <- raw_df2 |> 
         filter(is.na(Num_ID))|>
-        select(Sample.ID, ResSite, Date_processed, Num_ID))
+        select(Sample.ID, ResSite, Date_processed, Num_ID)
+print(no_num)
+write.csv(no_num, paste0(outputcheck_folder, "/no_numericid_dropped.csv"))
 
 raw_df2 <- raw_df2|>
   drop_na(Num_ID)
@@ -486,6 +508,8 @@ if(nrow(ert)>0){
   
   print(ert|>
           select(Sample.ID, ResSite, Depth, Date_processed, Sample_date, timing, WL750.0))
+
+  write.csv(ert, paste0(outputcheck_folder, "/dups_mistyped.csv"))
 }
 
 
@@ -500,6 +524,7 @@ check_turbidity <- raw_df2|>
 if (nrow(check_turbidity)>0){
   warning("The turbidity in some of the samples was high. They will be flagged. If the duplicate has not yet been run, the dup should be run.")
   print(n = nrow(check_turbidity), check_turbidity)
+  write.csv(check_turbidity, paste0(outputcheck_folder, "/check_turbidity.csv"))
 }
 
   # The calculations are from BRN Chla processing excel sheet
@@ -553,9 +578,13 @@ if (nrow(check_turbidity)>0){
   
   
   if(nrow(check_df$obs.table)>0){
-    warning("There are uneven number of samples in the before or after data frames. Check the output to see where the issue is. There should be the same number of samples in each data frame.")
+    warning("There are uneven number of samples in the before or after data frames. 
+    1. Check the output to see where the issue is. There should be the same number of samples in each data frame.
+    2. If it is a sample, check to see if the DUP was run.
+    3. If run, remove uneven sample run by adding it to the maintenance log.")
     
     print(check_df$obs.table)
+    write.csv(check_df$obs.table, paste0(outputcheck_folder, "/check_evenbfaft.csv"))
   }
   
   # Join the two data frames together
@@ -635,6 +664,7 @@ if (nrow(check_turbidity)>0){
   chla_df<- comb5_calc %>%
     filter(samp_type!="eth_blank")%>%
     select(Sample_ID,
+           Date_processed,
            ResSite,
            Depth,
            Sample_date,
@@ -695,6 +725,8 @@ if (nrow(check_turbidity)>0){
     warning("There are more than 2 samples on a sampling date, site, and depth. One probably needs to be added to the maintenance log. Check the output above. We only collect one duplicate so most likely there is an issue with one of the samples and it needs to be added to the maintenance log.")
     
     print(check_reps)
+    write.csv(check_reps, paste0(outputcheck_folder, "/check_reps.csv"))
+    
   }
   
  chla_new2 <- chla_new|>

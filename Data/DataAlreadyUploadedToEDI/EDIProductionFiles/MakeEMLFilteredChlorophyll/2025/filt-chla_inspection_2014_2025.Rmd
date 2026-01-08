@@ -28,19 +28,6 @@ datapath
 
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI, eval=FALSE, include=FALSE}
-# all_chla <- filt_chla_qaqc_test(
-#  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
-#  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
-#  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv",
-#  final_vol_extract = 6,
-#  blank_vol_filt = 500,
-#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
-#  #maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
-#  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
-#  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg",
-#  outfile = NULL,
-#  start_date = NULL,
-#  end_date = "2025-12-31")
 
 all_chla <- filt_chla_qaqc(directory = here("Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"),
  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
@@ -51,10 +38,24 @@ all_chla <- filt_chla_qaqc(directory = here("Data/DataNotYetUploadedToEDI/Raw_ch
  #maintenance_file = here("Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"),
  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg",
- outfile = NULL,
+ outfile = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/filt-chla_2014_2025.csv"),
  start_date = NULL,
  end_date = "2025-12-31",
  outputcheck_folder = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/outputcheck"))
+
+# directory = here("Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
+#  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
+#  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
+#  final_vol_extract = 6
+#  blank_vol_filt = 500
+#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"
+#  #maintenance_file = here("Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"),
+#  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
+#  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg"
+#  outfile = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/filt-chla_2014_2025.csv")
+#  start_date = NULL
+#  end_date = "2025-12-31"
+#  outputcheck_folder = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/outputcheck")
 
 ```
 
@@ -72,8 +73,6 @@ infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 all_chla <- read_csv(infile1)
-#for KKH 2025
-all_chla <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv")
 ```
 **Check there are no NAs in Flag columns**
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags matches what we expect to see. 
@@ -234,7 +233,7 @@ Flag_Chla_ugL	5	    Duplicate values were averaged
 ```{r Subset to Current Year Only (2024)}
 #subset data to FCR and BVR
 chla_current <- chla_YMD %>% 
-  subset((Year=="2024")) %>% 
+  subset((Year=="2025")) %>% 
    mutate(DOY = yday(DateTime)) 
 
 head(chla_current)
@@ -273,7 +272,7 @@ ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Phe
 
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Chla_ugL, col = Depth_m)) +
+ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Chla_ugL, col = Depth_m)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("2024Timeseries - Chlorophyll a")
@@ -281,7 +280,7 @@ ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Chla_ugL, col = Dep
 **Time Series for entire data set - Pheophyton**
 ```{r Time Series for entire data set - Pheophyton}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
+ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("2024 Timeseries - Pheophyton")
@@ -290,12 +289,13 @@ ggplot(subset(chla_YMD, Year == 2024), aes(x = DateTime, y = Pheo_ugL, col = Dep
 ```{r Remove duplicate row}
 all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 1013 obs
 #this should be taken care of in the qaqc script as of 2024
+#2025 goes from 1441 to 1439....
 ```
 
 **Make new CSV with current and historic files**
 ```{r Make new CSV with current and historic files}
 # Variable_startyear_endyear.csv
-# write.csv(all_chla, "FiltChla_2014_2024.csv", row.names = F)
+# write.csv(all_chla, "FiltChla_2014_2025.csv", row.names = F)
 ```
  Make site description file
 ```{r, eval = FALSE}

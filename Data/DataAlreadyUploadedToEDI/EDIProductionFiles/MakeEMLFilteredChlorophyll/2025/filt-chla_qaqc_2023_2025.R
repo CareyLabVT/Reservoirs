@@ -1,7 +1,7 @@
 # Chla Processing L1 script
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
-# Edit: 2 Jan. 26 - using "here" for pathing
+# Edit: Jan. 2026 - using "here" for pathing, updates to warnings, created new folder for qaqc checks - KKH
 # Edit: 18 Feb. 25 - added an if statement for when we don't have new observations for the year. The function ends
 # KKH Updated Jan 25 - rename SNP sites to be consistent with LSPA sites 
 # (40 (Hedgehog) > 220 (LSPA code for Hedgehog), 50 (buoy) > 200)
@@ -706,7 +706,7 @@ if (nrow(check_turbidity)>0){
            Flag_Chla_ugL=ifelse(Check_chla<34, 4, Flag_Chla_ugL),
            Flag_Pheo_ugL=ifelse(Check_pheo<34, 4, Flag_Pheo_ugL),
            Pheo_ugL=ifelse(Pheo_ugL<0, 0, Pheo_ugL), 
-           Flag_Chla_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Chla_ugL, 6), Flag_Chla_ugL),
+           Flag_Chla_ugL=ifelse(ratio_be_af_eth_corr>1.72, paste0(Flag_Chla_ugL, 6), Flag_Chla_ugL),
            Flag_Pheo_ugL=ifelse(ratio_be_af_eth_corr>1.72,paste0(Flag_Pheo_ugL, 6), Flag_Pheo_ugL))|>
     # flag high turbidity values as anything above 0.005. Maybe change later to 0.01
     mutate(Flag_Chla_ugL = ifelse(Chek_Turb_750>0.005, paste0(Flag_Chla_ugL, 7),Flag_Chla_ugL),

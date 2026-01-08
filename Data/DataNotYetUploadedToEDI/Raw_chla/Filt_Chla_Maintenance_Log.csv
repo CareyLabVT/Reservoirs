@@ -37,5 +37,5 @@ Date_processed, ResSite, DataStream, Rep, Sample.ID, Sample_date, start_paramete
 2025-12-09,B50, FiltChla, NA,25B,2025-08-11,WL750.0,WL384.0,2,NA,sample diluted and rerun at later date
 2025-12-09,B50, FiltChla, NA,25A,2025-08-11,WL750.0,WL384.0,2,NA,sample diluted and rerun at later date
 2025-08-15,B50,FiltChla,NA,6a,2025-07-07,WL750.0,WL384.0,2,NA,removed because sample not run unacidified. DUP was run.
-2025-12-11,S111,FiltChla,NA,60a,2025-06-11,WL750.0,WL384.0,2,NA,"on a GFF filter, not GFC"
-2025-12-11,S111,FiltChla,NA,60b,2025-06-11,WL750.0,WL384.0,2,NA,"on a GFF filter, not GFC"
+2025-12-12,S111,FiltChla,NA,60a,2025-06-11,WL750.0,WL384.0,2,NA,"on a GFF filter, not GFC"
+2025-12-12,S111,FiltChla,NA,60b,2025-06-11,WL750.0,WL384.0,2,NA,"on a GFF filter, not GFC"

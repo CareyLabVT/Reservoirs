@@ -16,7 +16,7 @@
 #    and output file for EDI is Catwalk_EDI_2018_2021.csv
 
 library(devtools)
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCRcatwalk/2025/"
@@ -161,7 +161,7 @@ make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, 
-         total dissolved solids, chlorophyll a, phycocyanin, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2025",
+         total dissolved solids, chlorophyll a, phycocyanin, turbidity, and fluorescent dissolved organic matter at discrete depths in Carvins Cove Reservoir, Virginia, USA in 2020-2025",
          data.table = c("ccre-waterquality_2021_2025.csv","ccre-waterquality_maintenancelog_2021_2025.csv","ccre-waterquality_depth_offsets_2021_2025.csv",  
                         "ccre-waterquality-hobos_2020_2021.csv", "reservoir_site_descriptions.csv"),
          #data.table.name = c("CCRCatwalk_2021_2023","CCRCatwalk_maintenancelog_2021_2023","CCRCatwalk_Depth_offsets_2021_2023",  
@@ -191,7 +191,7 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.719.33", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
+         package.id = "edi.719.35", #### this is the one that I need to change and the one for staging!!! 719.9 was the last stagging id for 2021 publishing
          #package.id = "edi.1069.3", #### THIS IS USED FOR PUBLISHING
          user.domain = 'EDI')
 ## Step 8: Check your data product! ####

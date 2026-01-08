@@ -1,3 +1,11 @@
+# Function to QAQC the data from the CCR catwalk
+# Author: A. Breef-Pilz
+# Created: Jan. 2024
+
+# Edits:
+# 07 Jan 2025: added a modeled depth equation to the data frame. Need to check if the reservoir is 21 m or 23 m deep at full pond. Going with 23 m for now
+# 08 Jan 2025: expand the leading lagging to add turbidity. Corrected how depth was calculated because it was setting the time when we calculate the depth with the EXO to NA. 
+
 qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data/ccre-waterquality.csv",
                      EXO2_manual_file = "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/current_files/CCR_1_5_EXO_L1.csv", 
                      maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCRW_MaintenanceLog.csv", 
@@ -214,15 +222,16 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   
   #####Create Flag columns#####
-
-  # create the Depth column before the flags columns are created
-  ccrwater$LvlDepth_m_13 <- NA
   
   # for loop to create flag columns
-  for(j in colnames(ccrwater%>%select(ThermistorTemp_C_1:LvlTemp_C_13, LvlDepth_m_13))) { #for loop to create new columns in data frame
+  for(j in colnames(ccrwater%>%select(ThermistorTemp_C_1:LvlTemp_C_13))) { #for loop to create new columns in data frame
     ccrwater[,paste0("Flag_",j)] <- 0 #creates flag column + name of variable
     ccrwater[c(which(is.na(ccrwater[,j]))),paste0("Flag_",j)] <-7 #puts in flag 7 if value not collected
   }
+  
+  # create the Depth column before the flags columns are created
+  ccrwater$LvlDepth_m_13 <- NA
+  ccrwater$Flag_LvlDepth_m_13 <- 0 
   
   
   ### Convert RFU to ugL for Algae sensor ### 
@@ -479,7 +488,7 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   ccrwater=data.frame(ccrwater)
   
-  for (a in colnames(ccrwater%>%select(ThermistorTemp_C_1:EXOfDOM_QSU_1, EXOTemp_C_9:EXOfDOM_QSU_9, LvlPressure_psi_13:LvlTemp_C_13))){
+  for (a in colnames(ccrwater%>%select(ThermistorTemp_C_1:EXOTurbidity_FNU_1, EXOTemp_C_9:EXOfDOM_QSU_9, LvlPressure_psi_13:LvlTemp_C_13))){
     Var_mean <- mean(ccrwater[,a], na.rm = TRUE)
     
     # For Algae sensors we use 4 sd as a threshold but for the others we use 2
@@ -531,7 +540,7 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   
   #create depth column
   ccrwater <- ccrwater%>%
-    mutate(LvlDepth_m_13=ifelse(LvlPressure_psi_13>16 & !is.na(LvlPressure_psi_13), LvlPressure_psi_13*0.70455, NA))#1psi=2.31ft, 1ft=0.305m
+    mutate(LvlDepth_m_13=ifelse(LvlPressure_psi_13>16 & !is.na(LvlPressure_psi_13), LvlPressure_psi_13*0.70455, ifelse(!is.na(LvlDepth_m_13), LvlDepth_m_13, NA)))#1psi=2.31ft, 1ft=0.305m
   
   # Using the find_depths function
   
@@ -550,7 +559,14 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
   }
   
   
+  ### Add a calculated reservoir depth column
   
+  ccrwater2 <- ccrwater2|>
+    mutate(Modeled_elevation_ft = (LvlPressure_psi_13*2.36)+1105.147,
+           Modeled_Water_Level_ft = Modeled_elevation_ft-1170,
+           Modeled_Depth_m = (Modeled_Water_Level_ft * 0.3048) + 23,
+           Modeled_Depth_m = ifelse(DateTime>as.Date("2024-01-23") & DateTime < as.Date("2024-02-26"), NA, Modeled_Depth_m))|>
+    select(-c(Modeled_elevation_ft, Modeled_Water_Level_ft))
   
   #############################################################################################################################  
   
@@ -568,7 +584,7 @@ qaqc_ccr <- function(data_file = "https://raw.githubusercontent.com/FLARE-foreca
                                     EXOTemp_C_9, EXOCond_uScm_9,
                                     EXOSpCond_uScm_9, EXOTDS_mgL_9, EXODOsat_percent_9, EXODO_mgL_9, 
                                     EXOfDOM_RFU_9, EXOfDOM_QSU_9,EXOPressure_psi_9, EXODepth_m_9, EXOBattery_V_9,
-                                    EXOCablepower_V_9, EXOWiper_V_9,LvlPressure_psi_13,LvlDepth_m_13, LvlTemp_C_13, 
+                                    EXOCablepower_V_9, EXOWiper_V_9,LvlPressure_psi_13,LvlDepth_m_13, LvlTemp_C_13, Modeled_Depth_m,
                                     RECORD, CR3000Battery_V, CR3000Panel_Temp_C,everything())%>%
     select(-c(EXOTSS_mgL_1, Flag_EXOTSS_mgL_1)) # take out TSS for now because it isn't calibrated
   

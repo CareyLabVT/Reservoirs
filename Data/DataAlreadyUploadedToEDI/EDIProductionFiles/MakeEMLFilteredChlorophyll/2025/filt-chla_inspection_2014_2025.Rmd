@@ -15,25 +15,46 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r setup packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet)
+pacman::p_load(tidyverse, lubridate, gsheet, here)
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
 ```
 
+```{r}
+here()
+datapath <- here(directory)
+datapath
+```
+
+
 **Read in Historical files from EDI**
 ```{r Read in Historical files from EDI, eval=FALSE, include=FALSE}
-all_chla <- filt_chla_qaqc_test(
- directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
+# all_chla <- filt_chla_qaqc_test(
+#  directory = "./Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/",
+#  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
+#  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv",
+#  final_vol_extract = 6,
+#  blank_vol_filt = 500,
+#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
+#  #maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
+#  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
+#  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg",
+#  outfile = NULL,
+#  start_date = NULL,
+#  end_date = "2025-12-31")
+
+all_chla <- filt_chla_qaqc(directory = here("Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/"),
  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk",
  filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv",
  final_vol_extract = 6,
  blank_vol_filt = 500,
  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
- #maintenance_file = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv",
+ #maintenance_file = here("Data/DataNotYetUploadedToEDI/Raw_chla/Filt_Chla_Maintenance_Log.csv"),
  historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv",
  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg",
  outfile = NULL,
  start_date = NULL,
- end_date = "2025-12-31")
+ end_date = "2025-12-31",
+ outputcheck_folder = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/outputcheck"))
 
 ```
 

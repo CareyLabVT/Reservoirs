@@ -159,7 +159,7 @@ make_eml(path = folder,
          user.id = "ccarey",
          user.domain = 'EDI',
          #STAGGING
-         package.id = "edi.779.31") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
+         package.id = "edi.779.33") # Put your package.id here, followed by .1 (for 1st version), 779.1 is reserved for staged data packages 
          # FINAL ID FOR THE PRODUCTION ENVIRONMENT 
          # package.id = "edi.1105.3") # edi.1105.1 for final product
 

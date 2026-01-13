@@ -1,4 +1,4 @@
 Author Contribution Statement-
 CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP is the point person for the dataset and led sensor maintenance, field work, data management, and QAQC.
 
-Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Dexter Howard for help setting up the sensors and other monitoring efforts in Carvins Cove, and XXX, DWH and Molly Stroud for helpful reviews of this data package.
+Acknowledgements: This data package has been iteratively updated over time and builds on the previous revisions. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, Dexter Howard for help setting up the sensors and other monitoring efforts in Carvins Cove, and Alicia Bateman, DWH and Molly Stroud for helpful reviews of this data package.

@@ -381,7 +381,7 @@ for(f in 1:ncol(Flags)){
 
 ### Check to make sure that what is in the maintenance log was actually removed
 
-### Look at the last rows of the maintenance log 
+### Look at the last row of the maintenance log 
 
 We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
 
@@ -399,14 +399,14 @@ sd <- tail(maint)%>%
   filter(flag!=7)
 
 
-knitr::kable((tail(sd)))
+knitr::kable((tail(sd, n = 1)))
 
 ```
 #### Check the that the columns have flags 
 
 Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
 
-#### Look at the first 5 rows for that time
+#### Look at the first 2 rows for that time
 
 ```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
 # get the last row of the data file
@@ -442,11 +442,11 @@ last_row <- tail(sd, n=1)
     
     # Print the head of the table to make sure that data are flagged
     
-    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test], n = 2))) 
 
 ```
 
-#### Look at the last 6 rows for the maintenance time
+#### Look at the last 2 rows for the maintenance time
 
 Make sure the observations are flagged
 
@@ -454,7 +454,7 @@ Make sure the observations are flagged
 
 # Print the tail of the table to make sure that data are flagged
     
-    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test], n = 2)) 
 
 ```
 
@@ -895,6 +895,12 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
 # Depth offsets
 download.file("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/ccre-dam-data-qaqc/CCR_Depth_offsets.csv",
               paste0(data_package,"_depth_offsets_2021_",year,".csv"))
+
+# read the file in and then save to take out the blank rows GitHub puts in 
+
+depth <- read_csv(paste0(data_package,"_depth_offsets_2021_",year,".csv"))
+
+write.csv(depth, depth_offset, row.names = F)
 
 # Finding depth function
 download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R","find_depths.R")

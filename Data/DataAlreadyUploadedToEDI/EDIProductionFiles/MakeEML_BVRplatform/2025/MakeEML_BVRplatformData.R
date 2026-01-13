@@ -1,21 +1,16 @@
-##MakeEML_MetData
+##MakeEML_BVRplatformData
 ##Author: Cayelan Carey
 ##Date: 21 July 2019
-## Updated: 07 Feb 2020, A. Hounshell
-
-
-# # Install devtools
-
+## Updated: 10 Feb 2021, A. Breef-Pilz
 
 library(devtools)
 #install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2025"
-
+folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform/2025"
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_MetData
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform
 
 #Step 2: Move your dataset to the directory
 
@@ -27,10 +22,13 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData
 
 #Step 5: Import the core metadata templates
 #Prepare metadata file templates using the 
+?template_table_attributes
 template_table_attributes(
  path = folder,
  data.path = folder,
- data.table = c('fcre-met_2015_2025.csv', "fcre-met_maintenancelog_2015_2025.csv", "fcre-met_Infrad_DOY_Avg_2015_2017.csv"))
+ data.table = c('bvre-waterquality_2020_2025.csv','bvre-waterquality_maintenancelog_2020_2025.csv',
+                'bvre-sensorstring_2016_2020.csv', "bvre-waterlevel_2009_2025.csv") ,
+ write.file=TRUE)
   
 # command. **Note:** 'import_templates' command currently (Dec. 2018) only works 
 # for data products that include table-based data files (e.g., .csv). To 
@@ -71,7 +69,7 @@ template_table_attributes(
 #paste text and click remove diacritics
 
 #Step 9: Additional information
-#This is where the authorship contribution statement goes
+#nothing mandatory for Carey Lab in this section
 
 #Step 10: Keywords
 #DO NOT EDIT KEYWORDS FILE USING A TEXT EDITOR!! USE EXCEL!!
@@ -86,7 +84,7 @@ template_table_attributes(
 #grab attribute names and definitions from your metadata word document
 #for units....
 # View and search the standard units dictionary
-#view_unit_dictionary()
+view_unit_dictionary()
 #put flag codes and site codes in the definitions cell
 #force reservoir to categorical
 
@@ -108,11 +106,11 @@ template_categorical_variables(path = folder,
 
 #Step 15: Geographic coverage
 #copy-paste the bounding_boxes.txt file that is Carey Lab specific into your working directory
-template_geographic_coverage(path = folder,
-                             data.path = folder,
-                             data.table = 'fcre-met_2015_2025.csv',
-                             empty = TRUE,
-                             write.file = TRUE)
+#template_geographic_coverage(path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+#                            data.path = "C:/R/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_BVRplatform",
+#                             data.table = 'BVR_EDI_2020.csv',
+#                             empty = TRUE,
+#                             write.file = TRUE)
 
 #Step 16: Make EML
 # View documentation for this function
@@ -138,52 +136,41 @@ template_geographic_coverage(path = folder,
 # zip.dir: Change the name of the module files zip folder
 # temporal.coverage: Update the dates
 # package.id: enter the ID you obtained in Step 6
+
 make_eml(path = folder,
-         data.path = folder,
-         eml.path = folder,
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2025",
-         data.table = c('fcre-met_2015_2025.csv','fcre-met_maintenancelog_2015_2025.csv', 'fcre-met_Infrad_DOY_Avg_2015_2017.csv'),
-        # data.table.name = c('FCRMet_2015_2023','FCRMet_maintenancelog_2015_2023', 'FCRMet_Infrad_DOY_Avg_2015_2017'),
-         data.table.description = c('All meteorological parameters measured at Falling Creek Reservoir during 2015-2025.',
-                            'The log for all maintenance and outliers for the Falling Creek Reservoir meteorology station that go into the QAQC script for 2015-2025.',
-                            'Infrared average and standard deviation for day of year from 2015-2017. This file is used in fcre-met_qaqc_2015_2024 in the met_infrad argument.'),
-         other.entity = c('fcre-met_qaqc_2015_2025.R', 'fcre-met_inspection_2015_2025.Rmd', 'Plotting_function.R'),
-         #other.entity.name = c('FCRMet_qaqc_2015_2023', 'FCRMet_inspection_2015_2023', 'Plotting_function'),
-         other.entity.description = c('Script used to flag, modify, and/or remove observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function. This script was used on all observations from 2015-2025.',
-                                      'Inspection script creates QAQC plots and downloads the necessary files for publication.',
-                                      'A function used to create the QAQC plots in the fcre-met_inspection_2015_2025.Rmd script.'),
-         temporal.coverage = c("2015-07-07", "2025-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
+         dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, conductivity, specific conductance, total dissolved solids, chlorophyll a, phycocyanin, fluorescent dissolved organic matter, and turbidity at discrete depths, and water level in Beaverdam Reservoir, Virginia, USA in 2009-2025",
+         data.table = c('bvre-waterquality_2020_2025.csv', 'bvre-waterquality_maintenancelog_2020_2025.csv', 'bvre-waterquality_depth_offsets_2020_2025.csv',
+                        'bvre-sensorstring_2016_2020.csv', 'bvre-waterlevel_2009_2025.csv'),
+         # data.table.name = c('BVRPlatform_2020_2023', 'BVRPlatform_maintenancelog_2020_2023', 'BVRPlatform_Depth_offsets_2020_2023',
+         #                     'BVR_sensor_string_2016_2020', 'BVR_WaterLevel_2009_2023'), 
+         data.table.description = c("Water quality parameters measured at Beaverdam Reservoir during 2020-2025",
+                                    "BVR sensor maintenance log for water quality sensors",
+                                    "BVR offsets for sensor depths. Used in the find_depths.R function.",
+                                    "Water quality parameters measured at Beaverdam Reservoir during 2016-2020",
+                                    "BVR water level from the staff gauge and converted to reservoir depth"),
+         other.entity = c('bvre-waterquality_qaqc_2020_2025.R', 'bvre-waterquality_inspection_2020_2025.Rmd',
+                           'find_depths.R', 'Plotting_function.R', 'bvre-sensorstring_qaqc_2016_2020.R',
+                          "bvre-waterlevel_qaqc_2009_2025.R",
+                          "bvre_daily_waterlevel_vol_2015_2022.Rmd"),
+         # other.entity.name = c('BVRPlatform_qaqc_2020_2023', 'BVRPlatform_inspection_2020_2023',
+         #                       'find_depths', 'Plot_function',
+         #                       'BVR_sensorstring_Collate_QAQC_2016_2020',
+         #                       "WaterLevel_BVR_2015_2022"),
+         other.entity.description = c('Script used to remove and/or flag observations from the dataset based on the maintenance log and other outliers. Also known as the L1 function',
+                                      'Inspection script creates QAQC plots and downloads the necessary files for publication', 
+                                      'A function that applies a depth to each observation',
+                                      'A function used to create the QAQC plots in the inspection script',
+                                      'Script that collates and QAQCs the files for bvre-sensorstring_2016_2020.csv',
+                                      'Script to read in the digitized water level observations and assign data flags',
+                                      'Script to calculate daily water level and volume from 2015-2022'),
+         temporal.coverage = c("2009-09-01", "2025-12-31"),
+         #geographic.description = c("Beaverdam, Vinton, Virginia, USA"),#have it in a .txt file
          #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.36") # FOR STAGING ENVIORNMENT THE PACKAGE ID IS "edi.143.#"
-         #package.id = 'edi.389.9') #FOR THE PRODUCTION ENVIORNMET THE PACKAGE ID IS "edi.389.#"
-
-
-#PROBLEMS WITH MAKING METATDATA! SO, COLIN SUGGESTED THAT THE FALLING CREEK SPACE IN THE PATH NAME WAS
-#  PROBLEMATIC, SO I COPIED AND PASTED THE ENTIRE DIRECTORY TO MY DESKTOP AND RAN THE MAKE_EML PATH THERE. THAT SEEMED TO WORK
-# ??!!! SO AM COPYING & PASTING THE .XML FILE BACK INTO THE GITHUB DIRECTORY. WORTH A TRY TO RUN IT OUT OF THERE
-# NEXT TIME WE UPDATE THE MET DATA IN THE FUTURE. I ALSO DELETED THE ZIP FILES 
-setwd("/Users/cayelan/Desktop/MakeEML_MetData")
-make_eml(path = folder,
-         data.path = folder,
-         eml.path = folder,
-         dataset.title = "Time series of high-frequency meteorological data at Falling Creek Reservoir, Virginia, USA 2015-2021",
-         data.table = 'FCR_Met_final_2015_2021.csv',
-         data.table.name = 'FCR_Met_final_2015_2021',
-         data.table.description = 'All meteorological parameters measured at Falling Creek Reservoir during 2015-2021',
-         other.entity = c('FCR_MET_QAQC_2021.R','FCR_Met_Maintenance_2015_2021.csv'),
-         other.entity.name = c('FCR_MET_QAQC_2021',"FCR_Met_Maintenance_2015_2021"),
-         other.entity.description = c('Data aggregation and QA/QC R script','The log of all maintenance applied to the meteorological station'),
-         temporal.coverage = c("2015-07-07", "2021-12-31"),
-         #geographic.description = c("Falling Creek Reservoir, Vinton, Virginia, USA"), #have it in a .txt file
-         #geographic.coordinates = c('37.309589', '-79.836009', '37.302660', '-79.839249'), #N, E, S, W
-         maintenance.description = "ongoing", 
-         user.id = "ccarey",
-         user.domain = 'EDI',
-         package.id = "edi.389.2") # Put your package.id here, followed by .1 (for 1st version)
+         package.id = "edi.157.41") # Put your package.id here, followed by .1 (for 1st version). This is for staging
+         #package.id = "edi.725.5") # This is for the final version in the production environment
 
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 

@@ -1,0 +1,845 @@
+---
+title: "BVR Platform Plots for EDI"
+author: "Adrienne Breef-Pilz"
+output: html_document
+theme: null
+original date: Jan. 2023
+date: "`r Sys.Date()`"
+---
+
+
+This script is the visual inspection scripts. 
+
+1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
+
+2. Then the script checks for duplicates, daily, and subdaily gaps in the current file. 
+
+3. Lists the flag frequency to check if there are any NAs or any assigned the wrong flag. 
+
+4. Checks to see if the Maintenance Log is working correctly by inspecting rows in the data frame. 
+
+5. If necessary can QAQC data already on EDI using the QAQC function
+
+6. Creates plots
+
+7. Writes data to new csv
+
+8. Downloads necessary files for EDI publishing
+
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+
+All files are from GitHub or EDI and the source scripts are from GitHub as well. 
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "Bind Historical and L1 files together". Make sure to comment out the row_bind section and un comment the section that reads in the pasta. In addition, make sure eval=FALSE is in the chunk header for "Read in EDI Files", "Read in current L1 file", "Make new CSV with current and historic files" chunk and "Download and save Maintenance Log". These chunks of code will not be run when the R markdown is knitted together. Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
+
+```{r Set Up, include=FALSE}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(RCurl,devtools, tidyverse,lubridate, plotly, magrittr, scattermore, knitr, htmltools, pander)
+
+# Source scripts from GitHub
+# This is the qaqc script. In the data package it is saved as BVRPlatform_qaqc_2023_2023.R
+ source("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R")
+
+# source("bvre-waterquality_qaqc_2020_2025-test.R")
+
+# This is the plotting function used below to make the plots. In the data package it is saved as Plot_function.R
+source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+
+
+ #turn off pander auto asis
+        pander::panderOptions('knitr.auto.asis', FALSE)
+
+
+```
+
+REVIEWERS and DATA PUBLISHERS START HERE BEFORE KNITTING
+
+1.  Update your role
+
+2.  Update dates for current year plots
+
+3.  If you are a reviewer, update the edi link
+
+```{r EDIT HERE, include=FALSE}
+
+# 1. How would you like to use this script. If you are a data publisher write "publisher" if you are a reviewer write "reviewer"
+
+role <- "publisher"
+
+# 2. DATA PUBLISHERS UPDATE DATES HERE
+# Set up the current time end time of the file and the current year for QAQC plots
+#current time of QAQC for graphing
+
+current_time_start=ymd_hms("2025-01-01 00:00:00", tz="EST")
+current_time_end=ymd_hms("2025-12-31 23:59:00", tz="EST")
+
+# 3. DATA PUBLISHERS UPDATE FILE NAMES
+# Update the name of the data files, maintenance log, and qaqc function. Double check the name of the file matches the naming convention and the start and end date of the data file. 
+
+file_name <- "bvre-waterquality_2020_2025.csv"
+
+qaqc_function <- "bvre-waterquality_qaqc_2020_2025.R"
+
+maintenance_log <- "bvre-waterquality_maintenancelog_2020_2025.csv"
+
+depth_offset <- "bvre-waterquality_depth_offsets_2020_2025.csv"
+
+# 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+edi_link <- "https://pasta-s.lternet.edu/package/data/eml/edi/157/39/37e2587d2ab477068b295f97f1598cf9"  
+
+```
+
+```{r set chunks on or off, echo=FALSE}
+### Code to determine which chunks are turned on and off
+
+if(role=="publisher"){
+  make_data = TRUE
+  edi_stage = FALSE
+}else if(role == "reviewer"){
+  make_data = FALSE
+  edi_stage = TRUE
+}
+
+```
+
+```{r QAQC all files, eval=make_data, message=TRUE, warning=TRUE, echo=FALSE}
+
+#Run the QAQC function to QAQC all raw data. Do this when you are preparing the data file for EDI.
+
+ds <- c(
+  'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/bvre-waterquality_legacy_2020_2023.csv',
+  "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/refs/heads/bvre-platform-data-qaqc/bvre-waterquality_legacy_2024.csv",
+  
+  
+  # THE CURRENT YEARS FILE
+  'https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv',
+
+# Read in and make a data frame of the manual downloaded files. I make these each year with the raw files we have downloaded.
+# See ManualDownloadsSCCData for the script on making the file for each year.
+# Link here : https://github.com/CareyLabVT/ManualDownloadsSCCData/tree/master/MetStation
+
+'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/BVRPlatform/BVR_manual_2020_2023.csv',
+'https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/refs/heads/master/BVRPlatform/BVR_manual_2024_2025.csv'
+
+)
+
+
+# QAQC all the data through the qaqc function
+
+current_df <- qaqc_bvr(data_file = ds,
+                      # maintenance_file = "bvre-waterquality_maintenancelog_2020_2025_test.csv",
+                    maintenance_file = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv",
+                    output_file = NULL,
+                    start_date = ymd_hms("2020-06-18 17:55:00", tz="EST"), 
+                    end_date = Sys.Date())
+  
+# make sure there are no dups
+  
+  current_df <- current_df|>
+  dplyr::distinct()|> 
+  filter(DateTime<(current_time_end))
+
+# make sure no time duplicates.
+ current_df<-  current_df[!duplicated(current_df$DateTime), ]
+
+#reorder. Just to be certain everything is in order
+  current_df<-current_df[order(current_df$DateTime),]
+
+```
+
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+```{r READ IN EDI FOR REVIEWER, eval = edi_stage, include = FALSE}
+
+# # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+                                                            
+ current_df <-read_csv(edi_link)
+
+ # Force files from EDI to have an EST timestamp
+  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
+
+```
+
+## Information for EDI methods text
+This is information that is included in the methods file for EDI 
+
+The minimum water level for BVR was `r min(current_df$LvlDepth_m_13, na.rm=T)` and the maximum water depth was `r max(current_df$LvlDepth_m_13, na.rm=T)`.
+
+The median water level was `r median(current_df$LvlDepth_m_13, na.rm=T)` and the mean water level was `r mean(current_df$LvlDepth_m_13, na.rm=T)`.
+
+
+```{r Download Raw data for plotting, include=FALSE}
+
+BVRDATA_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "ThermistorTemp_C_1",
+                        "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4", "ThermistorTemp_C_5",
+                        "ThermistorTemp_C_6", "ThermistorTemp_C_7", "ThermistorTemp_C_8", "ThermistorTemp_C_9",
+                        "ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13",
+                        "RDO_mgL_6", "RDOsat_percent_6", "RDOTemp_C_6", "RDO_mgL_13",
+                        "RDOsat_percent_13", "RDOTemp_C_13", "EXO_Date", "EXO_Time", "EXOTemp_C_1.5", "EXOCond_uScm_1.5",
+                        "EXOSpCond_uScm_1.5", "EXOTDS_mgL_1.5", "EXODOsat_percent_1.5", "EXODO_mgL_1.5", "EXOChla_RFU_1.5",
+                        "EXOChla_ugL_1.5", "EXOBGAPC_RFU_1.5", "EXOBGAPC_ugL_1.5", "EXOfDOM_RFU_1.5", "EXOfDOM_QSU_1.5",
+                        "EXOTurbidity_FNU_1.5", "EXOTSS_mg_1.5","EXOPressure_psi", "EXODepth_m", "EXOBattery_V",
+                        "EXOCablepower_V", "EXOWiper_V", "LvlPressure_psi_13", "LvlTemp_C_13")
+  
+ 
+  # read catwalk data and maintenance log
+  # NOTE: date-times throughout this script are processed as UTC
+  raw <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data/bvre-waterquality.csv", skip = 1, col_names = BVRDATA_COL_NAMES,
+                      col_types = cols(.default = col_double(), DateTime = col_datetime()))
+  
+  
+  # Take out extremly high values, EXO_Date and Time, and create depth column
+   raw <- raw%>%
+     select(-c("EXO_Date", "EXO_Time"))%>%
+      mutate(across(ThermistorTemp_C_1:LvlTemp_C_13, ~ifelse(.x >180, NA, .x)),
+             LvlDepth_m_13=LvlPressure_psi_13*0.70455,
+             Reservoir = "BVR",
+             Site = 50,
+             RDO_mgL_8 = RDO_mgL_6,
+             RDOTemp_C_8 = RDOTemp_C_6,
+             RDOsat_percent_8 = RDOsat_percent_6)
+     
+       
+
+  # convert NaN to NAs in the dataframe
+  raw[sapply(raw, is.nan)] <- NA
+  
+ # Force historical file timestamp to EST
+  raw$DateTime <- force_tz(as.POSIXct(raw$DateTime), tzone = "EST")
+
+```
+## Check for duplicates and  gaps in the data frame
+
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. 
+
+
+### Are there any duplicates?
+
+
+```{r Check for dups , echo=FALSE}
+
+# Make sure there are no duplicated dates. Do this here because the file is too large for Data Explore.
+# Print them if there are
+ dups<- current_df[duplicated(current_df$DateTime), ]
+
+dups <- dups%>%
+  select(DateTime, RECORD, ThermistorTemp_C_7,  RDO_mgL_6,
+         EXOTemp_C_1.5, LvlPressure_psi_13) 
+
+# Make it into a nice table when the Markdown is knitted together
+knitr::kable((dups))
+```
+
+
+### Are there any gaps in the data file?
+
+
+When gaps are found in the data file, check that you do not have new gaps in the previous years' publication. For the current year, if you find gaps check that you have all of the manually downloaded files. If the data are truly missing then record the dates and times in the methods section. 
+
+#### Daily Gaps
+
+```{r Check for daily gaps, echo=FALSE}
+
+# Get DOY
+bvrdata <- current_df
+ bvrdata$DOY=yday(bvrdata$DateTime)
+
+ for(i in 2:nrow(bvrdata)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(bvrdata$DOY[i]-bvrdata$DOY[i-1]>1){
+      print(c(bvrdata$DateTime[i-1],bvrdata$DateTime[i]))
+    }
+ }
+```
+
+#### Sub-daily Gaps
+
+This identifies if there are any sub-daily gaps in the current record, as gaps of the long term record are found in the metadata.
+
+The first row is the time for the first observation and then the subsequent observation. Each observation should be 10 minutes apart. The second row is the number of the record for each observation. Most of these gaps happen when we change the program on the data logger. These times will be recorded in the maintenance section of the metadata and are also noted in the maintenance log.
+
+```{r Check for sub daily gaps, echo=FALSE}
+
+# Because we can't have NAs for this for loop let's make a new df
+ bvr2 <- current_df%>%
+  filter(!is.na(RECORD))%>%
+  filter(DateTime>current_time_start)
+
+  for(i in 2:length(bvr2$RECORD)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if( abs(bvr2$RECORD[i]-bvr2$RECORD[i-1])>1 & difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>10){
+      print(c(bvr2$DateTime[i-1], bvr2$DateTime[i]))
+      print(c(bvr2$RECORD[i-1], bvr2$RECORD[i]))
+    }
+  }
+```
+
+#### Gaps in EXO2 Data
+These are gaps in the EXO2 data longer than 30 minutes
+
+```{r EXO gaps, echo=FALSE}
+
+# Check for any gaps longer than 30 minutes in the record for the current year
+
+ bvr2 <- current_df%>%
+  select(DateTime, starts_with("EXO"), Flag_EXOTemp_C_1.5)|>
+  filter(Flag_EXOTemp_C_1.5!=7)
+  #filter(DateTime>current_time_start)
+
+  for(i in 2:length(bvr2$EXOTemp_C_1.5)){ #this identifies if there are any data gaps in the long-term record, and where they are by record number
+    if(abs(difftime(bvr2$DateTime[i], bvr2$DateTime[i-1], units="mins")>30)){
+      print(c(bvr2$DateTime[i-1], bvr2$DateTime[i]))
+    }
+  }
+
+```
+
+
+
+
+
+### Flag Frequency
+Let's look at the flag Frequency for each variable. As a reminder here are the flag codes
+ Flag values
+ 
+ 0: no flag
+ 
+ 1: value removed due to maintenance and set to NA
+ 
+ 2: negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process
+ 
+ 3: negative values set to 0 except for temperature
+ 
+ 4: value removed due to fouling and set to NA
+ 
+ 5: questionable value but left in the dataset
+ 
+ 6: values adjusted using an offset or linear adjustment with code in maintenance log
+ 
+ 7: missing data
+ 
+ 8: sensor moved to a new position and need to create a new data column
+ 
+```{r Check out the flags, echo=FALSE}
+
+#make sure no NAS in the Flag columns
+Flags <- current_df%>%
+  select(DateTime, starts_with("Flag"))
+
+RowsNA=Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+#check the flag column
+Flags <- current_df%>%
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:ncol(Flags)){
+  print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+```
+
+
+### Check to make sure that what is in the maintenance log was actually removed
+
+### Look at the last rows of the maintenance log 
+
+We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
+
+```{r Read in the maintenance log and look at the tail, echo=FALSE}
+
+# The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
+ maint <- read_csv2("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv",
+                    show_col_types = FALSE)
+
+
+# name the data file for just the tail of the maintenance log
+# you want to filter out 7 because that is if the observation is missing and there are other ways that is flagged in the data besides the maintenance log, so it is not a good check.
+sd <- tail(maint)%>%
+  filter(flag!=7)
+
+
+knitr::kable((tail(sd, n = 1)))
+
+```
+#### Check the that the columns have flags 
+
+Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
+
+#### Look at the first 5 rows for that time
+
+```{r Did the maint log work head, echo=FALSE, message=FALSE, warning=FALSE}
+# get the last row of the data file
+last_row <- tail(sd, n=1)
+
+# Get starttime and end time
+### get start and end time of one maintenance event
+    start <- force_tz(as.POSIXct(last_row$TIMESTAMP_start), tzone = "EST")
+    end <- force_tz(as.POSIXct(last_row$TIMESTAMP_end), tzone = "EST")
+    
+    # Get the time of the maintenance
+    if(is.na(end)){
+      # If there the maintenance is on going then the columns will be removed until
+      # and end date is added
+      Time <- current_df |> filter(DateTime >= start) |> select(DateTime)
+      
+    }else if (is.na(start)){
+      # If there is only an end date change columns from beginning of data frame until end date
+      Time <- current_df |> filter(DateTime <= end) |> select(DateTime)
+      
+    }else {
+      Time <- current_df |> filter(DateTime >= start & DateTime <= end) |> select(DateTime)
+    }
+
+
+### Get the names of the columns affected by maintenance
+    colname_start <- last_row$start_parameter
+    colname_end <- last_row$end_parameter
+    
+     # Make list of just the columns we want 
+    
+    if (!is.na(colname_end)){
+    test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start), colname_end, paste0("Flag_",colname_end)))
+    } else{
+      test <- colnames(current_df%>%select(DateTime, colname_start, paste0("Flag_",colname_start)))
+    }
+    
+    # Print the head of the table to make sure that data are flagged
+    
+    knitr::kable((head(current_df[current_df$DateTime %in% Time$DateTime, test]))) 
+
+```
+
+#### Look at the last 6 rows for the maintenance time
+
+Make sure the observations are flagged
+
+```{r Print the tails, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Print the tail of the table to make sure that data are flagged
+    
+    knitr::kable(tail(current_df[current_df$DateTime %in% Time$DateTime, test])) 
+
+```
+
+
+## QAQC Plots
+
+##### QAQC plot information and all_plot function information
+
+For the plots, they use a function called "all_plot". In all_plot you can specify if you want plotly plots for the current data. BEWARE if you turn on the plotly plots and try to knit the markdown it will fail! I am working on a fix. For right now you can specify which plotly plots you want on. You can also look at the plotly plots manually in each chunk by running the chunk with Use_plotly=TRUE as an argument and then at the end of the chunk output[[1]]. 
+
+The plotting function is called all_plot() which plots the 4 or more plots described below. The function is sourced from GitHub in the first chunk of the script. The arguments are:
+Var # The column you want to plot. Make sure it is in quotes
+y_lab,  # This label can take an expression aka have the proper degrees C, 
+y_lab2, # This label is for the plotly function which can not handle expression argument. 
+Water=T, # Are these plots for in water streaming sensors?
+Raw_file = T, # Do you have access to raw files to compare to. This is only for streaming sensors. 
+Use_plotly = F){ # Do you want to produce plotly interactive plots? 
+
+The arguments with = followed by a True means that they are the defaults and you don't need to add them to the function when you use it. If you want to use the opposite of the default you must specify that. 
+  
+##### Plot Description:
+
+The plots below are:
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one has not been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+
+1. A time series of the current years' data. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
+
+2. A time series of the historical and the current data just the qaqced values. 
+
+The next two plots are just fun to see trends over time with the data. 
+
+3. Density plots are like a histogram and a grouped by color so you can see where the data are relative to other years. 
+
+4. The box plots look at the spread of the data within the year and we can look at the median and see how that is changing or not. 
+
+Do not over think the last 2 plots. 
+
+There are additional plots for depths that have more than one sensor such as at position 13 that has a thermistor and a pressure transducer which both measure temperature. In this case, we plot them on top of each other to make sure they are within the ballpark. For chal and the bluegreen algae sensor on the EXO2 we plot the daily observations on top of the 10 minute observations to make sure that the daily captures the same trend as the 10 minute data. 
+
+### Temperature
+
+```{r Temp, echo=FALSE, results='asis'}
+
+dx <- colnames(current_df%>%select(grep("Temp_C_[0-9A-Za-z]",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = expression(''*~degree*C*''), y_lab2 = "Degrees C", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly temp, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+
+```{r All Temperature, echo=FALSE, warning = FALSE, results='hide'}
+
+colors3 <-c("1"="firebrick1", "2"="DarkOrange1", "EXO_1.5m"="yellow","3"="gold", 
+                                  "4"="greenyellow", "5"="medium sea green", "6"="sea green",
+                                  "7"="DeepSkyBlue4", "8"="blue2", "9"="cornflowerblue", 
+            "10"="darkslateblue","11"="magenta2", "12"="darkmagenta", "13"="black")
+
+# Take out Temperature values 
+
+  All_temp<-current_df%>%
+    select(DateTime, starts_with("Ther"), starts_with("EXOTemp"), starts_with("RDOTem"), starts_with("LvlTemp"))%>%
+    pivot_longer(-c(DateTime), names_to="Sensor", values_to="Reading", values_drop_na=TRUE)%>%
+    mutate(DateTime=ymd_hms(DateTime))
+  
+  
+  ggplot(All_temp)+
+    geom_scattermore(aes(x=DateTime, y=Reading))+
+    facet_wrap(.~factor(Sensor, levels=c("ThermistorTemp_C_1", "ThermistorTemp_C_2", "EXOTemp_C_1.5", "ThermistorTemp_C_3", "ThermistorTemp_C_4","ThermistorTemp_C_5","ThermistorTemp_C_6","RDOTemp_C_6","ThermistorTemp_C_7","ThermistorTemp_C_8","RDOTemp_C_8","ThermistorTemp_C_9","EXOTemp_C_9","ThermistorTemp_C_10","ThermistorTemp_C_11","ThermistorTemp_C_12","ThermistorTemp_C_13", "RDOTemp_C_13", "LvlTemp_C_13")))+
+    theme_bw()
+  
+  
+# This is all the temps and just the current year
+  cur_temp <- current_df%>%
+     filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+    ggplot(.,aes(x = DateTime))+
+    geom_line(aes(y=ThermistorTemp_C_1, color="1"))+
+    geom_line(aes(y=ThermistorTemp_C_2, color="2"))+
+    geom_line(aes(y=EXOTemp_C_1.5, color="EXO_1.5m")) +
+    geom_line(aes(y=ThermistorTemp_C_3, color="3"))+
+    geom_line(aes(y=ThermistorTemp_C_4, color="4"))+
+    geom_line(aes(y=ThermistorTemp_C_5, color="5"))+
+    geom_line(aes(y=ThermistorTemp_C_6, color="6"))+
+    geom_line(aes(y=ThermistorTemp_C_7, color="7"))+
+    geom_line(aes(y=ThermistorTemp_C_8, color="8"))+
+    geom_line(aes(y=ThermistorTemp_C_9, color="9"))+
+    geom_line(aes(y=ThermistorTemp_C_10, color="10"))+
+    geom_line(aes(y=ThermistorTemp_C_11, color="11"))+
+    geom_line(aes(y=ThermistorTemp_C_12, color="12"))+
+    geom_line(aes(y=ThermistorTemp_C_13, color="13"))+
+    ggtitle("Current Temperature Profile") +
+    labs(y = expression(''*~degree*C*''),
+           color = "Legend") +
+      scale_color_manual(values = colors3)+
+      theme_bw()
+  
+```
+
+### Depth
+
+```{r Pressure Sensor, echo=FALSE, results='asis'}
+### Plotting depth from pressure sensor 
+   
+dx <- colnames(current_df%>%select(grep("Depth_m",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "Meters", y_lab2 = "Meters", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly pres, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Dissolved Oxygen
+
+```{r DO, echo=FALSE, results='asis'}
+
+
+dx <- colnames(current_df%>%select(grep("DO_mgL|sat_percent",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "mg/L or % sat", y_lab2 = "mg/L or % sat", Water=T, Use_plotly=T, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly DO, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Chlorophyll and Phycocanin
+
+```{r Check the EXO Chla and Blue Greens, echo=FALSE, results='asis'}
+
+dx <- colnames(current_df%>%select(grep("Chla|BGAPC",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "RFU or ug/L", y_lab2 = "RFU or ug/L", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+```
+
+```{r Print plotly algae, echo=FALSE, warning=FALSE, messages=FALSE}
+
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### fDOM
+
+```{r fdom EXO sensor, echo=FALSE, results='asis'}
+
+dx <- colnames(current_df%>%select(grep("fDOM",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "RFU or QSU", y_lab2 = "RFU or QSU", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+
+```
+
+```{r Print plotly fdom, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Conductivity, Specific Conductivity, TDS
+
+```{r Cond Spcond and TDS, echo=FALSE, results='asis'}
+
+dx <- colnames(current_df%>%select(grep("^EXOCond|^EXOSpCond|^EXOTDS",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab = "uScm or mg/L", y_lab2 = "uScm or mg/L", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly cond, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Turbidity
+
+```{r turbidity, echo=FALSE, results='asis'}
+
+#dx <- colnames(current%>%select(grep("fDOM",colnames(current))))
+
+# make the plots
+outputs <- lapply("EXOTurbidity_FNU_1.5", all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab="FNU", y_lab2="FNU", Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+
+#output[[1]]
+
+```
+
+```{r Print plotly tur, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+### Wiper, Battery, and CablePower
+
+```{r Wiper, echo=FALSE, results='asis'}
+
+dx <- colnames(current_df%>%select(grep("Wiper_V|Battery_V|power_V",colnames(current_df))))
+dx2 <-dx[!grepl("Flag_",dx)]
+
+# make the plots
+outputs <- lapply(dx2, all_plot, data=current_df, raw_data= raw, reservoir = "BVR", res_site=50, y_lab="Volts", y_lab2="Volts", Depth=F, Water=T, Use_plotly=F, Heatmap = F)
+
+output <- unlist(outputs, recursive = F)
+```
+
+```{r Print plotly power, echo=FALSE, messages=FALSE, warning=FALSE}
+
+ # Used to print the plotly plots
+  # attach the Dependencies
+  # since the do not get included with renderTags(...)$html
+  deps <- lapply(
+    Filter(function(x){inherits(x,"htmlwidget")},output),
+    function(hw){
+      renderTags(hw)$dependencies
+    }
+  )
+  
+  if(length(deps)>0){
+  attachDependencies(
+    tagList(),
+    unlist(deps,recursive=FALSE)
+  )
+  }  
+```
+
+
+### Write to CSV
+Make the data frame here and it will save where your inspection script is saved. 
+
+```{r Make current csv, eval = make_data, include=FALSE}
+# Double Check naming convention
+# Variable_StartYear_EndYear
+
+# convert datetimes to characters so that they are properly formatted in the output file
+ current_df$DateTime <- as.character(format(current_df$DateTime))
+
+write_csv(current_df, file_name)
+
+```
+
+### Download and save Maintenance Log, Plotting function, and QAQC function
+
+```{r Download and save Maintenance Log, eval = make_data, inclue = FALSE}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_maintenance_log.csv", maintenance_log)
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/R/edi_qaqc_function.R", qaqc_function)
+
+# streaming plots function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R", "Plotting_function.R")
+
+# Depth offsets
+download.file("https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_Depth_offsets.csv", depth_offset)
+
+depth <- read_csv(depth_offset)
+
+write.csv(depth, depth_offset, row.names = F)
+
+# Finding depth function
+download.file("https://raw.githubusercontent.com/LTREB-reservoirs/vera4cast/main/targets/target_functions/find_depths.R", "find_depths.R")
+
+# Download Heather's code to make BVR water level and then need to run it. 
+download.file("https://raw.githubusercontent.com/hlwander/bvr_glm/master/inputs/water_level/WaterLevel_BVR.Rmd", "bvre_daily_waterlevel_vol_2015_2022.Rmd")
+
+## Made files locally for 2025 data. Will figure out a better way to make the file later. 
+# # BVR water level file
+# download.file("https://raw.githubusercontent.com/abreefpilz/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_waterlevel/BVR/BVR_WaterLevel_2009_2023.csv", "bvre-waterlevel_2009_2024.csv")
+# 
+# # BVR water level QAQC script
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_waterlevel/BVR/BVR_WaterLevel_qaqc_2029_2023.R", "bvre-waterlevel_qaqc_2009_2024.R")
+
+```

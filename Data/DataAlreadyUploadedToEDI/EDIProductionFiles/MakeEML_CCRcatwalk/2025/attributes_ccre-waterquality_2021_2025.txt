@@ -27,7 +27,7 @@ EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Son
 EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1	Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOfDOM_QSU_1	Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
-EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.6 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
+EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
 EXOPressure_psi_1	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
 EXODepth_m_1	Depth of the EXO2 sonde at 1.5 m measured by the EXO2 sonde.	numeric	meter		NA	value is missing
 EXOBattery_V_1	Voltage of the EXO2 sonde at 1.5 m internal batteries.	numeric	volt		NA	value is missing
@@ -78,7 +78,7 @@ Flag_EXOBGAPC_RFU_1	Data flag for EXO2 phycocyanin data measured in RFU at 1.5 m
 Flag_EXOBGAPC_ugL_1	Data flag for EXO2 phycocyanin data measured in micrograms per liter at 1.5 m (EXOBGAPC _ugL_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_RFU_1	Data flag for EXO2 fluorescent dissolved organic matter data measured in RFU at 1.5 m (EXOfDOM_RFU_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_QSU_1	Data flag for EXO2 fluorescent dissolved organic matter data measured in QSU at 1.5 m (EXOfDOM_QSU_1)	categorical 			NA	value is missing
-Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU (EXOTurbidity_FNU_1)	categorical			NA	value is missing
+Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU at 1.5 m (EXOTurbidity_FNU_1)	categorical			NA	value is missing
 Flag_EXOPressure_psi_1	Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)	categorical 			NA	value is missing
 Flag_EXODepth_m_1	Data flag for EXO2 depth sensor at 1.5 m (EXODepth_m_1)	categorical 			NA	value is missing
 Flag_EXOBattery_V_1	Data flag for EXO2 internal battery at 1.5 m (EXOBattery_V_1)	categorical 			NA	value is missing

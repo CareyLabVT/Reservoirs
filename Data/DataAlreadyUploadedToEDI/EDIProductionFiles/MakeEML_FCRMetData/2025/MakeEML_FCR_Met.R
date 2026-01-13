@@ -8,7 +8,7 @@
 
 
 library(devtools)
-install_github("EDIorg/EMLassemblyline")
+#install_github("EDIorg/EMLassemblyline")
 library(EMLassemblyline)
 
 folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRMetData/2025"
@@ -158,7 +158,7 @@ make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.id = "ccarey",
          user.domain = 'EDI',
-         package.id = "edi.143.34") # FOR STAGING ENVIORNMENT THE PACKAGE ID IS "edi.143.#"
+         package.id = "edi.143.36") # FOR STAGING ENVIORNMENT THE PACKAGE ID IS "edi.143.#"
          #package.id = 'edi.389.9') #FOR THE PRODUCTION ENVIORNMET THE PACKAGE ID IS "edi.389.#"
 
 

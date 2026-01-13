@@ -199,7 +199,7 @@ make_eml(
   #user.id = 'melofton',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1139.10')
+  package.id = 'edi.1764.1')
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

@@ -34,11 +34,11 @@ All files are from GitHub or EDI and the source scripts are from GitHub as well.
 
 INFORMATION:
 
-There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it.
+There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I recommend this because if you run it chunk by chunk your R may abort the session. The Knit button is on the top of the file with a ball of yarn and a needle next to it.
 
 If you are REVIEWING this data package, add the pasta URL from EDI in the "EDIT HERE" chunk and you change the role, as well. If you are knitting the document, only the specified chunks of code will be run depending on your role.  Once that is all set than you can knit the file together as an HTML file to look at all the plots. 
 
-If you are running the code chunk by chunk you mind need to make some adjustments to the code. To make the plots this markdown uses a function called "all_plots". In the function it creates a plots of the most current year, the whole times series, as well as, density and box plots for daily averages. You can also specify if you would like to produce a heat map. Note that heat maps are only produced if your data has a depth column. The function also allows you to choose if you want interactive plots, using plotly, for the most recent year of data. The plotly plots are designed to be in order with the other plots when knit to together. Therefore if you are running the ploting section, chunk by chunk, then you need to specify the plotly plot from the list of plots labeled "output". For this data package do not use plotly for all plots at one time. I usually use it for depth, oxygen, and chla. 
+If you are running the code chunk by chunk you might need to make some adjustments to the code. To make the plots, this markdown uses a function called "all_plots". In the function it creates a plots of the most current year, the whole times series, as well as, density and box plots for daily averages. You can also specify if you would like to produce a heat map. Note that heat maps are only produced if your data has a depth column. The function also allows you to choose if you want interactive plots, using plotly, for the most recent year of data. The plotly plots are designed to be in order with the other plots when knit to together. Therefore if you are running the ploting section, chunk by chunk, then you need to specify the plotly plot from the list of plots labeled "output". For this data package do not use plotly for all plots at one time. I usually use it for depth, oxygen, and chla. 
 
 
 
@@ -239,7 +239,7 @@ CATPRES_COL_NAMES = c("DateTime", "RECORD", "CR6Battery_V", "CR6Panel_Temp_C", "
 
 ## Check for duplicates and  gaps in the data frame
 
-This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates. Look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. If there is nothing printed then there are no duplicates or missing files. 
+This section identifies if there are any duplicates, daily data, and sub daily gaps in the long-term record. If there are duplicates, look to see if they are true duplicates and then check the qaqc function and the chunk above where duplicates should be removed. If there is nothing printed then there are no duplicates or missing files. 
 
 
 ### Are there any duplicates?
@@ -450,7 +450,7 @@ The arguments with = followed by a True means that they are the defaults and you
 ##### Plot Description:
 
 The plots below are:
-The first 2 plots are the ones you should focus on for the QAQC chec. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
+The first 2 plots are the ones you should focus on for the QAQC check. Spend the most time looking at the most recent data because that one as been checked. Do pay attention to the historical to make sure there are no crazy outliers that were missed in previous years. 
 
 1. A time series of the current years' data. This can either be a regular plot or an interactive one. If you would like it to be interactive set Use_plotly = T. The black dots are the qaqced observations and the red is the raw files that were qaqced. This is to see what kind of values were removed and if there are any the script missed or that need to be added to the maintenance log. 
 
@@ -464,7 +464,7 @@ The next two plots are just fun to see trends over time with the data.
 
 Do not over think the last 2 plots, although they are good to look at historical trends to ensure relative data quality consistency. 
 
-There are additional plots for depths that have more than one sensor such as at position 13 that has a thermistor and a pressure transducer which both measure temperature. In this case, we plot them on top of each other to make sure they are within the ballpark. For chal and the bluegreen algae sensor on the EXO2 we plot the daily observations on top of the 10 minute observations to make sure that the daily captures the same trend as the 10 minute data. 
+There are additional plots for depths that have more than one sensor such as at position 13 that has a thermistor and a pressure transducer which both measure temperature. In this case, we plot them on top of each other to make sure they are within the ballpark. For chla and the bluegreen algae sensor on the EXO2 we plot the daily observations on top of the 10 minute observations to make sure that the daily captures the same trend as the 10 minute data. 
 
 
 ### Temperature

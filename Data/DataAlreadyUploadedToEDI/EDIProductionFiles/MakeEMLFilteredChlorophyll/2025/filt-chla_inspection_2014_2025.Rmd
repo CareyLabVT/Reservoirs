@@ -6,7 +6,7 @@ output: html_document
 ---
 
 This is the visual inspection script for Filtered Chlorophyll. 
-If running for EDI Dayz, start at line 43 and update the pasta with the most recent staged version.
+If running for EDI Dayz, start at line 71 and update the pasta with the most recent staged version.
 
 ## R Markdown Guide
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.

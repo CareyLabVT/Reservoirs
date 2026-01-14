@@ -3,6 +3,7 @@
 ##Modified by Whitney Woelmer and Jacob Wynne 
 ##Date: 24Jun2020
 ##Modified by Katie Hoffman on 10 Jan 2024
+## updated: 14 Jan 2026 - modified the xml file in for license info
 
 #This script is to stage and publish data to EDI
 
@@ -10,11 +11,15 @@
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
 #and links therein
 
-library(devtools)
-install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
+#library(devtools)
+#install_github("EDIorg/EMLassemblyline")
+#library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2024"
+# load data packages
+
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+
+folder <- paste0(here(),"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/")
 
 # (install and) Load EMLassemblyline #####
 #install.packages('devtools')
@@ -24,7 +29,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChl
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-library(EMLassemblyline)
+#library(EMLassemblyline)
 
 
 #Step 1: Create a directory for your dataset
@@ -145,7 +150,7 @@ view_unit_dictionary()
 ?make_eml
 
 # Run this function
-make_eml(
+eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
@@ -161,8 +166,45 @@ make_eml(
                                'Maintenance Log through 2024'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.33') #THIS IS FOR STAGING
-  #package.id = 'edi.555.4') # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  package.id = 'edi.52.33', #THIS IS FOR STAGING
+  #package.id = 'edi.555.4', # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  write.file = T, ### write the file to the folder
+  return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
 #          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",

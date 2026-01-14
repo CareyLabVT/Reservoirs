@@ -9,15 +9,20 @@ Load packages
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
+#library(tidyverse)
 
 # Install and load devtools (used for install_github() function below)
-install.packages("devtools")
-library(devtools)
+#install.packages("devtools")
+#library(devtools)
 
 # Install and load EMLassemblyline
-install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
+#install_github("EDIorg/EMLassemblyline")
+#library(EMLassemblyline)
+
+# load packages
+pacman::p_load(tidyverse, devtools, EMLassemblyline, xml2, XML)
+
+folder <- getwd()
 
 ```
 
@@ -57,7 +62,7 @@ Make EML
 
 ```{r}
 # Make the EML for EDI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make_eml(path = getwd(),
+eml_file <- make_eml(path = getwd(),
          dataset.title = "Time series of high-frequency profiles of depth, temperature, dissolved oxygen, conductivity, specific conductance, chlorophyll a, turbidity, pH, oxidation-reduction potential, photosynthetically active radiation, colored dissolved organic matter, phycocyanin, phycoerythrin, and descent rate for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2013-2024",
          data.table = c("ctd_2013_2024.csv",
                         "site_descriptions.csv", 
@@ -81,7 +86,45 @@ make_eml(path = getwd(),
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1113.19")
-         #package.id = "edi.200.14") #2024 #publishing
+         package.id = "edi.1113.19",
+         #package.id = "edi.200.14", #2024 #publishing
+        write.file = T, ### write the file to the folder
+        return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,"/",package.id,".xml"))
+
+
 ```
 

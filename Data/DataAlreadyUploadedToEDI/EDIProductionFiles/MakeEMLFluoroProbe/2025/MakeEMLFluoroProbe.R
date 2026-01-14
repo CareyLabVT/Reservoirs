@@ -1,6 +1,7 @@
 ##MakeEMLFluoroProbe
 ##Author: Mary Lofton
 ##Date: 10JAN25
+## Updates: 14 Jan 2026 - ABP updated the folder path, update the xml file with license info
 
 #good sites for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
@@ -8,14 +9,20 @@
 #and links therein
 
 # Install devtools
-install.packages("devtools")
+# install.packages("devtools")
 
 # Load devtools
-library(devtools)
+# library(devtools)
 
 # Install and load EMLassemblyline
-install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
+# install_github("EDIorg/EMLassemblyline")
+# library(EMLassemblyline)
+
+# load packages
+
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+
+folder <- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/")
 
 #Step 0: Create new dataset and do visual QAQC
 
@@ -80,31 +87,31 @@ library(EMLassemblyline)
 #'the maintenance log (csv)
 #'the qaqc script (R)
 #'the visualization script (R)
-template_core_metadata(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                       license = "CCBY",
-                       file.type = ".txt",
-                       write.file = TRUE)
+#template_core_metadata(path = folder,
+#                       license = "CCBY",
+#                       file.type = ".txt",
+#                       write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+template_table_attributes(path = folder,
+                          data.path = folder,
                           data.table = "FluoroProbe.csv",
                           write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
-                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2022",
+template_table_attributes(path = folder,
+                          data.path = folder,
                           data.table = "site_descriptions.csv",
                           write.file = TRUE)
 
-template_table_attributes(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
-                          data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2023",
+template_table_attributes(path = folder,
+                          data.path = folder,
                           data.table = "Maintenance_Log_FluoroProbe_2014_2023.txt",
                           write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
-                             data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2019",
+template_geographic_coverage(path = folder,
+                             data.path = folder,
                              data.table = "FluoroProbe.csv",
                              empty = TRUE,
                              write.file = TRUE)
@@ -154,8 +161,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_FluoroProbe.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
-                               data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2020",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -183,10 +190,10 @@ template_categorical_variables(path = "C:/Users/maria/OneDrive/2023 Rtudio/Maria
 # /Users/MaryLofton/RProjects/Reservoirs
 
 # Run this function
-make_eml(
-  path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
-  data.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
-  eml.path = "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025",
+eml_file <- make_eml(
+  path = folder,
+  data.path = folder,
+  eml.path = folder,
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2025",
   temporal.coverage = c("2014-05-04", "2025-12-02"),
   maintenance.description = 'ongoing',
@@ -199,7 +206,45 @@ make_eml(
   #user.id = 'melofton',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1764.1')
+  package.id = 'edi.1764.1', ## This is for staging
+  # package.id = 'edi.272.9', ### This is for the production environment
+  write.file = T, ### write the file to the folder
+  return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -235,22 +280,22 @@ make_eml(
 # ALL OTHER entries in the make_eml() command should match what you ran above,
 # in step 7
 
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
-  dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2024",
-  temporal.coverage = c("2014-05-04", "2024-11-19"),
-  maintenance.description = 'ongoing',
-  data.table = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
-  data.table.name = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
-  data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
-  other.entity.name = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
-  other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2024.csv before publishing"),
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.272.9')
+# make_eml(
+#   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+#   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+#   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024",
+#   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2024",
+#   temporal.coverage = c("2014-05-04", "2024-11-19"),
+#   maintenance.description = 'ongoing',
+#   data.table = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
+#   data.table.name = c("fluoroprobe_2014_2024.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2024.csv"),
+#   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
+#   other.entity = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
+#   other.entity.name = c("fluoroprobe_qaqc_2014_2024.R","fluoroprobe_inspection_2014_2024.Rmd"),
+#   other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2024.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2024.csv before publishing"),
+#   user.id = 'ccarey',
+#   user.domain = 'EDI',
+#   package.id = 'edi.272.9')
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

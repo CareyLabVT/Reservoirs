@@ -1,0 +1,23 @@
+attributeName	code	definition
+DataStream	Metals	Dataset including ICPMS analysis
+Filter	S	Filtered sample referred to as a soluble sample
+Filter	T	Non-filtered sample referred to as a total sample
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Site	100	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; long-term monitoring site where gauged weir is located
+Site	100.1	ISCO sampler at inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir
+Site	200	Inflow stream site on Falling Creek secondary inflow to Falling Creek Reservoir; also referred to as the wetland stream
+Site	50	Pelagic deep hole site at each reservoir
+end_parameter	Ba_mgL	Barium
+end_parameter	Mg_mgL	Magnesium
+end_parameter	Mn_mgL	Manganese
+end_parameter	Si_mgL	Silicon
+flag	10	improper procedure and set to NA
+flag	6	non-standard method
+flag	8	abnormally high value determined by 3 standard deviations above mean or at data manager discretion and left in dataset
+start_parameter	Ba_mgL	Barium
+start_parameter	Li_mgL	Lithium
+start_parameter	Mg_mgL	Magnesium
+start_parameter	Mn_mgL	Manganese
+start_parameter	Si_mgL	Silicon

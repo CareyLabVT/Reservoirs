@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
-Site	"Sampling site within each reservoir; 51=Deep hole or site nearest to the dam in the reservoir, attached to the platform."	numeric	dimensionless		NA	value is missing
+Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	character			NA	value is missing
+Site	"Pelagic deep hole site nearest to dam; at BVR platform closest to dam, 37.31288,-79.8159."	numeric	dimensionless		NA	value is missing
 Position	The position number of the sensor as described in the metadata	numeric	number		NA	value is missing
 Offset_start	The beginning date and time of the offset depth	character			NA	value is missing
 Offset_end	The ending date and time of the offset depth	character			NA	value is missing

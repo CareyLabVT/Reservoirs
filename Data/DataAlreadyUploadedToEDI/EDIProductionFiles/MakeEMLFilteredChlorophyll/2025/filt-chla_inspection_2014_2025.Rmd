@@ -1,5 +1,5 @@
 ---
-title: "FilteredChlorophyll_inspection_2014_2024"
+title: "FilteredChlorophyll_inspection_2014_2025"
 author: "KKH"
 date: "2023-12-05"
 output: html_document
@@ -118,27 +118,27 @@ ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Entire Dataset Timeseries - Chlorophyll a")
 ```
-**Time Series for entire data set - Pheophyton**
-```{r Time Series for entire data set - Pheophyton}
+**Time Series for entire data set - Phaeophyton**
+```{r Time Series for entire data set - Phaeophyton}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(all_chla), aes(x = DateTime, y = Pheo_ugL, col = Reservoir)) +
+ggplot(subset(all_chla), aes(x = DateTime, y = Phaeo_ugL, col = Reservoir)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
-  ggtitle("Entire Dataset Timeseries - Pheophyton")
+  ggtitle("Entire Dataset Timeseries - Phaeophyton")
 ```
 **VALUES BELOW 0 FOR PHAEOPHYTIN**
 DOUBLE CHECK THAT THEY ARE ALL FLAGGED WITH A 1
 All values below 0 have been set to 0. This check should return a tibble with 0 rows
 ```{r PHAEOPHYTIN VALS BELOW 0}
 #check the flag column
-pheo_below0 <- subset(all_chla, Pheo_ugL < 0)
-pheo_below0
+phaeo_below0 <- subset(all_chla, Phaeo_ugL < 0)
+phaeo_below0
 #these are all flagged as 4 or 45, "pigment in extract below detection"
 #Do we want to change these negative values to 0 in the future?
 #Yes, as of 2023
 
 #{r Set all Phaeophytin values that are below 0 to 0}
-all_chla <- all_chla %>% mutate(Pheo_ugL = if_else(Pheo_ugL < 0, 0, Pheo_ugL))
+all_chla <- all_chla %>% mutate(Phaeo_ugL = if_else(Phaeo_ugL < 0, 0, Phaeo_ugL))
 ```
 
 **All Sites, All Years, Monthly Mean - Chlorophyll a**
@@ -155,10 +155,10 @@ ggplot(subset(chla_YMD), aes(x = Month, y = Chla_ugL, col = Reservoir))+
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
   ggtitle("Range and Mean of Range - Chlorophyll a")
 ```
-**All Sites, All Years, Monthly Mean - Pheophyton**
-```{r All Sites, All Years, Monthly Average - Pheophyton}
+**All Sites, All Years, Monthly Mean - Phaeophyton**
+```{r All Sites, All Years, Monthly Average - Phaeophyton}
 # Facetted plot of the range of each reservoir for each year and the mean of the range
-ggplot(subset(chla_YMD), aes(x = Month, y = Pheo_ugL, col = Reservoir))+ 
+ggplot(subset(chla_YMD), aes(x = Month, y = Phaeo_ugL, col = Reservoir))+ 
   geom_point(size = 1) + 
   #stat_summary(fun = "mean", geom = "point", pch = 0, size =2, color = 'black') + 
   stat_summary(fun = "mean", geom = "point", pch = 18, size =2, color = 'black') + 
@@ -167,7 +167,7 @@ ggplot(subset(chla_YMD), aes(x = Month, y = Pheo_ugL, col = Reservoir))+
   scale_x_continuous("DateTime", breaks = seq(1, 12, 1)) + 
   scale_y_continuous("Concentration (ugL)") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
-  ggtitle("Range and Mean of Range - Pheophyton")
+  ggtitle("Range and Mean of Range - Phaeophyton")
 ```
 **All Sites, All Years, Monthly Median - Chlorophyll a**
 Sunapee EXCLUDED!!! Deep site for SNP is 200, but other reservoirs also have site 200
@@ -183,10 +183,10 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Reservoi
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
   ggtitle("Range and Median of Range - Chlorophyll a")
 ```
-**All Sites, All Years, Monthly Median - Pheophyton**
-```{r All Sites, All Years, Monthly Median - Pheophyton}
+**All Sites, All Years, Monthly Median - Phaeophyton**
+```{r All Sites, All Years, Monthly Median - Phaeophyton}
 # Facetted plot of the range of each reservoir for each year and the median of the range
-ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Reservoir))+ 
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Phaeo_ugL, col = Reservoir))+ 
   geom_point(size = 1) + 
   stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
   facet_grid(Reservoir~Year, scales = 'free_y') + 
@@ -194,7 +194,7 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Reservoi
   scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
   scale_y_continuous("Concentration (ugL)") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'none') + 
-  ggtitle("Range and Median of Range - Pheophyton")
+  ggtitle("Range and Median of Range - Phaeophyton")
 ```
 2024, July 1st seems to have a very high chla value. I am inclined to believe this is real, there was a large cyano bloom that date that was not captured on the EXO but can be seen on Flora - KKH
 ```{r All Sites, All Years, Monthly Median, samples colored by depth - Chlorophyll a}
@@ -209,9 +209,9 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Chla_ugL, col = Depth_gr
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'left') + 
   ggtitle("Chla - Median, by depth")
 ```
-```{r All Sites, All Years, Monthly Median, samples colored by depth - Pheophyton}
+```{r All Sites, All Years, Monthly Median, samples colored by depth - Phaeophyton}
 # Facetted plot of the range of each reservoir for each year and the median of the range with depth
-ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Depth_group))+ 
+ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Phaeo_ugL, col = Depth_group))+ 
   geom_point(size = 1) + 
   stat_summary(fun = "median", geom = "point", pch = 8, size = 1, color = 'black') + 
   facet_grid(Reservoir~Year, scales = 'free_y') + 
@@ -219,7 +219,7 @@ ggplot(subset(chla_YMD, Site == 50), aes(x = Month, y = Pheo_ugL, col = Depth_gr
   scale_x_continuous("Month of Year", breaks = seq(1,12, 1)) +
   scale_y_continuous("Concentration (ugL)") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = 'left') + 
-  ggtitle("Pheophyton - Median, by depth")
+  ggtitle("Phaeophyton - Median, by depth")
 ```
 **Flags**
 attributeName	code	definition
@@ -246,14 +246,14 @@ ggplot(subset(chla_current), aes(x = DOY, y = Chla_ugL, pch = as.factor(Flag_Chl
 
 ```
 **Flags**
-Flag_Pheo_ugL	0	    Value acceptable. No flag  
-Flag_Pheo_ugL	1	    Sample below detection  
-Flag_Pheo_ugL	2	    Sample not taken  
-Flag_Pheo_ugL	3	    Duplicate check failed  
-Flag_Pheo_ugL	4	    Pigment in extract below detection (<34 ug/L)  
-Flag_Pheo_ugL	45	  Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
-Flag_Pheo_ugL	5	    Duplicate values were averaged  
-```{r Subset to Current Year Only (2023) - Pheophyton}
+Flag_Phaeo_ugL	0	    Value acceptable. No flag  
+Flag_Phaeo_ugL	1	    Sample below detection  
+Flag_Phaeo_ugL	2	    Sample not taken  
+Flag_Phaeo_ugL	3	    Duplicate check failed  
+Flag_Phaeo_ugL	4	    Pigment in extract below detection (<34 ug/L)  
+Flag_Phaeo_ugL	45	  Pigment in extract below detection (<34 ug/L) and duplicate values were averaged  
+Flag_Phaeo_ugL	5	    Duplicate values were averaged  
+```{r Subset to Current Year Only (2023) - Phaeophyton}
 #subset data to FCR and BVR
 chla_current <- chla_YMD %>% 
   subset((Year=="2024")) %>% 
@@ -262,7 +262,7 @@ chla_current <- chla_YMD %>%
 head(chla_current)
 #### Graph ####
 # Current Year Timeseries
-ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Pheo_ugL))) +
+ggplot(subset(chla_current), aes(x = DOY, y = Phaeo_ugL, pch = as.factor(Flag_Phaeo_ugL))) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Current Year Timeseries")
@@ -277,13 +277,13 @@ ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Chla_ugL, col = Dep
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("2024Timeseries - Chlorophyll a")
 ```
-**Time Series for entire data set - Pheophyton**
-```{r Time Series for entire data set - Pheophyton}
+**Time Series for entire data set - Phaeophyton**
+```{r Time Series for entire data set - Phaeophyton}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
+ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Phaeo_ugL, col = Depth_m)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
-  ggtitle("2024 Timeseries - Pheophyton")
+  ggtitle("2024 Timeseries - Phaeophyton")
 ```
 
 ```{r Remove duplicate row}

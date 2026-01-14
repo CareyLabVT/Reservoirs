@@ -16,11 +16,19 @@
 #    QAQC for 2021 is in the script: catwalk_EDI_QAQC_all_variables.R
 #    and output file for EDI is Catwalk_EDI_2018_2021.csv
 
-library(devtools)
-#install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
 
-folder <- paste0(getwd(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2025")
+#library(devtools)
+#install_github("EDIorg/EMLassemblyline")
+#library(EMLassemblyline)
+#library(here)
+
+# used to make edits to the xml file
+#library(xml2)
+
+#load data packages
+pacman::p_load(devtools, EMLassemblyline,here, xml2, XML)
+
+folder <- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_FCRcatwalk/2025/")
 folder
 #### USEFUL DIRECTIONS FROM MEL FOR START TO FINISH EML CREATION FOR NEW DATA PRODUCT
 #Step 1: Create a directory for your dataset
@@ -159,7 +167,7 @@ template_categorical_variables(path = folder,
 ??make_eml
 
 # Run this function
-make_eml(path = folder,
+eml_file <- make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of high-frequency sensor data measuring water temperature, dissolved oxygen, pressure, conductivity, 
@@ -180,9 +188,47 @@ make_eml(path = folder,
          #geographic.coordinates = c("37.309589","-79.836009","37.30266","-79.839249"),
          maintenance.description = "ongoing",
          user.id =  "ccarey",
-         package.id = "edi.518.38", #### this is the one that I need to change and the one for staging!!!
-        # package.id = "edi.271.9", #### this is the one for the production enviornment
-         user.domain = 'EDI')
+        # package.id = "edi.518.43", #### this is the one that I need to change and the one for staging!!!
+         package.id = "edi.271.10", #### this is the one for the production environment
+         user.domain = 'EDI',
+        write.file = T, ### write the file to the folder
+        return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,"/",package.id,".xml"))
+
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

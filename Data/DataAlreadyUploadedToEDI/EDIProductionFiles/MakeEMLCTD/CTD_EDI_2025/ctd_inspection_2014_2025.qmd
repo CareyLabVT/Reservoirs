@@ -6,7 +6,7 @@ format:
     embed-resources: true
 editor: visual
 created: 23 April 2024
-updated: 26 January 2025
+updated: 9 January 2026
 ---
 
 ## Overview
@@ -35,7 +35,7 @@ source("../../../../DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
 
 #list.files("../../../../DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
 
-THIS_YEAR <- 2024 #Latest year of data
+THIS_YEAR <- 2025 #Latest year of data
 ```
 
 ## STEP 2: Collate all CTD files and run QAQC
@@ -138,22 +138,68 @@ qaqc <- ctd_edi
 
 ## STEP 5: Visualize data
 
-```{r}
+```{r basic checks}
 #Choose which data you want to visualize
 
 #ONLY IF YOU ARE REPROCESSING
 # qaqc <- ctd_reprocessed
 
 # Basic checks
-unique(qaqc$Site)
-unique(qaqc$Reservoir)
+qaqc |> 
+  filter(year(DateTime) == 2025) |> 
+  select(c(Site, Reservoir)) |> 
+  unique()
+
+qaqc |> 
+  mutate(Year = as.character(year(DateTime)), 
+         Site = as.character(Site)) |> 
+  #filter(year(DateTime) == 2025) |> 
+  select(c(Site, Reservoir, Year)) |> 
+  unique() |> 
+  group_by(Reservoir, Site, Year) |> 
+  summarise(Count = n()) |> 
+  ggplot(aes(x = Site, y = Count, fill = Year))+
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_discrete() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+  facet_wrap(~Reservoir)
+# unique(qaqc$Site)
+# unique(qaqc$Reservoir)
+
+
+#check cast times
+#be sure to change the year!
+#dashed lines are 8am and 5pm. If a cast falls outside of those times, it's unusual. Was there night sampling this year?
+qaqc |> 
+  filter(year(DateTime) == 2025) |> 
+  ggplot(aes(x = as_hms(ymd_hms(DateTime)), y = DateTime, color = Reservoir)) + 
+  geom_point() + 
+  scale_x_time(
+    limits = as_hms(c("00:00:00", "24:00:00"))) + 
+  geom_vline(xintercept = as_hms(c("08:00:00")), linetype = "dashed") + 
+  geom_vline(xintercept = as_hms(c("17:00:00")), linetype = "dashed")
+
+#cast time by CTD serial number for further troubleshooting
+#be sure to change the year!
+qaqc %>%
+  select(DateTime, SN) %>%
+  unique() %>%
+  filter(year(DateTime) == 2025) %>%
+  ggplot(aes(x = hour(DateTime))) +
+  geom_histogram()+
+  facet_wrap(~SN)
+
+```
+
+
+```{r plot functions}
 
 #Function to plot all data for a given year as a heatmap
 plot_var <- function(var_name, 
                      year, 
                      reservoirs = c("FCR", "BVR", "CCR"),
                      data = qaqc,
-                     site = c(10,20,30,40,50,88,90)){
+                     site = c(10,20,30,40,50,51, 8,90)){
   
   var <- sym(var_name)
   flag <- sym(paste0("Flag_", var_name))
@@ -174,7 +220,7 @@ plot_var_sites <- function(var_name,
                      year, 
                      reservoirs = c("FCR", "BVR", "CCR"),
                      data = qaqc,
-                     site = c(10,20,30,40,50,88,90)){
+                     site = c(10,20,30,40,50,51,88,90)){
   
   var <- sym(var_name)
   flag <- sym(paste0("Flag_", var_name))
@@ -193,6 +239,7 @@ plot_var_sites <- function(var_name,
 
 
 vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "Turbidity_NTU", "SpCond_uScm", "Chla_ugL", "pH", "PAR_umolm2s", "CDOM_ugL", "Phycoerythrin_ugL", "Phycocyanin_ugL", "DescRate_ms")
+
 #qaqc %>%
 #  filter(as.Date(DateTime) == as.Date("2021-07-28"))
 
@@ -202,8 +249,8 @@ vars_to_plot <- c("Temp_C", "DO_mgL", "DOsat_percent", "Cond_uScm", "Turbidity_N
 #qaqc %>%
 #  filter(Flag_DO_mgL == 2, !is.na(DO_mgL))
 
-wer <-qaqc|>
-  filter(DateTime>as.Date("2024-12-31"))
+# wer <-qaqc|>
+#   filter(DateTime>as.Date("2024-12-31"))
 ```
 
 ```{r plots}
@@ -211,7 +258,7 @@ wer <-qaqc|>
 # If you try to render the file with all of plots for every year, it will run out of memory. I have run it in 3 year chunks and run 2016-2013 at one time. You can also just make the plots in the qmd with out rendering them. 
 
 y2025 <-vars_to_plot %>%
-  map(plot_var, year = 2025, site = 50)
+  map(plot_var, year = 2025, site = c(50, 51))
 
 htmltools::tagList(list(y2025))
 
@@ -228,7 +275,7 @@ yy2025 <- vars_to_plot %>%
 
 htmltools::tagList(list(yy2025))
 
-htmltools::save_html(yy2025, "bvr_2025_ctd.html")
+#htmltools::save_html(yy2025, "bvr_2025_ctd.html")
 
 # a <-vars_to_plot %>%
 #   map(plot_var, year = 2023)
@@ -282,6 +329,8 @@ htmltools::save_html(yy2025, "bvr_2025_ctd.html")
 ```
 
 ```{r SHR and GWR}
+# we no longer sample SHR and GWR (as of 2019)
+# be sure to confirm that there were no additional reservoirs this year.
 
 # # Check that Spring Hollow and Gatewood Reservoir data look good
 # 
@@ -296,18 +345,5 @@ htmltools::save_html(yy2025, "bvr_2025_ctd.html")
 # 
 # # when you render the document then the interactive plots will work
 # htmltools::tagList(list(bb))
-
-```
-
-```{r hist}
-
-# look at the histogram of the time that casts were taken each year. Change the year in line 175. 
-qaqc %>%
-  select(DateTime, SN) %>%
-  unique() %>%
-  filter(year(DateTime) == 2025) %>%
-  ggplot(aes(x = hour(DateTime))) +
-  geom_histogram()+
-  facet_wrap(~SN)
 
 ```

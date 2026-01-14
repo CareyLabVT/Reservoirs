@@ -197,16 +197,16 @@ eml_file <- make_eml(
   dataset.title = "Time-series of high-frequency profiles of fluorescence-based phytoplankton spectral groups in Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, and Spring Hollow Reservoir in southwestern Virginia, USA 2014-2025",
   temporal.coverage = c("2014-05-04", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2025.csv"),
-  data.table.name = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenance_2014_2025.csv"),
+  data.table = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenancelog_2014_2025.csv"),
+  data.table.name = c("fluoroprobe_2014_2025", "site_descriptions","fluoroprobe_maintenancelog_2014_2025"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
-  other.entity = c("FluoroProbe_qaqc_2014_2025.R","FluoroProbe_inspection_2014_2025.Rmd"),
-  other.entity.name = c("FluoroProbe_qaqc_2014_2025.R","FluoroProbe_inspection_2014_2025.Rmd"),
+  other.entity = c("fluoroprobe_qaqc_2014_2025.R","fluoroprobe_inspection_2014_2025.Rmd"),
+  other.entity.name = c("fluoroprobe_qaqc_2014_2025","fluoroprobe_inspection_2014_2025"),
   other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2025.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2025.csv before publishing"),
   #user.id = 'melofton',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1764.1', ## This is for staging
+  package.id = 'edi.1764.2', ## This is for staging
   # package.id = 'edi.272.9', ### This is for the production environment
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id
@@ -240,7 +240,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 10)
+xml_add_child(parent, childC, .where = 11)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))

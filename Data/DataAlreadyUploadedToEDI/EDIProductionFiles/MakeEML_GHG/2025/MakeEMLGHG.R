@@ -37,25 +37,27 @@ library(tidyverse)
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
-library(devtools)
 
-devtools::install_github("EDIorg/EDIutils")
-devtools::install_github("EDIorg/taxonomyCleanr")
-devtools::install_github("EDIorg/EMLassemblyline")
-remotes::install_github("EDIorg/EMLassemblyline")
-remotes::install_github("ropensci/taxize", dependencies = TRUE)
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+#library(devtools)
+
+# devtools::install_github("EDIorg/EDIutils")
+# devtools::install_github("EDIorg/taxonomyCleanr")
+# devtools::install_github("EDIorg/EMLassemblyline")
+# remotes::install_github("EDIorg/EMLassemblyline")
+# remotes::install_github("ropensci/taxize", dependencies = TRUE)
 #install.packages("taxize")
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
 
-library(EMLassemblyline)
+#library(EMLassemblyline)
 
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG
 
-folder = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/2024/"
+folder = paste0(here(),"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/2025/")
 
 #Step 2: Move your dataset to the directory
 
@@ -167,7 +169,7 @@ template_categorical_variables(path = folder,
 
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
-make_eml(
+eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
@@ -194,9 +196,48 @@ make_eml(
                                'Script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
- # package.id = 'edi.997.18') #package id for staging
+  package.id = 'edi.997.18', #package id for staging
 
-package.id = 'edi.551.9') #package id for production
+  #package.id = 'edi.551.9', #package id for production
+ write.file = T, ### write the file to the folder
+ return.obj = T) ## return the object so we can get the package.id
+
+
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
 
 
 ## Step 8: Check your data product! ####

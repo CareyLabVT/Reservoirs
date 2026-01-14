@@ -2,20 +2,29 @@
 ##Author: Mary Lofton
 ##Date: 07SEP19
 ##Edited for Metals by: CEW 15Jan25
+## 14 Jan 2026 - ABP. Updated for added license info for XML
 
 
 #good site for step-by-step instructions
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
 #and links therein
 
-library(tidyverse)
+#library(tidyverse)
 
 # (install and) Load EMLassemblyline #####
 
-install.packages('devtools')
-library(devtools)
-install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
+#install.packages('devtools')
+#library(devtools)
+#install_github("EDIorg/EMLassemblyline")
+#library(EMLassemblyline)
+
+# load data packages
+pacman::p_load(tidyverse, devtools, EMLassemblyline, here, xml2, XML)
+
+# put file path as an object
+folder<- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025/")
+folder
+
 
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
@@ -48,13 +57,13 @@ library(EMLassemblyline)
 ??template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+template_core_metadata(path = folder,
                        license = "CCBY",
                        file.type = ".txt",
                        write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-                          data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+template_table_attributes(path = folder,
+                          data.path = folder,
                           data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
                           write.file = TRUE)
 
@@ -62,8 +71,8 @@ template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionF
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+template_geographic_coverage(path = folder,
+                             data.path = folder,
                              data.table = c("metals_2014_2024.csv", 'site_descriptions.csv'),
                              empty = TRUE,
                              write.file = TRUE)
@@ -111,8 +120,8 @@ view_unit_dictionary()
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+template_categorical_variables(path = folder,
+                               data.path = folder,
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -136,10 +145,10 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 ?make_eml
 
 # Run this function
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+eml_file <- make_eml(
+  path = folder,
+  data.path = folder,
+  eml.path = folder,
   dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
   temporal.coverage = c("2014-04-01", "2024-12-16"),
   maintenance.description = 'ongoing',
@@ -149,7 +158,45 @@ make_eml(
   other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.12') # This package identifier is only for the staging environment
+  package.id = 'edi.718.12', # This package identifier is only for the staging environment
+ # package.id = 'edi.455.9', # This is the package identifer for the production environment
+ write.file = T, ### write the file to the folder
+ return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -185,20 +232,20 @@ make_eml(
 # ALL OTHER entries in the make_eml() command should match what you ran above,
 # in step 7
 
-make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
-  dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
-  temporal.coverage = c("2014-04-01", "2024-12-16"),
-  maintenance.description = 'ongoing',
-  data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
-  data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
-  other.entity = c('metals_qaqc_2014_2024.R', 'metals_inspection_2014_2024.Rmd', 'Plotting_function.R'),
-  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
-  user.id = 'mschreib',
-  user.domain = 'EDI',
-  package.id = 'edi.455.9') # This is the package identifer for the production environment
+# make_eml(
+#   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+#   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+#   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025",
+#   dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
+#   temporal.coverage = c("2014-04-01", "2024-12-16"),
+#   maintenance.description = 'ongoing',
+#   data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
+#   data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
+#   other.entity = c('metals_qaqc_2014_2024.R', 'metals_inspection_2014_2024.Rmd', 'Plotting_function.R'),
+#   other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+#   user.id = 'mschreib',
+#   user.domain = 'EDI',
+#   package.id = 'edi.455.9') # This is the package identifer for the production environment
 
 # Once your xml file with your PUBLISHED package.id is Done, return to the 
 # EDI Production environment (https://portal.edirepository.org/nis/home.jsp)

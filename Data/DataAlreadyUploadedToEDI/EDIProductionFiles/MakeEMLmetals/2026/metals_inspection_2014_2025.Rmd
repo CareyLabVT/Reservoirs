@@ -421,7 +421,7 @@ output <- unlist(outputs, recursive = F)
 
 ### FCR 1 - samples from the outflow at FCR
 
-```{r QAQC FCR 1 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
+```{r QAQC FCR 1 Plots, eval=FALSE, warning=FALSE, include=FALSE, results='asis', time_it=TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
@@ -434,7 +434,7 @@ output <- unlist(outputs, recursive = F)
 
 ```
 
-```{r Print plotly F1, echo=FALSE, warning=FALSE, messages=FALSE}
+```{r Print plotly F1, eval=FALSE, warning=FALSE, include=FALSE, messages=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
@@ -497,7 +497,7 @@ output <- unlist(outputs, recursive = F)
 
 These samples were taken in 2022 and it might not be necessary to plot this each time. 
 
-```{r QAQC BVR 40 Plots, echo=FALSE, warning=FALSE, results='asis', time_it = TRUE}
+```{r QAQC BVR 40 Plots, eval=FALSE, warning=FALSE, include=FALSE, results='asis', time_it=TRUE}
 
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
@@ -511,7 +511,7 @@ output <- unlist(outputs, recursive = F)
 
 ```
 
-```{r Print plotly B40, echo=FALSE, messages=FALSE, warning=FALSE}
+```{r Print plotly B40, eval=FALSE, warning=FALSE, include=FALSE, messages=FALSE}
 
  # Used to print the plotly plots
   # attach the Dependencies
@@ -541,7 +541,7 @@ dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
 
-outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = F)
+outputs <- lapply(dx, all_plot, data=current_df, reservoir = "CCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
 
@@ -578,7 +578,7 @@ output <- unlist(outputs, recursive = F)
  current_df$DateTime <- as.character(format(current_df$DateTime))
 
 # Need to decide on a naming convention for this file
-write_csv(current_df, "metals_2014_2024.csv")
+write_csv(current_df, "metals_2014_2025.csv")
 
 ```
 
@@ -598,7 +598,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Da
  
  # save the csv without ISCO samples in maint log
  
- write.csv(maint, "metals_maintenancelog_2014_2024.csv")
+ write.csv(maint, "metals_maintenancelog_2014_2025.csv")
 
 # qaqc function
 # update link when change the location of the script

@@ -23,7 +23,7 @@ When you are making the data frame make sure all of the files that you uncomment
 ```{r setup packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet, plotly)
+pacman::p_load(tidyverse, lubridate, gsheet, plotly, htmltools)
 #current time of QAQC for graphing
 current_time_start=ymd_hms("2025-01-01 00:01:00", tz = "America/New_York")
 current_time_end= ymd_hms("2025-12-31 23:59:00", tz = "America/New_York")
@@ -31,18 +31,18 @@ current_time_end= ymd_hms("2025-12-31 23:59:00", tz = "America/New_York")
 
 ```{r Create the file for EDI, eval=FALSE, include=FALSE}
 # #source L1 function to run all data through QAQC process
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create.R")
+#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create#.R")
 
 
 # read in the Google sheet with all of the observations and QAQC them
-current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
-            gsheet_data = TRUE,
-            maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/maintenance_log.csv",
-            outfile = NULL,
-            start_date = as.Date("2013-01-01"),
-            end_date = as.Date(current_time_end))
+#current_df <- ysi_qaqc(data_file = #'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
+#            gsheet_data = TRUE,
+#            maintenance_file = #"https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/m#aintenance_log.csv",
+#            outfile = NULL,
+#            start_date = as.Date("2013-01-01"),
+#            end_date = as.Date(current_time_end))
 
-current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+#current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person.
@@ -53,9 +53,9 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
                                                                         ### CHANGE THIS BELOW 
                                                                               #########   
- # current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/1/9857a854092ae932ba81008fd574f631" )
- # # Force files from EDI to have an Daylight savings observed timestamp
- # current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/5/514d382eccf21428985abbd40e1d7d50")
+ # Force files from EDI to have an Daylight savings observed timestamp
+ current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
 ## Check for duplicates and gaps in the data frame
@@ -217,6 +217,28 @@ profiles_long$value<- as.numeric(profiles_long$value)
 profiles_long$Depth_m<- as.numeric(profiles_long$Depth_m)
 ```
 
+## Identify which sites had measurements during the specified timeframe
+Make sure to include plots for any sites that data was collected for this year for better viewing.
+
+```{r ID active sites}
+# Summarize sites and count distinct days
+sampled_sites <- profiles_long %>%
+  filter(
+    DateTime >= current_time_start,
+    DateTime <= current_time_end,
+    !is.na(value)  # only rows with actual measurements
+  ) %>%
+  mutate(Date = as_date(DateTime)) %>%  # extract just the date
+  group_by(Reservoir, Site) %>%         # group by location
+  summarise(
+    n_days_sampled = n_distinct(Date),  # count distinct days
+    .groups = "drop"
+  ) %>%
+  arrange(Reservoir, Site)
+
+print(sampled_sites)
+```
+
 ```{r ORP vs DO, eval=FALSE, include=FALSE}
 # Plot ORP as a function of DO
 # ggplot(subset(current_df, Reservoir == "BVR" | Reservoir=="FCR"), aes(x = DO_mgL, y = ORP_mV, col = Reservoir)) +
@@ -266,6 +288,51 @@ ggplot(subset(profiles_long, Site=="50" & Reservoir=="BVR"), aes(x = DateTime, y
 #ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_bvr.jpg"),width=3.5, height=4)
 ```
 
+###Current year all parameters at Beaverdam active sites
+```{r current BVR, echo=FALSE}
+res <- "BVR"
+active_site_names <- sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+# Parameters (all metrics between Temp_C and pH)
+param <- current_df %>%
+  select(which(names(.) == "Temp_C"):which(names(.) == "pH")) %>%
+  colnames()
+
+# Build a list to store all plots
+all_plots <- list()
+
+for (site in active_site_names) {
+  
+  # Filter and split by metric
+  a <- profiles_long %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > current_time_start,
+      DateTime < current_time_end,
+      metric %in% param
+    ) %>%
+    (\(x) split(x, x$metric))() %>%
+    lapply(function(df) {
+      ggplot(df, aes(DateTime, Depth_m, col = value)) +
+        geom_point(size = 2) +
+        scale_color_viridis_c(name = unique(df$metric)) +
+        scale_x_datetime("Date", date_breaks = "1 month", date_labels = "%b %Y") +
+        scale_y_reverse("depth(m)") +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        ggtitle(paste(res, site, unique(df$metric), sep = "_"))
+    })
+  
+  # Append plots for this site to the main list
+  all_plots <- c(all_plots, a)
+}
+
+# Display all plots in R Markdown
+tagList(lapply(all_plots, ggplotly))
+```
+
 ### All profiles from Falling Creek 
 ```{r All FCR, echo=FALSE}
 # FCR only; all sampling sites 
@@ -293,6 +360,51 @@ ggplot(subset(profiles_long, Site=="50" & Reservoir=="FCR"), aes(x = DateTime, y
   scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
   
 #ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
+```
+
+###Current year all parameters at active FCR Sites
+```{r}
+res <- "FCR"
+active_site_names <- sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+# Parameters (all metrics between Temp_C and pH)
+param <- current_df %>%
+  select(which(names(.) == "Temp_C"):which(names(.) == "pH")) %>%
+  colnames()
+
+# Build a list to store all plots
+all_plots <- list()
+
+for (site in active_site_names) {
+  
+  # Filter and split by metric
+  a <- profiles_long %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > current_time_start,
+      DateTime < current_time_end,
+      metric %in% param
+    ) %>%
+    (\(x) split(x, x$metric))() %>%
+    lapply(function(df) {
+      ggplot(df, aes(DateTime, Depth_m, col = value)) +
+        geom_point(size = 2) +
+        scale_color_viridis_c(name = unique(df$metric)) +
+        scale_x_datetime("Date", date_breaks = "1 month", date_labels = "%b %Y") +
+        scale_y_reverse("depth(m)") +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        ggtitle(paste(res, site, unique(df$metric), sep = "_"))
+    })
+  
+  # Append plots for this site to the main list
+  all_plots <- c(all_plots, a)
+}
+
+# Display all plots in R Markdown
+tagList(lapply(all_plots, ggplotly))
 ```
 
 ### All profiles from Carvins Cove
@@ -323,63 +435,51 @@ ggplot(subset(profiles_long, Site=="50" & Reservoir=="CCR"), aes(x = DateTime, y
 #ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/YSI_depths_2023_ccr.jpg"),width=3.5, height=4)
 ```
 
-## Current Profiles
-Let's look at the profiles at the Reservoirs at each of the sites. These plots are created by ggplotly so they are interactive. If you hover over the point you will see when it was collected. This helps for qaqc. 
-### Current profiles for Falling Creek
-
-```{r current FCR, echo=FALSE}
-#just look at current year - fcr
-a <- profiles_long|>
-  #filter(Reservoir=="FCR")|>
-  filter(Reservoir=="FCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
-ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
-  geom_point(cex=2) +
-  facet_grid(metric ~ Site, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
-  scale_y_continuous("") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
-  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
-#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/FCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
-# print plot and make it interactive
-ggplotly(a)
-```
-
-### Current profiles for Beaverdam
-```{r current BVR, echo=FALSE}
-#just look at current year - bvr (just temp)
-a <- profiles_long|>
-  filter(Reservoir=="BVR" & DateTime>current_time_start & DateTime<current_time_end)%>%
-ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
-  geom_point(cex=2) +
-  facet_grid(metric ~ Site, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
-  scale_y_continuous("") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
-  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
-#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/BVR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
-# print the plot
-ggplotly(a)
-```
-
-### Current profiles for Carvins Cove
+###Current year all parameters at CCR active sites
 ```{r current CCR, echo=FALSE}
-#just look at current year - ccr
-a <- profiles_long|>
-  filter(Reservoir=="CCR" & DateTime>current_time_start & DateTime<current_time_end)%>%
-ggplot(.,aes(x = DateTime, y = value, col=as.factor(Depth_m))) +
-  geom_point(cex=2) +
-  facet_grid(metric ~ Site, scales='free') +
-  scale_x_datetime("Date", date_breaks="1 month", date_labels = "%b %Y") +
-  scale_y_continuous("") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
-  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
-#ggsave(file.path("~/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLYSI_PAR_secchi/2023/Figures/CCR_YSI_depths_2023_fcr.jpg"),width=3.5, height=4)
-# print the plot and make it interactive
-ggplotly(a)
+res <- "CCR"
+active_site_names <- sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+# Parameters (all metrics between Temp_C and pH)
+param <- current_df %>%
+  select(which(names(.) == "Temp_C"):which(names(.) == "pH")) %>%
+  colnames()
+
+# Build a list to store all plots
+all_plots <- list()
+
+for (site in active_site_names) {
+  
+  # Filter and split by metric
+  a <- profiles_long %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > current_time_start,
+      DateTime < current_time_end,
+      metric %in% param
+    ) %>%
+    (\(x) split(x, x$metric))() %>%
+    lapply(function(df) {
+      ggplot(df, aes(DateTime, Depth_m, col = value)) +
+        geom_point(size = 2) +
+        scale_color_viridis_c(name = unique(df$metric)) +
+        scale_x_datetime("Date", date_breaks = "1 month", date_labels = "%b %Y") +
+        scale_y_reverse("depth(m)") +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        ggtitle(paste(res, site, unique(df$metric), sep = "_"))
+    })
+  
+  # Append plots for this site to the main list
+  all_plots <- c(all_plots, a)
+}
+
+# Display all plots in R Markdown
+tagList(lapply(all_plots, ggplotly))
 ```
+
 
 ```{r save the data, eval=FALSE, include=FALSE}
 # 

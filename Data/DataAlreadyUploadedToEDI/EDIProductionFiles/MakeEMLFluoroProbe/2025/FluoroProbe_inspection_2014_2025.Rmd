@@ -1,5 +1,5 @@
 ---
-title: "FluoroProbe_inspection_2014_2024"
+title: "FluoroProbe_inspection_2014_2025"
 author: "Adrienne + Mary"
 date: "2025-01-16"
 output: html_document
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate, akima, reshape2, 
                gridExtra, grid, colorRamps, RColorBrewer, cowplot,
-               devtools, EDIutils, xml2, httr)
+               devtools, EDIutils, xml2, httr, here)
 ```
 
 ## Build dataframe - reviewers should not run this!
@@ -66,23 +66,31 @@ write.csv(current_df, "./fluoroprobe_2014_2025.csv", row.names = FALSE)
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
 # THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
-# current_df <- read_csv('https://raw.githubusercontent.com/melofton/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024/FluoroProbe_2014_2024.csv') %>%
-#   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
+current_df <- read_csv('https://pasta-s.lternet.edu/package/data/eml/edi/1764/2/09255be1f3f7cb4f67064407aa21e2fc') %>%
+  mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
-current_df <- read_csv("C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/fluoroprobe_2014_2025.csv") %>%
-   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
+# current_df <- read_csv(here("/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/fluoroprobe_2014_2025.csv")) %>%
+#    mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # double-check time zone
 head(current_df$DateTime)
 hist(hour(current_df$DateTime))
 
 this_year <- current_df %>%
-  filter(year(DateTime) == 2024) 
+  filter(year(DateTime) == 2025) 
 ```
 
 ## Check flags
 
 This section checks to make sure each observation has a data flag. It also checks to make sure the frequency of flags match what we expect to see. 
+
+Flags
+0: all good!
+1: data recalibrated post inspection
+2: instrument malfunction
+3: negative transmission value
+4: data suspect due to poor calibration
+5:
 
 ```{r Check there are no NAs in Flag columns}
 
@@ -419,12 +427,22 @@ flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z
 ```
 
 ## Code to check for negative RFUs
+Negative RFU values are likely an artifact of quenching. QAQC is applied to the concentration data. 
+An ok range for negative numbers in RFUs is probably between 0 and -20. Keep an eye on this, but negative numbers are ok. 
 ```{r}
 current_df |>
   select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
   pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
   filter(RFU < 0) |> 
   ggplot(aes(x=DateTime, y= Depth_m, colour = as_factor(wavelength))) + 
+  facet_wrap(Reservoir~Site) + 
+  geom_point()
+
+current_df |>
+  select(c('DateTime','Depth_m', 'Reservoir', 'Site', starts_with('RFU'))) |>
+  pivot_longer(RFU_370nm:RFU_610nm, values_to = 'RFU', names_to = 'wavelength') |> 
+  filter(RFU < 0) |> 
+  ggplot(aes(x=DateTime, y= RFU, colour = as_factor(wavelength))) + 
   facet_wrap(Reservoir~Site) + 
   geom_point()
 
@@ -436,6 +454,7 @@ current_df |>
   reframe(.by = wavelength, 
           n = n())
 
+
 ```
 
 
@@ -446,7 +465,7 @@ current_df |>
 We want to make sure that our maintenance log actually worked and took out the values or changes those it was supposed to 
 
 ```{r Read in the maintenance log and look at the tail, echo=FALSE}
-
+#is this updated in the right place?
  maint <- read_csv('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv')
 
 # name the data file

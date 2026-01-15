@@ -1,0 +1,5 @@
+Reservoir, Site, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
+BVR,50,Secchi,2014-04-30 11:50:00 EDT, 2014-04-30 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
+BVR,50,Secchi,2014-07-23 11:50:00 EDT, 2014-07-23 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
+FCR,50,Secchi,2014-10-04 11:50:00 EDT, 2014-10-04 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
+CCR,50,Secchi,2021-08-19 12:15:00 EDT, 2021-08-19 12:20:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time

@@ -218,7 +218,7 @@ plot_var <- function(var_name,
     filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
     ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
-    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray", trans = "log") +
     scale_y_reverse() +
     geom_point() +
     ggtitle(year) +
@@ -239,7 +239,7 @@ plot_var_sites <- function(var_name,
     filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
     ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
-    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray", trans = "log") +
     scale_y_reverse() +
     geom_point() +
     ggtitle(year) +

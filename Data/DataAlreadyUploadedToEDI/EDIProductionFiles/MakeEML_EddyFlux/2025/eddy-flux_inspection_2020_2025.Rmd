@@ -308,7 +308,7 @@ outputs <- lapply(dx, all_plot,data=current_df, raw_data=NULL, reservoir=NULL, r
 
 output <- unlist(outputs, recursive = F)
 
-# output[[1]]
+output[[1]]
 ```
 
 ```{r Print plotly fluxes, echo=FALSE, warning=FALSE, messages=FALSE}
@@ -334,7 +334,7 @@ output <- unlist(outputs, recursive = F)
 
 ### Compare 30 minute flux to daily flux
 
-This is a similar figure to the one in Alex's paper. The 30 minute fluxes are black dotes and the line is the average daily flux
+This is a similar figure to the one in Alex's paper. The 30 minute fluxes are black dots and the line is the average daily flux
 
 #### CO2
 
@@ -444,7 +444,7 @@ outputs <- lapply(dx, all_plot,data=current_df, raw_data=NULL, reservoir=NULL, r
 
 output <- unlist(outputs, recursive = F)
 
-#output[[5]]
+output[[5]]
 ```
 
 ```{r Print plotly other data, echo=FALSE, warning=FALSE, messages=FALSE}

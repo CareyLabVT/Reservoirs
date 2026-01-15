@@ -90,7 +90,7 @@ Flags
 2: instrument malfunction
 3: negative transmission value
 4: data suspect due to poor calibration
-5:
+5: negative RFU value
 
 ```{r Check there are no NAs in Flag columns}
 
@@ -478,7 +478,7 @@ print(tail(sd))
 knitr::kable((tail(sd)))
 
 ```
-#### Check the that the columns have flags 
+#### Check that the columns have flags 
 
 Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
 

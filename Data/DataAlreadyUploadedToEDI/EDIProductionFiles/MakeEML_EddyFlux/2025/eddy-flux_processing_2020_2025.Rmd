@@ -61,7 +61,7 @@ ec <- dt2%>%
  bind_rows(.,dt1)
 
 #FOR USING YEAR-ROUND UPLOADED DATA FROM EDI. This overwrites the bind above. 
-ec <- dt2
+#ec <- dt2
 ```
 
 ```{r format time, echo=FALSE}
@@ -110,7 +110,7 @@ ec2 %>% group_by(year = year(datetime), month = factor(month.abb[month(datetime)
 sta<-ec2 %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100-sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# 72.2% data for CO2; 74.8% data for CH4
+# 74.62% data for CO2; 76.4% data for CH4
 
 # Check data availability by month
 ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -119,7 +119,56 @@ ec2 %>% group_by(year(datetime), month(datetime)) %>% select(datetime, co2_flux_
 #################################################################
 ```
 
-```{r Inital Flux plots, echo=FALSE}
+### Added from EDI 2026:
+We want to visualize the percentage availability of co2 and ch4 data each month through all the years.
+
+```{r}
+#compute monthly availability - slightly modified from above
+availability_monthly <- ec2 %>%
+  mutate(
+    year  = year(datetime),
+    month = month(datetime, label = TRUE, abbr = TRUE)
+  ) %>%
+  group_by(year, month) %>%
+  summarise(
+    co2_available = 100 * mean(!is.na(co2_flux_umolm2s)),
+    ch4_available = 100 * mean(!is.na(ch4_flux_umolm2s)),
+    .groups = "drop"
+  )
+
+#convert to long format for plotting
+availability_long <- availability_monthly %>%
+  pivot_longer(
+    cols = c(co2_available, ch4_available),
+    names_to = "gas",
+    values_to = "availability"
+  )
+
+#plot
+ggplot(availability_long,
+       aes(x = month, y = year, fill = availability)) +
+  geom_tile(color = "white") +
+  facet_wrap(~ gas, ncol = 1) +
+  scale_fill_viridis_c(
+    name = "Data availability (%)",
+    limits = c(0, 100)
+  ) +
+  labs(
+    title = "Monthly availability of CO2 and CH4 flux data - Only EddyPro Processed",
+    x = "Month",
+    y = "Year"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold")
+  )
+
+
+```
+
+
+```{r Inital Flux plots, echo=FALSE, warning=FALSE}
 
 ec2%>%
   select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s)%>%
@@ -150,7 +199,7 @@ Count how many initial NAs are in CO2 and CH4 data. Without any data processing!
 ## Double check that you have the most up to date 
 
 
-# Read in Met file from EDI. Data from 2015-2024. Update the date range when you update the link. 
+# Read in Met file from EDI. Data from 2015-2025. Update the date range when you update the link. 
 met_all <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/9/62647ecf8525cdfc069b8aaee14c0478",
                     col_select=c("DateTime","PAR_umolm2s_Average","PAR_Total_mmol_m2","BP_Average_kPa",
                                  "AirTemp_C_Average","RH_percent","Rain_Total_mm",
@@ -212,18 +261,30 @@ met_30_2 <- met_30_2 %>%
 met2 <- left_join(ts2, met_30_2, by = 'datetime')
 ```
 
-```{r Compare wind speeds from EC and Met}
-# Compare wind speeds from EC and Met
+```{r Compare wind speeds from EC and Met, warning= FALSE}
+#There could be a data row mismatch here between ec2 and met2 (e.g. due to daylight savings duplication) which can lead to error. Uncomment and run the following code if such thing happens.
+#check for duplicates (might need to change the file names)
+#df_long %>% count(datetime) %>% filter(n > 1)
+#df_short %>% count(datetime) %>% filter(n > 1)
 
+#This removes the second duplicate and keeps the first one (might need to change the file names)
+#ec2 <- ec2 %>%
+#  distinct(datetime, .keep_all = TRUE)
+
+# Compare wind speeds from EC and Met
 ggplot()+
   geom_point(aes(x=ec2$wind_speed_ms, y=met2$WS_ms_Avg))+
   theme_classic(base_size = 15)
   
 
 # Calculate percent of missing wind data
-# 10.4% missing
+# 10.09% missing
 miss_ws<-ec2 %>% select(datetime, wind_speed_ms) %>% 
   summarise(wnd_na = sum(is.na(wind_speed_ms))/n()*100)
+
+#check
+miss_ws
+
 ```
 
 We are missing `r round(miss_ws$wnd_na, digits=1)` % of the windspeed observations
@@ -235,7 +296,7 @@ summary(linearMod)
 cor(ec2[[49]],met2[[11]],use = "complete.obs",method=c("pearson"))
 
 # UPDATE EVERY YEAR WITH NEW RELATIONSHIP
-# For data period: EC = Met*0.541570+0.154306
+# For data period: EC = Met*0.546179+0.140389
 
 # Check conversion - UPDATE EVERY YEAR WITH NEW RELATIONSHIP
 plot(ec2$datetime, ec2$wind_speed_ms)
@@ -281,7 +342,7 @@ met4 <- left_join(ts2, met3)
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100- sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# Now have 50.34% CO2 data and 53.35% CH4 data
+# Now have 51.34% CO2 data and 53.85% CH4 data
 
 # Count number of timepoints that have data
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -370,7 +431,7 @@ plot(ec_filt$ch4_flux_umolm2s, type = 'o')
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
   summarise(co2_available = 100- sum(is.na(co2_flux_umolm2s))/n()*100,
             ch4_available = 100-sum(is.na(ch4_flux_umolm2s))/n()*100)
-# Now have 32.62% CO2 data and 30.31% CH4 data
+# Now have 33.39% CO2 data and 30.96% CH4 data
 
 # Count number of timepoints that have data
 ec_filt %>% select(datetime, co2_flux_umolm2s, ch4_flux_umolm2s) %>% 
@@ -386,8 +447,16 @@ ec_filt$ch4_flux_umolm2s <- ifelse(ec_filt$precip > 0, NA, ec_filt$ch4_flux_umol
 ec_filt$ch4_flux_umolm2s <- ifelse(ec_filt$datetime >= '2021-04-05' & ec_filt$datetime <= '2021-04-25', 
                            NA, ec_filt$ch4_flux_umolm2s)
 
+# Remove flux data when sonic temperature values were faulty (July 18 - July 21)
+ec_filt <- ec_filt %>%
+  filter(
+    !(datetime >= as.POSIXct("2025-07-18 17:30") &
+      datetime <= as.POSIXct("2025-07-21 09:30"))
+  )
+
 # Merge with timeseries
 eddy_fcr <- left_join(ts2, ec_filt, by = 'datetime')
+
 ```
 
 ```{r Count data}

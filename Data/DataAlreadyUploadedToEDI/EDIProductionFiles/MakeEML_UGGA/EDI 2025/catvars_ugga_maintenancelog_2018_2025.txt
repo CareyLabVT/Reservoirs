@@ -1,0 +1,5 @@
+attributeName	code	definition
+Reservoir	BVR	BeaverDam Reservoir
+end_parameter	ch4_flux_umolCm2s	Calculated ch4 flux 
+flag	100	Data removed from data frame
+start_parameter	Temp_C	Temperature of the air measured from the sensor

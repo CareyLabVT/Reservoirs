@@ -262,7 +262,9 @@ filtering_log <- gsheet::gsheet2tbl(filtering_log)
       ResSite = ifelse(samp_type == 'eth_blank', NA, ResSite),
       Sample_date = ifelse(samp_type == 'eth_blank', NA, Sample_date),
       Sample_date = as.Date(Sample_date, origin="1970-01-01")
-    )
+    )|> 
+    mutate(Rep = ifelse(is.na(Rep), 1, 
+                        ifelse(Rep == "DUP", 2, NA)))
     
   print("There will be multiple matches and that is ok")
   ## the following reservoir samples don't have a filtered volume. 
@@ -271,7 +273,7 @@ filtering_log <- gsheet::gsheet2tbl(filtering_log)
     warning("The following Reservoir samples are missing the amount of water filtered. Check the filtering log and check if sample has been mislabeled. If missing, volume filtered should also have been recorded on the frozen filter.")
     filter_check <- comb |>
             filter(samp_type == 'res_samp' & is.na(Vol_filt_mL))|>
-            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL)
+            select(Date_processed, Sample_ID, ResSite, Depth, Rep, Sample_date, Vol_filt_mL) 
     
     print(filter_check)
     write.csv(filter_check, paste0(outputcheck_folder, "/filtervol_check.csv"))
@@ -667,6 +669,7 @@ if (nrow(check_turbidity)>0){
            Date_processed,
            ResSite,
            Depth,
+           Rep,
            Sample_date,
            before_acid_abs_750,
            before_acid_abs_664,
@@ -745,12 +748,12 @@ if (nrow(check_turbidity)>0){
    # since you dropped some high turbidity dups. Count again
    group_by(Reservoir, Site, Date, Depth_m)%>%
    mutate(count = n())|>
- 
    # flag samples that had duplicates
-   mutate(Flag_Chla_ugL=ifelse(count==2,paste0(Flag_Chla_ugL,5),Flag_Chla_ugL),
-          Flag_Pheo_ugL=ifelse(count==2,paste0(Flag_Pheo_ugL,5),Flag_Pheo_ugL),
+   # as of 2025, not doing this
+   # mutate(Flag_Chla_ugL=ifelse(count==2,paste0(Flag_Chla_ugL,5),Flag_Chla_ugL),
+   #        Flag_Pheo_ugL=ifelse(count==2,paste0(Flag_Pheo_ugL,5),Flag_Pheo_ugL),
           # convert to numeric to eliminate leading 0 when pasting flags to each other
-          Flag_Chla_ugL = as.numeric(Flag_Chla_ugL),
+         mutate(Flag_Chla_ugL = as.numeric(Flag_Chla_ugL),
           Flag_Pheo_ugL = as.numeric(Flag_Pheo_ugL))|>
    
     #mutate(Chla_ugL = mean(Chla_ugL)) %>%
@@ -762,7 +765,7 @@ if (nrow(check_turbidity)>0){
     mutate(Depth_m=as.numeric(Depth_m))%>%
     mutate(Site=as.numeric(Site))%>%
     dplyr::rename(DateTime=Date)%>%
-    select(Reservoir,Site,DateTime, Depth_m, Chla_ugL,Pheo_ugL,Flag_Chla_ugL,Flag_Pheo_ugL)%>%
+    select(Reservoir,Site,DateTime, Depth_m, Rep, Chla_ugL,Pheo_ugL,Flag_Chla_ugL,Flag_Pheo_ugL)%>%
     mutate(Flag_Chla_ugL=ifelse(is.na(Chla_ugL), 2, Flag_Chla_ugL))%>% #Add a 2 flag if an observation is missing
     mutate(Flag_Pheo_ugL=ifelse(is.na(Pheo_ugL),2,Flag_Pheo_ugL))
   
@@ -779,6 +782,8 @@ if (nrow(check_turbidity)>0){
   
   # combine the historical file and the current file
   chla_all <- dplyr::bind_rows(hist, chla_new2)
+  chla_all <- chla_all |> 
+    mutate(Rep = ifelse(is.na(Rep), 1, Rep))
   
   # read in the sampling times file
   # 
@@ -803,7 +808,7 @@ if (nrow(check_turbidity)>0){
            DateTime = ymd_hms(paste0(DateTime," ",Time))) %>%
     mutate(Site = ifelse(Reservoir == "SNP" & Site == 50, 205, Site),  
            Site = ifelse(Reservoir == "SNP" & Site == 40, 220, Site)) %>% 
-    select(Reservoir, Site, DateTime, Depth_m, Chla_ugL, Pheo_ugL,
+    select(Reservoir, Site, DateTime, Depth_m, Rep, Chla_ugL, Pheo_ugL,
            Flag_DateTime, Flag_Chla_ugL, Flag_Pheo_ugL)|>
     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
   
@@ -856,3 +861,4 @@ if (nrow(check_turbidity)>0){
   } # ends the if statement if there are no new observations
   
 } # ends the function
+

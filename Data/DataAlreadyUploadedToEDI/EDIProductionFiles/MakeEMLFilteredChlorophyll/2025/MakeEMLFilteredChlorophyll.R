@@ -19,7 +19,7 @@
 
 pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
 
-folder <- paste0(here(),"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/")
+folder <- here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/")
 
 # (install and) Load EMLassemblyline #####
 #install.packages('devtools')
@@ -154,19 +154,19 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2024",
-  temporal.coverage = c("2014-04-18", "2024-12-17"),
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2025",
+  temporal.coverage = c("2014-04-18", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c("filt-chla_2014_2024.csv", 'site_descriptions.csv'),
-  data.table.name = c("filt-chla_2014_2024", 'site_descriptions'), 
+  data.table = c("filt-chla_2014_2025.csv", 'site_descriptions.csv'),
+  data.table.name = c("filt-chla_2014_2025", 'site_descriptions'), 
   data.table.description = c("Filtered chlorophyll a data at multiple sites","Sampling site descriptions with latitude and longitude" ),
-  other.entity = c('filt-chla_qaqc_2023_2024.R', 'filt-chla_inspection_2014_2024.Rmd', 'filt-chla_maintenancelog_2014_2024.csv'),
-  other.entity.name = c("filt-chla_qaqc_2023_2024", 'filt-chla_inspection_2014_2024', 'filt-chla_maintenancelog_2014_2024'),
+  other.entity = c('filt-chla_qaqc_2023_2025.R', 'filt-chla_inspection_2014_2025.Rmd', 'filt-chla_maintenancelog_2014_2025.csv'),
+  other.entity.name = c("filt-chla_qaqc_2023_2025", 'filt-chla_inspection_2014_2025', 'filt-chla_maintenancelog_2014_2025'),
   other.entity.description = c('Script used to collate and flag data for publication', 'Markdown file used to visualize data for QA/QC', 
-                               'Maintenance Log through 2024'), 
+                               'Maintenance Log through 2025'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.33', #THIS IS FOR STAGING
+  package.id = 'edi.52.41', #THIS IS FOR STAGING
   #package.id = 'edi.555.4', # ONLY USE THIS FOR ACTUAL PUBLISHING 
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id
@@ -200,7 +200,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 10)
+xml_add_child(parent, childC, .where = 15)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))
@@ -265,7 +265,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019",
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2025",
   temporal.coverage = c("2014-04-18", "2019-10-04"),
   maintenance.description = 'ongoing',
   data.table = "chla_master_df_dt.csv",

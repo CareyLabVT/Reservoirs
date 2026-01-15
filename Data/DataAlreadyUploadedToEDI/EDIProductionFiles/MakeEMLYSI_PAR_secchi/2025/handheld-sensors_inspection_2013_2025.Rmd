@@ -31,18 +31,18 @@ current_time_end= ymd_hms("2025-12-31 23:59:00", tz = "America/New_York")
 
 ```{r Create the file for EDI, eval=FALSE, include=FALSE}
 # #source L1 function to run all data through QAQC process
-#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create#.R")
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/ysi_create#.R")
 
 
 # read in the Google sheet with all of the observations and QAQC them
-#current_df <- ysi_qaqc(data_file = #'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
-#            gsheet_data = TRUE,
-#            maintenance_file = #"https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/m#aintenance_log.csv",
-#            outfile = NULL,
-#            start_date = as.Date("2013-01-01"),
-#            end_date = as.Date(current_time_end))
+current_df <- ysi_qaqc(data_file = 'https://docs.google.com/spreadsheets/d/1MX__IelyQBHO1bNxAltfYT_r_pJisMuiMtDG4oxkOok',
+            gsheet_data = TRUE,
+            maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/YSI_PAR/m#aintenance_log.csv",
+            outfile = NULL,
+            start_date = as.Date("2013-01-01"),
+            end_date = as.Date(current_time_end))
 
-#current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person.
@@ -53,9 +53,9 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
                                                                         ### CHANGE THIS BELOW 
                                                                               #########   
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/5/514d382eccf21428985abbd40e1d7d50")
+ #current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/5/514d382eccf21428985abbd40e1d7d50")
  # Force files from EDI to have an Daylight savings observed timestamp
- current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
+ #current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
 
 ## Check for duplicates and gaps in the data frame

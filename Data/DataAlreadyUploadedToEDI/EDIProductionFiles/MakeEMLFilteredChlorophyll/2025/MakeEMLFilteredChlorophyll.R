@@ -154,7 +154,7 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2024",
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2025",
   temporal.coverage = c("2014-04-18", "2025-12-02"),
   maintenance.description = 'ongoing',
   data.table = c("filt-chla_2014_2025.csv", 'site_descriptions.csv'),
@@ -166,7 +166,7 @@ eml_file <- make_eml(
                                'Maintenance Log through 2025'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.40', #THIS IS FOR STAGING
+  package.id = 'edi.52.41', #THIS IS FOR STAGING
   #package.id = 'edi.555.4', # ONLY USE THIS FOR ACTUAL PUBLISHING 
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id
@@ -265,7 +265,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019",
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2025",
   temporal.coverage = c("2014-04-18", "2019-10-04"),
   maintenance.description = 'ongoing',
   data.table = "chla_master_df_dt.csv",

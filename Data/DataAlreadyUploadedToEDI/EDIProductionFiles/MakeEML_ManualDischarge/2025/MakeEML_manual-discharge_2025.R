@@ -1,17 +1,22 @@
+## updated: 13 Jan 2026 - added code to update the xml with license info
+
+
 # Install devtools
 #install.packages("devtools")
-library(devtools)
+# library(devtools)
+# 
+# # Install and load EMLassemblyline, needs devtools
+# #also installing two other packages from github needed
+# # remotes::install_github("ropensci/bold")
+# # remotes::install_github("ropensci/taxize")
+# # remotes::install_github("EDIorg/EMLassemblyline")
+# library(EMLassemblyline)
 
-# Install and load EMLassemblyline, needs devtools
-#also installing two other packages from github needed
-# remotes::install_github("ropensci/bold")
-# remotes::install_github("ropensci/taxize")
-# remotes::install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
-
+# load data packages
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
 
 ##Set folder 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2025"
+folder <- paste0(here(),"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2025/")
 
 
 
@@ -117,7 +122,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDisc
 # table (e.g., edi.123)
 # Make note of this value, as it will be your package.id below
 
-make_eml(path = folder,
+eml_file <- make_eml(path = folder,
          dataset.title = "Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025",
          data.table = c("manual-discharge_2019_2025.csv",
                         "site_descriptions.csv",
@@ -136,8 +141,46 @@ make_eml(path = folder,
                                       'Script used to collate 2019-2025 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.20", #### this is the one that I need to change!!!
-         user.domain = 'EDI')
+         package.id = "edi.1017.20", #### this is the one that I need to change!!! For the staging environment
+         # package.id = "edi.454.8", #### this is the one that I need to change!!! For the production environment
+         user.domain = 'EDI',
+         write.file = T, ### write the file to the folder
+         return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 10)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,"/",package.id,".xml"))
+
 
 
 ## Step 8: Check your data product! ####
@@ -176,26 +219,26 @@ make_eml(path = folder,
 # Select text files and R file associated with the upload
 # Then click 'Upload': if everything works, there will be no errors and the dataset will be uploaded!
 # Check to make sure everything looks okay on EDI Website
-make_eml(path = folder,
-         dataset.title = "Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025",
-         data.table = c("manual-discharge_2019_2025.csv",
-                        "site_descriptions.csv",
-                        "manual-discharge_maintenancelog_2019_2025.csv"),
-         data.table.description = c("Manual Discharge Data",
-                                    'Descriptions of sampling sites',
-                                    'Manual Discharge Maintenance Log'),
-         temporal.coverage = c("2016-07-14", "2025-12-02"),
-         maintenance.description = "ongoing",
-         user.id =  "ccarey",
-         other.entity = c('manual-discharge_qaqc_2019_2025.R',
-                          'manual-discharge_inspection_2019_2025.Rmd',
-                          'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
-                          'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
-         other.entity.description = c('Script used to QAQC 2019-2025 data',
-                                      'Script used to collate 2019-2025 data for publication',
-                                      'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
-                                      'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.454.8", #### this is the one that I need to change!!!
-         user.domain = 'EDI')
+# make_eml(path = folder,
+#          dataset.title = "Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025",
+#          data.table = c("manual-discharge_2019_2025.csv",
+#                         "site_descriptions.csv",
+#                         "manual-discharge_maintenancelog_2019_2025.csv"),
+#          data.table.description = c("Manual Discharge Data",
+#                                     'Descriptions of sampling sites',
+#                                     'Manual Discharge Maintenance Log'),
+#          temporal.coverage = c("2016-07-14", "2025-12-02"),
+#          maintenance.description = "ongoing",
+#          user.id =  "ccarey",
+#          other.entity = c('manual-discharge_qaqc_2019_2025.R',
+#                           'manual-discharge_inspection_2019_2025.Rmd',
+#                           'SOP for Manual Reservoir Continuum Discharge Data Collection and Calculation.pdf',
+#                           'CCR_VolumetricFlow_2020_2022_calculations.xlsx'),
+#          other.entity.description = c('Script used to QAQC 2019-2025 data',
+#                                       'Script used to collate 2019-2025 data for publication',
+#                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
+#                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
+#          package.id = "edi.454.8", #### this is the one that I need to change!!!
+#          user.domain = 'EDI')
 
 

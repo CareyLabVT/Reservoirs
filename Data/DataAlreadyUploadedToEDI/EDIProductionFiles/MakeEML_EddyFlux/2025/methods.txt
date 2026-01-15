@@ -103,7 +103,7 @@ In 2023, we redeployed the LI-7200 on 21 Mar, but the flow module (LI-7200-1010)
 
 In 2024, from 6-13 May, CH4 data were not recorded due to power issues with the CH4 sensor (LI-7700) and was fixed on 13 May. On 26 May, there was a power outage at FCR and all the sensors were down. Power was restored on 27 May, however, the UPS where the sensors were plugged in was broken. On 28 May, the power to the catwalk sensors was supplied directly from the outlet at the catwalk. From 22-29 Aug, mirrors on the CO2 sensor (LI-7500) were extremely dirty and no observations were recorded. The mirrors were cleaned on 29 Aug which fixed the issue. From 19-23 Sep, there was a power outage at FCR due to a tripped outlet which was reset on 23 Sep. From 16-21 Oct, mirrors on the CO2 sensor (LI-7500) were extremely dirty and no observations were recorded. The mirrors were cleaned on 21 Oct which fixed the issue.
 
-In 2025, from 11-14 Feb and 22 Oct - 3 Nov, the data were not recorded for both the sensors.  
+In 2025, from 11-14 Feb and 22 Oct - 3 Nov, the data were not recorded for both the sensors. Additionally, the data from 18 July 17:30 - 21 July 9:30 was filtered out in the eddy-flux_processing_2020_2025.R script due to faulty sonic anemometer temperature values (intermittent power failures)  
 
 
 Additional processing script used for cleaning data for publication/analysis: eddy-flux_post_processing.Rmd (NOTE! This additional QAQC script was not applied to the data included in eddy-flux_2020_2025.csv)

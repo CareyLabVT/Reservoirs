@@ -24,21 +24,21 @@ current_endtime = as.Date("2025-12-31")
 ```
 
 
-```{r Make the qaqced data frame, eval=FALSE, include=FALSE}
+```{r Make the qaqced data frame, eval=T, include=FALSE}
 # Use the qaqc function to make the current data frame
 
-current_df <- ugga_qaqc(
-  files = "./../../../../DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
-  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
-  outfile = NULL,
-  start_date =NULL, # change when we update to read date from EDI
-  end_date = NULL)
+# current_df <- ugga_qaqc(
+#   files = "./../../../../DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
+#   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
+#   outfile = NULL,
+#   start_date =NULL, # change when we update to read date from EDI
+#   end_date = NULL)
 
 ```
 
 REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
 
-```{r READ IN EDI FOR REVIEWER, include=FALSE}
+```{r READ IN EDI FOR REVIEWER, eval=T, include=FALSE}
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
@@ -151,7 +151,7 @@ write.csv(current_df, "ugga_2018_2025.csv", row.names = FALSE)
 
 ```
 
-```{r Download relavant files, eval=FALSE, include=FALSE}
+```{r Download relavant files, eval=FALSE, include=T}
 
 # Maintenance Log
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv", "ugga_maintenancelog_2018_2025.csv")
@@ -164,7 +164,7 @@ download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/head
 
 ```
 
-```{r Site description file, eval=FALSE, include=FALSE}
+```{r Site description file, include=FALSE}
 #Install the required googlesheets4 package
 #install.packages('googlesheets4')
 #Load the library

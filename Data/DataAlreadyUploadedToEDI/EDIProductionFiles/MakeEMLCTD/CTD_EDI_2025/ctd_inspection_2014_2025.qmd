@@ -101,7 +101,7 @@ write_csv(qaqc, "ctd_2013_2025.csv")
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_Maintenance_Log.csv", "ctd_maintenancelog_2013_2025.csv")
 
 # download QAQC file
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R", "ctd_qaqc_2013_2025.R")
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R", "ctd_qaqc_2018_2025.R")
 
 # The helper scripts need to be downloaded and zipped. Not sure how to do this in R
 
@@ -218,7 +218,7 @@ plot_var <- function(var_name,
     filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
     ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
-    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray", trans = "log") +
     scale_y_reverse() +
     geom_point() +
     ggtitle(year) +
@@ -239,7 +239,7 @@ plot_var_sites <- function(var_name,
     filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
     sample_frac(.1) %>%
     ggplot(aes(x = DateTime, y = Depth_m, color = !!var, shape = as.factor(!!flag))) +
-    scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
+    scale_color_gradientn(colours = blue2green2red(100), na.value="gray", trans = "log") +
     scale_y_reverse() +
     geom_point() +
     ggtitle(year) +

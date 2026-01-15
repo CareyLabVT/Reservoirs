@@ -10,5 +10,5 @@ Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator
 Kathryn	K.	Hoffman	Virginia Tech	kkhoffman@vt.edu	0000-0002-2063-8269	creator			
 Maria		Popescu	Virginia Tech	mariapopescu100@vt.edu	0009-0001-5848-471X	creator			
 Arwen		Downum	Virginia Tech	arwend@vt.edu	0009-0001-4954-0505	creator			
-Kat  J.		Myer	Virginia Tech	katjmyer@vt.edu	0009-0002-7678-7914	creator			
+Katherine  J.		Myer	Virginia Tech	katjmyer@vt.edu	0009-0002-7678-7914	creator			
 Erin		Walters	Virginia Tech	erinw14@vt.edu	0009-0000-2143-8392	creator			

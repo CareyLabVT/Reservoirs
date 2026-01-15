@@ -176,7 +176,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 10)
+xml_add_child(parent, childC, .where = 12)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,"/",package.id,".xml"))

@@ -2,6 +2,7 @@
 ## A. Hounshell, 25 Jan 2021
 ## Substantially modified by A. Lewis in January and April of 2024
 ## ABP adapted for 2025
+## updated: 15 Jan 2026 - added lubridate for dealing with date parsing issues
 
 # Script following: https://github.com/junbinzhao/FluxCalR
 
@@ -70,7 +71,8 @@ files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
 files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0202.txt"
                                                               #,"gga_2001-12-31_f0284.txt" #made it usable but check this before EDI days.
-                                                              , "gga_2001-12-31_f0336.txt"
+                                                              , "gga_2001-12-31_f0336.txt",
+                                                              "gga_2001-12-31_f0294.txt"
                                                               )] # very messy and doesn't seem usable
 
 
@@ -86,7 +88,7 @@ for (file in files_to_process) {
 # QAQC: there were a few times that there was only one peak but we still had to click twice. 
 # Here, we manually remove the second peak from these files
 one_peak <- c("processed_csvs/gga_2001-12-31_f0360.csv", "processed_csvs/gga_2001-12-31_f0227.csv",
-              "processed_csvs/gga_2001-12-31_f0362.csv", "processed_csvs/gga_2001-12-31_f0222.csv", "processed_csvs/gga_2001-12-31_f0257.csv", "processed_csvs/gga_2001-12-31_f0264.csv", "processed_csvs/gga_2001-12-31_f0294.csv", "processed_csvs/gga_2001-12-31_f0308.csv", "processed_csvs/gga_2001-12-31_f0317.csv") # specify casts with one peak. Can still use them. 
+              "processed_csvs/gga_2001-12-31_f0362.csv", "processed_csvs/gga_2001-12-31_f0222.csv", "processed_csvs/gga_2001-12-31_f0257.csv", "processed_csvs/gga_2001-12-31_f0264.csv", "processed_csvs/gga_2001-12-31_f0308.csv", "processed_csvs/gga_2001-12-31_f0317.csv") # specify casts with one peak. Can still use them. 
 #Filter to only the first peak in these files
 for (file in one_peak) {
   data <- read.csv(file) %>%
@@ -100,6 +102,7 @@ flux_output <- read_csv(paste0("processed_csvs/", list.files("processed_csvs")))
 
 #Fix time issues
 flux_output2 <- flux_output %>%
+  mutate(Date_real = lubridate::parse_date_time(Date_real, orders = c('ymd','Ymd')))|>
   group_by(Date_real, Reservoir, Site) %>%
   mutate(Start = as_datetime(paste0(Date_real, Start)),
          End = as_datetime(paste0(Date_real, End)),

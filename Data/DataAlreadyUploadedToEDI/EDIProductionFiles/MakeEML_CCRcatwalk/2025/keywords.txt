@@ -36,3 +36,4 @@ sensors	carey lab controlled vocabulary
 HOBOs	carey lab controlled vocabulary
 ccre	carey lab controlled vocabulary
 ccre-waterquality	carey lab controlled vocabulary
+inflows	carey lab controlled vocabulary

@@ -49,29 +49,34 @@ Flag_RFU_525nm	1	data re-calibrated post-collection
 Flag_RFU_525nm	2	instrument malfunction
 Flag_RFU_525nm	3	negative transmission value
 Flag_RFU_525nm	4	data suspect due to poor calibration
+Flag_RFU_525nm	5	negative RFU value
 Flag_RFU_570nm	0	no flag
 Flag_RFU_570nm	1	data re-calibrated post-collection
 Flag_RFU_570nm	2	instrument malfunction
 Flag_RFU_570nm	3	negative transmission value
 Flag_RFU_570nm	4	data suspect due to poor calibration
+Flag_RFU_570nm	5	negative RFU value
 Flag_RFU_610nm	0	no flag
 Flag_RFU_610nm	1	data re-calibrated post-collection
 Flag_RFU_610nm	2	instrument malfunction
 Flag_RFU_610nm	3	negative transmission value
 Flag_RFU_610nm	4	data suspect due to poor calibration
+Flag_RFU_610nm	5	negative RFU value
 Flag_RFU_370nm	0	no flag
 Flag_RFU_370nm	1	data re-calibrated post-collection
 Flag_RFU_370nm	2	instrument malfunction
 Flag_RFU_370nm	3	negative transmission value
 Flag_RFU_370nm	4	data suspect due to poor calibration
+Flag_RFU_370nm	5	negative RFU value
 Flag_RFU_590nm	0	no flag
 Flag_RFU_590nm	1	data re-calibrated post-collection
 Flag_RFU_590nm	2	instrument malfunction
 Flag_RFU_590nm	3	negative transmission value
 Flag_RFU_590nm	4	data suspect due to poor calibration
+Flag_RFU_590nm	5	negative RFU value
 Flag_RFU_470nm	0	no flag
 Flag_RFU_470nm	1	data re-calibrated post-collection
 Flag_RFU_470nm	2	instrument malfunction
 Flag_RFU_470nm	3	negative transmission value
 Flag_RFU_470nm	4	data suspect due to poor calibration
-
+Flag_RFU_470nm	5	negative RFU value

@@ -1,22 +1,25 @@
 # Install and load packages
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(devtools,EMLassemblyline,tidyverse)
 
-library(devtools)
-devtools::install_github("ropensci/bold")
-devtools::install_github("EDIorg/taxonomyCleanr")
-remotes::install_github("ropensci/taxize", dependencies = TRUE)
-remotes::install_github("EDIorg/EMLassemblyline")
+# Updates: 15 Jan 2026 - ABP updated with license info
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(devtools,EMLassemblyline,tidyverse, xml2, XML)
+
+# library(devtools)
+# devtools::install_github("ropensci/bold")
+# devtools::install_github("EDIorg/taxonomyCleanr")
+# remotes::install_github("ropensci/taxize", dependencies = TRUE)
+# remotes::install_github("EDIorg/EMLassemblyline")
 
 
 #note that EMLassemblyline has an absurd number of dependencies and you
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-library(EMLassemblyline)
+# library(EMLassemblyline)
 
 # All the files you need are found in this folder
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_UGGA/EDI 2025/"
+folder <- paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_UGGA/EDI 2025/")
 
 #Step 1: Create a directory for your dataset
 
@@ -119,7 +122,7 @@ template_categorical_variables(path = folder,
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
 
-make_eml(path = folder,
+eml_file <- make_eml(path = folder,
          data.path = folder,
          eml.path = folder,
          dataset.title = "Time series of methane and carbon dioxide diffusive fluxes using an Ultraportable Greenhouse Gas Analyzer (UGGA) for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2018-2025",
@@ -147,5 +150,44 @@ make_eml(path = folder,
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1103.1") # this is for staging !
-     #package.id = "edi.1082.3") #edi.1082.2 is the most recent published version
+         package.id = "edi.1102.13", # this is for staging !
+     #package.id = "edi.1082.3", #edi.1082.2 is the most recent published version
+     write.file = T, ### write the file to the folder
+     return.obj = T) ## return the object so we can get the package.id
+
+
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 11)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+

@@ -1,6 +1,6 @@
 An eddy covariance (EC) system (LiCor Biosciences, Lincoln, Nebraska) was used to collect greenhouse gas fluxes (carbon dioxide, methane, and water vapor) from Falling Creek Reservoir (FCR) from 04 April 2020 to 31 December 2025. The EC instrumentation was deployed at the deepest site of FCR  on a permanent metal platform that extends about 45 m from the dam and approximately 2.9 m over the reservoir's surface (37.30278, -79.83694). The reservoir was maintained at full pond during the monitoring period, resulting in a negligible change in distance between the EC system and the water's surface.
 
-########### EddyPro Processing and QAQC for eddy-flux_2020_2025.csv
+EddyPro Processing and QAQC for eddy-flux_2020_2025.csv
 
 The EC instrumentation included an ultrasonic anemometer to measure 3D wind speed and direction (CSAT3, Campbell Scientific Inc., Logan, Utah, USA), an open-path infrared gas analyzer for measuring methane concentration (LI-7700, LiCor Biosciences, Lincoln, Nebraska, USA), and an enclosed path infrared gas analyzer for measuring carbon dioxide and water vapor concentrations (LI-7200, LiCor Biosciences, Lincoln, Nebraska, USA). The data streams (anemometer, methane, carbon dioxide, water vapor) were recorded at 10-Hz using a data logger that included a temperature sensor and pressure transducer (LI-7550, LiCor Biosciences, Lincoln, Nebraska, USA). The open-path methane sensor was manually cleaned approximately weekly from April through October and approximately monthly from November to April. The carbon dioxide sensor was cleaned approximately every three months or when the sensor strength dropped below ~95%. The data have been collected in Eastern Daylight Time (EDT) with daylight savings observed.
 
@@ -8,7 +8,7 @@ The collected, raw 10-Hz data were processed into 30-minute fluxes using the Edd
 
 The published CSV file (eddy-flux_2020_2025.csv) included in this data product contains the cleaned data after this QAQC has been applied. The file is generated in the eddy-flux_inspection_2020_2025.Rmd script that calls the eddy-flux_qaqc_2020_2025.R script. The script eddy-flux_inspection_2020_2025.Rmd also creates plots of the data and downloads additional files for EDI publishing. 
 
-################### Missing data and Maintenance:
+Missing data and Maintenance:
 
 Missing Data: Here is a list of gaps in the data that extend for longer than a day in the data file for all observations. See below for maintenance on individual sensors.
 
@@ -106,7 +106,7 @@ In 2024, from 6-13 May, CH4 data were not recorded due to power issues with the 
 In 2025, from 11-14 Feb and 22 Oct - 3 Nov, the data were not recorded for both the sensors.  
 
 
-####### Additional processing script used for cleaning data for publication/analysis: eddy-flux_post_processing.Rmd (NOTE! This additional QAQC script was not applied to the data included in eddy-flux_2020_2025.csv)
+Additional processing script used for cleaning data for publication/analysis: eddy-flux_post_processing.Rmd (NOTE! This additional QAQC script was not applied to the data included in eddy-flux_2020_2025.csv)
 
 Additional data post-processing following best practices can be applied using the eddy-flux_post_processing.Rmd script, which was not applied on the file eddy-flux_2020_2024.csv but was used by Hounshell et al. (2023) on the 2020-2022 eddy flux data. As detailed in this script, additional data processing options include: 1) removing wind directions which originated behind the dam (i.e., outside of the reservoir; wind direction between 80-250 degrees removed); 2) removing extreme flux values (carbon dioxide fluxes > abs(100) umol C m-2 s-1; methane fluxes > abs(0.25) umol C m-2 s-1); 3) removing methane fluxes when the signal strength <20%; 4) removing carbon dioxide and methane fluxes when they did not pass the test for stationarity or developed turbulent conditions (quality control, QC level 2, per Foken et al. 2004) in addition to when the latent heat flux (LE) or sensible heat (H) had QC level >=2; 4) removing open path methane fluxes during periods of rainfall, which was determined based on the rain gauge deployed at the FCR dam; 5) correction for high-pass and low-pass filtering effects (Moncrieff et al. 2004; using the function defined in despike.R), and 6) removing data that corresponded to flux footprints that extended significantly beyond the reservoir. Flux footprints were modeled every half-hour using a simple, two-dimensional parameterization developed by Kljun et al. (2015). This model builds on the Lagrangian stochastic particle dispersion model (Kljun et al., 2002) and provides information on the upwind and crosswind spread of the footprint. All the variables needed for the model were obtained directly from the dataset or calculated following Kljun et al. (2015). Data were excluded when the along-wind distance providing the highest contribution (peak) to turbulent fluxes was outside the reservoir. Finally, 7) we filtered out additional periods of low turbulence friction velocity (ustar) using REddyProc as described below (Wutzler et al. 2018). 
 

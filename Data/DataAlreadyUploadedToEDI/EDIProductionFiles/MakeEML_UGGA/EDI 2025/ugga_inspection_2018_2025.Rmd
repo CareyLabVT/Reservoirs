@@ -9,6 +9,7 @@ Script to visualize seasonal UGGA data
 Author: Abigail Lewis
 Created: 20 December 2023
 Last edit: 17 December 2025 (DXE)
+KKH updated 15 Jan 2025
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = FALSE)
@@ -44,14 +45,48 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
                                                                 ### CHANGE THIS NUMBER BELOW 
                                                                              ##      
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/157/30/9adadd2a7c2319e54227ab31a161ea12")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1102/13/b38441dbea377f89ab5745aca09cd355")
 
+current_year = "2025-01-01"
  # Force files from EDI to have an EST timestamp
-  current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
+  # current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
 
 ```
 
+```{r Current data plots}
+#Plot all CH4
+current_CH4 <- current_df%>%
+  filter(Date >= current_year) |>
+  #filter(Date > current_starttime & Date < current_endtime) %>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
 
+# Make plotly plot
+
+plotly::ggplotly(current_CH4)
+
+#Plot all C02
+Current_C02 <- current_df%>%
+  filter(Date >= current_year) |> 
+  #filter(Date > current_starttime & Date < current_endtime) %>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("C02 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+# Make plotly plot c02
+
+plotly::ggplotly(Current_C02)
+
+```
 
 ```{r QAQC plots}
 #Plot all CH4
@@ -102,39 +137,6 @@ current_df%>%
   facet_wrap(~Reservoir)+
   theme_bw()
 
-
-```
-
-```{r Current data plots}
-#Plot all CH4
-current_CH4 <- current_df%>%
-  filter(Date > current_starttime & Date < current_endtime) %>%
-  ggplot(aes(x = as.Date(Date), 
-             color = as.factor(Site),
-             y=CH4Flux_umolCm2s))+
-  geom_point()+
-  ylab("CH4 flux (umol/m2/s)")+
-  facet_wrap(~Reservoir)+
-  theme_bw()
-
-# Make plotly plot
-
-plotly::ggplotly(current_CH4)
-
-#Plot all C02
-Current_C02 <- current_df%>%
-  filter(Date > current_starttime & Date < current_endtime) %>%
-  ggplot(aes(x = as.Date(Date), 
-             color = as.factor(Site),
-             y=CO2Flux_umolCm2s))+
-  geom_point()+
-  ylab("C02 flux (umol/m2/s)")+
-  facet_wrap(~Reservoir)+
-  theme_bw()
-
-# Make plotly plot c02
-
-plotly::ggplotly(Current_C02)
 
 ```
 

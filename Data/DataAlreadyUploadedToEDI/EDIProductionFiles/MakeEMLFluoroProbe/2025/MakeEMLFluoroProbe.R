@@ -206,7 +206,7 @@ eml_file <- make_eml(
   #user.id = 'melofton',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1764.4', ## This is for staging
+  package.id = 'edi.1764.5', ## This is for staging
   # package.id = 'edi.272.9', ### This is for the production environment
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id

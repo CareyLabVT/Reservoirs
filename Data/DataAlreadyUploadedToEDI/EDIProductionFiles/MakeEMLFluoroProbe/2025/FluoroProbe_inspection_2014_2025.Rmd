@@ -68,7 +68,7 @@ write.csv(current_df, "./fluoroprobe_2014_2025.csv", row.names = FALSE)
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
 # THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
-current_df <- read_csv('https://pasta-s.lternet.edu/package/data/eml/edi/1764/2/09255be1f3f7cb4f67064407aa21e2fc') %>%
+current_df <- read_csv('https://pasta-s.lternet.edu/package/data/eml/edi/1764/3/09255be1f3f7cb4f67064407aa21e2fc') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # current_df <- read_csv(here("/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/fluoroprobe_2014_2025.csv")) %>%
@@ -227,7 +227,6 @@ castname <- paste(
   sep = "-"
 )
 ####maria edit ends####^^^^
-  
     
   profile_plot <- ggplot(data = profile, aes(x = Temp_C, y = Depth_m))+
     geom_path(linewidth = 1)+
@@ -281,7 +280,7 @@ castname <- paste(
 }
 ```
 
-## Define heatmap function
+## REVIEWER CAN START HERE AGAIN- Define heatmap function
 
 ```{r Heatmap function}
 flora_heatmap <- function(fp_data, reservoir, year, site, z){
@@ -415,6 +414,7 @@ flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 40, z
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 30, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 20, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 10, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2025, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2025, site = 50, z = "TotalConc_ugL")
 ```
 
@@ -426,6 +426,52 @@ flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z
 flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
+```
+
+##Visualize individual casts for 2025
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+PLOT_ALL_CASTS = TRUE
+#create png plots for every cast for QAQC purposes (algal biomass)
+annualcasts <- current_df|>
+  filter(year(DateTime) == 2025) #change this if you would like to see another year
+  #filter(Reservoir == "XXX") #add this if you would like to just see one reservoir
+
+if(PLOT_ALL_CASTS == TRUE){
+
+for (i in 1:length(unique(annualcasts$CastID))){ #for every unique FP cast
+  profile = subset(annualcasts, CastID == unique(annualcasts$CastID)[i])
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+ 
+  #maria added this too 
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
+
+# remove anything else sketchy just in case
+castname <- str_replace_all(castname, "[^A-Za-z0-9_-]", "")
+  
+  profile2 = profile %>%
+    select(Depth_m, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)%>%
+    gather(GreenAlgae_ugL:TotalConc_ugL, key = spectral_group, value = ugL)
+  
+  profile_plot <- ggplot(data = profile2, aes(x = ugL, y = Depth_m, group = spectral_group, colour = spectral_group))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+
+print(profile_plot)
+
+}
+}
+
 ```
 
 ## Code to check for negative RFUs

@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 pacman::p_load(tidyverse, lubridate, akima, reshape2, 
                gridExtra, grid, colorRamps, RColorBrewer, cowplot,
                devtools, EDIutils, xml2, httr, here)
+
+here()
 ```
 
 ## Build dataframe - reviewers should not run this!
@@ -33,16 +35,16 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 ## Run Function 
 repo_link <- "https://api.github.com/repos/CareyLabVT/Reservoirs/git/trees/master?recursive=1"
 #repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
-repo_filepath <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/"
+repo_filepath <- here()
 # example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
-example_file_for_colnames <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+example_file_for_colnames <- here("Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt")
 
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 # historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-historic_data_2017<- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+historic_data_2017<- here("Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt")
 # maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
-maintenance_file <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv"
+maintenance_file <- here("Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv")
 out_file <- NULL
 start_date <- as.Date("2014-05-03")
 end_date <- Sys.Date() + lubridate::days(1)
@@ -90,7 +92,7 @@ Flags
 2: instrument malfunction
 3: negative transmission value
 4: data suspect due to poor calibration
-5:
+5: negative RFU value
 
 ```{r Check there are no NAs in Flag columns}
 
@@ -478,7 +480,7 @@ print(tail(sd))
 knitr::kable((tail(sd)))
 
 ```
-#### Check the that the columns have flags 
+#### Check that the columns have flags 
 
 Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
 

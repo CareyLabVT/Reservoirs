@@ -3,6 +3,7 @@ Reservoir	"Three-letter code corresponding to sampled reservoir;  BVR = Beaverda
 Site	Sampling site within each reservoir	numeric	dimensionless		NA	value is missing
 DateTime	Date of sampling. Sampling times are set to 12:00pm EST if not recorded. See methods for more details.	Date	NA	YYYY-MM-DD hh:mm:ss	NA	value is missing
 Depth_m	Water depth where the sample was collected 	numeric	meter		NA	value is missing
+Rep	Field replicates collected at the same site, date, and depth	numeric	dimensionless		NA	value is missing
 Chla_ugL	Chlorophyll a concentration	numeric	microgramsPerLiter		NA	value is missing
 Pheo_ugL	Phaeophytin concentration	numeric	microgramsPerLiter		NA	value is missing
 Flag_DateTime	"Data flag for sample collection time 0=Value acceptable. No flag, 1= Sampling time not recorded. Set to 12:00:00"	numeric	dimensionless		NA	value is missing

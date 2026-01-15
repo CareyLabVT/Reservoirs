@@ -19,11 +19,6 @@ pacman::p_load(tidyverse, lubridate, gsheet, here)
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
 ```
 
-```{r}
-here()
-datapath <- here(directory)
-datapath
-```
 
 
 **Read in Historical files from EDI**
@@ -111,7 +106,7 @@ head(chla_YMD)
 **Time Series for entire data set - Chlorophyll a**
 ENTIRE DATASETS WILL LIKELY DISPLAY A MISSING DATA WARNING
 Samples were not collected in 2017
-```{r Time Series for entire data set - chla}
+```{r Time Series for entire data set chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
   geom_point(size = 1) + 
@@ -119,7 +114,7 @@ ggplot(subset(chla_YMD), aes(x = DateTime, y = Chla_ugL, col = Reservoir)) +
   ggtitle("Entire Dataset Timeseries - Chlorophyll a")
 ```
 **Time Series for entire data set - Phaeophyton**
-```{r Time Series for entire data set - Phaeophyton}
+```{r Time Series for entire data set Phaeophyton}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
 ggplot(subset(all_chla), aes(x = DateTime, y = Phaeo_ugL, col = Reservoir)) +
   geom_point(size = 1) + 

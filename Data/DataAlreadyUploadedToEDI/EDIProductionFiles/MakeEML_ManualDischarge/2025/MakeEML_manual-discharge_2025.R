@@ -141,7 +141,7 @@ eml_file <- make_eml(path = folder,
                                       'Script used to collate 2019-2025 data for publication',
                                       'SOPs for discharge data collection and calculation using flowmeter, salt injection, velocity float, and bucket volumetric methods',
                                       'Example spreadsheet which demonstrates the float method and bucket volumetric method calculations') ,
-         package.id = "edi.1017.21", #### this is the one that I need to change!!! For the staging environment
+         package.id = "edi.1017.22", #### this is the one that I need to change!!! For the staging environment
          # package.id = "edi.454.8", #### this is the one that I need to change!!! For the production environment
          user.domain = 'EDI',
          write.file = T, ### write the file to the folder

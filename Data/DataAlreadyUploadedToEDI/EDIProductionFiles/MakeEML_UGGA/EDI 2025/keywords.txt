@@ -1,7 +1,6 @@
 keyword	keywordThesaurus
 greenhouse gas	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
-Stream Team	carey lab controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary
 Falling Creek Reservoir	carey lab controlled vocabulary
 Beaverdam Reservoir	carey lab controlled vocabulary

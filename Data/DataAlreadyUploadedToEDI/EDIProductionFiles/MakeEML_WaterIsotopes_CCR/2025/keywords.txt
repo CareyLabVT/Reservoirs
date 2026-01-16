@@ -7,8 +7,12 @@ CCR	carey lab controlled vocabulary
 Reservoir	cuahsi controlled vocabulary
 Lake	cuahsi controlled vocabulary
 Lakes	lter controlled vocabulary
+Precipitation	lter controlled vocabulary
+Rain	lter controlled vocabulary
 stable isotope	lter controlled vocabulary
 isotope	lter controlled vocabulary
+stable isotopes	lter controlled vocabulary
+isotopes	lter controlled vocabulary
 deuterium	lter controlled vocabulary
 delta-18O of H2O	cuahsi controlled vocabulary
 delta-D of H2O	cuahsi controlled vocabulary

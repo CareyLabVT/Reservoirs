@@ -139,7 +139,7 @@ REVIEWERS START HERE. Double check you have the right pasta link for the data pa
 
 ```{r read in EDI data}
 # Read in Data from GitHub
-ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/20/97c1b55fdb8308b18e63eb8eae9b9bfa")
+ctd_edi <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1113/22/97c1b55fdb8308b18e63eb8eae9b9bfa")
 
 # for katie only: ctd_edi <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLCTD/CTD_EDI_2025/ctd_2013_2025.csv")
 

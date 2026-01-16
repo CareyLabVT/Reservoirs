@@ -250,7 +250,8 @@ current_data_plots <-  a %>%
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -268,7 +269,8 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -278,7 +280,8 @@ outputs
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = 50)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -296,15 +299,17 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 ```
 
-```{r All BVR Site 50 Plots All data, echo=FALSE}
+```{r All CCR Site 50 Plots All data, echo=FALSE}
 
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = c(50,51))
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -322,7 +327,8 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 ```
 
 ```{r Publisher Make new CSV with current and historic files, eval = make_data, include=FALSE}

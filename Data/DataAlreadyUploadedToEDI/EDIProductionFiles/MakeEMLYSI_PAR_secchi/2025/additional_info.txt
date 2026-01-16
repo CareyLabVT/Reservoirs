@@ -4,4 +4,4 @@ CCC developed and led the reservoir monitoring program. ABP was the point person
 
 Acknowledgments and historical contributions:
 
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. HLW led data publication and QAQC from 2019-2024. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Alicia Bateman, Dexter Howard, and Rohit Shukla for providing helpful reviews of these data and metadata.
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. HLW led data publication and QAQC from 2019-2024. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Alicia Bateman, Dexter Howard, Rohit Shukla and Maria Popescu for providing helpful reviews of these data and metadata.

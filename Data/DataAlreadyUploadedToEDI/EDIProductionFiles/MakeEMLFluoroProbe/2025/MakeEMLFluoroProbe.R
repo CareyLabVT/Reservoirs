@@ -40,11 +40,11 @@ folder <- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Make
 #' Or you can also run the qaqc function by re-knitting the visual inspection script
 
 #Step 1: Create a directory for your dataset
-#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2024
+#in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025
 
 #Step 2: Move your dataset to the directory.
 
-#' Also move your qaqc script, which is located in Reservoirs -> Scripts -> L1_generation_scripts -> fluoroprobe_qaqc.R
+#' Also move your qaqc script, which is located in Reservoirs -> Scripts -> L1_generation_scripts -> fluoroprobe_qaqc.
 #' Also move your maintenance log, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> Maintenance_Log_FluoroProbe.csv
 #' Also move your visual inspection script, which is located in Reservoirs -> Data -> DataNotYetUploadedToEDI -> Raw_fluoroprobe -> FluoroProbe_inspection_2014-2023.Rmd
 #' Also make sure you have a site_descriptions.csv file in there which is up to date
@@ -79,7 +79,7 @@ folder <- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Make
 ?template_categorical_variables #don't run this till later
 ?template_geographic_coverage
 
-# Import templates for our dataset licensed under CCBY.
+# Import templates for our dataset licensed under CCBYNB.
 
 #for the FluoroProbe dataset, you will have the following files:
 #'the dataset (csv)
@@ -94,7 +94,7 @@ folder <- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Make
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = "FluoroProbe.csv",
+                          data.table = "fluoroprobe_2014_2025.csv",
                           write.file = TRUE)
 
 template_table_attributes(path = folder,
@@ -198,16 +198,16 @@ eml_file <- make_eml(
   temporal.coverage = c("2014-05-04", "2025-12-02"),
   maintenance.description = 'ongoing',
   data.table = c("fluoroprobe_2014_2025.csv", "site_descriptions.csv","fluoroprobe_maintenancelog_2014_2025.csv"),
-  data.table.name = c("fluoroprobe_2014_2025", "site_descriptions","fluoroprobe_maintenancelog_2014_2025"),
+  #data.table.name = c("fluoroprobe_2014_2025", "site_descriptions","fluoroprobe_maintenancelog_2014_2025"),
   data.table.description = c("Reservoir FluoroProbe dataset","Sampling site descriptions","FluoroProbe maintenance log"),
   other.entity = c("fluoroprobe_qaqc_2014_2025.R","fluoroprobe_inspection_2014_2025.Rmd"),
-  other.entity.name = c("fluoroprobe_qaqc_2014_2025","fluoroprobe_inspection_2014_2025"),
+  #other.entity.name = c("fluoroprobe_qaqc_2014_2025","fluoroprobe_inspection_2014_2025"),
   other.entity.description = c("data aggregation and quality control script used to generate fluoroprobe_2014_2025.csv by applying automated QA/QC and maintenance log","data visual inspection script that was used to check fluoroprobe_2014_2025.csv before publishing"),
   #user.id = 'melofton',
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1764.5', ## This is for staging
-  # package.id = 'edi.272.9', ### This is for the production environment
+ # package.id = 'edi.1764.7', ## This is for staging
+ package.id = 'edi.272.10', ### This is for the production environment
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id
 

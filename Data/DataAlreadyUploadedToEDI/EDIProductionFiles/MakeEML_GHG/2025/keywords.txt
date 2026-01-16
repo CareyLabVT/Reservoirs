@@ -8,6 +8,8 @@ water quality	cuahsi controlled vocabulary
 depth	lter controlled vocabulary
 methane	lter controlled vocabulary
 carbon dioxide	lter controlled vocabulary
+dissolved methane	carey lab controlled vocabulary
+dissolved carbon dioxide	carey lab controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
 Stream Team	carey lab controlled vocabulary
 lake	cuahsi controlled vocabulary

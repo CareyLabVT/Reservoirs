@@ -6,7 +6,7 @@ format:
     embed-resources: true
 editor: visual
 created: 23 April 2024
-updated: 9 January 2026
+updated: 16 January 2026
 ---
 
 ## Overview
@@ -27,10 +27,14 @@ library(colorRamps)
 library(plotly)
 library(tidyverse)
 library(lubridate)
-library(plotly)
 library(here)
 library(RCurl)
 library(hms)
+library(stringr)
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(usethis)
 
 source("../../../../DataNotYetUploadedToEDI/Raw_CTD/CTD_code/ctd_QAQC.R")
 

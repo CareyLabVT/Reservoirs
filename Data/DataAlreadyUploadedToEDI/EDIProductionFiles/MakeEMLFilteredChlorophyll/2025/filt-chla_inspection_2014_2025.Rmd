@@ -67,7 +67,7 @@ Skip or replace with published version if running for the first time
 ```{r Read in data from EDI: START HERE}
 #Replace this link with the new EDI pasta
 
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/32/d321a924e9d6a839366647a8f942204e" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/42/d37e703eee6c7c7e28982f63703a0721" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")

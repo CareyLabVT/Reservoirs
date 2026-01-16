@@ -196,7 +196,7 @@ eml_file <- make_eml(
                                'Script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.20', #package id for staging
+  package.id = 'edi.997.21', #package id for staging
 
   #package.id = 'edi.551.9', #package id for production
  write.file = T, ### write the file to the folder

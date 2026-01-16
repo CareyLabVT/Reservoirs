@@ -14,7 +14,7 @@ Flag_CO2_umolL	6	6 = No peak detected and set to 0
 Flag_DateTime	0	0 = Time recorded
 Flag_DateTime	1	1 = Time not recorded and set to 12:00
 Reservoir	BVR	Beaverdam Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	FCR	Falling Creek Reservoir
 Flag_CH4_umolL	7	7 = Issue with GC. Samples re-run
 Flag_CO2_umolL	7	7 = Issue with GC. Samples re-run
-

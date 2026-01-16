@@ -15,4 +15,4 @@ CH4Flux_umolCm2s	Diffusive CH4 flux	numeric	micromolePerMeterSquaredPerSecond		N
 Flag_CO2Flux_umolCm2s	Flag for diffusive CO2 flux.	categorical	dimensionless		NA	Value is missing
 Flag_CH4Flux_umolCm2s	Flag for diffusive CH4 flux	categorical	dimensionless		NA	Value is missing
 Flag_Start_time	Flag for start time.	categorical	dimensionless		NA	Value is missing
-Flag_End_time	Flag for start time.	categorical	dimensionless		NA	Value is missing
+Flag_End_time	Flag for end time.	categorical	dimensionless		NA	Value is missing

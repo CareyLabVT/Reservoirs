@@ -5,7 +5,6 @@ reservoir	cuahsi controlled vocabulary
 methane	lter controlled vocabulary
 carbon dioxide	lter controlled vocabulary
 Virginia Tech	carey lab controlled vocabulary
-Stream Team	carey lab controlled vocabulary
 lake	cuahsi controlled vocabulary
 lakes	lter controlled vocabulary
 Western Virginia Water Authority	carey lab controlled vocabulary

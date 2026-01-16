@@ -7,7 +7,7 @@
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
-library(devtools)
+#library(devtools)
 
 #devtools::install_github("EDIorg/EDIutils")
 #devtools::install_github("EDIorg/taxonomyCleanr")
@@ -19,10 +19,14 @@ library(devtools)
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-library(EMLassemblyline)
+#library(EMLassemblyline)
+
+# load data packages
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+
 
 # All the files you need are found in this folder
-  folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/2025/"
+  folder <- paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_EddyFlux/2025/")
 
 
 
@@ -138,7 +142,7 @@ template_categorical_variables(path = folder,
 
 ## Make EML for staging environment
 ## NOTE: Will need to check geographic coordinates!!!
-make_eml(
+eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
@@ -151,13 +155,57 @@ make_eml(
   other.entity= c("eddy-flux_qaqc_2020_2025.R","eddy-flux_inspection_2020_2025.Rmd","eddy-flux_processing_2020_2025.Rmd","despike.R"),
   other.entity.description = c("R script to clean-up (customize the default error code -9999 to NA, remove outliers, and select variables) EddyPro output",
                                "R Markdown script for using the sourced qaqc script and making qaqc plots",
-                               "R Markdown script for post-processing (additional qaqc and gap-filling) of EC data and not used in eddy-flux_2020_2025.csv",
+                               "R Markdown script for post-processing (additional qaqc and gap-filling) of EC data and not used to make eddy-flux_2020_2025.csv",
                                "Despike function for post-processing (additional qaqc and gap-filling) in the script eddy-flux_processing_2020_2025.Rmd"),
   #other.entity.name = c("EddyPro CleanUp_2020_2022","EC Post-processing","Despike function"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.692.21') # FOR STAGING
-  #package.id = 'edi.1061.4') # FOR FINAL PRODUCTION
+  package.id = 'edi.692.21', # FOR STAGING
+  #package.id = 'edi.1061.4', # FOR FINAL PRODUCTION
+  write.file = T, ### write the file to the folder
+  return.obj = T) ## return the object so we can get the package.id
+
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Instructions to get the position for the license. Open doc file and the click on the down arrow next to dataset. Count the number of items to intellectual rights. Put that number below in .where = 12. 
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 12)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
+
+
+
+
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

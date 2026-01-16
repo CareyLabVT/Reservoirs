@@ -166,8 +166,8 @@ eml_file <- make_eml(
                                'Maintenance Log through 2025'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.41', #THIS IS FOR STAGING
-  #package.id = 'edi.555.4', # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  #package.id = 'edi.52.46', #THIS IS FOR STAGING
+  package.id = 'edi.555.6', # ONLY USE THIS FOR ACTUAL PUBLISHING 
   write.file = T, ### write the file to the folder
   return.obj = T) ## return the object so we can get the package.id
 
@@ -200,7 +200,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 15)
+xml_add_child(parent, childC, .where = 15) #need to change this every year
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))

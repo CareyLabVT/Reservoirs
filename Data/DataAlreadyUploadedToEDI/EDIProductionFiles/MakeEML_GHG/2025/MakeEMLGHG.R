@@ -15,9 +15,9 @@
 rm(list = ls())
 
 # Find and set-up working directory
-wd <- getwd()
-setwd(wd)
-library(tidyverse)
+#wd <- getwd()
+#setwd(wd)
+#library(tidyverse)
 
 # Add site descriptions
 
@@ -38,7 +38,7 @@ library(tidyverse)
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
 
-pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML, tidyverse)
 #library(devtools)
 
 # devtools::install_github("EDIorg/EDIutils")
@@ -57,7 +57,7 @@ pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
 #Step 1: Create a directory for your dataset
 #in this case, our directory is Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG
 
-folder = paste0(here(),"./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/2025/")
+folder = paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_GHG/2025/")
 
 #Step 2: Move your dataset to the directory
 
@@ -173,30 +173,30 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir and Beaverdam Reservoir in southwestern Virginia, USA during 2015-2024",
-  temporal.coverage = c("2015-03-31", "2024-12-04"),
+  dataset.title = "Time series of dissolved methane and carbon dioxide concentrations for Falling Creek Reservoir, Beaverdam Reservoir and Carvins Cove Reservoir in southwestern Virginia, USA during 2015-2025",
+  temporal.coverage = c("2015-03-31", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c('ghg_2015_2024.csv',
+  data.table = c('ghg_2015_2025.csv',
                  'site_descriptions.csv',
-                 "ghg_maintenancelog_2015_2024.csv" ),
+                 "ghg_maintenancelog_2015_2025.csv" ),
   data.table.description = c("GHG dataset",
                              "Descriptions of sites in this dataset with lat/long coordinates",
                              'Maintenance log used in L1 generation'),
- # data.table.name = c("ghg_2015_2024",
+ # data.table.name = c("ghg_2015_2025",
   #                    "site_descriptions",
-   #                   "ghg_maintenancelog_2015_2024"),
-  other.entity= c('ghg_qaqc_2015_2024.R',
+   #                   "ghg_maintenancelog_2015_2025"),
+  other.entity= c('ghg_qaqc_2015_2025.R',
                   'ghg_functions_for_L1.R',
-                  'ghg_inspection_2015_2024.Rmd'),
-  #other.entity.name = c("ghg_qaqc_2015_2024", 
+                  'ghg_inspection_2015_2025.Rmd'),
+  #other.entity.name = c("ghg_qaqc_2015_2025", 
    #                     'ghg_functions_for_L1',
-    #                    "ghg_inspection_2015_2024"),
-  other.entity.description = c("R script for GHG QA/QC to generate L1 in 2024", 
-                               'Functions used in the L1 generation script for QA/QC in 2024',
+    #                    "ghg_inspection_2015_2025"),
+  other.entity.description = c("R script for GHG QA/QC to generate L1 in 2025", 
+                               'Functions used in the L1 generation script for QA/QC in 2025',
                                'Script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.18', #package id for staging
+  package.id = 'edi.997.21', #package id for staging
 
   #package.id = 'edi.551.9', #package id for production
  write.file = T, ### write the file to the folder
@@ -233,7 +233,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 10)
+xml_add_child(parent, childC, .where = 17)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))

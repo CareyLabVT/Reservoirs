@@ -1,0 +1,14 @@
+keyword	keywordThesaurus
+Carey Lab	carey lab controlled vocabulary
+Virginia Tech	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Carvins Cove Reservoir	carey lab controlled vocabulary
+CCR	carey lab controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Lakes	lter controlled vocabulary
+stable isotope	lter controlled vocabulary
+isotope	lter controlled vocabulary
+deuterium	lter controlled vocabulary
+delta-18O of H2O	cuahsi controlled vocabulary
+delta-D of H2O	cuahsi controlled vocabulary

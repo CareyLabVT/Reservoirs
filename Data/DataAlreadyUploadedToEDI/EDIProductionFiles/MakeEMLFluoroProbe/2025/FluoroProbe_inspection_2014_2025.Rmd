@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 pacman::p_load(tidyverse, lubridate, akima, reshape2, 
                gridExtra, grid, colorRamps, RColorBrewer, cowplot,
                devtools, EDIutils, xml2, httr, here)
+
+here()
 ```
 
 ## Build dataframe - reviewers should not run this!
@@ -33,16 +35,16 @@ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 ## Run Function 
 repo_link <- "https://api.github.com/repos/CareyLabVT/Reservoirs/git/trees/master?recursive=1"
 #repo_filepath <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/"
-repo_filepath <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/"
+repo_filepath <- here()
 # example_file_for_colnames <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
-example_file_for_colnames <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt"
+example_file_for_colnames <- here("Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/20140404_CCR_50.txt")
 
 current_year_data_folder <- "Data/DataNotYetUploadedToEDI/FluoroProbe"
 historic_data_folder <- "Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData"
 # historic_data_2017 <- "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
-historic_data_2017<- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt"
+historic_data_2017<- here("Data/DataAlreadyUploadedToEDI/CollatedDataForEDI/FluoroProbeData/FP_2017_data/FP_recal_2017.txt")
 # maintenance_file <- 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv'
-maintenance_file <- "C:/Users/maria/OneDrive/2023 Rtudio/MariaReservoirs/Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv"
+maintenance_file <- here("Data/DataNotYetUploadedToEDI/FluoroProbe/fluoroprobe_maintenance.csv")
 out_file <- NULL
 start_date <- as.Date("2014-05-03")
 end_date <- Sys.Date() + lubridate::days(1)
@@ -66,7 +68,7 @@ write.csv(current_df, "./fluoroprobe_2014_2025.csv", row.names = FALSE)
 REVIEWERS PLEASE START HERE AND THANK YOU FOR YOUR EYES ON ALL THE DATA! :-)
 ```{r}
 # THIS LINK SHOULD BE UPDATED WITH THE MOST RECENT PASTA LINK FROM THE EDI STAGING ENVIRONMENT!
-current_df <- read_csv('https://pasta-s.lternet.edu/package/data/eml/edi/1764/2/09255be1f3f7cb4f67064407aa21e2fc') %>%
+current_df <- read_csv('https://pasta-s.lternet.edu/package/data/eml/edi/1764/3/09255be1f3f7cb4f67064407aa21e2fc') %>%
   mutate(DateTime = force_tz(DateTime, tzone = "America/New_York"))
 
 # current_df <- read_csv(here("/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFluoroProbe/2025/fluoroprobe_2014_2025.csv")) %>%
@@ -90,7 +92,7 @@ Flags
 2: instrument malfunction
 3: negative transmission value
 4: data suspect due to poor calibration
-5:
+5: negative RFU value
 
 ```{r Check there are no NAs in Flag columns}
 
@@ -225,7 +227,6 @@ castname <- paste(
   sep = "-"
 )
 ####maria edit ends####^^^^
-  
     
   profile_plot <- ggplot(data = profile, aes(x = Temp_C, y = Depth_m))+
     geom_path(linewidth = 1)+
@@ -279,7 +280,7 @@ castname <- paste(
 }
 ```
 
-## Define heatmap function
+## REVIEWER CAN START HERE AGAIN- Define heatmap function
 
 ```{r Heatmap function}
 flora_heatmap <- function(fp_data, reservoir, year, site, z){
@@ -413,6 +414,7 @@ flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 40, z
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 30, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 20, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "FCR", year = 2025, site = 10, z = "TotalConc_ugL")
+flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2025, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2025, site = 50, z = "TotalConc_ugL")
 ```
 
@@ -424,6 +426,52 @@ flora_heatmap(fp_data = current_df, reservoir = "BVR", year = 2016, site = 50, z
 flora_heatmap(fp_data = current_df, reservoir = "CCR", year = 2016, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "SHR", year = 2016, site = 50, z = "TotalConc_ugL")
 flora_heatmap(fp_data = current_df, reservoir = "GWR", year = 2016, site = 50, z = "TotalConc_ugL")
+```
+
+##Visualize individual casts for 2025
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+PLOT_ALL_CASTS = TRUE
+#create png plots for every cast for QAQC purposes (algal biomass)
+annualcasts <- current_df|>
+  filter(year(DateTime) == 2025) #change this if you would like to see another year
+  #filter(Reservoir == "XXX") #add this if you would like to just see one reservoir
+
+if(PLOT_ALL_CASTS == TRUE){
+
+for (i in 1:length(unique(annualcasts$CastID))){ #for every unique FP cast
+  profile = subset(annualcasts, CastID == unique(annualcasts$CastID)[i])
+  # castname = paste(profile$Reservoir[1], profile$Site[1], profile$DateTime[1],
+  #                  sep = "-")
+ 
+  #maria added this too 
+  safe_datetime <- format(as.POSIXct(profile$DateTime[1]),
+                        "%Y-%m-%d_%H-%M-%S")
+castname <- paste(
+  profile$Reservoir[1],
+  profile$Site[1],
+  safe_datetime,
+  sep = "-"
+)
+####maria edit ends####^^^^
+
+# remove anything else sketchy just in case
+castname <- str_replace_all(castname, "[^A-Za-z0-9_-]", "")
+  
+  profile2 = profile %>%
+    select(Depth_m, GreenAlgae_ugL, Bluegreens_ugL, BrownAlgae_ugL, MixedAlgae_ugL, YellowSubstances_ugL, TotalConc_ugL)%>%
+    gather(GreenAlgae_ugL:TotalConc_ugL, key = spectral_group, value = ugL)
+  
+  profile_plot <- ggplot(data = profile2, aes(x = ugL, y = Depth_m, group = spectral_group, colour = spectral_group))+
+    geom_path(linewidth = 1)+
+    scale_y_reverse()+
+    ggtitle(castname)+
+    theme_bw()
+
+print(profile_plot)
+
+}
+}
+
 ```
 
 ## Code to check for negative RFUs
@@ -478,7 +526,7 @@ print(tail(sd))
 knitr::kable((tail(sd)))
 
 ```
-#### Check the that the columns have flags 
+#### Check that the columns have flags 
 
 Look at the first few rows of the data frame and check that the observations after the TIMESTAMP_start are flagged
 

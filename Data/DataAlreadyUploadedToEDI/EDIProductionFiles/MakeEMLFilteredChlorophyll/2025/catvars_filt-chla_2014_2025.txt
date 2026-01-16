@@ -6,6 +6,7 @@ Flag_Chla_ugL	3	Duplicate check failed
 Flag_Chla_ugL	4	Pigment in extract below detection (<34 ug/L)
 Flag_Chla_ugL	5	Duplicate values were averaged
 Flag_Chla_ugL	6	The ratio of the concentration before acid addition to the concentration after acid addition was greater than 1.72
+Flag_Chla_ugL	7	The turbidity in the sample (absorbance at 750 nm) was greater than 0.005
 Flag_Pheo_ugL	0	Value acceptable. No flag
 Flag_Pheo_ugL	1	Sample below detection
 Flag_Pheo_ugL	2	Sample not taken
@@ -13,6 +14,8 @@ Flag_Pheo_ugL	3	Duplicate check failed
 Flag_Pheo_ugL	4	Pigment in extract below detection (<34 ug/L)
 Flag_Pheo_ugL	45	Pigment in extract below detection (<34 ug/L) and duplicate values were averaged
 Flag_Pheo_ugL	5	Duplicate values were averaged
+Flag_Pheo_ugL	6	The ratio of the concentration before acid addition to the concentration after acid addition was greater than 1.72
+Flag_Pheo_ugL	7	The turbidity in the sample (absorbance at 750 nm) was greater than 0.005
 Reservoir	BVR	Beaverdam Reservoir
 Reservoir	CCR	Carvins Cove Reservoir
 Reservoir	CLY	Claytor Lake Reservoir

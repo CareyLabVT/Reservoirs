@@ -24,6 +24,7 @@ green algae	carey lab controlled vocabulary
 diatoms	carey lab controlled vocabulary
 brown algae	carey lab controlled vocabulary
 LTREB	carey lab controlled vocabulary
+Flora	carey lab controlled vocabulary
 Virginia Reservoirs LTREB	carey lab controlled vocabulary
 Virginia Reservoirs	carey lab controlled vocabulary
 FCR	carey lab controlled vocabulary

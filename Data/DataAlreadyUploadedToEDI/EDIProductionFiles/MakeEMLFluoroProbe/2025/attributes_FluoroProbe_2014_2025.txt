@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
-DateTime	Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
+DateTime	Date and time of sampling. All observations were set to be in the Eastern Daylight Time Zone, even if they were collected in Eastern Standard Time	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 CastID	unique identifier for each cast	numeric	dimensionless		NA	value is missing
 Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	value is missing
 GreenAlgae_ugL	Green algae concentration	numeric	microgramsPerLiter		NA	value is missing

@@ -30,8 +30,8 @@ Flags indicate known or suspected issues with measured variables (see categorial
 All casts from 2018-2022 were re-processed in the revision published in May 2024 to standardize data processing across years (see QAQC_2018_2025.R and referenced data processing scripts). The re-processing method that occurred in May 2024 was continued to the present revision. 		
 
 Due to the flagging protocol implemented by the maintenance log and QA/QC script, there were some casts where all observations were flagged as NAs due to battery issues. These casts subsequently appear to be duplicated, however, we left them in the dataset to denote that the QAQC was applied on those days, which occurred for CTD SN7809 2024-10-15 and 2022-12-12 at FCR.
-		
-		
+
+
 INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED DURING 2013 - 2025
 
 

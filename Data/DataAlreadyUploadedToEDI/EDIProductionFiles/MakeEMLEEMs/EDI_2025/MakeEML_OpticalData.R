@@ -13,7 +13,9 @@
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-library(EMLassemblyline)
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+
+folder <- paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLEEMs/EDI_2025/")
 
 
 #Step 1: Create a directory for your dataset
@@ -97,10 +99,10 @@ getwd()
 # For modules that contain only zip folders, modify and run the following 
 # ** double-check that all files are closed before running this command! **
 
-make_eml(
-  path = "./EDI_2025",
-  data.path = "./EDI_2025",
-  eml.path = "./EDI_2025",
+eml_file <- make_eml(
+  path = folder,
+  data.path = folder,
+  eml.path = folder,
   dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir in Southwestern Virginia, USA 2019-2025",
   temporal.coverage = c("2019-04-29", "2025-04-16"),
   maintenance.description = 'completed',
@@ -141,7 +143,45 @@ make_eml(
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1772.5')
+  package.id = 'edi.1772.7',
+  write.file = T, ### write the file to the folder
+  return.obj = T)
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 14)
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,"/",package.id,".xml"))
+
+
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),
@@ -163,25 +203,25 @@ make_eml(
 ## Step 17: Obtain a package.id. ####
 # 
 
-make_eml(
-  path = "./EDI_2021",
-  data.path = "./EDI_2021",
-  eml.path = "./EDI_2021",
-  dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam and Falling Creek Reservoir in Southwestern Virginia, USA 2019-2020",
-  temporal.coverage = c("2019-04-29", "2020-03-30"),
-  maintenance.description = 'completed',
-  data.table = "20210511_OpticalData.csv",
-  data.table.description = "OpticalDataset",
-  other.entity= c('Abs_QA_QC.R','PARAFAC_Mod.m','EEMs_pfiles.zip','CDOM_Correction.zip'),
-  other.entity.description = c("R script for QA/QC of absorbance and fluorescence data",
-                               "Matlab code used to generate a PARAFAC model on the corrected EEMs data",
-                               "This zip folder contains corrected EEMs files ('p_ files') for all samples used in the PARAFAC model
-                               and the OpenFluor output used to identify PARAFAC components. See README file for file types and descriptions.",
-                               "This zip folder contains CSV files for absorbance corrections for all measured absorbance samples. 
-                               See README file for file types and descriptions."),
-  user.id = 'ccarey',
-  user.domain = 'EDI',
-  package.id = 'edi.841.1')
+# make_eml(
+#   path = "./EDI_2021",
+#   data.path = "./EDI_2021",
+#   eml.path = "./EDI_2021",
+#   dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam and Falling Creek Reservoir in Southwestern Virginia, USA 2019-2020",
+#   temporal.coverage = c("2019-04-29", "2020-03-30"),
+#   maintenance.description = 'completed',
+#   data.table = "20210511_OpticalData.csv",
+#   data.table.description = "OpticalDataset",
+#   other.entity= c('Abs_QA_QC.R','PARAFAC_Mod.m','EEMs_pfiles.zip','CDOM_Correction.zip'),
+#   other.entity.description = c("R script for QA/QC of absorbance and fluorescence data",
+#                                "Matlab code used to generate a PARAFAC model on the corrected EEMs data",
+#                                "This zip folder contains corrected EEMs files ('p_ files') for all samples used in the PARAFAC model
+#                                and the OpenFluor output used to identify PARAFAC components. See README file for file types and descriptions.",
+#                                "This zip folder contains CSV files for absorbance corrections for all measured absorbance samples. 
+#                                See README file for file types and descriptions."),
+#   user.id = 'ccarey',
+#   user.domain = 'EDI',
+#   package.id = 'edi.841.1')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

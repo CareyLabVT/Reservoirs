@@ -8,4 +8,4 @@ d18O_VSMOW	deviation of concentration of 18O from that of Vienna standard mean o
 d18O_VSMOW_1sd	1 standard deviation of injection reps of d18O_VSMOW	numeric	permil		NA	value is missing
 d2H_VSMOW	deviation of concentration of 2H from that of Vienna standard mean ocean water (VSMOW)	numeric	permil		NA	value is missing
 d2H_VSMOW_1sd	1 standard deviation of injection reps of d2H_VSMOW	numeric	permil		NA	value is missing
-Iso_Flag	Flag for all isotope parameters: 0 = Data are good for all parameters; 1 = data not collected	numeric	dimensionless		NA	value is missing
+Iso_Flag	Flag for all isotope parameters: 0 = Data are good for all parameters; 1 = Samples rerun after initial run with bad QAQC checks	numeric	dimensionless		NA	value is missing

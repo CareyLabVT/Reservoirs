@@ -103,7 +103,7 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir in Southwestern Virginia, USA 2019-2025",
+  dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir in southwestern Virginia, USA 2019-2025",
   temporal.coverage = c("2019-04-29", "2025-04-16"),
   maintenance.description = 'completed',
   data.table = c("OpticalData_2019_2025.csv",

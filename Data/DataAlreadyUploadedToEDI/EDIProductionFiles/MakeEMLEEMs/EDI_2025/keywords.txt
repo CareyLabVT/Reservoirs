@@ -19,3 +19,4 @@ colored dissolved organic matter	cuahsi controlled vocabulary
 absorbance	cuahsi controlled vocabulary
 fluorescence	lter controlled vocabulary
 organic matter	lter controlled vocabulary
+carbon	lter controlled vocabulary

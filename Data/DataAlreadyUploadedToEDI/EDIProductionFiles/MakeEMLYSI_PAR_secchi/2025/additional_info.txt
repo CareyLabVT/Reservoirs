@@ -1,7 +1,7 @@
 Authorship Contribution Statement: 
 
-CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2025, and led the field crew and contributed substantially to sampling. ABP also led QAQC and data collation in 2025. DXE led data publication and QAQC in 2025. EW, SEK, QC contributed to data digitization and fieldwork
+CCC developed and led the reservoir monitoring program. ABP was the point person for this data package in 2025, and led the field crew and contributed substantially to sampling and data collation. DXE led data publication and QAQC in 2025. EW, SEK, and QC contributed to data digitization and fieldwork.
 
 Acknowledgments and historical contributions:
 
-This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. HLW led data publication and QAQC from 2019-2024. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Alicia Bateman, Dexter Howard, Rohit Shukla and Maria Popescu for providing helpful reviews of these data and metadata.
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. HLW led data publication and QAQC from 2019-2024. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Alicia Bateman, Dexter Howard, Rohit Shukla, and Maria Popescu for providing helpful reviews of these data and metadata.

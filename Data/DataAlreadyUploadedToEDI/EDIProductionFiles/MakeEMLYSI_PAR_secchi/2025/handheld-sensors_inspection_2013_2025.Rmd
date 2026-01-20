@@ -53,7 +53,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
                                                                         ### CHANGE THIS BELOW 
                                                                               #########   
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/5/514d382eccf21428985abbd40e1d7d50")
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/10/514d382eccf21428985abbd40e1d7d50")
  # Force files from EDI to have an Daylight savings observed timestamp
  current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```
@@ -67,8 +67,7 @@ This section identifies if there are any duplicates. If there are duplicates. Lo
 # Print them if there are
  dups<- current_df[duplicated(current_df), ]
 dups <- dups%>%
-  select(Reservoir, Site, DateTime,  
-         Depth_m)
+  select(Reservoir, Site, DateTime, Depth_m)
 # Make it into a nice table when the Markdown is knitted together
 knitr::kable((dups))
 ```

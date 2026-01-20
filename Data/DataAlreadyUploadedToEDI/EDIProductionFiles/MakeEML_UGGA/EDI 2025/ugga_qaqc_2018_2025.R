@@ -3,6 +3,7 @@
 ## Authors: Austin Delany and Abby Lewis
 ## Last edited: 09-05-2024 A. Breef-Pilz did major updates and added in a maintenance log, combine historical files, and subset data
 ## 12 Feb 2025- added a statement to end the script if no new data for the year. 
+## 16 Jan 2026 - moved reps down to be calculated after the maintenance log
 
 ## Additional notes: This script is included with this EDI package to show which QAQC has already been applied to generate these data. This script is only for internal use by the data creator team and is provided as a reference; it may not run as-is.
 
@@ -15,8 +16,8 @@ ugga_qaqc <- function(files,
   # files <- "./Data/DataNotYetUploadedToEDI/UGGA/"
   # maintenance_file <- "./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv"
   # outfile <- "test_UGGA.csv"
-  # start_date <- last_edi_date
-  # end_date <- Sys.Date()
+  # start_date <- NULL
+  # end_date <- NULL
   
   # add in historic files for EDI
  
@@ -35,10 +36,11 @@ ugga_qaqc <- function(files,
       # put the Start_time and End_time in all the same column
       mutate(Start_time = dplyr::coalesce(Start, Start_time),
              End_time = dplyr::coalesce(End, End_time))|>
-      # rewrite the rep numbers to make sure they are grouped by Reservoir, Site, and Date
-      group_by(Reservoir, Site, Date)%>%
-      mutate(Rep = seq(1:n()))%>%
-      ungroup()%>%
+      # # rewrite the rep numbers to make sure they are grouped by Reservoir, Site, and Date
+      # # move down lower after things removed from maintenance log
+      # group_by(Reservoir, Site, Date)%>%
+      # mutate(Rep = seq(1:n()))%>%
+      # ungroup()%>%
       select(!c(Start, End))
     
     
@@ -296,7 +298,10 @@ ugga_qaqc <- function(files,
            # if the start time is exactly noon then it is set to that time and should be flagged
            Flag_Start_time = ifelse(Start_time == "12:00:00",1,0),
            Flag_End_time = ifelse(Start_time == "12:00:00",1,0))|>
-    select(!End_dif)
+    select(!End_dif)|>
+    group_by(Reservoir, Site, Date)%>%
+    mutate(Rep = seq(1:n()))%>%
+    ungroup()
   
   # drop inflow and saw grass sites
   final <- ugga_flagged |> 

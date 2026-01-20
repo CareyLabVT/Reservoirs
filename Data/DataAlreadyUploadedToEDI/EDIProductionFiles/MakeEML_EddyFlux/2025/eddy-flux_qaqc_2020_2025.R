@@ -381,6 +381,10 @@ eddypro_cleaning_function<-function(directory, # Name of the directory where the
            h2o_flux_umolm2s = ifelse(flowrate_mean<10 & !is.na(flowrate_mean) | flowrate_mean>20 & !is.na(flowrate_mean),NA, h2o_flux_umolm2s),  # take out fluxes when the blower motor malfunction
            qc_ch4_flux = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s) | ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), 4, qc_ch4_flux),
            ch4_flux_umolm2s = ifelse(ch4_flux_umolm2s> 1 & !is.na(ch4_flux_umolm2s)| ch4_flux_umolm2s< -0.25 & !is.na(ch4_flux_umolm2s), NA, ch4_flux_umolm2s), # take out very high and low fluxes
+ch4_flux_umolm2s = ifelse(rssi_77_mean < 0 & !is.na(ch4_flux_umolm2s)|
+                    rssi_77_mean > 100 & !is.na(ch4_flux_umolm2s), NA, ch4_flux_umolm2s), # take out fluxes when rssi signal strength beyond the range 0-100
+qc_ch4_flux = ifelse(rssi_77_mean < 0 | rssi_77_mean > 100,  4,  qc_ch4_flux), # set qc to 4 when rssi signal strength beyond the range 0-100 due to instrument malfunction
+rssi_77_mean = ifelse(rssi_77_mean < 0 | rssi_77_mean > 100,  NA,  rssi_77_mean), # set rssi to NA when rssi signal strength beyond the range 0-100
            qc_co2_flux = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), 4, qc_co2_flux),
            co2_flux_umolm2s = ifelse(co2_flux_umolm2s > 300 & !is.na(co2_flux_umolm2s) | co2_flux_umolm2s < -300 & !is.na(co2_flux_umolm2s), NA, co2_flux_umolm2s), # take out very high and low fluxes
            qc_h2o_flux = ifelse(h2o_flux_umolm2s > 40 & !is.na(h2o_flux_umolm2s) | h2o_flux_umolm2s < -40 & !is.na(h2o_flux_umolm2s), 4, qc_h2o_flux),

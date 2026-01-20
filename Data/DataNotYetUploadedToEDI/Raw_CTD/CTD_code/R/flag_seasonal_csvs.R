@@ -136,7 +136,7 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
   # Now back to flagging more things. 
   for(j in flag_cols[!grepl("DateTime", flag_cols)]){
     
-    # Flag values less than 0 with a flag 4 except: Temp, ORP and Decent rate
+    # Flag values less than 0 with a flag 4 except: Temp, ORP and Descent rate
     ctd[c(which(!is.na(ctd[,j]) & ctd[,j]<0 & (j %in% neg))), paste0("Flag_",j)]<-4
     
     # change negative values to 0
@@ -149,7 +149,6 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     ctd[c(which(!is.na(ctd[,j]) & ctd$Depth_m<0 & (j %in% water_vars))), paste0("Flag_",j)] <- 6
     ctd[c(which(ctd$Depth_m<0 & (j %in% water_vars))), j]<-NA
    
-    
   }  
   
   
@@ -407,7 +406,10 @@ flag_seasonal_csvs <- function(ctd_season_csvs = "../CTD_season_csvs",
     
     #remove and flag excessively high PAR
     Flag_PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, 2, Flag_PAR_umolm2s),
-    PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s)
+    PAR_umolm2s = ifelse(!is.na(PAR_umolm2s) & PAR_umolm2s > 3000, NA, PAR_umolm2s), 
+    
+    #change values of -0 to 0 in phycoerythrin column on SN 8188
+    Phycoerythrin_ugL = ifelse(!is.na(Phycoerythrin_ugL) & Phycoerythrin_ugL == -0, 0, Phycoerythrin_ugL)
   )
  
   # Check if there are any casts that were duplicated

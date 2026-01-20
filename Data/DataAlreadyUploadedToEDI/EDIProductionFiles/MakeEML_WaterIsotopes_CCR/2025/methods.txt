@@ -1,0 +1,19 @@
+Samples for stable water isotopes delta 2H and delta 18O were collected in surface waters, depth profiles, and precipitation at multiple sites in Carvins Cove Reservoir (Roanoke, Virginia) from May 2024 - April 2025. Carvins Cove Reservoir is owned and operated by the Western Virginia Water Authority as a primary drinking water source for Roanoke, Virginia. For detailed site descriptions, see 'site_descriptions.csv'. Samples were collected at two sites along the primary tributary to Carvins Cove Reservoir and depth profiles were collected at six within-reservoir sites. Intermittent precipitation samples were collected at the Carvins Cove Reservoir dam (see FIELD COLLECTION for further information).
+
+Below, we describe sample collection methods, chemical analyses including equipment, QAQC (quality assurance/quality control) methods, and additional references.
+
+FIELD COLLECTION AND SAMPLE STORAGE
+
+Samples were collected for stable water isotopes (delta 18O, delta 2H) at specified depths using a 4-L Van Dorn water sampler (Wildco, Yulee, Florida, USA) and were immediately syringe-filtered through 0.7-micron poresize glass fiber filters (GF/F) into 50-mL clear glass vials with no headspace using conical insert caps. Samples were stored in the dark at room temperature until analysis.
+
+Additional d18O and d2H samples were analyzed from precipitation samples. A precipitation sampler was deployed on the Carvins Cove Reservoir dam that included an opaque plastic bottle with a funnel to collect rain. A plastic ball was placed inside the funnel to reduce evaporation from the sampler. Samples were collected approximately monthly from the sampler into 50-mL clear glass vials with no headspace using conical insert caps. Samples were stored in the dark at room temperature until analysis. Data from these samples are provided in a separate csv from the tributary and in reservoir samples.
+
+
+SAMPLE ANALYSIS
+
+Stable water isotopes of d18O and d2H were analyzed on a cavity ringdown spectroscopic liquid water laser isotope analyzer (Picarro L1102-i Isotopic Liquid Water and Water Vapor Analyzer) following standard methods (van Geldern & Barth 2012). Concentrations were converted to standard notation, which is deviation (δ) of concentration from that of Vienna standard mean ocean water (VSMOW), and expressed in parts per thousand (‰).
+
+
+References:
+
+van Geldern Robert , Barth Johannes A.C. (2012) Optimization of instrument setup and post-run corrections for oxygen and hydrogen stable isotope measurements of water by isotope ratio infrared spectroscopy (IRIS), Limnol. Oceanogr. Methods, 10, doi:10.4319/lom.2012.10.1024.

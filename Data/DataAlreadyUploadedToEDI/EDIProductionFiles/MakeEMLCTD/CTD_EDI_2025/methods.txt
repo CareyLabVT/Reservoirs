@@ -3,41 +3,36 @@ OVERVIEW
 Depth profiles of multiple water quality variables were collected from 2013 through 2025 using two Conductivity, Temperature, and Depth (CTD) profilers from SeaBird Electronics (SBE, Bellevue Washington, USA).		
 
 
-Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2025); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected between 9:00 to 15:00, however, some occasional CTD casts were collected outside of the usual sampling window (e.g., at night). All times are listed in Eastern time with daylight savings observed. From August to December 2021, the CTD returned for calibration to SeaBird. Above-surface (i.e., air) temperature and PAR are included in the dataset for 2018–2025, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.		
+Measurements were taken at multiple sites in five reservoirs. Beaverdam Reservoir, Carvins Cove Reservoir, and Falling Creek Reservoir were sampled every year in the dataset (2013-2025); Spring Hollow Reservoir was only sampled 2013-2017 and 2019; and Gatewood Reservoir was only sampled in 2016. Within their sampling duration, profiles were collected, at minimum, monthly between May to October (usually weekly or subweekly at Beaverdam Reservoir and Falling Creek Reservoir), and bimonthly between November to April. Most CTD casts were collected between 9:00 to 15:00, however, some occasional CTD casts were collected outside of the usual sampling window (e.g., at night). All times are listed in local Eastern time with daylight savings observed. From August to December 2021, the CTD returned for calibration to SeaBird. Above-surface (i.e., air) temperature and PAR are included in the dataset for 2018–2025, and are denoted with a negative depth measurement that indicates the distance above the surface of the reservoir.		
 
 
-This data package includes the CTD data file (ctd_2013_2025.csv), QAQC R script (QAQC_2018_2025.R), maintenance log (ctd_maintenancelog_2013_2025.csv), visual inspection R script (ctd_inspection_2013_2025.qmd), sampling sites (site_descriptions.csv), and additional data processing scripts in the helper_scripts.zip file (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_ctd_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.
+This data package includes the CTD data file (ctd_2013_2025.csv), quality assurance/quality control (QAQC) R script (QAQC_2018_2025.R), maintenance log (ctd_maintenancelog_2013_2025.csv), visual inspection R script (ctd_inspection_2013_2025.qmd), sampling sites (site_descriptions.csv), and additional data processing scripts in the helper_scripts.zip file (update_seasonal_csvs.R, ctd_functions_automated.R, flag_seasonal_csvs.R, identify_new_files.R, process_ctd_file.R). The QAQC script processes and compiles raw .cnv files, removes outliers, and applies the maintenance log to clean the data files included in the package, sourcing functions provided in additional data processing scripts. The visual inspection script provides code for plotting the data files.
 
 
 SHORT CTD CASTS
 
-This list provides the dates on which we know the casts that were taken were much shorter than the maximum depth of the site on the given sampling day, but the profiler was not lowered to the maximum depth.
-
-2024		
-Reservoir	Site	Dates
-FCR 	50	SEP 2024, 23 SEP 2024, 7 OCT 2024, 19 NOV 2024
-CCR	50	19Jun2024
-
-
-2025
-
-FCR   50  25 August 2025
+This list provides the dates on which we know the casts that were taken were much shorter than the maximum depth of the site on a given sampling day, but the profiler was not lowered to the maximum depth.
+Reservoir-Site:	Dates
+FCR-50:	9-September-2024, 23-September-2024, 7-October-2024, 19-November-2024, 25-August-2025
+CCR-50:	19-June-2024
 
 
 CTD CALIBRATION
 
-The CTDs were calibrated by the manufacturer according to the standards and practices of SBE and the companies that manufactured the secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February) for our first CTD (serial numbers 4397 and 7809), except for the 2021 and 2022 field seasons, when calibration was delayed until August 2022 due to the ongoing COVID-19 pandemic. A second CTD (serial number 8188) was added in May 2022 and was returned for re-calibration of its turbidity and chl-a sensors in August - October 2022 and January - May 2024.	
+The CTDs were calibrated by the manufacturer according to the standards and practices of SBE and the companies that manufactured the secondary sensors coupled to the instrument. Calibration was performed yearly (usually in December-February) for our first CTD (serial numbers 4397 and 7809), except for the 2021 and 2022 field seasons, when calibration was delayed until August 2022 due to the COVID-19 pandemic. A second CTD (serial number 8188) was added in May 2022 and was returned for re-calibration of its turbidity and chl-a sensors in August - October 2022 and January - May 2024.	
 
 
 FLAGS AND QAQC INFORMATION
 
-Flags indicate known or suspected issues with measured variables (see categorial flag descriptions in data table attributes). We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data. Turbidity often increases rapidly near the bottom of the reservoir and may be caused by the CTD hitting the bottom of the reservoir. In this revision, PAR values > 3000 umolm2s have been removed and flagged as instrument malfunction, as have turbidity values > 200 NTU.
+Flags indicate known or suspected issues with measured variables (see categorial flag descriptions in data table attributes). We note that the Depth_m likely also includes marginal error over the course of the dataset, but this error is unquantified and unflagged. Due to the challenges of measuring pH, ORP, and turbidity in situ, we recommend caution in interpreting these data. Turbidity often increases rapidly near the bottom of the reservoir and may be caused by the CTD hitting the bottom of the reservoir. We note a similar pattern for conductivity and specific conductance due to high concentrations of metals and other reduced substances in the layer of water just above the sediments. In this revision, PAR values > 3000 umolm2s have been removed and flagged as instrument malfunction, as have turbidity values > 200 NTU.
 
 
-All casts from 2018-2022 were re-processed in the revision published in May 2024 to standardize data processing across years (see QAQC_2018_2024.R and referenced data processing scripts). 		
-		
-		
-INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED BETWEEN 2013 - 2025
+All casts from 2018-2022 were re-processed in the revision published in May 2024 to standardize data processing across years (see QAQC_2018_2025.R and referenced data processing scripts). The re-processing method that occurred in May 2024 was continued to the present revision. 		
+
+Due to the flagging protocol implemented by the maintenance log and QA/QC script, there were some casts where all observations were flagged as NAs due to battery issues. These casts subsequently appear to be duplicated, however, we left them in the dataset to denote that the QAQC was applied on those days, which occurred for CTD SN7809 2024-10-15 and 2022-12-12 at FCR.
+
+
+INSTRUMENTS, MANUAL, AND SERIAL NUMBERS USED DURING 2013 - 2025
 
 
 From 2013-2016, profiles were taken with our first CTD (serial number 4397) equipped with an SBE 43 Dissolved Oxygen sensor and an ECO FLNTU sensor for turbidity and chlorophyll. In spring 2017, this CTD had a major upgrade and received a new data recorder, pH/ORP sensor, and PAR sensor; all other sensors and pumps remained the same. As the CTD received a new motherboard with the data recorder upgrade, its serial number updated from 4397 to 7809. Thus, from 2017-2025, the serial number 7809 CTD was equipped with an SBE 43 Dissolved Oxygen sensor, an ECOFLNTU sensor for turbidity and chlorophyll, a PAR-LOG ICSW sensor for photosynthetically active radiation, and a SBE 27 pH and oxidation-reduction potential (ORP) sensor.
@@ -75,7 +70,7 @@ Below are the results of the comparison between the two CTDs, with the statistic
 - DO_mgL (2022 - 2023; n = 426): The Passing-Babcock regression slope was 1.14 (1.08 - 1.18), the intercept was 0.02 (-0.01 to 0.03), and the Pearson correlation coefficient was 0.939. The slope significantly above 1 suggests that the new CTD (8188) measures slightly higher dissolved oxygen than the old CTD (7809). This could be due to slight fouling. Plots of residuals over concentration showed no pattern. Given the much higher slope, DO concentration should be interpreted with caution when comparing between CTDs.
 
 
-- Chla_ugL (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll  then the old CTD (7809). This could be due to the slight difference in timing and position of the casts.  Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs.	
+- Chla_ugL (2022 - 2023; n = 809): The Passing-Babcock regression slope was 0.74 (0.73 - 0.75), the intercept was -0.15 (-0.20 to -0.12), and the Pearson correlation coefficient was 0.928. The slope below 1 suggests that the new CTD (8188) measures slightly lower chlorophyll than the old CTD (7809). This could be due to the slight difference in timing and position of the casts. Given the much higher slope, chlorophyll a should be interpreted with caution when comparing between CTDs.	
 
 
 The serial number of the CTD used for each profile is indicated in the column SN in published data.		

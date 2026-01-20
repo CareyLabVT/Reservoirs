@@ -49,7 +49,7 @@ staged_edi <- ManualDischarge_qaqc(gsheet_url = gsheet_url,
 ## Date trimming variables
 start_date <- min(staged_edi$DateTime)
 end_date <- max(staged_edi$DateTime)
-start_trim_date <- as.POSIXct("2025-01-01")
+start_trim_date <- as.POSIXct("2024-01-01")
 end_trim_date <- as.POSIXct("2025-12-31")
 
 
@@ -97,8 +97,221 @@ for(f in 1:(ncol(Flags))){
   print(table(Flags[,f], useNA = "always"))
 }
 ```
+#Create List of Active Sites for Current Year
+This prints the list of all sites that have data for the current time frame
+
+```{r ID active sites}
+# Summarize sites and count distinct days
+all_sampled_sites <- staged_edi %>%
+  filter(
+    DateTime >= start_date,
+    DateTime <= end_date,
+    !is.na(Flow_cms)  # only rows with actual measurements
+  ) %>%
+  mutate(Date = as_date(DateTime)) %>%  # extract just the date
+  group_by(Reservoir, Site) %>%         # group by location
+  summarise(
+    n_days_sampled = n_distinct(Date),  # count distinct days
+    .groups = "drop"
+  ) %>%
+  arrange(Reservoir, Site)
+
+all_sampled_sites
+
+current_sampled_sites <- staged_edi %>%
+  filter(
+    DateTime >= start_trim_date,
+    DateTime <= end_trim_date,
+    !is.na(Flow_cms)  # only rows with actual measurements
+  ) %>%
+  mutate(Date = as_date(DateTime)) %>%  # extract just the date
+  group_by(Reservoir, Site) %>%         # group by location
+  summarise(
+    n_days_sampled = n_distinct(Date),  # count distinct days
+    .groups = "drop"
+  ) %>%
+  arrange(Reservoir, Site)
+
+current_sampled_sites
+```
+
+Plot all data for CCR
+```{r all CCR, echo=FALSE}
+res <- "CCR"
+
+
+##NEED LIST OF ALL SITES
+active_site_names <- all_sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+all_plots <- list()
+
+for (site in active_site_names) {
+
+  df <- staged_edi %>%
+    filter(
+      Reservoir == res,
+      Site == site
+    )
+
+  # skip sites with no data so knit doesn’t die dramatically
+  if (nrow(df) == 0) next
+
+  p <- ggplot(df, aes(x = DateTime, y = Flow_cms)) +
+    geom_point(size = 2, color = "steelblue") +
+    scale_x_datetime(
+      "Date",
+      date_breaks = "6 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_y_continuous("Flow (cms)") +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    ggtitle(paste(res, site, "Flow_cms", sep = "_"))
+
+  all_plots[[length(all_plots) + 1]] <- p
+}
+
+tagList(lapply(all_plots, ggplotly))
+```
+
+
+Plot active sites for CCR
+
+```{r current CCR, echo=FALSE}
+res <- "CCR"
+
+active_site_names <- current_sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+all_plots <- list()
+
+for (site in active_site_names) {
+
+  df <- staged_edi %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > start_trim_date,
+      DateTime < end_trim_date
+    )
+
+  # skip sites with no data so knit doesn’t die dramatically
+  if (nrow(df) == 0) next
+
+  p <- ggplot(df, aes(x = DateTime, y = Flow_cms)) +
+    geom_point(size = 2, color = "steelblue") +
+    scale_x_datetime(
+      "Date",
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_y_continuous("Flow (cms)") +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    ggtitle(paste(res, site, "Flow_cms", sep = "_"))
+
+  all_plots[[length(all_plots) + 1]] <- p
+}
+
+tagList(lapply(all_plots, ggplotly))
+```
+
+Plot active sites for FCR
+
+```{r current FCR, echo=FALSE}
+res <- "FCR"
+
+active_site_names <- current_sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+all_plots <- list()
+
+for (site in active_site_names) {
+
+  df <- staged_edi %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > start_trim_date,
+      DateTime < end_trim_date
+    )
+
+  # skip sites with no data so knit doesn’t die dramatically
+  if (nrow(df) == 0) next
+
+  p <- ggplot(df, aes(x = DateTime, y = Flow_cms)) +
+    geom_point(size = 2, color = "steelblue") +
+    scale_x_datetime(
+      "Date",
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_y_continuous("Flow (cms)") +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    ggtitle(paste(res, site, "Flow_cms", sep = "_"))
+
+  all_plots[[length(all_plots) + 1]] <- p
+}
+
+tagList(lapply(all_plots, ggplotly))
+```
+Plot active sites for BVR
+
+```{r current BVR, echo=FALSE}
+res <- "BVR"
+
+active_site_names <- current_sampled_sites %>%
+  filter(Reservoir == res) %>%
+  pull(Site)
+
+all_plots <- list()
+
+for (site in active_site_names) {
+
+  df <- staged_edi %>%
+    filter(
+      Reservoir == res,
+      Site == site,
+      DateTime > start_trim_date,
+      DateTime < end_trim_date
+    )
+
+  # skip sites with no data so knit doesn’t die dramatically
+  if (nrow(df) == 0) next
+
+  p <- ggplot(df, aes(x = DateTime, y = Flow_cms)) +
+    geom_point(size = 2, color = "steelblue") +
+    scale_x_datetime(
+      "Date",
+      date_breaks = "1 month",
+      date_labels = "%b %Y"
+    ) +
+    scale_y_continuous("Flow (cms)") +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    ggtitle(paste(res, site, "Flow_cms", sep = "_"))
+
+  all_plots[[length(all_plots) + 1]] <- p
+}
+
+tagList(lapply(all_plots, ggplotly))
+```
 
 ```{r plots}
+
 
 ### Look at data
 

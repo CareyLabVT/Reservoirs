@@ -35,5 +35,6 @@ Fmax1	Fluorescent intensity of Component 1 identified by PARAFAC	numeric	relativ
 Fmax2	Fluorescent intensity of Component 2 identified by PARAFAC	numeric	relativeFluorescenceUnites		NA	value is missing
 Fmax3	Fluorescent intensity of Component 3 identified by PARAFAC	numeric	relativeFluorescenceUnites		NA	value is missing
 Fmax4	Fluorescent intensity of Component 4 identified by PARAFAC	numeric	relativeFluorescenceUnites		NA	value is missing
-abs_Flag	Flag for all absorbance parameters: 0 = Data are good; 1 = Absorbance not collected; 2 = Low absorbance values; use with caution	numeric	dimensionless		NA	value is missing
-fl_Flag	Flag for all fluorescence parameters: 0 = Data are good; 1 = Fluorescence not collected	numeric	dimensionless		NA	value is missing
+Flag_abs	Flag for all absorbance parameters: 0 = Data are good; 1 = Absorbance not collected; 2 = Low absorbance values; use with caution	numeric	dimensionless		NA	value is missing
+Flag_fl	Flag for all fluorescence parameters: 0 = Data are good; 1 = Fluorescence not collected	numeric	dimensionless		NA	value is missing
+Flag_DateTime	Data flag for DateTime: 0 = Time recorded; 1 = Time not recorded and set to 12:00	numeric	dimensionless		NA	value is missing

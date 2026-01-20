@@ -46,7 +46,7 @@ staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1772/3/4
 
 ### Check flags that there are no NAs
 Flags=staged_edi%>%
-  select(DateTime, abs_Flag, fl_Flag)
+  select(DateTime, Flag_abs, Flag_fl, Flag_DateTime)
 
 summary(Flags)
 
@@ -62,7 +62,7 @@ summary(staged_edi)
 
 ### Look at all Absorbance the data
 staged_edi |> 
-  select(-abs_Flag, -fl_Flag) |> 
+  select(-Flag_abs, -Flag_fl, -Flag_DateTime) |> 
   select(1:6, a254_m:Sr) |> 
   pivot_longer(-c(1:6)) |> 
   ggplot(aes(x = DateTime, y = value))+
@@ -74,7 +74,7 @@ staged_edi |>
 
 ### Look at all PARAFAC the data
 staged_edi |> 
-  select(-abs_Flag, -fl_Flag) |> 
+  select(-Flag_abs, -Flag_fl, -Flag_DateTime) |> 
   select(1:6, Fmax1:Fmax4) |> 
   pivot_longer(-c(1:6)) |> 
   ggplot(aes(x = DateTime, y = value))+
@@ -86,7 +86,7 @@ staged_edi |>
 
 ### Look at all Fluorescence the data
 staged_edi |> 
-  select(-abs_Flag, -fl_Flag) |> 
+  select(-Flag_abs, -Flag_fl, -Flag_DateTime) |> 
   select(1:6, Max_FL_Ex:N) |> 
   pivot_longer(-c(1:6)) |> 
   ggplot(aes(x = DateTime, y = value))+
@@ -96,7 +96,7 @@ staged_edi |>
   theme_bw()
 
 staged_edi |> 
-  select(-abs_Flag, -fl_Flag) |> 
+  select(-Flag_abs, -Flag_fl, -Flag_DateTime) |> 
   select(1:6, FI:C_N) |> 
   pivot_longer(-c(1:6)) |> 
   ggplot(aes(x = DateTime, y = value))+

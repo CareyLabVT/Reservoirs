@@ -9,11 +9,13 @@ Data considerations:
 
 There was an issue with the UGGA internal clock in 2022. Start times for these measurements have been set to 12:00, as sampling occurred between 10 AM and 2 PM. End times have been set to 12:00 plus the duration of the sampling interval (usually 4 min). Therefore, the difference between end time and start time correctly indicates the sampling duration. These measurements have been flagged with a "1" in the Flag_Start_time and Flag_End_time columns of the dataset.
 
-In 2024, there were issues with the external power battery so some casts, especially at BVR, were cut short. We replaced the external battery in August 2024. Starting in November 2024, we were unable take measurements at BVR due to construction at the dam.
+In 2024, there were issues with the external power battery so some casts, especially at BVR, were cut short. We replaced the external battery in August 2024. Starting in November 2024, we were unable take measurements at BVR due to construction at the dam. 
+
+In 2025, there were no casts at BVR due to construction at the site. At FCR, additional samples were collected approximately monthly at 2 wetland sites near an inflow tributary (Sites = 199.8, 199.9). Additionally, there were 4 casts FCR site 50 on March 17th and September 8th 2025 which were retained in this dataset.
 
 See site_descriptions.csv provided in this data package for further information regarding sampling sites. All data were collected in local time, meaning that the time zone alternated between Eastern Daylight Savings Time (summer months) and Eastern Standard Time (winter months).
 
-This data package includes data with calculated fluxes (ugga_2018_2025.csv), a QAQC R script (ugga_qaqc_2018_2025.R), a visual inspection R script (ugga_inspection_2018_2025.Rmd), sampling sites (site_descriptions.csv), a maintenance log file (ugga_maintenancelog_2018_2024.csv), a data processing script (ugga_FluxCalR_2025.R), and raw data files for 2024 (RawData.zip). See previous revisions of this data package for historical raw data files and data processing code. 
+This data package includes data with calculated fluxes (ugga_2018_2025.csv), a QAQC R script (ugga_qaqc_2018_2025.R), a visual inspection R script (ugga_inspection_2018_2025.Rmd), sampling sites (site_descriptions.csv), a maintenance log file (ugga_maintenancelog_2018_2025.csv), a data processing script (ugga_FluxCalR_2025.R), and raw data files for 2024 (RawData.zip). See previous revisions of this data package for historical raw data files and data processing code. 
 
 
 Additional notes:

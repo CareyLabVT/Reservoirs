@@ -88,7 +88,7 @@ folder = paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEM
 #
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = c("ghg_maintenancelog_2015_2024.csv", "ghg_2015_2024.csv", "site_descriptions.csv"),
+                          data.table = c("ghg_maintenancelog_2015_2025.csv", "ghg_2015_2025.csv", "site_descriptions.csv"),
                           write.file = TRUE)
 #
 #
@@ -196,7 +196,7 @@ eml_file <- make_eml(
                                'Script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.21', #package id for staging
+  package.id = 'edi.997.22', #package id for staging
 
   #package.id = 'edi.551.9', #package id for production
  write.file = T, ### write the file to the folder

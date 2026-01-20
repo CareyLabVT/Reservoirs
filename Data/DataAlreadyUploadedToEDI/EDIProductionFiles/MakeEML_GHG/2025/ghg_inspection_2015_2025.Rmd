@@ -16,7 +16,7 @@ This is the visualization script for the greenhouse gas data product which was u
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly)
+pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly, htmltools)
 
 # source the qaqc code for GHG from GitHub
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R")

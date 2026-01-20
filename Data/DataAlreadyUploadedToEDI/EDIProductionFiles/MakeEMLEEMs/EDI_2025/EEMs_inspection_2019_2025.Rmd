@@ -1,0 +1,218 @@
+---
+title: "EEMs_inspection_2019_2025"
+author: "Dexter"
+date: "2026-01-13"
+output: html_document
+---
+
+The script is for visualzing opitcal data prior to EDI publication and generating site descriptions csv 
+
+For EDI review run chunk 'r setup packages' then start at section 'Start here to read in EDI data' on line 171
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+
+```
+
+
+## Start here to read in EDI data 
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+
+```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THIS LINK BELOW 
+                                                                                  
+staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1772/3/45207449d82365ab02caa4f7f3b05cc1" )
+
+ 
+```
+
+
+```{r Check flags}
+
+### Check flags that there are no NAs
+Flags=staged_edi%>%
+  select(DateTime, abs_Flag, fl_Flag)
+
+summary(Flags)
+
+
+```
+
+
+
+```{r plots}
+
+### look at summary data
+summary(staged_edi)
+
+### Look at all Absorbance the data
+staged_edi |> 
+  select(-abs_Flag, -fl_Flag) |> 
+  select(1:6, a254_m:Sr) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_grid(name~Reservoir, scales = "free_y")+
+  ggtitle("All Abosrbance data") + 
+  theme_bw()
+
+
+### Look at all PARAFAC the data
+staged_edi |> 
+  select(-abs_Flag, -fl_Flag) |> 
+  select(1:6, Fmax1:Fmax4) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_grid(name~Reservoir, scales = "free_y")+
+  ggtitle("All PARAFAC data") + 
+  theme_bw()
+
+
+### Look at all Fluorescence the data
+staged_edi |> 
+  select(-abs_Flag, -fl_Flag) |> 
+  select(1:6, Max_FL_Ex:N) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_grid(name~Reservoir, scales = "free_y")+
+  ggtitle("EEM data") + 
+  theme_bw()
+
+staged_edi |> 
+  select(-abs_Flag, -fl_Flag) |> 
+  select(1:6, FI:C_N) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_grid(name~Reservoir, scales = "free_y")+
+  ggtitle("EEM data") + 
+  theme_bw()
+
+
+```
+
+```{r}
+# By reservoir
+
+############ FCR
+staged_edi |> 
+  filter(Reservoir == "FCR") |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_grid(name~Site, scales = "free_y")+
+  ggtitle("FCR EEM data") + 
+  theme_bw()
+
+staged_edi |> 
+  filter(Reservoir == "FCR", Site ==50) |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")+
+  ggtitle("FCR Site 50 EEM data") + 
+  theme_bw()
+
+
+################ BVR
+staged_edi |> 
+  filter(Reservoir == "BVR") |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_grid(name~Site, scales = "free_y")+
+  ggtitle("BVR EEM data") + 
+  theme_bw()
+
+staged_edi |> 
+  filter(Reservoir == "BVR", Site ==50) |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")+
+  ggtitle("BVR Site 50 EEM data") + 
+  theme_bw()
+
+
+################ CCR
+staged_edi |> 
+  filter(Reservoir == "CCR") |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_grid(name~Site, scales = "free_y")+
+  ggtitle("CCR EEM data") + 
+  theme_bw()
+
+staged_edi |> 
+  filter(Reservoir == "CCR", Site ==50) |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")+
+  ggtitle("CCR Site 50 EEM data") + 
+  theme_bw()
+
+staged_edi |> 
+  filter(Reservoir == "CCR", Site > 99) |> 
+  select(1:6, B:HIX) |> 
+  pivot_longer(-c(1:6)) |> 
+  ggplot(aes(x = DateTime, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_grid(name~Site, scales = "free_y")+
+  ggtitle("CCR Tribs EEM data") + 
+  theme_bw()
+
+```
+
+
+
+
+
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+
+  data <- staged_edi #This is the line you need to modify!
+  
+  trim_sites = function(data,sites){
+    data_res_site=data%>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  
+sites_trimmed = trim_sites(data,sites) 
+
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+
+```
+

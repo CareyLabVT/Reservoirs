@@ -9,7 +9,7 @@ Data considerations:
 
 There was an issue with the UGGA internal clock in 2022. Start times for these measurements have been set to 12:00, as sampling occurred between 10 AM and 2 PM. End times have been set to 12:00 plus the duration of the sampling interval (usually 4 min). Therefore, the difference between end time and start time correctly indicates the sampling duration. These measurements have been flagged with a "1" in the Flag_Start_time and Flag_End_time columns of the dataset.
 
-In 2024, there were issues with the external power battery so some casts, especially at BVR, were cut short. We replaced the external battery in August 2024. Starting in November 2024, we were unable to take measurements at BVR due to construction at the dam and modified access to the water.
+In 2024, there were issues with the external power battery so some casts, especially at BVR, were cut short. We replaced the external battery in August 2024. Starting in November 2024, we were unable to take measurements at BVR due to construction at the dam and modified access to the water. 
 
 See site_descriptions.csv provided in this data package for further information regarding sampling sites. All data were collected in local time, meaning that the time zone alternated between Eastern Daylight Savings Time (summer months) and Eastern Standard Time (winter months).
 

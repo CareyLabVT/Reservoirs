@@ -1,0 +1,8 @@
+Reservoir,Site,DataStream,TIMESTAMP_start,TIMESTAMP_end,start_parameter,end_parameter,flag,update_value,adjustment_code,notes
+CCR,101,hpb_inflow,2024-05-22 15:00:00,2024-05-22 16:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-06-19 11:00:00,2024-06-19 12:20:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-07-11 11:00:00,2024-07-11 12:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-09-16 13:00:00,2024-09-16 14:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-09-30 12:30:00,2024-09-30 14:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-10-28 13:00:00,2024-10-28 14:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download
+CCR,101,hpb_inflow,2024-12-17 13:30:00,2024-12-17 14:00:00,Stage_cm,Stage_cm,1,NA,,sensor out of water for data download

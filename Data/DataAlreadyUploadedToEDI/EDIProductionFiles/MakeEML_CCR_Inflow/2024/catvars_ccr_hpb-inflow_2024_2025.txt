@@ -1,0 +1,12 @@
+attributeName	code	definition
+Reservoir	CCR	Carvins Cove Reservoir
+Site	101	Horsepen Branch inflow stream to Carvins Cove Reservoir
+Flag_Pressure_kPa	0	no flag
+Flag_Pressure_kPa	1	value removed due to maintenance and set to NA
+Flag_Pressure_kPa	2	"negative or outlier value removed and set to NA, see Methods section for more detail on QAQC process"
+Flag_Stage_cm	0	no flag
+Flag_Stage_cm	1	value removed due to maintenance and set to NA
+Flag_Flow_cms	0	no flag
+Flag_Flow_cms	1	value removed due to maintenance and set to NA
+Flag_Temp_C	0	no flag
+Flag_Temp_C	1	value removed due to maintenance and set to NA

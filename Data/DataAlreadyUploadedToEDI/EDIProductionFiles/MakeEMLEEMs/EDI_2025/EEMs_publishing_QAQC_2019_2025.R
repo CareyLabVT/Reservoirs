@@ -10,7 +10,7 @@ library(tidyverse)
 
 #### Read in EEMs data and correct dates that were incorrect on sample labels
 #These samples were labeled for field day that was rescheduled 
-eems_21_25 <- read_csv("./EEMs_Results_2021_2025.csv") |> 
+eems_21_25 <- read_csv("https://raw.githubusercontent.com/dwh77/Reservoir_EEMs/refs/heads/main/EEMs_Results_2021_2025.csv") |> 
   mutate(Date = mdy(Date)) |> 
   mutate(Date = ifelse(Date == ymd("2024-08-15"), ymd("2024-08-14"), Date),
          Date = ifelse(Date == ymd("2025-02-17"), ymd("2025-02-26"), Date),
@@ -80,20 +80,25 @@ eems_19_25_time <- eems_19_25 |>
   #append EEM overnight times 
   mutate(Time = ifelse(is.na(Time), TIME_eems_msn, Time)) |> 
   #set unknown times to noon
-  mutate(Time = ifelse(is.na(Time), "12:00:00", Time))
+  mutate(Time = ifelse(is.na(Time), "12:00:00", Time)) |> 
+  #set datetime flag for noon
+  mutate(Flag_DateTimeA = ifelse(Time == "12:00:00", 1, 0)) |> 
+  # remove flag for known MSN time at noon
+  mutate(Flag_DateTime = ifelse(!is.na(TIME), 0, Flag_DateTimeA))
 
 #clean up datetime and removed unneeded columns
 eems_time_final <- eems_19_25_time |> 
   mutate(DateTime_fin = ymd_hms(paste(Date, Time, sep = " "))) |> 
   select(Reservoir, Site, DateTime_fin, Depth_m, everything()) |> 
-  select(-c(Date, TIME, DateTime, Time, TIME_eems_msn)) |> 
+  select(-c(Date, TIME, DateTime, Time, TIME_eems_msn, Flag_DateTimeA)) |> 
   rename(DateTime = DateTime_fin) |> 
-  arrange(Reservoir, DateTime, Site, Depth_m, Rep)
+  arrange(Reservoir, DateTime, Site, Depth_m, Rep) |> 
+  rename(Flag_fl = fl_Flag,
+         Flag_abs = abs_Flag)
 
 
 #write final csv
-#write.csv(eems_time_final, "./EDI_2025/OpticalData_2019_2025.csv", row.names = F)
-
+#write.csv(eems_time_final, "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLEEMs/EDI_2025/OpticalData_2019_2025.csv", row.names = F)
 
 
 

@@ -20,3 +20,7 @@ absorbance	cuahsi controlled vocabulary
 fluorescence	lter controlled vocabulary
 organic matter	lter controlled vocabulary
 carbon	lter controlled vocabulary
+carbon quality	carey lab controlled vocabulary
+EEMs	carey lab controlled vocabulary
+EEM	carey lab controlled vocabulary
+PARAFAC	carey lab controlled vocabulary

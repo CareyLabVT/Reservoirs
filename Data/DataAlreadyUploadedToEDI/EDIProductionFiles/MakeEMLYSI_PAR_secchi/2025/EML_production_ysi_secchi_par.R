@@ -53,7 +53,7 @@ template_geographic_coverage(path = folder,
 
 
 # Run this function for staging data
-elm_file <- make_eml(path = folder,
+eml_file <- make_eml(path = folder,
          dataset.title = "Secchi depth data and discrete depth profiles of water temperature, dissolved oxygen, 
          conductivity, specific conductance, photosynthetic active radiation, oxidation-reduction potential, 
          and pH for Beaverdam Reservoir, Carvins Cove Reservoir, Falling Creek Reservoir, Gatewood Reservoir, 
@@ -81,8 +81,8 @@ elm_file <- make_eml(path = folder,
          maintenance.description = "ongoing", 
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1140.7", #This is for staging
-        # package.id = "edi.198.13",  #need a new one each year. This one is for the production enviornment
+        # package.id = "edi.1140.12", #This is for staging
+         package.id = "edi.198.14",  #need a new one each year. This one is for the production enviornment
         write.file = T, ### write the file to the folder
         return.obj = T) ## return the object so we can get the package.id
 
@@ -115,7 +115,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 10)
+xml_add_child(parent, childC, .where = 14)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))

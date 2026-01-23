@@ -41,18 +41,18 @@ metals_qaqc <- function(directory,
   
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
-  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
-  # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
-  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-  # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
-  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
- # metals_save = T
-   # metals_outfile = NULL
-   # ISCO_save = T
-  # ISCO_outfile = NULL
-  # start_date = NULL
-  # end_date = NULL
+   directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+   historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+   sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+   sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+   MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
+  metals_save = T
+    metals_outfile = NULL
+    ISCO_save = T
+   ISCO_outfile = NULL
+   start_date = NULL
+   end_date = NULL
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -418,8 +418,29 @@ metals_qaqc <- function(directory,
 
    MRL <- read_csv(MRL_file, show_col_types = F)|>
      pivot_wider(names_from = 'Symbol',
-                 values_from = "MRL_mgL")
-
+                 values_from = "MRL_mgL") %>%
+     rename_with(~str_c("MRL_", .), Al_mgL:Sr_mgL)
+     
+     
+   
+   # for ease of use, add year column to raw_df
+   raw_df <-  raw_df %>%
+     mutate(Year = year(Date)) %>% 
+     left_join(MRL) %>%  
+     mutate(Flag_Li_mgL = if_else(!is.na(Li_mgL) & Li_mgL <= MRL_Li_mgL, as.numeric(paste0(Flag_Li_mgL, 3, sep = '')), Flag_Li_mgL),
+            Flag_Na_mgL = if_else(!is.na(Na_mgL) & Na_mgL <= MRL_Na_mgL, as.numeric(paste0(Flag_Na_mgL, 3, sep = '')), Flag_Na_mgL),
+            Flag_Mg_mgL = if_else(!is.na(Mg_mgL) & Mg_mgL <= MRL_Mg_mgL, as.numeric(paste0(Flag_Mg_mgL, 3, sep = '')), Flag_Mg_mgL),
+            Flag_Al_mgL = if_else(!is.na(Al_mgL) & Al_mgL <= MRL_Al_mgL, as.numeric(paste0(Flag_Al_mgL, 3, sep = '')), Flag_Al_mgL),
+            Flag_Si_mgL = if_else(!is.na(Si_mgL) & Si_mgL <= MRL_Si_mgL, as.numeric(paste0(Flag_Si_mgL, 3, sep = '')), Flag_Si_mgL),
+            Flag_K_mgL = if_else(!is.na(K_mgL) & K_mgL <= MRL_K_mgL, as.numeric(paste0(Flag_K_mgL, 3, sep = '')), Flag_K_mgL),
+            Flag_Ca_mgL = if_else(!is.na(Ca_mgL) & Ca_mgL <= MRL_Ca_mgL, as.numeric(paste0(Flag_Ca_mgL, 3, sep = '')), Flag_Ca_mgL),
+            Flag_Fe_mgL = if_else(!is.na(Fe_mgL) & Fe_mgL <= MRL_Fe_mgL, as.numeric(paste0(Flag_Fe_mgL, 3, sep = '')), Flag_Fe_mgL),
+            Flag_Mn_mgL = if_else(!is.na(Mn_mgL) & Mn_mgL <= MRL_Mn_mgL, as.numeric(paste0(Flag_Mn_mgL, 3, sep = '')), Flag_Mn_mgL),
+            Flag_Cu_mgL = if_else(!is.na(Cu_mgL) & Cu_mgL <= MRL_Cu_mgL, as.numeric(paste0(Flag_Cu_mgL, 3, sep = '')), Flag_Cu_mgL),
+            Flag_Sr_mgL = if_else(!is.na(Sr_mgL) & Sr_mgL <= MRL_Sr_mgL, as.numeric(paste0(Flag_Sr_mgL, 3, sep = '')), Flag_Sr_mgL),
+            Flag_Ba_mgL = if_else(!is.na(Ba_mgL) & Ba_mgL <= MRL_Ba_mgL, as.numeric(paste0(Flag_Ba_mgL, 3, sep = '')), Flag_Ba_mgL))
+   
+   
    # flag minimum reporting level
    for(j in colnames(raw_df|>select(Li_mgL:Ba_mgL))) {
 
@@ -430,15 +451,20 @@ metals_qaqc <- function(directory,
 
      # If value negative flag
      raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]!=34)),paste0("Flag_",j)] <- 3
+     
+     # get the year
+    ColYear <- raw_df[,"Date"] %>% 
+      mutate(Date = year(as.POSIXlt(Date, format = "%Y-%d-%m"))) %>% 
+      rename('Year' = 'Date')
 
    # get the minimum detection level
-   MRL_value <- as.numeric(MRL[1,j])
+   MRL_value <- as.numeric(MRL[which(MRL[,"Year"] == ColYear)])
 
    # If value is less than MRL and has been digested then flag both  and will set to MRL later
    raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
 
    # If value is less than MRL the flag and will set to MRL later
-   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=34)),paste0("Flag_",j)] <- 3
+   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=34 & raw_df[,paste0("Flag_",j)]!=4)),paste0("Flag_",j)] <- 3
 
    # replace the negative values or below MRL with the MRL
    raw_df[c(which(raw_df[,j]<=MRL_value)),j] <- MRL_value
@@ -574,7 +600,7 @@ metals_qaqc <- function(directory,
   if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
       raw_df[i,'Check_T_Mn_mgL'] == 'SWITCHED' &
       raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
-      raw_df[i,'Flag_T_Fe_mgL'] != 3 &
+      raw_df[i,'Flag_T_Fe_mgL'] != 3 & # add 34
       raw_df[i,'Flag_T_Mn_mgL'] != 3 &
       raw_df[i,'Flag_T_Al_mgL'] != 3){
     raw_df[i,'switch_all'] <- 1
@@ -624,6 +650,7 @@ metals_qaqc <- function(directory,
     
     
     # add a flag if the samples were switched
+    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1 & raw_df[paste0("Flag_",i)]!=6 & raw_df[paste0("Flag_",i)]!=69 & raw_df[paste0("Flag_",i)]!=9), paste0("Flag_",j)] <- 7
     raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1), paste0("Flag_",j)] <- 7
 
   }

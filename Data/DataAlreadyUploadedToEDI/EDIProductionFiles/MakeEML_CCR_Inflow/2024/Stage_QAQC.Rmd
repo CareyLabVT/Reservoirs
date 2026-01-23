@@ -1,0 +1,122 @@
+---
+title: "Stage_QAQC"
+author: "AEB and DXH"
+date: "2026-01-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(httr2)
+library(jsonlite)
+library(ggplot2)
+
+```
+
+## Import all PT data
+
+Pull all .csv files of direct data downloads from PT
+
+```{r cars, echo = FALSE}
+
+#Identify which GitHub Folder to pull folder names from
+url <- "https://api.github.com/repos/CareyLabVT/ManualDownloadsSCCData/contents/CCR_manual_downloads/CCR_Hobos/HPB_waterlevel"
+
+#create list of file names
+resp <- request(url) |>
+  req_headers(Accept = "application/vnd.github+json") |>
+  req_perform()
+
+dat <- resp_body_json(resp, simplifyVector = TRUE)
+
+file_names <- dat$name
+
+#only select .csv files and 2024 PT ##FOR NOW
+file_names <- file_names[grepl("^hobo_hpb.*\\.csv$", file_names)]
+
+#add to link 
+git_link <- "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CCR_manual_downloads/CCR_Hobos/HPB_waterlevel/"
+
+file_names <- paste0(git_link, file_names)
+
+#import .csv files
+hobo_all <- bind_rows(
+  lapply(file_names, function(f) {
+    read_csv(
+      f,
+      skip = 1,
+      show_col_types = FALSE
+    )[, 2:4]
+  }),
+  .id = "source_file"
+)
+
+```
+
+## Manage Data
+
+Set Timezone, Column names, data types
+
+```{r Data wrangling, echo=FALSE}
+#rename column names
+hobo_all <- hobo_all|> 
+  rename(DateTime_EDT = 2, 
+         HOBO_Abs_Pres_kPa = 3,
+         Temp_C = 4)
+
+#format datetime data
+hobo_all <- hobo_all |> 
+  mutate(DateTime_EDT = mdy_hms(DateTime_EDT))
+
+#Set tz to EST for PT data
+#force timezone to be UTC-4 since that's what the sensor was set at. Using 'American/Virgin' since EDT wasn't recognized and Virgin Islands don't use daylight savings so are always UTC-4
+hobo_all$DateTime_EDT <- force_tz(as.POSIXct(hobo_all$DateTime_EDT), tzone = "America/Virgin")
+
+#check that it worked
+attr(hobo_all$DateTime_EDT, "tzone")
+
+#now need to convert from EDT to EST to line up with met data
+hobo_all$DateTime_EST <- as.POSIXct(hobo_all$DateTime_EDT, tz = "EST")
+
+#check that it worked
+attr(hobo_all$DateTime_EST, "tzone")
+
+#select useful columns 
+hobo_all <- hobo_all |>
+  select(DateTime_EST,HOBO_Abs_Pres_kPa,Temp_C)
+
+```
+## Look at data before correcting for barometric pressure/maintenence log
+This is just a check to make sure all raw data came in and looks like it should
+
+```{r Raw data plot, echo = FALSE}
+ggplot(data = hobo_all, aes(x = DateTime_EST)) +
+  geom_line(aes(y = HOBO_Abs_Pres_kPa)) +
+  scale_x_datetime()
+  
+ggplot(data = hobo_all, aes(x = DateTime_EST)) +
+  geom_line(aes(y = Temp_C)) +
+  scale_x_datetime()
+
+```
+
+## Assign flags
+Flags for dataset are:
+0: good data
+1: non-active PT setup, see methods for timeline
+2: Sensor was out of water (maintenance, low water level, below freezing), value set to NA
+3: Barometric Pressure sensor data had a flag
+
+```{r maintenance log, echo = FALSE}
+#Load maintenance log
+maint_log <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCR_Inflow/2024/hpb_maintenancelog_2024.csv")
+
+
+```
+
+
+
+
+

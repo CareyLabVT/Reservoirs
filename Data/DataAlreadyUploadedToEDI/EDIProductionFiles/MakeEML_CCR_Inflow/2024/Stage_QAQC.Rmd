@@ -104,10 +104,17 @@ attr(hobo_raw$DateTime_EST, "tzone")
 hobo_raw <- hobo_raw |>
   select(DateTime_EST,HOBO_Abs_Pres_kPa,Temp_C)
 
+#arrange by datetime
+hobo_raw <- hobo_raw |>
+  arrange(DateTime_EST)
+
+#remove rows with NAs in Temp/Pressure
+hobo_raw <- hobo_raw %>% 
+  filter(!is.na(HOBO_Abs_Pres_kPa), !is.na(Temp_C))
+
 #remove duplicate times and rows with NA in pressure or temp
 hobo_raw <-  hobo_raw %>%
-  distinct(DateTime_EST, .keep_all = TRUE) %>%
-  filter(!is.na(HOBO_Abs_Pres_kPa), !is.na(Temp_C))
+  distinct(DateTime_EST, .keep_all = TRUE) 
 
 ```
 ## Look at data before correcting for barometric pressure/maintenence log
@@ -224,6 +231,8 @@ waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |>
 
 ##Plot atmospheric BP corrected water level
 
+In this zoomed in section, you can see 6/11 something happpened-- people were in the field and the sensor must have been placed differently than before. Since each subsequent visit wasnt an issue, it was probably that the PT was either not seated correctly at first deployment or got jostled and moved during a large event. 
+
 ```{r Plot BP corrected, echo = TRUE}
 # waterlevel_correct |> 
 #   ggplot()+
@@ -233,10 +242,14 @@ waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |>
 
 a <- waterlevel_correct |> 
   ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
-  geom_point()
+  geom_point() +
+  coord_cartesian(
+    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
 #ggplotly(a)
 a
 
+
+#Pull in nearby USGS gage to compare peak shape
 ```
 ## Visualize stage with local precip data
 
@@ -309,7 +322,7 @@ This section will eventually correct PT sensor data to manual measurements. For 
 
 PT 1 has fairly equal spread of higher and lower values, might show that the PT was slightly under the cobbles bc it was dug in with the stilling well, but imo not enough of a consistent offset to correct for.
 
-PT 2 seems to have a bias towards deeper manual measurements than PT readings. All being fairly significant differences. Again, I would not correct, but we can set this up better next time to reduce these errors. 
+PT 2 seems to have a bias towards deeper manual measurements than PT readings. All being fairly significant differences. Again, I would not correct for each manual measurement, but bc of the fairly regular looking "negative" stages, I think we can pick a consistent offset to apply. This will also help our agreement with the manual measurements.
 
 I think PT 1 and PT 2 stage data is useful for event timing and relating general magnitude of events. 
 
@@ -324,6 +337,53 @@ ggplot(data = selected_compare, aes(x = DateTime_EST, y = difference))+
   ylab("PT - manual depth (cm)")
 
 ```
+##Correct PT2 with constant offset
+Both measured values between PT downloads show large differences (-13.6 cm and -15.17 cm off), apply a constant offset (#+ 14.385 cm) to the PT data 
+
+*try to incorporate into the maintenance log so it can be a coded correction if it happens again?
+
+```{r}
+start_offset <- as.POSIXct("2025-04-11 13:10", tz = "EST")
+end_offset <- as.POSIXct("2025-06-11 12:10", tz = "EST")
+  
+waterlevel_corrected <- waterlevel_correct |>
+  mutate(
+    waterlevel_cm = if_else(
+      DateTime_EST >= start_offset & DateTime_EST <= end_offset, 
+      waterlevel_cm + 10,
+      waterlevel_cm
+    )
+  )
+
+ggplot()+
+  geom_point(aes(x = waterlevel_corrected$DateTime_EST, y = waterlevel_corrected$waterlevel_cm)) +
+  geom_point(aes(x = waterlevel_correct$DateTime_EST, y = waterlevel_correct$waterlevel_cm), color = "red") +
+  coord_cartesian(
+    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
+```
+
+
+
 ##Correct to Manual Measurements
 This section can eventually be written to correct PT data to the manually measured water level. Not for the current data. 
+
+##Visualize final corrected data to precip, nearby USGS gage, etc
+```{r}
+a <- waterlevel_correct |> 
+  ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
+  geom_point() +
+  coord_cartesian(
+    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
+#ggplotly(a)
+a
+
+ggplot(data = rain_comp, aes(x = DateTime_EST)) +
+  geom_point(aes(y = waterlevel_cm), size = 0.5) +
+  geom_col(aes(y = Rain_Total_mm*10), color = "blue") + #x 10 rain for better viewing
+  scale_x_datetime() +
+  coord_cartesian(
+    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
+
+#Pull in nearby USGS gage to compare peak shape
+```
 

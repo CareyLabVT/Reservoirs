@@ -150,8 +150,8 @@ eml_file <- make_eml(path = folder,
          maintenance.description = "ongoing",
          user.domain = "EDI",
          user.id = "ccarey",
-         package.id = "edi.1102.13", # this is for staging !
-     #package.id = "edi.1082.3", #edi.1082.2 is the most recent published version
+         #package.id = "edi.1102.16", # this is for staging !
+     package.id = "edi.1082.5", #edi.1082.2 is the most recent published version
      write.file = T, ### write the file to the folder
      return.obj = T) ## return the object so we can get the package.id
 

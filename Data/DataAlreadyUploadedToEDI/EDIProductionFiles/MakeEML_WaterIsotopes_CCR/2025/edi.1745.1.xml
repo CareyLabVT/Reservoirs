@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.1745.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Time series of stable water isotopes (d18O, d2H) from Carvins Cove Reservoir in Southwestern Virginia, USA 2024-2025</title>
+    <creator>
+      <individualName>
+        <givenName>Dexter</givenName>
+        <givenName>W.</givenName>
+        <surName>Howard</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dwh1998@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6118-2149</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Kelly</givenName>
+        <givenName>A.</givenName>
+        <surName>Peeler</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>kpeeler@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Durelle</givenName>
+        <givenName>T.</givenName>
+        <surName>Scott</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dscott@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-5792-789X</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <pubDate>2026-01-20</pubDate>
+    <abstract>
+      <para>Samples of stable water isotopes (delta 18O and delta 2H) were collected from surface waters and depth profiles in Carvins Cove Reservoir (Roanoke, Virginia, USA). Carvins Cove Reservoir is owned operated by the Western Virginia Water Authority as a primary drinking water source for Roanoke, Virginia. Samples were collected approximately monthly at two sites along a primary tributary and depth profiles at multiple transects within Carvins Cove Reservoir from May 2024 - April 2025. Additional isotope samples were analyzed from precipitation collected at the Carvins Cove Reservoir dam in 2024. Samples were analyzed using cavity ringdown spectroscopy and reported as deviation of concentration from that of Vienna standard mean ocean water. An Rmarkdown file to visualize the dataset accompanies the package. &#13;
+</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Carvins Cove Reservoir</keyword>
+      <keyword>CCR</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Reservoir</keyword>
+      <keyword>Lake</keyword>
+      <keyword>delta-18O of H2O</keyword>
+      <keyword>delta-D of H2O</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Lakes</keyword>
+      <keyword>Precipitation</keyword>
+      <keyword>Rain</keyword>
+      <keyword>stable isotope</keyword>
+      <keyword>isotope</keyword>
+      <keyword>stable isotopes</keyword>
+      <keyword>isotopes</keyword>
+      <keyword>deuterium</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Authorship Contribution Statement: DWH led data collection and sample analysis. KAP proved critical guidance and instruction for sample analysis procedures. CCC and DS provided guidance on sample design and collection, and DS provided laboratory access and supplies. ABP contributed substantially to field sampling and sampling design.</para>
+      <para>&#13;
+Acknowledgments and historical contributions: We thank the Western Virginia Water Authority for providing access to these sites and the VT Reservoir Group for contributing to fieldwork. We thank Frances Iannucci, Cece Wood, and Molly Stroud for constructive reviews on this data package. We thank the Virginia Tech Biological Systems Engineering Water Quality Lab for providing resources and supplies for sample analysis. </para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This data product is released under the Creative Commons Attribution Non Commercial 4.0 International license, following the terms detailed here: https://creativecommons.org/licenses/by-nc/4.0/legalcode. The consumer of these data (“Data User” herein) is required to cite it appropriately in any publication or derivative product (adapted material) that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available “as is.” The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Any work by data users to produce, reproduce, and share adapted material is for Non Commercial purposes only. Thank you.</para>
+    </intellectualRights>
+    <licensed>
+      <licenseName>Creative Commons Attribution Non Commercial 4.0 International</licenseName>
+      <url>https://spdx.org/licenses/CC-BY-NC-4.0</url>
+      <identifier>CC-BY-NC-4.0</identifier>
+    </licensed>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.409127</northBoundingCoordinate>
+          <southBoundingCoordinate>37.365345</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2024-05-22</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2025-04-16</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>completed</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Dexter</givenName>
+        <givenName>W.</givenName>
+        <surName>Howard</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dwh1998@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6118-2149</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Samples for stable water isotopes delta 2H and delta 18O were collected in surface waters, depth profiles, and precipitation at multiple sites in Carvins Cove Reservoir (Roanoke, Virginia) from May 2024 - April 2025. Carvins Cove Reservoir is owned and operated by the Western Virginia Water Authority as a primary drinking water source for Roanoke, Virginia. For detailed site descriptions, see 'site_descriptions.csv'. Samples were collected at two sites along the primary tributary to Carvins Cove Reservoir and depth profiles were collected at six within-reservoir sites. Intermittent precipitation samples were collected at the Carvins Cove Reservoir dam (see FIELD COLLECTION for further information).</para>
+          <para>Below, we describe sample collection methods, chemical analyses including equipment, QAQC (quality assurance/quality control) methods, and additional references.</para>
+          <para>FIELD COLLECTION AND SAMPLE STORAGE</para>
+          <para>Samples were collected for stable water isotopes (delta 18O, delta 2H) at specified depths using a 4-L Van Dorn water sampler (Wildco, Yulee, Florida, USA) and were immediately syringe-filtered through 0.7-micron poresize glass fiber filters (GF/F) into 50-mL clear glass vials with no headspace using conical insert caps. Samples were stored in the dark at room temperature until analysis.</para>
+          <para>Additional d18O and d2H samples were analyzed from precipitation samples. A precipitation sampler was deployed on the Carvins Cove Reservoir dam that included an opaque plastic bottle with a funnel to collect rain. A plastic ball was placed inside the funnel to reduce evaporation from the sampler. Samples were collected approximately monthly from the sampler into 50-mL clear glass vials with no headspace using conical insert caps. Samples were stored in the dark at room temperature until analysis. Data from these samples are provided in a separate csv from the tributary and in reservoir samples.</para>
+          <para>&#13;
+SAMPLE ANALYSIS</para>
+          <para>Stable water isotopes of d18O and d2H were analyzed on a cavity ringdown spectroscopic liquid water laser isotope analyzer (Picarro L1102-i Isotopic Liquid Water and Water Vapor Analyzer). Samples were analyzed following standard methods, including memory corrections across sample replicate injection and drift corrections across the run (van Geldern &amp; Barth 2012). Concentrations were converted to standard notation, which is the deviation (δ) of concentration from that of the Vienna standard mean ocean water (VSMOW), and expressed in parts per thousand (‰). </para>
+          <para>Sample runs were validated with quality control (QC) checks every run using known standards that were calibrated against Picarro provided standards. QC standards were selected to represent high, medium, and low concentrations anticipated within each run. These QC checks along with a replicate sample were analyzed with every instrument run. If QC checks were greater than acceptable offset deviations from known standards (0.15 per mil for d18O; 1.5 per mil for d2H), then all samples for that run were rerun with new QC controls. Samples that we reran are flagged with a value of 1 in the 'Iso_Flag' column. </para>
+          <para>References:</para>
+          <para>van Geldern Robert , Barth Johannes A.C. (2012) Optimization of instrument setup and post-run corrections for oxygen and hydrogen stable isotope measurements of water by isotope ratio infrared spectroscopy (IRIS), Limnol. Oceanogr. Methods, 10, doi:10.4319/lom.2012.10.1024.</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>Collaborative Research: URoL:ASC: Applying rules of life to forecast emergent behavior of phytoplankton and advance water quality management</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation DEB-2318861</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>WaterIsotopes_CCR_2024_2025.csv</entityName>
+      <entityDescription>Tributary and reservoir stable water isotope samples</entityDescription>
+      <physical>
+        <objectName>WaterIsotopes_CCR_2024_2025.csv</objectName>
+        <size unit="bytes">15304</size>
+        <authentication method="MD5">13a30ac9b68696b88cc22da9914c5806</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">101</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Date</attributeName>
+          <attributeDefinition>Date of sampling. All data were collected in the eastern time zone of the U.S.A. with daylight savings observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Depth_m</attributeName>
+          <attributeDefinition>The depth at which the sample was taken within the reservoir</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.1</minimum>
+                  <maximum exclusive="false">20</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d18O_VSMOW</attributeName>
+          <attributeDefinition>deviation of concentration of 18O from that of Vienna standard mean ocean water (VSMOW)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-6.844486664</minimum>
+                  <maximum exclusive="false">-3.719594057</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d18O_VSMOW_1sd</attributeName>
+          <attributeDefinition>1 standard deviation of injection reps of d18O_VSMOW</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.010097457</minimum>
+                  <maximum exclusive="false">0.126560014</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d2H_VSMOW</attributeName>
+          <attributeDefinition>deviation of concentration of 2H from that of Vienna standard mean ocean water (VSMOW)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-38.99862338</minimum>
+                  <maximum exclusive="false">-24.44959361</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d2H_VSMOW_1sd</attributeName>
+          <attributeDefinition>1 standard deviation of injection reps of d2H_VSMOW</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.025834071</minimum>
+                  <maximum exclusive="false">0.399936836</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Iso_Flag</attributeName>
+          <attributeDefinition>Flag for all isotope parameters: 0 = Data are good for all parameters; 1 = Samples rerun after initial run with bad QAQC checks</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>200</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>WaterIsotopes_CCR_precip_2024.csv</entityName>
+      <entityDescription>Precipitation stable water isotope samples</entityDescription>
+      <physical>
+        <objectName>WaterIsotopes_CCR_precip_2024.csv</objectName>
+        <size unit="bytes">444</size>
+        <authentication method="MD5">d54d1f8b254c55ffe64de0da52099d15</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">51</minimum>
+                  <maximum exclusive="false">51</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Date_deployed</attributeName>
+          <attributeDefinition>Date that rain sampler was deployed. All data were collected in the eastern time zone of the U.S.A. with daylight savings observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Date_collected</attributeName>
+          <attributeDefinition>Date that rain sample was collected. All data were collected in the eastern time zone of the U.S.A. with daylight savings observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Replicate of sample taken</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d18O_VSMOW</attributeName>
+          <attributeDefinition>deviation of concentration of 18O from that of Vienna standard mean ocean water (VSMOW)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-5.119522277</minimum>
+                  <maximum exclusive="false">-2.168033645</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d18O_VSMOW_1sd</attributeName>
+          <attributeDefinition>1 standard deviation of injection reps of d18O_VSMOW</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.016948673</minimum>
+                  <maximum exclusive="false">0.059902603</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d2H_VSMOW</attributeName>
+          <attributeDefinition>deviation of concentration of 2H from that of Vienna standard mean ocean water (VSMOW)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-30.99844936</minimum>
+                  <maximum exclusive="false">-6.604858257</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>d2H_VSMOW_1sd</attributeName>
+          <attributeDefinition>1 standard deviation of injection reps of d2H_VSMOW</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>permil</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.137372596</minimum>
+                  <maximum exclusive="false">0.295990772</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Iso_Flag</attributeName>
+          <attributeDefinition>Flag for all isotope parameters: 0 = Data are good for all parameters; 1 = Samples rerun after initial run with bad QAQC checks</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">1</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>4</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>site_descriptions.csv</entityName>
+      <entityDescription>Description, latitude, and longitude of reservoir sampling sites</entityDescription>
+      <physical>
+        <objectName>site_descriptions.csv</objectName>
+        <size unit="bytes">1781</size>
+        <authentication method="MD5">ab69fa9cb9a6a3e19a4401c31b3f94a2</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site numeric code</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">50</minimum>
+                  <maximum exclusive="false">101</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site_description</attributeName>
+          <attributeDefinition>Description of sampling site</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Description of sampling site</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Site latitude</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">37.3646</minimum>
+                  <maximum exclusive="false">37.3706</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Site longitude</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-79.9733</minimum>
+                  <maximum exclusive="false">-79.958</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>10</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>WaterIsotopes_CCR_inspection_2024_2025.Rmd</entityName>
+      <entityDescription>Data visualization script</entityDescription>
+      <physical>
+        <objectName>WaterIsotopes_CCR_inspection_2024_2025.Rmd</objectName>
+        <size unit="bytes">2510</size>
+        <authentication method="MD5">41b29d170a334b1c1874b1dadda001e1</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

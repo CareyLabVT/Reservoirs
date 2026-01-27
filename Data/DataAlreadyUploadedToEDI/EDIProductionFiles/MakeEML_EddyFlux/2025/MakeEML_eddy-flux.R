@@ -150,7 +150,7 @@ eml_file <- make_eml(
   temporal.coverage = c("2020-04-04", "2025-12-31"),
   maintenance.description = 'ongoing',
   data.table = c("eddy-flux_2020_2025.csv"),
-  data.table.description = c("EC data processed with EddyPro and cleaned-up from the default EddyPro output (customize the default error code -9999 to NA, remove outliers, and select variables) with eddy-flux_qaqc_2020_2025.R, but not further post-processed with eddy-flux_post_processing.Rmd"),
+  data.table.description = c("EC data processed with EddyPro and cleaned-up from the default EddyPro output (i.e., customize the default error code -9999 to NA, remove outliers, and select variables) with eddy-flux_qaqc_2020_2025.R, but not further post-process with eddy-flux_post_processing.Rmd script"),
   #data.table.name = "EC Data for 2020 to 2022",
   other.entity= c("eddy-flux_qaqc_2020_2025.R","eddy-flux_inspection_2020_2025.Rmd","eddy-flux_processing_2020_2025.Rmd","despike.R"),
   other.entity.description = c("R script to clean-up (customize the default error code -9999 to NA, remove outliers, and select variables) EddyPro output",

@@ -21,6 +21,8 @@ specific conductivity 	lter controlled vocabulary
 photosynthetically active radiation	lter controlled vocabulary
 PAR	lter controlled vocabulary
 Secchi depth	lter controlled vocabulary
+water transparency depth	lter controlled vocabulary
+water clarity depth	lter controlled vocabulary
 oxidation-reduction potential	carey lab controlled vocabulary 
 LTREB	carey lab controlled vocabulary
 YSI	carey lab controlled vocabulary
@@ -33,3 +35,4 @@ CCR	carey lab controlled vocabulary
 GWR	carey lab controlled vocabulary 
 SHR	carey lab controlled vocabulary 
 shore	cuahsi controlled vocabulary
+littoral	cuahsi controlled vocabulary

@@ -54,8 +54,7 @@ If you are the data product lead and making the data package then:
 
 ```{r setup packages, include=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE)
-
+knitr::opts_chunk$set(echo = FALSE)
 # Load the packages you need
 pacman::p_load(tidyverse, lubridate, gsheet, hms,gridExtra,openair, googledrive, knitr, scattermore, htmltools, pander, devtools, plotly)
 
@@ -80,35 +79,35 @@ current_time_end=ymd_hms("2025-12-31 23:59:00", tz= "America/New_York")
 
 
 
-```{r QAQC raw files, eval=FALSE, include=FALSE}
+```{r QAQC raw files, echo=FALSE}
 # QAQC the files we have
 
-# current_df <- eddypro_cleaning_function(
-#   directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/data/",
-#    text_file = F,
-#   gdrive = T, # Are the files on Google Drive. True or False
-#   gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
-#   output_file = NULL,
-#   start_date = as.Date("2020-01-01"),
-#   end_date = as.Date("2026-01-01"))
-
- # Make a DateTime column but remove it before saving the file
-#  current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
-
-  # force the timezone to Eastern/New_York
-
-  # Set timezone as EST. Streaming sensors don't observe daylight savings
-#   current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
-
-   # If No EDI file exists with all the years you want to look at
-#  current_df <- current_df%>%
-#  dplyr::distinct(.)%>% # get rid of dups if they snuck in
-#  filter(DateTime<(current_time_end))
-
-# make sure no time duplicates.
-# current_df<-  current_df[!duplicated(current_df$DateTime), ]
-
-#reorder. Just to be certain everything is in order
+#  current_df <- eddypro_cleaning_function(
+#    directory = "../../../../DataNotYetUploadedToEDI/EddyFlux_Processing/data/",
+#     text_file = F,
+#    gdrive = T, # Are the files on Google Drive. True or False
+#    gshared_drive = as_id("0ACybYKbCwLRPUk9PVA"),
+#    output_file = NULL,
+#    start_date = as.Date("2020-01-01"),
+#    end_date = as.Date("2026-01-01"))
+# 
+#  # Make a DateTime column but remove it before saving the file
+#   current_df$DateTime <- ymd_hms(paste0(current_df$date, " " ,current_df$time))
+# 
+#   # force the timezone to Eastern/New_York
+# 
+#   # Set timezone as EST. Streaming sensors don't observe daylight savings
+#    current_df$DateTime <- force_tz(current_df$DateTime, tzone = "America/New_York")
+# 
+#    # If No EDI file exists with all the years you want to look at
+#   current_df <- current_df%>%
+#   dplyr::distinct(.)%>% # get rid of dups if they snuck in
+#   filter(DateTime<(current_time_end))
+# 
+# # make sure no time duplicates.
+#  current_df<-  current_df[!duplicated(current_df$DateTime), ]
+# 
+# #reorder. Just to be certain everything is in order
 #  current_df<-current_df[order(current_df$DateTime),]
 
 
@@ -120,7 +119,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 
 # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data. The pasta link from EDI has already been updated for the year 2026.
     
-current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/21/9686456c091a205d2444fb01342eeedc")
+current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/692/30/9686456c091a205d2444fb01342eeedc")
 
 #Force files from EDI to have an EST timestamp
 
@@ -301,7 +300,7 @@ Do not over think the last 2 plots, although they are good to look at historical
 
 ```{r Fluxes, echo=FALSE, warning=FALSE, results='asis'}
 
-dx <- colnames(current_df%>%select(co2_flux_umolm2s, h2o_flux_umolm2s, ch4_flux_umolm2s))
+dx <- colnames(current_df%>%select(co2_flux_umolm2s, h2o_flux_umolm2s, ch4_flux_umolm2s, rssi_77_mean))
 
 # make the plots
 outputs <- lapply(dx, all_plot,data=current_df, raw_data=NULL, reservoir=NULL, res_site =NULL, y_lab="umolm2s", y_lab2="umolm2s",Depth=F, Water=F, Use_plotly=F, Heatmap=F)
@@ -470,7 +469,7 @@ output[[5]]
 
 #### Write the file to csv
 
-```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
+```{r Make new CSV with current and historic files, echo=FALSE}
 
 # Take out the DateTime column and make date and time column characters
 current_df2 <- current_df%>%
@@ -484,7 +483,7 @@ write_csv(current_df2, "eddy-flux_2020_2025.csv")
 
 ```
 
-```{r Download Files, eval=FALSE, include=FALSE}
+```{r Download Files, echo=FALSE}
 
 # save qaqc file in the folder
 download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/eddy_flux_create.R", "eddy-flux_qaqc_2020_2025.R")

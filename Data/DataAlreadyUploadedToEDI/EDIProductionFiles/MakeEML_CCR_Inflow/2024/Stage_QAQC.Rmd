@@ -16,7 +16,7 @@ library(plotly)
 library(googlesheets4)
 library(ggpmisc) #stat poly line
 library(lubridate)
-
+library(fuzzyjoin)
 ```
 
 ## Import all PT data
@@ -77,16 +77,6 @@ hobo_raw <- bind_rows(
 Set Timezone, Column names, data types
 
 ```{r Data wrangling, echo = TRUE}
-#rename column names
-# hobo_raw <- hobo_raw|>
-#   rename(DateTime_EDT = "DateTime_EDT",
-#          HOBO_Abs_Pres_kPa = "HOBO_Abs_Pres_kPa",
-#          Temp_C = "Temp_C")
-
-#format datetime data
-# hobo_raw <- hobo_raw |> 
-#   mutate(DateTime_EDT = mdy_hms(DateTime_EDT))
-
 #Set tz to EST for PT data
 #force timezone to be UTC-4 since that's what the sensor was set at. Using 'American/Virgin' since EDT wasn't recognized and Virgin Islands don't use daylight savings so are always UTC-4
 hobo_raw$DateTime_EDT <- force_tz(as.POSIXct(hobo_raw$DateTime_EDT), tzone = "America/Virgin")
@@ -112,7 +102,7 @@ hobo_raw <- hobo_raw |>
 hobo_raw <- hobo_raw %>% 
   filter(!is.na(HOBO_Abs_Pres_kPa), !is.na(Temp_C))
 
-#remove duplicate times and rows with NA in pressure or temp
+#remove duplicate times from overlapping uploads
 hobo_raw <-  hobo_raw %>%
   distinct(DateTime_EST, .keep_all = TRUE) 
 
@@ -178,17 +168,34 @@ hobo_qaqc <- hobo_raw %>%
   ) %>%
   ungroup()
 
+#Flag data type to character
+hobo_qaqc <- hobo_qaqc %>%
+  mutate(Flag = as.character(Flag))
+
 #Set Flag to 1 for any PT readings or Temp < 0 
-hobo_qaqc$Flag <- if_else(hobo_qaqc$Temp_C <= 0 | hobo_qaqc$HOBO_Abs_Pres_kPa <= 0, 1, hobo_qaqc$Flag)
+hobo_qaqc <- hobo_qaqc %>%
+  mutate(
+    Flag = if_else(
+      (Temp_C <= 0 | HOBO_Abs_Pres_kPa <= 0) & !grepl("1", Flag),
+      paste0("1", Flag),
+      Flag
+    )
+  )
 
 #remove Pressure and Temp data for Flag 1 
 hobo_qaqc <- hobo_qaqc %>%
   mutate(
     HOBO_Abs_Pres_kPa = if_else(
-      Flag == 1, NA_real_, HOBO_Abs_Pres_kPa, missing = HOBO_Abs_Pres_kPa
+      grepl("1", as.character(Flag)),
+      NA_real_,
+      HOBO_Abs_Pres_kPa,
+      missing = HOBO_Abs_Pres_kPa
     ),
     Temp_C = if_else(
-      Flag == 1, NA_real_, Temp_C, missing = Temp_C
+      grepl("1", as.character(Flag)),
+      NA_real_,
+      Temp_C,
+      missing = Temp_C
     )
   )
 
@@ -237,7 +244,7 @@ waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |>
 
 ##Plot atmospheric BP corrected water level
 
-In this zoomed in section, you can see 6/11 something happpened-- people were in the field and the sensor must have been placed differently than before. Since each subsequent visit wasnt an issue, it was probably that the PT was either not seated correctly at first deployment or got jostled and moved during a large event. 
+6/11 something happened-- people were in the field and the sensor must have been placed differently than before. Since each subsequent visit wasnt an issue, it was probably that the PT was either not seated correctly at first deployment or got jostled and moved during a large event. 
 
 ```{r Plot BP corrected, echo = TRUE}
 # waterlevel_correct |> 
@@ -248,17 +255,45 @@ In this zoomed in section, you can see 6/11 something happpened-- people were in
 
 a <- waterlevel_correct |> 
   ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
-  geom_point() +
-  coord_cartesian(
-    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
+  geom_point()
 #ggplotly(a)
 a
 
 ```
 
-##View with manual stage measurements
+##Correct offsets and interpolate between
+```{r Correct offsets flag 4, echo = TRUE}
 
-```{r}
+stage_final <- fuzzy_left_join(
+  waterlevel_correct,
+  maint_log %>% filter(flag == 4),
+  by = c(
+    "DateTime_EST" = "TIMESTAMP_start",
+    "DateTime_EST" = "TIMESTAMP_end"
+  ),
+  match_fun = list(`>=`, `<=`)
+) %>%
+  mutate(
+    frac = as.numeric(DateTime_EST - TIMESTAMP_start) /
+           as.numeric(TIMESTAMP_end - TIMESTAMP_start),
+
+    interp_offset = start_offset +
+      frac * (end_offset - start_offset),
+
+    waterlevel_cm = if_else(
+      !is.na(start_offset),
+      waterlevel_cm + interp_offset,
+      waterlevel_cm
+    )
+  ) %>%
+  select(-frac, -interp_offset,
+         -TIMESTAMP_start, -TIMESTAMP_end)
+```
+## Gap fill for missing periods less than 3 hours
+Should eventually add... reasonable inference esp since most deleted times of this length we are there and can note any serious waterlevel changes. Better/more continuous we can get the PT data looking, the better the discharge data will be. Should be able to build a complete timeseries df, use zoo na.approx with tsibble for multiple sites, and then remove NA rows of table for gaps longer than fill length. https://thedatahall.com/filling-gaps-in-time-series-and-panel-data-using-r/, but  
+
+##View with manual stage measurements
+```{r View manual measurements on timeseries, echo = TRUE}
 
 #Pull manual stage measurement file
 stage_checks <-  gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh1QfOad3ez_Hk4Sl8ziPYxmWWcoSv1GNeuJkrFec8/edit?gid=0#gid=0")
@@ -270,21 +305,8 @@ stage_checks$DateTime_EST = lubridate::parse_date_time(stage_checks$DateTime, or
 stage_checks <- stage_checks |>
   mutate(DateTime_EST = floor_date(DateTime_EST, unit = "10 minutes"))
 
-a <- full_join(waterlevel_correct, stage_checks, by = "DateTime_EST") |> 
-  ggplot(aes(x = DateTime_EST)) +
-  geom_point(aes(y = waterlevel_cm)) +
-  geom_point(aes(y = manual_depth_cm), color = "red") +
-  coord_cartesian(
-    xlim = c(ymd_hms("2024-08-01 00:00:00"), ymd_hms("2024-10-15 17:59:59")))
-ggplotly(a)
-
-ggplot(data = hobo_qaqc, aes(x = DateTime_EST)) +
-  geom_point(aes(y = Temp_C)) +
-  #geom_point(aes(y = manual_depth_cm), color = "red") +
-  coord_cartesian(
-    xlim = c(ymd_hms("2024-08-01 00:00:00"), ymd_hms("2024-08-15 17:59:59")))
-
-compare <- full_join(stage_checks, waterlevel_correct, by = "DateTime_EST") %>%
+#Plot PT data per deployment
+compare <- full_join(stage_checks, stage_final, by = "DateTime_EST") %>%
   select(DateTime_EST, waterlevel_cm, manual_depth_cm)
 
 
@@ -315,16 +337,9 @@ ggplot(data = PT2, aes(x = waterlevel_cm, y = manual_depth_cm))+
 
 
 ```
-##Correct to manual measurements
-This section will eventually correct PT sensor data to manual measurements as needed. For the first two deployments, the manual measurements were in reference between a cobble bottom and riffle surface, so I don't think it is worth correcting to. TBD what to do about negatives 
+##Visualize differences between PT sensor reading and manual measurement
 
-PT 1 might show that the PT was slightly under the cobbles bc it was dug in with the stilling well, but imo not enough of a consistent offset to correct for. Negative values during this deployment look real (ie still tracking water, but the reference 0 is too high/flow between cobbles but not overtop. I think fine to leave, esp if they generally match up with the timline you have for disconnected flow in the stream.
-
-PT 2 seems to have a bias towards deeper manual measurements than PT readings --all being fairly significant differences. Again, I would not correct for each manual measurement, but bc of the fairly regular looking "negative" stages, I picked a consistent offset to apply. This will also help our agreement with the manual measurements.
-
-I think PT 1 and PT 2 stage data is useful for event timing and relating general magnitude of events. 
-
-```{r}
+```{r Visualize PT v manual measurements, echo = TRUE}
 selected_compare <- compare |>
   filter(!is.na(waterlevel_cm), !is.na(manual_depth_cm))
 
@@ -335,68 +350,24 @@ ggplot(data = selected_compare, aes(x = DateTime_EST, y = difference))+
   ylab("PT - manual depth (cm)")
 
 ```
-##Correct PT2 with constant offset
-Both measured values between PT downloads show large differences (-13.6 cm and -15.17 cm off), apply a constant offset (+ 10.2 cm) to the PT data to match up the data after it is reinserted on 6/11
-
-*try to incorporate into the maintenance log so it can be a coded correction if it happens again?
-
-```{r}
-start_offset <- as.POSIXct("2025-04-11 13:10", tz = "EST")
-end_offset <- as.POSIXct("2025-06-11 12:10", tz = "EST")
-  
-waterlevel_corrected <- waterlevel_correct |>
-  mutate(
-    waterlevel_cm = if_else(
-      DateTime_EST >= start_offset & DateTime_EST <= end_offset, 
-      waterlevel_cm + 10.2,
-      waterlevel_cm
-    )
-  )
-
-a <- ggplot()+
-  geom_point(aes(x = waterlevel_corrected$DateTime_EST, y = waterlevel_corrected$waterlevel_cm)) +
-  geom_point(aes(x = waterlevel_correct$DateTime_EST, y = waterlevel_correct$waterlevel_cm), color = "red") +
-  coord_cartesian(
-    xlim = c(ymd_hms("2025-06-11 00:00:00"), ymd_hms("2025-06-12 17:59:59")))
-#ggplotly(a)
-a
-```
-
-
-
-##Correct to Manual Measurements
-This section can eventually be written to correct PT data to the manually measured water levels
-
-##Visualize final corrected data
 
 ##Visualize qaqc parameters ie manual measurements, temp
 Use this graph to visually qaqc PT data-- 
   1. When PT comes out of the water as seen by drastic temp change/larger diurnal swings and flat lining of PT data
   2. When site visit measurements don't line up with PT data
-  3. 
+  3. Gaps or odd jumps in water level
   
   
-```{r}
+```{r temp and corrected waterlevel, echo = TRUE}
 
-a <- ggplot(data = waterlevel_corrected, aes(x = DateTime_EST)) +
+a <- ggplot(data = stage_final, aes(x = DateTime_EST)) +
   geom_point(aes(y = waterlevel_cm)) +
-  geom_point(aes(y = Temp_C), pch = 2, size = 0.25, color = "blue") +
-  coord_cartesian(
-    xlim = c(ymd_hms("2024-07-14 00:00:00"), ymd_hms("2024-09-17 23:59:59")))
-#ggplotly(a)
+  geom_line(aes(y = Temp_C), color = "blue")
 a
 ```
 
-
-## Visualize stage with local precip data
-
 ```{r Compare with precip, echo = TRUE}
-rain_comp <- left_join(waterlevel_corrected, ccr_met, by = "DateTime_EST")
-
-# ggplot(data = rain_comp, aes(x = DateTime_EST)) +
-#   geom_line(y = waterlevel_correct) 
-  #geom_point(y = rain_comp$Rain_Total_mm)
-
+compare <- left_join(compare, ccr_met, by = "DateTime_EST")
 
 ggplot(data = rain_comp, aes(x = DateTime_EST)) +
   geom_line(aes(y = waterlevel_cm)) +
@@ -405,34 +376,12 @@ ggplot(data = rain_comp, aes(x = DateTime_EST)) +
   
 ```
 
+```{r Compare with manual measurements, echo = TRUE}
+a <- ggplot(data = compare, aes(x = DateTime_EST)) +
+  geom_point(aes(y = waterlevel_cm)) +
+  geom_point(aes(y = manual_depth_cm), color = "red")
 
-```{r}
-a <- waterlevel_correct |> 
-  ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
-  geom_point() +
-  coord_cartesian(
-    xlim = c(ymd_hms("2025-04-16 00:00:00"), ymd_hms("2025-06-11 23:59:59")))
-#ggplotly(a)
-a
+ggplotly(a)
 
-#Pull in nearby USGS gage to compare peak shape
-#data retrieval from USGS (Tinker Creek nr Daleville)
-# library(dataRetrieval)
-# USGSFlow = read_waterdata_daily(monitoring_location_id = "02055100", parameter_code = "00060")
-# USGSFlow = renameNWISColumns(USGSFlow)
-# 
-# #format date column, daily average, so tz +/- a bit not a big deal
-# USGSFlow$Date <- as.POSIXct(USGSFlow$Date, tz = "EST")
-# USGSFlow <- rename(USGSFlow, DateTime_EST = Date)
-# USGSFlow$Flow <- as.numeric(USGSFlow$Flow)
-# #head(USGSFlow)
-# 
-# #match to our data
-# USGSFlow <- left_join(waterlevel_corrected, USGSFlow, by = "DateTime_EST")
-
-# ggplot(data = USGSFlow, aes(x = DateTime_EST)) +
-#   geom_point(aes(y = waterlevel_cm)) +
-#   geom_point(aes(y = USGSFlow))
-#not plotting well rn-- probably scale or data type issues? 
 ```
 

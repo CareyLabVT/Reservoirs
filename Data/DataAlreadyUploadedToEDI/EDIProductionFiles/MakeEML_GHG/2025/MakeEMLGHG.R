@@ -196,9 +196,9 @@ eml_file <- make_eml(
                                'Script to generate plots and combine L1 and EDI products'),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.997.22', #package id for staging
+  #package.id = 'edi.997.24', #package id for staging
 
-  #package.id = 'edi.551.9', #package id for production
+  package.id = 'edi.551.10', #package id for production
  write.file = T, ### write the file to the folder
  return.obj = T) ## return the object so we can get the package.id
 
@@ -233,7 +233,7 @@ childC <- xml_find_first(parent, "licensed")
 xml_remove(childC)
 
 # Insert childC at position 10 (after Intellectual_rights)
-xml_add_child(parent, childC, .where = 17)
+xml_add_child(parent, childC, .where = 15)
 
 # Save the file with the changes
 write_xml(doc, paste0(folder,package.id,".xml"))

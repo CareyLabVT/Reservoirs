@@ -143,7 +143,8 @@ eml_file <- make_eml(
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1772.8', #EDI staging ID 
+  # package.id = 'edi.1772.9', #EDI staging ID 
+  package.id = 'edi.841.2', #EDI PUBLICATION ID
   write.file = T, ### write the file to the folder
   return.obj = T)
 
@@ -202,26 +203,6 @@ write_xml(doc, paste0(folder,"/",package.id,".xml"))
 
 ## Step 17: Obtain a package.id. ####
 # 
-
-# make_eml(
-#   path = "./EDI_2021",
-#   data.path = "./EDI_2021",
-#   eml.path = "./EDI_2021",
-#   dataset.title = "Time series of optical measurements (absorbance, fluorescence) for Beaverdam and Falling Creek Reservoir in Southwestern Virginia, USA 2019-2020",
-#   temporal.coverage = c("2019-04-29", "2020-03-30"),
-#   maintenance.description = 'completed',
-#   data.table = "20210511_OpticalData.csv",
-#   data.table.description = "OpticalDataset",
-#   other.entity= c('Abs_QA_QC.R','PARAFAC_Mod.m','EEMs_pfiles.zip','CDOM_Correction.zip'),
-#   other.entity.description = c("R script for QA/QC of absorbance and fluorescence data",
-#                                "Matlab code used to generate a PARAFAC model on the corrected EEMs data",
-#                                "This zip folder contains corrected EEMs files ('p_ files') for all samples used in the PARAFAC model
-#                                and the OpenFluor output used to identify PARAFAC components. See README file for file types and descriptions.",
-#                                "This zip folder contains CSV files for absorbance corrections for all measured absorbance samples. 
-#                                See README file for file types and descriptions."),
-#   user.id = 'ccarey',
-#   user.domain = 'EDI',
-#   package.id = 'edi.841.1')
 
 ## Step 18: Upload revision to EDI
 # Go to EDI website: https://portal.edirepository.org/nis/home.jsp and login with Carey Lab ID

@@ -1,0 +1,387 @@
+---
+title: "Stage_QAQC"
+author: "AEB and DXH"
+date: "2026-01-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(httr2)
+library(jsonlite)
+library(ggplot2)
+library(plotly)
+library(googlesheets4)
+library(ggpmisc) #stat poly line
+library(lubridate)
+library(fuzzyjoin)
+```
+
+## Import all PT data
+
+Pull all .csv files of direct data downloads from PT
+
+```{r load data, echo = TRUE}
+
+#Identify which GitHub Folder to pull folder names from
+url <- "https://api.github.com/repos/CareyLabVT/ManualDownloadsSCCData/contents/CCR_manual_downloads/CCR_Hobos/HPB_waterlevel"
+
+#create list of file names
+resp <- request(url) |>
+  req_headers(Accept = "application/vnd.github+json") |>
+  req_perform()
+
+dat <- resp_body_json(resp, simplifyVector = TRUE)
+
+file_names <- dat$name
+
+#only select .csv files and 2024 PT ##FOR NOW
+file_names <- file_names[grepl("\\.csv$", file_names)]
+
+#add to link 
+git_link <- "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData/master/CCR_manual_downloads/CCR_Hobos/HPB_waterlevel/"
+
+file_names <- paste0(git_link, file_names)
+
+#import .csv files
+hobo_raw <- bind_rows(
+  lapply(file_names, function(f) {
+
+    df <- read_csv(
+      f,
+      skip = 1,
+      locale = locale(encoding = "UTF-8"),
+      show_col_types = FALSE
+    )
+
+    df |>
+      select(
+        DateTime_EDT = contains("Date Time"),
+        HOBO_Abs_Pres_kPa = contains("Abs Pres"),
+        Temp_C = contains("Temp")
+      ) |>
+      mutate(
+        DateTime_EDT = parse_datetime(DateTime_EDT, format = "%m/%d/%y %I:%M:%S %p"),
+        HOBO_Abs_Pres_kPa = as.numeric(HOBO_Abs_Pres_kPa),
+        Temp_C = as.numeric(Temp_C),
+        )
+  })
+)
+
+```
+
+## Manage Data
+
+Set Timezone, Column names, data types
+
+```{r Data wrangling, echo = TRUE}
+#Set tz to EST for PT data
+#force timezone to be UTC-4 since that's what the sensor was set at. Using 'American/Virgin' since EDT wasn't recognized and Virgin Islands don't use daylight savings so are always UTC-4
+hobo_raw$DateTime_EDT <- force_tz(as.POSIXct(hobo_raw$DateTime_EDT), tzone = "America/Virgin")
+
+#check that it worked
+attr(hobo_raw$DateTime_EDT, "tzone")
+
+#now need to convert from EDT to EST to line up with met data
+hobo_raw$DateTime_EST <- as.POSIXct(hobo_raw$DateTime_EDT, tz = "EST")
+
+#check that it worked
+attr(hobo_raw$DateTime_EST, "tzone")
+
+#select useful columns 
+hobo_raw <- hobo_raw |>
+  select(DateTime_EST,HOBO_Abs_Pres_kPa,Temp_C)
+
+#arrange by datetime
+hobo_raw <- hobo_raw |>
+  arrange(DateTime_EST)
+
+#remove rows with NAs in Temp/Pressure
+hobo_raw <- hobo_raw %>% 
+  filter(!is.na(HOBO_Abs_Pres_kPa), !is.na(Temp_C))
+
+#remove duplicate times from overlapping uploads
+hobo_raw <-  hobo_raw %>%
+  distinct(DateTime_EST, .keep_all = TRUE) 
+
+```
+## Look at data before correcting for barometric pressure/maintenence log
+This is just a check to make sure all raw data came in and looks like it should
+
+```{r Raw data plot, echo = TRUE}
+ggplot(data = hobo_raw, aes(x = DateTime_EST)) +
+  geom_line(aes(y = HOBO_Abs_Pres_kPa)) +
+  scale_x_datetime()
+  
+ggplot(data = hobo_raw, aes(x = DateTime_EST)) +
+  geom_line(aes(y = Temp_C)) +
+  scale_x_datetime()
+
+```
+
+## Assign flags
+Flags for dataset are:
+0: good data
+1: Sensor was out of water (maintenance, low water level, below freezing), value set to NA
+2: non-active PT setup, see methods for timeline
+#3: Barometric Pressure sensor data had a flag (no dangerous looking flags for now)
+4: Correction applied
+
+
+```{r maintenance log, echo = TRUE}
+#Load maintenance log
+#maint_log <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CC#R_Inflow/2024/hpb_maintenancelog_2024.csv")
+
+#Local one for now
+maint_log <- read_csv("C:\\Users\\abate\\OneDrive\\Desktop\\hpb_maintenancelog_2024.csv")
+
+#force Maintenance Log into EST tz
+maint_log$TIMESTAMP_start <- force_tz(as.POSIXct(maint_log$TIMESTAMP_start, format = "%m/%d/%Y %H:%M"), tzone = "EST")
+maint_log$TIMESTAMP_end <- force_tz(as.POSIXct(maint_log$TIMESTAMP_end, format = "%m/%d/%Y %H:%M"), tzone = "EST")
+
+#Check to make sure tz changed
+attr(maint_log$TIMESTAMP_start, "tzone")
+attr(maint_log$TIMESTAMP_end, "tzone")
+
+#add column for flags and set to 0 initially
+hobo_raw$Flag <- 0
+
+#Add flags from maintenance log
+hobo_qaqc <- hobo_raw %>%
+  rowwise() %>%
+  mutate(
+    Flag = {
+      #find dates with flags
+      maint_flag <- maint_log$flag[
+        DateTime_EST >= maint_log$TIMESTAMP_start &
+        DateTime_EST <= maint_log$TIMESTAMP_end
+      ]
+      #If not in maintenance log, keep existing flag, otherwise concat
+      if(length(maint_flag) == 0){
+        Flag
+      } else {
+        as.numeric(paste0(maint_flag, collapse = ""))
+        }
+          }
+  ) %>%
+  ungroup()
+
+#Flag data type to character
+hobo_qaqc <- hobo_qaqc %>%
+  mutate(Flag = as.character(Flag))
+
+#Set Flag to 1 for any PT readings or Temp < 0 
+hobo_qaqc <- hobo_qaqc %>%
+  mutate(
+    Flag = if_else(
+      (Temp_C <= 0 | HOBO_Abs_Pres_kPa <= 0) & !grepl("1", Flag),
+      paste0("1", Flag),
+      Flag
+    )
+  )
+
+#remove Pressure and Temp data for Flag 1 
+hobo_qaqc <- hobo_qaqc %>%
+  mutate(
+    HOBO_Abs_Pres_kPa = if_else(
+      grepl("1", as.character(Flag)),
+      NA_real_,
+      HOBO_Abs_Pres_kPa,
+      missing = HOBO_Abs_Pres_kPa
+    ),
+    Temp_C = if_else(
+      grepl("1", as.character(Flag)),
+      NA_real_,
+      Temp_C,
+      missing = Temp_C
+    )
+  )
+
+
+```
+
+## Correct pressure data with Barometric Pressure from met station on dam
+The HOBO PTs are not vented. This corrects to local air pressure fluctuations.
+
+```{r Correct for barometric pressure, echo = TRUE}
+# ccr_met_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1105/3/df0ce4fc90f220b65c400b997abae37b" )
+# ccr_met_git <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/refs/heads/ccre-dam-data-qaqc/ccre_met_L1.csv")
+
+ccr_met <- read_csv("C:\\Users\\abate\\Downloads\\ccr_met.csv")
+#ccr_met <- read_csv("C:/Users/dwh18/Downloads/ccrmet_edi_git_hold.csv")
+
+# ccr_met <- ccr_met_edi |>
+#   select(-starts_with("Note")) |> #remove note columns to bind
+#   rbind(ccr_met_git)
+
+#write.csv(ccr_met, "C:\\Users\\abate\\Downloads\\ccr_met.csv", row.names = F)
+
+ccr_met <- ccr_met |> 
+  select(DateTime, BP_Average_kPa, Flag_BP_Average_kPa, Rain_Total_mm) |> #check BP flag
+  mutate(Date = as.Date(DateTime),
+         Hour = hour(DateTime),
+         Min = minute(DateTime)) |> 
+  filter(Min %in% c(0,10,20,30,40,50)) |>  #get just minutes to line up w/ HOBO
+  rename(DateTime_EST = DateTime) |>
+  select(DateTime_EST, BP_Average_kPa, Flag_BP_Average_kPa, Rain_Total_mm)
+
+#force into correct time zone (EST)
+ccr_met$DateTime_EST <- force_tz(as.POSIXct(ccr_met$DateTime_EST), tzone = "EST")
+
+#check that it worked
+attr(ccr_met$DateTime_EST, "tzone")
+
+#correct to water level data
+waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |> 
+  mutate(corrected_Pres_kPa = HOBO_Abs_Pres_kPa - BP_Average_kPa) |> 
+  mutate(waterlevel_cm = corrected_Pres_kPa * 10.1972) |>
+  select(DateTime_EST, waterlevel_cm, Temp_C, Flag)#convert pressure to water depth
+
+
+```
+
+##Plot atmospheric BP corrected water level
+
+6/11 something happened-- people were in the field and the sensor must have been placed differently than before. Since each subsequent visit wasnt an issue, it was probably that the PT was either not seated correctly at first deployment or got jostled and moved during a large event. 
+
+```{r Plot BP corrected, echo = TRUE}
+# waterlevel_correct |> 
+#   ggplot()+
+#   geom_line(aes(x=DateTime_EST, y = BP_Average_kPa, color = "MET"))+  
+#   geom_line(aes(x=DateTime_EST, y = HOBO_Abs_Pres_kPa, color = "HOBO_raw"))+
+#   geom_line(aes(x=DateTime_EST, y = corrected_Pres_kPa + 95, color = "HOBO_correct + 95"))
+
+a <- waterlevel_correct |> 
+  ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
+  geom_point()
+#ggplotly(a)
+a
+
+```
+
+##Correct offsets and interpolate between
+```{r Correct offsets flag 4, echo = TRUE}
+
+stage_final <- fuzzy_left_join(
+  waterlevel_correct,
+  maint_log %>% filter(flag == 4),
+  by = c(
+    "DateTime_EST" = "TIMESTAMP_start",
+    "DateTime_EST" = "TIMESTAMP_end"
+  ),
+  match_fun = list(`>=`, `<=`)
+) %>%
+  mutate(
+    frac = as.numeric(DateTime_EST - TIMESTAMP_start) /
+           as.numeric(TIMESTAMP_end - TIMESTAMP_start),
+
+    interp_offset = start_offset +
+      frac * (end_offset - start_offset),
+
+    waterlevel_cm = if_else(
+      !is.na(start_offset),
+      waterlevel_cm + interp_offset,
+      waterlevel_cm
+    )
+  ) %>%
+  select(-frac, -interp_offset,
+         -TIMESTAMP_start, -TIMESTAMP_end)
+```
+## Gap fill for missing periods less than 3 hours
+Should eventually add... reasonable inference esp since most deleted times of this length we are there and can note any serious waterlevel changes. Better/more continuous we can get the PT data looking, the better the discharge data will be. Should be able to build a complete timeseries df, use zoo na.approx with tsibble for multiple sites, and then remove NA rows of table for gaps longer than fill length. https://thedatahall.com/filling-gaps-in-time-series-and-panel-data-using-r/, but  
+
+##View with manual stage measurements
+```{r View manual measurements on timeseries, echo = TRUE}
+
+#Pull manual stage measurement file
+stage_checks <-  gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh1QfOad3ez_Hk4Sl8ziPYxmWWcoSv1GNeuJkrFec8/edit?gid=0#gid=0")
+
+#format date column
+stage_checks$DateTime_EST = lubridate::parse_date_time(stage_checks$DateTime, orders = c('ymd HMS','ymd HM','ymd', 'mdy','mdy HM', 'mdy HMS', 'mdy HM'), tz = "America/New_York")
+
+#set to closest 10 min to match up with PT readings
+stage_checks <- stage_checks |>
+  mutate(DateTime_EST = floor_date(DateTime_EST, unit = "10 minutes"))
+
+#Plot PT data per deployment
+compare <- full_join(stage_checks, stage_final, by = "DateTime_EST") %>%
+  select(DateTime_EST, waterlevel_cm, manual_depth_cm)
+
+
+#Filter to pull dates from each specific PT deployment
+PT1 <- compare %>%
+   filter(DateTime_EST >= as.POSIXct("2024-04-23", tz = "America/New_York"),
+         DateTime_EST <= as.POSIXct("2024-12-02", tz = "America/New_York"))
+
+PT2 <- compare %>%
+   filter(DateTime_EST >= as.POSIXct("2025-03-01", tz = "America/New_York"),
+         DateTime_EST <= as.POSIXct("2025-12-02", tz = "America/New_York"))
+
+#Plot comparison of PT to manual measured stage for 1st PT deployment
+ggplot(data = PT1, aes(x = waterlevel_cm, y = manual_depth_cm))+ 
+  geom_point()+
+  stat_poly_line(method = "lm", linewidth = 2)+
+  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
+               aes(x = waterlevel_cm, y = manual_depth_cm, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
+  labs(title = "PT1")
+
+#Plot comparison of PT to manual measured stage for 2nd PT deployment
+ggplot(data = PT2, aes(x = waterlevel_cm, y = manual_depth_cm))+ 
+  geom_point()+
+  stat_poly_line(method = "lm", linewidth = 2)+
+  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
+               aes(x = waterlevel_cm, y = manual_depth_cm, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
+  labs(title = "PT2")
+
+
+```
+##Visualize differences between PT sensor reading and manual measurement
+
+```{r Visualize PT v manual measurements, echo = TRUE}
+selected_compare <- compare |>
+  filter(!is.na(waterlevel_cm), !is.na(manual_depth_cm))
+
+selected_compare$difference <- selected_compare$waterlevel_cm - selected_compare$manual_depth_cm
+
+ggplot(data = selected_compare, aes(x = DateTime_EST, y = difference))+
+  geom_point()+
+  ylab("PT - manual depth (cm)")
+
+```
+
+##Visualize qaqc parameters ie manual measurements, temp
+Use this graph to visually qaqc PT data-- 
+  1. When PT comes out of the water as seen by drastic temp change/larger diurnal swings and flat lining of PT data
+  2. When site visit measurements don't line up with PT data
+  3. Gaps or odd jumps in water level
+  
+  
+```{r temp and corrected waterlevel, echo = TRUE}
+
+a <- ggplot(data = stage_final, aes(x = DateTime_EST)) +
+  geom_point(aes(y = waterlevel_cm)) +
+  geom_line(aes(y = Temp_C), color = "blue")
+a
+```
+
+```{r Compare with precip, echo = TRUE}
+compare <- left_join(compare, ccr_met, by = "DateTime_EST")
+
+ggplot(data = rain_comp, aes(x = DateTime_EST)) +
+  geom_line(aes(y = waterlevel_cm)) +
+  geom_col(aes(y = Rain_Total_mm*10), color = "blue") #x 10 rain for better viewing
+  scale_x_datetime()
+  
+```
+
+```{r Compare with manual measurements, echo = TRUE}
+a <- ggplot(data = compare, aes(x = DateTime_EST)) +
+  geom_point(aes(y = waterlevel_cm)) +
+  geom_point(aes(y = manual_depth_cm), color = "red")
+
+ggplotly(a)
+
+```
+

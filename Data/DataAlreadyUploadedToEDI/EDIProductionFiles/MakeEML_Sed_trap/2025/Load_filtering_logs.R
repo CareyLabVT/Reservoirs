@@ -27,6 +27,8 @@ log_2019 <- read_excel("2019_FilteringLog_EDI.xlsx")
 log_2020 <- read_excel("2020_FilteringLog_EDI.xlsx")
 log_2021 <- read_excel("2021_FilteringLog_EDI.xlsx")
 log_2022 <- read_excel("2022_FilteringLog_EDI.xlsx")
+log_2024 <- read_excel('2024_FilteringLog.xlsx', skip = 2) %>% 
+  mutate(Date = as.Date(Date, origin = "1899-12-30"))
 
 filteringlog = filteringlog%>%
   full_join(log_2018)%>%
@@ -49,16 +51,28 @@ frame1 <- frame1 %>%
 frame1 <- frame1 %>% 
   mutate(Date = as.Date(as.character(str_extract(frame1$FilterID, '(?<=_)[:digit:]*[:alpha:]*[:digit:]*$')), format = '%d%b%y'))
 
-#Site
-frame1$Site <- 50
 
 #Depth_m
 frame1 <- frame1 %>% 
   mutate(Depth_m = as.numeric(str_extract(frame1$FilterID, '(?<=_)[:digit:]+(?=m)')))
 
+
 #TrapRep
 frame1 <- frame1 %>% 
   mutate(TrapRep = as.numeric(str_extract(frame1$FilterID, '(?<=_R)[:digit:]+')))
+
+
+# now recreate filter id in 2024 filtering log
+log_2024 <- log_2024 %>% 
+  mutate(FilterID = paste0(substring(log_2024$Reservoir, 1,1), '_sed_', Depth_m, 'm_R', TrapRep, '_F', FilterNum, '_', format(Date, format = '%d%b%y')))
+
+frame1 <- frame1 %>% 
+  full_join(log_2024) %>% 
+  mutate(SedMass_g = round(SedMass_g, digits = 3)) # some sed mass values have 10+ digits, round to correct sig figs
+
+#Site
+frame1$Site <- 50
+
 
 #TrapXSA_m2
 frame1$TrapXSA_m2 <- 0.0040715
@@ -127,5 +141,5 @@ frame1 <- frame1 %>%
 
 #ready to write csv!
 frame1 <- arrange(frame1, frame1$Date)
-write.csv(frame1,"FilteringLog_EDI.csv",row.names = F)
+write.csv(frame1,"FilteringLog_2018_2024.csv",row.names = F)
 

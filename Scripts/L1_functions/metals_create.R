@@ -41,18 +41,18 @@ metals_qaqc <- function(directory,
   
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
-   directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
-   historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
-   sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-   maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-   sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
-   MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
-  metals_save = T
-    metals_outfile = NULL
-    ISCO_save = T
-   ISCO_outfile = NULL
-   start_date = NULL
-   end_date = NULL
+  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+  # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+  # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
+ # metals_save = T
+   # metals_outfile = NULL
+   # ISCO_save = T
+  # ISCO_outfile = NULL
+  # start_date = NULL
+  # end_date = NULL
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   

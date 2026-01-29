@@ -221,7 +221,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       all_grid <- current_df%>%
         drop_na(Var)%>%
         ggplot(.)+
-        geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 4)+
+        geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_", Var)]])))+
         labs(y = y_lab,
              color = "Meters") +
         ggtitle(paste0("All ",Var," by Depth"," ",reservoir," ",res_site)) +
@@ -270,7 +270,7 @@ if(length(qaqc_current$DateTime)>0){
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
           ggplot(.)+
-          geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 4)+
+          geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_", Var)]])))+
           labs(y = y_lab,
                color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +

@@ -18,7 +18,7 @@ library(readr)
 #for now, need to set working directories to read sheets in
 setwd("./Data/DataNotYetUploadedToEDI/Sed_trap")
 
-frame1 = read_csv("Filtering logs/FilteringLog_EDI.csv")
+frame1 = read_csv("Filtering logs/FilteringLog_2018_2024.csv")
 
 
 #
@@ -32,6 +32,7 @@ ICP2021 <- read_excel('Metals/Raw_Data/2021_ICPData.xlsx', skip = 3) %>% select(
 ICP2020 <- read_excel('Metals/Raw_Data/2020_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
 ICP2019 <- read_excel('Metals/Raw_Data/2019_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
 ICP2018 <- read_excel('Metals/Raw_Data/2018_ICPData.xlsx', skip = 3) %>% select(...1,  `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
+ICP2024 <- read_excel('Metals/Raw_Data/2024_ICPData.xlsx', skip = 3) %>% select(...1, `7Li (STDR)`, `23Na (STDR)`, `24Mg (STDR)`, `27Al (STDR)`, `39K (STDR)`, `44Ca (STDR)`, `54Fe (STDR)`, `55Mn (STDR)`, `65Cu (STDR)`, `88Sr (STDR)`, `138Ba (STDR)`)
 
 # add NAs for Li because 2018 doesn't have Li data
 if (!"7Li (STDR)" %in% names(ICP2018)) {
@@ -44,7 +45,8 @@ ICPData = ICP2023 %>%
   rbind(ICP2021)%>%
   rbind(ICP2020)%>%
   rbind(ICP2019)%>%
-  rbind(ICP2018)
+  rbind(ICP2018) %>% 
+  rbind(ICP2024)
 
 #rename headers to element in ppb
 glimpse(ICPData)
@@ -67,13 +69,15 @@ Digestion2021 <-  read_excel('Metals/Digestions/2021_AcidDigestion_EDI.xlsx')
 Digestion2020 <-  read_excel('Metals/Digestions/2020_AcidDigestion_EDI.xlsx')
 Digestion2019 <-  read_excel('Metals/Digestions/2019_AcidDigestions_EDI.xlsx')
 Digestion2018 <-  read_excel('Metals/Digestions/2018_AcidDigestions_EDI.xlsx')
+Digestion2024 <- read_excel('Metals/Digestions/2024_AcidDigestion_EDI.xlsx')
 
 Digestion <- Digestion2023 %>% 
   rbind(Digestion2022)%>%
   rbind(Digestion2021)%>%
   rbind(Digestion2020)%>%
   rbind(Digestion2019)%>%
-  rbind(Digestion2018)
+  rbind(Digestion2018) %>% 
+  rbind(Digestion2024)
 
 #combine all ICPdata with digestion information
 frame2 <- full_join(ICPData, Digestion, by = join_by(JeffID == Sample), multiple = "all", relationship = "many-to-many")
@@ -282,7 +286,8 @@ frame2 <- frame2_complete %>%
 #sort out the names and column order
 frame2 <- frame2 %>% 
   dplyr::rename("AcidVol_L" = "Vol_acid_L") %>% 
-  select(-(ends_with("ppb")))
+  select(-(ends_with("ppb"))) %>% 
+  arrange(Date)
 
 #save frame2 as a .csv
-write.csv(frame2, file="./Metals/2023_allMetals.csv",row.names = F)
+write.csv(frame2, file="./Metals/allMetals_2018_2024.csv",row.names = F)

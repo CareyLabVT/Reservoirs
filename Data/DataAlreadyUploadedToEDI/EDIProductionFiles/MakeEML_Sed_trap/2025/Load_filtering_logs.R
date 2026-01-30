@@ -6,7 +6,6 @@
 #load all the libraries first
 rm(list=ls(all=TRUE))
 library(dplyr)
-library(tidyr)
 library(readxl)
 library(lubridate)
 library(stringr)
@@ -82,8 +81,8 @@ frame1$TrapVol_L <- 1.8
 
     #CollectionVol_L
 frame1 <- frame1 %>% 
-  mutate(VolDiscarded_L = ifelse(year(Date)==2019&Date<"2019-09-15",NA,VolDiscarded_L))%>% #Mistakes in filtering log before this point
-  group_by(Reservoir, Depth_m, TrapRep, Date) %>% 
+  mutate(VolDiscarded_L = ifelse(year(Date)==2019&Date<"2019-09-15",NA,VolDiscarded_L)) %>% #Mistakes in filtering log before this point
+  group_by(Reservoir, Date, Depth_m, TrapRep) %>% 
   mutate(CollectionVol_L = (sum(FilterVol_L) + unique(VolDiscarded_L))) %>% 
   ungroup()
 

@@ -3,10 +3,9 @@ Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	
 Site	Sampling site within each reservoir	categorical	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the Eastern Standard Time zone of the USA, with daylight savings not observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 Pressure_kPa	Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor	numeric	poundsPerSquareInch		NA	value is missing
-Temp_C	Water temperature measured by the HOBO sensor	numeric	cubicMetersPerSecond		NA	value is missing
 Stage_cm	Water level at the site derived from the corrected pressure measurement (Pressure_kPa)	numeric	poundsPerSquareInch		NA	value is missing
+Temp_C	Water temperature measured by the HOBO sensor	numeric	cubicMetersPerSecond		NA	value is missing
 Flow_cms	Discharge flow rate derived from the HOBO pressure and rating curve	numeric	poundsPerSquareInch		NA	value is missing
-Flag_Pressure_kPa	Data flag for Pressure_kPa	categorical	dimensionless		NA	value is missing
+Flag_Pres	Data flag for Pressure_kPa and Stage_cm	categorical	dimensionless		NA	value is missing
 Flag_Temp_C	Data flag for Temp_C	categorical	dimensionless		NA	value is missing
-Flag_Stage_cm	Data flag for Stage_cm	categorical	dimensionless		NA	value is missing
 Flag_Flow_cms	Data flag for Flow_cms	categorical	dimensionless		NA	value is missing

@@ -16,7 +16,7 @@ library(plotly)
 library(googlesheets4)
 library(ggpmisc) #stat poly line
 library(lubridate)
-library(fuzzyjoin)
+#library(fuzzyjoin)
 ```
 
 ## Import all PT data
@@ -126,8 +126,9 @@ Flags for dataset are:
 0: good data
 1: Sensor was out of water (maintenance, low water level, below freezing), value set to NA
 2: non-active PT setup, see methods for timeline
-#3: Barometric Pressure sensor data had a flag (no dangerous looking flags for now)
+3: Barometric Pressure sensor data had a flag (no dangerous looking flags for now)
 4: Correction applied
+5: negtaive PT or Temp
 
 
 ```{r maintenance log, echo = TRUE}
@@ -135,7 +136,7 @@ Flags for dataset are:
 #maint_log <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CC#R_Inflow/2024/hpb_maintenancelog_2024.csv")
 
 #Local one for now
-maint_log <- read_csv("C:\\Users\\abate\\OneDrive\\Desktop\\hpb_maintenancelog_2024.csv")
+maint_log <- read_csv("./hpb_maintenancelog_2024_2025.csv")
 
 #force Maintenance Log into EST tz
 maint_log$TIMESTAMP_start <- force_tz(as.POSIXct(maint_log$TIMESTAMP_start, format = "%m/%d/%Y %H:%M"), tzone = "EST")
@@ -172,17 +173,7 @@ hobo_qaqc <- hobo_raw %>%
 hobo_qaqc <- hobo_qaqc %>%
   mutate(Flag = as.character(Flag))
 
-#Set Flag to 1 for any PT readings or Temp < 0 
-hobo_qaqc <- hobo_qaqc %>%
-  mutate(
-    Flag = if_else(
-      (Temp_C <= 0 | HOBO_Abs_Pres_kPa <= 0) & !grepl("1", Flag),
-      paste0("1", Flag),
-      Flag
-    )
-  )
-
-#remove Pressure and Temp data for Flag 1 
+#remove Pressure and Temp data for Flag 1 during maintenace
 hobo_qaqc <- hobo_qaqc %>%
   mutate(
     HOBO_Abs_Pres_kPa = if_else(
@@ -206,19 +197,14 @@ hobo_qaqc <- hobo_qaqc %>%
 The HOBO PTs are not vented. This corrects to local air pressure fluctuations.
 
 ```{r Correct for barometric pressure, echo = TRUE}
-# ccr_met_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1105/3/df0ce4fc90f220b65c400b997abae37b" )
+ccr_met_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1105/4/8ebf27393ccafe518328468a260d2e18")
 # ccr_met_git <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/refs/heads/ccre-dam-data-qaqc/ccre_met_L1.csv")
-
-ccr_met <- read_csv("C:\\Users\\abate\\Downloads\\ccr_met.csv")
-#ccr_met <- read_csv("C:/Users/dwh18/Downloads/ccrmet_edi_git_hold.csv")
-
+ccr_met_edi <- read_csv("C:/Users/dwh18/Downloads/ccrmet_edi_git_hold.csv")
 # ccr_met <- ccr_met_edi |>
 #   select(-starts_with("Note")) |> #remove note columns to bind
 #   rbind(ccr_met_git)
 
-#write.csv(ccr_met, "C:\\Users\\abate\\Downloads\\ccr_met.csv", row.names = F)
-
-ccr_met <- ccr_met |> 
+ccr_met <- ccr_met_edi |> 
   select(DateTime, BP_Average_kPa, Flag_BP_Average_kPa, Rain_Total_mm) |> #check BP flag
   mutate(Date = as.Date(DateTime),
          Hour = hour(DateTime),
@@ -237,7 +223,7 @@ attr(ccr_met$DateTime_EST, "tzone")
 waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |> 
   mutate(corrected_Pres_kPa = HOBO_Abs_Pres_kPa - BP_Average_kPa) |> 
   mutate(waterlevel_cm = corrected_Pres_kPa * 10.1972) |>
-  select(DateTime_EST, waterlevel_cm, Temp_C, Flag)#convert pressure to water depth
+  select(DateTime_EST, corrected_Pres_kPa, waterlevel_cm, Temp_C, Flag) #convert pressure to water depth
 
 
 ```
@@ -256,23 +242,50 @@ waterlevel_correct <- left_join(hobo_qaqc, ccr_met, by = "DateTime_EST") |>
 a <- waterlevel_correct |> 
   ggplot(aes(x = DateTime_EST, y = waterlevel_cm))+
   geom_point()
-#ggplotly(a)
+
 a
+#ggplotly(a)
 
 ```
 
-##Correct offsets and interpolate between
+##Correction offsets fpr second PT deployement and flag negative PT 
 ```{r Correct offsets flag 4, echo = TRUE}
+## previous fuzzyjoin code
+# stage_final <- fuzzy_left_join(
+#   waterlevel_correct,
+#   maint_log %>% filter(flag == 4),
+#   by = c(
+#     "DateTime_EST" = "TIMESTAMP_start",
+#     "DateTime_EST" = "TIMESTAMP_end"
+#   ),
+#   match_fun = list(`>=`, `<=`)
+# ) %>%
+#   mutate(
+#     frac = as.numeric(DateTime_EST - TIMESTAMP_start) /
+#            as.numeric(TIMESTAMP_end - TIMESTAMP_start),
+# 
+#     interp_offset = start_offset +
+#       frac * (end_offset - start_offset),
+# 
+#     waterlevel_cm = if_else(
+#       !is.na(start_offset),
+#       waterlevel_cm + interp_offset,
+#       waterlevel_cm
+#     )
+#   ) %>%
+#   select(-frac, -interp_offset,
+#          -TIMESTAMP_start, -TIMESTAMP_end)
 
-stage_final <- fuzzy_left_join(
-  waterlevel_correct,
-  maint_log %>% filter(flag == 4),
-  by = c(
-    "DateTime_EST" = "TIMESTAMP_start",
-    "DateTime_EST" = "TIMESTAMP_end"
-  ),
-  match_fun = list(`>=`, `<=`)
-) %>%
+###replacing fuzzyjoin with tidyverse joins
+stage <- waterlevel_correct %>%
+  ##apply flag and offset for 2nd PT deployement for flag of 4
+  left_join(
+    maint_log %>% filter(flag == 4),
+    join_by(
+      DateTime_EST >= TIMESTAMP_start,
+      DateTime_EST <= TIMESTAMP_end
+    )
+  ) %>%
   mutate(
     frac = as.numeric(DateTime_EST - TIMESTAMP_start) /
            as.numeric(TIMESTAMP_end - TIMESTAMP_start),
@@ -285,10 +298,53 @@ stage_final <- fuzzy_left_join(
       waterlevel_cm + interp_offset,
       waterlevel_cm
     )
-  ) %>%
-  select(-frac, -interp_offset,
-         -TIMESTAMP_start, -TIMESTAMP_end)
+  ) |> 
+  select(DateTime_EST, corrected_Pres_kPa, waterlevel_cm, Temp_C, Flag) 
+  
+
+
+###parse out flags to export
+unique(stage$Flag)
+
+stage_final <- stage |> 
+  #set up flag column for temp
+  mutate(
+    Flag_Temp_C = str_remove_all(Flag, "[4]"),   # remove  4s that are pressure specific 
+    Flag_Temp_C = if_else(
+      str_detect(Flag_Temp_C, "[012]"),
+      Flag_Temp_C,
+      "0"
+    )) |> 
+#flag negative pressure 
+  mutate(
+      Flag = if_else(
+      corrected_Pres_kPa <= 0 & !is.na(corrected_Pres_kPa),
+      paste0("5", Flag),
+      Flag
+    ) ) |> 
+  #rename flag for pressure
+  rename(Flag_Pres = Flag) |> 
+  #flag negative temp 
+  mutate(
+      Flag_Temp_C = if_else(
+      Temp_C <= 0 & !is.na(Temp_C),
+      paste0("5", Flag_Temp_C),
+      Flag_Temp_C
+    ) ) 
+  
+
+##look at plot 
+stage_final |> 
+  ggplot(aes(x = DateTime_EST, y = waterlevel_cm, shape = Flag_Pres))+
+  geom_point()
+
+
+###write final stage csv
+# write.csv(stage_final, "./HPB_stage_2024_2025.csv", row.names = F)
+
+
 ```
+
 ## Gap fill for missing periods less than 3 hours
 Should eventually add... reasonable inference esp since most deleted times of this length we are there and can note any serious waterlevel changes. Better/more continuous we can get the PT data looking, the better the discharge data will be. Should be able to build a complete timeseries df, use zoo na.approx with tsibble for multiple sites, and then remove NA rows of table for gaps longer than fill length. https://thedatahall.com/filling-gaps-in-time-series-and-panel-data-using-r/, but  
 
@@ -301,9 +357,17 @@ stage_checks <-  gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh
 #format date column
 stage_checks$DateTime_EST = lubridate::parse_date_time(stage_checks$DateTime, orders = c('ymd HMS','ymd HM','ymd', 'mdy','mdy HM', 'mdy HMS', 'mdy HM'), tz = "America/New_York")
 
+
+## get hourly averages for times when missing data for these check
+stage_hourly <- stage_final |> 
+  mutate(DateTime_hour = floor_date(DateTime_EST, "hour")) %>%
+  group_by(DateTime_hour) %>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))
+
+
 #set to closest 10 min to match up with PT readings
 stage_checks <- stage_checks |>
-  mutate(DateTime_EST = floor_date(DateTime_EST, unit = "10 minutes"))
+  mutate(DateTime_EST = floor_date(DateTime_EST, "hour")) #could do 10 min to: unit = "10 minutes"
 
 #Plot PT data per deployment
 compare <- full_join(stage_checks, stage_final, by = "DateTime_EST") %>%
@@ -313,7 +377,7 @@ compare <- full_join(stage_checks, stage_final, by = "DateTime_EST") %>%
 #Filter to pull dates from each specific PT deployment
 PT1 <- compare %>%
    filter(DateTime_EST >= as.POSIXct("2024-04-23", tz = "America/New_York"),
-         DateTime_EST <= as.POSIXct("2024-12-02", tz = "America/New_York"))
+         DateTime_EST <= as.POSIXct("2024-12-17", tz = "America/New_York"))
 
 PT2 <- compare %>%
    filter(DateTime_EST >= as.POSIXct("2025-03-01", tz = "America/New_York"),
@@ -337,6 +401,7 @@ ggplot(data = PT2, aes(x = waterlevel_cm, y = manual_depth_cm))+
 
 
 ```
+
 ##Visualize differences between PT sensor reading and manual measurement
 
 ```{r Visualize PT v manual measurements, echo = TRUE}
@@ -367,7 +432,7 @@ a
 ```
 
 ```{r Compare with precip, echo = TRUE}
-compare <- left_join(compare, ccr_met, by = "DateTime_EST")
+rain_comp <- left_join(compare, ccr_met, by = "DateTime_EST")
 
 ggplot(data = rain_comp, aes(x = DateTime_EST)) +
   geom_line(aes(y = waterlevel_cm)) +
@@ -381,7 +446,8 @@ a <- ggplot(data = compare, aes(x = DateTime_EST)) +
   geom_point(aes(y = waterlevel_cm)) +
   geom_point(aes(y = manual_depth_cm), color = "red")
 
-ggplotly(a)
+a
+#ggplotly(a)
 
 ```
 

@@ -1,0 +1,3 @@
+attributeName	code	definition
+Reservoir	CCR	Carvins Cove Reservoir
+Site	101	Horsepen Branch inflow stream of Carvins Cove Reservoir

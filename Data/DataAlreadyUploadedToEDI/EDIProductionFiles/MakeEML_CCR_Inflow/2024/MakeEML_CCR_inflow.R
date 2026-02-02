@@ -38,22 +38,22 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025",
+  dataset.title = "Stage and Discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025",
   temporal.coverage = c("2024-04-23", "2025-12-02"),
   maintenance.description = 'ongoing',
   data.table = c("ccr_hpb-inflow_2024_2025.csv", 
-                 "hpb_maintenancelog_2024.csv"),
+                 "hpb_maintenancelog_2024_2025.csv"),
   data.table.description = c("Tributary stage and discharge dataset from 2024-2025",
                              "Maintenace log for sensor"
                              ),
-  other.entity= c('hpb_stage_QAQC.R',
-                  'hpb_Q_calcs_trials.R'),
+  other.entity= c('Stage_QAQC.Rmd',
+                  'HPB_Q_calc.R'),
   other.entity.description = c("Script to QAQC 10-minute stage data",
                                "Script to calculate discharge"
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1781.1', #Staging ID
+  package.id = 'edi.1781.2', #Staging ID
   #package.id = '', #Publication ID
   write.file = T, ### write the file to the folder
   return.obj = T)

@@ -24,6 +24,10 @@ Discharge was calculate by developing a rating curve between sensor derived stag
 Data Flags are reported for each variable in the data set. 
 Flag of 0 = No Flag
 Flag of 1 = Data removed and set to NA due to maintenance 
+Flag of 2 = Data from the first PT sensor deployment (see methods)
+Flag of 4 = Offset to stage data applied
+Flag of 5 = Negative pressure values that were retained in the data set
+Flag of 6 = Dishcarge values that were greater than observed discharge used to generate the rating curve. These values are suspect and should be treated with caution.
 
 
 

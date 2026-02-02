@@ -1,2 +1,3 @@
 "Reservoir","Site","Depth_m","field_date","lab_date","field_vial_number","notes"
+"FCR",50,3.8,2026-01-21,2026-01-22,171,"Interference, but tried to reintegrate. If dups don't match for CO2 discard this one."
 NA,NA,NA,NA,2025-12-04,NA,"Partial CO2 interference. If dups don't match for CO2 discard this one."

@@ -1,15 +1,13 @@
-Reservoir,Site,DataStream,TIMESTAMP_start,TIMESTAMP_end,start_parameter,end_parameter,start_offset,end_offset,flag,update_value,adjustment_code,notes
-CCR,101,hpb_inflow,5/22/2024 14:40,5/22/2024 15:50,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,6/19/2024 10:40,6/19/2024 11:50,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,7/11/2024 11:00,7/11/2024 12:00,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,9/16/2024 13:00,9/16/2024 14:00,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,9/30/2024 12:00,9/30/2024 13:10,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,10/28/2024 12:40,10/28/2024 12:50,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,12/17/2024 12:50,12/17/2024 14:00,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,4/16/2025 11:00,4/16/2025 13:30,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for  install
-CCR,101,hpb_inflow,6/11/2025 12:00,6/11/2025 13:30,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,7/9/2025 10:00,7/9/2025 10:10,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,8/20/2025 11:00,8/20/2025 11:10,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,12/2/2025 12:30,12/2/2025 12:40,Stage_cm,Stage_cm,NA,NA,1,NA,,sensor out of water for data download
-CCR,101,hpb_inflow,4/23/2024 0:00,12/17/2024  23:00:00 PM,Stage_cm,Stage_cm,NA,NA,2,NA,,1st PT deployment; see methods
-CCR,101,hpb_inflow,4/11/2025 13:10,6/11/2025 12:10,Stage_cm,Stage_cm,10.3,10.3,4,,,constant offset applied due to PT set incorrectly
+Reservoir;Site;DataStream;TIMESTAMP_start;TIMESTAMP_end;start_parameter;end_parameter;flag;update_value;adjustment_code;notes
+CCR;101;hpb_inflow;5/22/2024 14:35;5/22/2024 15:05;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;6/19/2024 10:35;6/19/2024 10:45;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;9/30/2024 11:55;9/30/2024 12:05;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;10/28/2024 12:35;10/28/2024 12:45;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;12/17/2024 12:45;12/17/2024 12:55;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;4/16/2025 11:25;4/16/2025 12:15;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for  install
+CCR;101;hpb_inflow;4/11/2025 13:10;6/11/2025 12:10;corrected_Pres_kPa;NA;4;;"hobo[Time, maintenance_cols]+0.983"; moved PT down closer to the stream bed so applied an offset to earlier pressure values
+CCR;101;hpb_inflow;6/11/2025 12:10;6/11/2025 12:30;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;7/9/2025 09:55;7/9/2025 10:05;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;8/20/2025 10:55;8/20/2025 11:05;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hbp_inflow;11/11/2025 11:45;11/11/2025 11:55;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download
+CCR;101;hpb_inflow;12/2/2025 12:30;12/2/2025 12:40;HOBO_Abs_Pres_kPa;Temp_C;1;;;sensor out of water for data download

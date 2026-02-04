@@ -17,7 +17,26 @@ pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
 
 folder <- paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCR_Inflow/2024/")
 
+#Step 5: Import the core metadata templates
+#Prepare metadata file templates using the 
+template_table_attributes(
+  path = folder,
+  data.path = folder,
+  data.table = c('ccr_hpb-inflow_2024_2025.csv','hpb_maintenancelog_2024_2025.csv'))
 
+view_unit_dictionary()
+
+
+#Step 14: Categorical variables
+# View documentation for this function
+
+?template_categorical_variables
+
+# Run this function for your dataset
+
+template_categorical_variables(path = folder,
+                               data.path = folder,
+                               write.file = TRUE)
 
 
 ## Step 17: Obtain a package.id FROM STAGING ENVIRONMENT. ####

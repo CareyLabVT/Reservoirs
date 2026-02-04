@@ -6,8 +6,6 @@ TIMESTAMP_start	Date and time maintenance began. All data were collected in the 
 TIMESTAMP_end	Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time). No time zone shifts were observed throughout the dataset.	Date		YYYY-MM-DD hh:mm:ss	NA	Maintenance is on going and has no current end date
 start_parameter	Name of start variable in the sequence corresponding to inflow data table names	categorical	dimensionless		NA	There is only one parameter flagged
 end_parameter	Name of end variable in the sequence corresponding to inflow data table names	categorical	dimensionless		NA	There is only one parameter flagged
-start_offset	value to use at start of offset calculations	numeric	centimeter		NA	value is missing
-end_offset	value to use at end of offset calculations	numeric	centimeter		NA	value is missing
 flag	Data flag applied to associated variable	categorical	dimensionless		NA	value is missing
 update_value	New value to update the data to in the QAQC process	character			NA	No updated value used
 adjustment_code	Chunks of code or a numeric offset to change the data to in the QAQC process	character			NA	No adjustment code used

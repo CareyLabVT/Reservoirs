@@ -2,10 +2,15 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site within each reservoir	categorical	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the Eastern Standard Time zone of the USA, with daylight savings not observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Pressure_kPa	Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor	numeric	poundsPerSquareInch		NA	value is missing
-Stage_cm	Water level at the site derived from the corrected pressure measurement (Pressure_kPa)	numeric	poundsPerSquareInch		NA	value is missing
-Temp_C	Water temperature measured by the HOBO sensor	numeric	cubicMetersPerSecond		NA	value is missing
-Flow_cms	Discharge flow rate derived from the HOBO pressure and rating curve	numeric	poundsPerSquareInch		NA	value is missing
-Flag_Pres	Data flag for Pressure_kPa and Stage_cm	categorical	dimensionless		NA	value is missing
-Flag_Temp_C	Data flag for Temp_C	categorical	dimensionless		NA	value is missing
+HOBO_Abs_Pres_kPa	Pressure from the HOBO logger submerged in the stream 	numeric	kilopascal		NA	value is missing
+BP_Average_kPa	Barometric pressure averaged over measurement interval	numeric	kilopascal		NA	value is missing
+corrected_Pres_kPa	Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor	numeric	kilopascal		NA	value is missing
+waterlevel_cm	Water level at the site derived from the corrected pressure measurement (Pressure_kPa)	numeric	centimeter		NA	value is missing
+Flow_cms	Discharge flow rate derived from the HOBO pressure and rating curve	numeric	cubicMetersPerSecond		NA	value is missing
+Temp_C	Water temperature measured by the HOBO sensor	numeric	celsius		NA	value is missing
+Flag_HOBO_Abs_Pres_kPa	Data flag for HOBO_Abs_Pres_kPa	categorical	dimensionless		NA	value is missing
+Flag_BP_Average_kPa	Data flag for BP_Average_kPa	categorical	dimensionless		NA	value is missing
+Flag_corrected_Pres_kPa	Data flag for corrected_Pres_kPa	categorical	dimensionless		NA	value is missing
+Flag_waterlevel_cm	Data flag for waterlevel_cm	categorical	dimensionless		NA	value is missing
 Flag_Flow_cms	Data flag for Flow_cms	categorical	dimensionless		NA	value is missing
+Flag_Temp_C	Data flag for Temp_C	categorical	dimensionless		NA	value is missing

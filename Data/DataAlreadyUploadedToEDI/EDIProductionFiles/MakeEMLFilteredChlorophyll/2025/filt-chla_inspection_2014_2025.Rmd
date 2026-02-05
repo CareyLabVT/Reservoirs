@@ -4,6 +4,7 @@ author: "Kathryn Hoffman"
 date: "2023-12-05"
 output: html_document
 ---
+Last updated: 15 Jan 2025
 
 This is the visual inspection script for Filtered Chlorophyll. 
 If running for EDI Dayz, start at line 71 and update the pasta with the most recent staged version.
@@ -67,7 +68,7 @@ Skip or replace with published version if running for the first time
 ```{r Read in data from EDI: START HERE}
 #Replace this link with the new EDI pasta
 
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/42/d37e703eee6c7c7e28982f63703a0721" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/52/32/d321a924e9d6a839366647a8f942204e" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
@@ -285,6 +286,15 @@ ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Chla_ugL, col = Dep
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Timeseries - Chlorophyll a")
 ```
+Look at the duplicates: 
+```{r}
+ggplot(subset(chla_YMD, Year >= 2023), aes(x = DateTime, y = Chla_ugL, col = as.factor(Rep))) +
+  geom_point(size = 1) + 
+  facet_grid(Reservoir ~., scales = "free_y") + 
+  ggtitle("Timeseries - Chlorophyll a")
+```
+
+
 **Time Series for entire data set - Phaeophytin**
 ```{r Time Series for entire data set - Phaeophytin}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 

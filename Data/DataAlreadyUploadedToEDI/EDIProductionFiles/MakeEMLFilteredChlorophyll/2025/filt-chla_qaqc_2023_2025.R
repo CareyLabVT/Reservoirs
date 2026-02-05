@@ -3,7 +3,7 @@
 # Written: 24 Nov. 23
 # Edit: Jan. 2026 - using "here" for pathing, updates to warnings, created new folder for qaqc checks - KKH
 # Edit: 18 Feb. 25 - added an if statement for when we don't have new observations for the year. The function ends
-# KKH Updated Jan 25 - rename SNP sites to be consistent with LSPA sites 
+# KKH Updated Jan 2025 - rename SNP sites to be consistent with LSPA sites 
 # (40 (Hedgehog) > 220 (LSPA code for Hedgehog), 50 (buoy) > 200)
 # updated script to handle other possible spec sample ID naming conventions
 # 16 Jun 24- add in historical file, add a start and end date filter, add in time of sample

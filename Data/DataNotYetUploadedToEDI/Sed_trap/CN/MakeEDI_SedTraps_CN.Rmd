@@ -21,6 +21,7 @@ cn3 = read.csv("./2023 sed trap runs/ASL 26jan23.csv")
 cn4 = read.csv("./2023 sed trap runs/ASL 27jan23.csv")
 cn5 = read.csv("./2023 sed trap runs/ASL 23mar22.csv")
 cn6 = read.csv("./2023 sed trap runs/ASL 10feb22.csv")
+cn7 = read.csv("./2025 sed trap runs/CN_FMI_DXE_raw_spring2025.csv")
 #Add new file here
 
 cn_raw = cn1 %>%
@@ -29,6 +30,7 @@ cn_raw = cn1 %>%
   full_join(cn4) %>%
   full_join(cn5) %>%
   full_join(cn6) %>%
+  full_join(cn7) %>% 
   #full_join([new file]) %>%
   dplyr::select(-X)
 ```
@@ -43,7 +45,10 @@ cn_processed = cn_raw%>%
                       "RunIn",
                       "ref zzyzx",
                       "crucible blank",
-                      "internal reference zzyzx"),
+                      "internal reference zzyzx",
+                      "zzyzx soil",
+                      "aa tht is inaccurateweight_DXE",
+                      "zzyzx reference"),
          Method == "very low") %>%
   #Lots of code to extract information stored in sample name
   mutate(
@@ -84,16 +89,47 @@ cn_processed = cn_raw%>%
          C_factor = C..Factor,
          Date_run = Date)
 
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+high_c_factor <- c('b03jul23_8m_f3', # flagged by FMI as having a high C factor
+                      'b03jul23_4m_f3',
+                      'f03jul23_8m_f3',
+                      'f03jul23_4m_f3',
+                      'f19jun23_8m_f3',
+                      'f19jun23_4m_f3',
+                      'b19jun23_8m_f3',
+                      'b19jun23_4m_f3',
+                      'b05jun23_8m_f3',
+                      'b05jun23_4m_f3')
+
+high_c_factor_IDs <- cn_processed %>% 
+  filter(Name %in% high_c_factor) %>% 
+  select(Filter1ID, Filter2ID)
+
+high_c_factor_F1 <- high_c_factor_IDs$Filter1ID
+high_c_factor_F2 <- high_c_factor_IDs$Filter2ID
+# correct these abnormally high C_factor values by substituting the avg C_factor
+AvgC_Factor <- cn_processed %>% 
+  filter(Name %!in% high_c_factor) %>% 
+  summarise(AvgC_Factor = round(mean(C_factor, na.rm = TRUE), digits = 4))
+
+# apply avg C_factor to data
+cn_processed2 <- cn_processed %>% 
+  mutate(C_pct = if_else(Name %in% high_c_factor,
+                         round((C_pct/C_factor)*AvgC_Factor[1,1], digits = 3),
+                         C_pct),
+         C_factor = if_else(Name %in% high_c_factor, AvgC_Factor[1,1], C_factor))
+
 #Plot
-cn_processed%>%
+cn_processed2%>%
   mutate(layer=ifelse(Depth_m%in%c(4,5),"EPI","HYPO"))%>%
   ggplot(aes(x=Date_sampled,y=C_pct,color=layer))+
   #ggplot(aes(x=Date_sampled,y=C_pct,color=as.factor(Depth_m)))+
   geom_point()+
-  facet_wrap(~Reservoir)
+  facet_grid(rows = vars(layer), cols = vars(Reservoir))
 
 #Final formatting to combine with metals
-cn_to_combine = cn_processed%>%
+cn_to_combine = cn_processed2%>%
   dplyr::select(Weight_mg,
                 N_pct,
                 C_pct,
@@ -108,7 +144,7 @@ This bit is copied from the metals script and could be standardized in the futur
 
 In general, our goal here is to match up information from the filtering log with information from CN analysis. In the CN analysis, we combined two filters, so we need to combine information for the mass of sediment and volume filtered on BOTH of those filters.
 ```{r}
-frame1 = read.csv("../Filtering logs/FilteringLog_EDI.csv")
+frame1 = read.csv("../Filtering logs/FilteringLog_2018_2024.csv")
 
 #let's use the first filter ID to extract reservoir and depth info (should be the same year to year)
 #also add in info that never changes
@@ -134,7 +170,9 @@ frame2_complete = frame2%>%
          Flag_Filter2ID = 1, 
          Flag_CombinedSedMass_g = 1, 
          Flag_TOC_g = 1, #Not currently changing these below
-         Flag_TN_g= 1)
+         Flag_TN_g= 1,
+         Flag_TOCFlux_gm2d = 1,
+         Flag_TNFlux_gm2d = 1)
 #Loop through all rows and sum data
 for(i in 1:nrow(frame2_complete)){
   
@@ -211,7 +249,7 @@ CN_DONE = frame2_complete %>%
                 CombinedSedMass_g, CombinedXSA_m2, C_mass_CN_g, N_mass_CN_g, 
                 Flag_CombinedCollectionVol_L, Flag_Filter2ID, 
                 Flag_CombinedCollectionVol_L, Flag_CombinedSedMass_g, Flag_TOC_g, 
-                Flag_TN_g)%>%
+                Flag_TN_g, Flag_TOCFlux_gm2d, Flag_TNFlux_gm2d)%>%
   mutate(Filt_ratio = CombinedCollectionVol_L / CombinedFilterVol_L, 
          C_mass_traps_g = C_mass_CN_g * Filt_ratio,
          N_mass_traps_g = N_mass_CN_g * Filt_ratio,
@@ -228,7 +266,7 @@ CN_DONE%>%
 ## Combine with metals and export for EDI
 
 ```{r}
-metals_to_combine = read.csv("../Metals/2023_allMetals.csv")%>%
+metals_to_combine = read.csv("../Metals/allMetals_2018_2024.csv")%>%
   mutate(Date=as.Date(Date))
 
 comb_raw = CN_DONE%>%
@@ -295,6 +333,8 @@ comb_formatted = comb_raw%>%
                 Flag_CombinedSedMass_g,
                 Flag_TOC_g,
                 Flag_TN_g,
+                Flag_TOCFlux_gm2d,
+                Flag_TNFlux_gm2d,
                 Flag_ICPTLi_mgL,
                 Flag_ICPTNa_mgL,
                 Flag_ICPTMg_mgL,
@@ -319,7 +359,9 @@ comb_formatted = comb_raw%>%
          Flag_ICPTSr_mgL = ifelse(is.na(ICPTSr_mgL), 2, Flag_ICPTSr_mgL),
          Flag_ICPTBa_mgL = ifelse(is.na(ICPTBa_mgL), 2, Flag_ICPTBa_mgL),
          Flag_TOC_g = ifelse(is.na(TOC_g), 2, Flag_TOC_g),
-         Flag_TN_g = ifelse(is.na(TN_g), 2, Flag_TN_g))
+         Flag_TN_g = ifelse(is.na(TN_g), 2, Flag_TN_g),
+         Flag_TOCFlux_gm2d = if_else(is.na(TOCFlux_gm2d), 2, Flag_TOCFlux_gm2d),
+         Flag_TNFlux_gm2d = if_else(is.na(TNFlux_gm2d), 2, Flag_TNFlux_gm2d))
 
 #Some durations are unknown at the beginning of each year
 comb_formatted = comb_formatted%>%
@@ -335,9 +377,14 @@ comb_formatted = comb_formatted%>%
                                      Flag_Duration_days),
          Flag_Duration_days = ifelse(Date == "2021-06-28" & Reservoir == "BVR", 
                                      2, 
-                                     Flag_Duration_days))
+                                     Flag_Duration_days),
+         # flag for adjusted C_factor value
+         Flag_TOC_g = if_else(Filter1ID %in% high_c_factor_F1, 3,
+                              Flag_TOC_g),
+         Flag_TOCFlux_gm2d = if_else(Filter1ID %in% high_c_factor_F1, 3,
+                              Flag_TOCFlux_gm2d))
 
-write.csv(comb_formatted,"../CN_Metals_Flux_EDI.csv",row.names=F)
+write.csv(comb_formatted,"../CN_Metals_Flux_2018_2024.csv",row.names=F)
 
 mean(unique(frame1$CollectionVol_L), na.rm=T)
 ```

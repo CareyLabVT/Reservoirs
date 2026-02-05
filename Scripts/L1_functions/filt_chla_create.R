@@ -2,7 +2,7 @@
 # By: Adrienne Breef-Pilz
 # Written: 24 Nov. 23
 # Edit: 
-# Feb. 5, 2026 - added code to pull in from GitHub or from local files
+# Feb. 5, 2026 - added code to pull in from GitHub or from local files and moved the date filter up earlier
 # Jan. 2026 - using "here" for pathing, updates to warnings, created new folder for qaqc checks - KKH
 # 18 Feb. 25 - added an if statement for when we don't have new observations for the year. The function ends
 # KKH Updated Jan 25 - rename SNP sites to be consistent with LSPA sites 
@@ -41,7 +41,7 @@ filt_chla_qaqc <- function(directory,
                            outputcheck_folder = './Data/DataNotYetUploadedToEDI/Raw_chla/QAQC_check_folder')
 {
   # directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw%20data%20from%20spec"
-  ## directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
+  # # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
   # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
   # final_vol_extract = 6
@@ -51,8 +51,9 @@ filt_chla_qaqc <- function(directory,
   # historic_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Raw_chla/historic_filt_chla_2014_2022.csv"
   # sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg"
   # outfile = "./Data/DataNotYetUploadedToEDI/Raw_chla/Filt_chla_L1.csv"
-  # start_date = NULL
-  #  end_date = NULL
+  # start_date = as.Date("2026-01-01")
+  #  end_date = Sys.Date()
+  #  outputcheck_folder = './Data/DataNotYetUploadedToEDI/Raw_chla/QAQC_check_folder'
   
   #packages
   pacman::p_load(tidyverse, gsheet, arsenal, here, httr2)
@@ -239,18 +240,45 @@ filt_chla_qaqc <- function(directory,
       Sample_date = as.Date(Sample_date2))|> # put date in format
     select(-Sample_date2)
   
-  # Get the minimum sample date from the processed samples 
+  
+  # Now that the samples have dates let's filter for the current year and if there are no new samples then write no data for the current year 
+  
+  if(!is.null(start_date)){
+    
+    res_samp2 <- res_samp2|>
+      filter(Sample_date > start_date)
+  }
+  
+  if(!is.null(end_date)){
+    
+    res_samp2 <- res_samp2|>
+      filter(Sample_date < end_date)
+  }
+  
+  # If there are no data for the current year than end 
+  
+  if(nrow(res_samp2) == 0){
+    
+    print("No data for the current year")
+    
+    write_csv(res_samp2, outfile)
+    
+  }else {
+  
+  
+  # Get the minimum sample date from the processed samples after filtering 
   a <- res_samp2|>
     drop_na(Sample_date)
   
   min_samp_date <- min(a$Sample_date)
   print("minimum sample date is")
   print(min_samp_date)
+  
   ### 2.2 read in filtering log 
   
   filtering_log <- gsheet::gsheet2tbl(filtering_log)
   
-  # Clean up the data frame
+  # Clean up the filtering log
   filtering_log2 <- filtering_log %>%
     mutate(
       Sample_date = lubridate::ymd(`Sample Date`),
@@ -844,38 +872,6 @@ filt_chla_qaqc <- function(directory,
   # put in order
   final <- final[order(final$DateTime),]
   
-  # subset to make the L1 file. Maybe look at moving this earlier. 
-  
-  if (!is.null(start_date)){
-    #force tz check
-    start_date <- force_tz(as.POSIXct(start_date), tzone = "America/New_York")
-    
-    final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
-    
-    final <- final %>%
-      filter(DateTime >= start_date)
-    
-  }
-  
-  if(!is.null(end_date)){
-    #force tz check
-    end_date <- force_tz(as.POSIXct(end_date), tzone = "America/New_York")
-    
-    final$DateTime <- as.character(format(final$DateTime)) # convert DateTime to character
-    
-    final <- final %>%
-      filter(DateTime <= end_date)
-    
-  }
-  
-  # Check if there are any files for the L1. If not then end the script
-  
-  if(nrow(final)==0){
-    
-    print("No new files for the current year")
-    
-  }else{
-    
     
     ### 7. Save the file. If outfile is NULL then return the file
     

@@ -139,7 +139,6 @@ stage_Q_df |>
 #other filters are to test by year and different flow ranges, biggest issues seems to be two high flow days that mess up fit
 stage_df <- stage_Q_df |> 
   filter(waterlevel_cm < 18) |> # remove the high flow value from May 2025 for now
-   #filter(year(Date) == 2025) |> 
   select(DateTime, waterlevel_cm, Flow_cms) |> 
   filter(!is.na(Flow_cms),
          !is.na(waterlevel_cm),
@@ -171,7 +170,7 @@ plot(fitline$q, fitline$stage)
 
 # Let's see what it look like to show the range of the stage from flowmate dates
 
-itline <- data.frame(
+fitline <- data.frame(
   stage = seq(1, 20, by = 0.5))
 
 fitline$q <- a * fitline$stage^b
@@ -202,8 +201,7 @@ stage_Q_calc <- stage |>
 ##plot the time series of flows, Temp and water level
 stage_Q_calc |> 
   # filter(as.Date(DateTime_EST) > ymd("2025-01-01")) |> 
-  #select(DateTime, waterlevel_cm, Temp_C, Flow_cms) |> 
-  # filter(Flow_cms < 2) |> 
+  # filter(Flow_cms < 0.2) |> 
   pivot_longer(-1) |> 
   ggplot(aes(x = DateTime, y = value))+
   geom_point()+
@@ -229,8 +227,8 @@ stage_Q_calc |>
   facet_wrap(~var, scales = "free_y", ncol = 1)
 
 ##plot v flowmate
-flowmate_join <- hpb_flowmate |>  mutate(Date = as.Date(DateTime)) |> rename(Flow_cms_flowmate = Flow_cms)|>
-  filter(Flow_cms_flowmate < 0.07)
+flowmate_join <- hpb_flowmate |>  mutate(Date = as.Date(DateTime)) |> rename(Flow_cms_flowmate = Flow_cms)  
+  #filter(Flow_cms_flowmate < 0.07) #remove high may flow
 
 stage_Q_calc_join <- stage_Q_calc |> 
   mutate(Date = as.Date(DateTime)) 
@@ -261,6 +259,8 @@ left_join(flowmate_join, stage_Q_calc_join, by)|>
 #### Write csv for publishing Q 
 
 #merge the flows with the stage data frame created from Stage_QAQC.Rmd
+max_flowmate_Q <- max(stage_df$Flow_cms)
+
 
 Q_for_EDI <- stage_Q_calc |>
   select(DateTime, Flow_cms) %>%
@@ -269,6 +269,13 @@ Q_for_EDI <- stage_Q_calc |>
   relocate(Flag_waterlevel_cm, .after = Flag_corrected_Pres_kPa)|>
   mutate(Flag_Flow_cms = Flag_waterlevel_cm)|>
   relocate(Flag_Flow_cms, .after = Flag_waterlevel_cm)|>
+  rename(Stage_cm = waterlevel_cm,
+         Flag_Stage_cm = Flag_waterlevel_cm) |> 
+  ## add flag for times Flow exceeds upper Q in rating curve
+  mutate(Flag_Flow_cms = ifelse(Flow_cms > max_flowmate_Q, 
+                                6, 
+                                Flag_Flow_cms)) |> 
+  #add site identifiers and order data
   mutate(Reservoir = "CCR", 
          Site = 101)|>
   select(Reservoir, Site, everything())

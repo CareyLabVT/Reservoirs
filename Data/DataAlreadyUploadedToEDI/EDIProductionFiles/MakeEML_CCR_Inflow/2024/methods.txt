@@ -35,6 +35,9 @@ Data Flags are reported for each variable in the data set.
 
 5 = Negative corrected pressure but left in data set
 
+6 = Flow value exceeds highest flow mesaurement used in rating curve calculations
+
+
 When the corrected pressure was below 0 water level was set to 0 and flow was also set to 0. 
 
 

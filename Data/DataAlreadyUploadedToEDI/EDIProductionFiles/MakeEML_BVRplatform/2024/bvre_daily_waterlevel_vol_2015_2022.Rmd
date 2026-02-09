@@ -19,7 +19,8 @@ pacman::p_load(RCurl, tidyverse, lubridate)
 
 #read in BVR EDI data 
 
-inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/725/3/a9a7ff6fe8dc20f7a8f89447d4dc2038" 
+
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/725/4/9adadd2a7c2319e54227ab31a161ea12" 
 infile1 <- tempfile()
 options(timeout=3000)
 try(download.file(inUrl1,infile1,method="auto"))
@@ -29,20 +30,20 @@ try(download.file(inUrl1,infile1,method="auto"))
 sensor_depth = sensor%>%
   #mutate(DateTime = as.POSIXct(TIMESTAMP),
          #WaterLevel = Lvl_psi*0.70455)%>%
-  filter(year(DateTime)==2022,
+  filter(year(DateTime)>=2022,
          month(DateTime)>3,
-         Depth_m_13>7.5)%>%
+         LvlDepth_m_13>7.5)%>%
   arrange(DateTime)%>%
-  filter(!lag(Depth_m_13)-Depth_m_13>0.2)%>%
+  filter(!lag(LvlDepth_m_13)-LvlDepth_m_13>0.2)%>%
   mutate(Date = as.Date(DateTime))%>%
   group_by(Date)%>%
-  summarize(WaterLevel = mean(Depth_m_13))%>%
+  summarize(WaterLevel = mean(LvlDepth_m_13))%>%
   mutate(Year = year(Date),
          Site = 50)
 
 
 sensor_depth = sensor%>%
-  mutate(WaterLevel=Depth_m_13)%>%#the sensor is 0.5m off the bottom
+  mutate(WaterLevel=LvlDepth_m_13)%>%#the sensor is 0.5m off the bottom
   #mutate(DateTime = as.POSIXct(TIMESTAMP),
          #WaterLevel = Lvl_psi*0.70455)%>%
   #filter(WaterLevel>7.5)%>%
@@ -85,16 +86,16 @@ bvr_wl_obs <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/
 ```{r find lm}
 
 depth<- sensor%>%
-  select(DateTime, Depth_m_13)%>%
+  select(DateTime, LvlDepth_m_13)%>%
   merge(., bvr_wl_obs, by.x="DateTime", by.y="DateTime")
 
-plot(depth$WaterLevel_m, depth$Depth_m_13)
+plot(depth$WaterLevel_m, depth$LvlDepth_m_13)
 
-lm_depth<- lm(WaterLevel_m~Depth_m_13, data=depth)
+lm_depth<- lm(WaterLevel_m~LvlDepth_m_13, data=depth)
 
 summary(lm_depth)
 
-depth$check=-0.247+ (1.043*depth$Depth_m_13)
+depth$check=-0.247+ (1.043*depth$LvlDepth_m_13)
 
 ```
 
@@ -102,7 +103,7 @@ depth$check=-0.247+ (1.043*depth$Depth_m_13)
 
 vt_obs<- bvr_wl_obs%>%
   select(DateTime,WaterLevel_m, Source)%>%
-  filter(DateTime>ymd_hms("2015-07-07 00:00:00") & DateTime<ymd_hms("2020-06-17 00:00:00"))%>%
+  filter(DateTime>ymd_hms("2014-04-01 00:00:00") & DateTime<ymd_hms("2024-01-01 00:00:00"))%>%
   mutate(Date=as.Date(DateTime))%>%
   select(Date, WaterLevel_m, Source)
 
@@ -132,12 +133,12 @@ wl_final <- vt_obs |>
 ```{r add missing values}
 # Constrain to study time period: 2020-04-05 (time series start date) to
 # last 30 minute period - UPDATE WITH EACH NEW SET OF DATA!
-ts <- seq(as.Date('2015-07-07'), as.Date('2020-06-17'), by = "day")
+ts <- seq(as.Date('2014-04-01'), as.Date('2020-06-17'), by = "day")
 ts2 <- data.frame(Date = ts)
 
 # Join water level data with list of dates+time
 wl_pre_sensors <- left_join(ts2, wl_final, by = 'Date')%>%
-  mutate(WaterLevel_m = ifelse(Date=="2015-07-07", 11.3, WaterLevel_m)) %>% #make first date be 11.3 for interpolation
+  mutate(WaterLevel_m = ifelse(Date=="2014-04-01", 13.5, WaterLevel_m)) %>% #make first date be 13.5 for interpolation
     mutate(WaterLevel_m = ifelse(Date=="2020-06-17", 11.9, WaterLevel_m)) %>% #make last date be 11.9 for interpolation
   mutate(WaterLevel_m = zoo::na.approx(WaterLevel_m)) %>%
   #fill(WaterLevel_m, .direction = "up")%>% # back fill based on obs from staff gauge
@@ -155,12 +156,12 @@ wl_pre_sensors$WaterLevel_m[is.na(wl_pre_sensors$WaterLevel_m)] <- wl_pre_sensor
 calc_sensor_depth<- sensor_depth%>%
   mutate(WaterLevel_m=(WaterLevel*1.043)-0.247)%>%
   select(Date,WaterLevel_m) %>%
-  filter(Date<as.Date("2022-05-05"))
+  filter(Date<as.Date("2024-01-01"))
   
 
 wl_final<-rbind(wl_pre_sensors, calc_sensor_depth)
 
-write.csv(wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/BVR_WaterLevel_2015_2022_interp.csv", row.names = F)
+write.csv(wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/water_level/BVR_WaterLevel_2014_2023_interp.csv", row.names = F)
 
 ```
 
@@ -220,7 +221,7 @@ bvr_wl_final$vol_m3 <- total_bathy$approx_volume / 1000
 bvr_wl_final$Date <- as.Date(bvr_wl_final$Date)
 
 #export file
-write.csv(bvr_wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/BVR_Daily_WaterLevel_Vol_2015_2022_interp.csv", row.names = FALSE)
+write.csv(bvr_wl_final, "/Users/heatherwander/Documents/VirginiaTech/research/BVR_GLM/bvr_glm/inputs/BVR_Daily_WaterLevel_Vol_2015_2023_interp.csv", row.names = FALSE)
 
 ```
 

@@ -41,18 +41,18 @@ metals_qaqc <- function(directory,
   
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
- #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
- #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
- #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
- #  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
- #  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
- #  MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt"
+  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+  # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+  # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
  # metals_save = T
- #   metals_outfile = NULL
- #   ISCO_save = T
- #  ISCO_outfile = NULL
- #  start_date = NULL
- #  end_date = NULL
+   # metals_outfile = NULL
+   # ISCO_save = T
+  # ISCO_outfile = NULL
+  # start_date = NULL
+  # end_date = NULL
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -268,8 +268,8 @@ metals_qaqc <- function(directory,
    # puts in flag 1 if value not collected
    frame2[c(which(is.na(frame2[,j]))),paste0("Flag_",j)] <- 1
 
-   # puts in flag 7 for sample run twice and we report the mean. Use the count columns made above
-   frame2[c(which(frame2[,paste0("count_",colnames(frame2[j]))]>1)),paste0("Flag_",j)] <- 7
+   # puts in flag 5 for sample run twice and we report the mean. Use the count columns made above
+   frame2[c(which(frame2[,paste0("count_",colnames(frame2[j]))]>1)),paste0("Flag_",j)] <- 5
  }
 
  # Now we can remove the number of observation columns
@@ -383,7 +383,7 @@ metals_qaqc <- function(directory,
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-       else if (flag ==6){
+       else if (flag ==4){
          # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
 
          raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 2.2
@@ -391,13 +391,13 @@ metals_qaqc <- function(directory,
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-       else if (flag==8){
-         # abnormally high value, doesn't get flagged below but is manually flagged in maintenance log
+       else if (flag==6){
+         # suspect sample, doesn't get flagged below but is manually flagged in maintenance log
 
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-     else if (flag==10){
+     else if (flag==8){
        # improper procedure, set all data columns to NA and all flag columns to 10
        raw_df[All, maintenance_cols] <- NA
        
@@ -418,27 +418,53 @@ metals_qaqc <- function(directory,
 
    MRL <- read_csv(MRL_file, show_col_types = F)|>
      pivot_wider(names_from = 'Symbol',
-                 values_from = "MRL_mgL")
-
+                 values_from = "MRL_mgL") %>%
+     rename_with(~str_c("MRL_", .), Al_mgL:Sr_mgL)
+     
+     
+   
+   # for ease of use, add year column to raw_df
+   raw_df <-  raw_df %>%
+     mutate(Year = year(Date)) %>% 
+     left_join(MRL) %>%  
+     mutate(Flag_Li_mgL = if_else(!is.na(Li_mgL) & Li_mgL <= MRL_Li_mgL, as.numeric(paste0(Flag_Li_mgL, 3, sep = '')), Flag_Li_mgL),
+            Flag_Na_mgL = if_else(!is.na(Na_mgL) & Na_mgL <= MRL_Na_mgL, as.numeric(paste0(Flag_Na_mgL, 3, sep = '')), Flag_Na_mgL),
+            Flag_Mg_mgL = if_else(!is.na(Mg_mgL) & Mg_mgL <= MRL_Mg_mgL, as.numeric(paste0(Flag_Mg_mgL, 3, sep = '')), Flag_Mg_mgL),
+            Flag_Al_mgL = if_else(!is.na(Al_mgL) & Al_mgL <= MRL_Al_mgL, as.numeric(paste0(Flag_Al_mgL, 3, sep = '')), Flag_Al_mgL),
+            Flag_Si_mgL = if_else(!is.na(Si_mgL) & Si_mgL <= MRL_Si_mgL, as.numeric(paste0(Flag_Si_mgL, 3, sep = '')), Flag_Si_mgL),
+            Flag_K_mgL = if_else(!is.na(K_mgL) & K_mgL <= MRL_K_mgL, as.numeric(paste0(Flag_K_mgL, 3, sep = '')), Flag_K_mgL),
+            Flag_Ca_mgL = if_else(!is.na(Ca_mgL) & Ca_mgL <= MRL_Ca_mgL, as.numeric(paste0(Flag_Ca_mgL, 3, sep = '')), Flag_Ca_mgL),
+            Flag_Fe_mgL = if_else(!is.na(Fe_mgL) & Fe_mgL <= MRL_Fe_mgL, as.numeric(paste0(Flag_Fe_mgL, 3, sep = '')), Flag_Fe_mgL),
+            Flag_Mn_mgL = if_else(!is.na(Mn_mgL) & Mn_mgL <= MRL_Mn_mgL, as.numeric(paste0(Flag_Mn_mgL, 3, sep = '')), Flag_Mn_mgL),
+            Flag_Cu_mgL = if_else(!is.na(Cu_mgL) & Cu_mgL <= MRL_Cu_mgL, as.numeric(paste0(Flag_Cu_mgL, 3, sep = '')), Flag_Cu_mgL),
+            Flag_Sr_mgL = if_else(!is.na(Sr_mgL) & Sr_mgL <= MRL_Sr_mgL, as.numeric(paste0(Flag_Sr_mgL, 3, sep = '')), Flag_Sr_mgL),
+            Flag_Ba_mgL = if_else(!is.na(Ba_mgL) & Ba_mgL <= MRL_Ba_mgL, as.numeric(paste0(Flag_Ba_mgL, 3, sep = '')), Flag_Ba_mgL))
+   
+   
    # flag minimum reporting level
    for(j in colnames(raw_df|>select(Li_mgL:Ba_mgL))) {
 
    # If value negative set to minimum reporting level
 
      # If value negative and was digested flag with both
-     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]==6)),paste0("Flag_",j)] <- 64
+     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
 
      # If value negative flag
-     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]!=64)),paste0("Flag_",j)] <- 4
+     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]!=34)),paste0("Flag_",j)] <- 3
+     
+     # get the year
+    ColYear <- raw_df[,"Date"] %>% 
+      mutate(Date = year(as.POSIXlt(Date, format = "%Y-%d-%m"))) %>% 
+      rename('Year' = 'Date')
 
    # get the minimum detection level
-   MRL_value <- as.numeric(MRL[1,j])
+   MRL_value <- as.numeric(MRL[which(MRL[,"Year"] == ColYear)])
 
    # If value is less than MRL and has been digested then flag both  and will set to MRL later
-   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==6)),paste0("Flag_",j)] <- 63
+   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
 
    # If value is less than MRL the flag and will set to MRL later
-   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=63)),paste0("Flag_",j)] <- 3
+   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=34 & raw_df[,paste0("Flag_",j)]!=4)),paste0("Flag_",j)] <- 3
 
    # replace the negative values or below MRL with the MRL
    raw_df[c(which(raw_df[,j]<=MRL_value)),j] <- MRL_value
@@ -448,15 +474,14 @@ metals_qaqc <- function(directory,
 
    mean_value <- mean(as.numeric(unlist(raw_df[j])), na.rm = TRUE)
 
-   # Flag values over 3 standard deviations above the mean for the year.
-   # This will change each time we add more observations.
-   # This is why we should qaqc all raw files
+   
+   # for 2025 data: not flagging samples 3sd above the mean
    
    # Some samples are 3sd above the mean and we processed with a non-standard method, aka digestion
-   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]==6)),paste0("Flag_",j)] <- 68
+   # raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 46
    
    # Now flagging observations that were not digested and are 3sd above the mean
-   raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]!=68)),paste0("Flag_",j)] <- 8
+   # raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]!=46)),paste0("Flag_",j)] <- 6
 
    print(j)
    print("mean")
@@ -536,18 +561,36 @@ metals_qaqc <- function(directory,
    #### 6. Switch observations if total and soluble samples were mixed up ####
 
    # Determine if totals and soluble samples were switched.
-   # Totals plus the Minimum reporting level is less than the soluble sample then they need to be
-   # switched.
-   # Cece is this what you want it to be? It looks like some of the observations are very close.
-    #we want to do 3 MRL for Fe, and Mn, give it a flag of 9, and then see what it looks like
 
-  for(l in c('T_Fe_mgL', 'T_Mn_mgL')){
+  
+  # create columns for 5 percent threshold - this is the threshold for solubles being greater than totals
+  raw_df <- raw_df %>% 
+    mutate(
+      across(
+        .cols = starts_with("T_") | starts_with("S_"),
+        .fns = ~ .x *0.05,
+        .names = 'fivepercent_{.col}'
+      )
+    )
+
+  # create columns for 10 percent threshold - this is the threshold for tubes being switched
+  raw_df <- raw_df %>% 
+    mutate(
+      across(
+        .cols = starts_with("T_") | starts_with("S_"),
+        .fns = ~ .x *0.1,
+        .names = 'tenpercent_{.col}'
+      )
+    )
+  
+  # now begin the switching process
+  for(l in c('T_Fe_mgL', 'T_Mn_mgL', 'T_Al_mgL')){
     raw_df[,paste0("Check_",colnames(raw_df[l]))] <- "0"  #creates Check column + name of variable
-    MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
-    switch_threshold <- MRL_value*3
+    #MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
+    #switch_threshold <- MRL_value*3
 
     # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus three times the MRLA;s
-    raw_df[which(raw_df[,l]+switch_threshold < raw_df[,gsub("T_", "S_", l)]),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED"
+    raw_df[which(raw_df[,l]+raw_df[,paste0('tenpercent_',l)] < raw_df[,gsub("T_", "S_", l)]),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED"
   }
 
 
@@ -555,7 +598,11 @@ metals_qaqc <- function(directory,
   raw_df$switch_all <- 0
   for (i in 1:nrow(raw_df)){
   if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
-      raw_df[i,'Check_T_Mn_mgL'] == 'SWITCHED'){
+      raw_df[i,'Check_T_Mn_mgL'] == 'SWITCHED' &
+      raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
+      raw_df[i,'Flag_T_Fe_mgL'] != 3 & # add 34
+      raw_df[i,'Flag_T_Mn_mgL'] != 3 &
+      raw_df[i,'Flag_T_Al_mgL'] != 3){
     raw_df[i,'switch_all'] <- 1
   }
 }
@@ -565,7 +612,21 @@ metals_qaqc <- function(directory,
       raw_df[which(raw_df[,'switch_all'] == 1), c(gsub("T_", "S_", l), l)]
   }
 
+  
+  # now that all rows have been switched, check to see if solubles are greater than totals
+  for (i in colnames(raw_df|>select(starts_with('T_')))) {
+    raw_df[c(which(raw_df[,i]+raw_df[,paste0('fivepercent_',i)] < raw_df[,gsub("T_", "S_", i)] & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+    raw_df[c(which(raw_df[,i]+raw_df[,paste0('fivepercent_',i)] < raw_df[,gsub("T_", "S_", i)] & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+  }
 
+  for (i in colnames(raw_df|>select(starts_with(c('S_'))))) {
+    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+  }
+  
+  #raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
    # for(l in colnames(raw_df|>select(starts_with(c("T_"))))) {
    #   #for loop to create new columns in data frame
    #   raw_df[,paste0("Check_",colnames(raw_df[l]))] <- 0 #creates Check column + name of variable
@@ -587,8 +648,10 @@ metals_qaqc <- function(directory,
     # puts in flag 1 if value not collected
     raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
     
+    
     # add a flag if the samples were switched
-    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1), paste0("Flag_",j)] <- 9
+    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1 & raw_df[paste0("Flag_",i)]!=6 & raw_df[paste0("Flag_",i)]!=69 & raw_df[paste0("Flag_",i)]!=9), paste0("Flag_",j)] <- 7
+    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1), paste0("Flag_",j)] <- 7
 
   }
    # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the

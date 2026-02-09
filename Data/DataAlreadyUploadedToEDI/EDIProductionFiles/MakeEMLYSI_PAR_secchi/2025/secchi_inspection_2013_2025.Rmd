@@ -47,7 +47,7 @@ REVIEWERS- If you are reviewing this data package replace the pasta link with th
 # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
                                                                    ### CHANGE THIS NUMBER BELOW
                                                                               ##
- current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/1/54bda3bdebca2d1488221371a0c4ab8a" )
+ current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1140/10/547f9a388a26711b4b10e4c7ad7e1a4e" )
  # Force files from EDI to have an EST timestamp
  current_df$DateTime <- force_tz(current_df$DateTime, tz = "America/New_York")
 ```

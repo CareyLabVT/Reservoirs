@@ -1,0 +1,10 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; CCR = Carvins Cove Reservoir	character			NA	value is missing
+Site	Sampling site at each reservoir; see site_descriptions.csv provided in this data package for further information regarding sampling sites	numeric	dimensionless		NA	value is missing
+Date	Date of sampling. All data were collected in the eastern time zone of the U.S.A. with daylight savings observed	Date		YYYY-MM-DD	NA	value is missing
+Depth_m	The depth at which the sample was taken within the reservoir	numeric	meter		NA	value is missing
+d18O_VSMOW	deviation of concentration of 18O from that of Vienna standard mean ocean water (VSMOW)	numeric	permil		NA	value is missing
+d18O_VSMOW_1sd	1 standard deviation of injection reps of d18O_VSMOW	numeric	permil		NA	value is missing
+d2H_VSMOW	deviation of concentration of 2H from that of Vienna standard mean ocean water (VSMOW)	numeric	permil		NA	value is missing
+d2H_VSMOW_1sd	1 standard deviation of injection reps of d2H_VSMOW	numeric	permil		NA	value is missing
+Iso_Flag	Flag for all isotope parameters: 0 = Data are good for all parameters; 1 = Samples rerun after initial run with bad QAQC checks	numeric	dimensionless		NA	value is missing

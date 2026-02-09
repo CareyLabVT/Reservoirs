@@ -16,7 +16,7 @@ This is the visualization script for the greenhouse gas data product which was u
 knitr::opts_chunk$set(echo = TRUE)
 
 # Add the names of the packages 
-pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly)
+pacman::p_load(tidyverse, lubridate, gsheet, readxl, plotly, htmltools)
 
 # source the qaqc code for GHG from GitHub
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/ghg_create.R")
@@ -59,7 +59,7 @@ maintenance_log <- "ghg_maintenancelog_2015_2025.csv"
 # 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
-edi_link <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/18/98f19e7acae8bea7d127c463b1bb5fbc" 
+edi_link <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/20/ee8e65a2a380c9fb63bbf7f4a542c895" 
 
 edi_site_description_file <- "https://pasta-s.lternet.edu/package/data/eml/edi/997/18/5a1454801605a1237489e9c14d10ff2c" 
 
@@ -219,43 +219,28 @@ ghgplotting <- function(data_df,
                         var,
                         reservoir,
                         site){
-  
-
 # Filter the data frame based on the arguments
-  a <- data_df |>  
+  a <- data_df %>%
   filter(Reservoir %in% reservoir,
-         Site %in% site) 
-  
-
-  
-# make the plot  
-  
-# All data plots  
+         Site %in% site)
+# make the plot
+# All data plots
  all_data_plots <-  ggplot(a, aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
   geom_point() +
-   {if(length(site)>0)facet_grid(Site ~ ., scales="free_y")}+
+   {if(length(unique(a$Site))>1)facet_grid(Site ~ ., scales="free_y")}+
   labs(title = paste0("All data"," ",reservoir," "," ",var))+
    theme_bw()
-  
-  
   # actually make the all data plots
-  
-current_data_plots <-  a|>
-     filter(DateTime>=as.Date(current_start) & DateTime<=as.Date(current_end))|>
+current_data_plots <-  a %>%
+     filter(DateTime>=as.Date(current_start) & DateTime<=as.Date(current_end)) %>%
      ggplot( aes(x = DateTime, y = .data[[var]], colour = as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",var)]])))+
   geom_point() +
-   {if(length(site)>0)facet_grid(Site ~ ., scales="free_y")}+
+   {if(length(unique(a$Site))>1)facet_grid(Site ~ ., scales="free_y")}+
   labs(title = paste0("Current data"," ",reservoir," "," ",var))+
    theme_bw()
-   
-  c <- ggplotly(current_data_plots) 
- # list the plots from above 
-   
- all_plots <- list(all_data_plots,c)
- 
+ # list the plots from above
+ all_plots <- list(all_data_plots, current_data_plots)
  return(all_plots)
- 
-
   }
 
 ```
@@ -265,7 +250,8 @@ current_data_plots <-  a|>
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = 50)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -283,7 +269,8 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "FCR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -293,7 +280,8 @@ outputs
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = 50)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -311,15 +299,17 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "BVR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 ```
 
-```{r All BVR Site 50 Plots All data, echo=FALSE}
+```{r All CCR Site 50 Plots All data, echo=FALSE}
 
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = c(50,51))
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 
 ```
 
@@ -337,7 +327,8 @@ fgh <- fcr_sites$Site
 # make the plots
 outputs <- lapply(c("CH4_umolL", "CO2_umolL"), ghgplotting, data_df = current_df, reservoir = "CCR", site = fgh)
 
-outputs
+tagList(lapply(outputs[[1]], ggplotly))
+        tagList(lapply(outputs[[2]], ggplotly))
 ```
 
 ```{r Publisher Make new CSV with current and historic files, eval = make_data, include=FALSE}

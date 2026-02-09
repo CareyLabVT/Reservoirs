@@ -1,0 +1,276 @@
+---
+title: "Visual inspection for UGGA EDI"
+author: "Abby Lewis"
+date created: "1/6/2022"
+output: html_document
+---
+Updates: 
+Last edit: 17 December 2025 (DXE)
+KKH updated 15 Jan 2026
+ABP updated 16 Jan 2026 - added new text 
+
+This script is the visual inspection script. 
+
+1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
+
+2. Creates plots
+
+3. Writes data to new csv
+
+4. Downloads necessary files for EDI publishing
+
+5. Make site description file
+
+
+All files are from GitHub or EDI and the source scripts are from GitHub as well. 
+
+INFORMATION:
+
+There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I recommend this because if you run it chunk by chunk your R may abort the session. The Knit button is on the top of the file with a ball of yarn and a needle next to it.
+
+If you are REVIEWING this data package, add the pasta URL from EDI in the "EDIT HERE" chunk and you change the role, as well. If you are knitting the document, only the specified chunks of code will be run depending on your role.  Once that is all set than you can knit the file together as an HTML file to look at all the plots.
+
+
+If you are REVIEWING this data package, got to the "EDIT HERE" chunk
+
+1.  Update your role
+
+2.  Update the pasta link from EDI
+
+If you are running the code chunk by chunk you might need to make some adjustments to the code. 
+
+FOR DATA PRODUCT LEAD:
+
+If you are the data product lead and making the data package then:
+
+1.  Update the EDIT HERE Section with publishing years.
+
+2.  Make sure your GitHub is up to date. 
+
+3.  Knit the file. This is up to you. 
+
+4.  Look over the plots and see if there are any issues that need to be added to the maintenance log. I will usually read in the file you just made and make smaller plots with the variable and month in question. Once I have the dates, add them to the maintenance log.
+
+5.  Re-run the inspection script until you have found all of the issues.
+
+7.  Make sure large maintenance issues are also documented in the methods.txt file.
+
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(include = FALSE)
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse,lubridate, plotly, knitr, gsheet)
+
+
+# The reads in the QAQC function from GitHub so we can use it to make the data frame and qaqc it in this script
+source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/UGGA_create.R")
+
+```
+
+```{r EDIT HERE, include=FALSE}
+
+# 1. How would you like to use this script. If you are a data publisher write "publisher" if you are a reviewer write "reviewer"
+
+role <- "publisher"
+
+# 2. DATA PUBLISHERS UPDATE DATES HERE
+# Set up the current time end time of the file and the current year for QAQC plots
+#current time of QAQC for graphing
+
+current_start_time <- as.Date("2025-01-01")
+
+# 3. DATA PUBLISHERS UPDATE FILE NAMES
+# Update the name of the data files, maintenance log, and qaqc function. Double check the name of the file matches the naming convention and the start and end date of the data file. 
+
+file_name <- "ugga_2018_2025.csv"
+
+qaqc_function <- "ugga_qaqc_2018_2025.R"
+
+yearly_qaqc_function <- "ugga_FluxCalR_2025.R"
+
+maintenance_log <- "ugga_maintenancelog_2018_2025.csv"
+
+
+
+# 3. For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
+
+edi_link <-"https://pasta-s.lternet.edu/package/data/eml/edi/518/36/814580ebec0385c66f0a0a97c38e9136"  
+
+```
+
+```{r set chunks on or off, echo=FALSE}
+### Code to determine which chunks are turned on and off
+
+if(role=="publisher"){
+  make_data = TRUE
+  edi_stage = FALSE
+}else if(role == "reviewer"){
+  make_data = FALSE
+  edi_stage = TRUE
+}
+
+```
+
+
+```{r Make the qaqced data frame, eval=make_data, message=TRUE, warning=TRUE, echo=FALSE}
+# Use the qaqc function to make the current data frame
+
+current_df <- ugga_qaqc(
+  files = "./../../../../DataNotYetUploadedToEDI/UGGA/UGGA_Raw/",
+  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv",
+  outfile = NULL,
+  start_date =NULL, # change when we update to read date from EDI
+  end_date = NULL)
+
+```
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+```{r READ IN EDI FOR REVIEWER, eval = edi_stage, include = FALSE}
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT. 
+                                                                ### CHANGE THIS NUMBER BELOW 
+                                                                             ##      
+ current_df <-read_csv(edi_link)
+
+
+
+ # Force files from EDI to have an EST timestamp
+  # current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "EST")
+
+```
+
+```{r Current data plots}
+#Plot all CH4
+current_CH4 <- current_df%>%
+  filter(Date > current_start_time) %>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow =2)+
+  theme_bw()
+
+# Make plotly plot
+
+plotly::ggplotly(current_CH4)
+
+#Plot all C02
+Current_C02 <- current_df%>%
+  filter(Date > current_start_time) %>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("C02 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow = 2)+
+  theme_bw()
+
+# Make plotly plot c02
+
+plotly::ggplotly(Current_C02)
+
+```
+
+```{r CH4 plots DOY Fluxes}
+#Plot all CH4
+current_df%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CH4Flux_umolCm2s, shape = as.factor(Flag_CH4Flux_umolCm2s)))+
+  geom_point()+
+  ylab("CH4 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow = 2)+
+  theme_bw()
+
+#by day of year
+current_df%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CH4Flux_umolCm2s),
+             y=CH4Flux_umolCm2s))+
+  geom_point()+
+  ylab("CH4 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow = 2)+
+  theme_bw()
+
+#one negative methane flux in 2020 FCR
+```
+
+```{r Plot CO2 DOY FLuxes}
+#Plot all CO2
+current_df%>%
+  ggplot(aes(x = as.Date(Date), 
+             color = as.factor(Site),
+             y=CO2Flux_umolCm2s, shape = as.factor(Flag_CO2Flux_umolCm2s)))+
+  geom_point()+
+  ylab("CO2 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow = 2)+
+  theme_bw()
+
+#by day of year
+current_df%>%
+  mutate(yday = yday(Date)) %>%
+  ggplot(aes(x = yday, 
+             color = as.factor(Site),
+             shape = as.factor(Flag_CO2Flux_umolCm2s),
+             y=CO2Flux_umolCm2s))+
+  geom_point()+
+  ylab("CO2 flux (umol/m2/s)")+
+  facet_wrap(~Reservoir, nrow = 2)+
+  theme_bw()
+
+
+```
+
+```{r Save the data frame, eval = make_data, include=FALSE}
+
+# Double Check naming convention
+# Variable_StartYear_EndYear
+
+# convert datetimes to characters so that they are properly formatted in the output file
+ #current_df$DateTime <- as.character(format(current_df$Date)) this file does not have a datetime column
+
+write.csv(current_df, file_name, row.names = FALSE)
+
+
+```
+
+```{r Download relavant files, eval = make_data, include=FALSE}
+
+# Maintenance Log
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Maintenance_Log.csv", maintenance_log)
+
+# qaqc function
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/UGGA_create.R", qaqc_function)
+
+# helper script to process the UGGA files
+download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2025/FluxCalR_2025.R", yearly_qaqc_function)
+
+```
+
+```{r Site description file, eval = make_data, include=FALSE}
+#Install the required googlesheets4 package
+#install.packages('googlesheets4')
+#Load the library
+#read in site description spreadsheet
+sites <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/')
+#rename dataframe
+data <- current_df
+#create site trim function
+trim_sites = function(data,sites){
+  data_res_site=data%>% #Create a Reservoir/Site combo column
+    mutate(res_site = trimws(paste0(Reservoir,Site)))
+  sites_merged = sites%>% #Filter to Sites that are in the dataframe
+    mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+    filter(res_site%in%data_res_site$res_site)%>%
+    select(-res_site)
+}
+sites_trimmed = trim_sites(data,sites)
+write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
+```
+

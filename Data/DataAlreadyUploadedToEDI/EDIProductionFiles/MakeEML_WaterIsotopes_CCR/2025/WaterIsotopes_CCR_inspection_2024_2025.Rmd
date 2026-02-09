@@ -1,0 +1,97 @@
+---
+title: "WaterIsotope_inspection_2024_2025"
+author: "Dexter"
+date: "2026-01-13"
+output: html_document
+---
+
+The script is for visualizing stable water isotopes prior to EDI publication and generating site descriptions csv 
+
+## R Markdown Guide
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+```{r setup packages, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, gsheet)
+
+```
+
+
+## Start here to read in EDI data 
+
+REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. If there is a warning for HTTP error 404 that means you EDI link is old and make sure you have the most recent one. 
+
+
+```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
+
+
+# For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# MAKE SURE TO UPDATE THIS LINK BELOW 
+
+#Main data frame is url1
+staged_edi <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1776/2/71e54498052b76e103898e0b07426a7c" )
+
+#precip is url2
+staged_edi_precip <- read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/1776/4/fd3f2f52cdb239fed73521a94a28003d" )
+
+```
+
+
+```{r Check flags}
+
+### Check flags that there are no NAs
+Flags=staged_edi%>%
+  select(Date, Iso_Flag)
+
+summary(Flags)
+
+
+```
+
+
+
+```{r plots}
+
+### look at summary data
+summary(staged_edi)
+
+### Look at all the data
+staged_edi |> 
+  select(-Iso_Flag) |> 
+  pivot_longer(-c(1:4)) |> 
+  ggplot(aes(x = Date, y = value))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")+
+  ggtitle("All Iso data") + 
+  theme_bw()
+
+### Look at all the data by site
+staged_edi |> 
+  select(-Iso_Flag, -d2H_VSMOW_1sd, -d18O_VSMOW_1sd) |> 
+  pivot_longer(-c(1:4)) |> 
+  ggplot(aes(x = Date, y = value, color = as.factor(Depth_m)))+
+  geom_point()+
+  facet_grid(name~Site, scales = "free_y")+
+  scale_x_date(date_labels = "%b %y")+
+  ggtitle("All Iso by Site data") + 
+  theme_bw()
+
+
+
+
+```
+
+Look at precip data
+
+```{r}
+#this is only four lines of data
+staged_edi_precip
+
+```
+

@@ -1,0 +1,7 @@
+Contributions to the 2025 revision:
+
+CCC developed and led the reservoir monitoring program. ABP led the field crew and contributed substantially to fieldwork and sensor maintenance in 2025. DXE led data publication and QAQC in 2025.
+
+Acknowledgments and historical contributions:
+
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions. Abigail Lewis updated code for data processing, which was used in subsequent years. We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and Kathryn Hoffman, Rohit Shukla, and Bibek Kandel for constructive reviews. 

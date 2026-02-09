@@ -3,6 +3,7 @@
 ##Modified by Whitney Woelmer and Jacob Wynne 
 ##Date: 24Jun2020
 ##Modified by Katie Hoffman on 10 Jan 2024
+## updated: 14 Jan 2026 - modified the xml file in for license info
 
 #This script is to stage and publish data to EDI
 
@@ -10,11 +11,15 @@
 #https://ediorg.github.io/EMLassemblyline/articles/overview.html
 #and links therein
 
-library(devtools)
-install_github("EDIorg/EMLassemblyline")
-library(EMLassemblyline)
+#library(devtools)
+#install_github("EDIorg/EMLassemblyline")
+#library(EMLassemblyline)
 
-folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2024"
+# load data packages
+
+pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
+
+folder <- here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/")
 
 # (install and) Load EMLassemblyline #####
 #install.packages('devtools')
@@ -24,7 +29,7 @@ folder <- "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChl
 #may exceed your API rate limit; if this happens, you will have to wait an
 #hour and try again or get a personal authentification token (?? I think)
 #for github which allows you to submit more than 60 API requests in an hour
-library(EMLassemblyline)
+#library(EMLassemblyline)
 
 
 #Step 1: Create a directory for your dataset
@@ -145,24 +150,61 @@ view_unit_dictionary()
 ?make_eml
 
 # Run this function
-make_eml(
+eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2024",
-  temporal.coverage = c("2014-04-18", "2024-12-17"),
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, Spring Hollow Reservoir in southwestern Virginia, and Lake Sunapee in Sunapee, New Hampshire, USA during 2014-2025",
+  temporal.coverage = c("2014-04-18", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c("filt-chla_2014_2024.csv", 'site_descriptions.csv'),
-  data.table.name = c("filt-chla_2014_2024", 'site_descriptions'), 
+  data.table = c("filt-chla_2014_2025.csv", 'site_descriptions.csv'),
+  #data.table.name = c("filt-chla_2014_2025", 'site_descriptions'), 
   data.table.description = c("Filtered chlorophyll a data at multiple sites","Sampling site descriptions with latitude and longitude" ),
-  other.entity = c('filt-chla_qaqc_2023_2024.R', 'filt-chla_inspection_2014_2024.Rmd', 'filt-chla_maintenancelog_2014_2024.csv'),
-  other.entity.name = c("filt-chla_qaqc_2023_2024", 'filt-chla_inspection_2014_2024', 'filt-chla_maintenancelog_2014_2024'),
+  other.entity = c('filt-chla_qaqc_2023_2025.R', 'filt-chla_inspection_2014_2025.Rmd', 'filt-chla_maintenancelog_2014_2025.csv'),
+  #other.entity.name = c("filt-chla_qaqc_2023_2025", 'filt-chla_inspection_2014_2025', 'filt-chla_maintenancelog_2014_2025'),
   other.entity.description = c('Script used to collate and flag data for publication', 'Markdown file used to visualize data for QA/QC', 
-                               'Maintenance Log through 2024'), 
+                               'Maintenance Log through 2025'), 
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.52.33') #THIS IS FOR STAGING
-  #package.id = 'edi.555.4') # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  #package.id = 'edi.52.46', #THIS IS FOR STAGING
+  package.id = 'edi.555.6', # ONLY USE THIS FOR ACTUAL PUBLISHING 
+  write.file = T, ### write the file to the folder
+  return.obj = T) ## return the object so we can get the package.id
+
+# get the package.id from above
+package.id = eml_file$packageId
+
+# read in the xml file that you made from the make_eml function
+doc <- read_xml(paste0(folder,package.id,".xml"))
+
+# Find the parent node where <licensed> should be added
+parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent
+
+# Create <licensed> node with the name of the licence, the url, the identifier
+licensed <- xml_add_child(parent, "licensed")
+
+xml_add_child(licensed, "licenseName",
+              "Creative Commons Attribution Non Commercial 4.0 International")
+xml_add_child(licensed, "url",
+              "https://spdx.org/licenses/CC-BY-NC-4.0")
+xml_add_child(licensed, "identifier",
+              "CC-BY-NC-4.0")
+
+# Find the parent
+parent <- xml_find_first(doc, "//dataset")
+
+# Find the nodes
+childC <- xml_find_first(parent, "licensed")
+
+# Remove childC from its current position
+xml_remove(childC)
+
+# Insert childC at position 10 (after Intellectual_rights)
+xml_add_child(parent, childC, .where = 15) #need to change this every year
+
+# Save the file with the changes
+write_xml(doc, paste0(folder,package.id,".xml"))
+
 
 # make_eml(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_ManualDischarge/2021",
 #          dataset.title = "Manually-collected discharge data for multiple inflow tributaries entering Falling Creek Reservoir, Beaverdam Reservoir, and Carvin's Cove Reservoir, Vinton and Roanoke, Virginia, USA from 2019-2021",
@@ -223,7 +265,7 @@ make_eml(
   path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll",
-  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2019",
+  dataset.title = "Filtered chlorophyll a time series for Beaverdam Reservoir, Carvins Cove Reservoir, Claytor Lake, Falling Creek Reservoir, Gatewood Reservoir, Smith Mountain Lake, and Spring Hollow Reservoir in southwestern Virginia, USA during 2014-2025",
   temporal.coverage = c("2014-04-18", "2019-10-04"),
   maintenance.description = 'ongoing',
   data.table = "chla_master_df_dt.csv",

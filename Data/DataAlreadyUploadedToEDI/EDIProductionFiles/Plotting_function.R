@@ -4,6 +4,7 @@
 # First developed: 28 December 24
 # Last edited: 19 May 24 - changed the timeseries with depth to y=Depth not concentration 
 # 03 Jan 24- commented out line 121 because we don't need to deal with multiple sites for streaming sensors. 
+# 28 January 2026 - make it so flags are shapes in the plot
 
 all_plot<-function(
     Var,
@@ -14,27 +15,19 @@ all_plot<-function(
     y_lab,  # This label can take an expression aka have the proper degrees C, 
     y_lab2, # This label is for the plotly function which can not handle expression argument. 
     Depth=F,  # Do you want depth as a factor
-    Water=T, # Are these plots for inwater streaming sensors?
+    Water=T, # Are these plots for inwater streaming sensors? This makes some comparisons with temp sensors at the same depth
     Use_plotly = F, # Do you want to produce interactive plots for observations of the current year?
     Heatmap = F, # Do you want to make a heat maps?
     start_time = current_time_start,
     end_time = current_time_end) 
 { 
 
-  # data=df
-  # reservoir = "FCR"
-  # res_site=50
-  # raw_data = NULL
-  # Var = "TFe_mgL"
-  # y_lab = "mg/L"
-  # y_lab2 = "mg/L"
-  # Depth=T
-  # Water=F
-  # Use_plotly=T
-  # Heatmap = F
-
-   # source the heat map function
-    source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R")
+   # source the heat map function don't need this any more
+  # source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Heatmap_EDI_function.R")
+  
+  # load packages
+  if(!require("pacman")) install.packages("pacman")
+  pacman::p_load(colorRamps, RColorBrewer, plotly)
 
   # Make a list of the names of all the possible plots
   
@@ -62,8 +55,8 @@ all_plot<-function(
   
   # just the current year
   current <- current_df%>%
-    filter(DateTime>= current_time_start & DateTime<current_time_end)%>%
-    select(-contains(c("Flag", "adjusted")))|>
+    filter(DateTime>= start_time & DateTime<end_time)%>%
+    #select(-contains(c("Flag", "adjusted")))|>
     mutate(type = "qaqc")
   
   # daily average
@@ -87,13 +80,13 @@ all_plot<-function(
     
     # For all years
     all_depth <- current_df%>%
-    select(Depth_m)%>%
+    select(all_of("Depth_m"))%>%
     dplyr::distinct()%>%
     as.list()
     
   # Just the current year
   cur_depth <- current%>%
-    select(Depth_m)%>%
+    select(all_of("Depth_m"))%>%
     dplyr::distinct()%>%
     as.list()
   }else{
@@ -105,9 +98,9 @@ all_plot<-function(
   
  # If there is just one year then don't make the density and box plots
   all_year <- current_df%>%
-    select(Var, Year) %>%
+    select(all_of(c(Var, "Year"))) %>%
     drop_na(Var) %>%
-    select(Year)%>%
+    select(all_of("Year"))%>%
     dplyr::distinct()%>%
     as.list()
   
@@ -120,13 +113,13 @@ all_plot<-function(
     
   current_raw <- raw_data%>%
     #filter(Reservoir %in% reservoir & Site %in% res_site) %>% 
-  filter(DateTime>=current_time_start & DateTime<current_time_end)%>%
+  filter(DateTime>=start_time & DateTime<end_time)%>%
   mutate(type = "raw")
 
 
 # Let's only keep values that are different instead of plotting the raw and the qaqc value
 current_plot_df <- bind_rows(current, current_raw)%>%
-  select(-contains(c("Flags", "RECORD")))%>%
+  #select(-contains(c("Flags", "RECORD")))%>%
   dplyr::distinct(across(everything()))
     
     # If there are raw files to compare to then we only want to keep both observations if they are different.
@@ -194,8 +187,8 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       # Plots of just the current year with all temperatures reading from the same depth at different sensors
       
       com_curr <- ggplot() +
-        geom_scattermore(data = qaqc_current, aes(x = DateTime, y=.data[[Var]], color="Therm"), pointsize = 3)+ 
-        geom_scattermore(data = qaqc_current, aes(x = DateTime, y=.data[[Var2]], color="RDO"), pointsize = 3)+
+        geom_scattermore(data = qaqc_current, aes(x = DateTime, y=.data[[Var]], color="Therm"), pointsize = 2)+ 
+        geom_scattermore(data = qaqc_current, aes(x = DateTime, y=.data[[Var2]], color="RDO"), pointsize = 2)+
         {if(Switch)geom_scattermore(data = qaqc_current, aes(x = DateTime, y=.data[[Var3]],
                                                              color="Pressure"), pointsize = 3)}+ # print layer if Switch is TRUE
         ggtitle(paste0("Current Water Temp from"," ",Var,", ",Var2," ",reservoir," ",res_site)) +
@@ -228,7 +221,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       all_grid <- current_df%>%
         drop_na(Var)%>%
         ggplot(.)+
-        geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
+        geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_", Var)]])))+
         labs(y = y_lab,
              color = "Meters") +
         ggtitle(paste0("All ",Var," by Depth"," ",reservoir," ",res_site)) +
@@ -239,7 +232,7 @@ current_plot_df <- bind_rows(current, current_raw)%>%
       #}    
   }else {
     all <- ggplot()+
-      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"), pointsize = 5)+
+      geom_scattermore(data=current_df, aes(x=DateTime, y=.data[[Var]], color="qaqc"), pointsize = 4)+
       ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +
       labs(y = y_lab,
            color = "Legend") +
@@ -277,7 +270,7 @@ if(length(qaqc_current$DateTime)>0){
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
           ggplot(.)+
-          geom_scattermore(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)), pointsize = 9)+
+          geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_", Var)]])))+
           labs(y = y_lab,
                color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
@@ -321,7 +314,7 @@ if(length(qaqc_current$DateTime)>0){
         cur_grid <- qaqc_current%>%
           drop_na(Var)%>%
           {ggplot(.)+
-          geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m)))+
+          geom_point(aes(x=DateTime, y=.data[[Var]], color=as.factor(Depth_m), shape = as.factor(.data[[paste0("Flag_",Var)]])))+
           labs(y = y_lab,
                color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
@@ -333,7 +326,7 @@ if(length(qaqc_current$DateTime)>0){
           {if(switch_raw) geom_point(data= raw_current, aes(x=DateTime, y=.data[[Var]], 
                                                             color=type))}+
           geom_point(data= qaqc_current, aes(x=DateTime, y=.data[[Var]], 
-                                             color=type))+
+                                             color=type, shape = as.factor(.data[[paste0("Flag_",Var)]])))+
           ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
           labs(y = y_lab2,
                color = "Legend") +
@@ -400,7 +393,7 @@ if(length(qaqc_current$DateTime)>0){
       cur_heat <-
         {ggplot()+
         geom_point(data= qaqc_current, aes(x=DateTime, y=as.factor(Depth_m),
-                                                 color=.data[[Var]], shape=type))+
+                                                 color=.data[[Var]], shape=as.factor(.data[[paste0("Flag_",Var)]])))+
         scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
         scale_y_discrete(limits=rev) +
         ggtitle(paste0("Current: ",Var," ",reservoir," ",res_site)) +
@@ -419,7 +412,7 @@ if(length(qaqc_current$DateTime)>0){
         all_heat <-current_df %>%
           filter(!is.na(Depth_m)) %>%
           ggplot(.) +
-          geom_scattermore(aes(x=DateTime, y=as.factor(Depth_m), color=.data[[Var]]), pointsize = 4)+
+          geom_point(aes(x=DateTime, y=as.factor(Depth_m), color=.data[[Var]], shape=as.factor(.data[[paste0("Flag_",Var)]])))+
           scale_color_gradientn(colours = blue2green2red(100), na.value="gray") +
           scale_y_discrete(limits=rev) +
           ggtitle(paste0("All QAQCd",Var," ",reservoir," ",res_site)) +

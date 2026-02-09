@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir; BVR=Beaverdam Reservoir	character			NA	value is missing
+Site	"Pelagic deep hole site nearest to dam; at BVR platform closest to dam, 37.31288,-79.8159."	numeric	dimensionless		NA	value is missing
+Position	The position number of the sensor as described in the metadata	numeric	number		NA	value is missing
+Offset_start	The beginning date and time of the offset depth	character			NA	value is missing
+Offset_end	The ending date and time of the offset depth	character			NA	value is missing
+Offset	The offset to determine the depth of the sensor from the surface of the water 	numeric	meter		NA	value is missing
+Distance_above_sediments	Estimated height of the sensor above the sediment- not confirmed	numeric	meter		NA	value is missing

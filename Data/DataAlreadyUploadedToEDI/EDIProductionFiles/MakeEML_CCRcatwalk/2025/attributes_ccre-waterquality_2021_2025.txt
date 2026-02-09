@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
 Reservoir	Three-letter code corresponding to sampled reservoir; CCR=Carvins Cove Reservoir	character			NA	value is missing
-Site	Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform 	numeric	dimensionless		NA	value is missing
+Site	"Sampling site within each reservoir; 51=Site nearest to the dam in the reservoir, attached to the platform "	numeric	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time not observed, GMT -5"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
 ThermistorTemp_C_1	Water temperature measured by thermistor at position 1 (position closest to surface when reservoir is at full pond)	numeric	celsius		NA	value is missing
 ThermistorTemp_C_2	Water temperature measured by thermistor at position 2 (1 meter below thermistor 1)	numeric	celsius		NA	value is missing
@@ -27,7 +27,7 @@ EXOBGAPC_RFU_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Son
 EXOBGAPC_ugL_1	Blue-Green Algae phycocyanin at 1.5 m as measured by the EXO2 Sonde	numeric	microgramsPerLiter		NA	value is missing
 EXOfDOM_RFU_1	Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde	numeric	RelativeFluorescenceUnits		NA	value is missing
 EXOfDOM_QSU_1	Fluorescent dissolved organic matter at 1.5 m as measured by the EXO2 Sonde	numeric	QuinineSulfateUnits		NA	value is missing
-EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.6 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
+EXOTurbidity_FNU_1	Turbidity measured in FNU at 1.5 meters depth as measured by the EXO2 Sonde	numeric	FormazinNephelometricUnits		NA	value is missing
 EXOPressure_psi_1	Gauge pressure of EXO2 sonde at 1.5 m	numeric	psig		NA	value is missing
 EXODepth_m_1	Depth of the EXO2 sonde at 1.5 m measured by the EXO2 sonde.	numeric	meter		NA	value is missing
 EXOBattery_V_1	Voltage of the EXO2 sonde at 1.5 m internal batteries.	numeric	volt		NA	value is missing
@@ -46,9 +46,10 @@ EXODepth_m_9	Depth of the EXO3 sonde at 9 m measured by the EXO3 sonde	numeric	m
 EXOBattery_V_9	Voltage of the EXO3 sonde at 9 m internal batteries	numeric	volt		NA	value is missing
 EXOCablepower_V_9	Measure of power being used by the cable connected to the CR3000 datalogger as measured by the EXO3 sonde at 9 m.	numeric	volt		NA	value is missing
 EXOWiper_V_9	Wiper brush cleaning system activation signal as measured by the EXO3 sonde at 9 m	numeric	volt		NA	value is missing
-LvlPressure_psi_13	Gauge pressure CS-451 at position 13, measured relative to ambient atmospheric pressure	numeric	psig		NA	value is missing
+LvlPressure_psi_13	"Gauge pressure CS-451 at position 13, measured relative to ambient atmospheric pressure"	numeric	psig		NA	value is missing
 LvlDepth_m_13	Depth of the pressure sensor at position 13 in meters calculated by LvlPressure_psi_13 * 0.70455	numeric	meter		NA	value is missing
 LvlTemp_C_13	Water temperature at position 13 as measured by the water level logger	numeric	celsius		NA	value is missing
+Modeled_Depth_m	The modeled depth of the reservoir as determined from a linear model of pressure and elevation observations converted into meters	numeric	meter		NA	value is missing
 RECORD	Number of observations that changes when the program is restarted	numeric	number		NA	value is missing
 CR3000Battery_V	The volts in the rechargeable battery for the CR3000 datalogger	numeric	volt		NA	value is missing
 CR3000Panel_Temp_C	Temperature measured from the sensor inside the CR3000 datalogger	numeric	celsius		NA	value is missing
@@ -77,7 +78,7 @@ Flag_EXOBGAPC_RFU_1	Data flag for EXO2 phycocyanin data measured in RFU at 1.5 m
 Flag_EXOBGAPC_ugL_1	Data flag for EXO2 phycocyanin data measured in micrograms per liter at 1.5 m (EXOBGAPC _ugL_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_RFU_1	Data flag for EXO2 fluorescent dissolved organic matter data measured in RFU at 1.5 m (EXOfDOM_RFU_1)	categorical 			NA	value is missing
 Flag_EXOfDOM_QSU_1	Data flag for EXO2 fluorescent dissolved organic matter data measured in QSU at 1.5 m (EXOfDOM_QSU_1)	categorical 			NA	value is missing
-Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU (EXOTurbidity_FNU_1)	categorical			NA	value is missing
+Flag_EXOTurbidity_FNU_1	Data flag for EXO2 turbidity data in FNU at 1.5 m (EXOTurbidity_FNU_1)	categorical			NA	value is missing
 Flag_EXOPressure_psi_1	Data flag for EXO2 pressure sensor at 1.5 m (EXOPressure_psi_1)	categorical 			NA	value is missing
 Flag_EXODepth_m_1	Data flag for EXO2 depth sensor at 1.5 m (EXODepth_m_1)	categorical 			NA	value is missing
 Flag_EXOBattery_V_1	Data flag for EXO2 internal battery at 1.5 m (EXOBattery_V_1)	categorical 			NA	value is missing

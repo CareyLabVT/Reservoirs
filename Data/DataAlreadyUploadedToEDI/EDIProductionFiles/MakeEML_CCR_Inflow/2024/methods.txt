@@ -1,0 +1,86 @@
+### Data Package Overview:
+
+We calculated high-frequency (10-minute) stage and discharge on the Horsepen Branch Tributary of Carvins Cove (37.3646, -79.9733) Reservoir using a pressure transducer deployed in the stream bed. A HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) was used to measure 10-minute underwater pressure in the stream channel. A CS106 Vaisala PTB110 Barometer, part of the research grade meteorological station deployed on the Carvins Cove Reservoir Dam (~1.5 km from the stream site), was used to measure atmospheric barometric pressure which was used to correct in stream pressure (Carey & Breef-Pilz 2026). 
+
+
+### Sensor deployments:
+
+Pressure transducers were deployed in the middle of the stream channel in a PVC stilling well with 1/4 inch holes that allowed for water exchange. The stream channel experienced near continuous flow throughout a year. The PVC stilling well was attached to a steel fence T-post that was driven into the bottom on the stream bed. The pressure transducers were attached to a steel cable and lowered to the bottom of the PVC stilling well so the sensor sat just above the streambed. The cable was attached to an eye hook in an Oatey Gripper Plastic Mechanical Test Plug and secured the plug to the top of the PVC. The sensor was set to log pressure and water temperature data every 10-minutes and were downloaded approximately monthly.
+
+Two separate HOBO pressure transducers were used in this monitoring campaign. The first sensor (SN: 21978681) was deployed from 23 April 2024 - 17 December 2024. The sensor was likely lost during a large storm in February 2025 where PVC stilling well and fence post were dislodged and the HOBO sensor was lost. We were unable to download the data between 17 December 2024 and when the sensor was lost in February 2025.  A second sensor (SN: 22254183) was redeployed in the same location from 16 April 2025 - 2 December 2025 at the time of this data publication. 
+
+
+### Stage and Discharge calculations:
+
+To calculate the stream level stage and discharge, the pressure readings from the in stream pressure transducers had to be corrected for atmospheric pressure. We used atmospheric pressure data from the Carvins Cove Reservoir dam to correct in stream pressure where corrected_Pres_kPa = in stream pressure (HOBO_Abs_Pres_kPa) - atmospheric pressure (BP_Average_kPa). 
+
+To calculate water level we used the relationship between hydro static pressure and height where h = p/(ρg) with p = pressure in the liquid in Pa, ρ = density of liquid, g = acceleration of gravity in m/s, and h = height of fluid column - or depth in the fluid where pressure is measured in meters. We used the rLakeAnalyzer package in R to calculate the density of the water from water temperature and salinity is 0 (Winslow et. al, 2019). 
+
+Discharge was calculate by developing a rating curve between sensor derived stage data and manually measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2024). Discharge rate are reported in m^3 s^-1. 
+
+
+### Data Flags:
+
+Data Flags are reported for each variable in the data set.
+
+0 = No Flag
+
+1 = Data removed and set to NA due to maintenance 
+
+2 = Missing data
+
+3 = Neagive water level set to 0
+
+4 = Correction applied to the data
+
+5 = Negative corrected pressure but left in data set
+
+6 = Flow value exceeds highest flow mesaurement used in rating curve calculations
+
+
+When the corrected pressure was below 0 water level was set to 0 and flow was also set to 0. 
+
+
+### Maintenance: 
+
+This data package includes a maintenance log where we recorded maintenance times and other issues. The log is used in Stage_QAQC.Rmd to remove times when the sensor was out of the water for downloads and flag other mainteance issues. 
+
+On 11 June 2025, we moved the pressure transducer lower in the water than when it was originally deployed in 16 April 2025. To account for this change we corrected previous data to the new depth by adding 0.983 kPa to the corrected pressure reading and flaged the data with a 4 for correction applied. 
+
+
+### Data Gaps: 
+
+Sub daily gaps in data may have occurred on days when the sensor was downloaded.
+
+Multi-day gaps in data occurred between 17 December 2024 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025.
+
+
+### Notes
+
+All observations are in EST with daylight savings not observed. 
+
+This data package contains multiple scripts for data processing. 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the met station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) HPB_Q_calc.R reads in the file created in Stage_QAQC.Rmd and manual discharge measurements to create a rating curve for continuous discharge measurements. The data frame created in that script is the data file for this package. 
+
+
+### Sensors:
+
+HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) manual: https://www.onsetcomp.com/sites/default/files/2024-01/17153-H%20U20L%20Manual_0.pdf  SN: 21978681 (23 Apr 2024 - 17 Dec 2024) SN: 22254183 (16 Apr 2025 - current)
+
+CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. S3450174 https://s.campbellsci.com/documents/us/manuals/cs106.pdf
+
+
+### References:
+
+Carey, C.C. and A. Breef-Pilz. 2026. Time series of high-frequency meteorological data at Carvins Cove Reservoir, Virginia, USA 2021-2025 ver 4. Environmental Data Initiative. https://doi.org/10.6073/pasta/706b69081da6090a14f64f4b0bdb342b
+
+Carey, C.C., A. Breef-Pilz, A.E. Bateman, and D.W. Howard. 2026. Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025 ver 9. Environmental Data Initiative. https://doi.org/10.6073/pasta/73a63480443d39bcac19ed0bae2aa214
+
+R Core Team (2024). _R: A Language and Environment for Statistical Computing_. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
+
+Winslow L, Read J, Woolway R, Brentrup J, Leach T, Zwart J, Albers S, Collinge D (2019).
+  _rLakeAnalyzer: Lake Physics Tools_. doi:10.32614/CRAN.package.rLakeAnalyzer
+  <https://doi.org/10.32614/CRAN.package.rLakeAnalyzer>, R package version 1.11.4.1,
+  <https://CRAN.R-project.org/package=rLakeAnalyzer>.
+
+
+

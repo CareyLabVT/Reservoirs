@@ -1,0 +1,5 @@
+Author Contribution Statement-
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP and DWH led initial sensor deployment and maintenance. DWH led initial data package publication with methods development from ABP and AEB. DWH, ABP, and AEB contributed substantially to field work.
+
+
+Acknowledgements: We thank the Western Virginia Water Authority for providing access to these sites, the Reservoir Group for contributing to fieldwork, and XX, YY, and ZZ for helpful reviews of this data package.

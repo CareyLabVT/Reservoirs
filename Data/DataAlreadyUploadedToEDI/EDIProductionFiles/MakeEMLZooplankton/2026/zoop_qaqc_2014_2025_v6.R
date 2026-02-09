@@ -26,15 +26,15 @@ zoop <- zoop |>
 zoops1 <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2026/Data/EDI_zoop_summary_2019-2022.csv")
 zoops2 <- read.csv("./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLZooplankton/2026/Data/EDI_zoop_summary_2022-2025.csv")
 
-#update DateTime format
-zoops1$DateTime <- as.POSIXct(zoops1$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
-zoops2$DateTime <- as.POSIXct(zoops2$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")
-
 #merge dfs
 zoops_2019_2025 <- rbind(zoops1, zoops2)
 
 #now combine with old zoop df from v4 (skipping v5 bc those taxonomic summaries are what we are updating)
 summary_merged <- rbind(zoop, zoops_2019_2025)
+
+#replace end depth of 0 with 0.1m
+summary_merged <- summary_merged |>
+  mutate(EndDepth_m = ifelse(summary_merged$EndDepth_m == 0,  0.1, summary_merged$EndDepth_m))
 
 #make sure date format is correct
 summary_merged$DateTime <- as.POSIXct(summary_merged$DateTime, format = "%Y-%m-%d %H:%M:%S", tz="EST")

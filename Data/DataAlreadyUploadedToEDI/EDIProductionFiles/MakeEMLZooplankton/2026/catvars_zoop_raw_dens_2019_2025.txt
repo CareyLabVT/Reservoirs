@@ -1,0 +1,16 @@
+attributeName	code	definition
+CollectionMethod	Schindler	Zooplankton Collection Method
+CollectionMethod	Tow	Zooplankton Collection Method
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Subsample	A	A
+Subsample	B	B
+Subsample	C	C
+Subsample	D	D
+Subsample	E	E
+Subsample	F	F
+Subsample	G	G
+Subsample	H	H
+Subsample	I	I
+Subsample	J	J
+Subsample	K	K

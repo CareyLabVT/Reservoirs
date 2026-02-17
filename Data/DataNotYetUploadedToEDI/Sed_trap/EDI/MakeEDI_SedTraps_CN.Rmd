@@ -341,7 +341,7 @@ comb_formatted = comb_formatted%>%
                                      2, 
                                      Flag_Duration_days))
 
-write.csv(comb_formatted,"../CN_Metals_Flux_EDI.csv",row.names=F)
+write.csv(comb_formatted,"../sed-traps_2018_2024.csv",row.names=F)
 
 mean(unique(frame1$CollectionVol_L), na.rm=T)
 ```

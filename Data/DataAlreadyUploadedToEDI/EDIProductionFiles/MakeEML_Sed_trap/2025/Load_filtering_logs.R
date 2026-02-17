@@ -140,5 +140,5 @@ frame1 <- frame1 %>%
 
 #ready to write csv!
 frame1 <- arrange(frame1, frame1$Date)
-write.csv(frame1,"FilteringLog_2018_2024.csv",row.names = F)
+write.csv(frame1,"sed-traps_FilteringLog_2018_2024.csv",row.names = F)
 

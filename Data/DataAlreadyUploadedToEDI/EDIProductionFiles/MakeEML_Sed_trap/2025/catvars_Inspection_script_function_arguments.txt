@@ -1,0 +1,4 @@
+attributeName	code	definition
+data_flux	sedtraps	"Data frame named ""sedtraps"""
+data_mass	fluxes33	"Data frame named ""fluxes33"""
+use_plotly	T	TRUE

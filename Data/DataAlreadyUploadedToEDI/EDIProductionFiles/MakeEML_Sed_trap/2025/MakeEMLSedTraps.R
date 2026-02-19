@@ -43,22 +43,22 @@ library(EMLassemblyline)
 ?template_geographic_coverage
 
 # Import templates for our dataset licensed under CCBY, with 1 table.
-template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+template_core_metadata(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
                  license = "CCBY",
                  file.type = ".txt",
                  write.file = TRUE)
 
-template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-                       data.table = c("FluxSummary.csv","CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
+template_table_attributes(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+                       data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+                       data.table = c("sed-traps_FluxSummary_2018_2024.csv","sed-traps_FilteringLog_2018_2024.csv", "sed-traps_2018_2024.csv", "site_descriptions.csv", "Inspection_script_function_arguments.csv"),
                        write.file = TRUE)
 
 
 #we want empty to be true for this because we don't include lat/long
 #as columns within our dataset but would like to provide them
-template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-                             data.table = c("FluxSummary.csv", "CN_Metals_Flux_EDI.csv", "FilteringLog_EDI.csv", "site_descriptions.csv"),
+template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+                             data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+                             data.table = c("sed-traps_FluxSummary_2018_2024.csv","sed-traps_FilteringLog_2018_2024.csv", "sed-traps_2018_2024.csv", "site_descriptions.csv", "Inspection_script_function_arguments.csv"),
                           empty = TRUE,
                           write.file = TRUE)
 
@@ -105,8 +105,8 @@ template_geographic_coverage(path = "./Data/DataAlreadyUploadedToEDI/EDIProducti
 # Run this function for your dataset
 #THIS WILL ONLY WORK once you have filled out the attributes_chemistry.txt and
 #identified which variables are categorical
-template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
+template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+                               data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
                                write.file = TRUE)
 
 #open the created value IN A SPREADSHEET EDITOR and add a definition for each category
@@ -130,16 +130,17 @@ template_categorical_variables(path = "./Data/DataAlreadyUploadedToEDI/EDIProduc
 
 # Run this function
 make_eml(
-  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024",
-  dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2023",
-  temporal.coverage = c("2018-05-21", "2023-12-04"),
+  path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+  data.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+  eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
+  dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2024",
+  temporal.coverage = c("2018-05-21", "2024-12-16"),
   maintenance.description = 'ongoing',
-  data.table = c("FluxSummary.csv",
-                 "FilteringLog_EDI.csv", 
-                 "CN_Metals_Flux_EDI.csv",
-                 "site_descriptions.csv"),
+  data.table = c("sed-traps_FluxSummary_2018_2024.csv",
+                 "sed-traps_FilteringLog_2018_2024.csv",
+                 "sed-traps_2018_2024.csv",
+                 "site_descriptions.csv",
+                 "Inspection_script_function_arguments.csv"),
   # data.table.name = c("Flux Summary",
   #                     "Filtering log",
   #                     "Fluxes",
@@ -147,12 +148,13 @@ make_eml(
   data.table.description = c("Summary of sediment, carbon, nitrogen, and metal fluxes",
                              "Sediment trap filtering log",
                              "Carbon, nitrogen, and metal fluxes",
-                             "Sampling site descriptions"),
+                             "Sampling site descriptions",
+                             "Arguments needed for running inspection script"),
   other.entity = c("MakeEDI_FluxSummary.R",
                    "MakeEDI_SedTraps.R",
                    "MakeEDI_SedTraps_CN.Rmd",
                    "Load_filtering_logs.R",
-                   "SedTrap_Inspection_2014_2023.Rmd"),
+                   "SedTrap_Inspection_2014_2024.Rmd"),
   # other.entity.name = c("Flux summary script",
   #                       "Metals flux script",
   #                       "Carbon and nitrogen flux script",
@@ -165,7 +167,7 @@ make_eml(
                                "Plots metal fluxes and cumulative masses"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1474.8') #reserve new staging environment package id each year
+  package.id = 'edi.1789.1') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

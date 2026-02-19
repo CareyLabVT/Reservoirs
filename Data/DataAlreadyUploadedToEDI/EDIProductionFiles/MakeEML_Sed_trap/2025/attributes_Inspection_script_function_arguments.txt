@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+data_flux	Data table for fluxes	categorical			NA	No data
+data_mass	Data table for masses	categorical			NA	No data
+y_var_flux	Name of flux variable	character			NA	No data
+y_var_mass	Name of mass variable	character			NA	No data
+element_name	Name of element	character			NA	No data
+current_year	Most current year - used for plotting	numeric	nominalYear		NA	No data
+use_plotly	Indicates whether plotly should be used when plotting variable	categorical			NA	No data

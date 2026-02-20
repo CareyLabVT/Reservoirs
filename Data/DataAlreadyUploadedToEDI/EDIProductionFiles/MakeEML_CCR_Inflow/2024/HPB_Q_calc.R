@@ -71,65 +71,6 @@ stage_Q_df |>
   theme_bw()
 
 
-#### linear regression
-
-# linear regression of water level vs. maual flow measurements
-stage_Q_df |> 
-  # filter(!Flow_cms == 0) |> #0 point
-  ggplot(aes(x = waterlevel_cm, y = Flow_cms, color = month(DateTime))) +
-  geom_point() +
-  stat_poly_line(method = "lm", linewidth = 2)+
-  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
-               aes(x = waterlevel_cm, y = Flow_cms, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
-  labs(x = "HPB water level (cm)", y = "Flowmate (cms)")+
-  theme_bw()+
-  scale_color_viridis_c()
-
-# plot the relationship of water level and manual discharge measurements by year
-stage_Q_df |> 
-  mutate(year = year(DateTime)) |> 
-  ggplot(aes(x = waterlevel_cm, y = Flow_cms, color = month(DateTime))) +
-  geom_point() +
-  stat_poly_line(method = "lm", linewidth = 2)+
-  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
-               aes(x = waterlevel_cm, y = Flow_cms, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
-  labs(x = "HPB water level (cm)", y = "Flowmate (cms)")+
-  theme_bw()+
-  facet_wrap(~year)+
-  scale_color_viridis_c()
-
-
-### What does it look like if we take out the very high point in May 2025
-
-stage_Q_df |> 
-filter(waterlevel_cm<18)|>
-  # filter(!Flow_cms == 0) |> #0 point
-  ggplot(aes(x = waterlevel_cm, y = Flow_cms, color = month(DateTime))) +
-  geom_point() +
-  stat_poly_line(method = "lm", linewidth = 2)+
-  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
-               aes(x = waterlevel_cm, y = Flow_cms, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
-  labs(x = "HPB water level (cm)", y = "Flowmate (cms)")+
-  theme_bw()+
-  scale_color_viridis_c()
-
-
-stage_Q_df |> 
-  filter(waterlevel_cm<18)|>
-  mutate(year = year(DateTime)) |> 
-  ggplot(aes(x = waterlevel_cm, y = Flow_cms, color = month(DateTime))) +
-  geom_point() +
-  stat_poly_line(method = "lm", linewidth = 2)+
-  stat_poly_eq(formula=y~x, label.x = "left", label.y="top", parse=TRUE, inherit.aes = F,
-               aes(x = waterlevel_cm, y = Flow_cms, label=paste(..adj.rr.label..,..p.value.label..,sep="~~~"),size=3))+
-  labs(x = "HPB water level (cm)", y = "Flowmate (cms)")+
-  theme_bw()+
-  facet_wrap(~year)+
-  scale_color_viridis_c()
-
-# Now R2 is 0.85 for 2024 and 0.88 for 2025
-
-
 #### Fitting a non-linear curve, code resources below
 ## https://rpubs.com/kwf/hydrographs_covino
 ## other resource to check out: https://thewetlandblog.wordpress.com/2013/06/17/fitting-rating-curves-with-r/

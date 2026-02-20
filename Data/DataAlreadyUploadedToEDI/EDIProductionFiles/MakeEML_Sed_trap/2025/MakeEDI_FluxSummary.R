@@ -7,8 +7,8 @@ library(lubridate)
 library(stringr)
 
 #add sed flux
-setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2024')
-fluxes <- read.csv('CN_Metals_Flux_EDI.csv')
+setwd('./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025')
+fluxes <- read.csv('sed-traps_2018_2024.csv')
 fluxes$Date <- as.Date(fluxes$Date)
 fluxes <- fluxes %>% 
   mutate(SedFlux_gm2d = (((CombinedSedMass_g/CombinedFilterVol_L) * CombinedCollectionVol_L) / (CombinedXSA_m2 * Duration_days)))
@@ -121,6 +121,6 @@ flux_summary_final <- flux_summary %>%
          Flag_TOCFlux_gm2d,
          Flag_TNFlux_gm2d)
 
-write_csv(flux_summary_final, file = 'FluxSummary.csv')
+write_csv(flux_summary_final, file = 'sed-traps_FluxSummary_2018_2024.csv')
 
              

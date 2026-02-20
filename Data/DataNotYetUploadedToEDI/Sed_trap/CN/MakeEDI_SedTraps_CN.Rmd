@@ -361,7 +361,18 @@ comb_formatted = comb_raw%>%
          Flag_TOC_g = ifelse(is.na(TOC_g), 2, Flag_TOC_g),
          Flag_TN_g = ifelse(is.na(TN_g), 2, Flag_TN_g),
          Flag_TOCFlux_gm2d = if_else(is.na(TOCFlux_gm2d), 2, Flag_TOCFlux_gm2d),
-         Flag_TNFlux_gm2d = if_else(is.na(TNFlux_gm2d), 2, Flag_TNFlux_gm2d))
+         Flag_TNFlux_gm2d = if_else(is.na(TNFlux_gm2d), 2, Flag_TNFlux_gm2d),
+         Flag_TLiFlux_gm2d = if_else(is.na(TLiFlux_gm2d),2, 1),
+         Flag_TNaFlux_gm2d = if_else(is.na(TNaFlux_gm2d),2, 1),
+         Flag_TMgFlux_gm2d = if_else(is.na(TMgFlux_gm2d),2, 1),
+         Flag_TAlFlux_gm2d = if_else(is.na(TAlFlux_gm2d),2, 1),
+         Flag_TKFlux_gm2d = if_else(is.na(TKFlux_gm2d),2, 1),
+         Flag_TCaFlux_gm2d = if_else(is.na(TCaFlux_gm2d),2, 1),
+         Flag_TFeFlux_gm2d = if_else(is.na(TFeFlux_gm2d),2, 1),
+         Flag_TMnFlux_gm2d = if_else(is.na(TMnFlux_gm2d),2, 1),
+         Flag_TCuFlux_gm2d = if_else(is.na(TCuFlux_gm2d),2, 1),
+         Flag_TSrFlux_gm2d = if_else(is.na(TSrFlux_gm2d),2, 1),
+         Flag_TBaFlux_gm2d = if_else(is.na(TBaFlux_gm2d),2, 1))
 
 #Some durations are unknown at the beginning of each year
 comb_formatted = comb_formatted%>%
@@ -384,7 +395,7 @@ comb_formatted = comb_formatted%>%
          Flag_TOCFlux_gm2d = if_else(Filter1ID %in% high_c_factor_F1, 3,
                               Flag_TOCFlux_gm2d))
 
-write.csv(comb_formatted,"../CN_Metals_Flux_2018_2024.csv",row.names=F)
+write.csv(comb_formatted,"../sed-traps_2018_2024.csv",row.names=F)
 
 mean(unique(frame1$CollectionVol_L), na.rm=T)
 ```

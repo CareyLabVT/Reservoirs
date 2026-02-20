@@ -18,7 +18,7 @@ library(readr)
 #for now, need to set working directories to read sheets in
 setwd("./Data/DataNotYetUploadedToEDI/Sed_trap")
 
-frame1 = read_csv("Filtering logs/FilteringLog_2018_2024.csv")
+frame1 = read_csv("Filtering logs/sed-traps_FilteringLog_2018_2024.csv")
 
 
 #

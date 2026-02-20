@@ -54,6 +54,8 @@ Flag_CombinedCollectionVol_L	Data flag for CombinedCollectionVol (L)	categorical
 Flag_CombinedSedMass_g	Data flag for CombinedSedMass (g)	categorical			NA	No data
 Flag_TOC_g	Data flag for TOC (g)	categorical			NA	No data
 Flag_TN_g	Data flag for TN (g)	categorical			NA	No data
+Flag_TOCFlux_gm2d	Data flag for TOCFlux (g/m2d)	categorical			NA	No data
+Flag_TNFlux_gm2d	Data flag for TNFlux (g/m2d)	categorical			NA	No data
 Flag_ICPTLi_mgL	Data flag for ICPTLi (mg/L)	categorical			NA	No data
 Flag_ICPTNa_mgL	Data flag for ICPTNa (mg/L)	categorical			NA	No data
 Flag_ICPTMg_mgL	Data flag for ICPTMg (mg/L)	categorical			NA	No data
@@ -65,4 +67,15 @@ Flag_ICPTMn_mgL	Data flag for ICPTMn (mg/L)	categorical			NA	No data
 Flag_ICPTCu_mgL	Data flag for ICPTCu (mg/L)	categorical			NA	No data
 Flag_ICPTSr_mgL	Data flag for ICPTSr (mg/L)	categorical			NA	No data
 Flag_ICPTBa_mgL	Data flag for ICPTBa (mg/L)	categorical			NA	No data
+Flag_TLiFlux_gm2d	Data flag for TLiFlux (g/m2d)	categorical			NA	No data
+Flag_TNaFlux_gm2d	Data flag for TNaFlux (g/m2d)	categorical			NA	No data
+Flag_TMgFlux_gm2d	Data flag for TMgFlux (g/m2d)	categorical			NA	No data
+Flag_TAlFlux_gm2d	Data flag for TAlFlux (g/m2d)	categorical			NA	No data
+Flag_TKFlux_gm2d	Data flag for TKFlux (g/m2d)	categorical			NA	No data
+Flag_TCaFlux_gm2d	Data flag for TCaFlux (g/m2d)	categorical			NA	No data
+Flag_TFeFlux_gm2d	Data flag for TFeFlux (g/m2d)	categorical			NA	No data
+Flag_TMnFlux_gm2d	Data flag for TMnFlux (g/m2d)	categorical			NA	No data
+Flag_TCuFlux_gm2d	Data flag for TCuFlux (g/m2d)	categorical			NA	No data
+Flag_TSrFlux_gm2d	Data flag for TSrFlux (g/m2d)	categorical			NA	No data
+Flag_TBaFlux_gm2d	Data flag for TBaFlux (g/m2d)	categorical			NA	No data
 Flag_Duration_days	Data flag for Duration (days)	categorical			NA	No data

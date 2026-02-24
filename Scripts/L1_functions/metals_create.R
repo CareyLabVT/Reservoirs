@@ -9,6 +9,7 @@
 # 04 Feb. 25 Specified the columns when reading in the historical file and added a step to get times for ISCO observations. For now they are the same as the weir samples. 
 # 18 Feb. 25 Added a function when there were no observations for the year
 # 23 May 25 Changed the ISCO to take the higher of the duplicated values
+# 24 Fed 26 Fixed the section on adding historical MDLS and added in ability to pull from GitHub instead of local directories
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -22,7 +23,7 @@
 # 7. Save files
 
 # Read in packages
-pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable", "hms")
+pacman::p_load("tidyverse", "lubridate", "gsheet", "rqdatatable", "hms", "httr2")
 
 metals_qaqc <- function(directory,
                         historic = NULL, 
@@ -41,18 +42,20 @@ metals_qaqc <- function(directory,
   
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
-  # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
-  # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
-  # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-  # sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
-  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
- # metals_save = T
-   # metals_outfile = NULL
-   # ISCO_save = T
-  # ISCO_outfile = NULL
-  # start_date = NULL
-  # end_date = NULL
+ directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/"
+ historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+ sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+ maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+ sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+ MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
+ metals_save = T
+ metals_outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+ ISCO_save = T
+ ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
+ #start_date = NULL
+ #end_date = NULL
+ start_date = as.Date("2025-01-01") # change when we update to read date from EDI
+ end_date = Sys.Date() + lubridate::days(1)
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -142,11 +145,56 @@ metals_qaqc <- function(directory,
   return(al)
   }
   
- # List the files in the folder
-  ICP2<-list.files(path=directory, pattern="ICPMS", full.names=TRUE, recursive=TRUE)
+  # Read in the data from either your local computer or from GitHub depending on what your put in the directory argument. 
+  
+  
+  if(grep("https", directory) == T){
+    
+    #create list of file names
+    resp <- request(directory) |>
+      req_headers(Accept = "application/vnd.github+json") |>
+      req_perform()
+    
+    dat <- resp_body_json(resp, simplifyVector = TRUE)
+    
+    # make a blank data frame
+    files <- NULL
+    
+    # run through all the files
+    for(i in 1:nrow(dat)){
+      # get the files in the sub folder
+      if(dat$size[i] == 0){
+        #print(i)
+        resp_sub <- request(dat$url[i])|>
+          req_headers(Accept = "application/vnd.github+json") |>
+          req_perform()
+        
+        dat2 <- resp_body_json(resp_sub, simplifyVector = TRUE)
+        
+        files <- append(files, dat2$download_url)
+        
+        # make a list of the files
+      }else{
+        files <- append(files, dat$download_url)|>
+          unique()
+      }
+    }
+    
+    # now that we have a list of files get the ones that match the pattern
+    
+    files <- files[grepl("ICPMS", files) ]#make sure they follow the right name
+    print("Files from GitHub")
+    
+  }else{
+    
+    # List the files in the folder on your local computer 
+    files<-list.files(path= directory, pattern="ICPMS", full.names=TRUE, recursive = T)
+    print("Files from local computer")
+  }
+  
   
   # Take out the files that are in the Files_dont_follow_key folder
-  ICP2 <- ICP2[grepl("\\d+[/ICPMS]", ICP2)]
+  ICP2 <- files[grepl("\\d+[/ICPMS]", files)]
   
   # use map to read in all the files using the function above
   ICP <-ICP2 |>
@@ -416,63 +464,97 @@ metals_qaqc <- function(directory,
    print("Created flag columns and used maintenance log to qaqc the data.")
    ### 4. Read in the Minimum Reporting Limits and add flags ####
 
+   ### ABP fixed to make it work now but please feel free to change 
+   
    MRL <- read_csv(MRL_file, show_col_types = F)|>
-     pivot_wider(names_from = 'Symbol',
-                 values_from = "MRL_mgL") %>%
-     rename_with(~str_c("MRL_", .), Al_mgL:Sr_mgL)
+     separate_wider_delim(Symbol, delim = "_", names = c("Metal", "units"))
+     # pivot_wider(names_from = 'Symbol',
+     #             values_from = "MRL_mgL") %>%
+     # rename_with(~str_c("MRL_", .), Al_mgL:Sr_mgL)
+   
+   
+   # pivot the data frame longer
+   
+   long_raw_df <- raw_df|>
+     # add "conc" in front of the concentration values
+     rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag"))|>
+     pivot_longer(!c(Reservoir, Site, Date, Depth_m, Filter), 
+                  names_to = c("Type", "Metal", "units"),
+                  names_sep = "_")|>
+     # and then wider to have a Conc colum and a Flag column
+     pivot_wider(id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Metal, units), 
+                 names_from = Type,
+                 values_from = value)|>
+     mutate(Year = year(Date))|>
+     left_join(MRL, by = c("Metal", "units", "Year"))|>
+     # flag if the MRL is less than or equal to MRL
+     mutate(Flag = ifelse(!is.na(Conc) & Conc <= MRL_mgL, as.numeric(paste0(Flag, 3, sep = " ")), Flag),
+            # replace the negative values or below MRL with the MRL
+            Conc = ifelse(Flag %in% c(3, 43, 53 ), MRL_mgL, Conc))|>
+     # take out the MRL values once we change the value
+     select(-c(MRL_mgL, Year))|>
+     # now pivot longer again
+     pivot_longer(!c(Reservoir, Site, Date, Depth_m, Filter, Metal, units), 
+                     names_to = "Type")
+   
      
-     
+   # old code below and the code above does the same thing but in a different way  
    
    # for ease of use, add year column to raw_df
-   raw_df <-  raw_df %>%
-     mutate(Year = year(Date)) %>% 
-     left_join(MRL) %>%  
-     mutate(Flag_Li_mgL = if_else(!is.na(Li_mgL) & Li_mgL <= MRL_Li_mgL, as.numeric(paste0(Flag_Li_mgL, 3, sep = '')), Flag_Li_mgL),
-            Flag_Na_mgL = if_else(!is.na(Na_mgL) & Na_mgL <= MRL_Na_mgL, as.numeric(paste0(Flag_Na_mgL, 3, sep = '')), Flag_Na_mgL),
-            Flag_Mg_mgL = if_else(!is.na(Mg_mgL) & Mg_mgL <= MRL_Mg_mgL, as.numeric(paste0(Flag_Mg_mgL, 3, sep = '')), Flag_Mg_mgL),
-            Flag_Al_mgL = if_else(!is.na(Al_mgL) & Al_mgL <= MRL_Al_mgL, as.numeric(paste0(Flag_Al_mgL, 3, sep = '')), Flag_Al_mgL),
-            Flag_Si_mgL = if_else(!is.na(Si_mgL) & Si_mgL <= MRL_Si_mgL, as.numeric(paste0(Flag_Si_mgL, 3, sep = '')), Flag_Si_mgL),
-            Flag_K_mgL = if_else(!is.na(K_mgL) & K_mgL <= MRL_K_mgL, as.numeric(paste0(Flag_K_mgL, 3, sep = '')), Flag_K_mgL),
-            Flag_Ca_mgL = if_else(!is.na(Ca_mgL) & Ca_mgL <= MRL_Ca_mgL, as.numeric(paste0(Flag_Ca_mgL, 3, sep = '')), Flag_Ca_mgL),
-            Flag_Fe_mgL = if_else(!is.na(Fe_mgL) & Fe_mgL <= MRL_Fe_mgL, as.numeric(paste0(Flag_Fe_mgL, 3, sep = '')), Flag_Fe_mgL),
-            Flag_Mn_mgL = if_else(!is.na(Mn_mgL) & Mn_mgL <= MRL_Mn_mgL, as.numeric(paste0(Flag_Mn_mgL, 3, sep = '')), Flag_Mn_mgL),
-            Flag_Cu_mgL = if_else(!is.na(Cu_mgL) & Cu_mgL <= MRL_Cu_mgL, as.numeric(paste0(Flag_Cu_mgL, 3, sep = '')), Flag_Cu_mgL),
-            Flag_Sr_mgL = if_else(!is.na(Sr_mgL) & Sr_mgL <= MRL_Sr_mgL, as.numeric(paste0(Flag_Sr_mgL, 3, sep = '')), Flag_Sr_mgL),
-            Flag_Ba_mgL = if_else(!is.na(Ba_mgL) & Ba_mgL <= MRL_Ba_mgL, as.numeric(paste0(Flag_Ba_mgL, 3, sep = '')), Flag_Ba_mgL))
-   
-   
-   # flag minimum reporting level
-   for(j in colnames(raw_df|>select(Li_mgL:Ba_mgL))) {
+   # raw_df <-  raw_df |>
+   #   mutate(Year = year(Date)) |> 
+   #   left_join(MRL)  |>
+   #   mutate(Flag_Li_mgL = if_else(!is.na(Li_mgL) & Li_mgL <= MRL_Li_mgL, as.numeric(paste0(Flag_Li_mgL, 3, sep = '')), Flag_Li_mgL),
+   #          Flag_Na_mgL = if_else(!is.na(Na_mgL) & Na_mgL <= MRL_Na_mgL, as.numeric(paste0(Flag_Na_mgL, 3, sep = '')), Flag_Na_mgL),
+   #          Flag_Mg_mgL = if_else(!is.na(Mg_mgL) & Mg_mgL <= MRL_Mg_mgL, as.numeric(paste0(Flag_Mg_mgL, 3, sep = '')), Flag_Mg_mgL),
+   #          Flag_Al_mgL = if_else(!is.na(Al_mgL) & Al_mgL <= MRL_Al_mgL, as.numeric(paste0(Flag_Al_mgL, 3, sep = '')), Flag_Al_mgL),
+   #          Flag_Si_mgL = if_else(!is.na(Si_mgL) & Si_mgL <= MRL_Si_mgL, as.numeric(paste0(Flag_Si_mgL, 3, sep = '')), Flag_Si_mgL),
+   #          Flag_K_mgL = if_else(!is.na(K_mgL) & K_mgL <= MRL_K_mgL, as.numeric(paste0(Flag_K_mgL, 3, sep = '')), Flag_K_mgL),
+   #          Flag_Ca_mgL = if_else(!is.na(Ca_mgL) & Ca_mgL <= MRL_Ca_mgL, as.numeric(paste0(Flag_Ca_mgL, 3, sep = '')), Flag_Ca_mgL),
+   #          Flag_Fe_mgL = if_else(!is.na(Fe_mgL) & Fe_mgL <= MRL_Fe_mgL, as.numeric(paste0(Flag_Fe_mgL, 3, sep = '')), Flag_Fe_mgL),
+   #          Flag_Mn_mgL = if_else(!is.na(Mn_mgL) & Mn_mgL <= MRL_Mn_mgL, as.numeric(paste0(Flag_Mn_mgL, 3, sep = '')), Flag_Mn_mgL),
+   #          Flag_Cu_mgL = if_else(!is.na(Cu_mgL) & Cu_mgL <= MRL_Cu_mgL, as.numeric(paste0(Flag_Cu_mgL, 3, sep = '')), Flag_Cu_mgL),
+   #          Flag_Sr_mgL = if_else(!is.na(Sr_mgL) & Sr_mgL <= MRL_Sr_mgL, as.numeric(paste0(Flag_Sr_mgL, 3, sep = '')), Flag_Sr_mgL),
+   #          Flag_Ba_mgL = if_else(!is.na(Ba_mgL) & Ba_mgL <= MRL_Ba_mgL, as.numeric(paste0(Flag_Ba_mgL, 3, sep = '')), Flag_Ba_mgL))
+   # 
+   # 
+   # # flag minimum reporting level
+   # for(j in colnames(raw_df|>select(Li_mgL:Ba_mgL))) {
+   # 
+   # # If value negative set to minimum reporting level
+   # 
+   #   # If value negative and was digested flag with both
+   #   raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
+   # 
+   #   # If value negative flag
+   #   raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]!=34)),paste0("Flag_",j)] <- 3
+   #   
+   #   ### ABP do a quick fix 
+   #   
+   #   # get the year
+   #  # ColYear <- raw_df[,"Date"] %>% 
+   #  #   mutate(Date = year(as.POSIXlt(Date, format = "%Y-%d-%m"))) %>% 
+   #  #   rename('Year' = 'Date')
+   # 
+   # # get the minimum detection level
+   # # MRL_value <- as.numeric(MRL[which(MRL[,"Year"] == ColYear)])
+   #   
+   #   # get the MRL value that 
+   #   MRL <- raw_df[,]
+   # 
+   # # If value is less than MRL and has been digested then flag both  and will set to MRL later
+   # raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
+   # 
+   # # If value is less than MRL the flag and will set to MRL later
+   # raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=34 & raw_df[,paste0("Flag_",j)]!=4)),paste0("Flag_",j)] <- 3
 
-   # If value negative set to minimum reporting level
+   # # replace the negative values or below MRL with the MRL
+   # raw_df[c(which(raw_df[,j]<=MRL_value)),j] <- MRL_value
 
-     # If value negative and was digested flag with both
-     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
-
-     # If value negative flag
-     raw_df[c(which(raw_df[,j]<0 & raw_df[,paste0("Flag_",j)]!=34)),paste0("Flag_",j)] <- 3
-     
-     # get the year
-    ColYear <- raw_df[,"Date"] %>% 
-      mutate(Date = year(as.POSIXlt(Date, format = "%Y-%d-%m"))) %>% 
-      rename('Year' = 'Date')
-
-   # get the minimum detection level
-   MRL_value <- as.numeric(MRL[which(MRL[,"Year"] == ColYear)])
-
-   # If value is less than MRL and has been digested then flag both  and will set to MRL later
-   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]==4)),paste0("Flag_",j)] <- 34
-
-   # If value is less than MRL the flag and will set to MRL later
-   raw_df[c(which(raw_df[,j]<=MRL_value & raw_df[,paste0("Flag_",j)]!=34 & raw_df[,paste0("Flag_",j)]!=4)),paste0("Flag_",j)] <- 3
-
-   # replace the negative values or below MRL with the MRL
-   raw_df[c(which(raw_df[,j]<=MRL_value)),j] <- MRL_value
-
-   # Get the sd and the mean for flagging
-   sd_value <- sd(as.numeric(unlist(raw_df[j])), na.rm = TRUE) # get the minimum detection level
-
-   mean_value <- mean(as.numeric(unlist(raw_df[j])), na.rm = TRUE)
+   # # Get the sd and the mean for flagging
+   # sd_value <- sd(as.numeric(unlist(raw_df[j])), na.rm = TRUE) # get the minimum detection level
+   # 
+   # mean_value <- mean(as.numeric(unlist(raw_df[j])), na.rm = TRUE)
 
    
    # for 2025 data: not flagging samples 3sd above the mean
@@ -483,15 +565,15 @@ metals_qaqc <- function(directory,
    # Now flagging observations that were not digested and are 3sd above the mean
    # raw_df[c(which(raw_df[,j]>=mean_value + (sd_value*3) & raw_df[,paste0("Flag_",j)]!=46)),paste0("Flag_",j)] <- 6
 
-   print(j)
-   print("mean")
-   print(mean_value)
-   print("sd")
-   print(sd_value)
-   print("MRL value")
-   print(MRL_value)
+   # print(j)
+   # print("mean")
+   # print(mean_value)
+   # print("sd")
+   # print(sd_value)
+   # print("MRL value")
+   # print(MRL_value)
 
-   }
+  # }
 
    
    # read in the timesheet with the date and time the samples were taken.
@@ -507,6 +589,8 @@ metals_qaqc <- function(directory,
        Depth_m = as.numeric(Depth_m))
    #select(-VT_Metals)
    
+   print("read in time data frame")
+   
    # Make a data frame with just weir samples and then change to ISCO times. This is a crude way of doing it because we don't always collect metals samples when we collect ISCO samples, but it works for now. 
    
    weir <- time_sheet|>
@@ -516,16 +600,16 @@ metals_qaqc <- function(directory,
    time_sheet <- bind_rows(time_sheet, weir)|>
      arrange(Date)
    
-   
+   print("made a weir data frame")
    # add the time the sample was collected. Use Natural join to override NAs
    
    raw_df2 <-
-     natural_join(raw_df,time_sheet,
+     natural_join(long_raw_df,time_sheet,
                   by = c("Reservoir", "Site","Date","Depth_m"),
                   jointype = "LEFT")|>
      #select(-Site)|>
      #dplyr::rename(Site=clean_site)|>
-     select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
+     #select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
      mutate(
        Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
        Flag_DateTime = ifelse(is.na(Time), 1, 0),
@@ -534,22 +618,24 @@ metals_qaqc <- function(directory,
      select(-c(Date, Time))|>
      mutate_if(is.numeric, round, digits = 4) # round to 4 digits
    
-   
+   print("added time to the data frame")
+   # ABP come back here to figure out pivot wider
    # Pivot the data wider so that there is a T_element and and S_element
 
   wed <- raw_df2 |>
     # order the columns so the time column is not in the middle of the elements
     select(Reservoir, Site, DateTime, Depth_m, Filter, everything())|>
+    drop_na(Filter)|> # take out if there are NAs in the filter column
    #group_by(DateTime, Reservoir, Depth_m, Site) |>
-   pivot_wider(names_from = 'Filter',
-                              values_from = Flag_Al_mgL:Sr_mgL,
-                               names_glue = "{Filter}_{.value}")
+   pivot_wider(names_from = c('Type','Filter', 'Metal', 'units'),
+                              values_from = value,
+                               names_glue = "{Type}_{Filter}_{Metal}_{units}")
 
   # rename the Flag column
-  # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the
+  # Change the column headers so they match what is already on EDI. Take out the "Conc_
 
   raw_df <- wed |>
-    rename_with(~gsub("T_Flag", "Flag_T", gsub("S_Flag", "Flag_S",.)), -1)
+    rename_with(~gsub("Conc_", "", colnames(wed)))
     # mutate(
     #   clean_site = Site,
     #   Site = ifelse(Site==100.1, 100, Site)
@@ -603,6 +689,8 @@ metals_qaqc <- function(directory,
       raw_df[i,'Flag_T_Fe_mgL'] != 3 & # add 34
       raw_df[i,'Flag_T_Mn_mgL'] != 3 &
       raw_df[i,'Flag_T_Al_mgL'] != 3){
+    
+    # add a one to the colum
     raw_df[i,'switch_all'] <- 1
   }
 }
@@ -625,6 +713,8 @@ metals_qaqc <- function(directory,
     raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
     raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
   }
+  
+  print("fixed switched samples")
   
   #raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
    # for(l in colnames(raw_df|>select(starts_with(c("T_"))))) {
@@ -659,6 +749,7 @@ metals_qaqc <- function(directory,
    frame4 <- raw_df |>
      rename_with(~gsub("T_", "T", gsub("S_", "S",.)), -1)
 
+   print("flag NAs again")
 #let's write the final csv
 #note: you must edit the script each time to save the correct file name
  frame4 <- frame4 |>
@@ -678,8 +769,10 @@ metals_qaqc <- function(directory,
           Flag_TCu_mgL, Flag_SCu_mgL, Flag_TSr_mgL, Flag_SSr_mgL,
           Flag_TBa_mgL, Flag_SBa_mgL) |>
    arrange(DateTime, Reservoir, Site, Depth_m)
+ 
+ print("make final data frame")
 
- #### 7. Save Files ####
+ #### 7. Save Files 
 
  # Save the metals data frame
  # Remove the ISCO samples
@@ -753,7 +846,9 @@ if(metals_save==T){
    print("Data frames are in a list with the metals data frame being first and then the ISCO data frame")
  
   }
- } # ends the if statement when there are no new observations
-} # closes the function
+ }
+} 
+
+# closes the function
 
 

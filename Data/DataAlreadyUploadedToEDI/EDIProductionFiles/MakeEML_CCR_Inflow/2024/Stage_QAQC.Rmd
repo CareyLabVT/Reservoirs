@@ -108,15 +108,16 @@ The HOBO PTs are not vented. This corrects to local air pressure fluctuations.
 
 ```{r Correct for barometric pressure, echo = TRUE}
 ccr_met_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1105/4/8ebf27393ccafe518328468a260d2e18")
-# ccr_met_git <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/refs/heads/ccre-dam-data-qaqc/ccre_met_L1.csv")
+ ccr_met_git <- read_csv("https://raw.githubusercontent.com/FLARE-forecast/CCRE-data/refs/heads/ccre-dam-data-qaqc/ccre_met_L1.csv")
 # Can download and save locally if the link from EDI isn't working. Just paste the pasta link into your internet browser
 # ccr_met_edi <- read_csv("ccre-met_2021_2025.csv")
 # ccr_met_edi <- read_csv("C:/Users/dwh18/Downloads/ccrmet_edi_git_hold.csv")
-# ccr_met <- ccr_met_edi |>
-#   select(-starts_with("Note")) |> #remove note columns to bind
-#   rbind(ccr_met_git)
 
-ccr_met <- ccr_met_edi |> 
+ccr_met1 <- ccr_met_edi |>
+  select(-starts_with("Note")) |> #remove note columns to bind
+  rbind(ccr_met_git)
+
+ccr_met <- ccr_met1 |> 
   select(DateTime, BP_Average_kPa, Flag_BP_Average_kPa, Rain_Total_mm) |> #check BP flag
   mutate(Date = as.Date(DateTime),
          Hour = hour(DateTime),
@@ -468,7 +469,7 @@ a
 
 
 ```{r Compare with precip, echo = TRUE}
-rain_comp <- left_join(stage_final, ccr_met_edi, by = "DateTime")
+rain_comp <- left_join(stage_final, ccr_met1, by = "DateTime")
 
 ggplot(data = rain_comp, aes(x = DateTime)) +
   geom_line(aes(y = waterlevel_cm)) +

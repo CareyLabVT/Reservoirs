@@ -1,0 +1,115 @@
+---
+title: "Calc_Q"
+author: "AEB + DWH"
+date: "2026-02-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, ggplot2, plotly)
+
+#set Reservoir and Site
+res = "CCR"
+site = 101
+
+```
+
+## Import corrected stage data and Rating Curve made with Develop_Rating_Curve.Rmd
+
+```{r data import}
+#get corrected stage generated in Stage_QAQC.Rmd 
+stage <- read_csv(here(
+  "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
+  "MakeEML_CCR_Inflow", "2024", "HPB_stage_2024_2025.csv"))
+
+#set timezone
+stage$DateTime <- force_tz(as.POSIXct(stage$DateTime), tz = "EST")
+
+rating_curve <- read_csv(here(
+  "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", "MakeEML_CCR_Inflow", "2024",     "Rating_Curves.csv"))
+
+RC <- rating_curve |>
+  filter(
+    Reservoir == res,
+    Site == site
+  )|>
+  slice_max(curve_name)
+
+RC <- as.list(rating_curve[1, ])
+
+```
+
+## Calculate Q timeseries
+
+```{r pressure, echo=FALSE}
+
+Q_final <- stage |>
+  mutate(
+    Flow_cms = RC$a * (stage_cm - RC$gzf)^RC$b
+  )|>
+  relocate(Flow_cms, .after = stage_cm)
+
+```
+
+# Plot, compare w USGS reference
+```{r}
+ggplot(Q_final, aes(x = DateTime)) +
+  geom_point(aes(y = Flow_cms)) +
+  ggtitle(paste("Flow at", res, site))
+
+#pull in comparison USGS sites
+ref_site <- "USGS-02055100"
+
+USGS_Ref <- read_waterdata_continuous(
+  monitoring_location_id = ref_site,
+  parameter_code = "00060",
+  properties = c("time", "value", "unit_of_measure"),
+  time = paste0(min(stage$DateTime),"/",max(stage$DateTime))
+)
+
+USGS_Ref <- USGS_Ref |>
+  mutate(
+    Flow_cms = value / 35.3
+  )
+
+comp <- ggplot(Q_final, aes(x = DateTime)) +
+  geom_point(aes(y = Flow_cms), shape = 20) +
+  geom_line(data = USGS_Ref, aes(x = time, y = Flow_cms), color = "blue") +
+  ggtitle(paste("Flow at", res, site, "and Comparison Site", ref_site))
+
+ggplotly(comp)
+
+```
+
+
+
+```{r Flags}
+#Assign Q Flags
+Q_final <- Q_final |>
+  mutate(
+    Flag_Flow_cms = 0
+  ) |>
+  mutate(
+    Flag_Flow_cms = ifelse(
+      stage_cm > RC$max_dev_stage | stage_cm < RC$min_dev_stage, 
+                                6, 
+                                Flag_Flow_cms))|>
+  relocate(Flag_Flow_cms, .before = Flag_Temp_C)
+
+#Flag counts 
+### Check flags 
+Flags <- Q_final |>
+  select(starts_with("Flag"))
+
+Flags <- Flags[!complete.cases(Flags), ] # Keep only the complete rows
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
+
+```
+

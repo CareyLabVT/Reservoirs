@@ -1,0 +1,2 @@
+Reservoir,Site,time_start,time_end,curve_name,Iteration,a,b,gzf,RSE,max_dev_stage,max_obs_stage,min_dev_stage,min_obs_stage
+CCR,101,1/10/2024,1/1/2027,1,All,2.34167749190919e-06,3.412759379,18.6,0.005133359,38.85202393,86.19817016,25.12877766,18.64035439

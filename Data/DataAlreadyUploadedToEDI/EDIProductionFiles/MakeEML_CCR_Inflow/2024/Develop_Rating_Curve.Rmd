@@ -14,12 +14,12 @@ pacman::p_load(tidyverse, lubridate, here, dataRetrieval, plotly)
 #Define which site/timeframe
 res <- "CCR"
 site <- 101
-time_start <- as.POSIXct("2025-01-10 00:00:00", tz = "EST")
+time_start <- as.POSIXct("2024-01-10 00:00:00", tz = "EST")
 time_end <- as.POSIXct("2027-01-01 00:00:00", tz = "EST")
-curve_name <- paste0(res, site, "_RC_1") #update numbering as develop new RC for each site
+curve_name <- 1 #update numbering as develop new RC for each site
 
 #name the iteration you are trying this run, so all can be plotted for comparison later
-iter <- "2025"
+iter <- "All"
 
 ```
 
@@ -199,31 +199,31 @@ min_obs_stage <- stage |>
 ```{r Save Iterations}
 #Create rating curve df 
 #For initial iteration
-# rating_details <- data.frame(res, site, time_start, time_end, curve_name, iter, a, b, gzf, RSE, max_dev_stage, max_obs_stage, min_dev_stage, min_obs_stage)
-# 
-# rating_details <- rating_details |>
-#   rename(
-#     Reservoir = res,
-#     Site = site,
-#     Iteration = iter,
-#   )
+rating_details <- data.frame(res, site, time_start, time_end, curve_name, iter, a, b, gzf, RSE, max_dev_stage, max_obs_stage, min_dev_stage, min_obs_stage)
+
+rating_details <- rating_details |>
+  rename(
+    Reservoir = res,
+    Site = site,
+    Iteration = iter,
+  )
 
 #for additional iterations
-rating_details <- add_row(rating_details,
-                          Reservoir = res,
-                          Site = site,
-                          time_start = time_start,
-                          time_end = time_end,
-                          curve_name = curve_name,
-                          Iteration = iter,
-                          a = a,
-                          b = b,
-                          gzf = gzf,
-                          RSE = RSE,
-                          max_dev_stage = max_dev_stage,
-                          max_obs_stage = max_obs_stage,
-                          min_dev_stage = min_dev_stage,
-                          min_obs_stage = min_obs_stage)
+# rating_details <- add_row(rating_details,
+#                           Reservoir = res,
+#                           Site = site,
+#                           time_start = time_start,
+#                           time_end = time_end,
+#                           curve_name = curve_name,
+#                           Iteration = iter,
+#                           a = a,
+#                           b = b,
+#                           gzf = gzf,
+#                           RSE = RSE,
+#                           max_dev_stage = max_dev_stage,
+#                           max_obs_stage = max_obs_stage,
+#                           min_dev_stage = min_dev_stage,
+#                           min_obs_stage = min_obs_stage)
 
 
 ```
@@ -279,8 +279,8 @@ plot_end <- as.POSIXct("2025-11-30 00:00:00", tz = "EST")
 #Plots ##will have to rename with iteration names
 p <- ggplot(data = Q_timeseries, aes(x = DateTime))+
   geom_line(aes(y = `Q_cms_All`*35.3), color = 'red') +
-  geom_line(aes(y = `Q_cms_2024`*35.3), color = 'green') +
-  geom_line(aes(y = `Q_cms_2025`*35.3), color = 'green') +
+  #geom_line(aes(y = `Q_cms_2024`*35.3), color = 'green') +
+  #geom_line(aes(y = `Q_cms_2025`*35.3), color = 'green') +
   #geom_line(aes(y = `Q_cms_Rmv_highMay`*35.3), color = 'green')+
   geom_point(data = flowmate, aes(x = DateTime, y = Flow_cms*35.3)) +
   geom_line(data = USGS_Ref, aes(x = time, y = value), color = 'blue') +
@@ -301,21 +301,21 @@ selected_rating <- rating_details|>
     Iteration == best_iter
   )
 
-# write.csv(selected_rating, here(
-#     "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
-#     "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv")
-#     ), row.names = F)
+#create initial file
+write.csv(selected_rating, here(
+    "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles",
+    "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv"), row.names = F)
 
 #Add finished rating curve to .csv file
- write.table(
-  x = selected_rating,
-  file = here(
-    "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
-    "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv"),
-  append = TRUE,
-  sep = ",",
-  col.names = FALSE,
-  row.names = FALSE
-)
+#  write.table(
+#   x = selected_rating,
+#   file = here(
+#     "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
+#     "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv"),
+#   append = TRUE,
+#   sep = ",",
+#   col.names = FALSE,
+#   row.names = FALSE
+# )
 ```
 

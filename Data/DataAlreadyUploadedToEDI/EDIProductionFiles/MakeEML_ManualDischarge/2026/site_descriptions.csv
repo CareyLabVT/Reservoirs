@@ -1,8 +1,8 @@
 "Reservoir","Site","Site_description","Latitude","Longitude"
 "BVR",100,"Inflow stream site to BVR on western reservoir arm",37.31957,-79.82437
 "BVR",200,"Inflow stream site to BVR on eastern reservoir arm that drains upstream impoundment",37.322851,-79.81721
-"CCR",101,"Inflow stream site to Carvins Cove Reservoir at Horse Pen Branch",37.3646,-79.9733
 "CCR",100,"Inflow stream site to Carvins Cove Reservoir where Horse Pen Branch meets the reservoir and is a standing water inflow (downstream of site 100)",37.3654,-79.972
+"CCR",101,"Inflow stream site to Carvins Cove Reservoir at Horse Pen Branch",37.3646,-79.9733
 "CCR",201,"Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns",37.3958,-79.9937
 "CCR",300,"Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow closest to reservoir (downstream of 301)",37.4094,-79.9699
 "CCR",301,"Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream",37.4169,-79.9771

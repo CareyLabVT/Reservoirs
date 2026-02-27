@@ -1,0 +1,321 @@
+---
+title: "Develop_Rating_Curve"
+author: "AEB + DWH"
+date: "2026-02-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#load packages
+pacman::p_load(tidyverse, lubridate, here, dataRetrieval, plotly)
+
+#Define which site/timeframe
+res <- "CCR"
+site <- 101
+time_start <- as.POSIXct("2025-01-10 00:00:00", tz = "EST")
+time_end <- as.POSIXct("2027-01-01 00:00:00", tz = "EST")
+curve_name <- paste0(res, site, "_RC_1") #update numbering as develop new RC for each site
+
+#name the iteration you are trying this run, so all can be plotted for comparison later
+iter <- "2025"
+
+```
+
+## import the necessary data
+
+```{r inital data}
+#pull discharge measurements and match to corrected stage
+
+#flowmate Q
+flowmate <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/454/9/0e7fe16623a1ad2a67774c23ce8a29d8")
+
+#add in most recent Q measurements
+flowmate <- add_row(
+  flowmate,
+  Reservoir = res,
+  Site = site,
+  DateTime = as.POSIXct("2026-02-17 12:30:00", tz = "America/New_York"), 
+  Flow_cms = 0.0453300,
+  Flag_DateTime = 0,
+  Flag_Flow_cms = 0)
+
+# set timezone to American/New_york
+flowmate$DateTime <- force_tz(as.POSIXct(flowmate$DateTime), tz = "America/New_York")
+
+#select site of interest
+flowmate <- flowmate |> 
+  filter(Reservoir == res, 
+         Site == site)|>
+    select(DateTime, Flow_cms, Flag_DateTime, Flag_Flow_cms)
+
+# convert to EST
+flowmate$DateTime <- with_tz(as.POSIXct(flowmate$DateTime), tz = "EST")
+  
+#import corrected stage data
+stage <- read_csv(here("Data", "DataAlreadyUploadedtoEDI", "EDIProductionFiles", "MakeEML_CCR_Inflow", "2024", "HPB_stage_2024_2025.csv"))
+
+# Put the time into EST
+stage$DateTime <- force_tz(as.POSIXct(stage$DateTime), tz = "EST")
+
+##join stage and discharge by closest observation 
+by <- join_by(closest(DateTime >= DateTime))
+
+stage_Q_df <- left_join(flowmate, stage, by)|>
+  dplyr::rename(DateTime = DateTime.x)|>
+  select(-DateTime.y)|>
+  select(DateTime, stage_cm, Flow_cms, Flag_DateTime, Flag_Flow_cms, Flag_stage_cm)|>
+  filter(
+         DateTime >= time_start,
+         DateTime <= time_end)
+
+#manually add in reasonable stages for times that are NA that can be known
+stage_Q_df <- stage_Q_df |>
+  mutate(
+    stage_cm = if_else(
+      as.Date(DateTime) == ymd("2024-04-23"),
+      30.16215,   # reasonable stage value
+      stage_cm
+    )
+  )|>
+  mutate(
+    stage_cm = if_else(
+      as.Date(DateTime) == ymd("2025-04-16"),
+      35.78281,   # reasonable stage value
+      stage_cm
+    )
+  )
+  
+
+## quick data viz
+stage_Q_df |> 
+  pivot_longer(-1) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y", ncol = 1)+
+  theme_bw()
+```
+##Select which measurements to use
+
+```{r Measurement selection}
+
+stage_Q_df <- stage_Q_df |>
+  filter(
+    #Flag_DateTime == 0, #only measurements we know exact time to match to stage
+    !is.na(Flow_cms),
+    !is.na(stage_cm),
+    #stage_cm > 0,
+    Flow_cms > 0,
+    )
+
+```
+
+
+## Rating Curve Fitting
+
+Resource code: <https://thewetlandblog.wordpress.com/2013/06/17/fitting-rating-curves-with-r/> Resource: <https://rpubs.com/kwf/hydrographs_covino> 
+Helpful slide deck with key concepts: <https://statuschecker.fgdc.gov/lmp/surface-water-procedures-and-policies/SWP-Module12-Ratings/presentation_content/external_files/Lesson12-SlideNotes.pdf>
+
+The gage height of zero flow (GZF) is the stage at which there would be no flow at the gaging station, ie Q = 0 cms. This is a good value to collect in the field periodically. It is always downstream of the gaging point and is the lowest point along the stream bottom along the cross section that controls the flow. It is measured by finding the depth to the water surface at that point and then subtracting that from the current recorded stage at the gage.
+
+```{r rating curve, echo=FALSE}
+#Input gage height of zero flow, since datum +20, this makes all good stages >0. In future, will be field measured
+gzf = 18.6 
+
+# Fit nonlinear model: Q = a * (stage - gzf)^b
+rating_fit <- nls(Flow_cms ~ a * (stage_cm - gzf)^b, data = stage_Q_df, start = list(a = 0.01, b = 0.01))
+
+# Look at the summary file
+summary(rating_fit)
+
+coef(rating_fit) #pull out the coefficients
+a <- coef(rating_fit)[["a"]] #store value of a
+b <- coef(rating_fit)[["b"]] #store value of b
+
+#Smaller RSE = better model fit
+RSE <- summary(rating_fit)$sigma
+
+```
+
+```{r Plot Rating Curve}
+#60 will show what this range looks like up until max stage in HF stage data
+fitline <- data.frame(
+  stage = seq(1, 60, by = 0.5))
+
+fitline$q <- a * (fitline$stage - gzf)^b
+
+#plot the Flow vs. the stage with water level over the rating curve
+stage_Q_df |> 
+  ggplot(aes(x = Flow_cms)) +
+  geom_point(aes(y = stage_cm), size = 2) +
+  geom_line(data = fitline, aes(x = q, y = stage), color = "blue", size = 1) +
+  theme_bw() +
+  # xlim(0,1000) +
+  labs(title = paste("Rating Curve Fit", iter),
+       x = "Discharge (cms)",
+       y = "stage (cm)")
+
+stage_Q_df |> 
+  ggplot(aes(x = log10(Flow_cms))) +
+  geom_point(aes(y = log10(stage_cm - gzf)), size = 2) +
+  geom_line(data = fitline, aes(x = log10(q), y = log10(stage - gzf)), color = "blue", size = 1)+
+  theme_bw() +
+  # xlim(0,1000)+
+  labs(title = paste("Log-log Rating Curve Fit", iter),
+       x = "log Discharge (cms)",
+       y = "log (stage - gzf) (cm)")
+
+
+#Plot residuals
+plot(predict(rating_fit), residuals(rating_fit), xlab = "Predicted Values", ylab = "Residuals", main = paste("Residual Plot", iter))
+abline(h = 0, col = "red", lty = 2)
+
+
+#Find max and min stage of measurements used in RC development and compare to max min stage extrapolated over
+
+max_dev_stage <- max(stage_Q_df$stage_cm)
+
+min_dev_stage <- min(stage_Q_df$stage_cm)
+
+max_obs_stage <- stage |>
+  filter(
+    DateTime >= time_start,
+    DateTime <= time_end
+  ) |>
+  summarise(max_stage = max(stage_cm, na.rm = TRUE)) |>
+  pull(max_stage)
+
+min_obs_stage <- stage |>
+  filter(
+    DateTime >= time_start,
+    DateTime <= time_end
+  ) |>
+  summarise(min_stage = min(stage_cm, na.rm = TRUE)) |>
+  pull(min_stage)
+
+```
+
+```{r Save Iterations}
+#Create rating curve df 
+#For initial iteration
+# rating_details <- data.frame(res, site, time_start, time_end, curve_name, iter, a, b, gzf, RSE, max_dev_stage, max_obs_stage, min_dev_stage, min_obs_stage)
+# 
+# rating_details <- rating_details |>
+#   rename(
+#     Reservoir = res,
+#     Site = site,
+#     Iteration = iter,
+#   )
+
+#for additional iterations
+rating_details <- add_row(rating_details,
+                          Reservoir = res,
+                          Site = site,
+                          time_start = time_start,
+                          time_end = time_end,
+                          curve_name = curve_name,
+                          Iteration = iter,
+                          a = a,
+                          b = b,
+                          gzf = gzf,
+                          RSE = RSE,
+                          max_dev_stage = max_dev_stage,
+                          max_obs_stage = max_obs_stage,
+                          min_dev_stage = min_dev_stage,
+                          min_obs_stage = min_obs_stage)
+
+
+```
+
+Compare different rating curves to Q timeseries-
+
+Info about 
+CCR 101 (Streamstats): Drainage area ~ 1.65 sqmi 
+50% AEP flood = 163 cfs
+
+
+USGS Tinker Creek (USGS-02055100) = 11.7 sqmi
+50% AEP flood (streamstats) = 685 cfs
+May 13, 2025 peak = 315 cfs 5:15 am
+
+USGS Catawba Creek = 34.3 sqmi
+
+May 13, 2025 = 720 cfs 4:30 am
+
+```{r Convert stage to Q}
+
+#Create df for Q using each potential rating curve
+Q_timeseries <- rating_details |>
+  crossing(stage)|>
+  filter(
+    DateTime >= time_start,
+    DateTime <= time_end )|>
+  mutate(
+    Q = a * (stage_cm - gzf)^b
+  ) |>
+  select(DateTime, stage_cm, Iteration, Q)|>
+  pivot_wider(
+    names_from = Iteration,
+    values_from = Q,
+    names_prefix = "Q_cms_"
+  )
+
+#pull in comparison USGS sites
+
+ref_site <- "USGS-02055100"
+
+USGS_Ref <- read_waterdata_continuous(
+  monitoring_location_id = ref_site,
+  parameter_code = "00060",
+  properties = c("time", "value", "unit_of_measure"),
+  time = paste0(min(stage$DateTime),"/",max(stage$DateTime))
+)
+
+#zoom in on dates
+plot_start <- as.POSIXct("2024-05-05 00:00:00", tz = "EST")
+plot_end <- as.POSIXct("2025-11-30 00:00:00", tz = "EST")
+
+#Plots ##will have to rename with iteration names
+p <- ggplot(data = Q_timeseries, aes(x = DateTime))+
+  geom_line(aes(y = `Q_cms_All`*35.3), color = 'red') +
+  geom_line(aes(y = `Q_cms_2024`*35.3), color = 'green') +
+  geom_line(aes(y = `Q_cms_2025`*35.3), color = 'green') +
+  #geom_line(aes(y = `Q_cms_Rmv_highMay`*35.3), color = 'green')+
+  geom_point(data = flowmate, aes(x = DateTime, y = Flow_cms*35.3)) +
+  geom_line(data = USGS_Ref, aes(x = time, y = value), color = 'blue') +
+  #geom_line(data = stage, aes(x = DateTime, y = waterlevel_cm), color = 'purple') +
+  coord_cartesian(xlim = c(plot_start, plot_end))
+
+ggplotly(p)
+
+```
+
+```{r}
+
+#Select best rating curve scenario
+best_iter <- "All"
+
+selected_rating <- rating_details|>
+  filter(
+    Iteration == best_iter
+  )
+
+# write.csv(selected_rating, here(
+#     "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
+#     "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv")
+#     ), row.names = F)
+
+#Add finished rating curve to .csv file
+ write.table(
+  x = selected_rating,
+  file = here(
+    "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles", 
+    "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv"),
+  append = TRUE,
+  sep = ",",
+  col.names = FALSE,
+  row.names = FALSE
+)
+```
+

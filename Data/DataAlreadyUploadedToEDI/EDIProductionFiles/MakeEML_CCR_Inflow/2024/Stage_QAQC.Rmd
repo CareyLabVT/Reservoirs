@@ -101,8 +101,9 @@ ggplot(data = hobo_raw, aes(x = DateTime)) +
   scale_x_datetime()
 
 ```
+
 ## Correct pressure data with Barometric Pressure from met station on dam
-The HOBO PTs are not vented. This corrects to local air pressure fluctuations.
+The HOBO PTs are not vented. This corrects for local air pressure fluctuations.
 
 ```{r Correct for barometric pressure, echo = TRUE}
 ccr_met_edi <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/1105/4/8ebf27393ccafe518328468a260d2e18")
@@ -135,16 +136,13 @@ hobo <- left_join(hobo_raw, ccr_met, by = "DateTime") |>
   mutate(corrected_Pres_kPa = HOBO_Abs_Pres_kPa - BP_Average_kPa) |>
   select(DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, Temp_C) 
 
-
 # Viz the corrected pressure
-
 pres <- hobo|>
   ggplot(aes(x = DateTime, y = corrected_Pres_kPa))+
   geom_point()+
   theme_bw()
 
 pres
-
 #ggplotly(pres)
 
 ```
@@ -152,13 +150,23 @@ pres
 
 
 ## Assign flags
-Flags for dataset are:
-0: good data
-1: Sensor was out of water (maintenance, low water level, below freezing), value set to NA
-2: missing data 
-#3: negative waterlevel set to 0 
-4: Correction applied
-5: negtaive PT or Temp
+Data Flags are reported for each variable in the data set.
+
+0 = No Flag
+
+1 = Data removed and set to NA due to maintenance 
+
+2 = Missing data; either stream pressure or atmospheric correction pressure
+
+#3 = Negative water level 
+
+4 = Correction applied to the data
+
+5 = Negative corrected pressure but left in data set
+
+6 = Flow value exceeds highest flow measurement used in rating curve calculations
+
+7 = Data interpolated for gaps < 3 hours
 
 
 ```{r maintenance log, echo = TRUE}
@@ -171,6 +179,19 @@ Flags for dataset are:
     hobo[,paste0("Flag_",colnames(hobo[j]))] <- 0 #creates flag column + name of variable
     hobo[c(which(is.na(hobo[,j]))),paste0("Flag_",j)] <-2 #puts in flag 2 if value not collected
   }
+
+#Flag of 2 if BP_Average is missing
+hobo <- hobo |>
+  mutate(
+    Flag_BP_Average_kPa = if_else(
+      is.na(BP_Average_kPa),
+      2,
+      Flag_BP_Average_kPa),
+    Flag_corrected_Pres_kPa = if_else(
+      is.na(BP_Average_kPa),
+      2,
+      Flag_corrected_Pres_kPa))
+  
 
 #Local one for now
 log <- read_csv2("./hpb_maintenancelog_2024_2025.csv")
@@ -269,12 +290,6 @@ log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end, format = "%m/%d/%Y %
         hobo[Time, maintenance_cols] <- NA
         hobo[Time, flag_cols] <- flag
         
-      } else if (flag==2){
-        
-        # The observations are changed to NA for maintenance or other issues found in the maintenance log
-        hobo[Time, maintenance_cols] <- NA
-        hobo[Time, flag_cols] <- flag
-        
       } else if (flag==4){
         # Values are removed because they are out of range
         # put the adjusted value in a new column. The equation used to correct the value is in the maintenance log
@@ -290,6 +305,16 @@ log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end, format = "%m/%d/%Y %
       }
     } 
   }  
+
+#Flag counts 
+Flags <- hobo |>
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
 
 ```
 
@@ -311,10 +336,6 @@ check_pressure <- hobo|>
 check_pressure
 
 ```
-
-
-
-
 
 
 ##Correction offsets fpr second PT deployement and flag negative PT 
@@ -345,22 +366,29 @@ stage_obs <- hobo|>
   # make a flag column for water level
   # Add a flag column for when water level is negative and set to 0 and flag when pressure is negative
   mutate(Flag_waterlevel_cm = 0,
-         Flag_waterlevel_cm = ifelse(waterlevel_cm < 0, 3, Flag_waterlevel_cm),
+         #Flag_waterlevel_cm = ifelse(waterlevel_cm < 0, 3, Flag_waterlevel_cm),
          #waterlevel_cm = ifelse(waterlevel_cm < 0, 0, waterlevel_cm), ##This data actually looks good, the reference elevation of 0 is just higher than the PT
-         Flag_corrected_Pres_kPa = ifelse(corrected_Pres_kPa < 0, 5, Flag_corrected_Pres_kPa),
+         Flag_corrected_Pres_kPa = ifelse(corrected_Pres_kPa < 0, 5, Flag_corrected_Pres_kPa), 
          Flag_corrected_Pres_kPa = ifelse(Flag_HOBO_Abs_Pres_kPa == 1, 1, Flag_corrected_Pres_kPa),
          Flag_waterlevel_cm = ifelse(Flag_HOBO_Abs_Pres_kPa == 1, 1, Flag_waterlevel_cm))|>
   select(DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, waterlevel_cm, Temp_C, everything())
 
 # Double check that all missing data have flags
-
 for(j in colnames(stage_obs |> select(HOBO_Abs_Pres_kPa:Temp_C))) { 
     
     stage_obs[c(which(is.na(stage_obs[,j] & is.na(stage_obs[,paste0("Flag_",j)])))),paste0("Flag_",j)] <- 2 #puts in flag 2 if value not collected
-  }
-  
+}
 
 
+#Flag counts 
+Flags <- stage_obs |>
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
 
 ```
 
@@ -385,16 +413,25 @@ stage_filled <- stage_filled |>
       x = DateTime,
       maxgap = 18,
       na.rm = FALSE
-    ),
+    ), #Fills any gaps less than 3 hrs long with interpolation of pre and post waterlevel
     Flag_waterlevel_cm = if_else(
-      is.na(waterlevel_cm) & !is.na(waterlevel_cm_filled),
-      as.numeric(paste0(Flag_waterlevel_cm, 7)),
-      as.numeric(Flag_waterlevel_cm)
-    )
-  )
+    is.na(waterlevel_cm) & !is.na(waterlevel_cm_filled),
+    as.numeric(paste0(coalesce(as.character(Flag_waterlevel_cm), ""), 7)),
+    as.numeric(Flag_waterlevel_cm)
+    ), #Flags with 7 for all interpolated water levels
+    across(
+      c(Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_Temp_C),
+      ~ if_else(
+          is.na(HOBO_Abs_Pres_kPa) & is.na(BP_Average_kPa) 
+          & is.na(corrected_Pres_kPa) & is.na(Temp_C) 
+          & !is.na(waterlevel_cm_filled),
+          as.numeric(paste0(coalesce(as.character(.x), ""), 2)),
+          as.numeric(.x)
+        ) #Adds flags for data lines that were not originally collected by sensor but were within a <3hr data gap, so were able to be interpolated
+  ))
 
 #adjust datum so no negatives for good looking values 
-##Future this will be done in field by choosing reference point elevation well above zero. 
+##In future, this will be done in field by choosing reference point elevation well above zero. 
 datum <- 20
 
 stage_final <- stage_filled |>
@@ -406,11 +443,30 @@ stage_final <- stage_filled |>
     Flag_stage_cm = Flag_waterlevel_cm
   )
 
+#Flags for gap fill that was not in original data collection
+
+
+
+#remove rows with NA
+stage_final <- drop_na(stage_final, stage_cm)
+
+#Flag counts 
+Flags <- stage_final |>
+  select(starts_with("Flag"))
+
+# Make a table with the number of times a flag was used
+for(f in 1:(ncol(Flags))){
+  #print(colnames(Flags[f]))
+  print(table(Flags[,f], useNA = "always"))
+}
 
 # save data file 
 write.csv(stage_final, "HPB_stage_2024_2025.csv", row.names = F)
 
 ```
+
+
+
 ```{r USGS Reference Gage}
 ref_site <- "USGS-02055100"
 
@@ -459,7 +515,7 @@ ggplotly(p)
 
 pp <- ggplot() +
   geom_point(data = stage_final, aes(x = DateTime, y = stage_cm)) +
-  geom_point(data = USGS_Ref, aes(x = time, y = stage_cm), color = 'blue') +
+  geom_line(data = USGS_Ref, aes(x = time, y = stage_cm), color = 'blue') +
   ggtitle("Staged data USGS comparison site") +
   theme_bw()
 

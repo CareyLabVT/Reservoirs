@@ -103,13 +103,19 @@ Q_final <- Q_final |>
 Flags <- Q_final |>
   select(starts_with("Flag"))
 
-Flags <- Flags[!complete.cases(Flags), ] # Keep only the complete rows
-
 # Make a table with the number of times a flag was used
 for(f in 1:(ncol(Flags))){
   #print(colnames(Flags[f]))
   print(table(Flags[,f], useNA = "always"))
 }
+
+```
+```{r}
+#Save final data file
+write_csv(Q_final, here("Data", "DataAlreadyUploadedToEDI", 
+                        "EDIProductionFiles", "MakeEML_CCR_Inflow", "2024",
+                        "stage_discharge_final.csv")
+)
 
 ```
 

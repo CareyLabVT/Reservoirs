@@ -29,16 +29,13 @@ Data Flags are reported for each variable in the data set.
 
 2 = Missing data
 
-3 = Neagive water level set to 0
-
 4 = Correction applied to the data
 
 5 = Negative corrected pressure but left in data set
 
-6 = Flow value exceeds highest flow mesaurement used in rating curve calculations
+6 = Flow value computed from stage outside the range of measured stages used in rating curve development
 
-
-When the corrected pressure was below 0 water level was set to 0 and flow was also set to 0. 
+7 = Data interpolated for gaps < 3 hours
 
 
 ### Maintenance: 
@@ -50,9 +47,9 @@ On 11 June 2025, we moved the pressure transducer lower in the water than when i
 
 ### Data Gaps: 
 
-Sub daily gaps in data may have occurred on days when the sensor was downloaded.
+Sub daily gaps in data may have occurred on days when the sensor was downloaded. Gaps less than 3 hours in length are estimated by interpolation and flagged with a 7. 
 
-Multi-day gaps in data occurred between 17 December 2024 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025.
+Multi-day gaps in data occurred between 17 December 2024 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025 due to data overwriting.
 
 
 ### Notes

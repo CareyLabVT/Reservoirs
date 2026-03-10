@@ -2,6 +2,7 @@
 # Author: Adrienne Breef-Pilz based on functions from VERA targets files
 # Created: 11 Sept 2025
 # Edited: 
+# 10 Mar 2026 fixed the arguments in the find_depths function
 
 
 # Load packages
@@ -9,15 +10,15 @@
 install.packages("pacman")
 pacman::p_load(tidyverse, rLakeAnalyzer) 
 
-# Read in the data packages from EDI
+# Read in the data packages from EDI for data up to 2024. You can update the links if you want more recent data.
 
-# Read in data of the BVR streaming sensors from EDI
+# Read in data of the BVR streaming sensors from EDI using the 
 bvr <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/725/5/f649de0e8a468922b40dcfa34285055e")
 
 # Read in data of the FCR streaming sensors from EDI
 fcr <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/271/9/f23d27b67f71c25cb8e6232af739f986")
 
-# Read in data from the FCR met station
+# Read in data from the FCR met station. This takes a long time!
 met <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/389/9/62647ecf8525cdfc069b8aaee14c0478")
 
 
@@ -32,7 +33,10 @@ fcr_daily <- fcr|>
   group_by(Date)|>
   # average for each column for each day
   summarise(across(c(RDOsat_percent_9_adjusted:EXOTemp_C_1), \(x) mean(x, na.rm = TRUE), .names = "FCR_mean_{.col}"))|>
-  ungroup()
+  ungroup()|>
+  mutate(across(c(FCR_mean_RDOsat_percent_9_adjusted:FCR_mean_EXOTemp_C_1), round, 2))
+
+  
 
 
 # BVR
@@ -41,12 +45,13 @@ fcr_daily <- fcr|>
 
 bvr_daily <- bvr|>
   filter(DateTime>= as.Date("2020-07-01"))|> # change where you want the data to start
-  select(DateTime, RDOsat_percent_13, EXOChla_ugL_1.5, EXOfDOM_QSU_1.5, EXOTemp_C_1.5)|>
+  select(DateTime, RDOsat_percent_13, EXOChla_ugL_1.5, EXOfDOM_QSU_1.5, EXODOsat_percent_1.5,EXOTemp_C_1.5)|>
   mutate(Date = as.Date(DateTime))|>
   group_by(Date)|>
   # average for each column for each day
   summarise(across(c(RDOsat_percent_13:EXOTemp_C_1.5), \(x) mean(x, na.rm = TRUE), .names = "BVR_mean_{.col}"))|>
-  ungroup()
+  ungroup()|>
+  mutate(across(c(BVR_mean_RDOsat_percent_13:BVR_mean_EXOTemp_C_1.5), round, 2))
 
 # Weather data
 # Get the daily average for air temp, shortwave radiation (is in incoming or out going?), wind speed. For rain get the daily sum
@@ -58,7 +63,8 @@ met_daily <- met|>
   group_by(Date)|>
   # average for each column for each day
   summarise(across(c(ShortwaveRadiationUp_Average_W_m2:WindSpeed_Average_m_s), \(x) mean(x, na.rm = TRUE), .names = "mean_{.col}"))|>
-  ungroup()
+  ungroup()|>
+  mutate(across(c(mean_ShortwaveRadiationUp_Average_W_m2:mean_WindSpeed_Average_m_s), round, 3))
 
 # Get the daily sum of the rain
 
@@ -97,10 +103,7 @@ generate_schmidt.stability <- function(historic_file) {
   if (historic_df$Reservoir[1] == 'BVR') {
     bvr_depths <- find_depths(data_file = historic_file,
                               depth_offset = "https://raw.githubusercontent.com/FLARE-forecast/BVRE-data/bvre-platform-data-qaqc/BVR_Depth_offsets.csv",
-                              output = NULL,
-                              date_offset = "2021-04-05",
-                              offset_column1 = "Offset_before_05APR21",
-                              offset_column2 = "Offset_after_05APR21") |>
+                              output = NULL)|>
       dplyr::filter(variable == 'ThermistorTemp') |>
       dplyr::select(Reservoir, DateTime, Depth_m, variable, depth_bin, Position) |>
       dplyr::rename(WaterLevel = Depth_m,

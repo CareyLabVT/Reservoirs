@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(tidyverse, ggplot2, plotly)
+pacman::p_load(tidyverse, ggplot2, plotly, here, dataRetrieval)
 
 #set Reservoir and Site
 res = "CCR"

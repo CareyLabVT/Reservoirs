@@ -49,7 +49,10 @@ Q_final <- stage |>
   mutate(
     Flow_cms = RC$a * (stage_cm - RC$gzf)^RC$b
   )|>
-  relocate(Flow_cms, .after = stage_cm)
+  relocate(Flow_cms, .after = stage_cm) |> 
+  mutate(Reservoir = res,
+         Site = site) |> 
+  select(Reservoir, Site, everything())
 
 ```
 
@@ -77,9 +80,11 @@ USGS_Ref <- USGS_Ref |>
 comp <- ggplot(Q_final, aes(x = DateTime)) +
   geom_point(aes(y = Flow_cms), shape = 20) +
   geom_line(data = USGS_Ref, aes(x = time, y = Flow_cms), color = "blue") +
+  # scale_y_log10()+
   ggtitle(paste("Flow at", res, site, "and Comparison Site", ref_site))
 
-ggplotly(comp)
+comp
+#ggplotly(comp)
 
 ```
 
@@ -110,11 +115,41 @@ for(f in 1:(ncol(Flags))){
 }
 
 ```
+
+
+Final plot check
+
+```{r}
+#15 min
+Q_final |> 
+  select(1:7) |> 
+  pivot_longer(-1) |> 
+  ggplot(aes(x = DateTime, y = value))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")
+
+#daily
+dailyplot <- Q_final |> 
+  select(1:7) |> 
+  pivot_longer(-1) |> 
+  mutate(Date = as.Date(DateTime)) |> 
+  ggplot(aes(x = Date, y = value))+
+  geom_point()+
+  facet_wrap(~name, scales = "free_y")
+
+dailyplot
+
+```
+
+
+
+## Write csv
+
 ```{r}
 #Save final data file
 write_csv(Q_final, here("Data", "DataAlreadyUploadedToEDI", 
                         "EDIProductionFiles", "MakeEML_CCR_Inflow", "2024",
-                        "stage_discharge_final.csv")
+                        "ccr_hpb-inflow_2024_2025.csv")
 )
 
 ```

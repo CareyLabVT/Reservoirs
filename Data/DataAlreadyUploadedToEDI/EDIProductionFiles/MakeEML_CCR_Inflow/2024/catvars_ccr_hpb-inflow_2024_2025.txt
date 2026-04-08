@@ -16,9 +16,9 @@ Flag_corrected_Pres_kPa	1	Data removed and set to NA due to maintenance
 Flag_corrected_Pres_kPa	2	Missing data
 Flag_corrected_Pres_kPa	4	Correction applied to the data
 Flag_corrected_Pres_kPa	5	Negative corrected pressure but left in data set
-Flag_Stage_cm	0	No Flag
-Flag_Stage_cm	1	Data removed and set to NA due to maintenance
-Flag_Stage_cm	2	Missing data
-Flag_Stage_cm	3	Neagive water level set to 0
+Flag_stage_cm	0	No Flag
+Flag_stage_cm	1	Data removed and set to NA due to maintenance
+Flag_stage_cm	2	Missing data
+Flag_stage_cm	3	Neagive water level set to 0
 Reservoir	CCR	Carvins Cove Reservoir
 Site	101	Horsepen Branch inflow stream to Carvins Cove Reservoir

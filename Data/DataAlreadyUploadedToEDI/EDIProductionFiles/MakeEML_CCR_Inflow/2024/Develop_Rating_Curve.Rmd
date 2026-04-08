@@ -287,7 +287,8 @@ p <- ggplot(data = Q_timeseries, aes(x = DateTime))+
   #geom_line(data = stage, aes(x = DateTime, y = waterlevel_cm), color = 'purple') +
   coord_cartesian(xlim = c(plot_start, plot_end))
 
-ggplotly(p)
+p
+#ggplotly(p)
 
 ```
 

@@ -1,18 +1,9 @@
-### MakeEML for Optical Data 2021
-### Following: MakeEMLInflow.R and MakeEMLChemistry.R
-### 11 May 2021, A Hounshell
+### MakeEML for CCR PT inflow
 
 # (install and) Load EMLassemblyline #####
 # install.packages('devtools')
-
-# devtools::install_github("EDIorg/EDIutils")
-# devtools::install_github("EDIorg/taxonomyCleanr")
 # devtools::install_github("EDIorg/EMLassemblyline")
 
-#note that EMLassemblyline has an absurd number of dependencies and you
-#may exceed your API rate limit; if this happens, you will have to wait an
-#hour and try again or get a personal authentification token (?? I think)
-#for github which allows you to submit more than 60 API requests in an hour
 pacman::p_load(devtools, EMLassemblyline, here, xml2, XML)
 
 folder <- paste0(here(),"/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCR_Inflow/2024/")
@@ -58,7 +49,7 @@ eml_file <- make_eml(
   data.path = folder,
   eml.path = folder,
   dataset.title = "Stage and Discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025",
-  temporal.coverage = c("2024-04-23", "2025-12-02"),
+  temporal.coverage = c("2024-04-23", "2026-03-03"),
   maintenance.description = 'ongoing',
   data.table = c("ccr_hpb-inflow_2024_2025.csv", 
                  "hpb_maintenancelog_2024_2025.csv"),
@@ -66,13 +57,15 @@ eml_file <- make_eml(
                              "Maintenace log for sensor"
                              ),
   other.entity= c('Stage_QAQC.Rmd',
-                  'HPB_Q_calc.R'),
+                  'Develop_Rating_Curve.Rmd',
+                  'Calc_Q.Rmd'),
   other.entity.description = c("Script to QAQC 10-minute stage data",
+                               "Script to develop rating curve",
                                "Script to calculate discharge"
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1781.3', #Staging ID
+  package.id = 'edi.1781.6', #Staging ID
   #package.id = '', #Publication ID
   write.file = T, ### write the file to the folder
   return.obj = T)

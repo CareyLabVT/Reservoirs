@@ -49,7 +49,10 @@ Q_final <- stage |>
   mutate(
     Flow_cms = RC$a * (stage_cm - RC$gzf)^RC$b
   )|>
-  relocate(Flow_cms, .after = stage_cm)
+  relocate(Flow_cms, .after = stage_cm) |> 
+  mutate(Reservoir = res,
+         Site = site) |> 
+  select(Reservoir, Site, everything())
 
 ```
 

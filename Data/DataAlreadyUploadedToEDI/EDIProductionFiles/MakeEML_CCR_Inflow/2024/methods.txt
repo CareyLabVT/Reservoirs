@@ -7,7 +7,7 @@ We calculated high-frequency (10-minute) stage and discharge on the Horsepen Bra
 
 Pressure transducers were deployed in the middle of the stream channel in a PVC stilling well with 1/4 inch holes that allowed for water exchange. The stream channel experienced near continuous flow throughout a year. The PVC stilling well was attached to a steel fence T-post that was driven into the bottom on the stream bed. The pressure transducers were attached to a steel cable and lowered to the bottom of the PVC stilling well so the sensor sat just above the streambed. The cable was attached to an eye hook in an Oatey Gripper Plastic Mechanical Test Plug and secured the plug to the top of the PVC. The sensor was set to log pressure and water temperature data every 10-minutes and were downloaded approximately monthly.
 
-Two separate HOBO pressure transducers were used in this monitoring campaign. The first sensor (SN: 21978681) was deployed from 23 April 2024 - 17 December 2024. The sensor was likely lost during a large storm in February 2025 where PVC stilling well and fence post were dislodged and the HOBO sensor was lost. We were unable to download the data between 17 December 2024 and when the sensor was lost in February 2025.  A second sensor (SN: 22254183) was redeployed in the same location from 16 April 2025 - 2 December 2025 at the time of this data publication. 
+Two separate HOBO pressure transducers were used in this monitoring campaign. The first sensor (SN: 21978681) was deployed from 23 April 2024 - 10 February 2025. The sensor was lost during a large storm in midFebruary 2025 where PVC stilling well and fence post were dislodged and the HOBO sensor was lost. A second sensor (SN: 22254183) was redeployed in the same location from 16 April 2025 - 3 March 2026 at the time of this data publication. 
 
 
 ### Stage and Discharge calculations:
@@ -49,19 +49,19 @@ On 11 June 2025, we moved the pressure transducer lower in the water than when i
 
 Sub daily gaps in data may have occurred on days when the sensor was downloaded. Gaps less than 3 hours in length are estimated by interpolation and flagged with a 7. 
 
-Multi-day gaps in data occurred between 17 December 2024 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025 due to data overwriting.
+Multi-day gaps in data occurred between 10 February 2025 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025 due to data overwriting.
 
 
 ### Notes
 
 All observations are in EST with daylight savings not observed. 
 
-This data package contains multiple scripts for data processing. 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the met station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) HPB_Q_calc.R reads in the file created in Stage_QAQC.Rmd and manual discharge measurements to create a rating curve for continuous discharge measurements. The data frame created in that script is the data file for this package. 
+This data package contains multiple scripts for data processing. 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the met station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) Develop_Rating_curve.Rmd is used to develop a rating curve between high-frequency stage measurements and manually collected discharge measurements. 3) Calc_Q.Rmd reads in the file created in Stage_QAQC.Rmd and rating curve equations developed in Develop_Rating_curve.Rmd and calculated 10-minute discharge values. Additionally this script provides final QAQC and flag checks and generates the final data set.
 
 
 ### Sensors:
 
-HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) manual: https://www.onsetcomp.com/sites/default/files/2024-01/17153-H%20U20L%20Manual_0.pdf  SN: 21978681 (23 Apr 2024 - 17 Dec 2024) SN: 22254183 (16 Apr 2025 - current)
+HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) manual: https://www.onsetcomp.com/sites/default/files/2024-01/17153-H%20U20L%20Manual_0.pdf  SN: 21978681 (23 Apr 2024 - 10 Feb 2025) SN: 22254183 (16 Apr 2025 - current)
 
 CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. S3450174 https://s.campbellsci.com/documents/us/manuals/cs106.pdf
 

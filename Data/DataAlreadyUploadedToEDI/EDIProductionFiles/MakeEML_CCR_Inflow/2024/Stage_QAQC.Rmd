@@ -1,10 +1,12 @@
 ---
 title: "Stage_QAQC"
-author: "AEB and DWH"
+author: "AEB, ABP, and DWH"
 date: "2026-01-22"
 output: html_document
 ---
 Edits: ABP - changed the barometric pressure to average to get 10 more observations. Calculated depth using the relationship between hydro static pressure and height of the water column. Changed flags - added 2 for missing data, 3 for negative water level and changed to 0, 5 for negative pressure but not changed. Put the code in to run through the maintenance column. For comparing the water level to manual measurements used the closest observation as opposed to the average. 
+
+8apr26: DWH changed datum offset from 20 to 5 to better capture water measured water level
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,9 +18,11 @@ pacman::p_load(dplyr, tidyverse, httr2, jsonlite, plotly, googlesheets4, ggpmisc
 ## Import all PT data
 
 Pull all .csv files of direct data downloads from PT
+Updating to get: datetime column by GMT- 4 or 5; add serial number and csv name
 
-```{r load data, echo = TRUE}
+```{r}
 
+#get links
 #Identify which GitHub Folder to pull folder names from
 url <- "https://api.github.com/repos/CareyLabVT/ManualDownloadsSCCData/contents/CCR_manual_downloads/CCR_Hobos/HPB_waterlevel"
 
@@ -39,9 +43,15 @@ git_link <- "https://raw.githubusercontent.com/CareyLabVT/ManualDownloadsSCCData
 
 file_names <- paste0(git_link, file_names)
 
+# f <- file_names[1]
+
 #import .csv files
 hobo_raw <- bind_rows(
   lapply(file_names, function(f) {
+
+    # Read header line to extract serial number
+    header_line <- readLines(con <- url(f), n = 2); close(con)
+    serial_number <- str_extract(header_line[2], "(?<=LGR S/N: )\\d+")
 
     df <- read_csv(
       f,
@@ -50,43 +60,160 @@ hobo_raw <- bind_rows(
       show_col_types = FALSE
     )
 
-    df |>
+    # Extract GMT offset from the raw datetime column name
+    dt_col_name <- names(df)[str_detect(names(df), "Date Time")]
+    tz_offset <- str_extract(dt_col_name, "GMT-0(4|5)")
+
+    df <- df |>
       select(
-        DateTime_EDT = contains("Date Time"),
+        DateTime_raw = contains("Date Time"),
         HOBO_Abs_Pres_kPa = contains("Abs Pres"),
         Temp_C = contains("Temp")
       ) |>
       mutate(
-        DateTime_EDT = parse_datetime(DateTime_EDT, format = "%m/%d/%y %I:%M:%S %p"),
+        source_file = basename(f),
+        serial_number = serial_number,
+        DateTime_raw = parse_datetime(DateTime_raw, format = "%m/%d/%y %I:%M:%S %p"),
         HOBO_Abs_Pres_kPa = as.numeric(HOBO_Abs_Pres_kPa),
         Temp_C = as.numeric(Temp_C),
-        )
+      )
+
+    df$DateTime_GMT_min4 <- if (tz_offset == "GMT-04") df$DateTime_raw else as.POSIXct(NA)
+    df$DateTime_GMT_min5 <- if (tz_offset == "GMT-05") df$DateTime_raw else as.POSIXct(NA)
+
+    df |> select(-DateTime_raw)
   })
 )
 
+
 ```
+
+
+check which dates are diff timezones
+
+```{r}
+
+unique(hobo_raw$serial_number)
+
+hobo_raw |> filter(serial_number == 22423275)
+## 22423275 is the newest deployed one; filter it out since its in the well 
+
+zz <- hobo_raw |> filter(is.na(DateTime_GMT_min4))
+unique(zz$source_file)
+
+
+```
+
+
 ## Manage Data
 
-Set Timezone, Column names, data types
+remove newest HOBO deployed in well for this publication
+
+```{r}
+hobo_raw <- hobo_raw |> 
+  filter(serial_number != 22423275)
+
+```
+
+
+Set Timezone, 
 
 ```{r Data wrangling, echo = TRUE}
-#Set tz to EST for PT data
-#force timezone to be UTC-4 since that's what the sensor was set at. 
+#Set tz to EST (UTC-5) for PT data
 
-# #now put into GMT-5 from GMT-4
-    hobo_raw$DateTime_EDT <- force_tz(as.POSIXct(hobo_raw$DateTime_EDT), tz = "Etc/GMT+5") #get dates aligned
+#check classes and curret tz
+class(hobo_raw$DateTime_GMT_min4)
+attr(hobo_raw$DateTime_GMT_min4, "tzone")
+class(hobo_raw$DateTime_GMT_min5)
+attr(hobo_raw$DateTime_GMT_min5, "tzone")
 
-# pre time change data gets assigned proper timezone then corrected to GMT -5 to match the rest of the data set
-    hobo_raw$DateTime <- with_tz(force_tz(hobo_raw$DateTime_EDT,"Etc/GMT+4"), "EST") 
+# Force correct timezones on each column
+hobo_raw$DateTime_GMT_min4 <- force_tz(hobo_raw$DateTime_GMT_min4, tz = "Etc/GMT+4")
+attr(hobo_raw$DateTime_GMT_min4, "tzone")
+hobo_raw$DateTime_GMT_min5 <- force_tz(hobo_raw$DateTime_GMT_min5, tz = "Etc/GMT+5")
+attr(hobo_raw$DateTime_GMT_min5, "tzone")
 
+
+# Convert GMT-4 values to GMT-5, then coalesce into single DateTime column
+hobo_raw <- hobo_raw |>
+  mutate(
+    DateTime = coalesce(
+      with_tz(DateTime_GMT_min4, "Etc/GMT+5"),
+      DateTime_GMT_min5
+    )
+  ) |>
+  arrange(DateTime)
+
+
+```
+
+
+
+##check out data from 2025 storm when hobo1 was lost
+
+```{r}
+#plot full TS
+hobo_raw |> 
+  ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
+  geom_point()
+
+
+#zoom in on when hobo1 moved
+hobo_raw |> 
+  mutate(Date = as.Date(DateTime)) |> 
+  filter(Date > ymd("2025-01-01"),
+         Date < ymd("2025-03-01")) |> 
+  ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
+  geom_point()
+
+zz <- hobo_raw |> 
+  mutate(Date = as.Date(DateTime)) |> 
+  filter(Date > ymd("2025-02-07"),
+         Date < ymd("2025-02-21")) |> 
+  ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
+  geom_point()
+
+zz
+# plotly::ggplotly(zz)
+
+```
+
+
+remove data post feb 10th for sensor that was moved
+
+```{r}
+
+hobo_raw <- hobo_raw |>
+  filter(!(serial_number == "21978681" & DateTime > ymd_hms("2025-02-10 00:00:00")))
+
+
+#plot full TS that data got removed 
+hobo_raw |> 
+  ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
+  geom_point()
+
+
+```
+
+
+
+## Data Manage 
+
+Column names, data types, remove dups
+
+```{r}
 #select useful columns  
 hobo_raw <- hobo_raw |>
-  select(DateTime,HOBO_Abs_Pres_kPa,Temp_C)|>
+  select(DateTime, HOBO_Abs_Pres_kPa, Temp_C)|>
   arrange(DateTime)|> # put the date time in order
   drop_na() |> # drop any NAs from the data set
   dplyr::distinct(DateTime, .keep_all = TRUE) # take out dups from overlapping data in uploads
 
+
 ```
+
+
+
 
 ## Look at data before correcting for barometric pressure/maintenence log
 This is just a check to make sure all raw data came in and looks like it should
@@ -335,6 +462,8 @@ check_pressure <- hobo|>
 
 check_pressure
 
+# ggplotly(check_pressure)
+
 ```
 
 
@@ -432,7 +561,7 @@ stage_filled <- stage_filled |>
 
 #adjust datum so no negatives for good looking values 
 ##In future, this will be done in field by choosing reference point elevation well above zero. 
-datum <- 20
+datum <- 5
 
 stage_final <- stage_filled |>
   mutate(
@@ -461,7 +590,7 @@ for(f in 1:(ncol(Flags))){
 }
 
 # save data file 
-write.csv(stage_final, "HPB_stage_2024_2025.csv", row.names = F)
+ write.csv(stage_final, "HPB_stage_2024_2025.csv", row.names = F)
 
 ```
 
@@ -470,7 +599,7 @@ write.csv(stage_final, "HPB_stage_2024_2025.csv", row.names = F)
 ```{r USGS Reference Gage}
 ref_site <- "USGS-02055100"
 
-USGS_Ref <- read_waterdata_continuous(
+USGS_Ref <- dataRetrieval::read_waterdata_continuous(
   monitoring_location_id = ref_site,
   parameter_code = "00065",
   properties = c("time", "value", "unit_of_measure"),
@@ -511,7 +640,8 @@ p <- ggplot() +
   ggtitle("Staged data with manual points overlaid in red") +
   theme_bw()
 
-ggplotly(p)
+p
+#ggplotly(p)
 
 pp <- ggplot() +
   geom_point(data = stage_final, aes(x = DateTime, y = stage_cm)) +
@@ -519,7 +649,8 @@ pp <- ggplot() +
   ggtitle("Staged data USGS comparison site") +
   theme_bw()
 
-ggplotly(pp)
+pp
+#ggplotly(pp)
 
  # find the closest date and then join the two data frames
 # drop the NA waterlevel

@@ -48,13 +48,13 @@ eml_file <- make_eml(
   path = folder,
   data.path = folder,
   eml.path = folder,
-  dataset.title = "Stage and Discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025",
+  dataset.title = "Stage and discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025",
   temporal.coverage = c("2024-04-23", "2026-03-03"),
   maintenance.description = 'ongoing',
   data.table = c("ccr_hpb-inflow_2024_2025.csv", 
                  "hpb_maintenancelog_2024_2025.csv"),
   data.table.description = c("Tributary stage and discharge dataset from 2024-2025",
-                             "Maintenace log for sensor"
+                             "Maintenance log for sensor"
                              ),
   other.entity= c('Stage_QAQC.Rmd',
                   'Develop_Rating_Curve.Rmd',

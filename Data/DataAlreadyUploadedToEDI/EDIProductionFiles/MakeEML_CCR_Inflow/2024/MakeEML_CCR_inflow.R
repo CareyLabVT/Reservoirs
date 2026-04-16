@@ -65,7 +65,7 @@ eml_file <- make_eml(
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1781.6', #Staging ID
+  package.id = 'edi.1781.9', #Staging ID
   #package.id = '', #Publication ID
   write.file = T, ### write the file to the folder
   return.obj = T)

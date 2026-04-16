@@ -149,9 +149,9 @@ dailyplot
 #change datetime to character for writing 
 head(Q_final)
 
-Q_final <- Q_final |> 
-  mutate(DateTime = as.character(DateTime))
+Q_final$DateTime <- as.character(format(Q_final$DateTime))
 
+head(Q_final)
 
 #Save final data file
 write_csv(Q_final, here("Data", "DataAlreadyUploadedToEDI", 

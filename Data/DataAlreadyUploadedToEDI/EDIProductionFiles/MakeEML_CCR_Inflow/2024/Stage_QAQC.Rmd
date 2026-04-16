@@ -297,7 +297,7 @@ Data Flags are reported for each variable in the data set.
 
 ```{r maintenance log, echo = TRUE}
 #Load maintenance log
-#maint_log <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CC#R_Inflow/2024/hpb_maintenancelog_2024.csv")
+#maint_log <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_CCR_Inflow/2024/hpb_maintenancelog_2024.csv")
 
 # for loop to create flag columns
   for(j in colnames(hobo |> select(HOBO_Abs_Pres_kPa:Temp_C))) { 
@@ -320,12 +320,13 @@ hobo <- hobo |>
   
 
 #Local one for now
-log <- read_csv2("./hpb_maintenancelog_2024_2025.csv")
+log <- read_csv2("./hpb_maintenancelog.csv")
 
 #force Maintenance Log into EST tz
 log$TIMESTAMP_start <- force_tz(as.POSIXct(log$TIMESTAMP_start, format = "%m/%d/%Y %H:%M"), tzone = "EST")
 log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end, format = "%m/%d/%Y %H:%M"), tzone = "EST")
 
+write.csv(log, "./hpb_maintenancelog_2024_2025.csv", row.names = F)
 
 # Use the code to run through the maintenance log and flag based on what is in the maintenance log
 

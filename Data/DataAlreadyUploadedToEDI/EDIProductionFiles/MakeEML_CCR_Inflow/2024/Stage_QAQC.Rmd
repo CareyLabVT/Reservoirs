@@ -326,7 +326,11 @@ log <- read_csv2("./hpb_maintenancelog.csv")
 log$TIMESTAMP_start <- force_tz(as.POSIXct(log$TIMESTAMP_start, format = "%m/%d/%Y %H:%M"), tzone = "EST")
 log$TIMESTAMP_end <- force_tz(as.POSIXct(log$TIMESTAMP_end, format = "%m/%d/%Y %H:%M"), tzone = "EST")
 
-write.csv(log, "./hpb_maintenancelog_2024_2025.csv", row.names = F)
+log_edi <- log |> mutate(TIMESTAMP_start = as.character(format(TIMESTAMP_start)),
+                         TIMESTAMP_end = as.character(format(TIMESTAMP_end)))
+
+write_csv(log_edi, "./hpb_maintenancelog_2024_2025.csv", quote = "all")
+
 
 # Use the code to run through the maintenance log and flag based on what is in the maintenance log
 

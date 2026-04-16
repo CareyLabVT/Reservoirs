@@ -130,7 +130,7 @@ Q_final |>
 
 #daily
 dailyplot <- Q_final |> 
-  select(1:7) |> 
+  select(3:9) |> 
   pivot_longer(-1) |> 
   mutate(Date = as.Date(DateTime)) |> 
   ggplot(aes(x = Date, y = value))+
@@ -146,11 +146,19 @@ dailyplot
 ## Write csv
 
 ```{r}
+#change datetime to character for writing 
+head(Q_final)
+
+Q_final$DateTime <- as.character(format(Q_final$DateTime))
+
+head(Q_final)
+
 #Save final data file
 write_csv(Q_final, here("Data", "DataAlreadyUploadedToEDI", 
                         "EDIProductionFiles", "MakeEML_CCR_Inflow", "2024",
                         "ccr_hpb-inflow_2024_2025.csv")
 )
+
 
 ```
 

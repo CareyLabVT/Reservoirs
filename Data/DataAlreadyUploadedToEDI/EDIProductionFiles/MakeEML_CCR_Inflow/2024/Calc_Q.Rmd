@@ -120,13 +120,6 @@ for(f in 1:(ncol(Flags))){
 Final plot check
 
 ```{r}
-#15 min
-Q_final |> 
-  select(1:7) |> 
-  pivot_longer(-1) |> 
-  ggplot(aes(x = DateTime, y = value))+
-  geom_point()+
-  facet_wrap(~name, scales = "free_y")
 
 #daily
 dailyplot <- Q_final |> 

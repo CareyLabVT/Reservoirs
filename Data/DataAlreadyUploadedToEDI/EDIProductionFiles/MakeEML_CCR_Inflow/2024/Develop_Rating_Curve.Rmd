@@ -302,7 +302,7 @@ selected_rating <- rating_details|>
     Iteration == best_iter
   )
 
-#create initial file
+#create initial filed #Do not use-- will overwrite old rating curves; use add section below
 # write.csv(selected_rating, here(
 #     "Data", "DataAlreadyUploadedToEDI", "EDIProductionFiles",
 #     "MakeEML_CCR_Inflow", "2024", "Rating_Curves.csv"), row.names = F)

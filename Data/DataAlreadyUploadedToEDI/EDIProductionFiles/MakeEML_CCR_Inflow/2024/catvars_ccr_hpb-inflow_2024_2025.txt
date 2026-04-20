@@ -5,8 +5,8 @@ Flag_BP_Average_kPa	2	Missing data
 Flag_Flow_cms	0	No Flag
 Flag_Flow_cms	1	Data removed and set to NA due to maintenance
 Flag_Flow_cms	2	Missing data
-Flag_Flow_cms	3	Neagive water level set to 0
-Flag_Flow_cms	6	Flow value exceeds highest flow mesaurement used in rating curve calculations
+Flag_Flow_cms	3	Negative water level set to 0
+Flag_Flow_cms	6	Flow value outside of range of flow measurements used in rating curve calculations
 Flag_HOBO_Abs_Pres_kPa	0	No Flag
 Flag_HOBO_Abs_Pres_kPa	1	Data removed and set to NA due to maintenance
 Flag_Temp_C	0	No Flag
@@ -19,6 +19,6 @@ Flag_corrected_Pres_kPa	5	Negative corrected pressure but left in data set
 Flag_stage_cm	0	No Flag
 Flag_stage_cm	1	Data removed and set to NA due to maintenance
 Flag_stage_cm	2	Missing data
-Flag_stage_cm	3	Neagive water level set to 0
+Flag_stage_cm	3	Negative water level set to 0
 Reservoir	CCR	Carvins Cove Reservoir
 Site	101	Horsepen Branch inflow stream to Carvins Cove Reservoir

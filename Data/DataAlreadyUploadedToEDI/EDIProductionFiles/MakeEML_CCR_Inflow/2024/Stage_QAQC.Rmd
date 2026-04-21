@@ -290,7 +290,7 @@ Data Flags are reported for each variable in the data set.
 
 5 = Negative corrected pressure but left in data set
 
-6 = Flow value exceeds highest flow measurement used in rating curve calculations
+6 = Flow value outside of range of flow measurements used in rating curve calculations
 
 7 = Data interpolated for gaps < 3 hours
 

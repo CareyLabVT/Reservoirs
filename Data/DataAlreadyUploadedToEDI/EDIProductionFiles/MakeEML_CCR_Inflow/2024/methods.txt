@@ -7,23 +7,23 @@ We calculated high-frequency (10-minute) stage and discharge on the Horsepen Bra
 
 Two separate HOBO pressure transducers were used in this monitoring campaign. The first sensor (SN: 21978681) was deployed from 23 April 2024 - 10 February 2025. The sensor was lost during a large storm in mid-February 2025. A second sensor (SN: 22254183) was redeployed in the same location from 16 April 2025 - 3 March 2026 at the time of this data publication. 
 
-Pressure transducers were deployed in the middle of the stream channel in a PVC stilling well with 1/4-inch holes that allowed for water exchange. The stream channel experienced near continuous flow throughout a year. The PVC stilling well was attached to a steel fence T-post that was driven into the bottom on the streambed. The pressure transducers were attached to a steel cable and lowered to the bottom of the PVC stilling well so the sensor sat just above the streambed. The cable was attached to an eyehook in an Oatey Gripper Plastic Mechanical Test Plug and secured the plug to the top of the PVC. The sensor was set to log pressure and water temperature data every 10 minutes and were downloaded approximately monthly.
+Pressure transducers were deployed in the middle of the stream channel in a PVC stilling well with 1/4-inch holes that allowed for water exchange. The stream channel experienced near continuous flow throughout a year. The PVC stilling well was attached to a steel fence T-post that was driven into the bottom on the streambed. The pressure transducers were attached to a steel cable and lowered to the bottom of the PVC stilling well so the sensor sat just above the streambed. The cable was attached to an eyehook in an Oatey Gripper Plastic Mechanical Test Plug and secured the plug to the top of the PVC. The sensor was set to log pressure and water temperature data every 10 minutes and data were downloaded approximately monthly.
 
 
 ### Stage and Discharge calculations:
 
 To calculate the stream level stage and discharge, the pressure readings from the in-stream pressure transducers had to be corrected for atmospheric pressure. We used atmospheric barometric pressure data from the Carvins Cove Reservoir dam to correct stream pressure, where corrected_Pres_kPa = in stream pressure (HOBO_Abs_Pres_kPa) - atmospheric pressure (BP_Average_kPa). 
 
-To calculate water level, we used the relationship between hydrostatic pressure and height, where h = p/(ρg) with p = pressure in the liquid in Pa, ρ = density of liquid, g = acceleration of gravity in m/s, and h = height of fluid column (or depth in the fluid where pressure was measured, in meters). We used the rLakeAnalyzer package in R to calculate the density of the water from water temperature, assuming salinity was 0 ppt (Winslow et. al, 2019). 
+To calculate water level, we used the relationship between hydrostatic pressure and height, where h = p/(ρg) with p = pressure in the liquid in Pa, ρ = density of liquid, g = acceleration of gravity in m/s, and h = height of fluid column (or depth in the fluid where pressure was measured, in meters). We used the rLakeAnalyzer package in R to calculate the density of the water from water temperature, assuming salinity was 0 ppt (Winslow et al. 2019). 
 
-Discharge was calculated by developing a rating curve between sensor-derived stage data and manually-measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2024). Discharge rate data are reported in m^3 s^-1. 
+Discharge was calculated by developing a rating curve between sensor-derived stage data and manually-measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2024). Discharge rate data are reported in the units of m^3 s^-1. 
 
 
 ### Data Flags:
 
 Data Flags are reported for each variable in the dataset.
 
-0 = No Flag
+0 = No flag
 
 1 = Data removed and set to NA due to maintenance 
 
@@ -31,7 +31,7 @@ Data Flags are reported for each variable in the dataset.
 
 4 = Correction applied to the data
 
-5 = Negative corrected pressure but left in data set
+5 = Negative corrected pressure but left in dataset
 
 6 = Flow value computed from stage outside the range of measured stages used in rating curve development
 
@@ -40,23 +40,23 @@ Data Flags are reported for each variable in the dataset.
 
 ### Maintenance: 
 
-This data package includes a maintenance log where we recorded maintenance times and other issues. The log is used in Stage_QAQC.Rmd to remove times when the sensor was out of the water for downloads and flag other mainteance issues. 
+This data package includes a maintenance log in which we recorded maintenance times and other issues. The log is used in the Stage_QAQC.Rmd workflow to remove temporal periods when the sensor was out of the water for downloads and flag other maintenance issues. 
 
 On 11 June 2025, we moved the pressure transducer deeper in the water than when it was originally deployed in 16 April 2025. To account for this change, we corrected all previous observations to the new depth by adding 0.983 kPa to the corrected pressure reading and flagged the data with a '4' for correction applied. 
 
 
 ### Data Gaps: 
 
-Sub daily gaps in data may have occurred on days when the sensor data were downloaded. Gaps shorter than 3 hours in length are estimated by interpolation and flagged with a 7. 
+Sub-daily gaps in data may have occurred on days when the sensor data were downloaded. Gaps shorter than 3 hours in length are estimated by interpolation and flagged with a 7. 
 
-Multi-day gaps in data occurred between 10 February 2025 - 16 April 2025 due to a missing sensor. A second gap occurred from 14 September to 14 October 2025 due to data overwriting.
+Multi-day gaps in data occurred between 10 February 2025 - 16 April 2025 due to a missing sensor because of a very large storm event. A second gap occurred from 14 September 2025 to 14 October 2025 due to data overwriting.
 
 
 ### Notes
 
-All observations are in EST with daylight savings not observed. 
+All observations are recorded in EST with daylight savings not observed. 
 
-This data package contains multiple scripts for data processing. 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the met station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) Develop_Rating_curve.Rmd is used to develop a rating curve between high-frequency stage measurements and manually collected discharge measurements. 3) Calc_Q.Rmd reads in the file created in Stage_QAQC.Rmd and rating curve equations developed in Develop_Rating_curve.Rmd and calculated 10-minute discharge values. Additionally, this script provides final QAQC and flag checks and generates the final data set.
+This data package contains multiple scripts for data processing. These include: 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the weather station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) Develop_Rating_curve.Rmd is used to develop a rating curve between high-frequency stage measurements and manually collected discharge measurements. 3) Calc_Q.Rmd reads in the file created in Stage_QAQC.Rmd and rating curve equations developed in Develop_Rating_curve.Rmd and calculates 10-minute discharge values. Additionally, this script provides final QAQC and flag checks and generates the final dataset.
 
 
 ### Sensors:
@@ -72,10 +72,10 @@ Carey, C.C. and A. Breef-Pilz. 2026. Time series of high-frequency meteorologica
 
 Carey, C.C., A. Breef-Pilz, A.E. Bateman, and D.W. Howard. 2026. Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025 ver 9. Environmental Data Initiative. https://doi.org/10.6073/pasta/73a63480443d39bcac19ed0bae2aa214
 
-R Core Team (2024). _R: A Language and Environment for Statistical Computing_. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
+R Core Team (2024). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
 
 Winslow L, Read J, Woolway R, Brentrup J, Leach T, Zwart J, Albers S, Collinge D (2019).
-  _rLakeAnalyzer: Lake Physics Tools_. doi:10.32614/CRAN.package.rLakeAnalyzer
+  rLakeAnalyzer: Lake Physics Tools. doi:10.32614/CRAN.package.rLakeAnalyzer
   <https://doi.org/10.32614/CRAN.package.rLakeAnalyzer>, R package version 1.11.4.1,
   <https://CRAN.R-project.org/package=rLakeAnalyzer>.
 

@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.2333.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Stage and discharge time series for the primary inflow tributary entering Carvins Cove Reservoir, Roanoke, Virginia, USA 2024-2025</title>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Dexter</givenName>
+        <givenName>W.</givenName>
+        <surName>Howard</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>dwh1998@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6118-2149</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Adrienne</givenName>
+        <surName>Breef-Pilz</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>abreefpilz@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6759-0063</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Alicia</givenName>
+        <givenName>E.</givenName>
+        <surName>Bateman</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aebateman@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0009-0000-1835-7911</userId>
+    </creator>
+    <pubDate>2026-04-28</pubDate>
+    <abstract>
+      <para>Stage and water temperature of the Horsepen Branch inflow tributary into Carvins Cove Reservoir (Roanoke, Virginia, USA), were measured on a 10-minute temporal resolution from 23 April 2024 to 3 March 2026, and discharge rates were calculated for the same time period. The pressure transducer monitoring location is located at 37.3646, -79.9733. Carvins Cove Reservoir is a drinking water supply reservoir owned and managed by the Western Virginia Water Authority (WVWA). The dataset consists of water temperature and pressure that were measured during two different sensor deployments from a stationary monitoring location in a PVC stilling well. These data were converted to water level using atmospheric pressure corrections, and then converted to discharge by developing a rating curve between high-frequency stage data and manually measured discharge measurements. The dataset is accompanied by a sensor maintenance log and quality assurance/quality control analysis scripts.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Carey Lab</keyword>
+      <keyword>Virginia Tech Center for Ecosystem Forecasting</keyword>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Carvins Cove Reservoir</keyword>
+      <keyword>time series</keyword>
+      <keyword>CCR</keyword>
+      <keyword>inflow</keyword>
+      <keyword>Virginia Reservoirs</keyword>
+      <keyword>Horsepen Branch</keyword>
+      <keyword>sensors</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lakes</keyword>
+      <keyword>water temperature</keyword>
+      <keyword>pressure</keyword>
+      <keyword>streamflow</keyword>
+      <keyword>stream</keyword>
+      <keyword>streams</keyword>
+      <keyword>water balance</keyword>
+      <keyword>discharge</keyword>
+      <keyword>atmospheric pressure</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>lake</keyword>
+      <keyword>reservoir</keyword>
+      <keyword>reservoirs</keyword>
+      <keyword>high-frequency sensors</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>Author Contribution Statement-&#13;
+CCC is the PI on the project and led the purchasing of the equipment and coordinated equipment deployment. ABP and DWH led initial sensor deployment and maintenance. DWH led initial data package publication with methods development from ABP and AEB. DWH, ABP, and AEB contributed substantially to fieldwork.</para>
+      <para>Acknowledgements: We thank the Western Virginia Water Authority for providing access to these sites and to the Reservoir Group for contributing to fieldwork.</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This data product is released under the Creative Commons Attribution Non Commercial 4.0 International license, following the terms detailed here: https://creativecommons.org/licenses/by-nc/4.0/legalcode. The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication or derivative product (adapted material) that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Any work by data users to produce, reproduce, and share adapted material is for Non Commercial purposes only. Thank you.</para>
+    </intellectualRights>
+    <licensed>
+      <licenseName>Creative Commons Attribution Non Commercial 4.0 International</licenseName>
+      <url>https://spdx.org/licenses/CC-BY-NC-4.0</url>
+      <identifier>CC-BY-NC-4.0</identifier>
+    </licensed>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Carvins Cove Reservoir is located in Roanoke, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.978642</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.944052</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.409127</northBoundingCoordinate>
+          <southBoundingCoordinate>37.365345</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2024-04-23</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2026-03-03</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>ongoing</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>### Data Package Overview:</para>
+          <para>We calculated high-frequency (10-minute) stage and discharge on the Horsepen Branch Tributary of Carvins Cove (37.3646, -79.9733) Reservoir using a pressure transducer deployed in the stream bed. A HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) was used to measure 10-minute underwater pressure in the stream channel. A CS106 Vaisala PTB110 Barometer, part of the research grade meteorological station deployed on the Carvins Cove Reservoir dam (~1.5 km from the stream site), was used to measure atmospheric barometric pressure and correct stream pressure (Carey &amp; Breef-Pilz 2026). </para>
+          <para>&#13;
+### Sensor deployments:</para>
+          <para>Two separate HOBO pressure transducers were used in this monitoring campaign. The first sensor (SN: 21978681) was deployed from 23 April 2024 - 10 February 2025. The sensor was lost during a large storm in mid-February 2025. A second sensor (SN: 22254183) was redeployed in the same location from 16 April 2025 - 3 March 2026 at the time of this data publication. </para>
+          <para>Pressure transducers were deployed in the middle of the stream channel in a PVC stilling well with 1/4-inch holes that allowed for water exchange. The stream channel experienced near continuous flow throughout a year. The PVC stilling well was attached to a steel fence T-post that was driven into the bottom on the streambed. The pressure transducers were attached to a steel cable and lowered to the bottom of the PVC stilling well so the sensor sat just above the streambed. The cable was attached to an eyehook in an Oatey Gripper Plastic Mechanical Test Plug and secured the plug to the top of the PVC. The sensor was set to log pressure and water temperature data every 10 minutes and data were downloaded approximately monthly.</para>
+          <para>&#13;
+### Stage and Discharge calculations:</para>
+          <para>To calculate the stream level stage and discharge, the pressure readings from the in-stream pressure transducers had to be corrected for atmospheric pressure. We used atmospheric barometric pressure data from the Carvins Cove Reservoir dam to correct stream pressure, where corrected_Pres_kPa = in stream pressure (HOBO_Abs_Pres_kPa) - atmospheric pressure (BP_Average_kPa). </para>
+          <para>To calculate water level, we used the relationship between hydrostatic pressure and height, where h = p/(ρg) with p = pressure in the liquid in Pa, ρ = density of liquid, g = acceleration of gravity in m/s, and h = height of fluid column (or depth in the fluid where pressure was measured, in meters). We used the rLakeAnalyzer package in R to calculate the density of the water from water temperature, assuming salinity was 0 ppt (Winslow et al. 2019). </para>
+          <para>Discharge was calculated by developing a rating curve between sensor-derived stage data and manually-measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2026). Discharge rate data are reported in the units of m^3 s^-1. </para>
+          <para>&#13;
+### Data Flags:</para>
+          <para>Data Flags are reported for each variable in the dataset.</para>
+          <para>0 = No flag</para>
+          <para>1 = Data removed and set to NA due to maintenance </para>
+          <para>2 = Missing data</para>
+          <para>4 = Correction applied to the data</para>
+          <para>5 = Negative corrected pressure but left in dataset</para>
+          <para>6 = Flow value computed from stage outside the range of measured stages used in rating curve development</para>
+          <para>7 = Data interpolated for gaps &lt;3 hours</para>
+          <para>&#13;
+### Maintenance: </para>
+          <para>This data package includes a maintenance log in which we recorded maintenance times and other issues. The log is used in the Stage_QAQC.Rmd workflow to remove temporal periods when the sensor was out of the water for downloads and flag other maintenance issues. </para>
+          <para>On 11 June 2025, we moved the pressure transducer to be 10 cm deeper in the water than when it was originally deployed in 16 April 2025. To account for this change, we corrected all previous observations to the new depth by adding 0.983 kPa to the corrected pressure reading and flagged the data with a '4' for correction applied. </para>
+          <para>&#13;
+### Data Gaps: </para>
+          <para>Sub-daily gaps in data may have occurred on days when the sensor data were downloaded. Gaps shorter than 3 hours in length are estimated by interpolation and flagged with a 7. </para>
+          <para>Multi-day gaps in data occurred between 10 February 2025 - 16 April 2025 due to a missing sensor because of a very large storm event. A second gap occurred from 14 September 2025 to 14 October 2025 due to data overwriting.</para>
+          <para>&#13;
+### Notes</para>
+          <para>All observations are recorded in EST with daylight savings not observed. </para>
+          <para>This data package contains multiple scripts for data processing. These include: 1) Stage_QAQC.Rmd combines the raw data from the pressure transducer with the atmoshpheric pressure from the weather station to get corrected pressure. Maintenance values are removed using the maintenance log and then pressure is converted into water level. 2) Develop_Rating_curve.Rmd is used to develop a rating curve between high-frequency stage measurements and manually collected discharge measurements. 3) Calc_Q.Rmd reads in the file created in Stage_QAQC.Rmd and rating curve equations developed in Develop_Rating_curve.Rmd and calculates 10-minute discharge values. Additionally, this script provides final QAQC and flag checks and generates the final dataset.</para>
+          <para>&#13;
+### Sensors:</para>
+          <para>HOBO pressure transducer (Pressure (Absolute) and Water Level Measurements U20L-01; HOBO, Bourne, MA, USA) manual: https://www.onsetcomp.com/sites/default/files/2024-01/17153-H%20U20L%20Manual_0.pdf  SN: 21978681 (23 Apr 2024 - 10 Feb 2025) SN: 22254183 (16 Apr 2025 - current)</para>
+          <para>CS106 Vaisala PTB110 Barometer (500 - 1000 hPa) SERIAL NO. S3450174 https://s.campbellsci.com/documents/us/manuals/cs106.pdf</para>
+          <para>&#13;
+### References:</para>
+          <para>Carey, C.C. and A. Breef-Pilz. 2026. Time series of high-frequency meteorological data at Carvins Cove Reservoir, Virginia, USA 2021-2025 ver 4. Environmental Data Initiative. https://doi.org/10.6073/pasta/706b69081da6090a14f64f4b0bdb342b</para>
+          <para>Carey, C.C., A. Breef-Pilz, A.E. Bateman, and D.W. Howard. 2026. Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025 ver 9. Environmental Data Initiative. https://doi.org/10.6073/pasta/73a63480443d39bcac19ed0bae2aa214</para>
+          <para>R Core Team (2026). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. &lt;https://www.R-project.org/&gt;.</para>
+          <para>Winslow L, Read J, Woolway R, Brentrup J, Leach T, Zwart J, Albers S, Collinge D (2019).&#13;
+  rLakeAnalyzer: Lake Physics Tools. doi:10.32614/CRAN.package.rLakeAnalyzer&#13;
+  &lt;https://doi.org/10.32614/CRAN.package.rLakeAnalyzer&gt;, R package version 1.11.4.1,&#13;
+  &lt;https://CRAN.R-project.org/package=rLakeAnalyzer&gt;.</para>
+          <para/>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>No project title to report</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority</funding>
+      <relatedProject>
+        <title>No project title to report</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Center for Ecosystem Forecasting 034211</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>RAISE: Building resilience to Earth system hazards: forecasting drinking water quality with real-time integrated catchment modeling</title>
+        <personnel>
+          <individualName>
+            <givenName>R.</givenName>
+            <givenName>Quinn</givenName>
+            <surName>Thomas</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>rqthomas@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0003-1282-7825</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 2438447</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>ccr_hpb-inflow_2024_2025.csv</entityName>
+      <entityDescription>Tributary stage and discharge dataset from 2024-2025</entityDescription>
+      <physical>
+        <objectName>ccr_hpb-inflow_2024_2025.csv</objectName>
+        <size unit="bytes">9829819</size>
+        <authentication method="MD5">6fb25dff6c7166e9d22681ef986a0f6c</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>101</code>
+                    <definition>Horsepen Branch inflow stream to Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DateTime</attributeName>
+          <attributeDefinition>Date and time of sampling. All data were collected in the Eastern Standard Time zone of the USA, with daylight savings not observed</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>HOBO_Abs_Pres_kPa</attributeName>
+          <attributeDefinition>Pressure from the HOBO logger submerged in the stream</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kilopascal</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">96.34</minimum>
+                  <maximum exclusive="false">102.795</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>BP_Average_kPa</attributeName>
+          <attributeDefinition>Barometric pressure averaged over measurement interval</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kilopascal</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">95.65401</minimum>
+                  <maximum exclusive="false">100.10555</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>corrected_Pres_kPa</attributeName>
+          <attributeDefinition>Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kilopascal</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.133267000000004</minimum>
+                  <maximum exclusive="false">6.48937300000001</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>stage_cm</attributeName>
+          <attributeDefinition>Water level at the site derived from the corrected pressure measurement (Pressure_kPa)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>centimeter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">18.6403543938882</minimum>
+                  <maximum exclusive="false">86.1981701590597</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flow_cms</attributeName>
+          <attributeDefinition>Discharge flow rate derived from the HOBO pressure and rating curve</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>cubicMetersPerSecond</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">2.05405592538737e-10</minimum>
+                  <maximum exclusive="false">2.79811372905584</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Temp_C</attributeName>
+          <attributeDefinition>Water temperature measured by the HOBO sensor</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>celsius</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">-0.102</minimum>
+                  <maximum exclusive="false">27.665</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_HOBO_Abs_Pres_kPa</attributeName>
+          <attributeDefinition>Data flag for HOBO_Abs_Pres_kPa</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_BP_Average_kPa</attributeName>
+          <attributeDefinition>Data flag for BP_Average_kPa</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>Missing data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_corrected_Pres_kPa</attributeName>
+          <attributeDefinition>Data flag for corrected_Pres_kPa</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>Missing data</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>Correction applied to the data</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>5</code>
+                    <definition>Negative corrected pressure but left in data set</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_stage_cm</attributeName>
+          <attributeDefinition>Data flag for waterlevel_cm</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>Missing data</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>Negative water level set to 0</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Flow_cms</attributeName>
+          <attributeDefinition>Data flag for Flow_cms</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>2</code>
+                    <definition>Missing data</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>3</code>
+                    <definition>Negative water level set to 0</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>6</code>
+                    <definition>Flow value outside of range of flow measurements used in rating curve calculations</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_Temp_C</attributeName>
+          <attributeDefinition>Data flag for Temp_C</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>0</code>
+                    <definition>No Flag</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>83811</numberOfRecords>
+    </dataTable>
+    <dataTable>
+      <entityName>hpb_maintenancelog_2024_2025.csv</entityName>
+      <entityDescription>Maintenance log for sensor</entityDescription>
+      <physical>
+        <objectName>hpb_maintenancelog_2024_2025.csv</objectName>
+        <size unit="bytes">2237</size>
+        <authentication method="MD5">86263b5841e79b1e59f40a33e176e960</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>CCR</code>
+                    <definition>Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>Site</attributeName>
+          <attributeDefinition>Sampling site within each reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>101</code>
+                    <definition>Horsepen Branch inflow stream to Carvins Cove Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>DataStream</attributeName>
+          <attributeDefinition>Code corresponding to if the entry is for a maintenance issue or for the rating curve</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Code corresponding to if the entry is for a maintenance issue or for the rating curve</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_start</attributeName>
+          <attributeDefinition>Date and time maintenance began. All data were collected in the GMT -5 time zone (Eastern Standard Time). No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance started before the sensors were out</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>TIMESTAMP_end</attributeName>
+          <attributeDefinition>Date and time maintenance ended. All data were collected in the GMT -5 time zone (Eastern Standard Time). No time zone shifts were observed throughout the dataset.</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DD hh:mm:ss</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>Maintenance is on going and has no current end date</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>start_parameter</attributeName>
+          <attributeDefinition>Name of start variable in the sequence corresponding to inflow data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>HOBO_Abs_Pres_kPa</code>
+                    <definition>Pressure from the HOBO logger submerged in the stream</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>corrected_Pres_kPa</code>
+                    <definition>Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>end_parameter</attributeName>
+          <attributeDefinition>Name of end variable in the sequence corresponding to inflow data table names</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>Temp_C</code>
+                    <definition>Water temperature measured by the HOBO sensor</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>There is only one parameter flagged</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>flag</attributeName>
+          <attributeDefinition>Data flag applied to associated variable</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>1</code>
+                    <definition>Data removed and set to NA due to maintenance</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>4</code>
+                    <definition>Correction applied to the data</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>value is missing</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>update_value</attributeName>
+          <attributeDefinition>New value to update the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>New value to update the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No updated value used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>adjustment_code</attributeName>
+          <attributeDefinition>Chunks of code or a numeric offset to change the data to in the QAQC process</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Chunks of code or a numeric offset to change the data to in the QAQC process</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No adjustment code used</codeExplanation>
+          </missingValueCode>
+        </attribute>
+        <attribute>
+          <attributeName>notes</attributeName>
+          <attributeDefinition>Notes from the field crew on the maintenance or reason for changing the data</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Notes from the field crew on the maintenance or reason for changing the data</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <missingValueCode>
+            <code>NA</code>
+            <codeExplanation>No Note recorded</codeExplanation>
+          </missingValueCode>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>14</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>Stage_QAQC.Rmd</entityName>
+      <entityDescription>Script to QAQC 10-minute stage data</entityDescription>
+      <physical>
+        <objectName>Stage_QAQC.Rmd</objectName>
+        <size unit="bytes">23916</size>
+        <authentication method="MD5">b1541416fbbc93121e572cd917303c73</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Develop_Rating_Curve.Rmd</entityName>
+      <entityDescription>Script to develop rating curve</entityDescription>
+      <physical>
+        <objectName>Develop_Rating_Curve.Rmd</objectName>
+        <size unit="bytes">9918</size>
+        <authentication method="MD5">98f29fd8bfb4b350f6111d34452ae257</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+    <otherEntity>
+      <entityName>Calc_Q.Rmd</entityName>
+      <entityDescription>Script to calculate discharge</entityDescription>
+      <physical>
+        <objectName>Calc_Q.Rmd</objectName>
+        <size unit="bytes">3369</size>
+        <authentication method="MD5">fd35c201ae3d75957ee92ca39c521e7b</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.5</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

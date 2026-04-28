@@ -16,7 +16,7 @@ To calculate the stream level stage and discharge, the pressure readings from th
 
 To calculate water level, we used the relationship between hydrostatic pressure and height, where h = p/(ρg) with p = pressure in the liquid in Pa, ρ = density of liquid, g = acceleration of gravity in m/s, and h = height of fluid column (or depth in the fluid where pressure was measured, in meters). We used the rLakeAnalyzer package in R to calculate the density of the water from water temperature, assuming salinity was 0 ppt (Winslow et al. 2019). 
 
-Discharge was calculated by developing a rating curve between sensor-derived stage data and manually-measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2024). Discharge rate data are reported in the units of m^3 s^-1. 
+Discharge was calculated by developing a rating curve between sensor-derived stage data and manually-measured discharge using the velocity-area method with a flowmeter (see Carey et al. 2026 for further methods). We fit a rating curve following the equation: Discharge = a * Stage^b, using the nls function in the stats package in R (R Core Team 2026). Discharge rate data are reported in the units of m^3 s^-1. 
 
 
 ### Data Flags:
@@ -42,7 +42,7 @@ Data Flags are reported for each variable in the dataset.
 
 This data package includes a maintenance log in which we recorded maintenance times and other issues. The log is used in the Stage_QAQC.Rmd workflow to remove temporal periods when the sensor was out of the water for downloads and flag other maintenance issues. 
 
-On 11 June 2025, we moved the pressure transducer deeper in the water than when it was originally deployed in 16 April 2025. To account for this change, we corrected all previous observations to the new depth by adding 0.983 kPa to the corrected pressure reading and flagged the data with a '4' for correction applied. 
+On 11 June 2025, we moved the pressure transducer to be 10 cm deeper in the water than when it was originally deployed in 16 April 2025. To account for this change, we corrected all previous observations to the new depth by adding 0.983 kPa to the corrected pressure reading and flagged the data with a '4' for correction applied. 
 
 
 ### Data Gaps: 
@@ -72,7 +72,7 @@ Carey, C.C. and A. Breef-Pilz. 2026. Time series of high-frequency meteorologica
 
 Carey, C.C., A. Breef-Pilz, A.E. Bateman, and D.W. Howard. 2026. Manually-collected discharge data for multiple inflow and outflow tributaries at Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir, Virginia, USA from 2019-2025 ver 9. Environmental Data Initiative. https://doi.org/10.6073/pasta/73a63480443d39bcac19ed0bae2aa214
 
-R Core Team (2024). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
+R Core Team (2026). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
 
 Winslow L, Read J, Woolway R, Brentrup J, Leach T, Zwart J, Albers S, Collinge D (2019).
   rLakeAnalyzer: Lake Physics Tools. doi:10.32614/CRAN.package.rLakeAnalyzer

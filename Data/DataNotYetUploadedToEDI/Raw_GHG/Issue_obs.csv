@@ -1,3 +1,6 @@
 "Reservoir","Site","Depth_m","field_date","lab_date","field_vial_number","notes"
 "FCR",50,3.8,2026-01-21,2026-01-22,171,"Interference, but tried to reintegrate. If dups don't match for CO2 discard this one."
+"FCR",50,8,2026-02-06,2026-02-09,294,"Leaked out syringe when creating headspace. Estimated 2mL volume. If dups don't match discard this one."
+"FCR",50,9,2026-02-06,2026-02-09,39,"Small bubble in vial."
+"CCR",301,0.1,2026-03-03,2026-03-04,400,"air bubble in vial- not accurate headspace volume"
 NA,NA,NA,NA,2025-12-04,NA,"Partial CO2 interference. If dups don't match for CO2 discard this one."

@@ -65,7 +65,8 @@ eml_file <- make_eml(
                                ),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.1781.12', #Staging ID
+  # package.id = 'edi.1781.15', #Staging ID
+  package.id = 'edi.2333.1', # PUBLISHING ID
   #package.id = '', #Publication ID
   write.file = T, ### write the file to the folder
   return.obj = T)
@@ -138,3 +139,4 @@ write_xml(doc, paste0(folder,"/",package.id,".xml"))
 # Select text files and R file associated with the upload
 # Then click 'Upload': if everything works, there will be no errors and the dataset will be uploaded!
 # Check to make sure everything looks okay on EDI Website
+

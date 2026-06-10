@@ -33,8 +33,9 @@ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L
 # source('./Scripts/L1_functions/metals_create.R')
 
 ## Run Function 
-metals_qaqc( directory = 'https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/',
-  #directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+metals_qaqc(#directory = 'https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI#/Metals_Data/Raw_Data/2025/',
+  #'https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/',
+  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
    	    sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv",
    	    maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
   	    sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/",

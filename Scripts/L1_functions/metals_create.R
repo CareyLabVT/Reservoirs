@@ -42,7 +42,8 @@ metals_qaqc <- function(directory,
   
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
-# directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/"
+ #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
+ # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
 # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
 # sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
 # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
@@ -148,7 +149,7 @@ metals_qaqc <- function(directory,
   # Read in the data from either your local computer or from GitHub depending on what your put in the directory argument. 
   
   
-  if(grep("https", directory) == T){
+  if(grepl("https", directory)){
     
     #create list of file names
     resp <- request(directory) |>

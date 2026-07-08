@@ -1,0 +1,8 @@
+attributeName	code	definition
+Reservoir	CCR	Carvins Cove Reservoir
+Site	101	Horsepen Branch inflow stream to Carvins Cove Reservoir
+end_parameter	Temp_C	Water temperature measured by the HOBO sensor
+flag	1	Data removed and set to NA due to maintenance 
+flag	4	Correction applied to the data
+start_parameter	HOBO_Abs_Pres_kPa	Pressure from the HOBO logger submerged in the stream
+start_parameter	corrected_Pres_kPa	Corrected pressure (with atmospheric pressure subtracted) measured by the HOBO sensor

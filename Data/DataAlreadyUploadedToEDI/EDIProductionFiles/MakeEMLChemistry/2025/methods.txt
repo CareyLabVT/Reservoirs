@@ -40,15 +40,15 @@ METHOD DETECTION LIMITS
 
 Starting in 2020, we changed our Method Detection Limit (MDL) calculations and adopted those which are described in the USEPA second revision (USEPA 2016). The new analytical MDL calculations rely on data obtained from independently prepared standards over multiple runs, rather than that from a single day's run, to more accurately capture instrument performance and variability throughout the year.
 
-From the 2025 data publication to present, we provide the MDLs for TN, TP, SRP, NO3, NH4, DIC, and DOC. 
+From the 2025 data publication to present, we provide the MDLs for TN, TP, SRP, NO3, and NH4.
 
 DATA PROCESSING AND QAQC
 
 Starting in 2025, a new data workflow was implemented to process and qaqc data as well as calculate method detection limits from the analytical laboratory instruments using an R script in place of Excel sheets. The only change to this process is the qaqc method, no changes were made to the formulas used to process the data. 
 
-QAQC SCRIPTS
+QAQC SCRIPTS AND DATA
 
-Two scripts are used to QAQC and compile published data. First, 'chemistry_qaqc_2024_2025.R' is used to QAQC samples collected in 2024 - present that were analyzed between summer 2024 - present. This script applies data flags for MDLs and sets negative values to zero. Second, 'chemistry_inspection_2013_2025.Rmd' is used to combine 2025 data with the previous years' data publication, review all data via visual inspection, and apply any additional QAQC needed for previous years' data.
+This data package includes 1 data file (chemistry_2013_2025.csv) and two scripts used to QAQC and compile published data. First, 'chemistry_qaqc_2024_2025.R' is used to QAQC samples collected in 2024 - present that were analyzed between summer 2024 - present. This script applies data flags for MDLs and sets negative values to zero. Second, 'chemistry_inspection_2013_2025.Rmd' is used to combine 2025 data with the previous years' data publication, review all data via visual inspection, and apply any additional QAQC needed for previous years' data. 
 
 DATA FLAGS
 

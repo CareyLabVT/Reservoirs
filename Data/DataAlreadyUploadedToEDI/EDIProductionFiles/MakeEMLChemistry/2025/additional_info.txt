@@ -1,0 +1,5 @@
+Author contribution statement: CCC developed and led the reservoir monitoring program 2013-present. KKH led data publication and QAQC in 2025. KKH and MP assisted with data collection and analysis in 2025. ABP led the field crew and contributed substantially to sampling from 2020-2025. FMI oversaw all sample analyses in 2025, as well as developed analytical chemistry methods and QAQC procedures, and oversaw analytical chemistry instrumentation and training in 2025. ABP, KKH, and FMI developed new data processing workflows for 2025 - present chemistry data. 
+
+Acknowledgments and historical contributions:
+
+This data package has been iteratively updated over time and builds on the many historical contributions of co-authors listed in previous revisions, especially B.R. Niederlehner. We thank the Western Virginia Water Authority for providing access to these sites and the Reservoir Group for contributing to fieldwork. We thank Sean Kenny, Clara Higgins, and Kat Myer for help with field sampling and digitizing, and Arwen Downum and Erin Walters for help with the above in addition to lab prep.

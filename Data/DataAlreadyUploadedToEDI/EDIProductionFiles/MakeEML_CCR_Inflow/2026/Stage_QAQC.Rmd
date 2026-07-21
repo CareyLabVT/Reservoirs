@@ -53,47 +53,6 @@ git_link <- paste0("https://raw.githubusercontent.com/CareyLabVT/ManualDownloads
 
 file_names <- paste0(git_link, file_names)
 
-#import .csv files
-# hobo_raw <- bind_rows(
-#   lapply(file_names, function(f) {
-# 
-#     # Read header line to extract serial number
-#     header_line <- readLines(con <- url(f), n = 2); close(con)
-#     serial_number <- str_extract(header_line[2], "(?<=LGR S/N: )\\d+")
-# 
-#     df <- read_csv(
-#       f,
-#       skip = 1,
-#       locale = locale(encoding = "UTF-8"),
-#       show_col_types = FALSE
-#     )
-# 
-#     # Extract GMT offset from the raw datetime column name
-#     dt_col_name <- names(df)[str_detect(names(df), "Date Time")]
-#     tz_offset <- str_extract(dt_col_name, "GMT-0(4|5)")
-# 
-#     df <- df |>
-#       select(
-#         DateTime_raw = contains("Date Time"),
-#         HOBO_Abs_Pres_kPa = contains("Abs Pres"),
-#         Temp_C = contains("Temp")
-#       ) |>
-#       mutate(
-#         source_file = basename(f),
-#         serial_number = serial_number,
-#         DateTime_raw = parse_datetime(DateTime_raw, format = "%m/%d/%y %I:%M:%S %p"),
-#         HOBO_Abs_Pres_kPa = as.numeric(HOBO_Abs_Pres_kPa),
-#         Temp_C = as.numeric(Temp_C),
-#       )
-# 
-#     df$DateTime_GMT_min4 <- if (tz_offset == "GMT-04") df$DateTime_raw else as.POSIXct(NA)
-#     df$DateTime_GMT_min5 <- if (tz_offset == "GMT-05") df$DateTime_raw else as.POSIXct(NA)
-# 
-#     df |> select(-DateTime_raw)
-#  })
-#)
-
-##TRY###
 hobo_raw <- bind_rows(
   lapply(file_names, function(f) {
     # Read header line to extract serial number
@@ -301,12 +260,14 @@ This is just a check to make sure all raw data came in and looks like it should
 ggplot(data = hobo_raw_all, aes(x = DateTime)) +
   geom_point(aes(y = HOBO_Abs_Pres_kPa)) +
   scale_x_datetime() +
-  facet_wrap(~ Site, scales = "free_x")
+  facet_wrap(~ Site, scales = "free_x") +
+  ggtitle("Uncorrected Raw Pressure Data")
   
 ggplot(data = hobo_raw_all, aes(x = DateTime)) +
   geom_point(aes(y = Temp_C)) +
   scale_x_datetime() +
-  facet_wrap(~ Site, scales = "free")
+  facet_wrap(~ Site, scales = "free") +
+  ggtitle("Raw Temperature Data")
 
 ```
 
@@ -349,8 +310,9 @@ hobo <- left_join(hobo_raw_all, ccr_met, by = "DateTime") |>
 pres <- hobo|>
   ggplot(aes(x = DateTime, y = corrected_Pres_kPa))+
   geom_point()+
-  facet_wrap(~ Site, scales = "free_x")+
-  theme_bw()
+  facet_wrap(~ Site, scales = "free")+
+  theme_bw()+
+  ggtitle("Corrected Pressure Data")
 
 pres
 #ggplotly(pres)
@@ -509,7 +471,8 @@ check_pressure <- hobo|>
   geom_point(aes(y = corrected_Pres_kPa)) +
   # geom_point(aes(y = cor_pres), color = "red") +
   facet_wrap(~ Site, scales = "free")+
-  theme_bw()
+  theme_bw() +
+  ggtitle("Corrected Pressure with Maintenance Log Edits")
 
 check_pressure
 
@@ -577,42 +540,6 @@ Should eventually add... reasonable inference esp since most deleted times of th
 
 ```{r Gap fill}
 #gap fill for each site individually
-#for (i in site){}
-
-# seq_filled <- seq(
-#   from = min(stage_obs$DateTime),
-#   to = max(stage_obs$DateTime),
-#   by = "10 min"
-# )
-# 
-# stage_filled <- stage_obs |>
-#   complete(DateTime = seq_filled)
-# 
-# stage_filled <- stage_filled |>
-#   mutate(
-#     waterlevel_cm_filled = na.approx(
-#       waterlevel_cm,
-#       x = DateTime,
-#       maxgap = 18,
-#       na.rm = FALSE
-#     ), #Fills any gaps less than 3 hrs long with interpolation of pre and post waterlevel
-#     Flag_waterlevel_cm = if_else(
-#     is.na(waterlevel_cm) & !is.na(waterlevel_cm_filled),
-#     as.numeric(paste0(coalesce(as.character(Flag_waterlevel_cm), ""), 7)),
-#     as.numeric(Flag_waterlevel_cm)
-#     ), #Flags with 7 for all interpolated water levels
-#     across(
-#       c(Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_Temp_C),
-#       ~ if_else(
-#           is.na(HOBO_Abs_Pres_kPa) & is.na(BP_Average_kPa) 
-#           & is.na(corrected_Pres_kPa) & is.na(Temp_C) 
-#           & !is.na(waterlevel_cm_filled),
-#           as.numeric(paste0(coalesce(as.character(.x), ""), 2)),
-#           as.numeric(.x)
-#         ) #Adds flags for data lines that were not originally collected by sensor but were within a <3hr data gap, so were able to be interpolated
-#   ))
-
-# --- gap fill for each site individually ---
 
 stage_filled <- stage_obs |>
   group_by(Site) |>
@@ -621,11 +548,7 @@ stage_filled <- stage_obs |>
   # and inserts empty rows only within that site's range.
   complete(DateTime = seq(min(DateTime), max(DateTime), by = "10 min")) |>
   mutate(
-    # na.approx is called once per group because of group_by(Site) above.
-    # That means the interpolation window (maxgap = 18) can never reach
-    # across the boundary from one site's data into another's -- it only
-    # ever looks at consecutive rows belonging to the same site.
-    waterlevel_cm_filled = na.approx(
+    waterlevel_cm_filled = na.approx( # na.approx is called once per group
       waterlevel_cm,
       x = DateTime,
       maxgap = 18,
@@ -649,10 +572,19 @@ stage_filled <- stage_obs |>
         ) # Adds flags for data lines that were not originally collected by sensor but were within a <3hr data gap, so were able to be interpolated
     )
   ) |>
-  ungroup() # drop the grouping once done so downstream code isn't accidentally grouped
+  ungroup()
 
 
-#adjust datum so no negatives for good looking values 
+#reformat df
+stage_filled <- stage_filled |>
+  mutate(
+    stage_cm = waterlevel_cm_filled
+  )|>
+  select (Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_cm, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
+  rename(
+    Flag_stage_cm = Flag_waterlevel_cm
+  )
+
 ##In future, this will be done in field by choosing reference point elevation well above zero. 
 # datum <- 20
 # 
@@ -665,21 +597,33 @@ stage_filled <- stage_obs |>
 #     Flag_stage_cm = Flag_waterlevel_cm
 #   )
 
-#Flags for gap fill that was not in original data collection
+#adjust datum to actual elevation
 
+MP_elev <- c(342, 351, 332) ##FAKE NUMBERS FOR NOW #elevation of measuring point in meters, same order as "site" 
+L <- c(.3, .5, 6) #offset - Meters from MP to PT measure point
 
-stage_final <- stage_filled |>
-  mutate(
-    stage_cm = waterlevel_cm_filled
-  )|>
-  select (Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_cm, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
-  rename(
-    Flag_stage_cm = Flag_waterlevel_cm
-  )
+for (i in index) {
+  elev_corr <- stage_filled |>
+    filter(Reservoir == res[i], 
+           Site == site[i])|>
+    mutate(waterlevel_m = waterlevel_cm_filled / 100,
+           stage_elev_m = MP_elev[i] - (L[i] - waterlevel_m))
+  
+  assign(paste0(res[i], "_", site[i], "_elev_corr"), elev_corr)
+}
 
+#combine all site data into master df
+# get names of all objects ending in "_elev_corr"
+df_list <- ls(envir = .GlobalEnv)[grepl("_elev_corr$", ls(envir = .GlobalEnv))]
+elev_list <- mget(df_list, envir = .GlobalEnv) # pull those objects into a list and bind
+stage_final <- bind_rows(elev_list)
+
+stage_final <- stage_final |>
+  select(Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_elev_m, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
+  rename(Flag_waterlevel_cm = Flag_stage_elev_m)
 
 #remove rows with NA
-stage_final <- drop_na(stage_final, stage_cm)
+stage_final <- drop_na(stage_final, stage_elev_m)
 
 #Flag counts 
 Flags <- stage_final |>
@@ -703,7 +647,8 @@ p <- stage_final|>
   ggplot(aes(x = DateTime))+
   geom_point(aes(y = stage_cm)) +
   facet_wrap(~ Site, scales = "free")+
-  theme_bw()
+  theme_bw() +
+  ggtitle("WaterLevel Final with gap fill")
 p
 
 #ggplotly(p)

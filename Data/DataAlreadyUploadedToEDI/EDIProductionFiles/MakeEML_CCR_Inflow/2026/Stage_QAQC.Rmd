@@ -133,32 +133,9 @@ hobo_raw_all <- bind_rows(hobo_list)
 
 ```
 
-check which dates are diff timezones
-
-```{r}
-
-# unique(hobo_raw_all$serial_number)
-# 
-# # hobo_raw_all |> filter(serial_number == 22423275)
-# # ## 22423275 is the newest deployed one; filter it out since its in the well 
-# 
-# zz <- hobo_raw_all |> filter(is.na(DateTime_GMT_min4))
-# unique(zz$source_file)
-
-
-```
-
 ## Manage Data
 
-remove newest HOBO deployed in well for this publication
-
-```{r}
-# hobo_raw_all <- hobo_raw_all |> 
-#   filter(serial_number != 22423275)
-
-```
-
-Set consistent Timezone,
+Set consistent Timezone
 
 ```{r Data wrangling, echo = TRUE}
 #Set tz to EST (UTC-5) for PT data
@@ -186,10 +163,9 @@ hobo_raw_all <- hobo_raw_all |>
   ) |>
   arrange(DateTime)
 
-
 ```
 
-##check out data from 2025 storm when hobo1 was lost
+##plot data
 
 ```{r}
 #plot full TS
@@ -197,41 +173,6 @@ hobo_raw_all |>
   ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
   geom_point() +
   facet_wrap(~ Site)
-
-
-# #zoom in on when hobo1 moved
-# hobo_raw_all |> 
-#   mutate(Date = as.Date(DateTime)) |> 
-#   filter(Date > ymd("2025-01-01"),
-#          Date < ymd("2025-03-01")) |> 
-#   ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
-#   geom_point()
-# 
-# zz <- hobo_raw_all |> 
-#   mutate(Date = as.Date(DateTime)) |> 
-#   filter(Date > ymd("2025-02-07"),
-#          Date < ymd("2025-02-21")) |> 
-#   ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
-#   geom_point()
-# 
-# zz
-# plotly::ggplotly(zz)
-
-```
-
-remove data post feb 10th for sensor that was moved
-
-```{r}
-
-# hobo_raw_all <- hobo_raw_all |>
-#   filter(!(serial_number == "21978681" & DateTime > ymd_hms("2025-02-10 00:00:00")))
-# 
-# 
-# #plot full TS that data got removed 
-# hobo_raw_all |> 
-#   ggplot(aes(x = DateTime, y = HOBO_Abs_Pres_kPa))+
-#   geom_point()
-
 
 ```
 
@@ -373,7 +314,7 @@ log_edi <- log |> mutate(TIMESTAMP_start = as.character(format(TIMESTAMP_start))
 write_csv(log_edi, "./hpb_maintenancelog_2024_2026.csv", quote = "all")
 
 #loop through each site to handle each site's maintenance log rows separately 
-site_list <- unique(log$Site)
+site_list <- unique(log$Site) 
 
 for (site_id in site_list) {
 
@@ -502,7 +443,7 @@ ggplotly(check_pressure)
 # 2) We are assuming that salinity is 0 and that is a very fair assumption
 
 stage_obs <- hobo|>
-  mutate(density = water.density(Temp_C),
+  mutate(density = water.density(Temp_C), #1000,
          waterlevel_cm = ((corrected_Pres_kPa*1000)/(9.81*density))*100)|>
   # remove the density column because we don't need it any more
   select(-density)|>
@@ -534,6 +475,17 @@ for(f in 1:(ncol(Flags))){
 
 ```
 
+```{r Plot with manual checks}
+
+
+
+
+
+
+```
+
+
+
 ## Gap fill for missing periods less than 3 hours
 
 Should eventually add... reasonable inference esp since most deleted times of this length we are there and can note any serious waterlevel changes. Better/more continuous we can get the PT data looking, the better the discharge data will be. Should be able to build a complete timeseries df, use zoo na.approx with tsibble for multiple sites, and then remove NA rows of table for gaps longer than fill length. <https://thedatahall.com/filling-gaps-in-time-series-and-panel-data-using-r/>, but
@@ -548,12 +500,12 @@ stage_filled <- stage_obs |>
   # and inserts empty rows only within that site's range.
   complete(DateTime = seq(min(DateTime), max(DateTime), by = "10 min")) |>
   mutate(
-    waterlevel_cm_filled = na.approx( # na.approx is called once per group
-      waterlevel_cm,
-      x = DateTime,
-      maxgap = 18,
-      na.rm = FALSE
-    ), # Fills any gaps less than 3 hrs long with interpolation of pre and post waterlevel, per site
+    waterlevel_cm_filled = na.approx(
+                            waterlevel_cm,
+                            x = DateTime,
+                            maxgap = 18,
+                            na.rm = FALSE
+                                    ), # Fills any gaps less than 3 hrs long with interpolation of pre and post waterlevel, per site
 
     Flag_waterlevel_cm = if_else(
       is.na(waterlevel_cm) & !is.na(waterlevel_cm_filled),
@@ -577,37 +529,23 @@ stage_filled <- stage_obs |>
 
 #reformat df
 stage_filled <- stage_filled |>
-  mutate(
-    stage_cm = waterlevel_cm_filled
-  )|>
+  mutate(stage_cm = waterlevel_cm_filled)|>
   select (Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_cm, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
   rename(
     Flag_stage_cm = Flag_waterlevel_cm
   )
 
-##In future, this will be done in field by choosing reference point elevation well above zero. 
-# datum <- 20
-# 
-# stage_final <- stage_filled |>
-#   mutate(
-#     stage_cm = waterlevel_cm_filled + datum
-#   )|>
-#   select (DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_cm, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
-#   rename(
-#     Flag_stage_cm = Flag_waterlevel_cm
-#   )
 
 #adjust datum to actual elevation
-
-MP_elev <- c(342, 351, 332) ##FAKE NUMBERS FOR NOW #elevation of measuring point in meters, same order as "site" 
-L <- c(.3, .5, 6) #offset - Meters from MP to PT measure point
+datum <- c(342, 351, 335) ##FAKE NUMBERS FOR NOW #elevation of measuring point in meters, same order as "site" 
+L <- c(.3, .5, 8.59) #offset - Meters from MP to PT measure point
 
 for (i in index) {
   elev_corr <- stage_filled |>
     filter(Reservoir == res[i], 
            Site == site[i])|>
-    mutate(waterlevel_m = waterlevel_cm_filled / 100,
-           stage_elev_m = MP_elev[i] - (L[i] - waterlevel_m))
+    mutate(stage_m = stage_cm / 100,
+           stage_elev_m = datum[i] - (L[i] - stage_m))
   
   assign(paste0(res[i], "_", site[i], "_elev_corr"), elev_corr)
 }
@@ -619,8 +557,9 @@ elev_list <- mget(df_list, envir = .GlobalEnv) # pull those objects into a list 
 stage_final <- bind_rows(elev_list)
 
 stage_final <- stage_final |>
-  select(Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_elev_m, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_waterlevel_cm, Flag_Temp_C) |>
-  rename(Flag_waterlevel_cm = Flag_stage_elev_m)
+  select(Reservoir, Site, DateTime, HOBO_Abs_Pres_kPa, BP_Average_kPa, corrected_Pres_kPa, stage_elev_m, Temp_C, Flag_HOBO_Abs_Pres_kPa, Flag_BP_Average_kPa, Flag_corrected_Pres_kPa, Flag_stage_cm, Flag_Temp_C) |>
+  rename(Flag_stage_elev_m = Flag_stage_cm) |>
+  mutate(Site = as.numeric(Site))
 
 #remove rows with NA
 stage_final <- drop_na(stage_final, stage_elev_m)
@@ -645,7 +584,7 @@ write.csv(stage_final, "pt_stage_2024_2026.csv", row.names = F)
 
 p <- stage_final|>
   ggplot(aes(x = DateTime))+
-  geom_point(aes(y = stage_cm)) +
+  geom_point(aes(y = stage_elev_m)) +
   facet_wrap(~ Site, scales = "free")+
   theme_bw() +
   ggtitle("WaterLevel Final with gap fill")
@@ -675,8 +614,43 @@ p
 
 ```{r View manual measurements on timeseries, echo = TRUE}
 
+# Pull manual stage measurement file
+stage_checks <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh1QfOad3ez_Hk4Sl8ziPYxmWWcoSv1GNeuJkrFec8")
+
+# format date column
+stage_checks$DateTime <- lubridate::parse_date_time(
+  stage_checks$DateTime,
+  orders = c('ymd HMS','ymd HM','ymd', 'mdy','mdy HM', 'mdy HMS', 'mdy HM'),
+  tz = "America/New_York"
+)
+
+# convert to EST
+stage_checks$DateTime <- with_tz(as.POSIXct(stage_checks$DateTime), tz = "EST")
+
+#multisite datum df, could move up earlier in code
+site_datum <- data.frame(Site = site,
+                         datum = datum, #datum and offset in m
+                         offset = L) |>
+  mutate(Site = as.numeric(Site))
+
+stage_checks <- stage_checks |>
+  left_join(site_datum, by = "Site") |>
+  mutate(manual_elev_m = datum - manual_depth_m)
+
+p <- ggplot() +
+  geom_point(data = stage_final,  aes(x = DateTime, y = stage_elev_m)) +
+  geom_point(data = stage_checks, aes(x = DateTime, y = manual_elev_m), color = "red") +
+  facet_wrap(~ Site, scales = "free") +
+  ggtitle("Staged data with manual points overlaid in red, by Site") +
+  theme_bw()
+
+print(p)
+
+
+
+
 # #Pull manual stage measurement file
-#stage_checks <-  gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh1QfOad3ez_Hk4Sl8ziPYxmWWcoSv1GNeuJkrFec8")
+# stage_checks <-  gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1OOh1QfOad3ez_Hk4Sl8ziPYxmWWcoSv1GNeuJkrFec8")
 # 
 # #format date column
 # stage_checks$DateTime = lubridate::parse_date_time(stage_checks$DateTime, orders = c('ymd HMS','ymd HM','ymd', 'mdy','mdy HM', 'mdy HMS', 'mdy HM'), tz = "America/New_York")
@@ -696,7 +670,7 @@ p
 #   geom_point(data = stage_checks, aes(x = DateTime, y = manual_stage_cm), color = "red") +
 #   ggtitle("Staged data with manual points overlaid in red") +
 #   theme_bw()
-# 
+# # 
 # p
 # #ggplotly(p)
 # 

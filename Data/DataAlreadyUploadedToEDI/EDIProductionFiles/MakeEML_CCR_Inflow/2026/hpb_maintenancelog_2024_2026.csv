@@ -23,3 +23,4 @@
 "CCR",301,"301_inflow","2026-04-28 15:00:00","2026-04-28 15:15:00","HOBO_Abs_Pres_kPa","Temp_C",1,NA,NA,"sensor out of water for data download"
 "CCR",301,"301_inflow","2026-05-21 10:10:00","2026-05-21 10:45:00","HOBO_Abs_Pres_kPa","Temp_C",1,NA,NA,"sensor out of water for data download"
 "CCR",301,"301_inflow","2026-06-25 09:50:00","2026-06-25 10:45:00","HOBO_Abs_Pres_kPa","Temp_C",1,NA,NA,"sensor out of water for data download"
+"CCR",1001,"1001_level","2026-06-13 13:10:00","2026-06-30 00:00:00","corrected_Pres_kPa",NA,4,NA,"hobo[Time, maintenance_cols]-0.49","corrected potential PT drift"

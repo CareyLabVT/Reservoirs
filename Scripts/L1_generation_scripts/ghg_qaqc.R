@@ -5,7 +5,8 @@
 
 # This script uses the ghg
 #####################################################
-
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 # Download/load libraries
 pacman::p_load(lubridate,tidyverse, googledrive, readxl, gsheet, EDIutils, xml2)

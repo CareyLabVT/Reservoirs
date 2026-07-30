@@ -10,6 +10,9 @@
 pacman::p_load(tidyverse, lubridate, dplyr,
                EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
+
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.198.14'
 eml <- read_metadata(package_ID)

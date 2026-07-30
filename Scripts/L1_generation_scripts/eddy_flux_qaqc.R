@@ -12,7 +12,8 @@
 
 # This script runs the function which is sourced from the L1_functions folder
 #####################################################
-
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 # Download/load libraries
 pacman::p_load(lubridate,tidyverse,hms,gridExtra,openair, googledrive)

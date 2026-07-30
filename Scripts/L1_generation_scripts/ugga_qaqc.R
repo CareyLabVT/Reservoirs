@@ -3,6 +3,8 @@
 ## Last edited: 09-06-2024
 # This script runs the function which is sourced from the L1_functions folder 
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 # This script uses the UGGA_qaqc function saved as the UGGA_create.R
 #####################################################

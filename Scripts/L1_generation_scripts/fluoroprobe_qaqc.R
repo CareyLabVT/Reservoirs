@@ -4,6 +4,9 @@
 # Edited: 
 # 27 Feb 25 - changed the repo links from Mary's repo to the main repo
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
+
 # This script uses the fluoroprobe_qaqc function saved as the fluoroprobe_create.R
 
 rm(list=ls())

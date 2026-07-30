@@ -16,6 +16,9 @@
 # 6. Further QAQC processing
 # 7. Save files
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
+
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2, arsenal, here, httr2)
 

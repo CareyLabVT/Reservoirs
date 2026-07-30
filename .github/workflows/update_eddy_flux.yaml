@@ -10,6 +10,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       GDRIVE_PAT: ${{ secrets.CAREYLABVT_GOOGLEDRIVE }}
+      EDI_ACCESS_KEY: ${{ secrets.EDI_ACCESS_KEY }}
     container:
       image: rocker/tidyverse:4.2
     steps:

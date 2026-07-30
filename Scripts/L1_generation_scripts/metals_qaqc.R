@@ -6,6 +6,8 @@
 # This script uses the metals_create function
 #####################################################
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, gsheet, rqdatatable, hms, EDIutils, xml2)

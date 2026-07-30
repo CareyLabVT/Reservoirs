@@ -4,6 +4,9 @@
 # First developed: 2023-12-04
 # Last edited: 2024-12-19
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
+
 #install.packages('pacman')
 pacman::p_load(tidyverse, lubridate,
                dplyr, EDIutils, xml2, gsheet) ## Use pacman package to install/load other packages

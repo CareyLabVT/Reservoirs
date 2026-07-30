@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      EDI_ACCESS_KEY: ${{ secrets.EDI_ACCESS_KEY }}
     container:
       image: rocker/tidyverse:4.2
     steps:

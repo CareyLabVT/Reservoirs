@@ -198,7 +198,8 @@ eml_file <- make_eml(path = folder,
 package.id = eml_file$packageId
 
 # read in the xml file that you made from the make_eml function
-doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+#doc <- read_xml(paste0(folder,"/",package.id,".xml"))
+doc <- read_xml(paste0(folder,"edi.271.10.xml"))
 
 # Find the parent node where <licensed> should be added
 parent <- xml_find_first(doc, ".//dataset")   # change to your actual parent

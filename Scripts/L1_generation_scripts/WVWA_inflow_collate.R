@@ -21,6 +21,9 @@
 #### Load Packages ####
 pacman::p_load("tidyverse","lubridate", "EDIutils", "xml2")
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
+
 ### Read in current WVWA sensor files ####
 
 # If you want to to compile all files set year= NULL for your outfile "./Data/DataNotYetUploadedToEDI/Raw_inflow/WVWA_weirInflow_2013_ENDYEAR"

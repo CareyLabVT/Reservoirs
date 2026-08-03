@@ -9,13 +9,15 @@
 # Load in 'remotes' package
 pacman::p_load(remotes,tidyverse,lubridate)
 
+install.packages("rlang")
+
 # Install FluxCalR (if not already installed! If installed, skip to library(FluxCalR))
-remotes::install_github("junbinzhao/FluxCalR",build_vignettes = TRUE)
+remotes::install_github("junbinzhao/FluxCalR",build_vignettes = FALSE)
 library(FluxCalR)
 
 # Load in data: will need to load in individual files - I recommend doing this by year
 
-wd <- setwd("./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2025")
+wd <- setwd("./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2026")
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
 

@@ -11,7 +11,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       EDI_ACCESS_KEY: ${{ secrets.EDI_ACCESS_KEY }}
     container:
-      image: rocker/tidyverse:4.2
+      image: rocker/tidyverse:latest
     steps:
       - run: git config --system --add safe.directory '*'
       

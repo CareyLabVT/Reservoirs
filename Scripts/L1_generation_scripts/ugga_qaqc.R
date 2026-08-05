@@ -3,9 +3,6 @@
 ## Last edited: 09-06-2024
 # This script runs the function which is sourced from the L1_functions folder 
 
-edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
-login(key = edi_access_key)
-
 # This script uses the UGGA_qaqc function saved as the UGGA_create.R
 #####################################################
 
@@ -20,6 +17,8 @@ login(key = edi_access_key)
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, EDIutils, xml2)
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.1082.5'

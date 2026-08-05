@@ -6,12 +6,11 @@
 # This script uses the metals_create function
 #####################################################
 
-edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
-login(key = edi_access_key)
-
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, gsheet, rqdatatable, hms, EDIutils, xml2)
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.455.9'

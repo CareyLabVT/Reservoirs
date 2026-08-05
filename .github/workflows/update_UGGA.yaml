@@ -11,7 +11,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       EDI_ACCESS_KEY: ${{ secrets.EDI_ACCESS_KEY }}
     container:
-      image: rocker/tidyverse:4.2
+      image: rocker/tidyverse:latest
     steps:
       - run: git config --system --add safe.directory '*'
 
@@ -22,6 +22,7 @@ jobs:
 
       - name: Run automated target files
         run: |
+          R -e 'utils::install.packages("remotes")'
           R -e 'remotes::install_version("pacman", version = "0.5.1")'
           R -e 'utils::install.packages("RCurl")'
           Rscript $GITHUB_WORKSPACE/Scripts/L1_generation_scripts/ugga_qaqc.R

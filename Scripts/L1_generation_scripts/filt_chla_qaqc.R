@@ -16,12 +16,11 @@
 # 6. Further QAQC processing
 # 7. Save files
 
-edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
-login(key = edi_access_key)
-
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, gsheet, EDIutils, xml2, arsenal, here, httr2)
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.555.6'

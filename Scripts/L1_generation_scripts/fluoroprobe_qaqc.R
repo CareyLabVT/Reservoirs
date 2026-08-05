@@ -4,8 +4,6 @@
 # Edited: 
 # 27 Feb 25 - changed the repo links from Mary's repo to the main repo
 
-edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
-login(key = edi_access_key)
 
 # This script uses the fluoroprobe_qaqc function saved as the fluoroprobe_create.R
 
@@ -14,6 +12,8 @@ rm(list=ls())
 # Download/load libraries
 pacman::p_load(tidyverse, lubridate, EDIutils, xml2, httr)
 
+edi_access_key = Sys.getenv("EDI_ACCESS_KEY")
+login(key = edi_access_key)
 
 ## identify latest date for data on EDI (need to add one (+1) to both dates because we want to exclude all possible start_day data and include all possible data for end_day)
 package_ID <- 'edi.272.10'

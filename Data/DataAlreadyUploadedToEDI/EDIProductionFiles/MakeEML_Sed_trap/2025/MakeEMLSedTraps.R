@@ -24,7 +24,7 @@ library(EMLassemblyline)
 #Step 2: Move your dataset to the directory
 
 #Step 3: Identify an intellectual rights license
-#ours is CCBY
+#ours is CCBY-NC
 
 #Step 4: Identify the types of data in your dataset
 #right now the only supported option is "table"; happily, this is what 
@@ -135,7 +135,7 @@ make_eml(
   eml.path = "./Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEML_Sed_trap/2025",
   dataset.title = "Sediment trap time series data for Beaverdam Reservoir and Falling Creek Reservoir in southwestern Virginia, USA 2018 through 2024",
   temporal.coverage = c("2018-05-21", "2024-12-16"),
-  maintenance.description = 'ongoing',
+  maintenance.description = 'finished',
   data.table = c("sed-traps_FluxSummary_2018_2024.csv",
                  "sed-traps_FilteringLog_2018_2024.csv",
                  "sed-traps_2018_2024.csv",
@@ -154,7 +154,7 @@ make_eml(
                    "MakeEDI_SedTraps.R",
                    "MakeEDI_SedTraps_CN.Rmd",
                    "Load_filtering_logs.R",
-                   "SedTrap_Inspection_2014_2024.Rmd"),
+                   "SedTrap_Inspection_2018_2024.Rmd"),
   # other.entity.name = c("Flux summary script",
   #                       "Metals flux script",
   #                       "Carbon and nitrogen flux script",
@@ -167,7 +167,7 @@ make_eml(
                                "Plots metal fluxes and cumulative masses"),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.1789.1') #reserve new staging environment package id each year
+  package.id = 'edi.1789.3') #reserve new staging environment package id each year
 
 ## Step 8: Check your data product! ####
 # Return to the EDI staging environment (https://portal-s.edirepository.org/nis/home.jsp),

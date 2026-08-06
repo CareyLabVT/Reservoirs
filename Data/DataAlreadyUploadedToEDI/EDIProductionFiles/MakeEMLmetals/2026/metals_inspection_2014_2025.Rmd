@@ -2,11 +2,14 @@
 title: "Metals_inspection_2014_2024"
 author: "Adrienne Breef-Pilz"
 created: "2023-11-15"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    theme: united
 date:  "`r Sys.Date()`"
 ---
 
-This script is the visual inspection script. 
+### This script is the visual inspection script. 
 
 1. QAQCs all the raw data or for a reviewer reads in the data file from EDI for checking. 
 
@@ -29,7 +32,7 @@ If you are REVIEWING this data package, add the pasta URL from EDI in the "READ 
 
 If you are running the code chunk by chunk you mind need to make some adjustments to the code. To make the plots this markdown uses a function called "all_plots". In the function it creates a plots of the most current year, the whole times series, as well as, density and box plots for daily averages. You can also specify if you would like to produce a heat map. Note that heat maps are only produced if your data has a depth column. The function also allows you to choose if you want interactive plots, using plotly, for the most recent year of data. The plotly plots are designed to be in order with the other plots when knit to together. Therefore if you are running the ploting section, chunk by chunk, then you need to specify the plotly plot from the list of plots labeled "output". For this data package do not use plotly for all plots at one time. I usually use it for depth, oxygen, and chla. 
 
-FOR DATA PRODUCT LEAD:
+## FOR DATA PRODUCT LEAD:
 
 If you are the data product lead and making the data package then:
 
@@ -63,11 +66,9 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
 
-
 # Plotting script
-source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
-#source("../../Plotting_function.R")
-
+ source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+# source('https://raw.githubusercontent.com/ceceliawood/MiscGradSchool/refs/heads/main/Plotting_function_CEW.R') # same function but no density plots
 
  #turn off pander auto asis
         pander::panderOptions('knitr.auto.asis', FALSE)
@@ -89,7 +90,7 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
  sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
- MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.txt",
+ MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv",
          metals_save = TRUE,
          metals_outfile = NULL, # put Null to return the file
           ISCO_save = F, # ISCO file will not be saved and will not be returned
@@ -111,7 +112,7 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
   
 ```
 
-REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it. 
+##REVIEWERS- If you are reviewing this data package replace the pasta link with the one from EDI. If there are questions ask the data point person. There are two ways to use this script. You can either run it by chunks or you can knit it and make an html file. Knitting the file will run all the chunks and create an html page with all the plots. I like doing this because I can see all the plots in one place. The Knit button is on the top of the file with a ball of yarn and a needle next to it. 
 
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
 
@@ -141,23 +142,20 @@ Let's look at the flag Frequency for each variable. As a reminder here are the f
  
  2: instrument malfunction
  
- 3: sample below MRL and set to MRL
+ 3: sample below MRL or negative and set to MRL
  
- 4: negative value set to MRL
+ 4: non-standard method (digested)
  
- 6: non-standard method
+ 5: sample run multiple times and values averaged
  
- 7: sample run multiple times and values averaged
+ 6: suspect value
  
- 8: abnormally high concentration that is greater than 3 sd above the mean
+ 7: total and soluble samples switched prior to analysis; fixed in QAQC
  
- 9: total and soluble samples switched prior to analysis; fixed in QAQC
+ 8: improper procedure and set to NA
  
- 10: improper procedure and set to NA
+ 9: soluble is greater than the total
  
- 63: non-standard method and sample below MRL and set to MRL
- 
- 64: non-standard method and negative value set to MRL
 
 ```{r Check there are no NAs in Flag columns, echo=FALSE}
 
@@ -353,6 +351,8 @@ Do not over think the last 2 plots, although they are good to look at historical
 dx <- colnames(current_df%>%select(TLi_mgL:SBa_mgL))
 
 # make the plots
+
+
 outputs <- lapply(dx, all_plot, data=current_df, reservoir = "FCR", res_site=50, y_lab = "mg/L", y_lab2 = "mg/L",Depth=T, Water=F, Use_plotly=T, Heatmap = T)
 
 output <- unlist(outputs, recursive = F)
@@ -571,7 +571,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
+```{r Make new CSV with current and historic files, include=FALSE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file

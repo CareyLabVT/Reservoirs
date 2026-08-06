@@ -43,20 +43,20 @@ metals_qaqc <- function(directory,
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
  #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
- # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
-# historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
-# sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-# maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
-# sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
-# MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
-# metals_save = T
-# metals_outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
-# ISCO_save = T
-# ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
- #start_date = NULL
- #end_date = NULL
- # start_date = as.Date("2025-01-01") # change when we update to read date from EDI
- # end_date = Sys.Date() + lubridate::days(1)
+ #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+ #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+ #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
+ #  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+ #  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
+ # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
+ # metals_save = T
+ # metals_outfile = "./Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv"
+ # ISCO_save = T
+ # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
+ # start_date = NULL
+ # end_date = NULL
+ #start_date = as.Date("2025-01-01") # change when we update to read date from EDI
+ #end_date = Sys.Date() + lubridate::days(1)
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -467,8 +467,8 @@ metals_qaqc <- function(directory,
 
    ### ABP fixed to make it work now but please feel free to change 
    
-   MRL <- read_csv(MRL_file, show_col_types = F)|>
-     separate_wider_delim(Symbol, delim = "_", names = c("Metal", "units"))
+   MRL <- read_csv(MRL_file, show_col_types = F)#|>
+     #separate_wider_delim(Symbol, delim = "_", names = c("Metal", "units"))
      # pivot_wider(names_from = 'Symbol',
      #             values_from = "MRL_mgL") %>%
      # rename_with(~str_c("MRL_", .), Al_mgL:Sr_mgL)
@@ -476,27 +476,33 @@ metals_qaqc <- function(directory,
    
    # pivot the data frame longer
    
-   long_raw_df <- raw_df|>
-     # add "conc" in front of the concentration values
-     rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag"))|>
-     pivot_longer(!c(Reservoir, Site, Date, Depth_m, Filter), 
-                  names_to = c("Type", "Metal", "units"),
-                  names_sep = "_")|>
-     # and then wider to have a Conc colum and a Flag column
-     pivot_wider(id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Metal, units), 
-                 names_from = Type,
-                 values_from = value)|>
-     mutate(Year = year(Date))|>
-     left_join(MRL, by = c("Metal", "units", "Year"))|>
-     # flag if the MRL is less than or equal to MRL
-     mutate(Flag = ifelse(!is.na(Conc) & Conc <= MRL_mgL, as.numeric(paste0(Flag, 3, sep = " ")), Flag),
-            # replace the negative values or below MRL with the MRL
-            Conc = ifelse(Flag %in% c(3, 43, 53 ), MRL_mgL, Conc))|>
-     # take out the MRL values once we change the value
-     select(-c(MRL_mgL, Year))|>
-     # now pivot longer again
-     pivot_longer(!c(Reservoir, Site, Date, Depth_m, Filter, Metal, units), 
-                     names_to = "Type")
+   
+   long_raw_df <- raw_df |>
+     # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
+     rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
+     pivot_longer(
+       cols = -c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       names_to = c(".value", "Metal"),
+       names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
+     mutate(Year = year(Date), Metal_mgL = paste0(Metal, "_mgL")) |>
+     left_join(MRL, by = join_by(Metal_mgL == Symbol, Year)) |>
+     mutate(
+       Flag = as.character(Flag),
+       Flag = case_when(
+         is.na(Conc) ~ "1",           # missing concentration
+         Conc <= MRL_mgL ~ "3",         # below/at minimum reporting level
+         TRUE ~ Flag),
+       Conc = if_else(Flag == "3", MRL_mgL, Conc) # if Conc is below/at the MRL, set it to the MRL
+     ) |>
+     pivot_wider(
+       id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       names_from = Metal,
+       values_from = c(Conc, Flag),
+       names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"
+     )
+   
+   
+
    
      
    # old code below and the code above does the same thing but in a different way  
@@ -628,15 +634,35 @@ metals_qaqc <- function(directory,
     select(Reservoir, Site, DateTime, Depth_m, Filter, everything())|>
     drop_na(Filter)|> # take out if there are NAs in the filter column
    #group_by(DateTime, Reservoir, Depth_m, Site) |>
-   pivot_wider(names_from = c('Type','Filter', 'Metal', 'units'),
-                              values_from = value,
-                               names_glue = "{Type}_{Filter}_{Metal}_{units}")
+    pivot_wider(names_from = 'Filter',
+                id_cols = c('Reservoir', 'Site', 'DateTime','Depth_m', 'Flag_DateTime'),
+                values_from = Al_mgL:Sr_mgL,
+                names_glue = '{Filter}_{.value}') |> 
+    rename_with(
+      ~ .x |> gsub('T_Flag_', 'Flag_T_', x = _) |> gsub('S_Flag_', 'Flag_S_', x = _),
+      .cols = everything())
+  
+  # now that we pivoted wider again, reassign flags for NA values
+  
+  tsc <- wed |> select(starts_with("T_"), starts_with("S_")) |> colnames()
+  
+  for (j in tsc) {
+    flag_col <- paste0("Flag_", j)
+    
+    wed <- wed |>
+      mutate(
+        "{flag_col}" := case_when(
+          is.na(.data[[j]]) & is.na(.data[[flag_col]]) ~ "1",
+          TRUE ~ .data[[flag_col]]
+        )
+      )
+  }
 
   # rename the Flag column
   # Change the column headers so they match what is already on EDI. Take out the "Conc_
 
-  raw_df <- wed |>
-    rename_with(~gsub("Conc_", "", colnames(wed)))
+  # raw_df <- wed |>
+  #   rename_with(~gsub("Conc_", "", colnames(wed)))
     # mutate(
     #   clean_site = Site,
     #   Site = ifelse(Site==100.1, 100, Site)
@@ -651,7 +677,7 @@ metals_qaqc <- function(directory,
 
   
   # create columns for 5 percent threshold - this is the threshold for solubles being greater than totals
-  raw_df <- raw_df %>% 
+  wed <- wed %>% 
     mutate(
       across(
         .cols = starts_with("T_") | starts_with("S_"),
@@ -661,7 +687,7 @@ metals_qaqc <- function(directory,
     )
 
   # create columns for 10 percent threshold - this is the threshold for tubes being switched
-  raw_df <- raw_df %>% 
+  wed <- wed %>% 
     mutate(
       across(
         .cols = starts_with("T_") | starts_with("S_"),
@@ -670,52 +696,130 @@ metals_qaqc <- function(directory,
       )
     )
   
-  # now begin the switching process
-  for(l in c('T_Fe_mgL', 'T_Mn_mgL', 'T_Al_mgL')){
-    raw_df[,paste0("Check_",colnames(raw_df[l]))] <- "0"  #creates Check column + name of variable
-    #MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
-    #switch_threshold <- MRL_value*3
-
-    # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus three times the MRLA;s
-    raw_df[which(raw_df[,l]+raw_df[,paste0('tenpercent_',l)] < raw_df[,gsub("T_", "S_", l)]),paste0("Check_",colnames(raw_df[l]))] <- "SWITCHED"
-  }
-
-
-  ## assign rows where all three variables were switched
-  raw_df$switch_all <- 0
-  for (i in 1:nrow(raw_df)){
-  if (raw_df[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
-      raw_df[i,'Check_T_Mn_mgL'] == 'SWITCHED' &
-      raw_df[i,'Check_T_Al_mgL'] == 'SWITCHED' &
-      raw_df[i,'Flag_T_Fe_mgL'] != 3 & # add 34
-      raw_df[i,'Flag_T_Mn_mgL'] != 3 &
-      raw_df[i,'Flag_T_Al_mgL'] != 3){
-    
-    # add a one to the colum
-    raw_df[i,'switch_all'] <- 1
-  }
-}
-
-  for(l in colnames(raw_df|>select(starts_with(c("T_"))))) {
-    raw_df[which(raw_df[,'switch_all'] == 1), c(l,gsub("T_", "S_", l)) ] <-
-      raw_df[which(raw_df[,'switch_all'] == 1), c(gsub("T_", "S_", l), l)]
-  }
-
   
-  # now that all rows have been switched, check to see if solubles are greater than totals
-  for (i in colnames(raw_df|>select(starts_with('T_')))) {
-    raw_df[c(which(raw_df[,i]+raw_df[,paste0('fivepercent_',i)] < raw_df[,gsub("T_", "S_", i)] & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
-    raw_df[c(which(raw_df[,i]+raw_df[,paste0('fivepercent_',i)] < raw_df[,gsub("T_", "S_", i)] & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+  
+  # flag Fe/Mn/Al as "SWITCHED" where T + 10% < S
+  metals_check <- c("T_Fe_mgL", "T_Mn_mgL", "T_Al_mgL")
+  
+  for (l in metals_check) {
+    ten_col   <- paste0("tenpercent_", l)
+    s_col     <- gsub("T_", "S_", l)
+    check_col <- paste0("Check_", l)
+    
+    wed <- wed |>
+      mutate(
+        "{check_col}" := if_else(.data[[l]] + .data[[ten_col]] < .data[[s_col]], "SWITCHED", "0")
+      )
   }
-
-  for (i in colnames(raw_df|>select(starts_with(c('S_'))))) {
-    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
-    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
-    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
-    raw_df[c(which(raw_df[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & raw_df[paste0("Flag_",i)]!=1 & raw_df[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+  
+  # mark rows where all three metals were switched and none is already flagged "3"
+  wed <- wed |>
+    mutate(
+      switch_all = 0,
+      switch_all = if_else(
+        Check_T_Fe_mgL == "SWITCHED" & Check_T_Mn_mgL == "SWITCHED" & Check_T_Al_mgL == "SWITCHED" &
+          Flag_T_Fe_mgL != "3" & Flag_T_Mn_mgL != "3" & Flag_T_Al_mgL != "3" & Flag_T_Fe_mgL != "1" & Flag_T_Mn_mgL != "1" & Flag_T_Al_mgL != "1",
+        1, switch_all
+      ),
+      switch_all = if_else(is.na(switch_all), 0, switch_all)
+    )
+  
+  # swap T_/S_ values for every metal where switch_all == 1
+  t_cols <- wed |> select(starts_with("T_") & !starts_with(c("Check_"))) |> colnames()
+  
+  for (l in t_cols) {
+    s_col  <- gsub("T_", "S_", l)
+    orig_t <- wed[[l]]   # capture originals so the two assignments below don't clobber each other
+    orig_s <- wed[[s_col]]
+    
+    wed <- wed |>
+      mutate(
+        "{l}"     := if_else(switch_all == 1, orig_s, orig_t),
+        "{s_col}" := if_else(switch_all == 1, orig_t, orig_s)
+      )
+  }
+  
+  # recheck flags on T_ columns now that switching has happened
+  for (l in t_cols) {
+    five_col <- paste0("fivepercent_", l)
+    s_col    <- gsub("T_", "S_", l)
+    flag_col <- paste0("Flag_", l)
+    
+    wed <- wed |>
+      mutate(
+        "{flag_col}" := case_when(
+          .data[[l]] + .data[[five_col]] < .data[[s_col]] & .data[[flag_col]] != "1" & .data[[flag_col]] == "6" ~ "69",
+          .data[[l]] + .data[[five_col]] < .data[[s_col]] & .data[[flag_col]] != "1" & .data[[flag_col]] != "6" ~ "9",
+          TRUE ~ .data[[flag_col]]
+        )
+      )
+  }
+  
+  # propagate T_ flags to matching S_ flags
+  s_cols <- wed |> select(starts_with("S_") & !starts_with(c("Check_"))) |> colnames()
+  
+  for (i in s_cols) {
+    t_flag_col <- paste0("Flag_", gsub("S_", "T_", i))
+    flag_col   <- paste0("Flag_", i)
+    
+    wed <- wed |>
+      mutate(
+        "{flag_col}" := case_when(
+          .data[[t_flag_col]] %in% c("9", "69") & .data[[flag_col]] != "1" & .data[[flag_col]] == "6" ~ "69",
+          .data[[t_flag_col]] %in% c("9", "69") & .data[[flag_col]] != "1" & .data[[flag_col]] != "6" ~ "9",
+          TRUE ~ .data[[flag_col]]
+        )
+      )
   }
   
   print("fixed switched samples")
+  
+  # older code
+#   for(l in c('T_Fe_mgL', 'T_Mn_mgL', 'T_Al_mgL')){
+#     wed[,paste0("Check_",colnames(wed[l]))] <- "0"  #creates Check column + name of variable
+#     #MRL_value <- as.numeric(MRL[1,gsub("T_|S_","",l)]) # get the minimum detection level
+#     #switch_threshold <- MRL_value*3
+# 
+#     # Puts "SWITCHED" in the Check column if the soluble concentration is greater than the totals plus three times the MRLA;s
+#     wed[ which( wed[,l]+wed[,paste0('tenpercent_',l)] < wed[,gsub("T_", "S_", l)]),paste0("Check_",colnames(wed[l]) ) ] <- "SWITCHED"
+#   }
+# 
+# 
+#   ## assign rows where all three variables were switched
+#   wed$switch_all <- 0
+#   for (i in 1:nrow(wed)){
+#   if (wed[i,'Check_T_Fe_mgL'] == 'SWITCHED' &
+#       wed[i,'Check_T_Mn_mgL'] == 'SWITCHED' &
+#       wed[i,'Check_T_Al_mgL'] == 'SWITCHED' &
+#       wed[i,'Flag_T_Fe_mgL'] != 3 & # add 34
+#       wed[i,'Flag_T_Mn_mgL'] != 3 &
+#       wed[i,'Flag_T_Al_mgL'] != 3){
+#     
+#     # add a one to the column
+#     wed[i,'switch_all'] <- 1
+#   }
+# }
+# 
+#   for(l in colnames(wed|>select(starts_with(c("T_"))))) {
+#     wed[which(wed[,'switch_all'] == 1), c(l,gsub("T_", "S_", l)) ] <-
+#       wed[which(wed[,'switch_all'] == 1), c(gsub("T_", "S_", l), l)]
+#   }
+# 
+#   
+#   # now that all rows have been switched, check to see if solubles are greater than totals
+#   for (i in colnames(wed|>select(starts_with('T_')))) {
+#     wed[c(which(wed[,i]+wed[,paste0('fivepercent_',i)] < wed[,gsub("T_", "S_", i)] & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+#     wed[c(which(wed[,i]+wed[,paste0('fivepercent_',i)] < wed[,gsub("T_", "S_", i)] & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+#   }
+# 
+#   for (i in colnames(wed|>select(starts_with(c('S_'))))) {
+#     wed[c(which(wed[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+#     wed[c(which(wed[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]!=6)), paste0("Flag_", i)] <- 9
+#     wed[c(which(wed[paste0("Flag_", gsub('S_', 'T_', i))] == 9 & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+#     wed[c(which(wed[paste0("Flag_", gsub('S_', 'T_', i))] == 69 & wed[paste0("Flag_",i)]!=1 & wed[paste0("Flag_",i)]==6)), paste0("Flag_", i)] <- 69
+#   }
+#   
+#   print("fixed switched samples")
   
   #raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
    # for(l in colnames(raw_df|>select(starts_with(c("T_"))))) {
@@ -734,20 +838,24 @@ metals_qaqc <- function(directory,
    # }
 
   # Flag all Na in the data frame again
-  for(j in colnames(raw_df|>select(starts_with("T_"),starts_with("S_")))) {
+  tsc <- wed |> select(starts_with("T_"), starts_with("S_")) |> colnames()
+  
+  for (j in tsc) {
+    flag_col <- paste0("Flag_", j)
     
-    # puts in flag 1 if value not collected
-    raw_df[c(which(is.na(raw_df[,j]) & is.na(raw_df[paste0("Flag_",j)]))),paste0("Flag_",j)] <- 1
-    
-    
-    # add a flag if the samples were switched
-    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1 & raw_df[paste0("Flag_",i)]!=6 & raw_df[paste0("Flag_",i)]!=69 & raw_df[paste0("Flag_",i)]!=9), paste0("Flag_",j)] <- 7
-    raw_df[which(raw_df[,'switch_all'] == 1 & raw_df[paste0("Flag_",j)]!=1), paste0("Flag_",j)] <- 7
-
+    wed <- wed |>
+      mutate(
+        "{flag_col}" := case_when(
+          is.na(.data[[j]]) & is.na(.data[[flag_col]]) ~ "1",
+          switch_all == 1 & .data[[flag_col]] != "1" & .data[[flag_col]] != "6" &
+            .data[[flag_col]] != "69" & .data[[flag_col]] != "9" ~ "7",
+          TRUE ~ .data[[flag_col]]
+        )
+      )
   }
    # Change the column headers so they match what is already on EDI. Added T_ because it is easier in the
 
-   frame4 <- raw_df |>
+   frame4 <- wed |>
      rename_with(~gsub("T_", "T", gsub("S_", "S",.)), -1)
 
    print("flag NAs again")

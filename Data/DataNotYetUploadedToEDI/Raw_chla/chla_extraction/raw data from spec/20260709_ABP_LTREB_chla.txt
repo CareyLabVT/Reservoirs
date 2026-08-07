@@ -1,5 +1,5 @@
 "Sample ID","Type","WL750.0","WL664.0","WL665.0","Comments"
-"blank","Unknown",0.000,0.000,0.000,""
+"blank_b","Unknown",0.000,0.000,0.000,""
 "blank_a","Unknown",0.001,0.000,0.000,""
 "18_b","Unknown",0.003,0.004,0.004,""
 "18_a","Unknown",0.005,0.005,0.005,""

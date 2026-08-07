@@ -115,7 +115,7 @@ filt_chla_qaqc <- function(directory,
     print(paste0("Read in ", FILES))
     
     # Get the date the samples were processed on the spec
-    sed <- str_extract(FILES, "_\\d+")
+    sed <- sub(".*?(\\d{8}).*", "\\1", basename(FILES))
     
     # Take out the extra underscore
     Date <- sub("_","",sed)

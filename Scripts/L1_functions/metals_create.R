@@ -481,7 +481,7 @@ metals_qaqc <- function(directory,
      # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
      rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
      pivot_longer(
-       cols = -c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       cols = -c(Reservoir, Site, Date, Depth_m, Filter),
        names_to = c(".value", "Metal"),
        names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
      mutate(Year = year(Date), Metal_mgL = paste0(Metal, "_mgL")) |>
@@ -495,7 +495,7 @@ metals_qaqc <- function(directory,
        Conc = if_else(Flag == "3", MRL_mgL, Conc) # if Conc is below/at the MRL, set it to the MRL
      ) |>
      pivot_wider(
-       id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       id_cols = c(Reservoir, Site, Date, Depth_m, Filter),
        names_from = Metal,
        values_from = c(Conc, Flag),
        names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"

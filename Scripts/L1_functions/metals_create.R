@@ -10,6 +10,7 @@
 # 18 Feb. 25 Added a function when there were no observations for the year
 # 23 May 25 Changed the ISCO to take the higher of the duplicated values
 # 24 Fed 26 Fixed the section on adding historical MDLS and added in ability to pull from GitHub instead of local directories
+# 24 Aug 26 add a line when reading in the maintenance log to accept different time formats
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -64,12 +65,13 @@ metals_qaqc <- function(directory,
   
   log <- read_csv(maintenance_file, col_types = cols(
     .default = col_character(),
-    Sample_Date = col_date("%Y-%m-%d"),
+    Sample_Date = col_character(),
     flag = col_integer(),
     Sample_ID = col_integer(),
     Site = col_number(),
     Depth_m = col_number()
-  ))
+  ))|>
+   mutate(Sample_Date = parse_date_time(Sample_Date, orders = c("ymd", "mdy", "dmy")))
   
   # Read in Sample ID Key 
   

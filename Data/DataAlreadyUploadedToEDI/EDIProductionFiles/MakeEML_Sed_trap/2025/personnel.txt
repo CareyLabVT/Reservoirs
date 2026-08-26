@@ -1,8 +1,8 @@
 givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	contact			
 Madeline	E.	Schreiber	Virginia Tech	mschreib@vt.edu	0000-0002-1858-7730	creator			
-Carly	E.	Bauer	Virginia Tech	carlyeb@vt.edu	0009-0006-5955-8932	creator			
 Cecelia	E.	Wood	Virginia Tech	cecelia@vt.edu	0000-0003-1488-2174	creator			
+Carly	E.	Bauer	Virginia Tech	carlyeb@vt.edu	0009-0006-5955-8932	creator			
 Adrienne		Breef-Pilz	Virginia Tech	abreefpilz@vt.edu	0000-0002-6759-0063	creator			
 Frances	M.	Iannucci	Virginia Tech	fiannucci@vt.edu	0000-0002-7554-1819	creator			
 Dominique	X.	Edwards	Virginia Tech	dominique@vt.edu	0009-0005-1265-8429	creator			

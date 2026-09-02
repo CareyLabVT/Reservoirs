@@ -1,0 +1,373 @@
+---
+title: "Chemistry_inspection_2013_2024"
+format: html
+---
+
+Script to inspect QAQCd 2025 chemistry data and combine with previous EDI publication. 
+
+Script developed by HLW in 2023, edited by DWH in 2024-2025, edited by KKH in 2026.
+
+NOTE! This script does not knit because it incorporates many steps of QAQC that will be moved in subsequent years to the maintenance log/Level 1 generation script. 
+Note from KKH in 2026 - we should be able to get this to knit, but not there yet!
+
+NOTE TO REVIEWERS!!! After loading packages on lines 16-19 go to line 145 to begin data review
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, scales, viridis, plotly, gsheet, here)
+
+```
+
+
+```{r read in current + historic combined file}
+
+new_chem <- read_csv(paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_woISCO.csv")) 
+
+new_chem <- new_chem |> select(c(Reservoir, Site, DateTime, Depth_m, Rep, TN_ugL, TP_ugL, NH4_ugL, NO3NO2_ugL, SRP_ugL, DOC_mgL, DIC_mgL, DC_mgL, DN_mgL, Flag_DateTime, Flag_TP_ugL, Flag_TN_ugL, Flag_NH4_ugL, Flag_NO3NO2_ugL, Flag_SRP_ugL, Flag_DOC_mgL, Flag_DIC_mgL, Flag_DC_mgL, Flag_DN_mgL))
+
+myEDIAccessKey <- "UsVwoHpF431obnILyyNrNVt-Sdk"
+
+chem_data  <- paste0("https://pasta.lternet.edu/package/data/eml/edi/199/13/3f09a3d23b7b5dd32ed7d28e9bc1b081","?key=",myEDIAccessKey)
+
+old_chem <- read_csv(chem_data , col_types = cols())
+
+##remove reruns from new file 
+# DWH manually entered reruns. We need a better way to handle this. 
+# new_chem <- new_chem |> 
+#   mutate(Year = year(DateTime)) |> 
+#   #filter(Year != 2023) |> 
+#   select(-Year)
+
+##bind all chem together
+allchem <- rbind(old_chem, new_chem) |> 
+  mutate(Flag_DIC_mgL = as.numeric(Flag_DIC_mgL),
+         Flag_DC_mgL = as.numeric(Flag_DC_mgL))
+
+#check no NAs in flags
+summary(allchem)
+
+```
+
+```{r write csv for EDI}
+
+allchem <- allchem |> 
+  arrange(Reservoir, DateTime, Site, Depth_m, Rep) |> 
+  mutate(DN_mgL = round(DN_mgL, 2)) #fix DN rounding for all years, can cut this next year as now in qaqc
+
+write.csv(allchem, "Chemistry_2013_2025.csv", row.names = FALSE)
+```
+
+REVIEWERS START HERE!!!!!!
+
+```{r}
+######## UPDATE LINK ###############
+#read in the most recent version on EDI staging to work with this version to check on data
+allchem <- read_csv( "https://pasta-s.lternet.edu/package/data/eml/edi/1025/17/3f09a3d23b7b5dd32ed7d28e9bc1b081"   , col_types = cols())
+
+
+```
+
+
+```{r 2024 diagnostic plots - all sites}
+
+
+new_chem <- allchem |> 
+  filter(year(DateTime) >= 2025 )
+
+#select columns for plotting
+new_chem <- new_chem [,(names(new_chem) %in% c("Reservoir","Site","DateTime",
+  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL", "DIC_mgL"))]
+
+  #### Chemistry diagnostic plots ####
+chemistry_long <- new_chem %>% 
+  gather(metric, value, TN_ugL:DIC_mgL) %>% 
+  mutate(month = strftime(DateTime, "%b"))
+
+chemistry_long$value <- as.numeric(chemistry_long$value)
+
+
+# Plot range of values per constituent for each reservoir; 
+#mean value per sampling day indicated with large black dot
+chemistry_long |> 
+  filter(Site == 50, 
+         DateTime > ymd("2024-01-01")) |> 
+ggplot(aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
+  geom_point(size=1) +
+  stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
+  facet_grid(metric ~ Reservoir, scales= 'free_y') +
+  scale_x_date(labels = date_format("%d %b")) +
+  scale_y_continuous("Concentration at site 50") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+
+#ggsave("./Figures/FCR_BVR_CCR_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r Function to make plots}
+
+# Make individual plots of each variable with depth as color
+
+# make a function
+
+#Function to plot all data for a given year as a heatmap
+plot_var <- function(var_name, 
+                     year, 
+                     reservoirs = c("FCR", "BVR", "CCR"),
+                     data = qaqc,
+                     site = c(10,20,30,40,50,88,90)){
+  
+  var <- sym(var_name)
+  flag <- sym(paste0("Flag_", var_name))
+  qaqc_plotly <- data %>%
+    filter(Reservoir %in% reservoirs, Site %in% site, year(DateTime) %in% year) %>%
+    ggplot(aes(x = DateTime, y = !!var, color = as.factor(Depth_m), shape = as.factor(!!flag))) +
+    geom_point() +
+    #ggtitle(year)+
+    facet_grid(cols = vars(Reservoir),rows = vars(Site), scales = "free_y")+         
+    theme_bw()
+    #facet_grid(cols = vars(Reservoir))
+  ggplotly(qaqc_plotly)
+  #print(qaqc_plotly)
+}
+
+# list of variables
+vars_to_plot <- c("TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL", "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL")
+
+```
+
+
+```{r FCR plots current year}
+
+fcr2024 <-vars_to_plot %>%
+  map(plot_var, year = c(2024, 2025), reservoirs = "FCR", data = allchem, site = c(20,50,100,200))
+
+fcr2024
+
+```
+
+```{r BVR plots current year}
+bvr2024 <-vars_to_plot %>%
+  map(plot_var, year = c(2024,2025),reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
+
+bvr2024
+```
+
+```{r CCR plots current year}
+
+y2024 <-vars_to_plot %>%
+  map(plot_var, year = c(2024,2025), reservoirs = "CCR", data = allchem, site = c(50,51,88,90, 92,96,98,100,101,301))
+
+y2024
+
+```
+
+
+```{r Diagnostic plots - FCR 50}
+
+# FCR deep hole data time series
+ggplot(subset(chemistry_long, Reservoir=='FCR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) + theme_bw()+
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
+  scale_y_continuous("Concentration at site 50") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, size=6),
+        axis.text.y = element_text(size=6),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=5),
+        legend.title = element_text(size=6)) +
+  scale_color_manual("FCR_Depth (m)", values = viridis(10))
+  #geom_vline(xintercept=as.numeric(as.Date(c("2021-06-11", "2021-07-12", "2021-07-26", "2022-03-22")))) +
+  #geom_vline(xintercept=as.numeric(as.Date(c("2021-06-26", "2021-07-14","2021-12-06", "2022-03-24"))), linetype="dotted")
+
+#ggsave("./Figures/FCR_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r 2023 diagnostic plots FCR 100 and 200}
+
+# FCR other sites nutrient data time series
+ggplot(subset(chemistry_long, Reservoir=='FCR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
+  geom_point(cex=2) + theme_bw() +
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, size=6),
+        axis.text.y = element_text(size=6),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=5),
+        legend.title = element_text(size=6)) + 
+  scale_color_manual("FCR_Site", values = rainbow(10)) 
+
+#ggsave("./Figures/FCR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r 2023 diagnostic plots - BVR 50}
+
+# BVR deep hole data time series
+ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) + theme_bw() +
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
+  scale_y_continuous("Concentration at site 50") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, size=6),
+        axis.text.y = element_text(size=6),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=5),
+        legend.title = element_text(size=6)) + 
+  scale_color_manual("BVR_Depth (m)", values = plasma(10)) 
+
+# ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r 2023 diagnostic plots BVR inflows}
+
+ #BVR other sites nutrient time series #no 2024 inflow samples so no figure :)
+ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
+  geom_point(cex=2) + theme_bw() +
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_labels = "%d %b") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 0, hjust=0.5)) + 
+  scale_color_manual("BVR_Site", values = plasma(8)) 
+#ggsave("./Figures/BVR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r 2023 diagnostic plots - CCR 50}
+
+# CCR site 50 nutrient time series
+ggplot(subset(chemistry_long, Reservoir=='CCR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) + theme_bw() +
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, size=6),
+        axis.text.y = element_text(size=6),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=5),
+        legend.title = element_text(size=6)) + 
+  scale_color_manual("CCR_Depth (m)", values = plasma(7)) 
+
+#ggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, heighggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, heighggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r 2023 diagnostic plots- CCR inflows}
+
+# CCR other sites nutrient time series
+ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
+  geom_point(cex=2) + theme_bw() +
+  facet_grid(metric ~ ., scales='free') +
+  scale_x_date("Date", date_breaks="1 month", date_labels = "%d %b") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, size=6),
+        axis.text.y = element_text(size=6),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=5),
+        legend.title = element_text(size=6)) + 
+  scale_color_manual("CCR_Site", values = plasma(7)) 
+
+#ggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, heggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, heggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
+
+```
+
+```{r add additional columns to all chem df}
+#add column for year
+allchem$year <- year(allchem$DateTime)
+
+#### chem diagnostic plots #### 
+all_chem_long <- allchem %>%
+  gather(metric, value, TN_ugL:DIC_mgL) %>% 
+  mutate(month = strftime(DateTime, "%b"))
+
+#value as numeric
+all_chem_long$value<- as.numeric(all_chem_long$value)
+all_chem_long$Depth_m<- as.numeric(all_chem_long$Depth_m)
+
+```
+
+```{r all data plots}
+
+# Plot all values
+ggplot(all_chem_long, aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
+  geom_point(size=1) +
+  stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
+  facet_grid(metric ~ Reservoir, scales= 'free_y') +
+  scale_x_date("Date", date_breaks="6 months", date_labels = "%b %Y") +
+  scale_y_continuous("") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1), legend.position='none')
+
+#ggsave("./Figures/All_reservoirs_2013_2023.jpg", width=4, height=4)
+
+```
+
+```{r}
+
+plot_chem_vars <- function(
+    data,
+    reservoir, 
+    site){
+ggplot(subset(data, Reservoir %in% reservoir & Site %in% site), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
+  geom_point(cex=2) +
+  facet_grid(metric ~ Site, scales='free') +
+  scale_x_date("Date", date_breaks = "6 months" ,date_labels = "%b %y") +
+  scale_y_continuous("Concentration") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) 
+  #scale_color_gradient("Depth (m)", high = "black", low = "deepskyblue")
+}
+```
+
+
+```{r all data plots BVR}
+
+plot_chem_vars(data = all_chem_long, reservoir = "BVR", site = 50)
+
+```
+
+```{r all data plots FCR}
+
+# FCR only; all sampling sites 
+plot_chem_vars(data = all_chem_long, reservoir = "FCR", site = 50)
+
+#ggsave("./Figures/FCR_ChembySite_2013_2023.jpg",width=3.5, height=4)
+
+```
+
+```{r all data plots}
+
+# CCR only; site 50
+plot_chem_vars(data = all_chem_long, reservoir = "CCR", site = 50)
+
+#ggsave("./Figures/CCR_Site50_2013_2023.jpg",width=3.5, height=4)
+
+```
+
+
+```{r Make site description file}
+ # These lines of code make the csv of the site descriptions with lat and long
+
+  # Use Gsheet because you don't need to authenticate it. 
+sites <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1TlQRdjmi_lzwFfQ6Ovv1CAozmCEkHumDmbg_L4A2e-8/edit#gid=1244423834")
+
+  data <- allchem #This is the line you need to modify!
+  
+  trim_sites = function(data,sites){
+    data_res_site = data %>% #Create a Reservoir/Site combo column
+      mutate(res_site = trimws(paste0(Reservoir,Site)))
+    sites_merged = sites%>% #Filter to Sites that are in the dataframe
+      mutate(res_site = trimws(paste0(Reservoir,Site)))%>%
+      filter(res_site%in%data_res_site$res_site)%>%
+      select(-res_site)
+  }
+  
+sites_trimmed = trim_sites(data,sites) 
+  
+write.csv(sites_trimmed, "reservoir_site_descriptions.csv", row.names=F)# Write to file
+
+```
+

@@ -1,0 +1,14 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+RunDate	Date that the chemistry run (Lachat or TICTOC) occurred	Date		yyyy-mm-dd	NA	value is missing
+NH4_MDL_ugL	Method detection limit for NH4	numeric	microgramsPerLiter		NA	value is missing
+SRP_MDL_ugL	Method detection limit for SRP	numeric	microgramsPerLiter		NA	value is missing
+NO3NO2_MDL_ugL	Method detection limit for NO3NO2	numeric	microgramsPerLiter		NA	value is missing
+TP_MDL_ugL	Method detection limit for TP	numeric	microgramsPerLiter		NA	value is missing
+TN_MDL_ugL	Method detection limit for TN	numeric	microgramsPerLiter		NA	value is missing
+DIC_MDL_mgL	Method detection limit for DIC	numeric	milligramsPerLiter		NA	value is missing
+DC_MDL_mgL	Method detection limit for DC	numeric	milligramsPerLiter		NA	value is missing
+DOC_MDL_mgL	Method detection limit for DOC	numeric	milligramsPerLiter		NA	value is missing
+DN_MDL_mgL	Method detection limit for DN	numeric	milligramsPerLiter		NA	value is missing
+Notes_TICTOC	Notes about the method detection limit for DIC DC DOC and DN	character			NA	no notes
+Notes_SolublesLachat	Notes about the method detection limit for solubles runs SRP NO3NO2 NH4	character			NA	no notes
+Notes_TotalsLachat	Notes about the method detection limit for totals runs TP TN	character			NA	no notes

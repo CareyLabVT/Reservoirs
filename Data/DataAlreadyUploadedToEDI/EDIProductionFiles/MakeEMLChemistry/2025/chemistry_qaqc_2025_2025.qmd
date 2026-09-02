@@ -1,0 +1,1332 @@
+---
+title: "Chemisty_QAQC_2025_2025"
+format: html
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Chemistry QAQC script
+
+Post-processing 2025 data.
+
+This .qmd is a set of functions designed to compile all of the data from
+Lachat and TICTOC runs. As of 2025, this script 1.) processes and
+compiles data for totals, solubles, and DOC reviewed by the Stream Team
+analytical lab chemist 2.) identifies any samples that were run multiple
+times 3.) Condenses reruns and dilutions into one sample 4.) Associates
+run samples with collected samples and time collected (Nutrients &
+Metals Times) 5.) outputs a dataset for totals, solubles, and DOC 6.)
+combines totals, solubles, and DOC into one dataframe
+
+Still needs to do: 7.) sets all samples \<0 to 0 8.) adds flags based on
+flagging conventions 9.) reference a functions script to condense this
+code to be more manageable
+
+Each section of this script (totals, DOC, compilation) was designed to
+be separate scripts to run individually for data processing. They are
+presented here in this QAQC document as an example of what was done to
+compile this data. This .qmd will not run! (as of 2SEP2026)
+
+This code in this .qmd was developed in 2026 by KKH with the assistance
+of Claude Sonnet 5, Anthropic, 2026.
+
+## Lachat
+
+Starting with Lachat Totals and Solubles
+
+```{r}
+pacman::p_load(tidyverse, gsheet, arsenal, here, lubridate, janitor, readr, purrr, stringr, tidyr)
+select <- dplyr::select
+folder_path <- paste0(here(), "/Results/TNTP")
+
+# URL for the rack map Google Sheet
+totals_rackmap_url <- "https://docs.google.com/spreadsheets/d/1J5UtMFPWTNcb6QhcdCjEs1JUf5FtyiNm-WKGvCAtLAM/edit?gid=0#gid=0"
+
+# ---- Load the rack map ONCE, outside the per-file loop ----
+# ASSUMPTION: after clean_names(), the rack map has columns `vial_number`,
+# `batch`, and `sample_name`. If your actual sheet uses different column
+# names (e.g. "Vial #", "Batch #"), update the names referenced below.
+rack_map <- gsheet::gsheet2tbl(totals_rackmap_url) |>
+  clean_names()
+
+# ---- Helper functions ----
+
+# Returns the first non-missing value in a vector, or NA if all missing.
+coalesce_first <- function(x) {
+  non_na <- x[!is.na(x)]
+  if (length(non_na) == 0) NA else non_na[1]
+}
+
+# Concatenates all non-missing, DISTINCT values in a vector with a space
+# separator. Returns NA if all values are missing. If both rows have the
+# same flag (e.g. "7" and "7"), it appears only once in the result.
+combine_flags <- function(x) {
+  vals <- unique(x[!is.na(x)])
+  if (length(vals) == 0) return(NA_character_)
+  paste(vals, collapse = " ")
+}
+
+# Returns the smaller of the non-missing values in a vector, or NA if all missing.
+min_ignore_na <- function(x) {
+  vals <- x[!is.na(x)]
+  if (length(vals) == 0) return(NA_real_)
+  min(vals)
+}
+
+# Checks ONLY conc_ug_l_tn and conc_ug_l_tp for real conflicts (two
+# different non-missing values) within a sample_name + lab_dup group.
+find_coalesce_conflicts <- function(data, group_col = c("sample_name", "lab_dup"), file_path) {
+
+  data |>
+    # 1. Select the cup column along with the others
+    dplyr::select(all_of(group_col), any_of(c("cup_number", "cup")), conc_ug_l_tn, conc_ug_l_tp) |>
+    mutate(across(everything(), as.character)) |>
+    # 2. Pivot ONLY the concentration columns (keep group cols and cup cols intact)
+    pivot_longer(
+      cols = c(conc_ug_l_tn, conc_ug_l_tp), 
+      names_to = "column", 
+      values_to = "value"
+    ) |>
+    filter(!is.na(value)) |>
+    # 3. Group ONLY by your original group columns and the concentration column name
+    group_by(across(all_of(group_col)), column) |>
+    # 4. Collapse the unique cup numbers inside summarise
+    summarise(
+      n_distinct_values = n_distinct(value),
+      conflicting_values = paste(unique(value), collapse = " | "),
+      # Paste all unique cup numbers associated with this group/conflict
+      cup_number = paste(unique(na.omit(pick(any_of(c("cup_number", "cup")))[[1]])), collapse = " | "),
+      .groups = "drop"
+    ) |>
+    filter(n_distinct_values > 1) |>
+    mutate(file = file_path)
+}
+
+process_one_file <- function(file_path) {
+
+  message("Reading: ", file_path)
+
+  # Extract the date and batch number from the filename
+  # (e.g. "TNTP Results_2025-08-21_LTREB_2025_batch1.csv")
+  file_date <- as.Date(str_extract(file_path, "\\d{4}-\\d{2}-\\d{2}"), format = "%Y-%m-%d")
+  batch_num <- as.numeric(str_extract(file_path, "(?<=batch)\\d+"))
+
+  data <- read_csv(
+    file_path,
+    col_types = cols(
+      Sample.ID   = col_character(),
+      Sample.Type = col_character(),
+      Flag.TN     = col_character(),
+      Flag.TP     = col_character(),
+      Notes.TN    = col_character(),
+      Notes.TP    = col_character(),
+      Date        = col_character(),
+      clean_ids   = col_double(),
+      Cup.Number  = col_double(),
+      Conc.ugL.TN = col_double(),
+      Conc.ugL.TP = col_double()
+    ),
+    show_col_types = FALSE
+  ) |>
+    clean_names()
+
+  # ---- 1. Identify duplicates and dilutions from sample_id text ----
+  data <- data |>
+    mutate(
+      lab_dup = if_else(str_detect(sample_id, regex("dup", ignore_case = TRUE)),
+                         "DUP", NA_character_),
+      lab_dil = if_else(str_detect(sample_id, regex("dil", ignore_case = TRUE)),
+                         "DIL", NA_character_)
+    ) |>
+    filter(!sample_id %in% c("NO2", "NO3"))
+
+  # ---- 2. Assign sample_name from the rack map ----
+  # Joined on cup_number = vial_number, restricted to this file's batch.
+  rack_map_this_batch <- rack_map |>
+    filter(totals_run_number == batch_num) |>
+    dplyr::select(vial_number, sample_name, res_site, date_collected, rep, depth)
+
+  data <- data |>
+    left_join(rack_map_this_batch, by = c("cup_number" = "vial_number"))
+
+  unmatched <- data |>
+    filter(is.na(sample_name)) |>
+    mutate(file = file_path, batch = batch_num)
+
+  n_unmatched <- nrow(unmatched)
+  if (n_unmatched > 0) {
+    warning(paste0(n_unmatched, " row(s) in ", file_path,
+                    " did not match a rack map sample_name for batch ", batch_num,
+                    " (check cup_number/vial_number and batch alignment)."))
+  }
+
+  # ---- 3. Combined dup/dilution column ----
+  data <- data |>
+    mutate(
+      dup_dil_flag = case_when(
+        !is.na(lab_dup) & !is.na(lab_dil) ~ "DUP_DIL",
+        !is.na(lab_dup) ~ "DUP",
+        !is.na(lab_dil) ~ "DIL",
+        TRUE ~ NA_character_
+      )
+    )
+
+  # ---- Check for conc_ug_l_tn / conc_ug_l_tp conflicts BEFORE coalescing ----
+  conflicts <- find_coalesce_conflicts(data, group_col = c("sample_name", "lab_dup"), file_path = file_path) |> 
+    mutate(date = file_date, batch = batch_num)
+
+  # ---- 4. Coalesce reruns within this file ----
+  # Grouped by sample_name + lab_dup, so a dup and its non-dup counterpart
+  # are NEVER merged together -- they stay as two separate rows. A dilution
+  # merges with whichever group it belongs to (dilutions aren't flagged as dup).
+  # - flag_tn / flag_tp: combine ALL flags from both rows (space-separated), kept separate
+  # - cup_number: take the SMALLER of the two values
+  # - everything else (including conc_ug_l_tn / conc_ug_l_tp): first non-missing value
+  data_coalesced <- data |>
+    group_by(sample_name, lab_dup) |>
+    mutate(
+      flag_tn = combine_flags(flag_tn),
+      flag_tp = combine_flags(flag_tp),
+      cup_number = min_ignore_na(cup_number),
+      across(-any_of(c("flag_tn", "flag_tp", "cup_number", "sample_name", "lab_dup")), coalesce_first)
+    ) |>
+    slice(1) |>
+    ungroup() |>
+    mutate(date = file_date, batch = batch_num)
+
+  list(data = data_coalesced, conflicts = conflicts, unmatched = unmatched)
+}
+
+# ---- Loop over all files and combine ----
+files <- list.files(
+  path = folder_path,
+  pattern = "^TNTP Results_\\d{4}-\\d{2}-\\d{2}.*\\.csv$",
+  full.names = TRUE
+)
+
+if (length(files) == 0) {
+  warning("There are no csv files in the directory you listed")
+} else {
+  results <- map(files, process_one_file)
+
+  all_data      <- map_dfr(results, "data")
+  all_conflicts <- map_dfr(results, "conflicts")
+  all_unmatched <- map_dfr(results, "unmatched")
+
+# Normalize sample_name BEFORE batch preference filtering, so grouping matches
+# what coalesce_all_totals() will use downstream.
+all_data <- all_data |>
+  dplyr::mutate(sample_name = stringr::str_squish(sample_name))
+
+  # ---- Batch preference: prefer batch 6 over batch 9 when both exist ----
+  # for the same sample_name/lab_dup group ----
+  batch_pref_dropped <- all_data |>
+    group_by(sample_name, lab_dup) |>
+    filter(any(batch == 6) & any(batch == 9) & batch == 9) |>
+    ungroup()
+
+  if (nrow(batch_pref_dropped) > 0) {
+    warning(paste(nrow(batch_pref_dropped),
+                   "row(s) dropped from batch 9 in favor of batch 6",
+                   "(sample_name/lab_dup present in both batches)."))
+  }
+
+  all_data <- all_data |>
+    group_by(sample_name, lab_dup) |>
+    group_modify(function(g, key) {
+      if (any(g$batch == 6) & any(g$batch == 9)) {
+        g <- g |> filter(batch == 6)
+      }
+      g
+    }) |>
+    ungroup()
+
+  if (nrow(all_conflicts) > 0) {
+    warning(paste(nrow(all_conflicts),
+                   "conc_ug_l_tn/conc_ug_l_tp conflict(s) found during coalescing across files.",
+                   "Review the `all_conflicts` data frame -- the first non-missing value was kept by default."))
+  }
+
+  if (nrow(all_unmatched) > 0) {
+    warning(paste(nrow(all_unmatched),
+                   "row(s) across all files did not match a rack map sample_name.",
+                   "Review the `all_unmatched` data frame."))
+  }
+}
+
+all_conflicts
+
+all_unmatched <- all_unmatched |>
+  dplyr::select(batch, cup_number, sample_id, sample_type, date, notes_tn, notes_tp)
+
+coalesce_all_totals <- function(df, batch_col, date_col, dup_col = "dup_dil_flag", key_col = "sample_name") {
+  analytes <- names(df) |> stringr::str_subset("^conc_ug_l_") |> stringr::str_remove("^conc_ug_l_")
+  analyte_col_map <- lapply(analytes, function(a) {
+    cols <- names(df)[grepl(paste0("(^conc_ug_l_", a, "$)|(_", a, "$)"), names(df))]
+    names(cols) <- cols
+    cols
+  })
+  names(analyte_col_map) <- analytes
+  analyte_cols <- unique(unlist(analyte_col_map))
+  list_all_cols <- c(batch_col, date_col)
+  other_cols <- setdiff(names(df), c(key_col, dup_col, list_all_cols, analyte_cols))
+  is_dup <- function(x) x %in% c("DUP", "DUP_DIL", "DIL")
+
+  merged <- df |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(key_col))) |>
+    dplyr::group_modify(function(g, key) {
+      out <- tibble::tibble(.rows = 1)
+      conflict_rows <- list()
+
+      for (col in other_cols) {
+        vals <- g[[col]]
+        non_na <- vals[!is.na(vals)]
+        out[[col]] <- if (length(non_na) == 0) vals[NA_integer_] else non_na[1]
+      }
+
+      batch_vals <- unique(stats::na.omit(g[[batch_col]]))
+      out[[batch_col]] <- if (length(batch_vals) == 0) NA_character_ else paste(batch_vals, collapse = " | ")
+
+      date_vals <- unique(stats::na.omit(as.character(g[[date_col]])))
+      out[[date_col]] <- if (length(date_vals) == 0) NA_character_ else paste(date_vals, collapse = " | ")
+
+is_dil <- function(x) x %in% c("DIL")
+is_dup <- function(x) x %in% c("DUP")
+
+for (a in analytes) {
+  conc_col <- paste0("conc_ug_l_", a)
+  analyte_cols_this <- analyte_col_map[[a]]
+
+  primary_rows <- g[is.na(g[[dup_col]]), , drop = FALSE]
+  dil_rows     <- g[is_dil(g[[dup_col]]), , drop = FALSE]
+  dup_rows     <- g[is_dup(g[[dup_col]]), , drop = FALSE]
+
+  selected_row <- NULL
+  conflict <- FALSE
+  conflicting_values <- NULL
+
+  for (candidate_rows in list(primary_rows, dil_rows, dup_rows)) {
+    if (!is.null(selected_row)) break
+    if (conc_col %in% names(candidate_rows)) {
+      idx <- which(!is.na(candidate_rows[[conc_col]]))
+      if (length(idx) > 0) {
+        vals <- candidate_rows[[conc_col]][idx]
+        if (length(unique(vals)) > 1) { conflict <- TRUE; conflicting_values <- unique(vals) }
+        selected_row <- candidate_rows[idx[1], , drop = FALSE]
+      }
+    }
+  }
+
+  if (is.null(selected_row)) {
+    for (col in analyte_cols_this) {
+      out[[col]] <- if (is.numeric(g[[col]])) NA_real_
+        else if (is.integer(g[[col]])) NA_integer_
+        else if (inherits(g[[col]], "Date")) as.Date(NA)
+        else NA
+    }
+  } else {
+    for (col in analyte_cols_this) out[[col]] <- selected_row[[col]]
+  }
+
+  if (conflict) {
+    conflict_rows[[length(conflict_rows) + 1]] <- tibble::tibble(
+      analyte = a,
+      conflicting_values = paste(conflicting_values, collapse = " | "),
+      batches = paste(batch_vals, collapse = " | "),
+      dates = paste(date_vals, collapse = " | ")
+    )
+  }
+}
+
+      out$.conflicts <- list(if (length(conflict_rows) > 0) dplyr::bind_rows(conflict_rows) else tibble::tibble())
+      out
+    }) |>
+    dplyr::ungroup()
+
+  conflicts <- merged |>
+    dplyr::select(dplyr::all_of(key_col), .conflicts) |>
+    tidyr::unnest(.conflicts, keep_empty = TRUE) |>
+    dplyr::filter(!is.na(analyte))
+
+  merged <- merged |> dplyr::select(-.conflicts)
+
+  ordered_cols <- c(key_col, other_cols, batch_col, date_col, unname(unlist(analyte_col_map)))
+  ordered_cols <- ordered_cols[ordered_cols %in% names(merged)]
+  merged <- merged |> dplyr::select(dplyr::all_of(ordered_cols))
+
+  list(data = merged, conflicts = conflicts)
+}
+
+
+all_data_dup_coalesce1 <- all_data |>
+  rename(sample_id_totals = sample_id,
+         cup_number_totals = cup_number,
+         sample_type_totals = sample_type,
+         date_run_totals = date,
+         batch_totals = batch) |>
+  dplyr::mutate(
+    sample_name = stringr::str_squish(sample_name),
+    dup_dil_flag = dplyr::na_if(dup_dil_flag, "")
+  )
+  
+totals_result <- coalesce_all_totals(all_data_dup_coalesce1, batch_col = "batch_totals", date_col = "date_run_totals")
+totals_coalesced <- totals_result$data
+totals_conflicts <- totals_result$conflicts
+
+unique(totals_coalesced$res_site)
+
+sites <- c("B50", "B100", "B200", "B175", "C101", "C50", "C301", "C501", "C51", "F50", "F20", "F199.8", "F199.9", "F701", "F702", "F703", "F704", "F705", "F706", "F707", "F200", "B40", "F10.1", "F10.2", "F100", "F100.1", "F20.1", "F20.9", "F30.1", "F30.9", "F45.1")
+
+totals_data <- totals_coalesced |>
+  dplyr::select(sample_name, sample_id_totals, sample_type_totals, date_run_totals, batch_totals, cup_number_totals, conc_ug_l_tn, conc_ug_l_tp, notes_tn, notes_tp, flag_tn, flag_tp, res_site) |> 
+  mutate(sample_name = str_to_upper(sample_name)) |> 
+  filter(res_site %in% sites) |> 
+  filter(!is.na(conc_ug_l_tp) | !is.na(conc_ug_l_tn)) |> 
+  unique()
+
+howmany <- unique(totals_data$sample_name)
+
+test <- totals_data |> group_by(sample_name) %>%
+  filter(n() > 1) %>% 
+  ungroup() # there are still 2 samples that are not coalescing. I think this is because the cup numbers are not the same. Frustrating. 
+
+```
+
+Solubles. Copied from the totals, should be the same/similar, I hope!
+#totals has been edited, this may need to be updated
+
+```{r solubles}
+
+pacman::p_load(tidyverse, gsheet, arsenal, here, lubridate, janitor, readr, purrr, stringr, tidyr)
+
+folder_path <- paste0(here(), "/Results/Solubles")
+
+# URL for the rack map Google Sheet
+solubles_rackmap_url <- "https://docs.google.com/spreadsheets/d/1R19yrWLrRCrEkE3Dg2g1D9ZjAsW3C3KMBuD0R9jFMRQ/edit?usp=sharing"
+
+# ---- Load the rack map ONCE, outside the per-file loop ----
+rack_map <- gsheet::gsheet2tbl(solubles_rackmap_url) |>
+  clean_names()
+
+# ---- Helper functions ----
+
+# Returns the first non-missing value in a vector, or NA if all missing.
+coalesce_first <- function(x) {
+  non_na <- x[!is.na(x)]
+  if (length(non_na) == 0) NA else non_na[1]
+}
+
+# Concatenates all non-missing, DISTINCT values in a vector with a space
+# separator. Returns NA if all values are missing. If both rows have the
+# same flag (e.g. "7" and "7"), it appears only once in the result.
+combine_flags <- function(x) {
+  vals <- unique(x[!is.na(x)])
+  if (length(vals) == 0) return(NA_character_)
+  paste(vals, collapse = " ")
+}
+
+# Returns the smaller of the non-missing values in a vector, or NA if all missing.
+min_ignore_na <- function(x) {
+  vals <- x[!is.na(x)]
+  if (length(vals) == 0) return(NA_real_)
+  min(vals)
+}
+
+# Checks all conc_ug_l_* columns (auto-detected -- works for NH4/PO4/NO3,
+# or any other analyte set) for real conflicts (two different non-missing
+# values) within a sample_name + lab_dup group.
+find_coalesce_conflicts <- function(data, group_col = c("sample_name", "lab_dup"), file_path) {
+
+  conc_cols <- names(data)[str_detect(names(data), "^conc_ug_l_")]
+
+  data |>
+    # 1. Select the cup column along with the others
+    dplyr::select(all_of(group_col), any_of(c("cup_number", "cup")), all_of(conc_cols)) |>
+    mutate(across(everything(), as.character)) |>
+    # 2. Pivot ONLY the concentration columns (keep group cols and cup cols intact)
+    pivot_longer(
+      cols = all_of(conc_cols),
+      names_to = "column",
+      values_to = "value"
+    ) |>
+    filter(!is.na(value)) |>
+    # 3. Group ONLY by your original group columns and the concentration column name
+    group_by(across(all_of(group_col)), column) |>
+    # 4. Collapse the unique cup numbers inside summarise
+    summarise(
+      n_distinct_values = n_distinct(value),
+      conflicting_values = paste(unique(value), collapse = " | "),
+      cup_number = paste(unique(na.omit(pick(any_of(c("cup_number", "cup")))[[1]])), collapse = " | "),
+      .groups = "drop"
+    ) |>
+    filter(n_distinct_values > 1) |>
+    mutate(file = file_path)
+}
+
+process_one_file <- function(file_path) {
+
+  message("Reading: ", file_path)
+
+  # Extract the date and batch number from the filename
+  # (e.g. "Solubles Results_2025-08-21_LTREB_2025_batch1.csv")
+  file_date <- as.Date(str_extract(file_path, "\\d{4}-\\d{2}-\\d{2}"), format = "%Y-%m-%d")
+  batch_num <- as.numeric(str_extract(file_path, "(?<=batch)\\d+"))
+
+  data <- read_csv(
+    file_path,
+    col_types = cols(
+      Date        = col_character(),
+      clean_ids   = col_double(),
+      Cup.Number  = col_double(),
+      .default    = col_guess()
+    ),
+    show_col_types = FALSE
+  ) |>
+    clean_names() |>
+    # Force flag_* and notes_* columns to character. col_guess() can infer
+    # these as numeric in files where they only ever contain bare digits
+    # (or are blank), and as character in files with combined/non-numeric
+    # values (e.g. "7 3" from combine_flags()). That mismatch breaks
+    # map_dfr()/bind_rows() later when stacking files together.
+    mutate(
+      across(starts_with("flag_"), as.character),
+      across(starts_with("notes_"), as.character)
+    )
+
+  # ---- 1. Identify duplicates and dilutions from sample_id text ----
+  data <- data |>
+    mutate(
+      lab_dup = if_else(str_detect(sample_id, regex("dup", ignore_case = TRUE)),
+                         "DUP", NA_character_),
+      lab_dil = if_else(str_detect(sample_id, regex("dil", ignore_case = TRUE)),
+                         "DIL", NA_character_), 
+      lab_spk = if_else(str_detect(sample_id, regex("sp", ignore_case = TRUE)),
+                         "SPK", NA_character_)
+    ) |>
+    filter(!sample_id %in% c("NO2", "NO3"))
+
+  # ---- 2. Assign sample_name from the rack map ----
+  # Joined on cup_number = hole_position, restricted to this file's batch.
+  rack_map_this_batch <- rack_map |>
+    filter(lachat_run_number == batch_num) |>
+    dplyr::select(hole_position, sample_name, res_site, date_collected, rep, depth)
+
+  data <- data |>
+    left_join(rack_map_this_batch, by = c("cup_number" = "hole_position"))
+
+  unmatched <- data |>
+    filter(is.na(sample_name)) |>
+    mutate(file = file_path, batch = batch_num)
+
+  n_unmatched <- nrow(unmatched)
+  if (n_unmatched > 0) {
+    warning(paste0(n_unmatched, " row(s) in ", file_path,
+                    " did not match a rack map sample_name for batch ", batch_num,
+                    " (check cup_number/hole_position and batch alignment)."))
+  }
+
+  # ---- 3. Combined dup/dilution column ----
+  data <- data |>
+    mutate(
+      dup_dil_flag = case_when(
+        !is.na(lab_dup) & !is.na(lab_dil) ~ "DUP_DIL",
+        !is.na(lab_dup) ~ "DUP",
+        !is.na(lab_dil) ~ "DIL",
+        TRUE ~ NA_character_
+      )
+    )
+
+  # ---- Check for conc_ug_l_* conflicts BEFORE coalescing ----
+  # NOTE: batch is included here via mutate() right below.
+  conflicts <- find_coalesce_conflicts(data, group_col = c("sample_name", "lab_dup", "lab_spk"), file_path = file_path) |>
+    mutate(date = file_date, batch = batch_num)
+
+  # ---- 4. Coalesce reruns within this file ----
+  # Grouped by sample_name + lab_dup, so a dup and its non-dup counterpart
+  # are NEVER merged together -- they stay as two separate rows. A dilution
+  # merges with whichever group it belongs to (dilutions aren't flagged as dup).
+  # - flag_* (flag_nh4/flag_po4/flag_no3): combine ALL flags from both rows
+  #   (space-separated, de-duplicated), each kept separate
+  # - cup_number: take the SMALLER of the two values
+  # - everything else (including conc_ug_l_*): first non-missing value
+  # data_coalesced <- data |>
+
+data_coalesced <- data |>
+  group_by(sample_name, lab_dup) |>
+  mutate(
+    across(starts_with("flag_"), function(x) {
+      data_col <- stringr::str_remove(cur_column(), "^flag_")
+      
+      # if there's no matching data column, fall back to old behavior
+      if (!data_col %in% names(pick(everything()))) {
+        return(combine_flags(x))
+      }
+      
+      data_vals <- pick(all_of(data_col))[[1]]
+      valid <- !is.na(data_vals)
+      
+      if (sum(valid) == 0) {
+        NA_character_          # neither row has data -> flag doesn't matter
+      } else if (sum(valid) == 1) {
+        x[valid]               # only one row has data -> keep just that flag
+      } else {
+        combine_flags(x[valid]) # both have data -> combine as before
+      }
+    }),
+    cup_number = min_ignore_na(cup_number),
+    across(
+      -c(starts_with("flag_"), any_of(c("cup_number", "sample_name", "lab_dup"))),
+      coalesce_first
+    )
+  ) |>
+  slice(1) |>
+  ungroup() |>
+  mutate(date = file_date, batch = batch_num)
+
+combine_if_data <- function(x, data_vals, combine_fn) {
+  valid <- !is.na(data_vals)
+  if (sum(valid) == 0) {
+    NA_character_
+  } else if (sum(valid) == 1) {
+    x[valid]
+  } else {
+    combine_fn(x[valid])
+  }
+}
+
+combine_notes <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) return(NA_character_)
+  paste(x, collapse = "|")
+}
+
+data_coalesced <- data |>
+  group_by(sample_name, lab_dup) |>
+  mutate(
+    across(
+      c(starts_with("flag_"), starts_with("notes_")),
+      function(x) {
+        analyte <- stringr::str_remove(cur_column(), "^(flag_|notes_)")
+        data_col <- paste0("conc_ug_l_", analyte)
+        
+        data_vals <- pick(everything())[[data_col]]   # <-- fixed
+        
+        combine_fn <- if (stringr::str_starts(cur_column(), "flag_")) {
+          combine_flags
+        } else {
+          combine_notes
+        }
+        
+        combine_if_data(x, data_vals, combine_fn)
+      }
+    ),
+    cup_number = min_ignore_na(cup_number),
+    across(
+      -c(starts_with("flag_"), starts_with("notes_"),
+         any_of(c("cup_number", "sample_name", "lab_dup"))),
+      coalesce_first
+    )
+  ) |>
+  slice(1) |>
+  ungroup() |>
+  mutate(date = file_date, batch = batch_num)
+#possible issues with this, trying a new option
+  #   group_by(sample_name, lab_dup) |>
+  #   mutate(
+  #     across(starts_with("flag_"), combine_flags),
+  #     cup_number = min_ignore_na(cup_number),
+  #     across(
+  #       -c(starts_with("flag_"), any_of(c("cup_number", "sample_name", "lab_dup"))),
+  #       coalesce_first
+  #     )
+  #   ) |>
+  #   slice(1) |>
+  #   ungroup() |>
+  #   mutate(date = file_date, batch = batch_num)
+
+  list(data = data_coalesced, conflicts = conflicts, unmatched = unmatched)
+}
+
+# ---- Loop over all files and combine ----
+# (This was missing -- process_one_file() was defined but never actually run
+# across your files, so all_data/all_conflicts/all_unmatched didn't exist yet.)
+files <- list.files(
+  path = folder_path,
+  pattern = "^Solubles Results_\\d{4}-\\d{2}-\\d{2}.*\\.csv$",
+  full.names = TRUE
+)
+
+if (length(files) == 0) {
+  warning("There are no csv files in the directory you listed")
+} else {
+  results <- map(files, process_one_file)
+
+  all_data      <- map_dfr(results, "data")
+  all_conflicts <- map_dfr(results, "conflicts")
+  all_unmatched <- map_dfr(results, "unmatched")
+
+  if (nrow(all_conflicts) > 0) {
+    warning(paste(nrow(all_conflicts),
+                   "conflict(s) found in concentration values during coalescing across files.",
+                   "Review `all_conflicts` -- the first non-missing value was kept by default."))
+  }
+
+  if (nrow(all_unmatched) > 0) {
+    warning(paste(nrow(all_unmatched),
+                   "row(s) across all files did not match a rack map sample_name.",
+                   "Review `all_unmatched`."))
+  }
+}
+
+# ---- View everything ----
+# View(all_data)
+
+# NOTE: fixed from `unmatched` (didn't exist outside a single file's call)
+# to `all_unmatched` (combined across all files). Also changed notes_tn/notes_tp
+# (Totals column names) to notes_nh4/notes_po4/notes_no3 -- let me know if
+# these aren't the right Solubles column names.
+all_unmatched <- all_unmatched |>
+  dplyr::select(batch, cup_number, sample_id, sample_type, date, notes_nh4, notes_po4, notes_no3)
+# View(all_unmatched)
+
+# NOTE: fixed from `conflicts` (single-file only) to `all_conflicts` (combined)
+# View(all_conflicts |>
+#        dplyr::select(batch, cup_number, sample_name, lab_dup, column, n_distinct_values, conflicting_values, file))
+
+#now keep only the sites that we want
+unique(all_data$res_site)
+sites <- c("B50", "B100", "B200", "B175", "C101", "C50", "C301", "C501", "C51", "F50", "F20", "F199.8", "F199.9", "F701", "F702", "F703", "F704", "F705", "F706", "F707", "F200", "F100")
+
+dataforcoalesce <- all_data |> 
+  rename(sample_id_solubles = sample_id, 
+         cup_number_solubles = cup_number, 
+         sample_type_solubles = sample_type, 
+         date_run_solubles = date, 
+         batch_solubles = batch) 
+
+coalesce_all_solubles <- function(df, batch_col, date_col, dup_col = "dup_dil_flag", key_col = "sample_name") {
+  analytes <- names(df) |> stringr::str_subset("^conc_ug_l_") |> stringr::str_remove("^conc_ug_l_")
+  analyte_col_map <- lapply(analytes, function(a) {
+    cols <- names(df)[grepl(paste0("(^conc_ug_l_", a, "$)|(_", a, "$)"), names(df))]
+    names(cols) <- cols
+    cols
+  })
+  names(analyte_col_map) <- analytes
+  analyte_cols <- unique(unlist(analyte_col_map))
+  list_all_cols <- c(batch_col, date_col)
+  other_cols <- setdiff(names(df), c(key_col, dup_col, list_all_cols, analyte_cols))
+  is_dup <- function(x) x %in% c("DUP", "DUP_DIL", "DIL")
+
+  merged <- df |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(key_col))) |>
+    dplyr::group_modify(function(g, key) {
+      out <- tibble::tibble(.rows = 1)
+      conflict_rows <- list()
+
+      for (col in other_cols) {
+        vals <- g[[col]]
+        non_na <- vals[!is.na(vals)]
+        out[[col]] <- if (length(non_na) == 0) vals[NA_integer_] else non_na[1]
+      }
+
+      batch_vals <- unique(stats::na.omit(g[[batch_col]]))
+      out[[batch_col]] <- if (length(batch_vals) == 0) NA_character_ else paste(batch_vals, collapse = " | ")
+
+      date_vals <- unique(stats::na.omit(as.character(g[[date_col]])))
+      out[[date_col]] <- if (length(date_vals) == 0) NA_character_ else paste(date_vals, collapse = " | ")
+
+      for (a in analytes) {
+        conc_col <- paste0("conc_ug_l_", a)
+        analyte_cols_this <- analyte_col_map[[a]]
+        primary_rows <- g[is.na(g[[dup_col]]), , drop = FALSE]
+        dup_rows <- g[is_dup(g[[dup_col]]), , drop = FALSE]
+        selected_row <- NULL
+        conflict <- FALSE
+        conflicting_values <- NULL
+
+        if (conc_col %in% names(primary_rows)) {
+          idx <- which(!is.na(primary_rows[[conc_col]]))
+          if (length(idx) > 0) {
+            vals <- primary_rows[[conc_col]][idx]
+            if (length(unique(vals)) > 1) { conflict <- TRUE; conflicting_values <- unique(vals) }
+            selected_row <- primary_rows[idx[1], , drop = FALSE]
+          }
+        }
+        if (is.null(selected_row) && conc_col %in% names(dup_rows)) {
+          idx <- which(!is.na(dup_rows[[conc_col]]))
+          if (length(idx) > 0) {
+            vals <- dup_rows[[conc_col]][idx]
+            if (length(unique(vals)) > 1) { conflict <- TRUE; conflicting_values <- unique(vals) }
+            selected_row <- dup_rows[idx[1], , drop = FALSE]
+          }
+        }
+
+        if (is.null(selected_row)) {
+          for (col in analyte_cols_this) {
+            out[[col]] <- if (is.numeric(g[[col]])) NA_real_
+              else if (is.integer(g[[col]])) NA_integer_
+              else if (inherits(g[[col]], "Date")) as.Date(NA)
+              else NA
+          }
+        } else {
+          for (col in analyte_cols_this) out[[col]] <- selected_row[[col]]
+        }
+
+        if (conflict) {
+          conflict_rows[[length(conflict_rows) + 1]] <- tibble::tibble(
+            analyte = a,
+            conflicting_values = paste(conflicting_values, collapse = " | "),
+            batches = paste(batch_vals, collapse = " | "),
+            dates = paste(date_vals, collapse = " | ")
+          )
+        }
+      }
+
+      out$.conflicts <- list(if (length(conflict_rows) > 0) dplyr::bind_rows(conflict_rows) else tibble::tibble())
+      out
+    }) |>
+    dplyr::ungroup()
+
+  conflicts <- merged |>
+    dplyr::select(dplyr::all_of(key_col), .conflicts) |>
+    tidyr::unnest(.conflicts, keep_empty = TRUE) |>
+    dplyr::filter(!is.na(analyte))
+
+  merged <- merged |> dplyr::select(-.conflicts)
+
+  ordered_cols <- c(key_col, other_cols, batch_col, date_col, unname(unlist(analyte_col_map)))
+  ordered_cols <- ordered_cols[ordered_cols %in% names(merged)]
+  merged <- merged |> dplyr::select(dplyr::all_of(ordered_cols))
+
+  list(data = merged, conflicts = conflicts)
+}
+
+
+sol_result <- coalesce_all_solubles(
+  dataforcoalesce,
+  batch_col = "batch_solubles",
+  date_col  = "date_run_solubles")
+
+sol_coalesced <- sol_result$data
+sol_conflicts <- sol_result$conflicts #I AM HERE! I need to go through all the duplicates in the solubles now. Totals is very close. 
+
+solubles_data <- sol_coalesced |> 
+  dplyr::select(sample_name, sample_id_solubles, sample_type_solubles, date_run_solubles, batch_solubles, cup_number_solubles, conc_ug_l_po4, conc_ug_l_nh4, conc_ug_l_no3, conc_ug_l_no3, flag_po4, flag_nh4, flag_no3, flag_no3, notes_nh4, notes_po4, notes_no3, res_site) |> 
+  mutate(sample_name = str_to_upper(sample_name)) |> 
+  filter(res_site %in% sites) |> 
+  unique() |>  #make sure there aren't exact duplicates
+  filter(!is.na(conc_ug_l_no3) | !is.na(conc_ug_l_nh4) | !is.na(conc_ug_l_po4)) #make sure there aren't any samples listed with no data available whatsoever
+
+```
+
+Time to bring the data together. Left join the totals data with the
+solubles data based on sample ID.
+
+```{r}
+solubles_data <- solubles_data |> mutate(sample_name = stringr::str_squish(sample_name))
+totals_data <- totals_data |> mutate(sample_name = stringr::str_squish(sample_name))
+
+# write.csv(solubles_data, "~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/solubles_runsfor2025.csv")
+# 
+# write.csv(totals_data, "~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/totals_runsfor2025.csv")
+
+#Saving this for a 3rd script! Leaving code here for now. 
+totsol <- full_join(solubles_data, totals_data, by = c("sample_name"))
+totsol_anti <- anti_join(solubles_data, totals_data, by = c("sample_name"))
+
+totsol_anti2 <- anti_join(totals_data, solubles_data, by = c("sample_name")) |> 
+  separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  filter(res_site != "F100.1", 
+         batch_totals != "0", 
+         depth != "0.25")
+```
+
+There are too many matches, I'm going to work through by matching each
+individually with the nutrients and metals times sheet
+
+```{r}
+#LTREB datetimes
+datetimes_gsheet <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit?gid=0#gid=0")
+
+ltreb_datetimes <- datetimes_gsheet |> 
+  mutate(Site = as.character(Site)) |> 
+  select(1:11) |> 
+  clean_names() |> 
+  filter(!is.na(totals_tntp)|!is.na(solubles)) |> 
+  select(1:6) |> 
+  mutate(res_site = paste0(str_sub(reservoir, 1, 1), site), 
+         depth = as.numeric(depth_m), 
+         date = ymd(date), 
+         time2 = ifelse(is.na(time), hms(hours = 12), time)) |> 
+  mutate(time = hms::as_hms(time2)) |> 
+   filter(date > "2024-01-01") |> 
+  filter(date < "2026-04-01") |> 
+select(-reservoir, -site, -depth_m, -time2)
+  
+
+#now set up totals so we can match to this sheet. Need to separate based on reservoir, site, date, depth. rep is irrelevant for now. 
+
+try <- totals_data |> 
+separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  mutate(depth = as.numeric(depth), 
+         date = dmy(date))
+
+
+# check to see which samples did not join up!
+eek <- full_join(ltreb_datetimes, try)
+
+anti_totals <- anti_join(ltreb_datetimes, try) |> 
+filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01") |> #excluding anything that is not from 2025
+filter(depth != 0.25) #DXE's samples are not included on the LTREB samples collected sheet. This may be something that we want to fix in the future but I don't want to deal with it now. 
+
+#see which samples did not match that existed in samples run! There are 2 that could be problems, everything else run in batch 0 by Dexter, hoping those got fixed already! 
+anti2_totals <- anti_join(try, ltreb_datetimes)|> 
+filter(depth != 0.25) #|> 
+
+
+# filter(res_site != "F100.1") |> 
+# filter(res_site != "F20")
+
+#this is to set up a sheet that has all of the days that we were in the field!
+help <- ltreb_datetimes |> select(res_site, date) |> 
+  unique()
+
+#now set up solubles so we can match to this sheet. Need to separate based on reservoir, site, date, depth. rep is irrelevant for now. 
+
+try_sol <- solubles_data |> 
+separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  mutate(depth = as.numeric(depth), 
+         date = dmy(date)) |> 
+mutate(sample_name = stringr::str_squish(sample_name))
+
+# ltreb_datetimes <- ltreb_datetimes |> 
+# mutate(sample_name = stringr::str_squish(sample_name))
+
+eek_sol <- full_join(ltreb_datetimes, try_sol)
+anti_sol <- anti_join(ltreb_datetimes, try_sol, by = c("date", "res_site", "depth")) |> filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01") |> 
+filter(res_site != "F100.1") |> 
+filter(date != "2025-04-16") |> 
+filter(date != "2025-02-26") #DWH ran these already
+
+
+anti2_sol <- anti_join(try_sol, ltreb_datetimes, by = c("date", "res_site", "depth"))
+
+#Dexter has already published samples for CCR 50 26feb25 and 16apr25 in the 2024 rendition
+```
+
+## TICTOC
+
+Combine TICTOC
+
+```{r}
+pacman::p_load(tidyverse, gsheet, arsenal, here, lubridate, janitor, readr, purrr, stringr, tidyr, readxl)
+select <- dplyr::select
+folder_path <- paste0(here(), "/Results/TICTOC")
+
+# URL for the rack map Google Sheet
+tictoc_rackmap_url <- "https://docs.google.com/spreadsheets/d/1xqC1nvlrWYKvvtlIm-Pb2Rp0P-KBXipoDgoRb49pVdo/edit?usp=sharing"
+
+# ---- Load the rack map ONCE, outside the per-file loop ----
+# ASSUMPTION: after clean_names(), the rack map has columns `vial_number`,
+# `batch`, and `sample_name`. If your actual sheet uses different column
+# names (e.g. "Vial #", "Batch #"), update the names referenced below.
+rack_map <- gsheet::gsheet2tbl(tictoc_rackmap_url) |>
+  clean_names()
+
+# ---- Helper functions ----
+
+# Returns the first non-missing value in a vector, or NA if all missing.
+fill_na_by_sample <- function(data, 
+                               sample_col = "sample_name",
+                               value_cols = c("tic_mean_of_2_reps", "tc_mean_of_2_reps", 
+                                              "toc_mean_of_2_reps", "t_nb_mean_of_2_reps")) {
+  data |>
+    group_by(across(all_of(sample_col))) |>
+    mutate(
+      across(all_of(value_cols), ~ if_else(is.na(.x), coalesce_first(.x), .x))
+    ) |>
+    ungroup()
+}
+
+coalesce_first <- function(x) {
+  non_na <- x[!is.na(x)]
+  if (length(non_na) == 0) NA else non_na[1]
+}
+# # Concatenates all non-missing, DISTINCT values in a vector with a space
+# # separator. Returns NA if all values are missing. If both rows have the
+# # same flag (e.g. "7" and "7"), it appears only once in the result.
+# combine_flags <- function(x) {
+#   vals <- unique(x[!is.na(x)])
+#   if (length(vals) == 0) return(NA_character_)
+#   paste(vals, collapse = " ")
+# }
+# 
+# # Returns the smaller of the non-missing values in a vector, or NA if all missing.
+# min_ignore_na <- function(x) {
+#   vals <- x[!is.na(x)]
+#   if (length(vals) == 0) return(NA_real_)
+#   min(vals)
+# }
+
+# Checks ONLY conc_ug_l_tn and conc_ug_l_tp for real conflicts (two
+# different non-missing values) within a sample_name + lab_dup group.
+find_coalesce_conflicts <- function(data, 
+                                     group_col = c("sample_name", "dup_spike"), 
+                                     value_cols = c("tic_mean_of_2_reps", "tc_mean_of_2_reps", 
+                                                    "toc_mean_of_2_reps", "t_nb_mean_of_2_reps"),
+                                     file_path) {
+  data |>
+    # 1. Select the cup column along with the others
+    dplyr::select(all_of(group_col), any_of(c("hole_position")), all_of(value_cols), date_started) |>
+    mutate(across(everything(), as.character)) |>
+    # 2. Pivot ONLY the concentration columns (keep group cols and cup cols intact)
+    pivot_longer(
+      cols = all_of(value_cols), 
+      names_to = "column", 
+      values_to = "value"
+    ) |>
+    filter(!is.na(value)) |>
+    # 3. Group ONLY by your original group columns and the concentration column name
+    group_by(across(all_of(group_col)), column) |>
+    # 4. Collapse the unique cup numbers inside summarise
+    summarise(
+      n_distinct_values = n_distinct(value),
+      conflicting_values = paste(unique(value), collapse = " | "),
+      # Paste all unique cup numbers associated with this group/conflict
+      cup_number = paste(unique(na.omit(pick(any_of(c("hole_position", "hole_pos", "cup")))[[1]])), collapse = " | "),
+      date_started = paste(unique(na.omit(date_started)), collapse = " | "),
+      .groups = "drop"
+    ) |>
+    filter(n_distinct_values > 1) |>
+    mutate(file = file_path)
+}
+
+process_one_file <- function(file_path) {
+
+  message("Reading: ", file_path)
+
+  # Extract the batch number from the filename
+  #date is not included because there are multiple dates in each batch
+  # (e.g. "Results TIC TC 2025 Batch 1.csv")
+  # file_date <- as.Date(str_extract(file_path, "\\d{4}-\\d{2}-\\d{2}"), format = "%Y-%m-%d")
+batch_num <- as.numeric(str_extract(file_path, "(?i)(?<=Batch\\s)\\d+"))
+
+  data1 <- readxl::read_excel(
+    file_path,
+    sheet = 1
+  ) |>
+  clean_names() |>
+  mutate(
+    date_started              = as.character(date_started),
+    lachat_run_number         = as.numeric(lachat_run_number),
+    tic_toc_run_number        = as.numeric(tic_toc_run_number),
+    hole_position              = as.character(hole_position),
+    sample_number              = as.character(sample_number),
+    tic_mean_of_2_reps         = as.numeric(tic_mean_of_2_reps),
+    tc_mean_of_2_reps          = as.numeric(tc_mean_of_2_reps),
+    toc_mean_of_2_reps         = as.numeric(toc_mean_of_2_reps),
+    t_nb_mean_of_2_reps        = as.numeric(t_nb_mean_of_2_reps),
+    analyst_code                = as.character(analyst_code),
+    notes                       = as.character(notes)
+  )
+  
+  #0a. remove extraneous rows
+data <- data1 |> 
+  filter(if_any(c(tic_mean_of_2_reps, tc_mean_of_2_reps, toc_mean_of_2_reps, t_nb_mean_of_2_reps), ~ !is.na(.x))) |> 
+  mutate(hole_position = as.numeric(hole_position), 
+         date_started = ymd(date_started), 
+         lachat_run_number = as.numeric(lachat_run_number), 
+         tictoc_run_number = as.numeric(tic_toc_run_number))
+#merging on hole position, not sample number!
+
+#commented out so that we can link to sample names first in case the dup or spike came from somewhere other than 5/10/15/20 
+
+ # ---- 1. Identify duplicates and dilutions from sample_id text ---- 
+  # data <- data |>
+  #   mutate(
+  #     lab_dup = if_else(str_detect(sample_id, regex("dup", ignore_case = TRUE)),
+  #                        "DUP", NA_character_),
+  #     lab_dil = if_else(str_detect(sample_id, regex("dil", ignore_case = TRUE)),
+  #                        "DIL", NA_character_)
+  #   ) |>
+  #   filter(!sample_id %in% c("NO2", "NO3"))
+
+  # ---- 2. Assign sample_name from the rack map ----
+  # Joined on cup_number = vial_number, restricted to this file's batch.
+
+  rack_map_this_batch <- rack_map |>
+    filter(lachat_run_number == batch_num)  |>
+  mutate(hole_position = as.numeric(hole_position), 
+         date_started = mdy(date_started), 
+         lachat_run_number = as.numeric(lachat_run_number), 
+         tictoc_run_number = as.numeric(tictoc_run_number))
+    # dplyr::select(vial_number, sample_name, res_site, date_collected, rep, depth)
+
+  data2 <- full_join(rack_map_this_batch, data, by = c("hole_position" = "hole_position", "date_started" = "date_started", "lachat_run_number" = "lachat_run_number", "tictoc_run_number" = "tictoc_run_number"))
+
+  unmatched <- data2 |>
+    filter(is.na(sample_number.y)) |>
+    mutate(file = file_path, batch = batch_num)
+
+  n_unmatched <- nrow(unmatched)
+  if (n_unmatched > 0) {
+    warning(paste0(n_unmatched, " row(s) in ", file_path,
+                    " did not match a rack map sample_name for batch ", batch_num,
+                    " (check cup_number/vial_number and batch alignment)."))
+  }
+
+  # ---- 3. Combined dup/dilution column ----
+  data <- data2 |>
+    mutate(
+      dup_spk_flag = case_when(
+        dup_spike == "duplicate" ~ "DUP",
+        dup_spike == "spike" ~ "SPK",
+        TRUE ~ NA_character_
+      )
+    )
+
+  # ---- Check for conc_ug_l_tn / conc_ug_l_tp conflicts BEFORE coalescing ----
+  conflicts <- find_coalesce_conflicts(data, group_col = c("sample_name", "dup_spike"), file_path = file_path) 
+
+  # ---- 4. Coalesce reruns within this file ----
+  # Grouped by sample_name + lab_dup, so a dup and its non-dup counterpart
+  # are NEVER merged together -- they stay as two separate rows. A dilution
+  # merges with whichever group it belongs to (dilutions aren't flagged as dup).
+  # - flag_tn / flag_tp: combine ALL flags from both rows (space-separated), kept separate
+  # - cup_number: take the SMALLER of the two values
+  # - everything else (including conc_ug_l_tn / conc_ug_l_tp): first non-missing value
+ data_coalesced <- data |>
+    fill_na_by_sample() |> #this gets data to all the right places, but now it's duplicated
+ distinct(sample_name, tic_mean_of_2_reps, tc_mean_of_2_reps, 
+           toc_mean_of_2_reps, t_nb_mean_of_2_reps, .keep_all = TRUE)
+    
+  # group_by(sample_name, dup_spike) |>
+  # mutate(
+  #   notes = combine_flags(notes.y),
+  #   across(-any_of(c("notes", "cup_number", "sample_name", "dup_spike")), coalesce_first)
+  # ) |>
+  # slice(1) |>
+  # ungroup()
+
+  list(data = data_coalesced, conflicts = conflicts, unmatched = unmatched)
+}
+
+#process_one_file("~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/TICTOC/Results TIC TC 2025 Batch 1.xlsx")
+
+# ---- Loop over all files and combine ----
+files <- list.files(
+  path = folder_path,
+  pattern = "^Results TIC TC \\d{4} Batch \\d+\\.xlsx$",
+  full.names = TRUE
+)
+
+if (length(files) == 0) {
+  warning("There are no csv files in the directory you listed")
+} else {
+  results <- map(files, process_one_file)
+
+  all_data      <- map_dfr(results, "data")
+  all_conflicts_TICTOC <- map_dfr(results, "conflicts")
+  all_unmatched <- map_dfr(results, "unmatched")
+
+  if (nrow(all_conflicts_TICTOC) > 0) {
+    warning(paste(nrow(all_conflicts_TICTOC),
+                   "conc_ug_l_tn/conc_ug_l_tp conflict(s) found during coalescing across files.",
+                   "Review the `all_conflicts` data frame -- the first non-missing value was kept by default."))
+  }
+
+  if (nrow(all_unmatched) > 0) {
+    warning(paste(nrow(all_unmatched),
+                   "row(s) across all files did not match a rack map sample_name.",
+                   "Review the `all_unmatched` data frame."))
+  }
+}
+
+all_conflicts_TICTOC
+
+batch1_TICTOC <- all_data |> filter(lachat_run_number == 1)
+
+# all_unmatched <- all_unmatched |>
+#   dplyr::select(batch, hole_position, sample_name, date_started, notes.x, notes.y)
+
+#removed the coalesce step because there shouldn't be any need to coalesce TICTOC data
+
+
+sites <- c("B50", "B100", "B200", "B175", "C101", "C50", "C301", "C501", "C51", "F50", "F20", "F199.8", "F199.9", "F701", "F702", "F703", "F704", "F705", "F706", "F707", "F200", "B40", "F10.1", "F10.2", "F100", "F20.1", "F20.9", "F30.1", "F30.9", "F45.1")
+
+tictoc_data_problems <- all_data |> 
+  filter(is.na(dup_spike)) |> 
+  filter(!is.na(sample_name)) |> 
+  add_count(sample_name) |> 
+   filter(n > 1)
+ 
+ tictoc_data <- all_data |> 
+  filter(is.na(dup_spike)) |> 
+  filter(!is.na(sample_name))
+
+howmany <- unique(tictoc_data$sample_name)
+
+test <- tictoc_data |> group_by(sample_name) %>%
+  filter(n() > 1) %>% 
+  ungroup() # there is one sample that was run twice. Really not sure how this happened. 
+```
+
+## Compile all chem data
+
+Compile totals, solubles and DOC together.
+
+```{r}
+pacman::p_load(tidyverse, gsheet, arsenal, here, lubridate, janitor, readr, purrr, stringr, tidyr)
+select <- dplyr::select
+```
+
+```{r}
+solubles <- read.csv("~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/solubles_runsfor2025.csv")
+
+totals <- read.csv("~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/totals_runsfor2025.csv")
+
+tictoc <- read.csv("~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/tictoc_runsfor2025.csv")
+```
+
+This was cleaned up individually prior to coming into this .qmd. A
+version of this code exists in the TICTOC and Lachat compilation .qmds.
+Keeping a slightly more in depth version here to make sure everything
+still looks ok.
+
+```{r}
+#LTREB datetimes
+datetimes_gsheet <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit?gid=0#gid=0")
+
+ltreb_datetimes <- datetimes_gsheet |> 
+  mutate(Site = as.character(Site)) |> 
+  select(1:11) |> 
+  clean_names() |> 
+  filter(!is.na(totals_tntp)|!is.na(solubles)) |> 
+  select(1:7) |> 
+  mutate(res_site = paste0(str_sub(reservoir, 1, 1), site), 
+         depth = as.numeric(depth_m), 
+         date = ymd(date), 
+         time2 = ifelse(is.na(time), hms(hours = 12), time)) |> 
+  mutate(time = hms::as_hms(time2)) |> 
+   filter(date > "2024-01-01") |> 
+  filter(date < "2026-04-01") |> 
+select(-reservoir, -site, -depth_m, -time2)
+  
+
+#now set up totals so we can match to this sheet. Need to separate based on reservoir, site, date, depth. rep is irrelevant for now. 
+
+totals_data <- totals |> 
+separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  mutate(depth = as.numeric(depth), 
+         date = dmy(date))
+
+
+# check to see which samples did not join up!
+eek <- full_join(ltreb_datetimes, totals_data)
+
+anti_totals <- anti_join(ltreb_datetimes, totals_data) |> 
+filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01") |> #excluding anything that is not from 2025
+filter(depth != 0.25) #DXE's samples are not included on the LTREB samples collected sheet. This may be something that we want to fix in the future but I don't want to deal with it now. 
+
+#see which samples did not match that existed in samples run! There are 2 that could be problems, everything else run in batch 0 by Dexter, hoping those got fixed already! 
+anti2_totals <- anti_join(totals_data, ltreb_datetimes)|> 
+filter(depth != 0.25) #|> 
+
+
+#now set up solubles so we can match to this sheet. Need to separate based on reservoir, site, date, depth. rep is irrelevant for now. 
+
+try_sol <- solubles |> 
+separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  mutate(depth = as.numeric(depth), 
+         date = dmy(date)) |> 
+mutate(sample_name = stringr::str_squish(sample_name))
+
+# ltreb_datetimes <- ltreb_datetimes |> 
+# mutate(sample_name = stringr::str_squish(sample_name))
+
+eek_sol <- full_join(ltreb_datetimes, try_sol)
+anti_sol <- anti_join(ltreb_datetimes, try_sol, by = c("date", "res_site", "depth")) |> filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01") |> 
+filter(res_site != "F100.1") |> 
+filter(date != "2025-04-16") |> 
+filter(date != "2025-02-26") #DWH ran these already
+
+
+anti2_sol <- anti_join(try_sol, ltreb_datetimes, by = c("date", "res_site", "depth"))
+
+#Dexter has already published samples for CCR 50 26feb25 and 16apr25 in the 2024 rendition
+
+#And now TICTOC
+try_tictoc <- tictoc |> 
+separate(sample_name, into = c("res_site", "date", "depth", "rep"),
+           sep = "\\s+", remove = FALSE) |> 
+  mutate(depth = as.numeric(depth), 
+         date = dmy(date))
+
+eek_tictoc <- full_join(ltreb_datetimes, try_tictoc)
+anti_tictoc_nuts <- anti_join(ltreb_datetimes, try_tictoc) |> 
+filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01")
+  
+
+anti_tictoc_run <- anti_join(try_tictoc, ltreb_datetimes) |> 
+filter(date > "2024-12-31") |> 
+filter(date < "2026-01-01") |> 
+  select(c(sample_name, lachat_run_number, tictoc_run_number, hole_position, date_started))
+```
+
+\`\`\`{r} tictoc_join \<- try_tictoc \|\> select(c(sample_name,
+res_site, date, depth, rep, lachat_run_number, tictoc_run_number,
+tic_mean_of_2_reps, tc_mean_of_2_reps, toc_mean_of_2_reps,
+t_nb_mean_of_2_reps, notes.y)) \|\> mutate(sample_name =
+stringr::str_squish(sample_name))
+
+sol_join \<- try_sol \|\> select(c(sample_name, res_site, date, depth,
+rep, batch_solubles, conc_ug_l_po4, flag_po4, conc_ug_l_nh4, flag_nh4,
+conc_ug_l_no3, flag_no3)) \|\> mutate(sample_name =
+stringr::str_squish(sample_name))
+
+totals_join \<- totals_data \|\> select(c(sample_name, res_site, date,
+depth, rep, batch_totals, conc_ug_l_tn, flag_tn, notes_tn, conc_ug_l_tp,
+flag_tp, notes_tp))
+
+all_sol \<- full_join(tictoc_join, sol_join)
+
+all_join \<- ltreb_datetimes \|\> full_join(all_sol) \|\>
+full_join(totals_join) \|\> filter(!is.na(sample_name)) \|\>
+mutate(Flag_DateTime = 0, Flag_TP_ugL = 0, Flag_TN_ugL = 0,
+Flag_NO3NO2_ugL = 0, Flag_SRP_ugL = 0, Flag_NH4_ugL = 0, Flag_DOC_mgL =
+0, Flag_DIC_mgL = 0, Flag_DC_mgL =0, Flag_DN_mgL = 0, time2 =
+ifelse(is.na(time), hms::hms(hours = 12), time), time =
+hms::as_hms(time2), DateTime = paste(date, time), Reservoir = case_when(
+grepl("\^F", res_site) \~ "FCR", grepl("\^B", res_site) \~ "BVR",
+grepl("\^C", res_site) \~ "CCR", TRUE \~ res_site), Site =
+as.numeric(gsub("\[\^0-9.\]", "", res_site))) \|\> rename( Depth_m =
+depth, Rep = rep, TN_ugL = conc_ug_l_tn, TP_ugL = conc_ug_l_tp, NH4_ugL
+= conc_ug_l_nh4, NO3NO2_ugL = conc_ug_l_no3, SRP_ugL = conc_ug_l_po4,
+DOC_mgL = toc_mean_of_2_reps, DIC_mgL = tic_mean_of_2_reps, DC_mgL =
+tc_mean_of_2_reps, DN_mgL = t_nb_mean_of_2_reps) \|\> select(c(res_site,
+Reservoir, Site, DateTime, Depth_m, Rep, TN_ugL, TP_ugL, NH4_ugL,
+NO3NO2_ugL, SRP_ugL, DOC_mgL, DIC_mgL, DC_mgL, DN_mgL, Flag_DateTime,
+Flag_TP_ugL, Flag_TN_ugL, Flag_NH4_ugL, Flag_NO3NO2_ugL, Flag_SRP_ugL,
+Flag_DOC_mgL, Flag_DIC_mgL, Flag_DC_mgL, Flag_DN_mgL))
+
+all_join_woISCO \<- all_join \|\> filter(res_site != "F100.1")
+
+write.csv(all_join,
+"\~/GitHubRepos/CareyLabVT/Chemistry-QAQC-Frances/Results/Compiled_Results/chemistry_2025_wISCO.csv")
+
+write.csv(all_join_woISCO,
+"\~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_wISCO.csv")
+
+write.csv(all_join_woISCO,
+"\~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_woISCO.csv")

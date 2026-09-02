@@ -1,0 +1,1090 @@
+---
+title: "Lachat_QAQC_test"
+format: html
+editor: visual
+author: "Frances Iannucci and Adrienne Breef-Pilz"
+---
+
+Instructions: This is a script to analyze the TP an TN data from the Lachat. To run this script run it chunk by chunk and don't knit it together.
+
+```{r Setup}
+
+# load packages
+# install.packages("pacman")
+pacman::p_load(tidyverse, plotly, here, htmltools, manipulateWidget, htmlwidgets)
+
+
+# load the functions
+helper.functions <- list.files("functions/Lachat/")
+sapply(paste0("functions/Lachat/", helper.functions),source,.GlobalEnv)
+
+
+# analytes for this workflow
+analytes <- c("TN", "TP")
+
+# Read in a historical MDL file and get values
+
+# Check the methods of detection [delete/move this section once we can read in a real MDL file]
+#Estimated method detection limits (update periodically from rolling charts):
+est.MDL.TP= 4.9
+est.MDL.TN= 67    #values as of summer 2024
+
+#read in rolling checks file
+load(paste0(getwd(),'/MDLs/Rolling.Checks.TNTP.RData')) 
+
+    #calculate MDLs using everything from two years prior to run date
+    #maybe move this section after run file is created, so you can reference run date from there?
+        #now creates both runDate and runDate.posix- can reference that.
+
+
+# Flags used throughout and can update here: 
+#List of possible flags for data (used throughout):
+flags= c('1: Recalculated standard curve',
+         '2: Did not apply reduction efficiency correction',
+         '3: High concentration in blanks',
+         '4: Poor recovery (spikes or digestion checks)',
+         '5: High relative percent difference (dups or checks)',
+         '6: Messy peak integration',
+         '7: Concentration out of range',
+         '8: Just wrong in some way',
+         '9: Use with caution')
+
+
+# Make folder to put standard curve plots in 
+
+  if (!file.exists("preliminary_plots")){
+    # make the folder
+    dir.create(file.path("preliminary_plots"))
+  } 
+```
+
+```{r load in raw data}
+print('Select your raw data file. If you have multiple segments, choose the first one.')
+#
+all= read.csv(file.choose(new = F))
+#This will trigger you to open up a data file to run this QA/QC script on. Choose one or more data files within the Raw/Totals/ directory
+rl= readline('Do you have additional run segments to add? (y/n): ')
+while (rl=='y'|rl=='Y') {
+  seg.b= read.csv(file.choose(new = F))
+  all= rbind(all, seg.b)
+  rl= readline('Do you have additional run segments to add? (y/n): ')
+}
+
+#Enter run information:
+runDate= readline('Enter the date your samples were run (YYYY-MM-DD format): ')
+#no quotes are needed for your date string
+runDate.posix= as.POSIXct(runDate)
+
+# project information
+project= readline('Enter a brief description of what was run (e.g., LTREB_2025_batch1): ')
+#this is an internal note for you only
+
+# # added this line so that we can add project information
+# print(runDate)
+```
+
+```{r Spiking information}
+# Default spiking information:
+sb.di= 10000
+sb.std= 250
+sb.conc= 1000
+ss.sample= 10000
+ss.std= 250
+ss.conc= 1000
+n.factor= 10
+
+cat("Spiking information:", "\n",
+ "Volume of DI or sample added = ", sb.di,"uL", "\n", "Volume of standard added to blanks and samples =", sb.std,
+ "uL", "\n", "Concentration of P standard added =", sb.conc, "ppb", "\n", "Factor to scale up from P to N concentrations =", n.factor)
+
+rl= readline('Do you need to change any of these default values? (y/n): ')
+#for some reason it will make you say yes twice before it will let you edit values, but then it works
+
+while (rl=='y'|rl=='Y') {
+  param= readline('What parameter do you want to change? Options are sb.di, sb.std, sb.conc, ss.sample, ss.std, ss.conc, and n.factor: ')
+  if (param=='sb.di') {sb.di= as.numeric(readline('Enter volume of water used for spike blanks (in uL): '))}
+  if (param=='sb.std') {sb.std= as.numeric(readline('Enter volume of standard added to spike blanks (in uL): '))}
+  if (param=='sb.conc') {sb.conc= as.numeric(readline('Enter concentration of TP standard added to spike blanks (in ug/L): '))}
+  if (param=='ss.sample') {ss.sample= as.numeric(readline('Enter volume of water used for spiked samples (in uL): '))}
+  if (param=='ss.std') {ss.std= as.numeric(readline('Enter volume of standard added to spiked samples (in uL): '))}
+  if (param=='ss.conc') {ss.conc= as.numeric(readline('Enter concentration of TP standard added to spiked samples (in ug/L): '))}
+  if (param=='n.factor') {n.factor= as.numeric(readline('Enter the scaling factor to convert from TP to TN standard concentration (normally 10): '))}
+  cat("Spiking information:", "\n",
+ "Volume of DI or sample added = ", sb.di,"uL", "\n", "Volume of standard added to blanks and samples =", sb.std,
+ "uL", "\n", "Concentration of P standard added =", sb.conc, "ppb", "\n", "Factor to scale up from P to N concentrations =", n.factor)
+  rl= readline('Do you need to change any other parameters? (y/n): ')
+}
+
+```
+
+```{r Set up the data frame}
+#### START BUILDING OUTPUT DATAFRAME ####
+
+# Build analyte rows dynamically from repeated analyte blocks.
+# This handles runs with 2+ analytes and preserves NH4-before-PO4 ordering from raw data.
+
+# make a vector of the common names
+common_cols <- c(
+  "Detection.Date", "Detection.Time", "Run.File.Name", "Sample.ID", "Cup.Number", "Sample.Type",
+  "Auto.Dilution.Factor", "Manual.Dilution.Factor"
+)
+
+# get the column names with the analyte labeled. If none then stop
+analyte_cols <- grep("^Analyte.Name(\\.[0-9]+)?$", names(all), value = TRUE)
+if (length(analyte_cols) == 0) {
+  stop("No analyte columns found. Check raw file format.")
+}
+
+suffixes <- sub("Analyte.Name", "", analyte_cols)
+block_fields <- c("Analyte.Name", "Concentration.Units", "Peak.Height", "Peak.Area", "Peak.Concentration")
+
+# make 3 lists of the different analytes
+blocks <- lapply(suffixes, function(sfx) {
+  block_names <- paste0(block_fields, sfx)
+  keep <- block_names %in% names(all)
+  if (!all(keep)) {
+    return(NULL)
+  }
+  
+  out <- all |>
+    select(all_of(common_cols), all_of(block_names))
+  
+  names(out)[(length(common_cols) + 1):ncol(out)] <- block_fields
+  out
+})
+
+blocks <- blocks[!sapply(blocks, is.null)]
+if (length(blocks) == 0) {
+  stop("Could not construct analyte blocks from raw data.")
+}
+
+# bind them all together
+long_data <- bind_rows(blocks)
+
+# Expected check standard concentration from Sample ID digits
+long_data <- long_data |>
+  mutate(expected.conc = ifelse(grepl("Standard", Sample.Type, ignore.case = TRUE),
+                                as.numeric(gsub("[^0-9.-]", "", Sample.ID)),
+                                NA),
+         Analyte.Name = gsub("-.*", "", Analyte.Name)) # clean up the names and take out the dash
+
+# Add notes/flags before pivot wider
+long_data <- long_data |>
+  mutate(
+    Notes = NA,
+    Flag = NA
+  )
+
+# One row per sample with analyte-specific columns
+# Use run row id to keep duplicate sample IDs from collapsing together
+long_data <- long_data |>
+  group_by(Detection.Date, Detection.Time, Run.File.Name, Sample.ID, Cup.Number, Sample.Type,
+           Auto.Dilution.Factor, Manual.Dilution.Factor) |>
+  mutate(run_row_id = cur_group_id()) |>
+  ungroup()
+
+data_raw <- long_data |>
+  select(-Concentration.Units) |>
+  pivot_longer(
+    cols = !c(Detection.Date, Detection.Time, Run.File.Name, Sample.ID, Cup.Number,
+              Sample.Type, Auto.Dilution.Factor, Manual.Dilution.Factor, run_row_id, Analyte.Name),
+    names_to = "var",
+    values_to = "obs"
+  ) |>
+  pivot_wider(
+    id_cols = c(Detection.Date, Detection.Time, Run.File.Name, Sample.ID, Cup.Number,
+                Sample.Type, Auto.Dilution.Factor, Manual.Dilution.Factor, run_row_id),
+    names_from = c(var, Analyte.Name),
+    names_glue = "{var}.{Analyte.Name}",
+    values_from = obs
+  ) |>
+  mutate(
+    Detection.Time = paste0(Detection.Date, " ", Detection.Time),
+    Detection.Time = as.POSIXct(Detection.Time, format = "%m/%d/%Y %I:%M:%S %p"),
+    expected.conc.TN = expected.conc.TP * n.factor, # get the expected TN conc based on TP
+    row.numbers = row_number() # create column of row numbers
+  ) |>
+  select(-run_row_id) # take out the column
+
+names(data_raw) <- gsub("Peak.Concentration", "Conc.ugL", names(data_raw))
+
+# numeric run time for plotting/regression in downstream checks
+data_raw$Detection.Time <- as.numeric(data_raw$Detection.Time - data_raw$Detection.Time[1])
+
+# put the time in usable YYYY-MM-DD format
+
+data_raw$Detection.Date <- as.Date(data_raw$Detection.Date, "%m/%d/%Y")
+
+```
+
+```{r Review and Edit Data Frame (currently just sample ID's)}
+#### REVIEW AND EDIT DATA FRAME ####
+
+# View the data frame and make any needed corrections to Sample.ID. Can add the other columns
+# before proceeding with QA/QC checks.
+
+View(data_raw)
+
+rl <- readline("Do you need to make any changes to the data frame? (e.g., typos in sample IDs) (y/n): ")
+while (rl == "y" | rl == "Y") {
+  rn  <- readline("Which row number(s) need to be changed? (single number, range like 3:7, or list like 1,4,6): ")
+  
+  if(rn == ""){
+    
+    rn  <- readline("Which row number(s) need to be changed? (single number, range like 3:7, or list like 1,4,6): ")
+  }
+  new_val <- readline(paste0("What should the new value of be?: "))
+  
+  if(new_val == ""){
+    new_val <- readline(paste0("What should the new value of be?: "))
+  }
+
+  # change the Sample.ID here 
+    data_raw <- edit_sample_info(df = data_raw, rn = rn, new_sample_id = new_val)
+    
+    # add a note that the Sample.ID was changed 
+    data_raw <- append_flag_note(df = data_raw, rn = rn, analyte = 'TNTP', flag_num = NA, note_text = "Sample.Id changed")
+  
+
+  View(data_raw)
+  rl <- readline("Do you need to make any more changes? (y/n): ")
+}
+
+```
+
+```{r Evaluate Standard Curves}
+#### EVALUATE STANDARD CURVES ####
+
+# Check the standard curve. Plots are saved in an intermediate folder for you to look at because you need to make decisions based on the plots. 
+
+data_scurv_TP <- standard_curve(
+   analyte = "TP",
+   lachat_data = data_raw
+)
+
+#repeat the process for TN:
+
+data_scurv <- standard_curve(
+  analyte = "TN",
+  lachat_data = data_scurv_TP
+)
+
+print("Finished checking the standard curves")
+
+```
+
+```{r Calculate and Evaluate TN reduction efficiency}
+
+#EVENTUALLY: EDIT SO THAT CUP NUMBER IS RETAINED IN R.EFFICIENCY_DF AND REDUCTION.POINTS - Not sure how this would work because there are two cups per a row. Isn't that what S1 and S2 are?
+
+
+# Calculate efficiency as nitrate (S2) divided by nitrite (S1) concentration.
+# S1 = nitrite/NO2 (odd rows), S2 = nitrate/NO3 (even rows)
+
+r.efficiency <- data_scurv |>
+  filter(grepl("^n", Sample.ID, ignore.case = TRUE)) |>
+  select(row.numbers, Detection.Time, Sample.ID, Cup.Number, Peak.Area.TN, Conc.ugL.TN)
+
+S1.r.efficiency <- r.efficiency |>
+  filter(row_number() %% 2 == 1) |>
+  dplyr::rename("S1.Peak.Area.TN" = Peak.Area.TN, "S1.Conc.ugL.TN" = Conc.ugL.TN)
+
+r.efficiency_df <- r.efficiency |>
+  filter(row_number() %% 2 == 0) |>
+  dplyr::rename("S2.Peak.Area.TN" = Peak.Area.TN, "S2.Conc.ugL.TN" = Conc.ugL.TN) |>
+  bind_cols(S1.r.efficiency, ..2 = _) |>
+  select(row.numbers...1, Detection.Time...2, Sample.ID...3,
+         S1.Peak.Area.TN, S1.Conc.ugL.TN, S2.Peak.Area.TN, S2.Conc.ugL.TN) |>
+  dplyr::rename("row.numbers"    = row.numbers...1,
+                "Detection.Time" = Detection.Time...2,
+                "Sample.ID"      = Sample.ID...3) |>
+  mutate(reduction.efficiency = S2.Conc.ugL.TN / S1.Conc.ugL.TN)
+
+# Join efficiency back to the main data frame
+data_eff <- left_join(data_scurv,
+                      r.efficiency_df |> select(Detection.Time, Sample.ID, reduction.efficiency),
+                      by = c("Detection.Time", "Sample.ID"))
+
+# helper to save the efficiency plot
+save_eff_plot <- function(df, title) {
+  p <- ggplot(df, aes(x = Detection.Time, y = reduction.efficiency)) +
+    geom_smooth(method = "lm") +
+    geom_point() +
+    ggtitle(title) +
+    theme_bw() +
+    theme(text = element_text(size = 18))
+  png("preliminary_plots/reduction_efficiency_3.png", width = 10, height = 10, units = "in", res = 600)
+  plot(p)
+  dev.off()
+}
+
+save_eff_plot(r.efficiency_df, "Reduction efficiency over the time of the run. Can remove bad points later on.")
+View(r.efficiency_df)
+
+cat("Review efficiency checks for TN- ideally >= 90% and stable over the run.\n",
+    "By default an efficiency correction should be applied unless there are problems with the efficiency checks.\n",
+    "You can also apply a correction to specific segments if there are step changes.\n",
+    "See preliminary_plots/reduction_efficiency_3.png.\n")
+
+rl <- readline("Would you like to apply an efficiency correction to the data? (y/n): ")
+
+if (rl == "n" | rl == "N") {
+  note <- readline("Enter a note- explain why efficiency was not corrected: ")
+  data_eff <- append_flag_note(df = data_eff, rn = data_eff$row.numbers, analyte = "TN",
+                               flag_num = 2, note_text = note)
+
+} else if (rl == "y" | rl == "Y") {
+
+  reduction.points <- r.efficiency_df
+
+  or <- readline("Look at reduction_efficiency_3.png (estimate; true model will be forced through 1). Do you want to remove any outliers from the regression? (y/n): ")
+  while (or == "y" | or == "Y") {
+    View(r.efficiency_df)
+    rn.rp <- readline("Enter the row.numbers of the efficiency check(s) to exclude (e.g. 3, 5): ")
+   # rn.d  <- readline("Enter the same row.numbers in the full data set (for flagging): ")
+
+    # parse the row number strings
+    parse_rn <- function(s) as.numeric(unlist(strsplit(gsub(",", " ", s), "\\s+")))
+    rp_vec   <- parse_rn(rn.rp)
+   # data_vec <- parse_rn(rn.d)
+
+    # set outlier efficiency to NA in the efficiency data frame
+    r.efficiency_df$reduction.efficiency[r.efficiency_df$row.numbers %in% rp_vec] <- NA
+
+    save_eff_plot(r.efficiency_df, "Reduction efficiency. Check that outliers are removed.")
+    View(r.efficiency_df)
+
+    kc <- readline("Keep changes? Saying no restores all outliers to the regression. (y/n): ")
+
+    if (kc == "y" | kc == "Y") {
+      reduction.points <- r.efficiency_df
+      data_eff <- append_flag_note(df = data_eff, rn = rp_vec, analyte = "TN",
+                                   flag_num = 9, note_text = "Point excluded from efficiency correction.")
+    } else {
+      # restore all points
+      reduction.points <- data_eff[!is.na(data_eff$reduction.efficiency), ]
+    }
+
+    save_eff_plot(reduction.points, "Reduction efficiency. Check that you have all the outliers.")
+    View(reduction.points)
+    or <- readline("Do you want to remove any more outliers from the regression? (y/n): ")
+  }
+
+  sub <- readline("Do you want to apply the regression to a specific run segment only? (y/n): ")
+  
+  if (sub == "n" | sub == "N") {
+    efficiency.reg <- lm((reduction.efficiency - 1) ~ 0 + Detection.Time, reduction.points)
+    data_eff$Conc.ugL.TN <- data_eff$Conc.ugL.TN /
+      (coef(efficiency.reg) * data_eff$Detection.Time + 1)
+  }
+  while (sub == "y" | sub == "Y") {
+    View(reduction.points)
+    reg.start <- as.numeric(readline("Enter the row number of the first reduction check for the regression: "))
+    reg.end   <- as.numeric(readline("Enter the row number of the last reduction check for the regression: "))
+    data_eff <- append_flag_note(df = data_eff, rn = reg.start, analyte = "TN",
+                                 note_text = "Start of RE regression segment.")
+    data_eff <- append_flag_note(df = data_eff, rn = reg.end,   analyte = "TN",
+                                 note_text = "End of RE regression segment.")
+    View(data_eff)
+    data.start <- as.numeric(readline("Enter the row where you want to start applying this regression: "))
+    data.end   <- as.numeric(readline("Enter the row where you want to stop applying this regression: "))
+    efficiency.reg <- lm((reduction.efficiency - 1) ~ 0 + Detection.Time, reduction.points[reg.start:reg.end, ])
+    for (i in data.start:data.end) {
+      data_eff$Conc.ugL.TN[i] <- data_eff$Conc.ugL.TN[i] /
+        (coef(efficiency.reg) * data_eff$Detection.Time[i] + 1)
+    }
+    sub <- readline("Do you need to apply a separate regression to another run segment? (y/n): ")
+  }
+}
+
+print("Finished adding the efficiency correction to the data frame.")
+```
+
+#### REVIEW QUALITY CHECKS
+
+#EVENTUALLY EDIT FUNCTIONS FOR ROLLING CHARTS TO EXCLUDE POINTS FLAGGED 6 (MESSY PEAK INTEGRATION) FROM PLOTTING AND CALCULATIONS #ALSO MAKE SURE CHECKS.RPD (OR ANY RPD OR PCT.RECOVERY COLUMNS) IS RETAINED THROUGHOUT THE ENTIRE LOOP
+
+```{r Water blanks }
+# Check out the water blanks
+
+# Make a data frame of stats. The check argument should be: water blank, digest check, spike blank, check standards.
+
+data_list <- qc_check(lachat_data = data_eff, check = "water blank")
+
+
+# add the qc check to the rolling charts
+rc_digested.blanks <- add_rollingcharts(rolling_chart = digested.blanks)
+
+# check the qc check and how they relate to the Rolling Charts
+
+print('Generating rolling charts plots- this will take a minute')
+
+rc_digested.blanks <- run_mdl_rolling_charts(df = rc_digested.blanks)
+
+# Get the main dataframe from the list
+
+data_blank <- data_list[[1]]
+
+# update the flag and notes from the mdl function
+data_blank <- update_data_from_rolling(
+  lachat_data = data_blank,
+    rolling_export = rc_digested.blanks)
+
+print("Water Blank check finished")
+
+```
+
+```{r digestion checks}
+#digestion checks:
+# The check argument should be: water blank, digest check, spike blank, check standards.
+
+data_list <- qc_check(lachat_data = data_blank, check = "digest check")
+
+# add the qc check to the rolling charts
+rc_digest.checks <- add_rollingcharts(rolling_chart = digest.checks)
+
+# check the qc check and how they relate to the Rolling Charts
+
+print('Generating rolling charts plots- this will take a minute')
+
+rc_digest.checks <- run_mdl_rolling_charts(df = rc_digest.checks)
+
+# Get the main dataframe from the list
+
+data_digest <- data_list[[1]]
+
+# update the flag and notes from the mdl function
+data_digest <- update_data_from_rolling(
+  lachat_data = data_digest,
+    rolling_export = rc_digest.checks)
+
+# Need to have an output so the readline will work in the function. Not sure why
+print("Digestions check finished")
+
+```
+
+```{r Spike blanks}
+#spike blanks:
+# The check argument should be: water blank, digest check, spiked blank, check standards.
+
+data_list <- qc_check(lachat_data = data_digest, check = "spiked blank")
+
+# add the qc check to the rolling charts
+rc_spiked.blanks <- add_rollingcharts(rolling_chart = spiked.blanks)
+
+# check the qc check and how they relate to the Rolling Charts
+
+print('Generating rolling charts plots- this will take a minute')
+
+rc_spiked.blanks <- run_mdl_rolling_charts(df = rc_spiked.blanks)
+
+# Get the main dataframe from the list
+
+data_sp_blank <- data_list[[1]]
+
+# update the flag and notes from the mdl function
+data_sp_blank <- update_data_from_rolling(
+  lachat_data = data_sp_blank,
+    rolling_export = rc_spiked.blanks)
+
+# Need to have an output so the readline will work in the function. Not sure why
+print("Spiked blanks check finished")
+
+```
+
+```{r Check standards}
+
+
+#WOULD LIKE TO UPDATE SO ALL CHECK STANDARDS ARE REVIEWED AT FIRST, BUT ONLY CHECK 25'S ARE ADDED TO THE ROLLING CHARTS - Done
+  #FILTER BY SAMPLE TYPE == CHECK STANDARD?
+  #CURRENTLY MISSES THINGS THAT DON'T HAVE CHECK OR CHK IN THE NAME - Done. In the qc script changed the filter to the Sample.Type column
+
+
+#relative percent difference of check standards from expected concentrations:
+# The check argument should be: water blank, digest check, spike blank, check standards.
+
+data_list <- qc_check(lachat_data = data_sp_blank, check = "check standards")
+
+# filter out the checks that are not 25 
+check_25_df <- data_list[[2]] |>
+  filter(expected.conc.TN %in% 250,
+         expected.conc.TP %in% 25)
+
+
+# add the qc check to the rolling charts
+rc_check.25.standards <- add_rollingcharts(data_file = check_25_df,
+                                           rolling_chart = check.25.standards)
+
+# check the qc check and how they relate to the Rolling Charts
+
+print('Generating rolling charts plots- this will take a minute')
+
+rc_check.25.standards <- run_mdl_rolling_charts(df = rc_check.25.standards)
+
+# Get the main dataframe from the list
+
+data_checks <- data_list[[1]]
+
+# update the flag and notes from the mdl function
+data_checks <- update_data_from_rolling(
+  lachat_data = data_checks,
+    rolling_export = rc_check.25.standards)
+
+# Need to have an output so the readline will work in the function. Not sure why
+print("Check standards check finished")
+#
+```
+
+```{r Dups check}
+#relative percent difference of duplicate samples:
+
+# make a df of just the obs with dups
+data_dups <- data_checks
+
+dups_check <- data_dups|>
+      filter(grepl("Du", Sample.Type,ignore.case = T))|>
+      # make a column of just sample ids without the dups
+      mutate(clean_ids = gsub("[^0-9.-]", "", Sample.ID))|>
+      # select the columns we care about
+      select(Detection.Date, Sample.Type, Sample.ID, clean_ids ,Conc.ugL.TN, Conc.ugL.TP)|>
+      group_by(Sample.Type, clean_ids)|>
+      # look at summarise across 
+      summarise(Duplicates.RPD.TN = (abs(diff(Conc.ugL.TN))/mean(Conc.ugL.TN)*100),
+                Duplicates.RPD.TP = (abs(diff(Conc.ugL.TP))/mean(Conc.ugL.TP)*100))|>
+  ungroup()
+
+# make a data frame of just the samples that were duped
+
+# lets add all the to the data 
+data_dups <- data_dups|>
+   mutate(clean_ids = gsub("[^0-9.-]", "", Sample.ID))|>
+  merge(dups_check, by = c("clean_ids", "Sample.Type"), all = T)|>
+  mutate(dup_id = case_when(
+    grepl("DUP", Sample.ID, ignore.case = TRUE) ~ "duplicate",  # e.g. "DUP S23" or "S23 DUP"
+    TRUE ~ "original"  # e.g. "S23"
+  ))|> # label original vs. duplicate based on presence of "DUP" anywhere in Sample.ID
+  # set the RPD to NA for the original sample
+  mutate(Duplicates.RPD.TN = ifelse(grepl("Du", Sample.Type, ignore.case = T) & dup_id == "original", NA, Duplicates.RPD.TN),
+         Duplicates.RPD.TP = ifelse(grepl("Du", Sample.Type, ignore.case = T) & dup_id == "original", NA, Duplicates.RPD.TP))
+ 
+
+# flag pairs with high relative percent difference
+# helper: append flag 5 if RPD exceeds threshold (>20% above MDL, >100% near/below MDL)
+flag_high_rpd <- function(flag, notes, rpd, conc, mdl) {
+  needs_flag <- !is.na(rpd) & (
+    (conc >  2 * mdl & rpd >  20) |
+    (conc <= 2 * mdl & rpd > 100)
+  )
+  ifelse(needs_flag, ifelse(!is.na(flag), paste(flag, 5), 5), flag)
+}
+
+data_dups2 <- data_dups |>
+  mutate(
+    Flag.TP = flag_high_rpd(Flag.TP, Notes.TP, Duplicates.RPD.TP, Conc.ugL.TP, est.MDL.TP),
+    Flag.TN = flag_high_rpd(Flag.TN, Notes.TN, Duplicates.RPD.TN, Conc.ugL.TN, est.MDL.TN),
+    Notes.TP = ifelse(grepl("5", Flag.TP), "RPD exceeds threshold (>20% above MDL, >100% near/below MDL)", Notes.TP),
+    Notes.TN = ifelse(grepl("5", Flag.TN), "RPD exceeds threshold (>20% above MDL, >100% near/below MDL)", Notes.TN))
+
+# create a smaller data frame
+dups_view <- data_dups2|>
+  filter(grepl("Du", Sample.Type,ignore.case = T))|>
+  select(row.numbers,Sample.ID, clean_ids, dup_id, Sample.Type, Conc.ugL.TP, Duplicates.RPD.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Duplicates.RPD.TN, Flag.TN, Notes.TN)
+
+# add in reruns with matching clean ids, to help decide which numbers to believe:
+rr_dups <- data_dups2|>
+  filter(clean_ids %in% dups_view$clean_ids & !grepl("stand", Sample.Type, ignore.case = T))|>
+  select(row.numbers,Sample.ID, clean_ids, Sample.Type, Conc.ugL.TP, Duplicates.RPD.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Duplicates.RPD.TN, Flag.TN, Notes.TN)
+
+View(rr_dups)
+
+
+rl= readline('Review the duplicates and the plot- high RPD is flagged automatically. Remember to compare dups to reruns when deciding which data to use, and flag bad data. Do you want to add any flags/notes? (y/n): ')
+while (rl=='y'|rl=='Y') {
+  rn= readline('Enter the row number or numbers (from row.numbers) you want to add a flag+note to: ')
+  type= readline('Which analyte needs a note? (TN, TP): ')
+  print(flags)
+  f= as.numeric(readline('Enter the flag number (see list above): '))
+  note= as.character(readline('Enter your note: '))
+  
+  # Flag and add the note using this function
+  data_dups2 <- append_flag_note(df = data_dups2, rn = rn, analyte = type, flag_num = f, note_text = note)
+  
+  
+  View(data_dups2|>
+  filter(clean_ids %in% dups_view$clean_ids & !grepl("stand", Sample.Type, ignore.case = T))|>
+  select(row.numbers,Sample.ID, clean_ids, Sample.Type, Conc.ugL.TP, Duplicates.RPD.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Duplicates.RPD.TN, Flag.TN, Notes.TN))
+      #can this be edited so it displays reruns and dilutions as well? like how it's displayed in rr_dups - done!
+  rl= readline('Do you want to add any more notes? (y/n): ')
+}
+
+#add just the dups (not the originals) to the rolling charts:
+dups_rc= data_dups2|>
+  filter(grepl("Du", Sample.ID,ignore.case = T))|>
+  select(Detection.Date, Detection.Time, Sample.ID, Cup.Number, Peak.Area.TP, Conc.ugL.TP, Notes.TP, Flag.TP, Duplicates.RPD.TP, Peak.Area.TN, Conc.ugL.TN, Notes.TN, Flag.TN, Duplicates.RPD.TN, Sample.Type, row.numbers)
+    #row.numbers is kept so add_rollingcharts will work. Cup.Number is kept for update_data_from_rolling.
+
+dups_rc= dups_rc|>
+  filter(Sample.Type!='Unknown')|>
+  select(!Sample.Type)
+
+#then just feed dups_rc into the add_rollingcharts function??
+rc_duplicates <- add_rollingcharts(rolling_chart = duplicates, data_file = dups_rc)
+
+# make a plot of the dups that is saved in the preliminary plots folder
+
+a <- build_rolling_plot(df = rc_duplicates, analyte = "TP", metric = "Duplicates.RPD")
+
+b <- build_rolling_plot(df = rc_duplicates, analyte = "TN", metric = "Duplicates.RPD")
+
+combined_fig <- manipulateWidget::combineWidgets(a, b, height = 1000)
+                                                 
+htmlwidgets::saveWidget(combined_fig, paste0(here(),"/preliminary_plots/Dups_", runDate,".html"), selfcontained = TRUE)
+
+# update the flag and notes from the mdl function
+data_dups2 <- update_data_from_rolling(
+  lachat_data = data_dups2,
+    rolling_export = rc_duplicates)
+
+#take off cup number now that we're done using it:
+rc_duplicates= rc_duplicates|>
+  select(!Cup.Number)
+
+
+cat('Remember to look at the rolling dups plot in preliminary plots!')
+
+```
+
+```{r Spike Recovery}
+
+#EVENTUALLY: ADD AN OPTION TO ADD A FLAG TO EVERY SINGLE SPIKED SAMPLE WITHOUT NEEDING TO ENTER ALL ROW NUMBERS - Done
+
+#spike recovery for spiked samples:
+data_spikes <- data_dups2
+
+# make a vector of all the row numbers for the spiked samples. Check if you want spike blanks in this too. - removed spiked blanks
+spike_row_numbers <- data_spikes |>
+  filter(grepl("SP", Sample.ID, ignore.case = TRUE)) |>
+  filter(grepl("bl", Sample.ID, ignore.case = TRUE)==F)
+  
+# USE sp_row_numbers WHICH IS A LIST OF ALL THE ROW NUMBERS FOR SPIKES. 
+sp_row_numbers <- spike_row_numbers$row.numbers
+
+
+expected.spike.change.TP= (ss.conc * ss.std)/(ss.std+ss.sample)
+expected.spike.change.TN= expected.spike.change.TP * n.factor
+
+spike_recovery <- data_spikes|>
+      filter(grepl("Sp", Sample.Type,ignore.case = T))|>
+      # make a column of just sample ids without the dups
+      mutate(clean_ids = gsub("[^0-9.-]", "", Sample.ID))|>
+      # select the columns we care about
+      select(Detection.Date, Sample.Type, Sample.ID, clean_ids ,Conc.ugL.TN, Conc.ugL.TP)|>
+      group_by(Sample.Type, clean_ids)|>
+      # look at summarise across 
+      summarise(Spikes.PctRecovery.TN = (diff(Conc.ugL.TN)/expected.spike.change.TN*100),
+                Spikes.PctRecovery.TP = (diff(Conc.ugL.TP)/expected.spike.change.TP*100))|>
+                        ## SOMETIMES CALCULATES INCORRECTLY- MAYBE DOESN'T DISTINGUISH BETWEEN "ORIGINAL MINUS SPIKE" AND "SPIKE MINUS ORIGINAL"?
+                        ## we want this to be calculated as (spike minus original) / expected change * 100
+  ungroup()
+
+data_spikes_merge <- data_spikes|>
+   mutate(clean_ids = gsub("[^0-9.-]", "", Sample.ID))|>
+  merge(spike_recovery, by = c("clean_ids", "Sample.Type"), all = T)|>
+  mutate(dup_id = case_when(
+    grepl("SP", Sample.ID, ignore.case = TRUE) ~ "duplicate",  # e.g. "DUP S23" or "S23 DUP"
+    TRUE ~ "original"  # e.g. "S23"
+  ))|> # label original vs. duplicate based on presence of "DUP" anywhere in Sample.ID
+  # set the RPD to NA for the original sample. 
+  mutate(Spikes.PctRecovery.TN = ifelse(grepl("Sp", Sample.Type, ignore.case = T) & dup_id == "original", NA, Spikes.PctRecovery.TN),
+         Spikes.PctRecovery.TP = ifelse(grepl("Sp", Sample.Type, ignore.case = T) & dup_id == "original", NA, Spikes.PctRecovery.TP))
+ 
+
+# Flag if spike recovery is out of acceptable range (80-120%)
+# Only applied to the spiked sample row, not the original sample.
+
+rn_flag_TP <- data_spikes_merge$row.numbers[
+  !is.na(data_spikes_merge$Spikes.PctRecovery.TP) &
+  (data_spikes_merge$Spikes.PctRecovery.TP < 80 | data_spikes_merge$Spikes.PctRecovery.TP > 120)
+]
+rn_flag_TN <- data_spikes_merge$row.numbers[
+  !is.na(data_spikes_merge$Spikes.PctRecovery.TN) &
+  (data_spikes_merge$Spikes.PctRecovery.TN < 80 | data_spikes_merge$Spikes.PctRecovery.TN > 120)
+]
+
+if (length(rn_flag_TP) > 0) {
+  data_spikes_merge <- append_flag_note(df = data_spikes_merge, rn = rn_flag_TP, analyte = "TP",
+                                        flag_num = 4, note_text = "Recovery outside acceptable range (80-120%).")
+}
+if (length(rn_flag_TN) > 0) {
+  data_spikes_merge <- append_flag_note(df = data_spikes_merge, rn = rn_flag_TN, analyte = "TN",
+                                        flag_num = 4, note_text = "Recovery outside acceptable range (80-120%).")
+}
+
+spikes <- data_spikes_merge|>
+  filter(grepl("Sp", Sample.Type,ignore.case = T))|>
+  select(row.numbers,Sample.ID, clean_ids, dup_id, Sample.Type, Conc.ugL.TP, Spikes.PctRecovery.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Spikes.PctRecovery.TN, Flag.TN, Notes.TN) |>
+  arrange(row.numbers)
+
+
+View(spikes)
+print(paste('Expected TP concentration change =',expected.spike.change.TP))
+print(paste('Expected TN concentration change =',expected.spike.change.TN))
+
+
+cat("Review percent recovery of the spiked samples- target is 80-120% recovery.\n",
+    "This threshold is less strict if samples are near the detection limit or if the sample concentration and spike amount are poorly matched.\n",
+    "If you suspect this is the case, add a note.\n")
+rl <- readline("Do you want to add any notes? (y/n): ")
+while (rl=='y'|rl=='Y') {
+  repeat {
+    rn <- readline('Enter the row number or numbers you want to add a note to- eg. 3,4,5 or sp_row_numbers for all spikes: ')
+    if (nchar(trimws(rn)) > 0) break # add this because it would skip over entering the row numbers
+  }
+  print(flags)
+  f= as.numeric(readline('Enter the flag number (see list above): '))
+  type= readline('Which analyte needs a note? (TN, TP): ')
+  note= as.character(readline('What do you want to say?: '))
+  
+  # add the notes for spiked samples
+  data_spikes_merge <- append_flag_note(df = data_spikes_merge, rn = rn, analyte = type, flag_num = f, note_text = note)
+  
+# View the data frame 
+  
+  spikes <- data_spikes_merge|>
+  filter(grepl("Sp", Sample.Type,ignore.case = T))|>
+  select(row.numbers,Sample.ID, clean_ids, dup_id, Sample.Type, Conc.ugL.TP, Spikes.PctRecovery.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Spikes.PctRecovery.TN, Flag.TN, Notes.TN) |>
+  arrange(row.numbers)
+
+View(spikes)
+  
+  rl= readline('Do you want to add any more notes? (y/n): ')
+}
+
+#add just the spikes (not the originals) to the rolling charts:
+spikes_rc= data_spikes_merge|>
+  filter(grepl("Sp", Sample.ID,ignore.case = T))|>
+  select(Detection.Date, Detection.Time, Sample.ID, Peak.Area.TP, Conc.ugL.TP, Notes.TP, Flag.TP, Spikes.PctRecovery.TP, Peak.Area.TN, Conc.ugL.TN, Notes.TN, Flag.TN, Spikes.PctRecovery.TN, Sample.Type, row.numbers, Cup.Number)
+    #row.numbers is kept so add_rollingcharts will work. Cup.Number needed for update_data_from_rolling.
+
+spikes_rc= spikes_rc|>
+  filter(Sample.Type!='Unknown')|>
+  select(!Sample.Type)
+
+#then just feed spikes_rc into the add_rollingcharts function??
+rc_spiked.samples <- add_rollingcharts(rolling_chart = spiked.samples, data_file = spikes_rc)
+
+# make a plot of the dups that is saved in the preliminary plots folder
+
+
+#EVENTUALLY: EDIT SO ROWS FLAGGED AS 8 ARE EXCLUDED FROM PLOTTING - Done - still getting newly flagged rows in the plot
+
+# make a new data frame that sets values flagged as 8 to NA but only for plotting
+
+rc_spiked_plot_df <- rc_spiked.samples|>
+  mutate(Conc.ugL.TN = ifelse(grepl("7|8", Flag.TN), NA, Conc.ugL.TN),
+    Conc.ugL.TP = ifelse(grepl("7|8", Flag.TP), NA, Conc.ugL.TP))
+
+# Make plots
+a <- build_rolling_plot(df = rc_spiked_plot_df, analyte = "TP", metric = "Spikes.PctRecovery")
+
+b <- build_rolling_plot(df = rc_spiked_plot_df, analyte = "TN", metric = "Spikes.PctRecovery")
+
+combined_fig <- manipulateWidget::combineWidgets(a, b, height = 1000)
+                                                 
+htmlwidgets::saveWidget(combined_fig, paste0(here(),"/preliminary_plots/SpikeRecovery_", runDate,".html"), selfcontained = TRUE)
+
+# update the flag and notes from the mdl function
+data_spikes_merge <- update_data_from_rolling(
+  lachat_data = data_spikes_merge,
+    rolling_export = rc_spiked.samples)
+
+#take off cup number now that we're done using it:
+rc_spiked.samples= rc_spiked.samples|>
+  select(!Cup.Number)
+
+
+cat('Remember to look at the rolling spikes plot in preliminary plots!')
+
+#
+
+```
+
+```{r Reruns}
+
+data_reruns <- data_spikes_merge
+View(data_reruns)
+cat("Review the data before saving. This section flags reruns and sets keep/discard for each analyte.\n")
+
+rl <- readline("Do you need to flag any samples that were rerun (without diluting)? (y/n): ")
+while (rl == "y" | rl == "Y") {
+  repeat {
+    rerun.sample <- readline("Enter the sample number from the clean_ids column for the sample that was rerun: ")
+    if (nchar(trimws(rerun.sample)) > 0) break # add this because it would skip over entering the row numbers
+  }
+  comparison <- data_reruns[data_reruns$clean_ids == as.numeric(rerun.sample), ] |>
+    select(row.numbers, Sample.ID, Cup.Number, Conc.ugL.TP, Conc.ugL.TN, Notes.TP, Flag.TP, Notes.TN, Flag.TN)
+  View(comparison)
+
+  rn.original <- readline("Enter the row number of the original sample (from row.numbers): ")
+  rn.rerun    <- readline("Enter the row number of the rerun (from row.numbers): ")
+
+  cat("Which result do you want to use as the true result?\n",
+      " 1: original  (rerun discarded for all analytes)\n",
+      " 2: rerun  (original discarded for all analytes)\n",
+      " 3: rerun for single analyte\n",
+      "Preference is to use the rerun unless something is obviously wrong.\n")
+  decision <- readline("Enter 1, 2, or 3: ")
+
+  if (decision == "1") {
+    # keep original — discard rerun for both analytes
+    data_reruns <- append_flag_note(df = data_reruns, rn = rn.rerun, analyte = "TN TP",
+                                    flag_num = 8, note_text = "Discard data- use results from original sample.")
+  }
+  
+  if (decision == "2") {
+    # keep original — discard rerun for both analytes
+    data_reruns <- append_flag_note(df = data_reruns, rn = rn.original, analyte = "TN TP",
+                                    flag_num = 8, note_text = "Discard data- use results from rerun.")
+  }
+
+  if (decision == "3") {
+    x <- readline("Use rerun for which analyte- TN or TP?: ")
+    print(flags)
+    flag <- as.numeric(readline("Enter the flag number for the discarded original result: "))
+
+    if (toupper(x) %in% c("TN", "N")) {
+      # keep rerun TN — discard original TN, discard rerun TP
+      data_reruns <- append_flag_note(df = data_reruns, rn = rn.original, analyte = "TN",
+                                      flag_num = flag, note_text = "Discard data- use results from rerun.")
+      data_reruns <- append_flag_note(df = data_reruns, rn = rn.rerun,    analyte = "TP",
+                                      flag_num = 8,    note_text = "Discard data- use results from original sample.")
+    } else if (toupper(x) %in% c("TP", "P")) {
+      # keep rerun TP — discard original TP, discard rerun TN
+      data_reruns <- append_flag_note(df = data_reruns, rn = rn.original, analyte = "TP",
+                                      flag_num = flag, note_text = "Discard data- use results from rerun.")
+      data_reruns <- append_flag_note(df = data_reruns, rn = rn.rerun,    analyte = "TN",
+                                      flag_num = 8,    note_text = "Discard data- use results from original sample.")
+    }
+  }
+
+  View(data_reruns)
+  rl <- readline("Do any more reruns need to be flagged? (y/n): ")
+}
+
+```
+
+```{r Dilutions}
+
+#THIS SECTION IS A PAIN WHEN DILUTION FACTOR IS INCLUDED IN SAMPLE ID. 
+
+View(data_reruns)   #helpful to have open in the background in case of naming issues
+
+data_dilutions <- data_reruns
+
+# make a smaller data frame with just the dilutions 
+# get a data frame of the original and the dilution
+qw <- data_dilutions |>
+  filter(grepl("dil",Sample.ID, ignore.case=T)) |>
+  select(clean_ids)
+
+# make a data frame of the duplicates and original
+comparison <- data_dilutions |>
+  filter(clean_ids %in% qw[["clean_ids"]],
+         Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set"))
+
+View(comparison|>
+       select(clean_ids, row.numbers, everything()))
+
+cat("NOTE ON PROCESSING DILUTIONS:\n
+    If you ran a dilution of a sample from a previous run, choose one of the 'dye' rows when prompted to enter the row of the original sample.")
+
+rl <- readline("Did you need to dilute any samples during this run? (y/n): ")
+while (rl == "y" | rl == "Y") {
+  dilution.sample <- as.numeric(readline("Enter the sample number from the clean_ids column for the sample that was diluted: "))
+  # just the samples that match the id
+  indv_samp <- data_dilutions[data_dilutions$clean_ids == dilution.sample, ]
+  View(indv_samp|>
+         select(row.numbers, everything()))
+  
+  #NOTE FOR WHEN UPDATING TO READ IN DIGITIZED DILUTIONS SHEET:
+  #instead of row.numbers, have it search for cup number for the original and the dilution
+  #that way it can automatically loop through all dilutions instead of requiring manual entry of row.number
+  
+  rn.original <- readline("Enter the row number of the original sample (from row.numbers): ")
+  rn.dilution  <- readline("Enter the row number of the dilution (from row.numbers): ")
+  v.sample <- as.numeric(readline("Enter the volume of sample used for the dilution (uL): "))
+  v.water  <- as.numeric(readline("Enter the volume of water used for the dilution (uL): "))
+  dilution.factor <- (v.sample + v.water) / v.sample
+
+  # back-calculate the undiluted concentration from the diluted row
+  rn.dil.num <- as.numeric(rn.dilution)
+  data_dilutions$Conc.ugL.TN[data_dilutions$row.numbers == rn.dil.num] <-
+    data_dilutions$Conc.ugL.TN[data_dilutions$row.numbers == rn.dil.num] * dilution.factor
+  data_dilutions$Conc.ugL.TP[data_dilutions$row.numbers == rn.dil.num] <-
+    data_dilutions$Conc.ugL.TP[data_dilutions$row.numbers == rn.dil.num] * dilution.factor
+
+  x <- toupper(readline("Which analyte was out of range- TN, TP, or TN TP?: "))
+
+  if (x %in% c("TN", "N")) {
+    # discard original TN (out of range), discard dilution TP (not needed)
+    data_dilutions <- append_flag_note(df = data_dilutions, rn = rn.original, analyte = "TN",
+                                       flag_num = 7, note_text = "Discard data- TN out of range.")
+    data_dilutions <- append_flag_note(df = data_dilutions, rn = rn.dilution,  analyte = "TP",
+                                       flag_num = 8, note_text = "Discard data- dilution not needed for TP.")
+  } else if (x %in% c("TP", "P")) {
+    # discard original TP (out of range), discard dilution TN (not needed)
+    data_dilutions <- append_flag_note(df = data_dilutions, rn = rn.original, analyte = "TP",
+                                       flag_num = 7, note_text = "Discard data- TP out of range.")
+    data_dilutions <- append_flag_note(df = data_dilutions, rn = rn.dilution,  analyte = "TN",
+                                       flag_num = 8, note_text = "Discard data- dilution not needed for TN.")
+  } else if (x == "TN TP") {
+    # discard original for both analytes
+    data_dilutions <- append_flag_note(df = data_dilutions, rn = rn.original, analyte = "TN TP",
+                                       flag_num = 7, note_text = "Discard data- out of range.")
+  }
+  
+  comparison <- data_dilutions |>
+  filter(clean_ids %in% qw[["clean_ids"]],
+         Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set"))
+
+  View(comparison|>
+       select(clean_ids, row.numbers, everything()))
+  rl <- readline("Do any more dilutions need to be addressed? (y/n): ")
+}
+```
+
+```{r Final Review}
+#other notes/flags:
+data_final <- data_dilutions
+
+# make a data frame of the duplicates and dilutions to make sure that everything is flagged as it should be
+
+check_dil <- data_final |>
+  filter(Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set")) |>
+  select(clean_ids, Sample.ID, Cup.Number, Sample.Type,
+         Conc.ugL.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Flag.TN, Notes.TN) |>
+  filter(!grepl("S", Cup.Number, ignore.case = TRUE)) |>
+  filter(!grepl("bl|che|sp", Sample.ID, ignore.case = TRUE)) |>
+   group_by(clean_ids)|>
+  summarise(n = n()) |>
+  filter(n >1)
+
+# make a data frame of the clean_ids 
+View(data_final |>
+       filter(clean_ids %in% check_dil[[1]])|>
+       select(row.numbers, clean_ids, Sample.Type, Sample.ID, Cup.Number,
+              Conc.ugL.TP, Flag.TP, Notes.TP, Conc.ugL.TN, Flag.TN, Notes.TN, everything())|>
+       filter(Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set")))
+
+print("Review data frame of clean id's that have dups. Make sure all dups, spikes, dilutions, and reruns look correct.")
+  
+rl= readline('Do you have any other notes to add to these samples? (y/n): ')
+while (rl=='y'|rl=='Y') {
+  rn= readline('Enter the row number or numbers you want to flag (eg. 3,4,5): ') 
+  var= readline('Which solute needs the flag? (TN, TP): ')
+  print(flags)
+  f= as.numeric(readline('Enter the flag number (see list above): '))
+  note= as.character(readline('Enter a comment for the Notes column: '))
+  
+  # use the flag function to add notes and flags
+  data_final <- append_flag_note(df = data_final, rn = rn, analyte = var, flag_num = f, note_text = note)
+  
+  View(data_final |>
+       filter(clean_ids %in% check_dil[[1]])|>
+       select(row.numbers, clean_ids, Sample.Type, Sample.ID, Cup.Number,
+              Conc.ugL.TP, Flag.TP, Notes.TP, Conc.ugL.TN, Flag.TN, Notes.TN, everything())|>
+       filter(Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set")))
+  rl= readline('Do you have any other notes to add to these samples? (y/n): ')
+}
+
+
+#SOMEDAY: ADD A SECTION THAT DISPLAYS ANYTHING OUT OF RANGE OF CAL CURVE (>120% OF TOP STANDARD CONC) TO CHECK THAT ALL NECESSARY DILUTIONS WERE DONE
+
+# View the entire dataset and add notes if needed
+data_final= data_final[order(data_final$row.numbers),]   #makes it easier to compare to rack map
+View(data_final |>
+ select(row.numbers, everything()))
+print("Now review the full data set and make sure everything looks correct.")
+rl= readline('Do you have any other notes + flags to add? (y/n): ')
+while (rl=='y'|rl=='Y') {
+  rn= readline('Enter the row number or numbers you want to flag (eg. 3,4,5): ') 
+  var= readline('Which solute needs the flag? (TN, TP): ')
+  print(flags)
+  f= as.numeric(readline('Enter the flag number (see list above): '))
+  note= as.character(readline('Enter a comment for the Notes column: '))
+  
+  # use the flag function to add notes and flags
+  data_final <- append_flag_note(df = data_final, rn = rn, analyte = var, flag_num = f, note_text = note)
+  
+  View(data_final |>
+ select(row.numbers, everything()))
+  rl= readline('Do you need to add any more notes? (y/n): ')
+}
+```
+
+```{r Write files}
+
+# Save updated rolling charts
+check.25.standards= rc_check.25.standards |>
+  select(-expected.conc)
+digest.checks= rc_digest.checks |>
+  select(-expected.conc)
+digested.blanks= rc_digested.blanks |>
+  select(-expected.conc)
+spiked.blanks= rc_spiked.blanks |>
+  select(-expected.conc)
+duplicates= rc_duplicates
+spiked.samples= rc_spiked.samples
+save(check.25.standards, digest.checks, digested.blanks, spiked.blanks, duplicates, spiked.samples,
+     file = "MDLs/Rolling.Checks.TNTP.RData")
+
+# Full QAQC file with all rows and flag/note columns
+data_final= data_final[order(data_final$row.numbers),]
+write.csv(data_final, file = paste0(getwd(),"/Results/TNTP/TNTP Results_withQAQC_", runDate, "_", project, ".csv"), row.names = FALSE)
+
+# I don't think this should be part of this script. To me this makes more sense in the flagging script after this. 
+      #It's something I will need to do for other projects. -F
+# Cleaned file: samples only, no QC rows, no dilution/rerun duplicates
+cleaned <- data_final |>
+  filter(Sample.Type %in% c("Unknown", "Duplicate Set", "Spike Set")) |>
+  select(clean_ids, Sample.ID, Cup.Number, Sample.Type,
+         Conc.ugL.TP, Flag.TP, Notes.TP,
+         Conc.ugL.TN, Flag.TN, Notes.TN) |>
+  filter(!grepl("S", Cup.Number, ignore.case = TRUE)) |>
+  filter(!grepl("bl|che|sp", Sample.ID, ignore.case = TRUE)) |> # it looks like the spikes are removed. Is this right? yes!
+  # remove rows flagged as discard (flag 7 = out of range, flag 8 = discard)
+  mutate(
+    Conc.ugL.TN = ifelse(grepl("7|8", Flag.TN), NA, Conc.ugL.TN),
+    Conc.ugL.TP = ifelse(grepl("7|8", Flag.TP), NA, Conc.ugL.TP),
+    Flag.TN = as.character(Flag.TN),
+    Flag.TP = as.character(Flag.TP)
+  )|>
+  pivot_longer(cols = c(Conc.ugL.TN, Flag.TN, Notes.TN, Conc.ugL.TP, Flag.TP, Notes.TP),
+    names_to = c(".value", "analyte"),
+    names_pattern = "^(.+)\\.(TN|TP)$"
+) |> 
+ # drop_na(Conc.ugL) |> # drop any of the rows that have NA for concentration|>
+pivot_wider(names_from = analyte,
+    names_sep = ".",
+    values_from = c(Conc.ugL, Flag, Notes)) 
+
+# how to handle dups? Average later?
+#lab dups have never been averaged (at least during Dexter's time here)
+#added this to give option me the option to delete dups from the list for other projects
+rl= readline("Do you want to retain lab dups in the cleaned data file? (y/n): ")
+if (rl=='n'|rl=='N'){cleaned= cleaned[grepl('DUP',cleaned$Sample.ID, ignore.case = F)==F,]}
+
+
+# make the date the run date
+cleaned$Date <- runDate
+
+write.csv(cleaned, file = paste0(getwd(),"/Results/TNTP/TNTP Results_", runDate, "_", project, ".csv"), row.names = FALSE)
+
+print(paste("Done! Results files are saved in", paste0(getwd(),'/Results/TNTP')))
+```

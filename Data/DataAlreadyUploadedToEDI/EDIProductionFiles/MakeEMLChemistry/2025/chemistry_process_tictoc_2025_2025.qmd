@@ -1,0 +1,989 @@
+---
+title: "TICTOC"
+format: html
+---
+TICTOC script needs: 
+Step toward the beginning to flag bad things from the rack map
+
+getting formulas to the correct rows
+any injection we know is bad
+any standard we want to exclude
+
+Notes section for notes about the entire run
+would ideally have a place fo rthe full run notes
+for any high DIC C samples, DOC will be less accurate
+
+What are TICTOC flags? 
+- maintenance log - a .csv - needs to be flexible
+- digitized rack map
+
+- date run
+- hole pos
+- sample #
+- No. - line #
+- and analyte
+- and notes col. 
+
+csv pull date based on 1st line. 
+
+May need to be able to set up or id segmented regression (single breakpoint)
+- needs would go in the maintenance log. 
+
+Ideally this would all be able to be run as an html
+Set anything bad to NA using the maintenance log
+
+
+```{r settings}
+# Set to TRUE to add entries to the maintenance log interactively
+# Set to FALSE when knitting
+run_interactive <- TRUE
+```
+
+```{r libraries}
+library(pacman)
+
+pacman::p_load(here, tidyverse, ggplot2, dplyr, janitor, ggpmisc, segmented, kableExtra, knitr)
+
+```
+
+Bring in the data! This requires the data to be in the folder and should allow running all of the files at once
+```{r read data}
+
+file <- paste0(here(), "/Raw/TICTOC/20260327_KKH_LTREB7_5.csv")
+file #something is not right with this
+tictoc <- read.csv(file, skip = 1) |> clean_names()
+
+```
+
+Real #1. Apply maintenance log
+Takes the data and the maintenance log, matches by no, hole pos. and date run. 
+```{r maint log application}
+
+maintenancelog <- paste0(here(),"/maintenance_logs/TICTOC_maintlog.csv")
+maintenancelog
+maintenancelog <- read.csv(maintenancelog)
+
+source(paste0(here(), "/functions/TICTOC functions/TICTOC_applymaintlog.R"))
+
+TICTOC_applymaintlog(maintenancefile = maintenancelog, tictoc)
+
+TICTOC_applymaintlog(maintenance_file = maintenancelog,  
+                                 directory = paste0(here(), "/Raw/TICTOC"), #this is the folder where all of the TICTOC runs are stored
+                                 outfile = "Results/TICTOC/TICTOC_postmaintlog.csv",
+                                 start_date = NULL,
+                                 end_date = NULL, 
+                                 outputcheck_folder = paste0(here()))
+
+```
+
+1. plot standards and water blanks using the area from each injection. Prioritize the last 2 injections from each sample. 
+```{r get concentrations}
+tictoc <- read.csv(paste0(here(), "/Results/TICTOC/TICTOC_postmaintlog.csv"))
+
+
+standards_all <- tictoc |> filter(grepl(pattern = "Mixed Check", x = name))
+
+
+get_last_injections <- function(df, n = 2) {
+  df |>
+    arrange(hole_pos, no) |>
+    group_by(hole_pos) |>
+    slice_tail(n = n) |>
+    ungroup()
+}
+
+standards_avg <- standards_all |> 
+  get_last_injections() |> 
+  group_by(Date_processed) |> 
+  group_by(hole_pos) |> 
+  mutate(avg_tic = mean(tic_area), 
+         avg_tc = mean(tc_area), 
+         avg_tnb = mean(t_nb_area)) |> 
+  mutate(conc_tic = ifelse(grepl("3/6/0.3", x = name), 3, 
+                           ifelse(grepl("9/18/0.9", x = name), 9, NA)), 
+         conc_tc = ifelse(grepl("3/6/0.3", x = name), 6, 
+                           ifelse(grepl("9/18/0.9", x = name), 18, NA)),
+         conc_tnb = ifelse(grepl("3/6/0.3", x = name), 0.3, 
+                           ifelse(grepl("9/18/0.9", x = name), 0.9, NA))) |> 
+  mutate(stconc_tic = (tic_vol_ml * conc_tic), 
+         stconc_tc = (tc_vol_ml * conc_tc), 
+         stconc_tnb = (tc_vol_ml * conc_tnb))
+```
+
+```{r plot standards}
+
+pivot_analytes <- function(df) {
+  df |>
+    rename(area_tnb = t_nb_area, 
+           area_tc = tc_area, 
+           area_tic = tic_area) |>
+    pivot_longer(
+      cols = c(stconc_tc, stconc_tic, stconc_tnb,
+               avg_tc, avg_tic, avg_tnb,
+               area_tc, area_tic, area_tnb, Date_processed),
+      names_to = c(".value", "analyte"),
+      names_pattern = "^(.+)_(tc|tic|tnb)$"
+    )
+}
+
+dates <- unique(standards_avg$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  p <- standards_avg |>
+    filter(Date_processed == d) |>
+    dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb, 
+                  avg_tic, avg_tc, avg_tnb, 
+                  tic_area, tc_area, t_nb_area, Date_processed) |>
+    pivot_analytes() |>
+    ggplot(aes(x = stconc, y = avg)) +
+    geom_point() +
+    geom_point(aes(x = stconc, y = area), colour = "red") +
+    geom_smooth(method = "lm", se = FALSE) +
+    stat_poly_eq(
+      aes(label = after_stat(eq.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      label.y = 0.95
+    ) +
+    stat_poly_eq(
+      aes(label = after_stat(rr.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      rr.digits = 5,
+      label.y = 0.85
+    ) +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Date processed:", d))
+  
+  print(p)
+}
+
+# test <- standards_avg |> 
+#   dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb, avg_tic, avg_tc, avg_tnb, tic_area, tc_area, t_nb_area, Date_processed) |> 
+# pivot_analytes() |> 
+#   ggplot(aes(x = stconc, y = avg)) +
+#   geom_point() +
+#   geom_point(aes(x = stconc, y = area), colour = "red")+
+#   geom_smooth(method = "lm", se = FALSE) +
+# stat_poly_eq(
+#     aes(label = after_stat(eq.label)),
+#     formula = y ~ x,
+#     parse = TRUE,
+#     label.y = 0.95
+#   ) +
+#   stat_poly_eq(
+#     aes(label = after_stat(rr.label)),
+#     formula = y ~ x,
+#     parse = TRUE,
+#     rr.digits = 5,
+#     label.y = 0.85
+#   ) +
+#   facet_wrap(~analyte, scales = "free")
+# test
+```
+
+```{r}
+#with 120% error? 
+
+pivot_analytes <- function(df) {
+  df |>
+    rename(area_tnb = t_nb_area, 
+           area_tc = tc_area, 
+           area_tic = tic_area) |>
+    pivot_longer(
+      cols = c(stconc_tc, stconc_tic, stconc_tnb,
+               avg_tc, avg_tic, avg_tnb,
+               area_tc, area_tic, area_tnb, Date_processed),
+      names_to = c(".value", "analyte"),
+      names_pattern = "^(.+)_(tc|tic|tnb)$"
+    )
+}
+
+dates <- unique(standards_avg$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  plot_data <- standards_avg |>
+    filter(Date_processed == d) |>
+    dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb, 
+                  avg_tic, avg_tc, avg_tnb, 
+                  tic_area, tc_area, t_nb_area, Date_processed) |>
+    pivot_analytes() |>
+    mutate(
+      pct_error = ((avg - stconc) / stconc) * 100,
+      out_of_range = abs(pct_error) > 15
+    )
+  
+  # Standard curve plot
+  p <- plot_data |>
+    ggplot(aes(x = stconc, y = avg)) +
+    geom_point(aes(color = out_of_range)) +
+    scale_color_manual(values = c("FALSE" = "black", "TRUE" = "red"),
+                       name = ">15% error") +
+    geom_point(aes(x = stconc, y = area), colour = "red", shape = 17) +
+    geom_smooth(method = "lm", se = FALSE) +
+    geom_abline(aes(slope = 1.2, intercept = 0),
+                linetype = "dashed", colour = "darkred") +
+    stat_poly_eq(
+      aes(label = after_stat(eq.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      label.y = 0.95
+    ) +
+    stat_poly_eq(
+      aes(label = after_stat(rr.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      rr.digits = 5,
+      label.y = 0.85
+    ) +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Standard curve - Date processed:", d))
+  
+  print(p)
+  
+  # % error table
+  error_table <- plot_data |>
+    dplyr::select(no, hole_pos, analyte, stconc, avg, pct_error, out_of_range) |>
+    arrange(analyte, stconc) |>
+    mutate(pct_error = round(pct_error, 2)) |>
+    knitr::kable(
+      caption = paste("% Error by standard - Date processed:", d),
+      col.names = c("No", "Hole Pos", "Analyte", "Known Std", 
+                    "Measured Avg", "% Error", ">15% Error")
+    ) |>
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
+    kableExtra::row_spec(which(plot_data$out_of_range), background = "#ffcccc")
+  
+  print(error_table)
+}
+```
+
+
+This section plots a segmented regression. This is NOT what will be used in most cases. 
+
+```{r segmented regression if necessary}
+dates <- unique(standards_avg$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  p <- standards_avg |>
+    filter(Date_processed == d) |>
+    dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb, 
+                  avg_tic, avg_tc, avg_tnb, 
+                  tic_area, tc_area, t_nb_area, Date_processed) |>
+    pivot_analytes() |>
+    dplyr::filter(!is.na(analyte), !is.na(avg), !is.na(stconc)) |>
+    dplyr::group_by(analyte) |>
+    dplyr::mutate(
+      seg_fitted = {
+        fit_lm <- lm(avg ~ stconc)
+        fit_seg <- segmented(fit_lm, seg.Z = ~stconc)
+        fitted(fit_seg)
+      },
+      breakpoint = {
+        fit_lm <- lm(avg ~ stconc)
+        fit_seg <- segmented(fit_lm, seg.Z = ~stconc)
+        fit_seg$psi[, "Est."]
+      }
+    ) |>
+    dplyr::ungroup() |>
+    ggplot(aes(x = stconc, y = avg)) +
+    geom_point() +
+    geom_point(aes(y = area), colour = "red") +
+    geom_line(aes(y = seg_fitted), colour = "blue") +
+    geom_vline(aes(xintercept = breakpoint), 
+               linetype = "dashed", colour = "darkred") +
+    stat_poly_eq(aes(label = after_stat(rr.label)),
+                 formula = y ~ x,
+                 parse = TRUE,
+                 rr.digits = 5,
+                 label.y = 0.95) +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Date processed:", d))
+  
+  print(p)
+}
+# 
+# test <- standards_avg |>
+#   dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb, avg_tic, avg_tc, avg_tnb, tic_area, tc_area, t_nb_area, Date_processed) |>
+#   pivot_analytes() |>
+#   dplyr::filter(!is.na(analyte), !is.na(avg), !is.na(stconc)) |>
+#   dplyr::group_by(analyte) |>
+#   dplyr::mutate(
+#     seg_fitted = {
+#       fit_lm <- lm(avg ~ stconc)
+#       fit_seg <- segmented(fit_lm, seg.Z = ~stconc)
+#       fitted(fit_seg)
+#     },
+#     breakpoint = {
+#       fit_lm <- lm(avg ~ stconc)
+#       fit_seg <- segmented(fit_lm, seg.Z = ~stconc)
+#       fit_seg$psi[, "Est."]
+#     }
+#   ) |>
+#   dplyr::ungroup() |>
+#   ggplot(aes(x = stconc, y = avg)) +
+#   geom_point() +
+#   geom_point(aes(y = area), colour = "red") +
+#   geom_line(aes(y = seg_fitted), colour = "blue") +
+#   geom_vline(aes(xintercept = breakpoint),
+#              linetype = "dashed", colour = "darkred") +
+#   stat_poly_eq(aes(label = after_stat(rr.label)),
+#                formula = y ~ x,
+#                parse = TRUE,
+#                rr.digits = 5,
+#                label.y = 0.95) +
+#   facet_wrap(~analyte, scales = "free")
+# test
+```
+
+
+
+```{r water blanks}
+waterblanks <- tictoc |> filter(grepl(pattern = "Water", x = name))
+
+get_last_injections_time <- function(df, n = 2, window_hours = 2) {
+  df |>
+    arrange(date, time) |>
+    mutate(
+      datetime = as.POSIXct(paste(date, time)),
+      time_group = floor(as.numeric(datetime) / (window_hours * 3600))
+    ) |>
+    group_by(hole_pos, time_group) |>
+    slice_tail(n = n) |>
+    ungroup() 
+}
+
+blanks <- waterblanks |> 
+  get_last_injections_time() |> 
+  group_by(hole_pos, time_group) |>
+  mutate(avg_tic = mean(tic_area, na.rm = T), 
+         avg_tc  = mean(tc_area, na.rm = T), 
+         avg_tnb = mean(t_nb_area, na.rm = T)) 
+
+dates <- unique(blanks$Date_processed)
+
+
+pivot_analytes_blanks <- function(df) {
+  df |>
+    rename(area_tnb = t_nb_area, 
+           area_tc  = tc_area, 
+           area_tic = tic_area) |>
+    pivot_longer(
+      cols = c(avg_tc, avg_tic, avg_tnb,
+               area_tc, area_tic, area_tnb),
+      names_to = c(".value", "analyte"),
+      names_pattern = "^(.+)_(tc|tic|tnb)$"
+    )
+}
+
+dates <- unique(blanks$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  p <- blanks |>
+    filter(Date_processed == d) |>
+    dplyr::select(no, hole_pos, avg_tic, avg_tc, avg_tnb, 
+                  tic_area, tc_area, t_nb_area) |>
+    pivot_analytes_blanks() |>
+    ggplot(aes(x = no, y = area)) +
+    geom_point() +
+    geom_point(aes(x = no, y = avg), color = "green") +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Date processed:", d))
+  
+  print(p)
+}
+
+# waterblanks <- tictoc |> filter(grepl(pattern = "Water", x = name))
+# 
+# #this function is time based and should solve issues pertaining to duplicate hole pos/dates/names. However, keep an eye on this!
+# get_last_injections_time <- function(df, n = 2, window_hours = 2) {
+#   df |>
+#     arrange(date, time) |>
+#     mutate(
+#       datetime = as.POSIXct(paste(date, time)),
+#       time_group = floor(as.numeric(datetime) / (window_hours * 3600))
+#     ) |>
+#     group_by(hole_pos, time_group) |>
+#     slice_tail(n = n) |>
+#     ungroup() 
+# }
+# 
+# blanks <- waterblanks |> 
+#   get_last_injections_time() |> 
+#   group_by(hole_pos, time_group) |>
+#   mutate(avg_tic = mean(tic_area, na.rm = T), 
+#          avg_tc = mean(tc_area, na.rm = T), 
+#          avg_tnb = mean(t_nb_area, na.rm = T)) 
+# 
+# pivot_analytes <- function(df) {
+#   df |>
+#     rename(area_tnb = t_nb_area, 
+#            area_tc = tc_area, 
+#            area_tic = tic_area) |>
+#     pivot_longer(
+#       cols = c(avg_tc, avg_tic, avg_tnb,
+#                area_tc, area_tic, area_tnb),
+#       names_to = c(".value", "analyte"),
+#       names_pattern = "^(.+)_(tc|tic|tnb)$"
+#     )
+# }
+# 
+# 
+# # add a line for the blanks rolling average
+# blanks |> 
+#   dplyr::select(no, hole_pos, avg_tic, avg_tc, avg_tnb, tic_area, tc_area, t_nb_area) |> 
+# pivot_analytes() |> 
+#   ggplot(aes(x = no, y = area)) +
+#   geom_point() +
+#     geom_point(aes(x = no, y = avg), color = "green") +
+#   facet_wrap(~analyte, scales = "free")
+
+```
+
+2a. Add a chunk to take out any standards as needed, print a list for the maintenance log, ideally add straight to maintenance log
+
+```{r interactive maintenance log 1}
+### Add entries to the maintenance log interactively
+
+# Read in the maintenance log to see its structure
+maintenancelog <- paste0(here(), "/maintenance_logs/TICTOC_maintlog.csv")
+log_current <- read_csv(maintenancelog)
+
+# Print current samples in the data to help identify what to log
+print("Current unique sample names in raw_df:")
+print(sort(unique(tictoc$name)))
+
+# Enter a value for each column interactively
+new_entry <- data.frame(
+  date_run     = as.Date(readline(prompt = "date_run (YYYY-MM-DD): ")),
+  hole_pos     = readline(prompt = "hole_pos: "),
+  name         = readline(prompt = "name: "),
+  line_no      = as.integer(readline(prompt = "line_no: ")),
+  analyte      = readline(prompt = "analyte (all/tic/tc/tnb): "),
+  lab_flag     = as.integer(readline(prompt = "lab_flag (1-9): ")),
+  notes        = readline(prompt = "notes: ")
+)
+
+# Print the entry so you can confirm it looks right
+print("New entry to be added:")
+print(new_entry)
+
+# Confirm before appending
+confirm <- readline(prompt = "Add this entry to the maintenance log? (yes/no): ")
+
+if(tolower(confirm) == "yes"){
+  write.table(new_entry, 
+              maintenancelog, 
+              append = TRUE, 
+              sep = ",", 
+              row.names = FALSE, 
+              col.names = FALSE)
+  print("Entry added to maintenance log.")
+} else {
+  print("Entry not added.")
+}
+```
+
+
+3a. default linear and plot standards. 
+
+```{r plot standards post maint log application}
+# KKH recommends going up to the previous chunk and rerunning there. Not adding this section here so that this doesn't get too long. 
+```
+
+
+3a. always ignore the first injection, if both injections are available, average, otherwise take only one
+
+Plotting all samples by hole position, plotting both average area and individual injection areas
+```{r plot all samples}
+
+samples_all <- tictoc_conc |> filter(grepl(pattern = "Sample|SPIKE|DUP", x = name, ignore.case = TRUE)) |> get_last_injections()
+
+sample_avg <- samples_all |> 
+  #get_last_injections() |> 
+  group_by(Date_processed) |> 
+  group_by(hole_pos) |> 
+  mutate(avg_tic = mean(tic_area), 
+         avg_tc = mean(tc_area), 
+         avg_tnb = mean(t_nb_area)) |> 
+  pivot_analytes_blanks() |>
+    ggplot(aes(x = hole_pos, y = area)) +
+    geom_point() +
+    geom_point(aes(x = hole_pos, y = avg), color = "green") +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Date processed:", d))
+
+sample_avg
+
+```
+
+
+4. calculate % error on each of the injection volumes for the standard curve, present as a table. Color points red if std dev is greater than 15%
+
+([conc.] - [kn. std])/[kn. std]
+
+add line to the graph at 120% of known standard to id anything out of range
+
+```{r}
+# Step 1: Fit linear regressions per analyte per date from the standard curve
+pivot_analytes <- function(df) {
+  df |>
+    rename(area_tnb = t_nb_area, 
+           area_tc = tc_area, 
+           area_tic = tic_area) |>
+    pivot_longer(
+      cols = c(stconc_tc, stconc_tic, stconc_tnb,
+               avg_tc, avg_tic, avg_tnb,
+               area_tc, area_tic, area_tnb),
+      names_to = c(".value", "analyte"),
+      names_pattern = "^(.+)_(tc|tic|tnb)$"
+    )
+}
+
+regressions <- standards_avg |>
+  ungroup() |> 
+  dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb,
+                avg_tic, avg_tc, avg_tnb,
+                tic_area, tc_area, t_nb_area, Date_processed) |>
+  pivot_analytes() |>
+  filter(!is.na(avg), !is.na(stconc)) |>
+  group_by(analyte, Date_processed) |>
+  summarise(
+    model = list(lm(avg ~ stconc)),
+    .groups = "drop"
+  )
+
+# Helper to apply a model to an area value: solves avg = a + b*stconc for stconc
+# i.e. conc = (area - intercept) / slope
+calc_conc <- function(model, area){
+  intercept <- coef(model)[1]
+  slope     <- coef(model)[2]
+  (area - intercept) / slope
+}
+
+# Step 2: Apply regressions to all samples to calculate concentrations
+tictoc_conc <- tictoc |>
+  group_by(Date_processed) |>
+  group_modify(~ {
+    df <- .x
+    d  <- .y$Date_processed
+    
+    for(analyte in c("tic", "tc", "tnb")){
+      
+      area_col  <- switch(analyte,
+                          "tic" = "tic_area",
+                          "tc"  = "tc_area",
+                          "tnb" = "t_nb_area")
+      
+      conc_col  <- switch(analyte,
+                          "tic" = "calc_conc_tic",
+                          "tc"  = "calc_conc_tc",
+                          "tnb" = "calc_conc_tnb")
+      
+      mod <- regressions |>
+        filter(analyte == !!analyte, Date_processed == d) |>
+        pull(model)
+      
+      if(length(mod) == 0){
+        df[[conc_col]] <- NA_real_
+      } else {
+        df[[conc_col]] <- calc_conc(mod[[1]], df[[area_col]])
+      }
+    }
+    df
+  }) |>
+  ungroup()
+
+# Step 3: Apply regressions back to standard areas and calculate % error
+standards_pct_error <- standards_avg |>
+  dplyr::select(no, hole_pos, stconc_tc, stconc_tic, stconc_tnb,
+                avg_tic, avg_tc, avg_tnb,
+                tic_area, tc_area, t_nb_area, Date_processed) |>
+  pivot_analytes() |>
+  filter(!is.na(avg), !is.na(stconc)) |>
+  group_by(Date_processed) |>
+  group_modify(~ {
+    df <- .x
+    d  <- .y$Date_processed
+    
+    for(a in c("tic", "tc", "tnb")){
+      mod <- regressions |>
+        filter(analyte == a, Date_processed == d) |>
+        pull(model)
+      
+      rows <- df$analyte == a
+      
+      if(length(mod) == 0){
+        df$calc_conc[rows] <- NA_real_
+      } else {
+        df$calc_conc[rows] <- calc_conc(mod[[1]], df$area[rows])
+      }
+    }
+    df
+  }) |>
+  ungroup() |>
+  mutate(
+    pct_error    = ((calc_conc - stconc) / stconc) * 100,
+    out_of_range = abs(pct_error) > 15
+  )
+
+# Step 4: Plot standard curve with % error and print table, looped by date
+dates <- unique(standards_avg$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  plot_data <- standards_pct_error |> filter(Date_processed == d)
+  
+  p <- plot_data |>
+    ggplot(aes(x = stconc, y = avg)) +
+    geom_point(aes(color = out_of_range)) +
+    scale_color_manual(values = c("FALSE" = "black", "TRUE" = "red"),
+                       name = ">15% error") +
+    geom_point(aes(x = stconc, y = area), colour = "red", shape = 17) +
+    geom_smooth(method = "lm", se = FALSE) +
+    geom_abline(aes(slope = 1.2, intercept = 0),
+                linetype = "dashed", colour = "darkred") +
+    stat_poly_eq(
+      aes(label = after_stat(eq.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      label.y = 0.95
+    ) +
+    stat_poly_eq(
+      aes(label = after_stat(rr.label)),
+      formula = y ~ x,
+      parse = TRUE,
+      rr.digits = 5,
+      label.y = 0.85
+    ) +
+    facet_wrap(~analyte, scales = "free") +
+    labs(title = paste("Standard curve - Date processed:", d))
+  
+  print(p)
+  
+  error_table <- plot_data |>
+    dplyr::select(no, hole_pos, analyte, stconc, avg, calc_conc, pct_error, out_of_range) |>
+    arrange(analyte, stconc) |>
+    mutate(pct_error = round(pct_error, 2),
+           calc_conc = round(calc_conc, 4)) |>
+    knitr::kable(
+      caption = paste("% Error by standard - Date processed:", d),
+      col.names = c("No", "Hole Pos", "Analyte", "Known Std",
+                    "Measured Avg", "Calc. Conc", "% Error", ">15% Error")
+    ) |>
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
+    kableExtra::row_spec(which(plot_data$out_of_range), background = "#ffcccc")
+  
+  print(error_table)
+}
+
+```
+```{r}
+# Step 1: Calculate percent difference between duplicate injections
+pct_diff <- samples_all |>
+  get_last_injections() |> 
+  group_by(Date_processed, name, hole_pos) |>
+  summarise(
+    n_injections  = n(),
+    mean_conc_tic = mean(calc_conc_tic, na.rm = TRUE),
+    mean_conc_tc  = mean(calc_conc_tc,  na.rm = TRUE),
+    mean_conc_tnb = mean(calc_conc_tnb, na.rm = TRUE),
+    rpd_tic = {
+      vals <- calc_conc_tic[!is.na(calc_conc_tic)]
+      if(length(vals) == 2) abs(vals[1] - vals[2]) / mean(vals) * 100 else NA_real_
+    },
+    rpd_tc = {
+      vals <- calc_conc_tc[!is.na(calc_conc_tc)]
+      if(length(vals) == 2) abs(vals[1] - vals[2]) / mean(vals) * 100 else NA_real_
+    },
+    rpd_tnb = {
+      vals <- calc_conc_tnb[!is.na(calc_conc_tnb)]
+      if(length(vals) == 2) abs(vals[1] - vals[2]) / mean(vals) * 100 else NA_real_
+    },
+    .groups = "drop"
+  ) |>
+  pivot_longer(
+    cols = c(mean_conc_tic, mean_conc_tc, mean_conc_tnb,
+             rpd_tic, rpd_tc, rpd_tnb),
+    names_to = c(".value", "analyte"),
+    names_pattern = "^(.+)_(tic|tc|tnb)$"
+  )
+
+# Step 2: Plot looped by date
+dates <- unique(pct_diff$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  plot_data <- pct_diff |> filter(Date_processed == d)
+  
+  # Figure 1: Concentration by sample
+  p1 <- plot_data |>
+    ggplot(aes(x = name, y = mean_conc, color = hole_pos)) +
+    geom_point(size = 2) +
+    facet_wrap(~analyte, scales = "free_y") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = paste("Sample concentrations - Date processed:", d),
+         x = "Sample",
+         y = "Calculated concentration",
+         color = "Hole position")
+  
+  print(p1)
+  
+  # Figure 2: Percent difference between duplicate injections
+p2_data <- plot_data |> filter(!is.na(rpd))
+  
+  if(nrow(p2_data) > 0){
+    p2 <- p2_data |>
+      ggplot(aes(x = name, y = rpd, color = rpd > 15)) +
+      geom_point(size = 2) +
+      geom_hline(yintercept = 15, linetype = "dashed", colour = "darkred") +
+      scale_color_manual(values = c("FALSE" = "black", "TRUE" = "red"),
+                         name = ">15% RPD") +
+      facet_wrap(~analyte, scales = "free_y") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      labs(title = paste("Injection RPD - Date processed:", d),
+           x = "Sample",
+           y = "Relative percent difference (%)",
+           color = ">15% RPD")
+    
+    print(p2)
+    
+  } else {
+    message("No RPD values to plot for date: ", d)
+  }
+}
+
+```
+
+
+-- here: look back at the notes and make decisions about any injections to exclude if necessary --
+- add this list to maint log if necessary
+
+6. Check dups - perc diff (avg. orig - avg. dup)/avg. of all injections
+```{r}
+# Define duplicate pairings
+dup_pairs <- tibble(
+  sample_name = c("Sample 5",  "Sample 15"),
+  dup_hole_pos = c("20", "32")
+)
+
+# Calculate RPD between each sample and its paired DUP
+dup_rpd <- dup_pairs |>
+  rowwise() |>
+  reframe(
+    samples_all |>
+      filter(Date_processed %in% unique(samples_all$Date_processed)) |>
+      group_by(Date_processed) |>
+      summarise(
+        sample_conc_tic = mean(calc_conc_tic[name == sample_name],  na.rm = TRUE),
+        sample_conc_tc  = mean(calc_conc_tc[name == sample_name],   na.rm = TRUE),
+        sample_conc_tnb = mean(calc_conc_tnb[name == sample_name],  na.rm = TRUE),
+        dup_conc_tic    = mean(calc_conc_tic[name == "DUP" & hole_pos == dup_hole_pos],  na.rm = TRUE),
+        dup_conc_tc     = mean(calc_conc_tc[name == "DUP" & hole_pos == dup_hole_pos],   na.rm = TRUE),
+        dup_conc_tnb    = mean(calc_conc_tnb[name == "DUP" & hole_pos == dup_hole_pos],  na.rm = TRUE),
+        sample_name     = sample_name,
+        dup_hole_pos    = dup_hole_pos,
+        .groups         = "drop"
+      )
+  ) |>
+  mutate(
+    rpd_tic = abs(sample_conc_tic - dup_conc_tic) / mean(c(sample_conc_tic, dup_conc_tic)) * 100,
+    rpd_tc  = abs(sample_conc_tc  - dup_conc_tc)  / mean(c(sample_conc_tc,  dup_conc_tc))  * 100,
+    rpd_tnb = abs(sample_conc_tnb - dup_conc_tnb) / mean(c(sample_conc_tnb, dup_conc_tnb)) * 100
+  ) |>
+  pivot_longer(
+    cols = c(sample_conc_tic, sample_conc_tc, sample_conc_tnb,
+             dup_conc_tic, dup_conc_tc, dup_conc_tnb,
+             rpd_tic, rpd_tc, rpd_tnb),
+    names_to = c(".value", "analyte"),
+    names_pattern = "^(.+)_(tic|tc|tnb)$"
+  )
+
+# Plot looped by date
+dates <- unique(dup_rpd$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  plot_data <- dup_rpd |> filter(Date_processed == d)
+  
+  p <- plot_data |>
+    ggplot(aes(x = sample_name, y = rpd, fill = rpd > 15)) +
+    geom_col() +
+    geom_hline(yintercept = 15, linetype = "dashed", colour = "darkred") +
+    scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "red"),
+                      name = ">15% RPD") +
+    facet_wrap(~analyte, scales = "free_y") +
+    labs(title = paste("Duplicate RPD - Date processed:", d),
+         x = "Sample",
+         y = "Relative percent difference (%)") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
+}
+```
+
+
+7. Check spikes - conc. difference to calculate % recovery
+
+FRANCES YOU NEED TO FILL THIS IN, RAN OUT OF STEAM LAST NIGHT. OTHERWISE SHOULD WORK
+
+```{r}
+# Known spike concentrations - FILL IN THESE VALUES
+spike_conc_tic <- NA_real_  # fill in known TIC spike concentration
+spike_conc_tc  <- NA_real_  # fill in known TC spike concentration
+spike_conc_tnb <- NA_real_  # fill in known TNB spike concentration
+
+# Define spike pairings
+spike_pairs <- tibble(
+  sample_name   = c("Sample 10", "Sample 20"),
+  spike_hole_pos = c("19", "31")
+)
+
+# Calculate spike recovery
+spike_recovery <- spike_pairs |>
+  rowwise() |>
+  reframe(
+    tictoc_conc |>
+      group_by(Date_processed) |>
+      summarise(
+        sample_conc_tic  = mean(calc_conc_tic[name == sample_name],                          na.rm = TRUE),
+        sample_conc_tc   = mean(calc_conc_tc[name == sample_name],                           na.rm = TRUE),
+        sample_conc_tnb  = mean(calc_conc_tnb[name == sample_name],                          na.rm = TRUE),
+        spike_conc_tic   = mean(calc_conc_tic[name == "SPIKE" & hole_pos == spike_hole_pos], na.rm = TRUE),
+        spike_conc_tc    = mean(calc_conc_tc[name == "SPIKE" & hole_pos == spike_hole_pos],  na.rm = TRUE),
+        spike_conc_tnb   = mean(calc_conc_tnb[name == "SPIKE" & hole_pos == spike_hole_pos], na.rm = TRUE),
+        sample_name      = sample_name,
+        spike_hole_pos   = spike_hole_pos,
+        .groups          = "drop"
+      )
+  ) |>
+  mutate(
+    recovery_tic = (spike_conc_tic - sample_conc_tic) / spike_conc_tic * 100,
+    recovery_tc  = (spike_conc_tc  - sample_conc_tc)  / spike_conc_tc  * 100,
+    recovery_tnb = (spike_conc_tnb - sample_conc_tnb) / spike_conc_tnb * 100
+  ) |>
+  pivot_longer(
+    cols = c(sample_conc_tic, sample_conc_tc, sample_conc_tnb,
+             spike_conc_tic,  spike_conc_tc,  spike_conc_tnb,
+             recovery_tic,    recovery_tc,    recovery_tnb),
+    names_to  = c(".value", "analyte"),
+    names_pattern = "^(.+)_(tic|tc|tnb)$"
+  )
+
+# Plot looped by date
+dates <- unique(spike_recovery$Date_processed)
+
+for(d in dates){
+  
+  d <- as.Date(d, origin = "1970-01-01")
+  
+  plot_data <- spike_recovery |> filter(Date_processed == d)
+  
+  p <- plot_data |>
+    ggplot(aes(x = sample_name, y = recovery, fill = recovery < 80 | recovery > 120)) +
+    geom_col() +
+    geom_hline(yintercept = 80,  linetype = "dashed", colour = "darkred") +
+    geom_hline(yintercept = 120, linetype = "dashed", colour = "darkred") +
+    scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "red"),
+                      name = "Outside 80-120%") +
+    facet_wrap(~analyte, scales = "free_y") +
+    labs(title = paste("Spike recovery - Date processed:", d),
+         x     = "Sample",
+         y     = "% Recovery") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
+}
+```
+
+8. Spk taps - see next page - apply flag for outside range - plot, also calc % difference from the 1st spk tap over the course of the run
+
+STILL NEED TO DO THIS PART! WHAT ARE THE VALUES THAT THEY SHOULD BE?
+```{r}
+
+```
+
+9. average reps 2 & 3, flag anything that is over 120% of the top std. 
+WHAT IS THE FLAG THAT WE ARE USING FOR THIS?
+These reps are averaged based on concentration, not area! Technically should be the same. Might not be the same if using a segmented regression. That might be a can of worms we open only if we must.
+```{r}
+
+```
+
+
+
+ADDING A MANUAL WAY TO ADD FLAGS TO THE MAINTENANCE LOG HERE AGAIN FOR THIS
+```{r interactive maintenance log 2}
+### Add entries to the maintenance log interactively
+
+# Read in the maintenance log to see its structure
+maintenancelog <- paste0(here(), "/maintenance_logs/TICTOC_maintlog.csv")
+log_current <- read_csv(maintenancelog)
+
+# Print current samples in the data to help identify what to log
+print("Current unique sample names in raw_df:")
+print(sort(unique(tictoc$name)))
+
+# Enter a value for each column interactively
+new_entry <- data.frame(
+  date_run     = as.Date(readline(prompt = "date_run (YYYY-MM-DD): ")),
+  hole_pos     = readline(prompt = "hole_pos: "),
+  name         = readline(prompt = "name: "),
+  line_no      = as.integer(readline(prompt = "line_no: ")),
+  analyte      = readline(prompt = "analyte (all/tic/tc/tnb): "),
+  lab_flag     = as.integer(readline(prompt = "lab_flag (1-9): ")),
+  notes        = readline(prompt = "notes: ")
+)
+
+# Print the entry so you can confirm it looks right
+print("New entry to be added:")
+print(new_entry)
+
+# Confirm before appending
+confirm <- readline(prompt = "Add this entry to the maintenance log? (yes/no): ")
+
+if(tolower(confirm) == "yes"){
+  write.table(new_entry, 
+              maintenancelog, 
+              append = TRUE, 
+              sep = ",", 
+              row.names = FALSE, 
+              col.names = FALSE)
+  print("Entry added to maintenance log.")
+} else {
+  print("Entry not added.")
+}
+```
+
+
+
+Output the Excel sheet that is delivered. 
+We might need to change this naming convention.
+```{r}
+write.csv(paste0(here(), "/Results/TICTOC/", paste0(Sys.Date()), "_TICTOCresults.csv"))
+
+Sys.Date()
+```
+
+
+
+
+

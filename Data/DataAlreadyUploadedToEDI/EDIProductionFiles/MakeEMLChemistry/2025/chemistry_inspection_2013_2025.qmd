@@ -1,5 +1,5 @@
 ---
-title: "Chemistry_inspection_2013_2024"
+title: "Chemistry_inspection_2013_present"
 format: html
 ---
 
@@ -8,9 +8,9 @@ Script to inspect QAQCd 2025 chemistry data and combine with previous EDI public
 Script developed by HLW in 2023, edited by DWH in 2024-2025, edited by KKH in 2026.
 
 NOTE! This script does not knit because it incorporates many steps of QAQC that will be moved in subsequent years to the maintenance log/Level 1 generation script. 
-Note from KKH in 2026 - we should be able to get this to knit, but not there yet!
+Note from KKH in 2026 - we should be able to get this to knit in the future, but still not there yet!
 
-NOTE TO REVIEWERS!!! After loading packages on lines 16-19 go to line 145 to begin data review
+NOTE TO REVIEWERS!!! Go to the "For Reviewers" section to begin data review
 
 
 ```{r setup, include=FALSE}
@@ -21,18 +21,39 @@ pacman::p_load(tidyverse, lubridate, scales, viridis, plotly, gsheet, here)
 
 ```
 
-
 ```{r read in current + historic combined file}
 
-new_chem <- read_csv(paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_woISCO.csv")) 
+new_chem1 <- read_csv(paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_woISCO.csv")) 
 
-new_chem <- new_chem |> select(c(Reservoir, Site, DateTime, Depth_m, Rep, TN_ugL, TP_ugL, NH4_ugL, NO3NO2_ugL, SRP_ugL, DOC_mgL, DIC_mgL, DC_mgL, DN_mgL, Flag_DateTime, Flag_TP_ugL, Flag_TN_ugL, Flag_NH4_ugL, Flag_NO3NO2_ugL, Flag_SRP_ugL, Flag_DOC_mgL, Flag_DIC_mgL, Flag_DC_mgL, Flag_DN_mgL))
+new_chem <- new_chem1 |> select(c(Reservoir, Site, DateTime, Depth_m, Rep, TN_ugL, TP_ugL, NH4_ugL, NO3NO2_ugL, SRP_ugL, DOC_mgL, DIC_mgL, DC_mgL, DN_mgL, Flag_DateTime, Flag_TP_ugL, Flag_TN_ugL, Flag_NH4_ugL, Flag_NO3NO2_ugL, Flag_SRP_ugL, Flag_DOC_mgL, Flag_DIC_mgL, Flag_DC_mgL, Flag_DN_mgL, date_run_totals, date_run_solubles, date_run_tictoc)) |> 
+  rename(RunDate_Totals = date_run_totals, #add in run dates for the MDL information
+         RunDate_Solubles = date_run_solubles, 
+         RunDate_TC = date_run_tictoc) |> 
+  mutate(Flag_DIC_mgL = case_when(!is.na(DIC_mgL) & 
+                                    Depth_m>=5 & 
+                                    as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) & 
+                                    as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~9, 
+                                  TRUE ~ Flag_DIC_mgL))
 
-myEDIAccessKey <- "UsVwoHpF431obnILyyNrNVt-Sdk"
+
+ #question key needed 
+myEDIAccessKey <- "yltMpS4UEIk12AvB9L7OL5uRiG0"
 
 chem_data  <- paste0("https://pasta.lternet.edu/package/data/eml/edi/199/13/3f09a3d23b7b5dd32ed7d28e9bc1b081","?key=",myEDIAccessKey)
 
-old_chem <- read_csv(chem_data , col_types = cols())
+old_chem <- read_csv(chem_data , col_types = cols()) |> 
+  mutate(RunDate_Totals = NA, 
+         RunDate_Solubles = NA, 
+         RunDate_TC = NA) |> 
+dplyr::mutate(
+  time1 = hms::as_hms(DateTime),
+  time2 = dplyr::if_else(time1 == hms::as_hms("00:00:00"), #fixed old time problems!
+                         hms::as_hms("12:00:00"), time1),
+  date1 = lubridate::as_date(DateTime)
+) |> 
+  mutate(DateTime = paste(date1, time2)) |> 
+  mutate(DateTime = ymd_hms(DateTime)) |> 
+  select(-c(date1, time1, time2))
 
 ##remove reruns from new file 
 # DWH manually entered reruns. We need a better way to handle this. 
@@ -57,29 +78,63 @@ allchem <- allchem |>
   arrange(Reservoir, DateTime, Site, Depth_m, Rep) |> 
   mutate(DN_mgL = round(DN_mgL, 2)) #fix DN rounding for all years, can cut this next year as now in qaqc
 
-write.csv(allchem, "Chemistry_2013_2025.csv", row.names = FALSE)
+write.csv(allchem, "chemistry_2013_2025.csv", row.names = FALSE)
 ```
 
 REVIEWERS START HERE!!!!!!
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Add the names of the packages 
+pacman::p_load(tidyverse, lubridate, scales, viridis, plotly, gsheet, here)
+
+```
+
 ```{r}
 ######## UPDATE LINK ###############
 #read in the most recent version on EDI staging to work with this version to check on data
-allchem <- read_csv( "https://pasta-s.lternet.edu/package/data/eml/edi/1025/17/3f09a3d23b7b5dd32ed7d28e9bc1b081"   , col_types = cols())
+#API_access <- "?key=yltMpS4UEIk12AvB9L7OL5uRiG0"
+# staged_data <- "https://pasta-s.lternet.edu/package/data/eml/edi/1025/23/7f75abb974e6dfe026a283a3340498b0" 
 
+myEDIAccessKey <- "i3zts9FpyZyzQJgxWTrtCYpnU-k" #STAGING ONLY!!!
+# myEDIAccessKey <- "yltMpS4UEIk12AvB9L7OL5uRiG0" #PUBLISHED PACKAGES ONLY
+chem_data  <- paste0("https://pasta-s.lternet.edu/package/data/eml/edi/1025/23/7f75abb974e6dfe026a283a3340498b0", "?key=", myEDIAccessKey)
+# 
+allchem_read <- read.csv(chem_data)
+# 
+
+```
+
+Thought for new figure from Maria: 
+date on the x axis (pulling from a file where we have the dates for each field day that we definitely collected samples for that reservoir- something we could get the UGs to start doing if it doesn't currently exist), depth on the y axis. if there isn't a sample collected for that day/depth an "x" appears. it would also make it easy to see which dates/depths we have dupes of. # of samples collected (green = 1, orange = 2, red >= 3). so this doesn't show anything with values, it's just a quick way to see how many of each sample we collected/are missing.
+
+KKH note - yes - should probably go into QAQC script, actually, which is where we pull in this information. This already exists in table format. 
+```{r}
 
 ```
 
 
-```{r 2024 diagnostic plots - all sites}
+```{r all datetime}
+allchem <- allchem_read |> 
+  mutate(DateTime = ymd_hms(DateTime))
+#if this returns a warning: failed to parse, there are missing datetimes! Check which ones using the code below
 
+#the issue here is that actaully these are all set to midnight instead of noon :( I think I've fixed this! KKH
+
+# allchem <- allchem_read |> 
+#   mutate(DateTime1 = ymd_hms(DateTime))
+
+```
+
+```{r diagnostic plots - all sites}
 
 new_chem <- allchem |> 
-  filter(year(DateTime) >= 2025 )
+  filter(year(DateTime) >= 2022) # change this year to what you are interested in looking at
 
 #select columns for plotting
 new_chem <- new_chem [,(names(new_chem) %in% c("Reservoir","Site","DateTime",
-  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL", "DIC_mgL"))]
+  "Depth_m","Rep","TP_ugL","TN_ugL","NH4_ugL","SRP_ugL","NO3NO2_ugL","DOC_mgL", "DIC_mgL"))] #recognizing that this is missing DN and DC
 
   #### Chemistry diagnostic plots ####
 chemistry_long <- new_chem %>% 
@@ -93,7 +148,7 @@ chemistry_long$value <- as.numeric(chemistry_long$value)
 #mean value per sampling day indicated with large black dot
 chemistry_long |> 
   filter(Site == 50, 
-         DateTime > ymd("2024-01-01")) |> 
+         DateTime > ymd("2022-01-01")) |> 
 ggplot(aes(x = as.Date(DateTime), y = value, col=Reservoir)) +
   geom_point(size=1) +
   stat_summary(fun.y="mean", geom="point",pch=21,  size=3, fill='black') +
@@ -133,34 +188,224 @@ plot_var <- function(var_name,
   #print(qaqc_plotly)
 }
 
-# list of variables
-vars_to_plot <- c("TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL", "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL")
+#list of years
+years_to_plot <- c(2024, 2025, 2026) #reviewers change this to look at different years
 
+# list of variables
+vars_to_plot <- c("TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL", "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL") #reviewers change this to look at different variables. All variables existing are c("TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL", "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL") 
+
+```
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(purrr)
+library(rlang)
+library(lubridate)
+
+#You can use this to plot either a period or look closely at multiple years. Commenting the multiple years out for simplicity for now. 
+
+#Code courtesy of GPT - 5.6 - Sol
+# Plot one variable for any date range, including ranges spanning multiple years.
+plot_var_period <- function(var_name,
+                            start_date,
+                            end_date,
+                            data,
+                            reservoirs = c("FCR", "BVR", "CCR"),
+                            sites = c(10, 20, 30, 40, 50, 88, 90)) {
+
+  var_col <- rlang::sym(var_name)
+  flag_col <- rlang::sym(paste0("Flag_", var_name))
+  start_date <- as.Date(start_date)
+  end_date <- as.Date(end_date)
+
+  plot_data <- data |>
+    dplyr::filter(
+      Reservoir %in% reservoirs,
+      Site %in% sites,
+      as.Date(DateTime) >= start_date,
+      as.Date(DateTime) <= end_date
+    )
+
+  ggplot2::ggplot(
+    plot_data,
+    ggplot2::aes(
+      x = DateTime,
+      y = !!var_col,
+      color = as.factor(Depth_m),
+      shape = as.factor(!!flag_col)
+    )
+  ) +
+    ggplot2::geom_point() +
+    ggplot2::facet_grid(
+      cols = ggplot2::vars(Reservoir),
+      rows = ggplot2::vars(Site),
+      scales = "fixed",
+      drop = TRUE
+    ) +
+    ggplot2::scale_y_continuous(
+      limits = c(0, NA),
+      expand = ggplot2::expansion(mult = c(0, 0.05))
+    ) +
+    ggplot2::labs(
+      title = paste(
+        var_name,
+        format(start_date, "%Y-%m-%d"),
+        "to",
+        format(end_date, "%Y-%m-%d")
+      ),
+      x = "Date",
+      y = var_name,
+      color = "Depth (m)",
+      shape = "Flag"
+    ) +
+    ggplot2::theme_bw()
+}
+
+# Dataframe to plot.
+plot_data <- allchem
+
+#### Set date range here!
+# Set any date range. The dates can span multiple calendar years.
+start_date <- "2024-08-01"
+end_date <- "2026-03-31"
+
+# Set vars to plot
+vars_to_plot <- c(
+  "TN_ugL", "TP_ugL", "NH4_ugL", "NO3NO2_ugL", "SRP_ugL",
+  "DOC_mgL", "DIC_mgL", "DC_mgL", "DN_mgL"
+)
+
+# Set sites to plot
+
+sites = c(20, 50, 100, 200)
+sites_all <- c(1, 2, 3, 4, 5, 10.1, 10.2, 20, 20.1, 20.9, 30, 30.1, 30.9, 40, 45, 45.1,
+  50, 51, 88, 90, 92, 96, 98, 99, 100, 101, 102, 110, 175, 199, 199.8, 199.9,
+  200, 201, 215, 300, 301, 400, 500, 501) #don't recommend using sites_all to look closely at data, but should be used as a check to make sure data is where you expect it to be!
+
+# Create one cross-year plot for each variable.
+fcr_period <- vars_to_plot |>
+  stats::setNames(vars_to_plot) |>
+  purrr::map(
+    plot_var_period,
+    start_date = start_date,
+    end_date = end_date,
+    data = plot_data,
+    reservoirs = "FCR",
+    sites = sites_all
+  )
+
+# Display one variable for the complete date range.
+print(fcr_period[["TN_ugL"]])
+
+# Display every variable for the complete date range.
+purrr::walk(fcr_period, print)
+
+# # Optional: retain year-by-year plots when needed.
+# plot_var_year <- function(var_name,
+#                           plot_year,
+#                           data,
+#                           reservoirs = c("FCR", "BVR", "CCR"),
+#                           sites = c(10, 20, 30, 40, 50, 88, 90)) {
+#   plot_var_period(
+#     var_name = var_name,
+#     start_date = as.Date(paste0(plot_year, "-01-01")),
+#     end_date = as.Date(paste0(plot_year, "-12-31")),
+#     data = data,
+#     reservoirs = reservoirs,
+#     sites = sites
+#   )
+# }
+# 
+# years_to_plot <- c(2024, 2025, 2026)
+# 
+# fcr_by_year <- years_to_plot |>
+#   stats::setNames(as.character(years_to_plot)) |>
+#   purrr::map(function(current_year) {
+#     vars_to_plot |>
+#       stats::setNames(vars_to_plot) |>
+#       purrr::map(
+#         plot_var_year,
+#         plot_year = current_year,
+#         data = plot_data,
+#         reservoirs = "FCR",
+#         sites = c(20, 50, 100, 200)
+#       )
+#   })
+# 
+# # Example year-specific plot.
+# print(fcr_by_year[["2025"]][["TN_ugL"]])
+# purrr::walk(fcr_by_year, \(year_plots) { # to print every plot for every year
+#   purrr::walk(year_plots, print)
+# })
+
+
+```
+```{r}
+# Create one cross-year plot for each variable.
+bvr_period <- vars_to_plot |>
+  stats::setNames(vars_to_plot) |>
+  purrr::map(
+    plot_var_period,
+    start_date = start_date,
+    end_date = end_date,
+    data = plot_data,
+    reservoirs = "BVR",
+    sites = sites_all
+  )
+
+# Display one variable for the complete date range.
+print(bvr_period[["TN_ugL"]])
+
+# Display every variable for the complete date range.
+purrr::walk(bvr_period, print)
+```
+
+```{r}
+# Create one cross-year plot for each variable.
+ccr_period <- vars_to_plot |>
+  stats::setNames(vars_to_plot) |>
+  purrr::map(
+    plot_var_period,
+    start_date = start_date,
+    end_date = end_date,
+    data = plot_data,
+    reservoirs = "CCR",
+    sites = sites_all
+  )
+
+# Display one variable for the complete date range.
+print(ccr_period[["TN_ugL"]])
+
+# Display every variable for the complete date range.
+purrr::walk(ccr_period, print)
 ```
 
 
 ```{r FCR plots current year}
 
-fcr2024 <-vars_to_plot %>%
-  map(plot_var, year = c(2024, 2025), reservoirs = "FCR", data = allchem, site = c(20,50,100,200))
+fcr_current <-vars_to_plot %>%
+  map(plot_var, year = years_to_plot, reservoirs = "FCR", data = allchem, site = c(20,50,100,200))
 
-fcr2024
+fcr_current
 
 ```
 
 ```{r BVR plots current year}
-bvr2024 <-vars_to_plot %>%
-  map(plot_var, year = c(2024,2025),reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
 
-bvr2024
+bvr_current <-vars_to_plot %>%
+  map(plot_var, year = years_to_plot,reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
+
+bvr_current
 ```
 
 ```{r CCR plots current year}
 
-y2024 <-vars_to_plot %>%
+current_ccr <-vars_to_plot %>%
   map(plot_var, year = c(2024,2025), reservoirs = "CCR", data = allchem, site = c(50,51,88,90, 92,96,98,100,101,301))
 
-y2024
+current_ccr
 
 ```
 
@@ -186,7 +431,7 @@ ggplot(subset(chemistry_long, Reservoir=='FCR' & Site=="50"), aes(x = as.Date(Da
 
 ```
 
-```{r 2023 diagnostic plots FCR 100 and 200}
+```{r current diagnostic plots FCR 100 and 200}
 
 # FCR other sites nutrient data time series
 ggplot(subset(chemistry_long, Reservoir=='FCR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
@@ -205,7 +450,7 @@ ggplot(subset(chemistry_long, Reservoir=='FCR' & Site!="50"), aes(x = as.Date(Da
 
 ```
 
-```{r 2023 diagnostic plots - BVR 50}
+```{r current diagnostic plots - BVR 50}
 
 # BVR deep hole data time series
 ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
@@ -224,7 +469,7 @@ ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = as.Date(Da
 
 ```
 
-```{r 2023 diagnostic plots BVR inflows}
+```{r current diagnostic plots BVR inflows}
 
  #BVR other sites nutrient time series #no 2024 inflow samples so no figure :)
 ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
@@ -238,7 +483,7 @@ ggplot(subset(chemistry_long, Reservoir=='BVR' & Site!="50"), aes(x = as.Date(Da
 
 ```
 
-```{r 2023 diagnostic plots - CCR 50}
+```{r current diagnostic plots - CCR 50}
 
 # CCR site 50 nutrient time series
 ggplot(subset(chemistry_long, Reservoir=='CCR' & Site=="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Depth_m))) +
@@ -257,7 +502,7 @@ ggplot(subset(chemistry_long, Reservoir=='CCR' & Site=="50"), aes(x = as.Date(Da
 
 ```
 
-```{r 2023 diagnostic plots- CCR inflows}
+```{r current diagnostic plots- CCR inflows}
 
 # CCR other sites nutrient time series
 ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = as.Date(DateTime), y = value, col=as.factor(Site))) +
@@ -270,7 +515,7 @@ ggplot(subset(chemistry_long, Reservoir=='CCR' & Site!="50"), aes(x = as.Date(Da
         legend.key.size = unit(0.5, 'lines'),
         legend.text = element_text(size=5),
         legend.title = element_text(size=6)) + 
-  scale_color_manual("CCR_Site", values = plasma(7)) 
+  scale_color_manual("CCR_Site", values = plasma(14)) 
 
 #ggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, heggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, heggsave("./Figures/CCR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
 

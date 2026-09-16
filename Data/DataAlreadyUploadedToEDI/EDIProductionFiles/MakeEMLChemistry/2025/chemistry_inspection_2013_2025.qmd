@@ -29,11 +29,17 @@ new_chem <- new_chem1 |> select(c(Reservoir, Site, DateTime, Depth_m, Rep, TN_ug
   rename(RunDate_Totals = date_run_totals, #add in run dates for the MDL information
          RunDate_Solubles = date_run_solubles, 
          RunDate_TC = date_run_tictoc) |> 
-  mutate(Flag_DIC_mgL = case_when(!is.na(DIC_mgL) & 
-                                    Depth_m>=5 & 
-                                    as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) & 
-                                    as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~9, 
-                                  TRUE ~ Flag_DIC_mgL))
+  # mutate(Flag_DIC_mgL = case_when(!is.na(DIC_mgL) & #this year we are changing to less than or equal to 3m for BVR
+  #                                   Depth_m>=5 & 
+  #                                   as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) & 
+  #                                   as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~9, 
+  #                                 TRUE ~ Flag_DIC_mgL))
+mutate(Flag_DIC_mgL = case_when(
+  !is.na(DIC_mgL) & ((Reservoir %in% c("CCR", "FCR") & Depth_m >= 5) | (Reservoir == "BVR" & Depth_m >= 3)) &
+    as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) &
+    as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~ 9,
+  TRUE ~ Flag_DIC_mgL
+))
 
 
  #question key needed 

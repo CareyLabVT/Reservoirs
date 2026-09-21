@@ -1,0 +1,8 @@
+attributeName	code	definition
+Reservoir	BVR	Beaverdam Reservoir
+Reservoir	FCR	Falling Creek Reservoir
+Reservoir	CCR	Carvins Cove Reservoir
+Flag_SA_m2	0	No flag
+Flag_SA_m2	1	Surface Area value was interpolated since bathymetry was measured when the reservoir was not at full pond 
+Flag_Volume_L	0	No flag
+Flag_Volume_L	1	Volume value was interpolated since bathymetry was measured when the reservoir was not at full pond 

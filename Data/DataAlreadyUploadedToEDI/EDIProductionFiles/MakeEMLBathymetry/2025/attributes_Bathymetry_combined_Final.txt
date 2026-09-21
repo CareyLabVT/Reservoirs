@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Depth_m	Depth from surface	numeric	meter		NA	value is missing
+SA_m2	Total surface area of the reservoir at this depth	numeric	squareMeter		NA	value is missing
+Volume_layer_L	Volume of water between this depth and the next (deeper) depth below it	numeric	liter		NA	value is missing
+Volume_below_L	Total volume of water below this depth	numeric	liter		NA	value is missing
+Flag_SA_m2	Data flag for SA_m2 column	categorical	dimensionless		NA	value is missing
+Flag_Volume_L	Data flag for Volume_layer_L and Volume_below_L columns	categorical	dimensionless		NA	value is missing

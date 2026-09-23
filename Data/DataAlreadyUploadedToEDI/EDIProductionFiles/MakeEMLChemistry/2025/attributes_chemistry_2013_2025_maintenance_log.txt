@@ -1,0 +1,12 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
+Site	Sampling site at each reservoir	numeric	dimensionless		NA	value is missing
+DateTime	"""Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"""	Date		YYYY-MM-DD	NA	value is missing
+Depth_m	Water depth where the sample was collected	numeric	meter		NA	value is missing
+Rep	"Field replicates collected at the same site, date, and depth"	numeric	dimensionless		NA	value is missing
+RunDate_Totals	Date that totals samples were run. This applies to TN and TP and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing
+RunDate_Solubles	Date that solubles samples were run. This applies to SRP; NO3NO2; and NH4 and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing
+RunDate_TC	Date that TC (total inorganic and organic carbon) samples were run. This applies to TC; DIC; DOC; and DN and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing
+parameter	Analyte that the flag should be applied to	character			NA	value is missing
+flag	Flag that should be applied	numeric	dimensionless		NA	value is missing
+notes	Reason that a flag was applied	character			NA	value is missing

@@ -39,7 +39,8 @@ mutate(Flag_DIC_mgL = case_when(
     as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) &
     as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~ 9,
   TRUE ~ Flag_DIC_mgL
-))
+)) |> 
+  mutate(Rep = as.integer(str_extract(Rep, "-?\\d+")))
 
 
  #question key needed 
@@ -61,28 +62,106 @@ dplyr::mutate(
   mutate(DateTime = ymd_hms(DateTime)) |> 
   select(-c(date1, time1, time2))
 
-##remove reruns from new file 
-# DWH manually entered reruns. We need a better way to handle this. 
-# new_chem <- new_chem |> 
-#   mutate(Year = year(DateTime)) |> 
-#   #filter(Year != 2023) |> 
-#   select(-Year)
-
 ##bind all chem together
 allchem <- rbind(old_chem, new_chem) |> 
   mutate(Flag_DIC_mgL = as.numeric(Flag_DIC_mgL),
          Flag_DC_mgL = as.numeric(Flag_DC_mgL))
 
+```
+
+```{r add in maintenance log}
+ ## check how maintenance log is read in/entered
+maint_log <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_2025_maintenance_log.csv")
+  
+keys <- c("Site", "DateTime", "Depth_m", "Rep")
+
+key_value <- function(x) {
+  x <- trimws(as.character(x))
+  x[is.na(x) | x == ""] <- "<NA>"
+  x
+}
+
+date_only <- function(x) {
+  if (inherits(x, c("POSIXct", "POSIXlt", "Date"))) {
+    return(as.character(as.Date(x)))
+  }
+
+  # Handles strings such as "2025-01-15 13:42:00" or "2025-01-15T13:42:00"
+  as.character(as.Date(sub("[ T].*$", "", trimws(as.character(x)))))
+}
+
+flag_chr <- as.character(maint_log$flag)
+maint_log$flag_int <- suppressWarnings(
+  as.integer(regmatches(flag_chr, regexpr("-?\\d+", flag_chr)))
+)
+
+maint_log$.Site <- key_value(maint_log$Site)
+maint_log$.Date <- date_only(maint_log$DateTime)
+maint_log$.Depth_m <- key_value(maint_log$Depth_m)
+maint_log$.Rep <- key_value(maint_log$Rep)
+maint_log$.parameter <- toupper(trimws(as.character(maint_log$parameter)))
+
+allchem$.Site <- key_value(allchem$Site)
+allchem$.Date <- date_only(allchem$DateTime)
+allchem$.Depth_m <- key_value(allchem$Depth_m)
+allchem$.Rep <- key_value(allchem$Rep)
+
+for (i in seq_len(nrow(maint_log))) {
+  target_col <- paste0("Flag_", maint_log$.parameter[i], "_ugL")
+
+  if (!target_col %in% names(allchem)) {
+    warning("Skipping maintenance-log row ", i,
+            ": column not found: ", target_col)
+    next
+  }
+
+  idx <- which(
+    allchem$.Site == maint_log$.Site[i] &
+    allchem$.Date == maint_log$.Date[i] &
+    allchem$.Depth_m == maint_log$.Depth_m[i] &
+    allchem$.Rep == maint_log$.Rep[i]
+  )
+
+  if (!length(idx)) {
+    warning("No matching allchem row found for maintenance-log row ", i)
+    next
+  }
+
+  allchem[idx, target_col] <- maint_log$flag_int[i]
+}
+
+# Remove temporary matching columns
+allchem <- allchem[, !names(allchem) %in% c(".Site", ".Date", ".Depth_m", ".Rep")]
+maint_log <- maint_log[, !names(maint_log) %in% c(".Site", ".Date", ".Depth_m", ".Rep", ".parameter")]
+
+
 #check no NAs in flags
 summary(allchem)
-
 ```
+
 
 ```{r write csv for EDI}
 
 allchem <- allchem |> 
   arrange(Reservoir, DateTime, Site, Depth_m, Rep) |> 
-  mutate(DN_mgL = round(DN_mgL, 2)) #fix DN rounding for all years, can cut this next year as now in qaqc
+  mutate(DN_mgL = round(DN_mgL, 2), 
+         TN_ugL = round(TN_ugL, 2), 
+         TP_ugL = round(TP_ugL, 2), 
+         NH4_ugL = round(NH4_ugL, 2), 
+         NO3NO2_ugL = round(NO3NO2_ugL, 2), 
+         SRP_ugL = round(SRP_ugL, 2), 
+         DOC_mgL = round(DOC_mgL, 2), 
+         DIC_mgL = round(DIC_mgL, 2), 
+         DC_mgL = round(DC_mgL, 2)) |>  #fix rounding for all years
+mutate(Rep = as.numeric(gsub("R", "", Rep))) |> 
+  mutate(RunDate_Totals = as_date(RunDate_Totals), 
+         RunDate_Solubles = as_date(RunDate_Solubles), 
+         RunDate_TC = as_date(RunDate_TC))
+summary(allchem)
+
+# apply a maintenance log to flag samples that need flagging and are found in the inspection step
+
+
 
 write.csv(allchem, "chemistry_2013_2025.csv", row.names = FALSE)
 ```
@@ -125,8 +204,6 @@ KKH note - yes - should probably go into QAQC script, actually, which is where w
 allchem <- allchem_read |> 
   mutate(DateTime = ymd_hms(DateTime))
 #if this returns a warning: failed to parse, there are missing datetimes! Check which ones using the code below
-
-#the issue here is that actaully these are all set to midnight instead of noon :( I think I've fixed this! KKH
 
 # allchem <- allchem_read |> 
 #   mutate(DateTime1 = ymd_hms(DateTime))
@@ -274,7 +351,7 @@ plot_data <- allchem
 
 #### Set date range here!
 # Set any date range. The dates can span multiple calendar years.
-start_date <- "2024-08-01"
+start_date <- "2025-01-01"
 end_date <- "2026-03-31"
 
 # Set vars to plot
@@ -401,7 +478,7 @@ fcr_current
 ```{r BVR plots current year}
 
 bvr_current <-vars_to_plot %>%
-  map(plot_var, year = years_to_plot,reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
+  map(plot_var, year = 2025,reservoirs = "BVR", data = allchem, site = c(20,50,100,200))
 
 bvr_current
 ```
@@ -450,7 +527,7 @@ ggplot(subset(chemistry_long, Reservoir=='FCR' & Site!="50"), aes(x = as.Date(Da
         legend.key.size = unit(0.5, 'lines'),
         legend.text = element_text(size=5),
         legend.title = element_text(size=6)) + 
-  scale_color_manual("FCR_Site", values = rainbow(10)) 
+  scale_color_manual("FCR_Site", values = rainbow(12)) 
 
 #ggsave("./Figures/FCR_sites_all_nutrients_summer2023.jpg", width=4, height=4)
 
@@ -469,7 +546,7 @@ ggplot(subset(chemistry_long, Reservoir=='BVR' & Site=="50"), aes(x = as.Date(Da
         legend.key.size = unit(0.5, 'lines'),
         legend.text = element_text(size=5),
         legend.title = element_text(size=6)) + 
-  scale_color_manual("BVR_Depth (m)", values = plasma(10)) 
+  scale_color_manual("BVR_Depth (m)", values = plasma(11)) 
 
 # ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4ggsave("./Figures/BVR_all_nutrients_summer2023.jpg", width=4, height=4)
 
@@ -502,7 +579,7 @@ ggplot(subset(chemistry_long, Reservoir=='CCR' & Site=="50"), aes(x = as.Date(Da
         legend.key.size = unit(0.5, 'lines'),
         legend.text = element_text(size=5),
         legend.title = element_text(size=6)) + 
-  scale_color_manual("CCR_Depth (m)", values = plasma(7)) 
+  scale_color_manual("CCR_Depth (m)", values = plasma(9)) 
 
 #ggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, heighggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, heighggsave("./Figures/CCR_50_all_nutrients_summer2023.jpg", width=4, height=4)
 

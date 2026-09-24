@@ -2,6 +2,7 @@
 ## AUTOMATED L1 QAQC SCRIPT FOR UGGA 
 #This QAQC cleaning script was applied to create the data files included in this data package
 ## Authors: Dexter Howard and Adrienne Breef-Pilz
+##Edited 09-21-2026 - A. Bateman corrected Bucket method calculation (mutate to summarise)
 ## Last edited: 02-18-2025 - A. Breef-Pilz added an if statement when no observations for the year
 ## 12-19-2024 A. Breef-Pilz did major updates and added in a combine historical files, and subset data
 
@@ -93,8 +94,8 @@ bucket_Q <- discharge_df %>%
   mutate(Bucket_Volume_m3 = Bucket_Volume_L/1000,  #convert volume from L to cubic meters
          Discharge = Bucket_Volume_m3/Bucket_time_sec) %>%  #calculate discharge for each rep 
   group_by(Reservoir, DateTime, Site, Bucket_Site) %>%  #group by site and date and sub sites w/in each site (for tunnels with multiple outflow spouts from tunnel)
-  mutate(Discharge_m3s = mean(Discharge, na.rm = T), .groups = "drop") %>% # get average from reps 
-  group_by(Reservoir, DateTime, Site) %>%  # now group by just date and site
+  summarise(Discharge_m3s = mean(Discharge, na.rm = T), .groups = "drop") %>% # get average from reps 
+  group_by(Reservoir, DateTime, Site) %>% #now group by just date and site
   mutate(Discharge_m3s = sum(Discharge_m3s, na.rm = T),  #sum across sites w/in each site (for tunnel sites with multiple outflow spouts from tunnel)
             Method = "B") %>%  #assign method flag
   select(Reservoir, Site, DateTime, Discharge_m3s, Method) %>% 

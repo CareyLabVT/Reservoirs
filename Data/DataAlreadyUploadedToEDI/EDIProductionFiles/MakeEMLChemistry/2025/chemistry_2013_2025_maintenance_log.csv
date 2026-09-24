@@ -1,0 +1,6 @@
+Reservoir,Site,DateTime,Depth_m,Rep,RunDate_Totals,RunDate_Solubles,RunDate_TC,parameter,flag,notes
+BVR,50,2025-09-29,6,1,2026-04-23,NA,NA,TN,9,a value much higher than we've ever seen before
+FCR,199.8,2025-10-10,0.25,1,2026-02-27,NA,NA,TP,9,a value much higher than we've ever seen before; these samples had bits in them
+BVR,50,2023-10-31,3,1,NA,NA,NA,SRP,9,ten times higher than values we have ever seen before; no run date recorded
+FCR,30.9,2025-08-07,0.25,1,2026-02-27,NA,NA,TN,9,4x higher than the site on the other side of the reservoir
+FCR,30.9,2025-08-07,0.25,1,2026-02-27,NA,NA,TP,9,4x higher than the site on the other side of the reservoir

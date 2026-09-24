@@ -2,7 +2,7 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 Reservoir	Three-letter code corresponding to sampled reservoir	categorical			NA	value is missing
 Site	Sampling site at each reservoir	numeric	dimensionless		NA	value is missing
 DateTime	"Date and time of sampling. All data were collected in the eastern time zone of the U.S.A., with daylight savings time observed"	Date		YYYY-MM-DD hh:mm:ss	NA	value is missing
-Depth_m	Water depth where the sample was collected or sensor reading was measured	numeric	meter		NA	value is missing
+Depth_m	Water depth where the sample was collected 	numeric	meter		NA	value is missing
 Rep	"Field replicates collected at the same site, date, and depth"	numeric	dimensionless		NA	value is missing
 TN_ugL	Total nitrogen concentration	numeric	microgramsPerLiter		NA	value is missing
 TP_ugL	Total phosphorus concentration	numeric	microgramsPerLiter		NA	value is missing
@@ -23,3 +23,6 @@ Flag_DOC_mgL	Data flag for dissolved organic carbon (DOC); measurements with mul
 Flag_DIC_mgL	Data flag for dissolved inorganic carbon (DIC); measurements with multiple flags are coded as a multiple-digit number	categorical	dimensionless		NA	value is missing
 Flag_DC_mgL	Data flag for dissolved carbon (DC); measurements with multiple flags are coded as a multiple-digit number	categorical	dimensionless		NA	value is missing
 Flag_DN_mgL	Data flag for dissolved nitrogen (DN); measurements with multiple flags are coded as a multiple-digit number	categorical	dimensionless		NA	value is missing
+RunDate_Totals	Date that totals samples were run. This applies to TN and TP and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing
+RunDate_Solubles	Date that solubles samples were run. This applies to SRP; NO3NO2; and NH4 and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing
+RunDate_TC	Date that TC (total inorganic and organic carbon) samples were run. This applies to TC; DIC; DOC; and DN and has a corresponding date in the MDL file	Date		YYYY-MM-DD	NA	value is missing

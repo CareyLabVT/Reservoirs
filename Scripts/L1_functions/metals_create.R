@@ -421,6 +421,19 @@ metals_qaqc <- function(directory,
        ### 5.2 Actually remove values in the maintenance log from the data frame
        ## This is where information in the maintenance log gets removed.
        # UPDatetime THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
+     
+     # for these dates, the dilution factor was changed to 20
+      oopsieDigestionDates <- c(as.Date('2025-03-10'), as.Date('2025-03-24'),
+                               as.Date('2025-03-31'), as.Date('2025-04-07'),
+                               as.Date('2025-04-14'), as.Date('2025-04-21'),
+                               as.Date('2025-04-28'), as.Date('2025-05-05'),
+                               as.Date('2025-05-12'), as.Date('2025-05-19'),
+                               as.Date('2025-05-26'), as.Date('2025-06-02'),
+                               as.Date('2025-06-09'), as.Date('2025-06-16'),
+                               as.Date('2025-06-23'), as.Date('2025-06-30'),
+                               as.Date('2025-07-07'))
+     
+      '%!in%' <- function(x,y)!('%in%'(x,y))
 
        # replace relevant data with NAs and set flags while maintenance was in effect
        if(flag==1){
@@ -434,7 +447,7 @@ metals_qaqc <- function(directory,
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-       else if (flag ==4){
+       else if (flag ==4 & Date %!in% oopsieDigestionDates){
          # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
 
          raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 2.2
@@ -442,6 +455,16 @@ metals_qaqc <- function(directory,
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
+     
+     else if (flag ==4 & Date %in% oopsieDigestionDates){
+       # Sample was digested because there were particulates
+       # Dilution factor was messed up, now equals 20
+       
+       raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 20
+       
+       # Flag the sample here
+       raw_df[All, flag_cols] <- flag
+     }
        else if (flag==6){
          # suspect sample, doesn't get flagged below but is manually flagged in maintenance log
 

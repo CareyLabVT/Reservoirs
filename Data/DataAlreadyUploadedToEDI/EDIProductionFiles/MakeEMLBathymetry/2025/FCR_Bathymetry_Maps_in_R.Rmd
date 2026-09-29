@@ -1,5 +1,5 @@
 ---
-title: "Bathymetry Map and Calculations"
+title: "FCR Bathymetry Map and Calculations"
 author: "Evelyn Tipper"
 date: "2023-09-07"
 output: html_document
@@ -25,15 +25,17 @@ library(sf)
 
 ## Upload Data
 ```{r}
-#Read in CSV files
+#Read in CSV files after downloading entire EDI repository, you will have to check that local files path work below, they are referenced off of EDI package ID folder currently
 
 #VMT processed ADCP data can be found in the 'Bathymetry_Spatial_Data' folder then FCR or BVR then "VMT_Processed..."
 
 #read in either FCR an rename to adcpdata to run script
 
-fcr_vmt <- read.delim("./Bathymetry_Spatial_Data/Bathymetry_Spatial_Data/FCR/VMT_Processed_Temp_Corrected_Data/FCR_2023.csv", header=TRUE, sep=",")
+fcr_vmt <- read.delim("./edi.971.6/Bathymetry_Spatial_Data/FCR/VMT_Processed_Temp_Corrected_Data/FCR_2023.csv", header=TRUE, sep=",")
 
-bvr_vmt <- read.delim("./Bathymetry_Spatial_Data/Bathymetry_Spatial_Data/BVR_April2024_10m/VMT_Processed_Data/BVR_14APR24_Reprocessed.csv", header=TRUE, sep=",")
+bvr_vmt <- read.delim("./edi.971.6/Bathymetry_Spatial_Data/BVR/BVR_april2024_bathymetry/VMT_Processed_Data/BVR_14APR24_Reprocessed.csv", header=TRUE, sep=",")
+
+## Update this path if you want to make the maps for BVR; NOTE: BVR has lower spatial data coverage in FCR and this workflow will return a map with holes, we recommend using the provided BVR raster or TIN files for map making. CCR csv is not currently structured for this workflow but could be adapted.
 
 adcpdata <- fcr_vmt
 

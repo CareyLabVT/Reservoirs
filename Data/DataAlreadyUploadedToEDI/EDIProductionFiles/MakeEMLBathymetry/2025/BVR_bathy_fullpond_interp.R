@@ -5,6 +5,7 @@ library(tidyverse)
 
 
 #### read in hypsometry data
+## YOU WILL HAVE TO UPDATE THIS PATH TO THE LOCATION OF the spatial data zipped file once downloaded
 hypso <- read.csv("C:/Users/dwh18/OneDrive/Documents/Bathy_EDI_2026/Bathy_EDI_updates/hypso_sept2026/Bathy_comb_V1.csv")
 
 

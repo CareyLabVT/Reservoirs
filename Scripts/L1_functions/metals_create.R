@@ -87,7 +87,7 @@ metals_qaqc <- function(directory,
   # make a function that reads in the files and takes the columns we want
   read_metals_files <- function(FILES){
     
-  al <- read_csv(FILES, skip = 3, col_names = T, show_col_types = F)|>
+  al <- read_csv(FILES, skip = 3, col_names = T, show_col_types = F)|> 
     dplyr::rename(Date_ID = `...1`)|>
     select(starts_with("Date"), contains("(STDR"))|> # only select the columns that are the date column and end with (STDR) which is how the samples are labeled 
     drop_na(Date_ID) |>
@@ -423,17 +423,19 @@ metals_qaqc <- function(directory,
        # UPDatetime THE IF STATEMENTS BASED ON THE NECESSARY CRITERIA FROM THE MAINTENANCE LOG
      
      # for these dates, the dilution factor was changed to 20
-      oopsieDigestionDates <- c(as.Date('2025-03-10'), as.Date('2025-03-24'),
-                               as.Date('2025-03-31'), as.Date('2025-04-07'),
-                               as.Date('2025-04-14'), as.Date('2025-04-21'),
-                               as.Date('2025-04-28'), as.Date('2025-05-05'),
-                               as.Date('2025-05-12'), as.Date('2025-05-19'),
-                               as.Date('2025-05-26'), as.Date('2025-06-02'),
-                               as.Date('2025-06-09'), as.Date('2025-06-16'),
-                               as.Date('2025-06-23'), as.Date('2025-06-30'),
-                               as.Date('2025-07-07'))
-     
-      '%!in%' <- function(x,y)!('%in%'(x,y))
+      # oopsieDigestionDates <- c(as.Date('2025-03-10'), as.Date('2025-03-24'),
+      #                          as.Date('2025-03-31'), as.Date('2025-04-07'),
+      #                          as.Date('2025-04-14'), as.Date('2025-04-21'),
+      #                          as.Date('2025-04-28'), as.Date('2025-05-05'),
+      #                          as.Date('2025-05-12'), as.Date('2025-05-19'),
+      #                          as.Date('2025-05-26'), as.Date('2025-06-02'),
+      #                          as.Date('2025-06-09'), as.Date('2025-06-16'),
+      #                          as.Date('2025-06-23'), as.Date('2025-06-30'),
+      #                          as.Date('2025-07-07'))
+      
+      # Date <- Sample_Date
+      # 
+      # '%!in%' <- function(x,y)!('%in%'(x,y))
 
        # replace relevant data with NAs and set flags while maintenance was in effect
        if(flag==1){
@@ -447,7 +449,7 @@ metals_qaqc <- function(directory,
          # Flag the sample here
          raw_df[All, flag_cols] <- flag
        }
-       else if (flag ==4 & Date %!in% oopsieDigestionDates){
+       else if (flag ==4){
          # Sample was digested because there were particulates, so need to multiply the concentration by 2.2
 
          raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 2.2
@@ -456,14 +458,14 @@ metals_qaqc <- function(directory,
          raw_df[All, flag_cols] <- flag
        }
      
-     else if (flag ==4 & Date %in% oopsieDigestionDates){
+     else if (flag == '4b'){
        # Sample was digested because there were particulates
        # Dilution factor was messed up, now equals 20
        
-       raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 20
+       raw_df[All, maintenance_cols] <- raw_df[All, maintenance_cols] * 22
        
        # Flag the sample here
-       raw_df[All, flag_cols] <- flag
+       raw_df[All, flag_cols] <- 4
      }
        else if (flag==6){
          # suspect sample, doesn't get flagged below but is manually flagged in maintenance log
@@ -506,21 +508,23 @@ metals_qaqc <- function(directory,
      # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
      rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
      pivot_longer(
-       cols = -c(Reservoir, Site, Date, Depth_m, Filter),
+       cols = -c(Reservoir, Site, Date, Depth_m, Filter, Time),
        names_to = c(".value", "Metal"),
        names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
      mutate(Year = year(Date), Metal_mgL = paste0(Metal, "_mgL")) |>
      left_join(MRL, by = join_by(Metal_mgL == Symbol, Year)) |>
      mutate(
        Flag = as.character(Flag),
+       below_mrl = coalesce(Conc <= MRL_mgL, FALSE),  # TRUE if at/below MRL; FALSE if Conc or MRL is NA
        Flag = case_when(
-         is.na(Conc) ~ "1",           # missing concentration
-         Conc <= MRL_mgL ~ "3",         # below/at minimum reporting level
+         is.na(Conc) ~ "1",                 # missing concentration
+         below_mrl & Flag == "4" ~ "34",    # digested sample AND below/at MRL
+         below_mrl ~ "3",                   # below/at MRL (flag was 0)
          TRUE ~ Flag),
-       Conc = if_else(Flag == "3", MRL_mgL, Conc) # if Conc is below/at the MRL, set it to the MRL
-     ) |>
+       Conc = if_else(below_mrl, MRL_mgL, Conc)  # set below/at-MRL values to the MRL
+     ) |> 
      pivot_wider(
-       id_cols = c(Reservoir, Site, Date, Depth_m, Filter),
+       id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Time),
        names_from = Metal,
        values_from = c(Conc, Flag),
        names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"
@@ -648,6 +652,7 @@ metals_qaqc <- function(directory,
        Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
        DateTime = ymd_hms(paste0(Date," ",Time)))|>
      select(-c(Date, Time))|>
+     distinct(Reservoir, Site, DateTime, Depth_m, Filter, .keep_all = TRUE) |> 
      mutate_if(is.numeric, round, digits = 4) # round to 4 digits
    
    print("added time to the data frame")
@@ -666,6 +671,7 @@ metals_qaqc <- function(directory,
     rename_with(
       ~ .x |> gsub('T_Flag_', 'Flag_T_', x = _) |> gsub('S_Flag_', 'Flag_S_', x = _),
       .cols = everything())
+  
   
   # now that we pivoted wider again, reassign flags for NA values
   
@@ -701,27 +707,27 @@ metals_qaqc <- function(directory,
    # Determine if totals and soluble samples were switched.
 
   
-  # create columns for 5 percent threshold - this is the threshold for solubles being greater than totals
+  # ---- helpers ----------------------------------------------------------------
+  # append a flag code to an existing flag: "0" + "9" -> "9", "4" + "9" -> "49", "5" + "9" -> "59"
+  add_flag <- function(old, new) {
+    old <- if_else(old == "0", "", old)
+    vapply(paste0(old, new),
+           \(x) paste(sort(unique(strsplit(x, "")[[1]])), collapse = ""),
+           character(1), USE.NAMES = FALSE)
+  }
+  
+  # flags this chunk is allowed to modify: not missing, not "1", and not containing a 3 or 6
+  can_flag <- function(f) !is.na(f) & f != "1" & !grepl("[36]", f)
+  
+  # ---- 10 percent threshold: tubes switched -----------------------------------
   wed <- wed %>% 
     mutate(
       across(
         .cols = starts_with("T_") | starts_with("S_"),
-        .fns = ~ .x *0.05,
-        .names = 'fivepercent_{.col}'
-      )
-    )
-
-  # create columns for 10 percent threshold - this is the threshold for tubes being switched
-  wed <- wed %>% 
-    mutate(
-      across(
-        .cols = starts_with("T_") | starts_with("S_"),
-        .fns = ~ .x *0.1,
+        .fns = ~ .x * 0.1,
         .names = 'tenpercent_{.col}'
       )
     )
-  
-  
   
   # flag Fe/Mn/Al as "SWITCHED" where T + 10% < S
   metals_check <- c("T_Fe_mgL", "T_Mn_mgL", "T_Al_mgL")
@@ -737,51 +743,53 @@ metals_qaqc <- function(directory,
       )
   }
   
-  # mark rows where all three metals were switched and none is already flagged "3"
+  # mark rows where all three metals were switched and none is flagged 1 or contains a 3
   wed <- wed |>
     mutate(
-      switch_all = 0,
       switch_all = if_else(
         Check_T_Fe_mgL == "SWITCHED" & Check_T_Mn_mgL == "SWITCHED" & Check_T_Al_mgL == "SWITCHED" &
-          Flag_T_Fe_mgL != "3" & Flag_T_Mn_mgL != "3" & Flag_T_Al_mgL != "3" & Flag_T_Fe_mgL != "1" & Flag_T_Mn_mgL != "1" & Flag_T_Al_mgL != "1",
-        1, switch_all
-      ),
-      switch_all = if_else(is.na(switch_all), 0, switch_all)
+          !grepl("3", Flag_T_Fe_mgL) & !grepl("3", Flag_T_Mn_mgL) & !grepl("3", Flag_T_Al_mgL) &
+          Flag_T_Fe_mgL != "1" & Flag_T_Mn_mgL != "1" & Flag_T_Al_mgL != "1",
+        1, 0, missing = 0
+      )
     )
   
-  # swap T_/S_ values for every metal where switch_all == 1
-  t_cols <- wed |> select(starts_with("T_") & !starts_with(c("Check_"))) |> colnames()
+  # ---- swap T_/S_ values AND flags for every metal where switch_all == 1 -------
+  t_cols <- wed |> select(starts_with("T_")) |> colnames()
   
   for (l in t_cols) {
-    s_col  <- gsub("T_", "S_", l)
-    orig_t <- wed[[l]]   # capture originals so the two assignments below don't clobber each other
-    orig_s <- wed[[s_col]]
+    s_col   <- gsub("T_", "S_", l)
+    t_flag  <- paste0("Flag_", l)
+    s_flag  <- paste0("Flag_", s_col)
+    orig_t  <- wed[[l]];      orig_s  <- wed[[s_col]]   # capture originals so assignments don't clobber each other
+    orig_tf <- wed[[t_flag]]; orig_sf <- wed[[s_flag]]
     
     wed <- wed |>
       mutate(
-        "{l}"     := if_else(switch_all == 1, orig_s, orig_t),
-        "{s_col}" := if_else(switch_all == 1, orig_t, orig_s)
+        "{l}"      := if_else(switch_all == 1, orig_s,  orig_t),
+        "{s_col}"  := if_else(switch_all == 1, orig_t,  orig_s),
+        "{t_flag}" := if_else(switch_all == 1, orig_sf, orig_tf),
+        "{s_flag}" := if_else(switch_all == 1, orig_tf, orig_sf)
       )
   }
   
-  # recheck flags on T_ columns now that switching has happened
+  # ---- 5 percent threshold: solubles > totals (computed on post-swap values) ---
   for (l in t_cols) {
-    five_col <- paste0("fivepercent_", l)
     s_col    <- gsub("T_", "S_", l)
     flag_col <- paste0("Flag_", l)
     
     wed <- wed |>
       mutate(
-        "{flag_col}" := case_when(
-          .data[[l]] + .data[[five_col]] < .data[[s_col]] & .data[[flag_col]] != "1" & .data[[flag_col]] == "6" ~ "69",
-          .data[[l]] + .data[[five_col]] < .data[[s_col]] & .data[[flag_col]] != "1" & .data[[flag_col]] != "6" ~ "9",
-          TRUE ~ .data[[flag_col]]
+        "{flag_col}" := if_else(
+          coalesce(.data[[l]] * 1.05 < .data[[s_col]], FALSE) & can_flag(.data[[flag_col]]),
+          add_flag(.data[[flag_col]], "9"),
+          .data[[flag_col]]
         )
       )
   }
   
-  # propagate T_ flags to matching S_ flags
-  s_cols <- wed |> select(starts_with("S_") & !starts_with(c("Check_"))) |> colnames()
+  # ---- propagate 9 from T_ flags to matching S_ flags -------------------------
+  s_cols <- wed |> select(starts_with("S_")) |> colnames()
   
   for (i in s_cols) {
     t_flag_col <- paste0("Flag_", gsub("S_", "T_", i))
@@ -789,10 +797,10 @@ metals_qaqc <- function(directory,
     
     wed <- wed |>
       mutate(
-        "{flag_col}" := case_when(
-          .data[[t_flag_col]] %in% c("9", "69") & .data[[flag_col]] != "1" & .data[[flag_col]] == "6" ~ "69",
-          .data[[t_flag_col]] %in% c("9", "69") & .data[[flag_col]] != "1" & .data[[flag_col]] != "6" ~ "9",
-          TRUE ~ .data[[flag_col]]
+        "{flag_col}" := if_else(
+          grepl("9", .data[[t_flag_col]]) & can_flag(.data[[flag_col]]),
+          add_flag(.data[[flag_col]], "9"),
+          .data[[flag_col]]
         )
       )
   }

@@ -1,5 +1,5 @@
 ---
-title: "Metals_inspection_2014_2024"
+title: "Metals_inspection_2014_2025"
 author: "Adrienne Breef-Pilz"
 created: "2023-11-15"
 output: 
@@ -65,10 +65,11 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
 source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
+# source('~/Documents/GitHub/Reservoirs/Scripts/L1_functions/metals_create.R')
 
 # Plotting script
- source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
-# source('https://raw.githubusercontent.com/ceceliawood/MiscGradSchool/refs/heads/main/Plotting_function_CEW.R') # same function but no density plots
+ # source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
+ source('https://raw.githubusercontent.com/ceceliawood/MiscGradSchool/refs/heads/main/Plotting_function_CEW.R') # same function but no density plots
 
  #turn off pander auto asis
         pander::panderOptions('knitr.auto.asis', FALSE)

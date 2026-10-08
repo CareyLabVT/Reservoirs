@@ -189,8 +189,8 @@ We want to make sure that our maintenance log actually worked and took out the v
 # The streaming sensors use semicolons as a deliminator because of the adjustment_code column. We use the read_csv2 to read in the file. 
  maint <- read_csv("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
                     show_col_types = FALSE)|>
-  filter(Site != 100.1)
-
+  filter(Site != 100.1) %>%
+mutate(Sample_Date = as.Date(Sample_Date, tryFormats = c("%m/%d/%Y")))
 
 # name the data file for just the tail of the maintenance log
 

@@ -1,4 +1,4 @@
-RunDate,NH4_MDL_ugL,SRP_MDL_ugL,NO3NO2_MDL_ugL,TP_MDL_ugL,TN_MDL_ugL,DIC_MDL_mgL,DC_MDL_mgL,DOC_MDL_mgL,DN_MDL_mgL,Notes_TICTOC,Notes_SolublesLachat,Notes_TotalsLachat
+RunDate,NH4_MDL_ugNL,SRP_MDL_ugPL,NO3NO2_MDL_ugNL,TP_MDL_ugPL,TN_MDL_ugNL,DIC_MDL_mgCL,DC_MDL_mgCL,DOC_MDL_mgCL,DN_MDL_mgNL,Notes_TC,Notes_Solubles,Notes_Totals
 9/29/25,4.5,4.4,5.4,,,0.99,1.36,1.01,0.091,,,
 10/6/25,4.7,4.3,5.2,,,0.96,1.23,0.99,0.089,1 week of method change started here set to previous MDL,,
 10/20/25,4.8,4.3,5.1,,,1.09,0.97,1.1,0.1,,,

@@ -4,3 +4,5 @@ FCR,199.8,2025-10-10,0.25,1,2026-02-27,NA,NA,TP,9,a value much higher than we've
 BVR,50,2023-10-31,3,1,NA,NA,NA,SRP,9,ten times higher than values we have ever seen before; no run date recorded
 FCR,30.9,2025-08-07,0.25,1,2026-02-27,NA,NA,TN,9,4x higher than the site on the other side of the reservoir
 FCR,30.9,2025-08-07,0.25,1,2026-02-27,NA,NA,TP,9,4x higher than the site on the other side of the reservoir
+BVR,50,2025-09-29,6,1,2026-04-23,NA,NA,DN,9,out of range on the TC; likely closer to 6mg/L
+BVR,50,2023-10-31,3,1,NA,NA,NA,DOC,9,suspiciously high; SRP was also suspiciously high; consider entire bottle suspect; no run date recorded

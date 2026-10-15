@@ -11,6 +11,7 @@
 # 23 May 25 Changed the ISCO to take the higher of the duplicated values
 # 24 Fed 26 Fixed the section on adding historical MDLS and added in ability to pull from GitHub instead of local directories
 # 24 Aug 26 add a line when reading in the maintenance log to accept different time formats
+# 15 Oct 26 Removed time from a select when making the data frame into a long format because that column is added later
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -47,7 +48,7 @@ metals_qaqc <- function(directory,
  #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
  #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
  #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
-  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
+ # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
  #  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
  # MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv"
  # metals_save = T
@@ -56,8 +57,8 @@ metals_qaqc <- function(directory,
  # ISCO_outfile = "./Data/DataNotYetUploadedToEDI/FCR_ISCO/ISCO_metals_L1.csv"
  # start_date = NULL
  # end_date = NULL
- #start_date = as.Date("2025-01-01") # change when we update to read date from EDI
- #end_date = Sys.Date() + lubridate::days(1)
+ # start_date = as.Date("2025-01-01") # change when we update to read date from EDI
+ # end_date = Sys.Date() + lubridate::days(1)
 
   #### 1. Read in Maintenance Log and Sample ID Key ####
   
@@ -508,7 +509,7 @@ metals_qaqc <- function(directory,
      # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
      rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
      pivot_longer(
-       cols = -c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       cols = -c(Reservoir, Site, Date, Depth_m, Filter),
        names_to = c(".value", "Metal"),
        names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
      mutate(Year = year(Date), Metal_mgL = paste0(Metal, "_mgL")) |>
@@ -524,7 +525,7 @@ metals_qaqc <- function(directory,
        Conc = if_else(below_mrl, MRL_mgL, Conc)  # set below/at-MRL values to the MRL
      ) |> 
      pivot_wider(
-       id_cols = c(Reservoir, Site, Date, Depth_m, Filter, Time),
+       id_cols = c(Reservoir, Site, Date, Depth_m, Filter),
        names_from = Metal,
        values_from = c(Conc, Flag),
        names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"

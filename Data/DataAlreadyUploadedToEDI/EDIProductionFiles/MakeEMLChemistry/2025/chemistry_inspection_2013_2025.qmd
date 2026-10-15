@@ -15,7 +15,7 @@ NOTE TO REVIEWERS!!! Go to the "For Reviewers" section to begin data review
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+if(!require(pacman)){install.packages("pacman")}
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, scales, viridis, plotly, gsheet, here)
 
@@ -29,16 +29,34 @@ new_chem <- new_chem1 |> select(c(Reservoir, Site, DateTime, Depth_m, Rep, TN_ug
   rename(RunDate_Totals = date_run_totals, #add in run dates for the MDL information
          RunDate_Solubles = date_run_solubles, 
          RunDate_TC = date_run_tictoc) |> 
+  rename(TN_ugNL = TN_ugL, 
+         TP_ugPL = TP_ugL, 
+         NH4_ugNL = NH4_ugL, 
+         NO3NO2_ugNL = NO3NO2_ugL, 
+         SRP_ugPL = SRP_ugL, 
+         DOC_mgCL = DOC_mgL, 
+         DIC_mgCL = DIC_mgL, 
+         DC_mgCL = DC_mgL, 
+         DN_mgNL = DN_mgL, 
+         Flag_TP_ugPL = Flag_TP_ugL, 
+         Flag_TN_ugNL = Flag_TN_ugL, 
+         Flag_NH4_ugNL = Flag_NH4_ugL, 
+         Flag_NO3NO2_ugNL = Flag_NO3NO2_ugL, 
+         Flag_SRP_ugPL = Flag_SRP_ugL, 
+         Flag_DOC_mgCL = Flag_DOC_mgL, 
+         Flag_DIC_mgCL = Flag_DIC_mgL, 
+         Flag_DC_mgCL = Flag_DC_mgL, 
+         Flag_DN_mgNL = Flag_DN_mgL) |> 
   # mutate(Flag_DIC_mgL = case_when(!is.na(DIC_mgL) & #this year we are changing to less than or equal to 3m for BVR
   #                                   Depth_m>=5 & 
   #                                   as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) & 
   #                                   as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~9, 
   #                                 TRUE ~ Flag_DIC_mgL))
-mutate(Flag_DIC_mgL = case_when(
-  !is.na(DIC_mgL) & ((Reservoir %in% c("CCR", "FCR") & Depth_m >= 5) | (Reservoir == "BVR" & Depth_m >= 3)) &
+mutate(Flag_DIC_mgCL = case_when(
+  !is.na(DIC_mgCL) & ((Reservoir %in% c("CCR", "FCR") & Depth_m >= 5) | (Reservoir == "BVR" & Depth_m >= 3)) &
     as.Date(DateTime) >= lubridate::make_date(lubridate::year(DateTime), 4, 1) &
     as.Date(DateTime) <= lubridate::make_date(lubridate::year(DateTime), 11, 15) ~ 9,
-  TRUE ~ Flag_DIC_mgL
+  TRUE ~ Flag_DIC_mgCL
 )) |> 
   mutate(Rep = as.integer(str_extract(Rep, "-?\\d+")))
 
@@ -52,6 +70,24 @@ old_chem <- read_csv(chem_data , col_types = cols()) |>
   mutate(RunDate_Totals = NA, 
          RunDate_Solubles = NA, 
          RunDate_TC = NA) |> 
+   rename(TN_ugNL = TN_ugL, 
+         TP_ugPL = TP_ugL, 
+         NH4_ugNL = NH4_ugL, 
+          NO3NO2_ugNL = NO3NO2_ugL, 
+         SRP_ugPL = SRP_ugL, 
+         DOC_mgCL = DOC_mgL, 
+         DIC_mgCL = DIC_mgL, 
+         DC_mgCL = DC_mgL, 
+         DN_mgNL = DN_mgL, 
+         Flag_TP_ugPL = Flag_TP_ugL, 
+         Flag_TN_ugNL = Flag_TN_ugL, 
+         Flag_NH4_ugNL = Flag_NH4_ugL, 
+         Flag_NO3NO2_ugNL = Flag_NO3NO2_ugL, 
+         Flag_SRP_ugPL = Flag_SRP_ugL, 
+         Flag_DOC_mgCL = Flag_DOC_mgL, 
+         Flag_DIC_mgCL = Flag_DIC_mgL, 
+         Flag_DC_mgCL = Flag_DC_mgL, 
+         Flag_DN_mgNL = Flag_DN_mgL) |> 
 dplyr::mutate(
   time1 = hms::as_hms(DateTime),
   time2 = dplyr::if_else(time1 == hms::as_hms("00:00:00"), #fixed old time problems!
@@ -64,14 +100,14 @@ dplyr::mutate(
 
 ##bind all chem together
 allchem <- rbind(old_chem, new_chem) |> 
-  mutate(Flag_DIC_mgL = as.numeric(Flag_DIC_mgL),
-         Flag_DC_mgL = as.numeric(Flag_DC_mgL))
+  mutate(Flag_DIC_mgCL = as.numeric(Flag_DIC_mgCL),
+         Flag_DC_mgCL = as.numeric(Flag_DC_mgCL))
 
 ```
 
 ```{r add in maintenance log}
  ## check how maintenance log is read in/entered
-maint_log <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2025_2025_maintenance_log.csv")
+maint_log <- read_csv("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLChemistry/2025/chemistry_2013_2025_maintenance_log.csv")
   
 keys <- c("Site", "DateTime", "Depth_m", "Rep")
 
@@ -144,19 +180,20 @@ summary(allchem)
 
 allchem <- allchem |> 
   arrange(Reservoir, DateTime, Site, Depth_m, Rep) |> 
-  mutate(DN_mgL = round(DN_mgL, 2), 
-         TN_ugL = round(TN_ugL, 2), 
-         TP_ugL = round(TP_ugL, 2), 
-         NH4_ugL = round(NH4_ugL, 2), 
-         NO3NO2_ugL = round(NO3NO2_ugL, 2), 
-         SRP_ugL = round(SRP_ugL, 2), 
-         DOC_mgL = round(DOC_mgL, 2), 
-         DIC_mgL = round(DIC_mgL, 2), 
-         DC_mgL = round(DC_mgL, 2)) |>  #fix rounding for all years
+  mutate(DN_mgNL = round(DN_mgNL, 2), 
+         TN_ugNL = round(TN_ugNL, 2), 
+         TP_ugPL = round(TP_ugPL, 2), 
+         NH4_ugNL = round(NH4_ugNL, 2), 
+         NO3NO2_ugNL = round(NO3NO2_ugNL, 2), 
+         SRP_ugPL = round(SRP_ugPL, 2), 
+         DOC_mgCL = round(DOC_mgCL, 2), 
+         DIC_mgCL = round(DIC_mgCL, 2), 
+         DC_mgCL = round(DC_mgCL, 2)) |>  #fix rounding for all years
 mutate(Rep = as.numeric(gsub("R", "", Rep))) |> 
   mutate(RunDate_Totals = as_date(RunDate_Totals), 
          RunDate_Solubles = as_date(RunDate_Solubles), 
-         RunDate_TC = as_date(RunDate_TC))
+         RunDate_TC = as_date(RunDate_TC),
+         DateTime = ymd_hms(DateTime))
 summary(allchem)
 
 # apply a maintenance log to flag samples that need flagging and are found in the inspection step
@@ -190,15 +227,6 @@ allchem_read <- read.csv(chem_data)
 # 
 
 ```
-
-Thought for new figure from Maria: 
-date on the x axis (pulling from a file where we have the dates for each field day that we definitely collected samples for that reservoir- something we could get the UGs to start doing if it doesn't currently exist), depth on the y axis. if there isn't a sample collected for that day/depth an "x" appears. it would also make it easy to see which dates/depths we have dupes of. # of samples collected (green = 1, orange = 2, red >= 3). so this doesn't show anything with values, it's just a quick way to see how many of each sample we collected/are missing.
-
-KKH note - yes - should probably go into QAQC script, actually, which is where we pull in this information. This already exists in table format. 
-```{r}
-
-```
-
 
 ```{r all datetime}
 allchem <- allchem_read |> 

@@ -22,7 +22,7 @@
 pacman::p_load(tidyverse, devtools, EMLassemblyline, here, xml2, XML)
 
 # put file path as an object
-folder<- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2025/")
+folder<- paste0(here(), "/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLmetals/2026/")
 folder
 
 
@@ -64,7 +64,7 @@ template_core_metadata(path = folder,
 
 template_table_attributes(path = folder,
                           data.path = folder,
-                          data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
+                          data.table = c("metals_2014_2025.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2025.csv'),
                           write.file = TRUE)
 
 
@@ -73,7 +73,7 @@ template_table_attributes(path = folder,
 #as columns within our dataset but would like to provide them
 template_geographic_coverage(path = folder,
                              data.path = folder,
-                             data.table = c("metals_2014_2024.csv", 'site_descriptions.csv'),
+                             data.table = c("metals_2014_2025.csv", 'site_descriptions.csv'),
                              empty = TRUE,
                              write.file = TRUE)
 
@@ -150,19 +150,20 @@ eml_file <- make_eml(
   data.path = folder,
   eml.path = folder,
   dataset.title = "Time series of total and soluble metal concentrations from Falling Creek Reservoir, Beaverdam Reservoir, and Carvins Cove Reservoir in southwestern Virginia, USA from 2014-2024",
-  temporal.coverage = c("2014-04-01", "2024-12-16"),
+  temporal.coverage = c("2014-04-01", "2025-12-02"),
   maintenance.description = 'ongoing',
-  data.table = c("metals_2014_2024.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2024.csv'),
+  data.table = c("metals_2014_2025.csv", 'site_descriptions.csv', 'metals_maintenancelog_2014_2025.csv'),
   data.table.description = c("ICPMS data for water samples","Site numbers and corresponding latitude and longitude coordinates", 'Log describing dataset maintenance'),
-  other.entity = c('metals_qaqc_2014_2024.R', 'metals_inspection_2014_2024.Rmd', 'Plotting_function.R'),
-  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2024.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
+  other.entity = c('metals_qaqc_2014_2025.R', 'metals_inspection_2014_2025.Rmd', 'Plotting_function.R'),
+  other.entity.description = c("QAQC script which takes the output from ICPMS, cleans data, and flags errant data", 'Script that uses metals_qaqc_2014_2025.R script to create the final dataframe and plots the data', 'Function to create output plots utilized by visual inspection script'),
   user.id = 'mschreib',
   user.domain = 'EDI',
-  package.id = 'edi.718.12', # This package identifier is only for the staging environment
+  package.id = 'edi.1511.4', # This package identifier is only for the staging environment
  # package.id = 'edi.455.9', # This is the package identifer for the production environment
  write.file = T, ### write the file to the folder
  return.obj = T) ## return the object so we can get the package.id
 
+# The following created errors when staging in EDI:
 # get the package.id from above
 package.id = eml_file$packageId
 

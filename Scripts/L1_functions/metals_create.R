@@ -12,6 +12,7 @@
 # 24 Fed 26 Fixed the section on adding historical MDLS and added in ability to pull from GitHub instead of local directories
 # 24 Aug 26 add a line when reading in the maintenance log to accept different time formats
 # 15 Oct 26 Removed time from a select when making the data frame into a long format because that column is added later
+# 16 Oct 26 Moved the section to add times to the samples up so it can be used when you need to pivot longer and wider because we have multiple samples taken on the same day. 
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -39,9 +40,8 @@ metals_qaqc <- function(directory,
                         ISCO_outfile, # put ISCO_save=T and Null to return the file
                         start_date = NULL,
                         end_date = NULL)
-                        
 {
-  
+
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
  #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
@@ -491,6 +491,53 @@ metals_qaqc <- function(directory,
 
 
    print("Created flag columns and used maintenance log to qaqc the data.")
+   
+   # read in the timesheet with the date and time the samples were taken.
+   # For the ISCO just use the weir time. Figure out how to do this.
+   
+   time_sheet <- gsheet::gsheet2tbl(sample_time)|>
+     select(Reservoir, Site,Date,Time,Depth_m)|>
+     #filter(VT_Metals =="X")|> #only take obs when metals samples were collected
+     mutate(
+       Date = parse_date_time(Date, orders = c('ymd HMS','ymd HM','ymd','mdy')),
+       Date = as.Date(Date),
+       Site = as.numeric(Site),
+       Depth_m = as.numeric(Depth_m))
+   #select(-VT_Metals)
+   
+   print("read in time data frame")
+   
+   # Make a data frame with just weir samples and then change to ISCO times. This is a crude way of doing it because we don't always collect metals samples when we collect ISCO samples, but it works for now. 
+   
+   weir <- time_sheet|>
+     filter(Site==100)|>
+     mutate(Site = ifelse(Site==100, 100.1, Site))
+   
+   time_sheet <- bind_rows(time_sheet, weir)|>
+     arrange(Date)
+   
+   print("made a weir data frame")
+   # add the time the sample was collected. Use Natural join to override NAs
+   
+   raw_df2 <-
+     natural_join(raw_df,time_sheet,
+                  by = c("Reservoir", "Site","Date","Depth_m"),
+                  jointype = "LEFT")|>
+     #select(-Site)|>
+     #dplyr::rename(Site=clean_site)|>
+     #select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
+     mutate(
+       Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
+       Flag_DateTime = ifelse(is.na(Time), 1, 0),
+       Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
+       DateTime = ymd_hms(paste0(Date," ",Time)))|>
+     select(-c(Date, Time))|>
+     distinct(Reservoir, Site, DateTime, Depth_m, Filter, .keep_all = TRUE) |> 
+     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
+   
+   print("added time to the data frame")
+   
+   
    ### 4. Read in the Minimum Reporting Limits and add flags ####
 
    ### ABP fixed to make it work now but please feel free to change 
@@ -505,14 +552,14 @@ metals_qaqc <- function(directory,
    # pivot the data frame longer
    
    
-   long_raw_df <- raw_df |>
+   long_raw_df <- raw_df2 |>
      # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
      rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
      pivot_longer(
-       cols = -c(Reservoir, Site, Date, Depth_m, Filter),
+       cols = -c(Reservoir, Site, DateTime, Depth_m, Filter),
        names_to = c(".value", "Metal"),
        names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
-     mutate(Year = year(Date), Metal_mgL = paste0(Metal, "_mgL")) |>
+     mutate(Year = year(DateTime), Metal_mgL = paste0(Metal, "_mgL")) |>
      left_join(MRL, by = join_by(Metal_mgL == Symbol, Year)) |>
      mutate(
        Flag = as.character(Flag),
@@ -525,7 +572,7 @@ metals_qaqc <- function(directory,
        Conc = if_else(below_mrl, MRL_mgL, Conc)  # set below/at-MRL values to the MRL
      ) |> 
      pivot_wider(
-       id_cols = c(Reservoir, Site, Date, Depth_m, Filter),
+       id_cols = c(Reservoir, Site, DateTime, Depth_m, Filter),
        names_from = Metal,
        values_from = c(Conc, Flag),
        names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"
@@ -612,51 +659,7 @@ metals_qaqc <- function(directory,
 
   # }
 
-   
-   # read in the timesheet with the date and time the samples were taken.
-   # For the ISCO just use the weir time. Figure out how to do this.
-   
-   time_sheet <- gsheet::gsheet2tbl(sample_time)|>
-     select(Reservoir, Site,Date,Time,Depth_m)|>
-     #filter(VT_Metals =="X")|> #only take obs when metals samples were collected
-     mutate(
-       Date = parse_date_time(Date, orders = c('ymd HMS','ymd HM','ymd','mdy')),
-       Date = as.Date(Date),
-       Site = as.numeric(Site),
-       Depth_m = as.numeric(Depth_m))
-   #select(-VT_Metals)
-   
-   print("read in time data frame")
-   
-   # Make a data frame with just weir samples and then change to ISCO times. This is a crude way of doing it because we don't always collect metals samples when we collect ISCO samples, but it works for now. 
-   
-   weir <- time_sheet|>
-     filter(Site==100)|>
-     mutate(Site = ifelse(Site==100, 100.1, Site))
-   
-   time_sheet <- bind_rows(time_sheet, weir)|>
-     arrange(Date)
-   
-   print("made a weir data frame")
-   # add the time the sample was collected. Use Natural join to override NAs
-   
-   raw_df2 <-
-     natural_join(long_raw_df,time_sheet,
-                  by = c("Reservoir", "Site","Date","Depth_m"),
-                  jointype = "LEFT")|>
-     #select(-Site)|>
-     #dplyr::rename(Site=clean_site)|>
-     #select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
-     mutate(
-       Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
-       Flag_DateTime = ifelse(is.na(Time), 1, 0),
-       Time = ifelse(Flag_DateTime==1, "12:00:00",Time), # set flagged time to noon
-       DateTime = ymd_hms(paste0(Date," ",Time)))|>
-     select(-c(Date, Time))|>
-     distinct(Reservoir, Site, DateTime, Depth_m, Filter, .keep_all = TRUE) |> 
-     mutate_if(is.numeric, round, digits = 4) # round to 4 digits
-   
-   print("added time to the data frame")
+
    # ABP come back here to figure out pivot wider
    # Pivot the data wider so that there is a T_element and and S_element
 
@@ -671,7 +674,8 @@ metals_qaqc <- function(directory,
                 names_glue = '{Filter}_{.value}') |> 
     rename_with(
       ~ .x |> gsub('T_Flag_', 'Flag_T_', x = _) |> gsub('S_Flag_', 'Flag_S_', x = _),
-      .cols = everything())
+      .cols = everything())|>
+    mutate(across(starts_with("Flag"), as.character)) # converted the Flags to characters because everything below needs them in that form instead of numeric
   
   
   # now that we pivoted wider again, reassign flags for NA values
@@ -679,8 +683,9 @@ metals_qaqc <- function(directory,
   tsc <- wed |> select(starts_with("T_"), starts_with("S_")) |> colnames()
   
   for (j in tsc) {
-    flag_col <- paste0("Flag_", j)
     
+    flag_col <- paste0("Flag_", j)
+
     wed <- wed |>
       mutate(
         "{flag_col}" := case_when(
@@ -689,6 +694,8 @@ metals_qaqc <- function(directory,
         )
       )
   }
+  
+  
 
   # rename the Flag column
   # Change the column headers so they match what is already on EDI. Take out the "Conc_
@@ -941,16 +948,13 @@ metals_qaqc <- function(directory,
    
    print(paste0("ISCO file will be save here: ", ISCO_outfile))
    
- }else{
-   return(ISCO)
-   
+ } else {
    print("ISCO data frame returned to the enviornment")
-  }
- 
-  
- }else{
-   warning("ISCO file is not saved and will not be returned. This is a check to make sure you know this.")
  }
+ 
+} else {
+   warning("ISCO file is not saved and will not be returned. This is a check to make sure you know this.")
+}
  
 
  # add in filter later. Right now save everything.
@@ -969,11 +973,10 @@ if(metals_save==T){
  # print where the file will be saved
  print(paste0("Metals file will be save here: ", metals_outfile))
 
-  }else{
-   return(final)
+  } else {
     print("Metals data frame returned to the enviornment")
- }
-  }else{
+  }
+} else {
    warning("The metals data frame was not save or returned. This is a check to make sure you know this.")
 }
  
@@ -984,14 +987,8 @@ if(metals_save==T){
    
    all_plots <- list(final, ISCO)
    
-   return(all_plots)
-   
    print("Data frames are in a list with the metals data frame being first and then the ISCO data frame")
  
-  }
- }
-} 
-
-# closes the function
-
-
+    } # close the if statement
+  } 
+} # close the function

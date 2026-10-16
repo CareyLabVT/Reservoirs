@@ -64,8 +64,8 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # Source scripts from GitHub
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
-# source('~/Documents/GitHub/Reservoirs/Scripts/L1_functions/metals_create.R')
+#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
+source("C:\\Users\\dakirr\\Documents\\Kirr_Reservoirs_R\\Reservoirs\\Scripts\\L1_functions\\metals_create.R")
 
 # Plotting script
  # source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
@@ -104,7 +104,6 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
   current_df <- current_df%>%
   dplyr::distinct(.)%>% # get rid of dups if they snuck in
   filter(DateTime<(current_time_end))
-
 
 #reorder. Just to be certain everything is in order
   current_df<-current_df[order(current_df$DateTime),]

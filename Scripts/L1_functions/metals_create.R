@@ -44,7 +44,7 @@ metals_qaqc <- function(directory,
 
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
- #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
+ # #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
  #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
  #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
  #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
@@ -523,9 +523,6 @@ metals_qaqc <- function(directory,
      natural_join(raw_df,time_sheet,
                   by = c("Reservoir", "Site","Date","Depth_m"),
                   jointype = "LEFT")|>
-     #select(-Site)|>
-     #dplyr::rename(Site=clean_site)|>
-     #select(Reservoir, Site, Date, Time, Depth_m, Filter, starts_with("Flag"), ends_with("mgL"))|>
      mutate(
        Time = as.character(hms::as_hms(Time)), # convert time and flag if time is NA
        Flag_DateTime = ifelse(is.na(Time), 1, 0),
@@ -975,6 +972,7 @@ if(metals_save==T){
 
   } else {
     print("Metals data frame returned to the enviornment")
+    return(final)
   }
 } else {
    warning("The metals data frame was not save or returned. This is a check to make sure you know this.")

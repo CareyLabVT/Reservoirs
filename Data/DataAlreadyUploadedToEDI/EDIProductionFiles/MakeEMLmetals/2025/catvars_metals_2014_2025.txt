@@ -59,6 +59,38 @@ Flag_TCu_mgL	3	sample below MRL and set to MRL
 Flag_TFe_mgL	3	sample below MRL and set to MRL
 Flag_TLi_mgL	3	sample below MRL and set to MRL
 Flag_TMn_mgL	3	sample below MRL and set to MRL
+Flag_SAl_mgL	4	
+Flag_SBa_mgL	4	
+Flag_SCa_mgL	4	
+Flag_SCu_mgL	4	
+Flag_SFe_mgL	4	
+Flag_SK_mgL	4	
+Flag_SLi_mgL	4	
+Flag_SMg_mgL	4	
+Flag_SMn_mgL	4	
+Flag_SNa_mgL	4	
+Flag_SSi_mgL	4	
+Flag_SSr_mgL	4	
+Flag_TAl_mgL	4	
+Flag_TBa_mgL	4	
+Flag_TCa_mgL	4	
+Flag_TCu_mgL	4	
+Flag_TFe_mgL	4	
+Flag_TK_mgL	4	
+Flag_TLi_mgL	4	
+Flag_TMg_mgL	4	
+Flag_TMn_mgL	4	
+Flag_TNa_mgL	4	
+Flag_TSi_mgL	4	
+Flag_TSr_mgL	4	
+		
+		
+		
+		
+		
+		
+		
+		
 Flag_SAl_mgL	6	non-standard method
 Flag_SBa_mgL	6	non-standard method
 Flag_SCa_mgL	6	non-standard method

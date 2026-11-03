@@ -40,8 +40,8 @@ filt_chla_qaqc <- function(directory,
                            end_date, 
                            outputcheck_folder = './Data/DataNotYetUploadedToEDI/Raw_chla/QAQC_check_folder')
 {
-  # directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw%20data%20from%20spec"
-  # # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
+  ## directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw%20data%20from%20spec"
+  # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
   # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
   # final_vol_extract = 6
@@ -212,7 +212,7 @@ filt_chla_qaqc <- function(directory,
   # check if there are any dups in the rack map
   rack_dup <- rack_map2 |>
     select(Date_processed, ResSite, Depth, Rep, Sample_date, dil_factor)|>
-    filter(l("^20", Sample_date))
+    filter(grepl("^20", Sample_date))
   
   check_rack_dup <- rack_dup[duplicated(rack_dup), ]
   
@@ -236,7 +236,7 @@ filt_chla_qaqc <- function(directory,
   # Get sample dates in the right format
   res_samp2 <- df3%>%
     mutate(
-      Sample_date2= ifelse(l("^20", Sample_date)==T, Sample_date, NA),
+      Sample_date2= ifelse(grepl("^20", Sample_date)==T, Sample_date, NA),
       Sample_date = as.Date(Sample_date2))|> # put date in format
     select(-Sample_date2)
   
@@ -520,9 +520,9 @@ filt_chla_qaqc <- function(directory,
       
       timing = ifelse(str_detect(Sample.ID,"^b|^B|b$|B$|_b|_B")==T,"b", 
                       ifelse(str_detect(Sample.ID,"^a|^A|a$|A$|_a|_A")==T, "a", timing)))
-  # samp_type = ifelse(l("et|blan|buff|filt", Sample.ID), "eth_blank",
-  #                            ifelse(l("fa", Sample.ID), "fake",
-  #                                   ifelse(l("ref", Sample.ID), "ref", "res_samp")))
+  # samp_type = ifelse(grepl("et|blan|buff|filt", Sample.ID), "eth_blank",
+  #                            ifelse(grepl("fa", Sample.ID), "fake",
+  #                                   ifelse(grepl("ref", Sample.ID), "ref", "res_samp")))
   
   
   print("The following samples were diluted. Ensure the dilution factor is recorded in the rack map")
@@ -886,4 +886,3 @@ filt_chla_qaqc <- function(directory,
   } # ends the if statement if there are no new observations
   
 } # ends the function
-

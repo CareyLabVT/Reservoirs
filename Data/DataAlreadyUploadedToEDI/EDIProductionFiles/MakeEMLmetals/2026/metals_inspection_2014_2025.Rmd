@@ -64,8 +64,8 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # Source scripts from GitHub
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
-#source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
-source("C:\\Users\\dakirr\\Documents\\Kirr_Reservoirs_R\\Reservoirs\\Scripts\\L1_functions\\metals_create.R")
+ source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
+# source("C:\\Users\\dakirr\\Documents\\Kirr_Reservoirs_R\\Reservoirs\\Scripts\\L1_functions\\metals_create.R")
 
 # Plotting script
  # source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
@@ -82,31 +82,31 @@ current_time_end=ymd_hms("2025-12-31 23:59:00", tz="America/New_York")
 ```
 
 
-```{r QAQC all files, eval=TRUE, include=FALSE}
+```{r QAQC all files, eval=FALSE, include=FALSE}
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data #file for EDI. 
 
-current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
-historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
- sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
- maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
- sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
- MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv",
-         metals_save = TRUE,
-         metals_outfile = NULL, # put Null to return the file
-          ISCO_save = F, # ISCO file will not be saved and will not be returned
-         ISCO_outfile = "dont_save.csv", # put Null to return the file
-         start_date = as.Date('2014-01-01'),
-         end_date = NULL)
-
-
-# # Filter so we only go through the end of the reporting year 
-  current_df <- current_df%>%
-  dplyr::distinct(.)%>% # get rid of dups if they snuck in
-  filter(DateTime<(current_time_end))
-
-#reorder. Just to be certain everything is in order
-  current_df<-current_df[order(current_df$DateTime),]
+# current_df <- metals_qaqc(directory = "../../../../DataNotYetUploadedToEDI/Metals_Data/Raw_Data/",
+# historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv",
+#  sample_ID_key =  "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv", 
+#  maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv",
+#  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0",
+#  MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/MRL_metals.csv",
+#          metals_save = TRUE,
+#          metals_outfile = NULL, # put Null to return the file
+#           ISCO_save = F, # ISCO file will not be saved and will not be returned
+#          ISCO_outfile = "dont_save.csv", # put Null to return the file
+#          start_date = as.Date('2014-01-01'),
+#          end_date = NULL)
+# 
+# 
+# # # Filter so we only go through the end of the reporting year 
+#   current_df <- current_df%>%
+#   dplyr::distinct(.)%>% # get rid of dups if they snuck in
+#   filter(DateTime<(current_time_end))
+# 
+# #reorder. Just to be certain everything is in order
+#   current_df<-current_df[order(current_df$DateTime),]
 
 
   
@@ -117,15 +117,20 @@ historic = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/m
 ```{r QAQC file or READ IN EDI FOR REVIEWER, include=FALSE}
 
 
-# # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data.
+# # For REVIEWERS: Run this section to pull the data from EDI which is in staging as a check of the data
+
+## This is the staging EDI Access code to access the data from the staging enviornment.
+
+myEDIAccessKey = "i3zts9FpyZyzQJgxWTrtCYpnU-k"
+
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
                                                                 ### CHANGE THIS NUMBER BELOW
                                                                              ##
- #current_df <-read_csv("https://pasta-s.lternet.edu/package/data/eml/edi/718/7/9c8c61b003923f4f03ebfe55cea8bbfd")
- # 
- # # Force files from EDI to have an EST timestamp
- #current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
+ current_df <-read_csv(paste0("https://pasta-s.lternet.edu/package/data/eml/edi/1511/4/c4545c5bd9acb2155a228d9fc99ea4b2","?key=",myEDIAccessKey)) 
+
+ # Force files from EDI to have an EST timestamp
+ current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
 
 ```
 
@@ -571,7 +576,7 @@ output <- unlist(outputs, recursive = F)
 
 
 
-```{r Make new CSV with current and historic files, include=FALSE}
+```{r Make new CSV with current and historic files, eval=FALSE, include=FALSE}
 
 # Convert DateTime to a character
 # convert datetimes to characters so that they are properly formatted in the output file

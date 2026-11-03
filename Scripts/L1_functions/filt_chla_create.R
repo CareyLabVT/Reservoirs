@@ -162,23 +162,23 @@ filt_chla_qaqc <- function(directory,
   # Read in the data from either your local computer or from GitHub depending on what your put in the directory argument. 
   
   
-  if(grepl("https", directory) == T){
-    
-    #create list of file names
-    resp <- request(directory) |>
-      req_headers(Accept = "application/vnd.github+json") |>
-      req_perform()
-    
-    dat <- resp_body_json(resp, simplifyVector = TRUE)|>
-      drop_na(download_url)
-    
-    files <- dat$download_url
-    
-    
-  } else{
-    
-    files<-list.files(path= directory, pattern=".txt", full.names=TRUE)
-  }
+ if(grepl("https", directory) == T){
+   
+   #create list of file names
+   resp <- request(directory) |>
+     req_headers(Accept = "application/vnd.github+json") |>
+     req_perform()
+   
+   dat <- resp_body_json(resp, simplifyVector = TRUE)|>
+     drop_na(download_url)
+   
+   files <- dat$download_url
+   
+   
+ } else{
+   
+   files<-list.files(path= directory, pattern=".txt", full.names=TRUE)
+ }
   
   
   # Combine all the files into one big folder
@@ -213,7 +213,7 @@ filt_chla_qaqc <- function(directory,
   # check if there are any dups in the rack map
   rack_dup <- rack_map2 |>
     select(Date_processed, ResSite, Depth, Rep, Sample_date, dil_factor)|>
-    filter(grepl("^20", Sample_date))
+    filter(l("^20", Sample_date))
   
   check_rack_dup <- rack_dup[duplicated(rack_dup), ]
   
@@ -237,7 +237,7 @@ filt_chla_qaqc <- function(directory,
   # Get sample dates in the right format
   res_samp2 <- df3%>%
     mutate(
-      Sample_date2= ifelse(grepl("^20", Sample_date)==T, Sample_date, NA),
+      Sample_date2= ifelse(l("^20", Sample_date)==T, Sample_date, NA),
       Sample_date = as.Date(Sample_date2))|> # put date in format
     select(-Sample_date2)
   
@@ -569,8 +569,23 @@ filt_chla_qaqc <- function(directory,
       print(ert|>
               select(Sample.ID, ResSite, Depth, Date_processed, Sample_date, timing, WL750.0))
       
-      write.csv(ert, paste0(outputcheck_folder, "/dups_mistyped.csv"))
-    }
+      timing = ifelse(str_detect(Sample.ID,"^b|^B|b$|B$|_b|_B")==T,"b", 
+                      ifelse(str_detect(Sample.ID,"^a|^A|a$|A$|_a|_A")==T, "a", timing)))
+  # samp_type = ifelse(l("et|blan|buff|filt", Sample.ID), "eth_blank",
+  #                            ifelse(l("fa", Sample.ID), "fake",
+  #                                   ifelse(l("ref", Sample.ID), "ref", "res_samp")))
+  
+  
+  print("The following samples were diluted. Ensure the dilution factor is recorded in the rack map")
+  dils <- raw_df2 |>
+    filter(dilution == "diluted") |> 
+    select(c(Sample.ID, Date_processed, Sample_date, ResSite, Depth))
+  print(dils)
+  write.csv(dils, paste0(outputcheck_folder, "/dilutedsamples.csv"))
+  
+  ## The following Samples don't have a numeric ID and will be dropped
+  
+  if(nrow(raw_df2|>filter(is.na(Num_ID)))>0){
     
     
     ## Check the turbidity absorbance and print out values above 0.005 and save the files

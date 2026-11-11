@@ -2,7 +2,9 @@ Reservoir,Site,Site_description,Latitude,Longitude
 BVR,40,Pelagic upstream site in Beaverdam Reservoir at the location of the upstream pipe outflow leading to Falling Creek Reservoir,37.314783,-79.820864
 BVR,50,Pelagic deep hole site nearest to dam; at BVR platform closest to dam,37.31288,-79.8159
 CCR,50,Pelagic deep hole site of Carvins Cove Reservoir near dam (also site 6 for Ironman sampling); the closest access point to the dam via boat and 21 m at full pond,37.3706,-79.9582
-CCR,201,Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fire road near red barns,37.3958,-79.9937
+CCR,51,Pelagic site directly at the dam sampled from dam walkway (site of sensors); can be sampled to 19m at full pond,37.3697,-79.958
+CCR,101,Inflow stream site to Carvins Cove Reservoir at Horse Pen Branch,37.3646,-79.9733
+CCR,201,Inflow stream site to Carvins Cove Reservoir at Carvins Creek Stream accessed via fireroad near red barns,37.3958,-79.9937
 CCR,301,Inflow stream site to Carvins Cove Reservoir at Sawmill Branch inflow site upstream of reservoir where fire road bridge crosses the stream,37.4169,-79.9771
 CCR,400,Inflow tunnel site to Carvins Cove Reservoir at emergence of Tinker Creek Tunnel,37.39967489,-79.9471728
 CCR,501,Inflow tunnel site to Carvins Cove Reservoir at emergence of Catawaba Creek Tunnel,37.4082,-79.9897

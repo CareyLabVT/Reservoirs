@@ -21,7 +21,7 @@ wd <- setwd("./Data/DataNotYetUploadedToEDI/UGGA/UGGA_Raw/2026")
 # You'll want to save this script in the same working directory to keep a record of what files
 # you have corrected.
 
-field_sheet <- read.csv("UGGA_log_2025.csv")
+field_sheet <- read.csv("UGGA_log_2026.csv")
 
 # Here, we create a function that will be used for processing each file. 
 # You don't need to modify this
@@ -71,10 +71,8 @@ processed_files <- sub(".csv", ".txt", list.files("processed_csvs"))
 #Compare these two to figure out which files still need to be processed
 files_to_process <- files[!files %in% processed_files]
 #Exclude any files that we have decided not to process (see notes above)
-files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0202.txt"
-                                                              #,"gga_2001-12-31_f0284.txt" #made it usable but check this before EDI days.
-                                                              , "gga_2001-12-31_f0336.txt",
-                                                              "gga_2001-12-31_f0294.txt"
+files_to_process <- files_to_process[!files_to_process %in% c("gga_2001-12-31_f0395.txt", # need to add this one
+                                                              "gga_2001-12-31_f0401.txt" # no data in this file
                                                               )] # very messy and doesn't seem usable
 
 
@@ -89,8 +87,7 @@ for (file in files_to_process) {
 
 # QAQC: there were a few times that there was only one peak but we still had to click twice. 
 # Here, we manually remove the second peak from these files
-one_peak <- c("processed_csvs/gga_2001-12-31_f0360.csv", "processed_csvs/gga_2001-12-31_f0227.csv",
-              "processed_csvs/gga_2001-12-31_f0362.csv", "processed_csvs/gga_2001-12-31_f0222.csv", "processed_csvs/gga_2001-12-31_f0257.csv", "processed_csvs/gga_2001-12-31_f0264.csv", "processed_csvs/gga_2001-12-31_f0308.csv", "processed_csvs/gga_2001-12-31_f0317.csv") # specify casts with one peak. Can still use them. 
+one_peak <- c() # specify casts with one peak. Can still use them. 
 #Filter to only the first peak in these files
 for (file in one_peak) {
   data <- read.csv(file) %>%
@@ -150,4 +147,4 @@ flux_all <- flux_all %>%
          End = format(End, format = "%H:%M"))
 
 # Export out fluxes
-write.csv(flux_all,"./2025_season_Flux_Output.csv", row.names = F)
+write.csv(flux_all,"./2026_season_Flux_Output.csv", row.names = F)

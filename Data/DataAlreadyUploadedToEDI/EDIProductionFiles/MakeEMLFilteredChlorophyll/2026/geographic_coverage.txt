@@ -1,0 +1,9 @@
+geographicDescription	northBoundingCoordinate	southBoundingCoordinate	eastBoundingCoordinate	westBoundingCoordinate
+Beaverdam Reservoir is located in Vinton, Virginia, USA	37.322865	37.311961	-79.813848	-79.824834
+Carvins Cove Reservoir is located in Roanoke, Virginia, USA	37.409127	37.365345	-79.944052	-79.978642
+Claytor Lake is located in Pulaski, Virginia, USA 	37.086718	36.967031	-80.576912	-80.74543
+Falling Creek Reservoir is located in Vinton, Virginia, USA	37.309589	37.30266	-79.836009	-79.839249
+Gatewood Reservoir is located in Pulaski, Virginia, USA	37.054358	37.03819	-80.858492	-80.89188
+Smith Mountain Lake is located in Bedford, Franklin and Pittsylvania, Virginia, USA	37.158577	37.002455	-79.522078	-79.726699
+Spring Hollow Reservoir is located in Salem, Virginia, USA	37.231092	37.217594	-80.170407	-80.179076
+Lake Sunapee is located in Sunapee, New Hampshire, USA	43.431481	43.321181	-72.033127	-72.08948

@@ -1,6 +1,6 @@
 # ysi_qaqc_2023.R
 # QAQC of YSI and PAR data from 2023
-# Created by ADD, modified by HLW
+# Created by ADD, modified by HLW, and ABP
 # First developed: 2023-12-04
 # Last edited: 2025-11-12 
 # changed as.Date to as.Date.character because as.Date would add a day if time close to mindnight

@@ -13,6 +13,7 @@
 # 24 Aug 26 add a line when reading in the maintenance log to accept different time formats
 # 15 Oct 26 Removed time from a select when making the data frame into a long format because that column is added later
 # 16 Oct 26 Moved the section to add times to the samples up so it can be used when you need to pivot longer and wider because we have multiple samples taken on the same day. 
+# 6 Nov 26 Corrected data frame calls for flags and columns that get carried from one data frame to the next to keep 3 flags
 
 # Purpose: convert metals data from the ICP-MS lab format to the format needed
 # for publication to EDI
@@ -45,8 +46,8 @@ metals_qaqc <- function(directory,
  # These are so I can run the function one step at a time and figure everything out.
  # Leave for now while still in figuring out mode
  # #directory = c("https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2025/", "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/2026/" )
- #  directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
- #  historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
+ # directory = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/"
+ # historic = "./Data/DataNotYetUploadedToEDI/Metals_Data/Raw_Data/historic_raw_2014_2019_w_unique_samp_campaign.csv"
  #  sample_ID_key = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Scripts/Metals_Sample_Depth.csv"
  # maintenance_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataNotYetUploadedToEDI/Metals_Data/Metals_Maintenance_Log.csv"
  #  sample_time = "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg/edit#gid=0"
@@ -536,8 +537,6 @@ metals_qaqc <- function(directory,
    
    
    ### 4. Read in the Minimum Reporting Limits and add flags ####
-
-   ### ABP fixed to make it work now but please feel free to change 
    
    MRL <- read_csv(MRL_file, show_col_types = F)#|>
      #separate_wider_delim(Symbol, delim = "_", names = c("Metal", "units"))
@@ -553,7 +552,7 @@ metals_qaqc <- function(directory,
      # normalize naming so Conc and Flag columns share a pattern: {prefix}_{Metal}_mgL
      rename_with(~paste0("Conc_", .x), .cols = ends_with("mgL") & !starts_with("Flag")) |>
      pivot_longer(
-       cols = -c(Reservoir, Site, DateTime, Depth_m, Filter),
+       cols = -c(Reservoir, Site, DateTime, Depth_m, Filter, Flag_DateTime),
        names_to = c(".value", "Metal"),
        names_pattern = "^(Conc|Flag)_(.+)_mgL$") |>
      mutate(Year = year(DateTime), Metal_mgL = paste0(Metal, "_mgL")) |>
@@ -569,7 +568,7 @@ metals_qaqc <- function(directory,
        Conc = if_else(below_mrl, MRL_mgL, Conc)  # set below/at-MRL values to the MRL
      ) |> 
      pivot_wider(
-       id_cols = c(Reservoir, Site, DateTime, Depth_m, Filter),
+       id_cols = c(Reservoir, Site, DateTime, Depth_m, Filter, Flag_DateTime),
        names_from = Metal,
        values_from = c(Conc, Flag),
        names_glue = "{ifelse(.value == 'Conc', paste0(Metal, '_mgL'), paste0('Flag_', Metal, '_mgL'))}"
@@ -660,14 +659,14 @@ metals_qaqc <- function(directory,
    # ABP come back here to figure out pivot wider
    # Pivot the data wider so that there is a T_element and and S_element
 
-  wed <- raw_df2 |>
+  wed <- long_raw_df |>
     # order the columns so the time column is not in the middle of the elements
     select(Reservoir, Site, DateTime, Depth_m, Filter, everything())|>
-    drop_na(Filter)|> # take out if there are NAs in the filter column
+    #drop_na(Filter)|> # take out if there are NAs in the filter column
    #group_by(DateTime, Reservoir, Depth_m, Site) |>
     pivot_wider(names_from = 'Filter',
                 id_cols = c('Reservoir', 'Site', 'DateTime','Depth_m', 'Flag_DateTime'),
-                values_from = Al_mgL:Sr_mgL,
+                values_from = Al_mgL:Flag_Sr_mgL,
                 names_glue = '{Filter}_{.value}') |> 
     rename_with(
       ~ .x |> gsub('T_Flag_', 'Flag_T_', x = _) |> gsub('S_Flag_', 'Flag_S_', x = _),

@@ -3,6 +3,7 @@ FCR,100,0.1,T,Metals,15,7/22/2019,Mn_mgL,Mn_mgL,6,observation seems abnormally h
 FCR,100.1,0.1,T,Metals,29,3/24/2020,Li_mgL,Ba_mgL,8,Sample was originally labelled; '03/24/2020 - 29 (decant)'; name was edited for ease of automation
 FCR,100.1,0.1,T,Metals,30,3/24/2020,Li_mgL,Ba_mgL,8,Sample was originally labelled; '03/24/2020 - 30 (decant)'; name was edited for ease of automation
 BVR,50,9,S,Metals,26,4/20/2020,Si_mgL,Si_mgL,6,observation seems abnormally high.
+FCR,50,5,T,Metals,7,7/20/2020,Cu_mgL,Cu_mgL,6,observation seems abnormally high.
 BVR,50,10,T,Metals,67,9/2/2020,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,10/5/2020,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,S,Metals,18,10/5/2020,Li_mgL,Ba_mgL,8,Filtered sample had particulates. Set to NA for improper procedure
@@ -42,6 +43,7 @@ FCR,100,0.1,T,Metals,15,5/23/2022,Li_mgL,Ba_mgL,4,sample had particulates and wa
 FCR,200,0.1,T,Metals,17,5/23/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,5/31/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,5/31/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
+BVR,50,9,T,Metals,25,6/7/2022,Mg_mgL,Mg_mgL,6,observation seems abnormally high.
 FCR,100,0.1,T,Metals,15,6/7/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,6/13/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,6/13/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
@@ -49,6 +51,7 @@ FCR,100,0.1,T,Metals,15,6/20/2022,Li_mgL,Ba_mgL,4,sample had particulates and wa
 FCR,200,0.1,T,Metals,17,6/20/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 BVR,50,3,T,Metals,21,6/20/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 BVR,50,8,T,Metals,69,6/20/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
+FCR,50,8,T,Metals,11,6/20/2022,Ba_mgL,Ba_mgL,6,observation seems abnormally high.
 CCR,50,21,T,Metals,15,6/27/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 FCR,200,0.1,T,Metals,17,6/27/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
 CCR,50,21,T,Metals,57,6/30/2022,Li_mgL,Ba_mgL,4,sample had particulates and was microwave digested. See digestion notebook
@@ -130,6 +133,7 @@ FCR,100.1,0.1,T,Metals,29,5/23/2022,Li_mgL,Ba_mgL,4,Sample had particulates and 
 FCR,100.1,0.1,T,Metals,30,5/23/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,6/7/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,30,6/7/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
+BVR,50,9,T,Metals,25,6/7/2022,Sr_mgL,Sr_mgL,6,observation seems abnormally low.
 FCR,100.1,0.1,T,Metals,29,6/20/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,30,6/20/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,6/27/2022,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
@@ -148,6 +152,7 @@ FCR,100.1,0.1,T,Metals,29,5/6/2021,Li_mgL,Ba_mgL,4,Sample had particulates and w
 FCR,100.1,0.1,T,Metals,30,5/6/2021,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,5/24/2021,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,30,5/24/2021,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,5/1/2023,Ba_mgL,Ba_mgL,6,observation seems abnormally high.
 FCR,100.1,0.1,T,Metals,29,5/8/2023,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,5/27/2023,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,5/29/2023,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
@@ -272,7 +277,9 @@ FCR,100.1,0.1,T,Metals,29,11/19/2024,Li_mgL,Ba_mgL,4,Sample had particulates and
 FCR,100.1,0.1,T,Metals,30,11/19/2024,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,29,12/3/2024,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100.1,0.1,T,Metals,30,12/3/2024,Li_mgL,Ba_mgL,4,Sample had particulates and was microwave digested. See digestion notebook
+FCR,100,0.1,S,Metals,16,12/3/2024,Cu_mgL,Cu_mgL,6,observation seems abnormally high.
 FCR,1,0.1,S,Metals,72,8/12/2024,Fe_mgL,Fe_mgL,6,observation seems abnormally high.
+FCR,50,3.8,S,Metals,6,2/24/2025,Al_mgL,Al_mgL,6,observation seems abnormally high.
 FCR,50,5,S,Metals,8,3/4/2025,K_mgL,K_mgL,6,observation seems abnormally low.
 FCR,100,0.1,T,Metals,15,3/10/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook. Dilution factor for this sample is 20.
 FCR,100,0.1,T,Metals,15,3/24/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
@@ -280,6 +287,20 @@ FCR,100,0.1,T,Metals,15,3/31/2025,Li_mgL,Ba_mgL,99,Sample had particulates and w
 FCR,100,0.1,T,Metals,15,4/7/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,4/14/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,4/21/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
+FCR,50,0.1,T,Metals,1,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,0.1,S,Metals,2,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,1.6,T,Metals,3,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,1.6,S,Metals,4,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,3.8,T,Metals,5,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,3.8,S,Metals,6,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,5,T,Metals,7,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,5,S,Metals,8,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,6.2,T,Metals,9,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,6.2,S,Metals,10,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,8,T,Metals,11,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,8,S,Metals,12,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,9,T,Metals,13,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
+FCR,50,9,S,Metals,14,4/28/2025,Li_mgL,Ba_mgL,6,observation seems abnormally high.
 FCR,100,0.1,T,Metals,15,4/28/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,5/5/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook
 FCR,100,0.1,T,Metals,15,5/12/2025,Li_mgL,Ba_mgL,99,Sample had particulates and was microwave digested. See digestion notebook

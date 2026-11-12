@@ -50,6 +50,16 @@ Flag_TNa_mgL	1	sample not taken
 Flag_TSi_mgL	1	sample not taken
 Flag_TSr_mgL	1	sample not taken
 Site	1	Outflow spillway from Falling Creek Reservoir
+Flag_TLi_mgL	3	"sample below MRL, set to MRL"
+Flag_SLi_mgL	3	"sample below MRL, set to MRL"
+Flag_TCu_mgL	3	"sample below MRL, set to MRL"
+Flag_SCu_mgL	3	"sample below MRL, set to MRL"
+Flag_TAl_mgL	3	"sample below MRL, set to MRL"
+Flag_SAl_mgL	3	"sample below MRL, set to MRL"
+Flag_TFe_mgL	3	"sample below MRL, set to MRL"
+Flag_SFe_mgL	3	"sample below MRL, set to MRL"
+Flag_TMn_mgL	3	"sample below MRL, set to MRL"
+Flag_SMn_mgL	3	"sample below MRL, set to MRL"
 Flag_SAl_mgL	4	non-standard method (digested)
 Flag_SBa_mgL	4	non-standard method (digested)
 Flag_SCa_mgL	4	non-standard method (digested)
@@ -156,6 +166,10 @@ Flag_TNa_mgL	9	soluble is greater than the total
 Flag_TSi_mgL	9	soluble is greater than the total
 Flag_TSr_mgL	9	soluble is greater than the total
 Site	40	Pelagic upstream site
+Flag_TLi_mgL	34	"sample below MRL, set to MRL and non-standard method (digested)"
+Flag_SLi_mgL	34	"sample below MRL, set to MRL and non-standard method (digested)"
+Flag_TCu_mgL	34	"sample below MRL, set to MRL and non-standard method (digested)"
+Flag_SCu_mgL	34	"sample below MRL, set to MRL and non-standard method (digested)"
 Flag_SBa_mgL	49	non-standard method (digested) and soluble is greater than the total
 Flag_SCa_mgL	49	non-standard method (digested) and soluble is greater than the total
 Flag_SCu_mgL	49	non-standard method (digested) and soluble is greater than the total

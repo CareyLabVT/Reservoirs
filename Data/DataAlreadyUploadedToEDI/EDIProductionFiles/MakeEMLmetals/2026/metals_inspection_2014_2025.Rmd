@@ -65,7 +65,7 @@ pacman::p_load(RCurl,devtools, tidyverse,lubridate, gsheet, rqdatatable, hms, pl
 # QAQC script
 # Will need to update this link when we rename the script and move it to the Scripts/L1_functions folder
  source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Scripts/L1_functions/metals_create.R")
-#source("C:\\Users\\dakirr\\Documents\\Kirr_Reservoirs_R\\Reservoirs\\Scripts\\L1_functions\\metals_create.R")
+#source("../../../../../Scripts/L1_functions/metals_create.R")
 
 # Plotting script
  # source('https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/Plotting_function.R')
@@ -82,7 +82,7 @@ current_time_end=ymd_hms("2025-12-31 23:59:00", tz="America/New_York")
 ```
 
 
-```{r QAQC all files, eval=FALSE, include=FALSE}
+```{r QAQC all files, eval=TRUE, include=FALSE}
 
 # Run the QAQC function to QAQC all raw data. Do this when you are preparing the data #file for EDI.
 
@@ -121,16 +121,16 @@ MRL_file = "https://raw.githubusercontent.com/CareyLabVT/Reservoirs/master/Data/
 
 ## This is the staging EDI Access code to access the data from the staging enviornment.
 
-myEDIAccessKey = "i3zts9FpyZyzQJgxWTrtCYpnU-k"
+#myEDIAccessKey = "i3zts9FpyZyzQJgxWTrtCYpnU-k"
 
 # # MAKE SURE TO UPDATE THE PASTA FROM THE VERSION YOU WANT
 
                                                                 ### CHANGE THIS NUMBER BELOW
                                                                              ##
- current_df <-read_csv(paste0("https://pasta-s.lternet.edu/package/data/eml/edi/1511/4/c4545c5bd9acb2155a228d9fc99ea4b2","?key=",myEDIAccessKey)) 
+ #current_df <-read_csv(paste0("https://pasta-s.lternet.edu/package/data/eml/edi/1511/4/c4545c5bd9acb2155a228d9fc99ea4b2","?key=",myEDIAccessKey)) 
 
  # Force files from EDI to have an EST timestamp
- current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
+ #current_df$DateTime <- force_tz(as.POSIXct(current_df$DateTime), tzone = "America/New_York")
 
 ```
 

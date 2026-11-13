@@ -40,8 +40,8 @@ filt_chla_qaqc <- function(directory,
                            end_date, 
                            outputcheck_folder = './Data/DataNotYetUploadedToEDI/Raw_chla/QAQC_check_folder')
 {
-  # directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw%20data%20from%20spec"
-  # # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
+  ## directory = "https://api.github.com/repos/CareyLabVT/Reservoirs/contents/Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw%20data%20from%20spec"
+  # directory = "Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/" # if loading from local files
   # rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
   # filtering_log = "https://docs.google.com/spreadsheets/d/1xeF312vgwJn7d2UwN4qOD8F32ZGHE3Vv"
   # final_vol_extract = 6
@@ -161,7 +161,7 @@ filt_chla_qaqc <- function(directory,
   # Read in the data from either your local computer or from GitHub depending on what your put in the directory argument. 
   
   
- if(grep("https", directory) == T){
+ if(grepl("https", directory) == T){
    
    #create list of file names
    resp <- request(directory) |>
@@ -886,4 +886,3 @@ filt_chla_qaqc <- function(directory,
   } # ends the if statement if there are no new observations
   
 } # ends the function
-

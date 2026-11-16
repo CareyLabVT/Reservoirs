@@ -1,6 +1,4 @@
 Reservoir, Site, DataStream, TIMESTAMP_start, TIMESTAMP_end, start_parameter, end_parameter , flag, update_value, notes
-BVR,50,Secchi,2014-04-30 11:50:00 EDT, 2014-04-30 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
-BVR,50,Secchi,2014-07-23 11:50:00 EDT, 2014-07-23 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
-FCR,50,Secchi,2014-10-04 11:50:00 EDT, 2014-10-04 12:10:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
-CCR,50,Secchi,2021-08-19 12:15:00 EDT, 2021-08-19 12:20:00 EDT,Secchi_m,NA,2,NA,Averaged observations from the same site at the same time
-
+BVR,50,Secchi,2026-07-27 10:27:00 EDT, 2026-07-30 10:29:00 EDT,Secchi_m,NA,2,NA,secchi broken in half; suspect value
+FCR,50,Secchi,2026-07-27 12:02:00 EDT, 2026-07-30 12:04:00 EDT,Secchi_m,NA,2,NA,secchi broken in half; suspect value
+FCR,20,Secchi,2026-07-27 12:25:00 EDT, 2026-07-30 12:27:00 EDT,Secchi_m,NA,2,NA,secchi broken in half; suspect value

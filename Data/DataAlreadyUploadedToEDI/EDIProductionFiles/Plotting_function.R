@@ -56,7 +56,7 @@ all_plot<-function(
   # just the current year
   current <- current_df%>%
     filter(DateTime>= start_time & DateTime<end_time)%>%
-    #select(-contains(c("Flag", "adjusted")))|>
+    #select(-contains(c("Flag", "adjusted")))%>%
     mutate(type = "qaqc")
   
   # daily average
@@ -319,7 +319,10 @@ if(length(qaqc_current$DateTime)>0){
                color = "Meters") +
           ggtitle(paste0("Current ",Var, " by Depth"," ",reservoir," ",res_site)) +
           theme_bw()+
-          facet_wrap(~ as.factor(Depth_m), scale="free")}%>%ggplotly %>% as_widget()
+          facet_wrap(~ as.factor(Depth_m), scale="free")}%>%
+          ggplotly %>% 
+          as_widget() %>%
+          toWebGL()
         #}
     }else{
       cur <- {ggplot()+
@@ -331,7 +334,10 @@ if(length(qaqc_current$DateTime)>0){
           labs(y = y_lab2,
                color = "Legend") +
           scale_color_manual(values = colors)+
-          theme_bw()}%>% ggplotly%>% as_widget
+          theme_bw()}%>%
+        ggplotly %>%
+        as_widget() %>%
+        toWebGL()
       
     }
   }
@@ -400,7 +406,10 @@ if(length(qaqc_current$DateTime)>0){
         labs(y = "Meters",
              color = y_lab) +
         #scale_color_manual(values = colors)+
-          theme_bw()}%>%ggplotly %>% as_widget()
+          theme_bw()}%>%
+        ggplotly %>% 
+        as_widget() %>%
+        toWebGL()
     
     
     }

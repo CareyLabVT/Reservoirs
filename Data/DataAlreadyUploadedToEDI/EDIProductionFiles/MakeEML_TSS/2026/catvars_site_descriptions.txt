@@ -1,0 +1,3 @@
+attributeName	code	definition
+Reservoir	FCR	Falling Creek Reservoir
+Site	100.1	Inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir; where ISCO is located

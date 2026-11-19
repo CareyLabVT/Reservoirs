@@ -1,0 +1,10 @@
+attributeName	code	definition
+DataStream	Metals	Dataset including ICPMS analysis
+Filter	T	Non-filtered sample referred to as a total sample
+Reservoir	FCR	Falling Creek Reservoir
+Site	100.1	ISCO sampler at inflow stream site on Tunnel Branch primary inflow to Falling Creek Reservoir
+end_parameter	Ba_mgL	Barium
+flag	10	improper procedure and set to NA
+flag	6	non-standard method
+flag	8	abnormally high value determined by 3 standard deviations above mean or at data manager discretion and left in dataset
+start_parameter	Li_mgL	Lithium

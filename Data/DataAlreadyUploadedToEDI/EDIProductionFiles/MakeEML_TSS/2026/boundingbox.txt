@@ -1,0 +1,2 @@
+geographicDescription	westBoundingCoordinate	eastBoundingCoordinate	northBoundingCoordinate	southBounding coordinate
+"Falling Creek Reservoir is located in Vinton, Virginia, USA"	-79.839249	-79.836009	37.30266	37.309589

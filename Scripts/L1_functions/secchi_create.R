@@ -2,7 +2,7 @@
 # QAQC of Secchi data from 2023
 # Created by ADD, modified by HLW, and ABP
 # First developed: 2023-12-04
-# Last edited: 2025-11-13
+# Last edited: 2026-11-19
 
 # Edit:
 # 2025-11-13 consolidating column types

@@ -22,7 +22,7 @@ ManualDischarge_qaqc <- function(gsheet_url,
   # historical_file = NULL
   # maintenance_file = "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
   # output_file = NULL
-  # start_date = as.Date("2024-01-01")
+  # start_date = as.Date("2026-01-01")
   # end_date = Sys.Date()
   
 #read in and format data
@@ -65,11 +65,11 @@ flowmate_Q <- discharge_df %>%
          Velocity_m.s = ifelse(Velocity_unit %in% c("ft_s", "ft/s"), Velocity*0.3048, Velocity),  #convert velocity to m/s if it was measured in ft/s
          Discharge = Depth_m * Velocity_m.s * WidthInterval_m      #calculate discharge for each interval 
          ) %>% 
-  group_by(Reservoir, Site, DateTime) %>% #group by site and date
+  group_by(Reservoir, Site, DateTime, Rep) %>% #group by site and date
   mutate(Discharge_m3s = sum(Discharge, na.rm = T),  #sum across intervals to get final discharge
          Method = "F") %>%  #assign method flag 
-  select(Reservoir, Site, DateTime, Discharge_m3s, Method) %>% 
-  distinct(Reservoir, DateTime, Site, .keep_all = TRUE) %>% 
+  select(Reservoir, Site, Rep, DateTime, Discharge_m3s, Method) %>% 
+  distinct(Reservoir, DateTime, Site, Rep,.keep_all = TRUE) %>% 
   ungroup() #ungroup data so that for loop below works
 
 
@@ -79,11 +79,11 @@ float_Q <- discharge_df %>%
   mutate(Depth_m = Depth_cm/100,   # convert depth to meters
          Velocity_m.s = Float_Length_m/Float_Time_sec,  #calculate velocity 
          Discharge = Depth_m * Width_m * Velocity_m.s) %>%   # calculate discharge for each rep
-  group_by(Reservoir, DateTime, Site) %>%  # group by site and date
+  group_by(Reservoir, DateTime, Site, Rep) %>%  # group by site and date
   mutate(Discharge_m3s = mean(Discharge, na.rm = T),  #average across reps to get final Q
          Method = "V") %>%  # assign method flag
-  select(Reservoir, Site, DateTime, Discharge_m3s, Method) %>% 
-  distinct(Reservoir, DateTime, Site, .keep_all = TRUE) %>% 
+  select(Reservoir, Site, Rep,DateTime, Discharge_m3s, Method) %>% 
+  distinct(Reservoir, DateTime, Site, Rep,.keep_all = TRUE) %>% 
   ungroup() #ungroup data so that for loop below works
 
 
@@ -92,17 +92,17 @@ bucket_Q <- discharge_df %>%
   filter(Method == "Bucket") %>% #filter to bucket methods 
   mutate(Bucket_Volume_m3 = Bucket_Volume_L/1000,  #convert volume from L to cubic meters
          Discharge = Bucket_Volume_m3/Bucket_time_sec) %>%  #calculate discharge for each rep 
-  group_by(Reservoir, DateTime, Site, Bucket_Site) %>%  #group by site and date and sub sites w/in each site (for tunnels with multiple outflow spouts from tunnel)
+  group_by(Reservoir, DateTime, Site, Rep, Bucket_Site) %>%  #group by site and date and sub sites w/in each site (for tunnels with multiple outflow spouts from tunnel)
   mutate(Discharge_m3s = mean(Discharge, na.rm = T), .groups = "drop") %>% # get average from reps 
-  group_by(Reservoir, DateTime, Site) %>%  # now group by just date and site
-  mutate(Discharge_m3s = sum(Discharge_m3s, na.rm = T),  #sum across sites w/in each site (for tunnel sites with multiple outflow spouts from tunnel)
+  group_by(Reservoir, DateTime, Site, Rep) %>%  # now group by just date and site
+  summarise(Discharge_m3s = sum(Discharge_m3s, na.rm = T),  #sum across sites w/in each site (for tunnel sites with multiple outflow spouts from tunnel)
             Method = "B") %>%  #assign method flag
-  select(Reservoir, Site, DateTime, Discharge_m3s, Method) %>% 
-  distinct(Reservoir, DateTime, Site, .keep_all = TRUE) %>% 
+  select(Reservoir, Site, Rep, DateTime, Discharge_m3s, Method) %>% 
+  distinct(Reservoir, DateTime, Site, Rep,.keep_all = TRUE) %>% 
   ungroup() #ungroup data so that for loop below works
 
 ##bind Q values together 
-final_Q <- rbind(flowmate_Q, float_Q, bucket_Q)|>
+final_Q <- bind_rows(flowmate_Q, float_Q, bucket_Q)|>
   rename(Flow_cms = Discharge_m3s) # rename column
 
 ## Add in historical file

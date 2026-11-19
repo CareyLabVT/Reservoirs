@@ -29,7 +29,7 @@ iter <- "All"
 #pull discharge measurements and match to corrected stage
 
 #flowmate Q
-flowmate <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/454/9/0e7fe16623a1ad2a67774c23ce8a29d8")
+flowmate <- read_csv("https://pasta.lternet.edu/package/data/eml/edi/454/9/0e7fe16623a1ad2a67774c23ce8a29d8?key=yltMpS4UEIk12AvB9L7OL5uRiG0")
 
 #add in most recent Q measurements
 flowmate <- add_row(

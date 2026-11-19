@@ -18,18 +18,21 @@ ManualDischarge_qaqc <- function(gsheet_url,
 				                        end_date){
   
   
-  # gsheet_url = "https://docs.google.com/spreadsheets/d/1fgYcGsZeALuwdAX3H0UeA3u57zKsuqTkouh2bxuBTKw/"
-  # historical_file = NULL
-  # maintenance_file = "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
-  # output_file = NULL
-  # start_date = as.Date("2026-01-01")
-  # end_date = Sys.Date()
+  gsheet_url = "https://docs.google.com/spreadsheets/d/1fgYcGsZeALuwdAX3H0UeA3u57zKsuqTkouh2bxuBTKw/"
+  historical_file = NULL
+  maintenance_file = "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
+  output_file = NULL
+  start_date = as.Date("2026-01-01")
+  end_date = Sys.Date()
   
 #read in and format data
 
-discharge_df <- gsheet::gsheet2tbl(gsheet_url)
+discharge_df  <- read.csv(text=gsheet::gsheet2text(gsheet_url, format='csv'), stringsAsFactors=FALSE)
+
 
 discharge_df$DateTime = lubridate::parse_date_time(discharge_df$Date, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HMS', 'mdy HM'))
+
+
 
 # subset the file if there are start and end dates
 
@@ -75,10 +78,11 @@ flowmate_Q <- discharge_df %>%
 
 ## calculate Q from float method 
 float_Q <- discharge_df %>% 
-  filter(Method == "Float") %>% #filter to float measurements
+  filter(Method == "Float") |> #filter to float measurements
   mutate(Depth_m = Depth_cm/100,   # convert depth to meters
-         Velocity_m.s = Float_Length_m/Float_Time_sec,  #calculate velocity 
-         Discharge = Depth_m * Width_m * Velocity_m.s) %>%   # calculate discharge for each rep
+         Velocity_m.s = Float_Length_m/Float_Time_sec) |>  #calculate velocity 
+  group_by(Reservoir, DateTime, Site, Float_section) |>
+         mutate(Discharge = Depth_m * Width_m * Velocity_m.s)   # calculate discharge for each rep
   group_by(Reservoir, DateTime, Site, Rep) %>%  # group by site and date
   mutate(Discharge_m3s = mean(Discharge, na.rm = T),  #average across reps to get final Q
          Method = "V") %>%  # assign method flag

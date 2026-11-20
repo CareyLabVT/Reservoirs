@@ -18,12 +18,12 @@ ManualDischarge_qaqc <- function(gsheet_url,
 				                        end_date){
   
   
-  gsheet_url = "https://docs.google.com/spreadsheets/d/1fgYcGsZeALuwdAX3H0UeA3u57zKsuqTkouh2bxuBTKw/"
-  historical_file = NULL
-  maintenance_file = "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
-  output_file = NULL
-  start_date = as.Date("2026-01-01")
-  end_date = Sys.Date()
+  # gsheet_url = "https://docs.google.com/spreadsheets/d/1fgYcGsZeALuwdAX3H0UeA3u57zKsuqTkouh2bxuBTKw/"
+  # historical_file = NULL
+  # maintenance_file = "Data/DataNotYetUploadedToEDI/Raw_Discharge/ManualDischarge_Maintenance_Log.csv"
+  # output_file = NULL
+  # start_date = NULL #as.Date("2026-01-01")
+  # end_date = NULL #Sys.Date()
   
 #read in and format data
 
@@ -31,7 +31,7 @@ discharge_df  <- read.csv(text=gsheet::gsheet2text(gsheet_url, format='csv'), st
 
 
 discharge_df$DateTime = lubridate::parse_date_time(discharge_df$Date, orders = c('ymd HMS','ymd HM','ymd','mdy', 'mdy HMS', 'mdy HM'))
-
+discharge_df$WidthInterval_m = as.numeric(discharge_df$WidthInterval_m)
 
 
 # subset the file if there are start and end dates
@@ -80,13 +80,15 @@ flowmate_Q <- discharge_df %>%
 float_Q <- discharge_df %>% 
   filter(Method == "Float") |> #filter to float measurements
   mutate(Depth_m = Depth_cm/100,   # convert depth to meters
-         Velocity_m.s = Float_Length_m/Float_Time_sec) |>  #calculate velocity 
-  group_by(Reservoir, DateTime, Site, Float_section) |>
-         mutate(Discharge = Depth_m * Width_m * Velocity_m.s)   # calculate discharge for each rep
-  group_by(Reservoir, DateTime, Site, Rep) %>%  # group by site and date
-  mutate(Discharge_m3s = mean(Discharge, na.rm = T),  #average across reps to get final Q
+         Velocity_m.s = Float_Length_m/Float_Time_sec) |> #calculate velocity 
+  group_by(Reservoir, DateTime, Site, Rep, Float_section) |>
+         mutate(p_Q = Depth_m * WidthInterval_m * Velocity_m.s) |>   # calculate discharge for each float trial
+  summarise(section_Q = mean(p_Q)) |> #average each float trial in a section to get section Q
+  ungroup()|>
+  group_by(Reservoir, DateTime, Site, Rep) %>%  # group by site, date, and rep
+  mutate(Discharge_m3s = sum(section_Q, na.rm = T),  #sums each section Q to get total flow
          Method = "V") %>%  # assign method flag
-  select(Reservoir, Site, Rep,DateTime, Discharge_m3s, Method) %>% 
+  select(Reservoir, Site, Rep, DateTime, Discharge_m3s, Method) %>% 
   distinct(Reservoir, DateTime, Site, Rep,.keep_all = TRUE) %>% 
   ungroup() #ungroup data so that for loop below works
 

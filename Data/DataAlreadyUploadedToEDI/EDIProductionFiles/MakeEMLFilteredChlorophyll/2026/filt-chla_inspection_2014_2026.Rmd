@@ -17,8 +17,13 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::opts_chunk$set(echo = TRUE)
 # Add the names of the packages 
 pacman::p_load(tidyverse, lubridate, gsheet, here)
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
-download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R", "filt-chla_qaqc_2023_2026.R")
+
+#Should source this new every year. If edits required, then make sure to update back!
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
+# download.file("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R", "filt-chla_qaqc_2023_2026.R")
+
+#as of 2026, updates have been made! Make sure to send back!
+source("~/GitHubRepos/CareyLabVT/Reservoirs/Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2026/filt-chla_qaqc_2023_2026.R")
 ```
 
 
@@ -37,8 +42,8 @@ all_chla <- filt_chla_qaqc(directory = "https://api.github.com/repos/CareyLabVT/
  sample_times =  "https://docs.google.com/spreadsheets/d/1MbSN2G_NyKyXQUEzfMHmxEgZYI_s-VDVizOZM8qPpdg",
  outfile = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/filt-chla_2014_2025.csv"),
  start_date = NULL,
- end_date = "2025-12-31",
- outputcheck_folder = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2025/outputcheck"))
+ end_date = Sys.Date(),
+ outputcheck_folder = here("Data/DataAlreadyUploadedToEDI/EDIProductionFiles/MakeEMLFilteredChlorophyll/2026/outputcheck"))
 
 # directory = here("Data/DataNotYetUploadedToEDI/Raw_chla/chla_extraction/raw data from spec/")
 #  rack_map = "https://docs.google.com/spreadsheets/d/1N7he-0Z1gmSA5KjO96QA5tOeNXFcAKoVfAD1zix4qNk"
@@ -57,7 +62,7 @@ all_chla <- filt_chla_qaqc(directory = "https://api.github.com/repos/CareyLabVT/
 ```
 
 ```{r run L1 script, eval=FALSE, include=FALSE}
-source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
+# source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_functions/filt_chla_create.R")
 # source("https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Scripts/L1_generation_scripts/filt_chla_qaqc.R")
 ```
 
@@ -243,7 +248,7 @@ Flag_Chla_ugL 7     High turbidity values
 ```{r Subset to Current Year Only}
 #subset data to FCR and BVR
 chla_current <- chla_YMD %>% 
-  subset(Year == c(2025)) %>% 
+  subset(Year == c(2026)) %>% 
    mutate(DOY = yday(DateTime)) 
 
 head(chla_current)
@@ -266,7 +271,7 @@ Flag_Pheo_ugL	5	    Duplicate values were averaged
 ```{r Subset to Current Year Only (2023) - Pheophytin}
 #subset data to FCR and BVR
 chla_current <- chla_YMD %>% 
-  subset((Year=="2024")) %>% 
+  subset((Year=="2026")) %>% 
    mutate(DOY = yday(DateTime)) 
 
 head(chla_current)
@@ -282,14 +287,14 @@ ggplot(subset(chla_current), aes(x = DOY, y = Pheo_ugL, pch = as.factor(Flag_Phe
 
 ```{r Time Series for entire data set - chla}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Chla_ugL, col = Depth_m)) +
+ggplot(subset(chla_YMD, Year == 2026), aes(x = DateTime, y = Chla_ugL, col = as.factor(Depth_m))) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Timeseries - Chlorophyll a")
 ```
 Look at the duplicates: 
 ```{r}
-ggplot(subset(chla_YMD, Year >= 2023), aes(x = DateTime, y = Chla_ugL, col = as.factor(Rep))) +
+ggplot(subset(chla_YMD, Year >= 2026), aes(x = DateTime, y = Chla_ugL, col = as.factor(Rep))) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("Timeseries - Chlorophyll a")
@@ -299,7 +304,7 @@ ggplot(subset(chla_YMD, Year >= 2023), aes(x = DateTime, y = Chla_ugL, col = as.
 **Time Series for entire data set - Phaeophytin**
 ```{r Time Series for entire data set - Phaeophytin}
 # Facetted plot of the datapoints within each reservoir over the entire dataset 
-ggplot(subset(chla_YMD, Year == 2025), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
+ggplot(subset(chla_YMD, Year == 2026), aes(x = DateTime, y = Pheo_ugL, col = Depth_m)) +
   geom_point(size = 1) + 
   facet_grid(Reservoir ~., scales = "free_y") + 
   ggtitle("This year's timeseries - Pheophytin")
@@ -314,7 +319,7 @@ all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 101
 **Make new CSV with current and historic files**
 ```{r Make new CSV with current and historic files}
 # Variable_startyear_endyear.csv
- write.csv(all_chla, "filt-chla_2014_2025.csv", row.names = F)
+ write.csv(all_chla, "filt-chla_2014_2026.csv", row.names = F)
 ```
  Make site description file
 ```{r, eval = FALSE}
@@ -334,6 +339,6 @@ all_chla <- dplyr::distinct(all_chla) #as of 2023 should go from 1014 obs to 101
  sites_trimmed = trim_sites(data, sites)
  write.csv(sites_trimmed,"site_descriptions.csv", row.names=F)# Write to file
  maint_file <- read.csv(maintenance_file)
- write.csv(maint_file, "filt-chla_maintenancelog_2014_2024.csv", row.names = F)
+ write.csv(maint_file, "filt-chla_maintenancelog_2014_2026.csv", row.names = F)
 ```
 
